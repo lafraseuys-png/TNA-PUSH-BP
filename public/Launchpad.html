@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Launchpad - TNA Systems</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #0f172a; 
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #1e293b; 
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        .user-info {
+            padding: 1.5rem;
+            border-bottom: 1px solid #334155;
+            text-align: center;
+        }
+        .nav-links {
+            flex-grow: 1;
+            padding: 1rem 0;
+        }
+        .nav-link {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: background 0.3s, color 0.3s;
+        }
+        .nav-link:hover {
+            background-color: #334155;
+            color: white;
+        }
+        .nav-link i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        .logout-btn {
+            padding: 1rem;
+            background-color: #b91c1c; 
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s;
+            border: none;
+            width: 100%;
+            font-size: 1rem;
+        }
+        .logout-btn:hover {
+            background-color: #991b1b;
+        }
+        .settings-btn {
+            background-color: #2563eb; 
+        }
+        .settings-btn:hover {
+            background-color: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="user-info">
+            <i class="fas fa-user-circle text-4xl mb-2 text-gray-400"></i>
+            <h3 id="displayUsername" class="text-xl font-bold">Loading...</h3>
+            <p id="displayTenant" class="text-sm text-gray-400"></p>
+        </div>
+        
+        <div class="nav-links">
+            <a href="#" class="nav-link"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="#" class="nav-link"><i class="fas fa-user"></i> My Profile</a>
+        </div>
+
+        <button id="btnSettings" onclick="window.location.href='Settings.html'" class="logout-btn settings-btn hidden">
+            <i class="fas fa-cog mr-2"></i> Settings
+        </button>
+        <button onclick="logout()" class="logout-btn">
+            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+        </button>
+    </div>
+
+    <div class="main-content">
+        <div class="flex justify-between items-center mb-8 border-b border-gray-700 pb-4">
+            <h1 class="text-3xl font-bold">System Launchpad</h1>
+            <div id="godModeBadge" class="hidden bg-red-600 text-white px-4 py-1 rounded-full font-bold animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.8)] border border-red-400">
+                <i class="fas fa-radiation mr-2"></i> GOD MODE ACTIVE
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <div id="module-empMaster" class="bg-gray-800 p-6 rounded-lg shadow-lg text-center opacity-50 transition duration-300">
+                <i class="fas fa-id-card text-4xl mb-4 text-blue-400"></i>
+                <h2 class="text-xl font-bold mb-2">Employee Master</h2>
+                <p class="text-gray-400 text-sm mb-4">Manage employee profiles, departments, and sync hardware access.</p>
+                <button onclick="window.location.href='employeemaster.html'" id="btn-empMaster" disabled class="bg-gray-600 text-white px-4 py-2 rounded font-bold w-full cursor-not-allowed transition">Access Restricted</button>
+            </div>
+
+            <div id="module-timeAttendance" class="bg-gray-800 p-6 rounded-lg shadow-lg text-center opacity-50 transition duration-300">
+                <i class="fas fa-user-clock text-4xl mb-4 text-teal-400"></i>
+                <h2 class="text-xl font-bold mb-2">Time & Attendance</h2>
+                <p class="text-gray-400 text-sm mb-4">Manage employee clock-ins, timesheets, and offline sync logs.</p>
+                <button onclick="window.location.href='tna_dashboard.html'" id="btn-timeAttendance" disabled class="bg-gray-600 text-white px-4 py-2 rounded font-bold w-full cursor-not-allowed transition">Access Restricted</button>
+            </div>
+
+            <div id="module-hr" class="bg-gray-800 p-6 rounded-lg shadow-lg text-center opacity-50 transition duration-300">
+                <i class="fas fa-users-cog text-4xl mb-4 text-indigo-400"></i>
+                <h2 class="text-xl font-bold mb-2">HR Management</h2>
+                <p class="text-gray-400 text-sm mb-4">Track infringements, performance notes, and field HR records.</p>
+                <button onclick="window.location.href='hr_dashboard.html'" id="btn-hr" disabled class="bg-gray-600 text-white px-4 py-2 rounded font-bold w-full cursor-not-allowed transition">Access Restricted</button>
+            </div>
+
+            <div id="module-contracts" class="bg-gray-800 p-6 rounded-lg shadow-lg text-center opacity-50 transition duration-300">
+                <i class="fas fa-file-signature text-4xl mb-4 text-yellow-400"></i>
+                <h2 class="text-xl font-bold mb-2">CRM, Contracts & Onboarding</h2>
+                <p class="text-gray-400 text-sm mb-4">Manage client data, service level agreements, and renewals.</p>
+                <button id="btn-contracts" disabled class="bg-gray-600 text-white px-4 py-2 rounded font-bold w-full cursor-not-allowed transition">Access Restricted</button>
+            </div>
+
+            <div id="module-fuel" class="bg-gray-800 p-6 rounded-lg shadow-lg text-center opacity-50 transition duration-300">
+                <i class="fas fa-gas-pump text-4xl mb-4 text-green-400"></i>
+                <h2 class="text-xl font-bold mb-2">Fuel Management</h2>
+                <p class="text-gray-400 text-sm mb-4">Track fuel dispensing, vehicle efficiency, and generate reports.</p>
+                <button onclick="window.location.href='Fueldashboard.html'" id="btn-fuel" disabled class="bg-gray-600 text-white px-4 py-2 rounded font-bold w-full cursor-not-allowed transition">Access Restricted</button>
+            </div>
+
+            <div id="module-tasks" class="bg-gray-800 p-6 rounded-lg shadow-lg text-center opacity-50 transition duration-300">
+                <i class="fas fa-tasks text-4xl mb-4 text-pink-400"></i>
+                <h2 class="text-xl font-bold mb-2">Agri Piece Work</h2>
+                <p class="text-gray-400 text-sm mb-4">Job assignments, progress tracking, and field reporting.</p>
+                <button id="btn-tasks" disabled class="bg-gray-600 text-white px-4 py-2 rounded font-bold w-full cursor-not-allowed transition">Access Restricted</button>
+            </div>
+
+            <div id="module-chemicalApplication" class="bg-gray-800 p-6 rounded-lg shadow-lg text-center opacity-50 transition duration-300">
+                <i class="fas fa-flask text-4xl mb-4 text-cyan-400"></i>
+                <h2 class="text-xl font-bold mb-2">Chemical Application</h2>
+                <p class="text-gray-400 text-sm mb-4">Spraying records, mix ratios, and compliance logging.</p>
+                <button id="btn-chemicalApplication" disabled class="bg-gray-600 text-white px-4 py-2 rounded font-bold w-full cursor-not-allowed transition">Access Restricted</button>
+            </div>
+
+            <div id="module-stock" class="hidden">
+                <button id="btn-stock"></button>
+            </div>
+
+            <div id="module-assetTagging" class="bg-gray-800 p-6 rounded-lg shadow-lg text-center opacity-50 transition duration-300">
+                <i class="fas fa-barcode text-4xl mb-4 text-purple-400"></i>
+                <h2 class="text-xl font-bold mb-2">Asset Tagging & Stock Control</h2>
+                <p class="text-gray-400 text-sm mb-4">Hardware lifecycle, inventory tracking, allocations, and stock management.</p>
+                <button onclick="window.location.href='AssetTagging.html'" id="btn-assetTagging" disabled class="bg-gray-600 text-white px-4 py-2 rounded font-bold w-full cursor-not-allowed transition">Access Restricted</button>
+            </div>
+
+        </div>
+    </div>
+
+    
+    <script src="launchpad.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+pm2 start ecosystem.config.js
+PS C:\Apps\enterprise-system> pm2 start ecosystem.config.js
+pm2 stop all
+pm2 logs              # All apps
+pm2 logs aa_server       # Just TNA
+{
+    "status": 302,
+    "usedToken": "34DF681877BE2CF1FFABD65CC7B0414259C27EAD7A20E434FD6843A1607569C0",
+    "rawPayload": ""
+}
+34DF681877BE2CF1FFABD65CC7B0414259C27EAD7A20E434FD6843A1607569C0
+
+npx pm2 start ecosystem.config.js
+npx pm2 monit
+npx pm2 kill
+npx pm2 logs
+
+E7E282A1A72A5CD04C70D57C02D2067F
+Admin
+Admin123
+admin123
+
+0C4BDB6FBBAA8C7C54CEB5F1996F541FCC64D26D06337BE883D0A94D54D718BC

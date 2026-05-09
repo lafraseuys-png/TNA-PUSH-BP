@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise System Registration</title>
+    <script src="https://cdn.tailwindcss.com"></script>  <!-- Optional: For styling -->
+    <style>
+        body { background-color: #f3f4f6; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        form { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 300px; }
+    </style>
+</head>
+<body>
+    <form id="registerForm">
+        <h2 class="text-2xl font-bold mb-4 text-center">Register</h2>
+        <input type="text" id="username" placeholder="Username" required class="w-full p-2 mb-2 border rounded">
+        <input type="password" id="password" placeholder="Password" required class="w-full p-2 mb-2 border rounded">
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" required class="w-full p-2 mb-4 border rounded">
+        <button type="submit" class="w-full bg-green-500 text-white p-2 rounded">Register</button>
+        <p id="error" class="text-red-500 mt-2 text-center hidden"></p>
+        <p class="text-center mt-4"><a href="/Login.html" class="text-blue-500">Already have an account? Login</a></p>
+    </form>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const errorEl = document.getElementById('error');
+
+            if (password !== confirmPassword) {
+                errorEl.textContent = 'Passwords do not match';
+                errorEl.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+
+                if (!res.ok) throw new Error(data.message || 'Registration failed');
+
+                // On success, redirect to login
+                window.location.href = '/Login.html';
+            } catch (err) {
+                errorEl.textContent = err.message;
+                errorEl.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

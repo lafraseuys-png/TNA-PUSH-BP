@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TNA Africa - Hardware Godmode</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        :root {
+            --bg-dark: #0e1013;
+            --card-bg: #1c1f26;
+            --border-color: #30363d;
+            --text-main: #adbac7;
+            --accent-green: #2ea043;
+            --accent-blue: #58a6ff;
+            --accent-yellow: #d29922;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: var(--bg-dark); 
+            color: var(--text-main); 
+            padding: 20px; 
+            height: 95vh; 
+            display: flex; 
+            flex-direction: column;
+            margin: 0;
+        }
+
+        h2 { color: white; margin-bottom: 20px; }
+
+        /* Tab Navigation */
+        .tabs { display: flex; gap: 5px; margin-bottom: 0; border-bottom: 1px solid var(--border-color); }
+        .tab-btn { 
+            background: var(--card-bg); 
+            color: #8b949e; 
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            padding: 12px 25px; 
+            cursor: pointer; 
+            border-radius: 6px 6px 0 0; 
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .tab-btn:hover { background: #24292f; }
+        .tab-btn.active { 
+            background: var(--bg-dark); 
+            color: white; 
+            border-top: 3px solid var(--accent-green);
+            padding-top: 9px;
+        }
+
+        /* Content Areas */
+        .tab-content { 
+            display: none; 
+            flex: 1; 
+            background: var(--bg-dark); 
+            border: 1px solid var(--border-color);
+            border-top: none;
+            padding: 15px;
+            overflow: hidden;
+        }
+        .tab-content.active { display: flex; flex-direction: column; }
+
+        /* Log & Table Styles */
+        .window-container { 
+            background: #000; 
+            border-radius: 8px; 
+            flex: 1; 
+            overflow-y: auto; 
+            padding: 15px; 
+            font-family: 'Consolas', 'Courier New', monospace; 
+            font-size: 0.9em; 
+            line-height: 1.6;
+            border: 1px solid #333;
+        }
+
+        .log-entry { margin-bottom: 5px; border-bottom: 1px solid #1a1a1a; padding-bottom: 2px; }
+        .type-SEND { color: var(--accent-blue); }
+        .type-RECEIVE { color: var(--accent-yellow); }
+        .type-PING { color: #8b949e; }
+        .type-SYSTEM { color: var(--accent-green); }
+
+        table { width: 100%; border-collapse: collapse; color: var(--text-main); }
+        th { text-align: left; background: #24292f; padding: 12px; position: sticky; top: 0; }
+        td { padding: 12px; border-bottom: 1px solid var(--border-color); }
+
+        .save-btn {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+        .save-btn:hover { opacity: 0.8; }
+    </style>
+</head>
+<body>
+
+    <h2>TNA Africa - Hardware Engine Control</h2>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab(event, 'system-logs')">Handshake & Logs</button>
+        <button class="tab-btn" onclick="openTab(event, 'live-traffic')">Live Attendance</button>
+        <button class="tab-btn" onclick="openTab(event, 'registered-devices')">Saved Hardware</button>
+    </div>
+
+    <div id="system-logs" class="tab-content active">
+        <div class="window-container" id="log-content">
+            <div class="log-entry" style="color:var(--accent-green)">> TNA Engine Initialized. Watching Port 8091...</div>
+        </div>
+    </div>
+
+    <div id="live-traffic" class="tab-content">
+        <div class="window-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Serial Number</th>
+                        <th>User PIN</th>
+                        <th>Timestamp</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="traffic-body">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="registered-devices" class="tab-content">
+        <div class="window-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Device Name</th>
+                        <th>Serial Number</th>
+                        <th>Last Seen</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="devices-body">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+
+        // 1. FETCH SAVED HARDWARE FROM API
+        async function loadSavedDevices() {
+            try {
+                const response = await fetch('/api/devices');
+                if (!response.ok) throw new Error('Failed to fetch devices');
+                
+                const devices = await response.json();
+                const body = document.getElementById('devices-body');
+                
+                body.innerHTML = ''; // Clear current list
+                
+                devices.forEach(dev => {
+                    const row = body.insertRow();
+                    const lastSeen = dev.last_seen ? new Date(dev.last_seen).toLocaleString() : 'Never';
+                    row.innerHTML = `
+                        <td>${dev.device_name || 'Unnamed Device'}</td>
+                        <td>${dev.serial_number}</td>
+                        <td>${lastSeen}</td>
+                        <td><span style="color:${dev.status === 'Online' ? '#2ea043' : '#8b949e'}">● ${dev.status}</span></td>
+                    `;
+                });
+            } catch (err) {
+                console.error('API Error:', err);
+            }
+        }
+
+        // 2. TAB SWITCHING LOGIC
+        function openTab(evt, tabName) {
+            const contents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < contents.length; i++) contents[i].classList.remove("active");
+
+            const buttons = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < buttons.length; i++) buttons[i].classList.remove("active");
+
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+
+            // If user clicks the hardware tab, refresh the list from SQL
+            if (tabName === 'registered-devices') {
+                loadSavedDevices();
+            }
+        }
+
+        // 3. RECEIVE SYSTEM LOGS
+        socket.on('status_log', (data) => {
+            const logBox = document.getElementById('log-content');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            
+            let actionHtml = '';
+            // If it's a handshake, show a "Save" button
+            if (data.type === 'RECEIVE' && data.message.includes('Handshake')) {
+                actionHtml = `<button class="save-btn" onclick="promptRegistration('${data.sn}')">Save Device</button>`;
+            }
+
+            entry.innerHTML = `
+                <span style="color:#8b949e">[${data.time}]</span> 
+                <span class="type-${data.type}">[${data.type}]</span> 
+                <span style="color:white">${data.sn}</span>: 
+                ${data.message} ${actionHtml}
+            `;
+            logBox.appendChild(entry);
+            logBox.scrollTop = logBox.scrollHeight;
+        });
+
+        // 4. RECEIVE LIVE PUNCHES
+        socket.on('punch', (data) => {
+            const body = document.getElementById('traffic-body');
+            const row = body.insertRow(0);
+            row.innerHTML = `
+                <td>${data.sn}</td>
+                <td><strong>${data.pin}</strong></td>
+                <td>${data.time}</td>
+                <td style="color:${data.type==='Check-In'?'#2ea043':'#f85149'}">${data.type}</td>
+            `;
+            if (body.rows.length > 50) body.deleteRow(50);
+        });
+
+        // 5. HANDLE DEVICE REGISTRATION
+        function promptRegistration(sn) {
+            const name = prompt(`Enter a descriptive name for device ${sn}:`, "Front Office Gate");
+            if (name) {
+                socket.emit('register_device', {
+                    sn: sn,
+                    name: name,
+                    ip: 'detected'
+                });
+                alert('Device save request sent to SQL. Switch to "Saved Hardware" tab to view.');
+            }
+        }
+
+        // INITIAL LOAD
+        window.onload = loadSavedDevices;
+    </script>
+</body>
+</html>

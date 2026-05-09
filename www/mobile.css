@@ -1,0 +1,104 @@
+:root {
+    --primary-brand: #70A827; /* FarmSuite Green */
+    --bg-dark: #121212;
+    --card-bg: #1e1e1e;
+    --border: #333;
+}
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-dark);
+    color: #e0e0e0;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+.screen { display: none !important; padding-bottom: 80px; }
+.screen.active { display: block !important; animation: fadeIn 0.3s ease; }
+#screen-login.active { display: flex !important; flex-direction: column; justify-content: center; min-height: 100vh; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+input, select, textarea {
+    background-color: #2a2a2a;
+    border: 1px solid var(--border);
+    color: white;
+    border-radius: 8px;
+    padding: 12px;
+    width: 100%;
+    margin-top: 4px;
+}
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary-brand);
+}
+
+.btn-primary {
+    background-color: var(--primary-brand);
+    color: white;
+    font-weight: 600;
+    padding: 14px;
+    border-radius: 8px;
+    width: 100%;
+    text-align: center;
+    transition: opacity 0.2s;
+}
+.btn-primary:active { opacity: 0.8; }
+
+.nav-item { color: #888; display: flex; flex-direction: column; align-items: center; font-size: 10px; transition: color 0.2s;}
+.nav-item i { font-size: 20px; margin-bottom: 2px; }
+.nav-item.active { color: var(--primary-brand); }
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.8);
+    display: none; align-items: center; justify-content: center;
+    z-index: 50; padding: 20px;
+}
+
+.glass-nav {
+    background: rgba(30, 30, 30, 0.9);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border);
+}
+.form-input, .form-select {
+    width: 100%;
+    background: #2a2a2a;
+    border: 1px solid var(--border);
+    color: white;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 16px; 
+    outline: none;
+    appearance: none;
+}
+.form-input:focus, .form-select:focus { border-color: var(--primary-brand); }
+.signature-pad { background-color: #ffffff; border-radius: 8px; touch-action: none; border: 1px dashed var(--border); }
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+/* ⚡ THE GLASS FLOOR (ABSOLUTE OVERRIDE) ⚡ */
+html.native-camera-active,
+body.native-camera-active {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+/* Forcefully kill the active screen and navigation */
+html.native-camera-active .screen.active,
+html.native-camera-active .screen,
+html.native-camera-active #bottom-nav {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+/* Make the modal background completely invisible to reveal the camera */
+html.native-camera-active #cameraModal,
+html.native-camera-active #cameraModal > div {
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}

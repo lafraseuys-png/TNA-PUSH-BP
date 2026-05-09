@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>God Mode Admin Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #0f172a; color: #e2e8f0; }
+        .page-section { display: none; }
+        .page-section.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .sidebar-item { color: #cbd5e1; transition: background 0.3s, color 0.3s; }
+        .sidebar-item:hover { background-color: #334155; color: white; }
+        .sidebar-item.active { background-color: #1e293b; border-left: 4px solid #3b82f6; color: white; font-weight: bold; }
+        
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        .section { background: #1f2937; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); margin-bottom: 2rem; border-t: 4px solid #3b82f6; }
+        #editModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 100; }
+        #editForm { background: #1f2937; padding: 2rem; border-radius: 8px; width: 400px; color: white; }
+        .action-btn { width: 120px; }
+        table th, table td { border-color: #4b5563; }
+        table thead { background-color: #374151; }
+    </style>
+</head>
+<body class="font-sans flex h-screen overflow-hidden bg-gray-900">
+
+    <aside class="w-64 bg-gray-800 flex flex-col shadow-xl flex-shrink-0 border-r border-gray-700">
+        <div class="p-6 border-b border-gray-700 text-center">
+            <h1 id="godModeTrigger" onclick="triggerSecretMode()" class="text-2xl font-black text-red-500 cursor-pointer select-none transition hover:text-red-400"><i class="fas fa-bolt mr-2"></i>GOD MODE</h1>
+            <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">SaaS Master Control</p>
+        </div>
+        <nav class="flex-1 overflow-y-auto py-4" id="sidebarNav">
+            <button onclick="showSection('dashboard', this)" class="sidebar-item active w-full flex items-center p-4 text-left">
+                <i class="fas fa-tachometer-alt w-6 text-center mr-2"></i> Dashboard
+            </button>
+            <button onclick="showSection('tenants', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+                <i class="fas fa-building w-6 text-center mr-2"></i> Tenants
+            </button>
+            <button onclick="showSection('hardware', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+                <i class="fas fa-microchip w-6 text-center mr-2"></i> Hardware
+            </button>
+            <button onclick="showSection('global', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+                <i class="fas fa-globe w-6 text-center mr-2"></i> Global Settings
+            </button>
+            <button onclick="showSection('reports', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+                <i class="fas fa-chart-line w-6 text-center mr-2"></i> Reports
+            </button>
+            <button id="btnTnaAdmin" onclick="showSection('tna-admin', this)" class="sidebar-item w-full items-center p-4 text-left hidden border-l-4 border-red-600 bg-red-900/20 hover:bg-red-900/40 text-red-400 font-bold transition">
+            <i class="fas fa-user-secret w-6 text-center mr-2"></i> TNA ADMIN
+            </button>
+        </nav>
+        <div class="p-4 border-t border-gray-700 text-xs">
+            <a href="Login.html" class="text-gray-400 hover:text-white font-bold w-full text-left flex items-center transition">
+                <i class="fas fa-sign-out-alt mr-2"></i> Back to Login
+            </a>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col overflow-hidden bg-gray-900">
+        <header class="bg-gray-800 shadow-sm p-4 flex justify-between items-center z-10 border-b border-gray-700">
+            <h2 id="sectionTitle" class="text-lg font-bold text-gray-200 uppercase tracking-wide">Dashboard</h2>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-6 relative">
+
+            <!-- TAB 1: DASHBOARD -->
+            <section id="page-dashboard" class="page-section active">
+                <!-- Metrics Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-blue-500">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-blue-900/50 text-blue-400 mr-4">
+                                <i class="fas fa-building fa-2x"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-400 uppercase font-bold tracking-wider">Active Tenants</p>
+                                <p class="text-3xl font-black text-white" id="dashActiveTenants">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-teal-500">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-teal-900/50 text-teal-400 mr-4">
+                                <i class="fas fa-satellite-dish fa-2x"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-400 uppercase font-bold tracking-wider">Online Devices</p>
+                                <p class="text-3xl font-black text-teal-400" id="dashOnlineDevices">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-red-500">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-red-900/50 text-red-400 mr-4">
+                                <i class="fas fa-exclamation-triangle fa-2x"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-400 uppercase font-bold tracking-wider">Offline Devices</p>
+                                <p class="text-3xl font-black text-red-400" id="dashOfflineDevices">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                </section>
+
+            <!-- TAB 2: TENANTS -->
+            <section id="page-tenants" class="page-section">
+                
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white"><i class="fas fa-building mr-2 text-emerald-500"></i>Tenant Management</h2>
+                        <p class="text-sm text-gray-400">Deploy and manage client SaaS environments.</p>
+                    </div>
+                    <button onclick="openCreateTenantModal()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-6 rounded shadow-lg transition"><i class="fas fa-plus mr-2"></i> Deploy New Tenant</button>
+                </div>
+
+        <div class="section">
+            <h2 class="text-2xl font-semibold mb-4">Manage Existing Tenants</h2>
+            <table id="tenantsTable" class="w-full border-collapse">
+                <thead>
+                    <tr class="bg-gray-700">
+                        <th class="p-2 border">Name</th>
+                        <th class="p-2 border">DB Name</th>
+                        <th class="p-2 border">License Key</th>
+                        <th class="p-2 border">Expiry Date</th>
+                        <th class="p-2 border">Modules</th>
+                        <th class="p-2 border">Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        </section> <!-- End Tenants Tab -->
+
+        <!-- TAB 4: GLOBAL SETTINGS (Part 1) -->
+        <section id="page-global" class="page-section">
+        <div class="section" style="border-color: #8b5cf6;">
+            <h2 class="text-2xl font-semibold mb-4">Global Email Settings</h2>
+            <form id="emailSettingsForm">
+                <input type="text" id="smtpHost" placeholder="SMTP Host (e.g., smtp.gmail.com)" class="w-full p-2 mb-2 border rounded bg-gray-800 text-white border-gray-600">
+                <input type="number" id="smtpPort" placeholder="SMTP Port (e.g., 587)" class="w-full p-2 mb-2 border rounded bg-gray-800 text-white border-gray-600">
+                <input type="text" id="smtpUser" placeholder="SMTP User" class="w-full p-2 mb-2 border rounded bg-gray-800 text-white border-gray-600">
+                <input type="password" id="smtpPass" placeholder="SMTP Password (optional to change)" class="w-full p-2 mb-2 border rounded bg-gray-800 text-white border-gray-600">
+                <input type="email" id="fromEmail" placeholder="From Email" class="w-full p-2 mb-4 border rounded bg-gray-800 text-white border-gray-600">
+                <button type="submit" class="w-full bg-green-800 text-white p-2 rounded">Save Email Settings</button>
+            </form>
+            <h3 class="text-xl font-semibold mt-6 mb-2">Test Email</h3>
+            <input type="email" id="testTo" placeholder="Test To Email" class="w-full p-2 mb-2 border rounded bg-gray-800 text-white border-gray-600">
+            <input type="text" id="testSubject" placeholder="Test Subject" class="w-full p-2 mb-2 border rounded bg-gray-800 text-white border-gray-600">
+            <textarea id="testText" placeholder="Test Message" class="w-full p-2 mb-4 border rounded bg-gray-800 text-white border-gray-600" rows="4"></textarea>
+            <button onclick="sendTestEmail()" class="w-full bg-blue-800 text-white p-2 rounded">Send Test Email</button>
+            <p id="emailError" class="text-red-500 mt-2 hidden"></p>
+            <p id="emailSuccess" class="text-green-500 mt-2 hidden"></p>
+        </div>
+        </section> <!-- Pause Global Tab -->
+
+        <!-- TAB 3: HARDWARE -->
+        <section id="page-hardware" class="page-section">
+        
+        <div class="section">
+            <h2 class="text-2xl font-semibold mb-4">Hardware & Device Allocation</h2>
+            <p class="text-sm text-gray-400 mb-4">Link detected biometric devices to specific client tenants.</p>
+            
+            <input type="text" id="deviceSearch" onkeyup="filterHardware()" placeholder="Search by Serial Number or Name..." class="w-full p-2 mb-4 border rounded bg-gray-900 text-white border-gray-600">
+
+            <table id="hardwareTable" class="w-full border-collapse">
+                <thead>
+                    <tr class="bg-gray-700">
+                        <th class="p-2 border">Serial Number</th>
+                        <th class="p-2 border">Name</th>
+                        <th class="p-2 border">Status</th>
+                        <th class="p-2 border">Assigned Tenant</th>
+                        <th class="p-2 border">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+
+      <div class="section" style="border-color: #6366f1;">
+            <h2 class="text-2xl font-semibold mb-4">Hardware Screen Media</h2>
+            <div class="bg-gray-800 border border-gray-600 rounded-lg p-6 shadow-xl w-full">
+                <h3 class="text-lg font-semibold mb-4 text-white">Push Screen Media</h3> 
+                    <form id="mediaForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Target Device</label>
+                            <select id="mediaTargetDevice" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-indigo-500">
+                                <option value="">Select a device...</option>
+                            </select>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-1">
+                                <label class="block text-sm text-gray-400 mb-1">Media Type</label>
+                                <select id="mediaType" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-indigo-500">
+                                    <option value="WALLPAPER">Wallpaper (Background)</option>
+                                    <option value="ADPIC">Running Ad (Screensaver)</option>
+                                </select>
+                            </div>
+                            <div class="w-24">
+                                <label class="block text-sm text-gray-400 mb-1" title="For Ads: Slot 1 to 10">Ad Index</label>
+                                <input type="number" id="adIndex" value="1" min="1" max="10" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-indigo-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Image (Auto-resizes for hardware)</label>
+                            <input type="file" id="mediaPhoto" required accept="image/jpeg, image/png" class="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-gray-700 file:text-indigo-400 hover:file:bg-gray-600">
+                            <img id="mediaPreview" class="mt-4 max-w-[200px] rounded hidden border border-gray-600">
+                        </div>
+                        <button type="submit" class="w-full bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 rounded transition shadow-lg">Upload Media to Device</button>
+                    </form>
+                    <p id="mediaStatusMsg" class="mt-4 text-indigo-400 text-sm hidden"></p>
+                </div>
+        </div>
+        </section> <!-- End Hardware Tab -->
+
+        <!-- SECRET TAB: TNA ADMIN -->
+        <section id="page-tna-admin" class="page-section">
+            <div class="section" style="border-color: #ef4444;">
+                <h2 class="text-2xl font-semibold mb-4 text-red-500"><i class="fas fa-user-secret mr-2"></i>Global Module Costing</h2>
+                <p class="text-sm text-gray-400 mb-6">These are the global base costs injected into the Master Database. They act as defaults before being assigned to specific tenants.</p>
+                
+                <form id="globalCostingForm" class="space-y-4 max-w-2xl">
+                    
+                    <!-- Pricing Factor Toggle -->
+                    <div class="bg-gray-800 p-4 rounded border border-gray-600 shadow-inner mb-6">
+                        <label class="block text-sm text-red-400 font-bold mb-2 uppercase"><i class="fas fa-sliders-h mr-2"></i>Global Pricing Model (Factor)</label>
+                        <select id="globalFactor" class="w-full p-2 border rounded bg-gray-900 text-white border-gray-600 focus:border-red-500 focus:outline-none cursor-pointer">
+                            <option value="0">0 - Fixed Price</option>
+                            <option value="1">1 - Business Partner (BP) Split</option>
+                        </select>
+                    </div>
+
+                    <!-- TNA Section -->
+                    <h3 class="text-lg font-bold text-gray-300 mt-4 mb-2 border-b border-gray-700 pb-1"><i class="fas fa-clock text-blue-400 mr-2"></i>Time & Attendance</h3>
+                <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-800 p-3 rounded border border-gray-600 shadow-inner">
+                            <label class="block text-xs text-red-400 font-bold mb-1 uppercase">Setup Cost</label>
+                            <div class="flex items-center"><span class="bg-gray-700 text-gray-300 px-3 py-1.5 rounded-l border-y border-l border-gray-600">R</span><input type="number" step="0.01" id="tnaSetupCost" class="w-full p-1.5 border-y border-r rounded-r bg-gray-900 text-white border-gray-600 focus:border-red-500 focus:outline-none" required></div>
+                        </div>
+                        <div class="bg-gray-800 p-3 rounded border border-gray-600 shadow-inner">
+                            <label class="block text-xs text-red-400 font-bold mb-1 uppercase">Per Employee</label>
+                            <div class="flex items-center"><span class="bg-gray-700 text-gray-300 px-3 py-1.5 rounded-l border-y border-l border-gray-600">R</span><input type="number" step="0.01" id="tnaEmployeeCost" class="w-full p-1.5 border-y border-r rounded-r bg-gray-900 text-white border-gray-600 focus:border-red-500 focus:outline-none" required></div>
+                        </div>
+                    </div>
+
+                    <!-- Fuel Section -->
+                    <h3 class="text-lg font-bold text-gray-300 mt-6 mb-2 border-b border-gray-700 pb-1"><i class="fas fa-gas-pump text-green-400 mr-2"></i>Fuel Management</h3>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="bg-gray-800 p-3 rounded border border-gray-600 shadow-inner">
+                            <label class="block text-xs text-red-400 font-bold mb-1 uppercase">Setup Cost</label>
+                            <div class="flex items-center"><span class="bg-gray-700 text-gray-300 px-3 py-1.5 rounded-l border-y border-l border-gray-600">R</span><input type="number" step="0.01" id="fuelSetupCost" class="w-full p-1.5 border-y border-r rounded-r bg-gray-900 text-white border-gray-600 focus:border-red-500 focus:outline-none" required></div>
+                        </div>
+                        <div class="bg-gray-800 p-3 rounded border border-gray-600 shadow-inner">
+                            <label class="block text-xs text-red-400 font-bold mb-1 uppercase">Per Asset</label>
+                            <div class="flex items-center"><span class="bg-gray-700 text-gray-300 px-3 py-1.5 rounded-l border-y border-l border-gray-600">R</span><input type="number" step="0.01" id="fuelAssetCost" class="w-full p-1.5 border-y border-r rounded-r bg-gray-900 text-white border-gray-600 focus:border-red-500 focus:outline-none" required></div>
+                        </div>
+                        <div class="bg-gray-800 p-3 rounded border border-gray-600 shadow-inner">
+                            <label class="block text-xs text-red-400 font-bold mb-1 uppercase">Per Depot</label>
+                            <div class="flex items-center"><span class="bg-gray-700 text-gray-300 px-3 py-1.5 rounded-l border-y border-l border-gray-600">R</span><input type="number" step="0.01" id="fuelDepotCost" class="w-full p-1.5 border-y border-r rounded-r bg-gray-900 text-white border-gray-600 focus:border-red-500 focus:outline-none" required></div>
+                        </div>
+                    </div>
+
+                    <!-- HR Section -->
+                    <h3 class="text-lg font-bold text-gray-300 mt-6 mb-2 border-b border-gray-700 pb-1"><i class="fas fa-users text-purple-400 mr-2"></i>HR & Personnel</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-800 p-3 rounded border border-gray-600 shadow-inner">
+                            <label class="block text-xs text-red-400 font-bold mb-1 uppercase">Setup Cost</label>
+                            <div class="flex items-center"><span class="bg-gray-700 text-gray-300 px-3 py-1.5 rounded-l border-y border-l border-gray-600">R</span><input type="number" step="0.01" id="hrSetupCost" class="w-full p-1.5 border-y border-r rounded-r bg-gray-900 text-white border-gray-600 focus:border-red-500 focus:outline-none" required></div>
+                        </div>
+                        <div class="bg-gray-800 p-3 rounded border border-gray-600 shadow-inner">
+                            <label class="block text-xs text-red-400 font-bold mb-1 uppercase">Per Employee</label>
+                            <div class="flex items-center"><span class="bg-gray-700 text-gray-300 px-3 py-1.5 rounded-l border-y border-l border-gray-600">R</span><input type="number" step="0.01" id="hrEmployeeCost" class="w-full p-1.5 border-y border-r rounded-r bg-gray-900 text-white border-gray-600 focus:border-red-500 focus:outline-none" required></div>
+                        </div>
+                    </div>
+
+                    <!-- Piece Work Section -->
+                    <h3 class="text-lg font-bold text-gray-300 mt-6 mb-2 border-b border-gray-700 pb-1"><i class="fas fa-tractor text-orange-400 mr-2"></i>Piece Work / Agriculture</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-800 p-3 rounded border border-gray-600 shadow-inner">
+                            <label class="block text-xs text-red-400 font-bold mb-1 uppercase">Setup Cost</label>
+                            <div class="flex items-center"><span class="bg-gray-700 text-gray-300 px-3 py-1.5 rounded-l border-y border-l border-gray-600">R</span><input type="number" step="0.01" id="pieceWorkSetupCost" class="w-full p-1.5 border-y border-r rounded-r bg-gray-900 text-white border-gray-600 focus:border-red-500 focus:outline-none" required></div>
+                        </div>
+                        <div class="bg-gray-800 p-3 rounded border border-gray-600 shadow-inner">
+                            <label class="block text-xs text-red-400 font-bold mb-1 uppercase">Per Employee</label>
+                            <div class="flex items-center"><span class="bg-gray-700 text-gray-300 px-3 py-1.5 rounded-l border-y border-l border-gray-600">R</span><input type="number" step="0.01" id="pieceWorkEmployeeCost" class="w-full p-1.5 border-y border-r rounded-r bg-gray-900 text-white border-gray-600 focus:border-red-500 focus:outline-none" required></div>
+                        </div>
+                    </div>
+                    
+                <!-- Stock & Assets Section -->
+                    <h3 class="text-lg font-bold text-gray-300 mt-6 mb-2 border-b border-gray-700 pb-1"><i class="fas fa-boxes text-teal-400 mr-2"></i>Stock & Assets</h3>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="bg-gray-800 p-3 rounded border border-gray-600 shadow-inner">
+                            <label class="block text-xs text-red-400 font-bold mb-1 uppercase">Setup Cost</label>
+                            <div class="flex items-center"><span class="bg-gray-700 text-gray-300 px-3 py-1.5 rounded-l border-y border-l border-gray-600">R</span><input type="number" step="0.01" id="stockSetupCost" class="w-full p-1.5 border-y border-r rounded-r bg-gray-900 text-white border-gray-600 focus:border-red-500 focus:outline-none" required></div>
+                        </div>
+                        <div class="bg-gray-800 p-3 rounded border border-gray-600 shadow-inner">
+                            <label class="block text-xs text-red-400 font-bold mb-1 uppercase">Per Asset Monthly</label>
+                            <div class="flex items-center"><span class="bg-gray-700 text-gray-300 px-3 py-1.5 rounded-l border-y border-l border-gray-600">R</span><input type="number" step="0.01" id="stockAssetCost" class="w-full p-1.5 border-y border-r rounded-r bg-gray-900 text-white border-gray-600 focus:border-red-500 focus:outline-none" required></div>
+                        </div>
+                    </div>
+
+                    
+<!-- Facial Recognition Section -->
+                    <h3 class="text-lg font-bold text-gray-300 mt-6 mb-2 border-b border-gray-700 pb-1"><i class="fas fa-user-astronaut text-pink-400 mr-2"></i>Facial Hardware Module</h3>
+                    <div class="grid grid-cols-1 gap-4 mb-6">
+                        <div class="bg-gray-800 p-3 rounded border border-gray-600 shadow-inner">
+                            <label class="block text-xs text-red-400 font-bold mb-1 uppercase">Once-Off Cost Per License</label>
+                            <div class="flex items-center"><span class="bg-gray-700 text-gray-300 px-3 py-1.5 rounded-l border-y border-l border-gray-600">R</span><input type="number" step="0.01" id="facialLicenseCost" class="w-full p-1.5 border-y border-r rounded-r bg-gray-900 text-white border-gray-600 focus:border-red-500 focus:outline-none" required></div>
+                        </div>
+                    </div>
+
+                    <!-- System Automation Emails -->
+                    <h3 class="text-lg font-bold text-gray-300 mt-6 mb-2 border-b border-gray-700 pb-1"><i class="fas fa-envelope-open-text text-blue-400 mr-2"></i>Automated System Notifications</h3>
+                    <div class="bg-gray-800 p-4 rounded border border-gray-600 shadow-inner mb-6">
+                        <label class="block text-xs text-red-400 font-bold mb-1 uppercase">Alert Emails (Comma Separated)</label>
+                        <p class="text-xs text-gray-400 mb-3">These addresses will automatically receive a full financial breakdown whenever a Tenant is added or updated.</p>
+                        <input type="text" id="notificationEmails" placeholder="admin@tnaafrica.co.za, accounts@tnaafrica.co.za" class="w-full p-2 border rounded bg-gray-900 text-white border-gray-600 focus:border-red-500 focus:outline-none">
+                    </div>
+
+                    <button type="submit" class="w-full bg-red-700 hover:bg-red-600 text-white font-bold py-3 rounded transition shadow-lg"><i class="fas fa-save mr-2"></i> Save Global Settings</button>   
+                </form>
+                <p id="costStatusMsg" class="mt-4 text-green-400 text-sm hidden font-bold"><i class="fas fa-check-circle mr-1"></i> Global settings updated successfully in Master DB!</p>
+                
+                <!-- NEW: Manual Master Report Trigger -->
+                <div class="mt-8 pt-6 border-t border-red-900/50">
+                    <h3 class="text-lg font-bold text-gray-300 mb-2"><i class="fas fa-paper-plane text-emerald-400 mr-2"></i>Master Billing Report</h3>
+                    <p class="text-xs text-gray-400 mb-4">Instantly compile and email the full tenant billing summary to the notification emails listed above.</p>
+                    <button type="button" onclick="triggerMasterBillingReport(this)" class="w-full bg-emerald-700 hover:bg-emerald-600 text-white font-bold py-2 rounded transition shadow"><i class="fas fa-envelope mr-2"></i> Send Master Report Now</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: GLOBAL SETTINGS (Part 2) -->
+        <section id="page-global-2" class="page-section tab-global-linked">
+        <div class="section" style="border-color: #f59e0b;">
+            <h2 class="text-2xl font-semibold mb-4">Hardware Network Config</h2>
+            <form id="hardwareConfigForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm text-gray-300 mb-1">Additional Device Ports (Comma Separated)</label>
+                    <p class="text-xs text-gray-500 mb-2">Port <strong class="text-teal-400">3299</strong> is permanently locked as the primary listener. Open additional ports to bypass strict client firewalls (e.g., 80, 8080).</p>
+                    <div class="flex items-center gap-4">
+                        <span class="bg-teal-900/30 text-teal-400 border border-teal-700 px-4 py-2 rounded font-mono text-lg shadow-inner cursor-not-allowed">3299</span>
+                        <span class="text-gray-500 text-xl">+</span>
+                        <input type="text" id="devicePorts" placeholder="80, 8080" class="flex-1 p-2 border rounded bg-gray-900 text-white border-gray-600 font-mono tracking-widest text-lg">
+                    </div>
+                </div>
+                <button type="submit" class="bg-blue-800 hover:bg-blue-700 text-white px-6 py-2 rounded transition shadow-lg"><i class="fas fa-power-off mr-2"></i> Save & Restart Service</button>
+            </form>
+        </div>
+        </section> <!-- End Global Settings Part 2 -->
+
+        <!-- TAB 5: REPORTS -->
+        <section id="page-reports" class="page-section">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-white"><i class="fas fa-chart-line mr-2 text-blue-500"></i>Financial Reports</h2>
+                    <p class="text-sm text-gray-400">View and export tenant billing summaries.</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="exportAllCSV('setup')" class="bg-purple-700 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded shadow transition"><i class="fas fa-tools mr-2"></i> Export All (Setups)</button>
+                    <button onclick="exportAllCSV('internal')" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded shadow transition"><i class="fas fa-file-excel mr-2"></i> Export All (Internal)</button>
+                    <button onclick="exportAllCSV('client')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded shadow transition"><i class="fas fa-file-invoice-dollar mr-2"></i> Export All (Client)</button>
+                </div>
+               </div> 
+
+            <div class="section">
+                <table id="reportsTable" class="w-full border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-gray-700 text-gray-300">
+                            <th class="p-2 border border-gray-600 text-left">Tenant Name</th>
+                            <th class="p-2 border border-gray-600 text-right">Setup Cost</th>
+                            <th class="p-2 border border-gray-600 text-right bg-gray-800 text-emerald-400">Setup Sell</th>
+                            <th class="p-2 border border-gray-600 text-right">Monthly Cost</th>
+                            <th class="p-2 border border-gray-600 text-right bg-gray-800 text-emerald-400">Monthly Sell</th>
+                            <th class="p-2 border border-gray-600 text-right font-bold text-white">Margin (Mo)</th>
+                            <th class="p-2 border border-gray-600 text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reportsTableBody">
+                        <tr><td colspan="7" class="p-4 text-center text-gray-500">Loading reports...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        </div> <!-- End Flex Container Inner Padding -->
+    </main>
+    
+    <div id="deviceActionModal" class="fixed inset-0 z-[100] hidden bg-black/80 backdrop-blur-sm items-center justify-center">
+        <div class="bg-gray-800 border border-gray-600 rounded-lg shadow-2xl p-6 w-full max-w-lg relative text-white">
+            <button onclick="closeDeviceActions()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition"><i class="fas fa-times text-xl"></i></button>
+            <h3 class="text-xl font-bold text-teal-400 mb-1">Device Management</h3>
+            <p id="modalDeviceName" class="text-sm text-gray-400 mb-6"></p>
+            <div class="grid grid-cols-3 gap-3" id="modalActionGrid"></div>
+        </div>
+    </div>
+
+    <div id="shortcutModal" class="fixed inset-0 z-[100] hidden bg-black/80 backdrop-blur-sm items-center justify-center">
+        <div class="bg-gray-800 border border-gray-600 rounded-lg shadow-2xl p-6 w-full max-w-2xl relative text-white">
+            <button onclick="closeShortcutModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition"><i class="fas fa-times text-xl"></i></button>
+            <h3 class="text-xl font-bold text-pink-400 mb-1"><i class="fas fa-keyboard mr-2"></i> Shortcut Key Manager</h3>
+            <p class="text-sm text-gray-400 mb-6">Assign statuses to the F1-F8 hardware buttons.</p>
+            <div id="shortcutList" class="space-y-3 max-h-[60vh] overflow-y-auto pr-2"></div>
+        </div>
+    </div>
+
+    <div id="networkModal" class="fixed inset-0 z-[100] hidden bg-black/80 backdrop-blur-sm items-center justify-center">
+        <div class="bg-gray-800 border border-gray-600 rounded-lg shadow-2xl p-6 w-full max-w-md relative text-white">
+            <button onclick="closeNetworkModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition"><i class="fas fa-times text-xl"></i></button>
+            <h3 class="text-xl font-bold text-indigo-400 mb-1"><i class="fas fa-network-wired mr-2"></i> Network Config</h3>
+            <p class="text-sm text-gray-400 mb-6">Update the device IP, Subnet, and Gateway.</p>
+            <div id="networkForm" class="space-y-4"></div>
+        </div>
+    </div>
+
+    <div id="infoModal" class="fixed inset-0 z-[100] hidden bg-black/80 backdrop-blur-sm items-center justify-center">
+        <div class="bg-gray-800 border border-gray-600 rounded-lg shadow-2xl p-6 w-full max-w-4xl relative text-white flex flex-col max-h-[90vh]">
+            <button onclick="closeInfoModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition"><i class="fas fa-times text-xl"></i></button>
+            <h3 class="text-xl font-bold text-blue-400 mb-1"><i class="fas fa-microchip mr-2"></i> Live Device Memory & Status</h3>
+            <p class="text-sm text-gray-400 mb-4">Pulling live diagnostic data directly from the hardware...</p>
+            
+            <div id="infoLoader" class="flex flex-col items-center justify-center py-10">
+                <i class="fas fa-spinner fa-spin text-5xl text-blue-500 mb-4"></i>
+                <span class="text-gray-300 font-mono text-lg" id="infoWaitText">Waiting for device heartbeat...</span>
+            </div>
+            
+            <div id="infoContent" class="hidden flex-1 overflow-y-auto bg-gray-900 border border-gray-700 p-4 rounded font-mono text-xs text-green-400 whitespace-pre-wrap"></div>
+        </div>
+    </div>
+
+    <div id="faceSettingsModal" class="fixed inset-0 z-[100] hidden bg-black/80 backdrop-blur-sm items-center justify-center">
+        <div class="bg-gray-800 border border-gray-600 rounded-lg shadow-2xl p-6 w-full max-w-md relative text-white">
+            <button onclick="closeFaceSettingsModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition"><i class="fas fa-times text-xl"></i></button>
+            <h3 class="text-xl font-bold text-teal-400 mb-1"><i class="fas fa-user-astronaut mr-2"></i> Face Parameters</h3>
+            <p class="text-sm text-gray-400 mb-6">Configure hardware facial recognition settings.</p>
+            
+            <form id="faceSettingsForm" class="space-y-4">
+                <input type="hidden" id="faceTargetSn">
+                
+                <div>
+                    <label class="text-xs text-gray-400 uppercase">Live Detection (Anti-Spoofing)</label>
+                    <select id="faceLiveDetect" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white">
+                        <option value="1">1 - Enabled (Recommended)</option>
+                        <option value="0">0 - Disabled</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="text-xs text-gray-400 uppercase">WDR (Backlight Correction)</label>
+                    <select id="faceWdr" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white">
+                        <option value="1">1 - Enabled (Recommended)</option>
+                        <option value="0">0 - Disabled</option>
+                    </select>
+                </div>
+
+                <div class="flex gap-4">
+                    <div class="w-1/2">
+                        <label class="text-xs text-gray-400 uppercase">1:1 Threshold</label>
+                        <input type="number" id="face11Threshold" value="47" min="1" max="100" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white" title="Score required when user presents Card/PIN first">
+                    </div>
+                    <div class="w-1/2">
+                        <label class="text-xs text-gray-400 uppercase">1:N Threshold</label>
+                        <input type="number" id="face1NThreshold" value="55" min="1" max="100" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white" title="Score required for pure face scanning">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full mt-4 bg-teal-700 hover:bg-teal-600 text-white font-bold p-2 rounded shadow">Queue Face Settings</button>
+            </form>
+        </div>
+    </div>
+    
+    
+
+    <!-- NEW ADVANCED TENANT CREATION MODAL -->
+    <div id="createTenantModal" class="fixed inset-0 z-[100] hidden bg-black/80 backdrop-blur-sm items-center justify-center p-4">
+        <div class="bg-gray-800 border border-gray-600 rounded-lg shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col relative text-white">
+            
+            <header class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
+                <h3 class="text-xl font-bold text-emerald-400"><i class="fas fa-rocket mr-2"></i>Deploy New SaaS Tenant</h3>
+                <button type="button" onclick="closeCreateTenantModal()" class="text-gray-400 hover:text-white transition"><i class="fas fa-times text-2xl"></i></button>
+            </header>
+            
+            <div class="flex-1 overflow-y-auto p-6">
+                <form id="advancedTenantForm">
+                    
+                    <!-- Basic Info -->
+                    <h4 class="text-lg font-bold text-gray-300 border-b border-gray-700 pb-1 mb-4">1. Core Deployment Data</h4>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <label class="block text-xs text-gray-400 uppercase mb-1">Company / Tenant Name *</label>
+                            <input type="text" id="advTenantName" required class="w-full p-2 border rounded bg-gray-900 text-white border-gray-600 focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 uppercase mb-1">Preferred License Key *</label>
+                            <input type="text" id="advLicenseKey" required placeholder="e.g. TNA-AFRICA-2026" class="w-full p-2 border rounded bg-gray-900 text-white border-gray-600 font-mono focus:border-emerald-500">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="block text-xs text-gray-400 uppercase mb-1">Physical Address (Optional)</label>
+                            <textarea id="advAddress" rows="2" class="w-full p-2 border rounded bg-gray-900 text-white border-gray-600 focus:border-emerald-500"></textarea>
+                        </div>
+                        <div>
+                            <label id="lblUsername" class="block text-xs text-gray-400 uppercase mb-1">Master Admin Username *</label>
+                            <input type="text" id="advUsername" class="w-full p-2 border rounded bg-gray-900 text-white border-gray-600 focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label id="lblPassword" class="block text-xs text-gray-400 uppercase mb-1">Master Admin Password *</label>
+                            <input type="password" id="advPassword" placeholder="Leave blank to keep current password" class="w-full p-2 border rounded bg-gray-900 text-white border-gray-600 focus:border-emerald-500">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="block text-xs text-gray-400 uppercase mb-1">License Expiry Date *</label>
+                            <input type="date" id="advExpiryDate" class="w-full p-2 border rounded bg-gray-900 text-white border-gray-600 focus:border-emerald-500">
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Contacts -->
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-1">
+                        <h4 class="text-lg font-bold text-gray-300">2. Key Contacts</h4>
+                        <button type="button" onclick="addContactRow()" class="text-xs bg-blue-700 hover:bg-blue-600 text-white px-2 py-1 rounded shadow"><i class="fas fa-plus mr-1"></i> Add Contact</button>
+                    </div>
+                    <div id="contactsContainer" class="space-y-3 mb-6">
+                        <!-- Contacts injected via JS -->
+                    </div>
+
+                    <!-- Module Selection & Engine -->
+                    <h4 class="text-lg font-bold text-gray-300 border-b border-gray-700 pb-1 mb-4 flex justify-between items-end">
+                        <span>3. Active Modules & Pricing Matrix</span>
+                        <span id="pricingUpdatedWrapper" class="text-xs font-normal text-gray-400 hidden bg-gray-800 px-2 py-1 rounded">Prices Last Updated: <strong class="text-emerald-400" id="pricingUpdatedDate"></strong></span>
+                    </h4>
+                    
+                    <div class="flex gap-6 mb-4 bg-gray-900 p-4 rounded border border-gray-700">
+                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modTNA" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>Time & Attendance</span></label>
+                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modHRContracts" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>HR & Contracts</span></label>
+                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modPieceWork" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>Piece Work</span></label>
+                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modStockAssets" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>Stock & Assets</span></label>
+                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modFuel" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>Fuel Management</span></label>
+                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modFacial" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>Facial Hardware</span></label>
+                    </div>
+
+                    <table class="w-full border-collapse mb-6 text-sm" id="pricingTable">
+                        <thead>
+                            <tr class="bg-gray-700 text-gray-300">
+                                <th class="p-2 border border-gray-600 text-left">Line Item</th>
+                                <th class="p-2 border border-gray-600 w-24 text-center">Type</th>
+                                <th class="p-2 border border-gray-600 w-20 text-center">Qty</th>
+                                <th class="p-2 border border-gray-600 w-32">Unit Cost</th>
+                                <th class="p-2 border border-gray-600 w-32">Unit Sell</th>
+                                <th class="p-2 border border-gray-600 w-32 bg-gray-800 text-emerald-400 font-bold">Total Sell</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pricingTableBody">
+                            <tr><td colspan="6" class="p-4 text-center text-gray-500">Select modules above to build the pricing matrix.</td></tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            
+            <footer class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-end gap-3">
+                <p id="advTenantError" class="text-red-500 text-sm hidden self-center mr-auto font-bold"></p>
+                <button type="button" onclick="closeCreateTenantModal()" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded transition">Cancel</button>
+                <button type="button" onclick="submitAdvancedTenant()" id="btnSubmitTenant" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-6 rounded transition shadow-lg"><i class="fas fa-cloud-upload-alt mr-2"></i> Deploy Tenant Architecture</button>
+            </footer>
+
+        </div>
+    </div>
+
+  <script src="godmode.js"></script>

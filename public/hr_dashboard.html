@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Management Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body { background-color: #0f172a; color: #e2e8f0; }
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+        .sidebar-item { color: #cbd5e1; transition: background 0.3s, color 0.3s; }
+        .sidebar-item:hover { background-color: #334155; color: white; }
+        .sidebar-item.active { background-color: #1e293b; border-left: 4px solid #3b82f6; color: white; font-weight: bold; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+        
+        .modal-backdrop {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.7); z-index: 50; justify-content: center; align-items: center;
+        }
+        .modal-backdrop.active { display: flex; }
+    </style>
+</head>
+<body class="font-sans flex h-screen overflow-hidden">
+
+    <aside class="w-64 bg-gray-800 flex flex-col shadow-xl flex-shrink-0 border-r border-gray-700">
+        <div class="p-6 border-b border-gray-700 text-center">
+            <h1 class="text-2xl font-black text-blue-500"><i class="fas fa-users-cog mr-2"></i>TNA AFRICA</h1>
+            <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">HR Management</p>
+        </div>
+        <nav class="flex-1 overflow-y-auto py-4">
+            <button onclick="showSection('dashboard', this)" class="sidebar-item active w-full flex items-center p-4 text-left">
+                <i class="fas fa-chart-pie w-6 text-center mr-2"></i> Dashboard Overview
+            </button>
+            <button onclick="showSection('employees', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+                <i class="fas fa-users w-6 text-center mr-2"></i> Employee Master
+            </button>
+            <button onclick="showSection('infringements', this)" class="sidebar-item w-full flex justify-between items-center p-4 text-left border-l-4 border-transparent">
+                <div><i class="fas fa-exclamation-triangle w-6 text-center mr-2"></i> Infringements</div>
+                <span class="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">0</span>
+            </button>
+            <button onclick="showSection('performance', this)" class="sidebar-item w-full flex items-center p-4 text-left border-l-4 border-transparent">
+                <i class="fas fa-star w-6 text-center mr-2"></i> Performance Notes
+            </button>
+            <button onclick="showSection('onboarding', this)" class="sidebar-item w-full flex items-center p-4 text-left border-l-4 border-transparent">
+                <i class="fas fa-user-plus w-6 text-center mr-2"></i> Onboarding & Temp
+            </button>
+            <button onclick="showSection('active-contracts', this)" class="sidebar-item w-full flex items-center p-4 text-left border-l-4 border-transparent" id="nav-active-contracts">
+                <i class="fas fa-file-signature w-6 text-center mr-2"></i> Active Contracts
+            </button>
+            <button onclick="showSection('expiring', this)" class="sidebar-item w-full flex justify-between items-center p-4 text-left border-l-4 border-transparent" id="nav-expiring">
+                <div><i class="fas fa-calendar-times w-6 text-center mr-2"></i> Expiring This Month</div>
+                <span id="sidebarExpiringCount" class="bg-yellow-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full hidden">0</span>
+            </button>
+            <button onclick="showSection('settings', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+                <i class="fas fa-cogs w-6 text-center mr-2"></i> HR Settings
+            </button>
+        </nav>
+        <div class="p-4 border-t border-gray-700 text-xs">
+            <button onclick="window.location.href='Launchpad.html'" class="text-gray-400 hover:text-white font-bold w-full text-left flex items-center transition">
+                <i class="fas fa-arrow-left mr-2"></i> Back to Launchpad
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col overflow-hidden bg-gray-900">
+        <header class="bg-gray-800 shadow-sm p-4 flex justify-between items-center z-10 border-b border-gray-700">
+            <h2 id="sectionTitle" class="text-lg font-bold text-gray-200 uppercase tracking-wide">Dashboard Overview</h2>
+            <button class="bg-gray-700 border border-gray-600 text-gray-200 px-4 py-2 rounded text-xs font-bold hover:bg-gray-600 transition flex items-center">
+                <i class="fas fa-sync-alt mr-2"></i> Refresh Data
+            </button>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-6 relative">
+            
+            <section id="page-dashboard" class="page-section active">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-blue-500 hover:bg-gray-700 transition cursor-pointer" onclick="showSection('employees', document.querySelectorAll('.sidebar-item')[1])">
+                        <div class="flex justify-between items-start">
+                            <div><p class="text-xs text-gray-400 uppercase font-bold">Total Staff</p><h3 id="dashTotalStaff" class="text-3xl font-black text-white mt-1">--</h3></div>
+                            <div class="p-3 bg-blue-900/50 rounded-lg text-blue-400"><i class="fas fa-users text-xl"></i></div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-red-500 hover:bg-gray-700 transition cursor-pointer" onclick="showSection('infringements', document.querySelectorAll('.sidebar-item')[2])">
+                        <div class="flex justify-between items-start">
+                            <div><p class="text-xs text-gray-400 uppercase font-bold">Infringements</p><h3 id="dashInfringements" class="text-3xl font-black text-white mt-1">--</h3></div>
+                            <div class="p-3 bg-red-900/50 rounded-lg text-red-400"><i class="fas fa-exclamation-triangle text-xl"></i></div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-yellow-500 hover:bg-gray-700 transition cursor-pointer" onclick="showSection('performance', document.querySelectorAll('.sidebar-item')[3])">
+                        <div class="flex justify-between items-start">
+                            <div><p class="text-xs text-gray-400 uppercase font-bold">Performance Notes</p><h3 id="dashPerformance" class="text-3xl font-black text-white mt-1">--</h3></div>
+                            <div class="p-3 bg-yellow-900/50 rounded-lg text-yellow-400"><i class="fas fa-star text-xl"></i></div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-purple-500 hover:bg-gray-700 transition cursor-pointer" onclick="showSection('onboarding', document.querySelectorAll('.sidebar-item')[4]); switchOnboardingTab('awaiting');">
+                        <div class="flex justify-between items-start">
+                            <div><p class="text-[11px] text-gray-400 uppercase font-bold tracking-tight">Pending Onboarding</p><h3 id="dashPendingOnboard" class="text-3xl font-black text-white mt-1">--</h3></div>
+                            <div class="p-3 bg-purple-900/50 rounded-lg text-purple-400"><i class="fas fa-hourglass-half text-xl"></i></div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-orange-500 hover:bg-gray-700 transition cursor-pointer" onclick="showSection('onboarding', document.querySelectorAll('.sidebar-item')[4]); switchOnboardingTab('manage'); document.getElementById('manageFilterMissing').checked = true; toggleManageDateFilters(); fetchManagedContracts();">
+                        <div class="flex justify-between items-start">
+                            <div><p class="text-[11px] text-gray-400 uppercase font-bold tracking-tight">Missing Contracts</p><h3 id="dashMissingContracts" class="text-3xl font-black text-white mt-1">--</h3></div>
+                            <div class="p-3 bg-orange-900/50 rounded-lg text-orange-400"><i class="fas fa-file-signature text-xl"></i></div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-yellow-500 hover:bg-gray-700 transition cursor-pointer" onclick="showSection('expiring', document.getElementById('nav-expiring')); fetchExpiringContracts();">
+                        <div class="flex justify-between items-start">
+                            <div><p class="text-[11px] text-gray-400 uppercase font-bold tracking-tight">Expiring This Month</p><h3 id="dashExpiringContracts" class="text-3xl font-black text-white mt-1">--</h3></div>
+                            <div class="p-3 bg-yellow-900/50 rounded-lg text-yellow-400"><i class="fas fa-calendar-times text-xl"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-employees" class="page-section">
+                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-teal-500">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                        <h3 class="font-bold text-gray-300"><i class="fas fa-address-book mr-2"></i>Staff Directory</h3>
+                        <button class="bg-purple-600 hover:bg-purple-500 text-white px-4 py-1.5 rounded text-xs font-bold transition flex items-center shadow">
+                            <i class="fas fa-cloud-download-alt mr-2"></i> Sync from Source
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center space-x-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
+                        <div class="relative flex-1 max-w-sm">
+                            <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
+                         <input type="text" id="empSearch" placeholder="Search Employee Name or PIN..." class="w-full pl-8 pr-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-teal-500 transition"> 
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                                <tr>
+                                    <th class="p-3">PIN</th>
+                                    <th class="p-3">First Name</th>
+                                    <th class="p-3">Last Name</th>
+                                    <th class="p-3">Department</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700 bg-gray-800">
+                                <tr><td colspan="4" class="p-4 text-center text-gray-500">Loading employees...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-infringements" class="page-section">
+                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-red-500">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                        <h3 class="font-bold text-gray-300"><i class="fas fa-exclamation-circle mr-2"></i>Infringement Records</h3>
+                    </div>
+
+                    <div class="flex items-center space-x-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
+                        <div>
+                            <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">Start Date</label>
+                            <input type="date" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-white text-xs focus:outline-none focus:border-red-500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">End Date</label>
+                            <input type="date" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-white text-xs focus:outline-none focus:border-red-500">
+                        </div>
+                        <div class="flex-1 max-w-sm">
+                            <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">Employee Search</label>
+                            <input type="text" placeholder="Type Name or PIN..." class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-red-500 transition">
+                        </div>
+                        <div class="flex space-x-2 mt-4">
+                            <button class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs font-bold uppercase transition shadow"><i class="fas fa-search mr-1"></i> Search</button>
+                            <button class="bg-gray-600 hover:bg-gray-500 text-white px-3 py-1.5 rounded text-xs font-bold uppercase transition shadow"><i class="fas fa-times mr-1"></i> Clear</button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm border-collapse">
+                            <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                                <tr>
+                                    <th class="p-3 border-b border-gray-600">Date</th>
+                                    <th class="p-3 border-b border-gray-600">Employee</th>
+                                    <th class="p-3 border-b border-gray-600">Infringement</th>
+                                    <th class="p-3 border-b border-gray-600 text-center">Evidence</th>
+                                    <th class="p-3 border-b border-gray-600 text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700 bg-gray-800">
+                                <tr><td colspan="5" class="p-8 text-center text-gray-500">Loading infringement records...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-performance" class="page-section">
+                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-yellow-500">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                        <h3 class="font-bold text-gray-300"><i class="fas fa-star mr-2"></i>Performance Notes</h3>
+                    </div>
+
+                    <div class="flex items-center space-x-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
+                        <div>
+                            <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">Start Date</label>
+                            <input type="date" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-white text-xs focus:outline-none focus:border-yellow-500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">End Date</label>
+                            <input type="date" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-white text-xs focus:outline-none focus:border-yellow-500">
+                        </div>
+                        <div class="flex-1 max-w-sm">
+                            <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">Employee Search</label>
+                            <input type="text" placeholder="Type Name or PIN..." class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-yellow-500 transition">
+                        </div>
+                        <div class="flex space-x-2 mt-4">
+                            <button class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs font-bold uppercase transition shadow"><i class="fas fa-search mr-1"></i> Search</button>
+                            <button class="bg-gray-600 hover:bg-gray-500 text-white px-3 py-1.5 rounded text-xs font-bold uppercase transition shadow"><i class="fas fa-times mr-1"></i> Clear</button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm border-collapse">
+                            <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                                <tr>
+                                    <th class="p-3 border-b border-gray-600">Date</th>
+                                    <th class="p-3 border-b border-gray-600">Employee</th>
+                                    <th class="p-3 border-b border-gray-600">Category</th>
+                                    <th class="p-3 border-b border-gray-600">Subject</th>
+                                    <th class="p-3 border-b border-gray-600 text-center">Evidence</th>
+                                    <th class="p-3 border-b border-gray-600 text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700 bg-gray-800">
+                                <tr><td colspan="6" class="p-8 text-center text-gray-500">Loading performance notes...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-active-contracts" class="page-section">
+                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-green-500">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                        <h3 class="font-bold text-gray-300"><i class="fas fa-file-signature mr-2"></i>Active Contracts</h3>
+                    </div>
+
+                    <div class="flex items-center space-x-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
+                        <div class="w-1/3">
+                            <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">Department (Required)</label>
+                            <select id="activeContractDept" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-white text-xs focus:outline-none focus:border-green-500 transition">
+                                <option value="">-- Select Department --</option>
+                            </select>
+                        </div>
+                        <div class="flex-1 max-w-sm">
+                            <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">Employee Search</label>
+                            <input type="text" id="activeContractSearch" placeholder="Type Name, Surname or PIN..." class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-green-500 transition">
+                        </div>
+                        <div class="flex space-x-2 mt-4">
+                            <button onclick="fetchActiveContracts()" class="bg-green-700 hover:bg-green-600 text-white px-4 py-1.5 rounded text-xs font-bold uppercase transition shadow"><i class="fas fa-search mr-1"></i> Search</button>
+                        </div>
+                    </div>
+
+                   <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm border-collapse">
+                            <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                                <tr>
+                                    <th class="p-3 border-b border-gray-600">Employee</th>
+                                    <th class="p-3 border-b border-gray-600">Department</th>
+                                    <th class="p-3 border-b border-gray-600">Contract Type</th>
+                                    <th class="p-3 border-b border-gray-600">Valid From</th>
+                                    <th class="p-3 border-b border-gray-600">Valid To</th>
+                                    <th class="p-3 border-b border-gray-600 text-center">Physical Copy</th>
+                                </tr>
+                            </thead>
+                            <tbody id="activeContractsTableBody" class="divide-y divide-gray-700 bg-gray-800">
+                                <tr><td colspan="6" class="p-4 text-center text-gray-500">Please select a department and click Search.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-expiring" class="page-section">
+                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-yellow-500">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                        <h3 class="font-bold text-gray-300"><i class="fas fa-calendar-times mr-2"></i>Contracts Expiring This Month</h3>
+                        <button onclick="fetchExpiringContracts()" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-gray-500">
+                            <i class="fas fa-sync-alt mr-2"></i> Refresh List
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm border-collapse">
+                            <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                                <tr>
+                                    <th class="p-3 border-b border-gray-600">Employee</th>
+                                    <th class="p-3 border-b border-gray-600">Department</th>
+                                    <th class="p-3 border-b border-gray-600">Contract Type</th>
+                                    <th class="p-3 border-b border-gray-600">Valid From</th>
+                                    <th class="p-3 border-b border-gray-600 text-yellow-400">Valid To</th>
+                                </tr>
+                            </thead>
+                            <tbody id="expiringContractsTableBody" class="divide-y divide-gray-700 bg-gray-800">
+                                <tr><td colspan="5" class="p-4 text-center text-gray-500">Loading expiring contracts...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-settings" class="page-section">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-gray-500 col-span-1">
+                        <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                            <h3 class="font-bold text-gray-300"><i class="fas fa-tags mr-2"></i>Categories</h3>
+                            <button onclick="openCategoryModal()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded text-xs font-bold transition flex items-center shadow">
+                                <i class="fas fa-plus mr-1"></i> Add
+                            </button>
+                        </div>
+                        <div class="overflow-y-auto max-h-[60vh]">
+                            <table class="w-full text-left text-sm border-collapse">
+                                <thead class="bg-gray-700 uppercase text-[10px] font-bold text-gray-400">
+                                    <tr>
+                                        <th class="p-2 border-b border-gray-600">Name / Module</th>
+                                        <th class="p-2 border-b border-gray-600 text-center w-24">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="categoryTableBody" class="divide-y divide-gray-700 bg-gray-800">
+                                    <tr><td colspan="2" class="p-4 text-center text-gray-500 text-xs">Loading categories...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-purple-500 col-span-1 lg:col-span-2">
+                        <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                            <h3 class="font-bold text-gray-300"><i class="fas fa-list-check mr-2"></i>HR Rules (Infringements & Performance)</h3>
+                            <button onclick="openTypeModal()" class="bg-green-600 hover:bg-green-500 text-white px-4 py-1.5 rounded text-xs font-bold transition flex items-center shadow">
+                                <i class="fas fa-plus mr-2"></i> Add Rule
+                            </button>
+                        </div>
+                        <div class="overflow-y-auto max-h-[60vh]">
+                            <table class="w-full text-left text-sm border-collapse">
+                                <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                                    <tr>
+                                        <th class="p-3 border-b border-gray-600 w-24">Code</th>
+                                        <th class="p-3 border-b border-gray-600">Details</th>
+                                        <th class="p-3 border-b border-gray-600 text-center w-24">Severity</th>
+                                        <th class="p-3 border-b border-gray-600 text-center w-32">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="typesTableBody" class="divide-y divide-gray-700 bg-gray-800">
+                                    <tr><td colspan="4" class="p-8 text-center text-gray-500">Loading configurations...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-onboarding" class="page-section pb-20">
+                
+                <div class="flex space-x-2 mb-6 border-b border-gray-700 pb-2">
+                    <button onclick="switchOnboardingTab('assign')" id="tab-assign" class="px-4 py-2 text-sm font-bold text-white bg-blue-600 rounded-t-lg transition">Assign Contract</button>
+                    <button onclick="switchOnboardingTab('awaiting')" id="tab-awaiting" class="px-4 py-2 text-sm font-bold text-gray-400 hover:text-white transition">Awaiting Approval</button>
+                    <button onclick="switchOnboardingTab('manage')" id="tab-manage" class="px-4 py-2 text-sm font-bold text-gray-400 hover:text-white transition">Manage Contracts</button>
+                    <button onclick="switchOnboardingTab('templates')" id="tab-templates" class="px-4 py-2 text-sm font-bold text-gray-400 hover:text-white transition">Contract Templates</button>
+                </div>
+
+                <div id="onboarding-assign" class="onboarding-tab block">
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-blue-500">
+                        <h3 class="font-bold text-gray-300 mb-4 border-b border-gray-700 pb-2"><i class="fas fa-user-plus mr-2"></i>Assign Employee Contract</h3>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="bg-gray-900 p-4 rounded border border-gray-700 relative">
+                                <label class="block text-xs font-bold text-gray-400 mb-1">1. Search & Select Employee</label>
+                                <div class="relative">
+                                    <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
+                                    <input type="text" id="obSearchEmp" placeholder="Type Name or PIN..." autocomplete="off" class="w-full pl-8 pr-3 py-2 bg-gray-800 border border-gray-600 rounded text-sm text-white focus:outline-none focus:border-blue-500 transition">
+                                </div>
+                                <div id="obEmpDropdown" class="hidden absolute z-50 w-full mt-1 bg-gray-700 border border-gray-500 rounded shadow-xl max-h-48 overflow-y-auto left-0 right-0 ml-4 mr-4 w-[calc(100%-2rem)]"></div>
+                                
+                                <input type="hidden" id="obSelectedPin">
+                                <div id="obSelectedDisplay" class="mt-3 p-3 bg-gray-800 border border-blue-500/50 rounded hidden">
+                                    <p class="text-xs text-gray-400">Selected:</p>
+                                    <p id="obSelectedName" class="font-bold text-white text-sm">--</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-900 p-4 rounded border border-gray-700 space-y-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-400 mb-1">2. Select Contract Template</label>
+                                    <select id="obTemplateSelect" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                                        <option value="">-- Loading Templates --</option>
+                                    </select>
+                                </div>
+                               <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-400 mb-1">Valid From</label>
+                                        <input type="date" id="obValidFrom" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-yellow-400 mb-1"><i class="fas fa-calendar-times mr-1"></i> Valid To (Auto-Terminate)</label>
+                                        <input type="date" id="obValidTo" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-yellow-500">
+                                    </div>
+                                </div>
+                                <div class="flex items-center mt-2">
+                                    <input type="checkbox" id="obIsPermanent" onchange="togglePermanentContract()" class="w-4 h-4 accent-blue-500 bg-gray-800 border-gray-600 rounded cursor-pointer">
+                                    <label for="obIsPermanent" class="ml-2 text-xs font-bold text-blue-400 cursor-pointer">Set as Permanent Contract (No Expiry)</label>
+                                </div>
+                                <button onclick="assignContract()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-2 rounded font-bold text-sm shadow transition mt-4" id="btnAssignContract">
+                                    Assign Contract
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="onboarding-awaiting" class="onboarding-tab hidden">
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-yellow-500">
+                        <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                            <h3 class="font-bold text-gray-300"><i class="fas fa-hourglass-half mr-2"></i>Awaiting Approval & Validation</h3>
+                            <button onclick="fetchAwaitingContracts()" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-gray-500">
+                                <i class="fas fa-sync-alt mr-2"></i> Refresh
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm border-collapse">
+                                <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                                    <tr>
+                                        <th class="p-3 border-b border-gray-600">Employee</th>
+                                        <th class="p-3 border-b border-gray-600">Contract Type</th>
+                                        <th class="p-3 border-b border-gray-600">Validity Period</th>
+                                        <th class="p-3 border-b border-gray-600">Status</th>
+                                        <th class="p-3 border-b border-gray-600 text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="awaitingTableBody" class="divide-y divide-gray-700 bg-gray-800">
+                                    <tr><td colspan="5" class="p-4 text-center text-gray-500">Loading records...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="onboarding-manage" class="onboarding-tab hidden">
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-green-500">
+                        <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                            <h3 class="font-bold text-gray-300"><i class="fas fa-folder-open mr-2"></i>Active Temporary Contracts</h3>
+                        </div>
+
+                       <div class="bg-gray-900 p-3 rounded border border-gray-700 mb-4">
+                            <div class="flex items-center space-x-3">
+                                <div>
+                                    <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">Termination From</label>
+                                    <input type="date" id="manageFilterFrom" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-white text-xs focus:outline-none focus:border-green-500 transition">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">Termination To (Max 1 Month)</label>
+                                    <input type="date" id="manageFilterTo" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-white text-xs focus:outline-none focus:border-green-500 transition">
+                                </div>
+                                <div class="flex-1 max-w-sm">
+                                    <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">Employee Search</label>
+                                    <input type="text" id="manageFilterSearch" placeholder="Type Name or PIN..." class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-green-500 transition">
+                                </div>
+                                <div class="flex space-x-2 mt-4">
+                                    <button onclick="fetchManagedContracts()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-1.5 rounded text-xs font-bold uppercase transition shadow"><i class="fas fa-search mr-1"></i> View</button>
+                                </div>
+                            </div>
+                            <div class="flex items-center mt-3 pt-3 border-t border-gray-700">
+                                <input type="checkbox" id="manageFilterMissing" onchange="toggleManageDateFilters()" class="w-4 h-4 accent-red-500 bg-gray-800 border-gray-600 rounded cursor-pointer">
+                                <label for="manageFilterMissing" class="ml-2 text-xs font-bold text-red-400 cursor-pointer">Show ALL missing physical contracts (ignores dates)</label>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm border-collapse">
+                                <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                                    <tr>
+                                        <th class="p-3 border-b border-gray-600">Employee</th>
+                                        <th class="p-3 border-b border-gray-600">Contract Type</th>
+                                        <th class="p-3 border-b border-gray-600">Terminates On</th>
+                                        <th class="p-3 border-b border-gray-600 text-center">Physical Copy</th>
+                                        <th class="p-3 border-b border-gray-600 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="manageTableBody" class="divide-y divide-gray-700 bg-gray-800">
+                                    <tr><td colspan="5" class="p-4 text-center text-gray-500">Please select dates and click View.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <input type="file" id="hiddenContractUpload" accept="image/*" class="hidden">
+                <input type="hidden" id="uploadContractId">
+
+                <div id="onboarding-templates" class="onboarding-tab hidden">
+                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-purple-500">
+                        <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                            <h3 class="font-bold text-gray-300"><i class="fas fa-file-contract mr-2"></i>Contract Master Templates</h3>
+                            <button onclick="openTemplateModal()" class="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded text-xs font-bold transition flex items-center shadow border border-purple-500">
+                                <i class="fas fa-plus-circle mr-2"></i> Create New Template
+                            </button>
+                        </div>
+                        <div class="overflow-y-auto max-h-[60vh]">
+                            <table class="w-full text-left text-sm border-collapse">
+                                <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                                    <tr>
+                                        <th class="p-3 border-b border-gray-600">Title</th>
+                                        <th class="p-3 border-b border-gray-600">Created</th>
+                                        <th class="p-3 border-b border-gray-600 text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="templatesTableBody" class="divide-y divide-gray-700 bg-gray-800">
+                                    <tr><td colspan="3" class="p-4 text-center text-gray-500">Loading templates...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+   <div id="categoryModal" class="modal-backdrop">
+        <div class="bg-gray-800 w-full max-w-sm rounded shadow-2xl border border-gray-600 flex flex-col">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center">
+                <h3 id="catModalTitle" class="font-bold text-lg text-blue-400">Add Category</h3>
+                <button onclick="closeModal('categoryModal')" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6">
+                <form id="categoryForm" class="space-y-4">
+                    <input type="hidden" id="catId">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Category Name</label>
+                        <input type="text" id="catName" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-blue-500" placeholder="e.g. Safety Gear" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Applies To Module</label>
+                        <select id="catType" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-blue-500">
+                            <option value="Infringement">Infringements</option>
+                            <option value="Performance">Performance Notes</option>
+                        </select>
+                    </div>
+                    <div class="pt-4 flex justify-end space-x-3">
+                        <button type="button" onclick="closeModal('categoryModal')" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded font-bold text-sm">Cancel</button>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded font-bold text-sm shadow">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="typeModal" class="modal-backdrop">
+        <div class="bg-gray-800 w-full max-w-md rounded shadow-2xl border border-gray-600 flex flex-col">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center">
+                <h3 id="typeModalTitle" class="font-bold text-lg text-green-400">Add Infringement Rule</h3>
+                <button onclick="closeModal('typeModal')" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6">
+                <form id="typeForm" class="space-y-4">
+                    <input type="hidden" id="typeIsEdit" value="false">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Rule Code (Unique)</label>
+                        <input type="text" id="typeCode" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-green-500 uppercase" placeholder="e.g. ATT-01" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Category</label>
+                        <select id="typeCat" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-green-500" required>
+                            </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Description</label>
+                        <textarea id="typeDesc" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white h-24 focus:outline-none focus:border-green-500" placeholder="Description of the rule" required></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Severity</label>
+                        <select id="typeSev" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-green-500">
+                            <option value="1">1 - Minor</option>
+                            <option value="2">2 - Serious</option>
+                            <option value="3">3 - Critical</option>
+                        </select>
+                    </div>
+                    <div class="pt-4 flex justify-end space-x-3">
+                        <button type="button" onclick="closeModal('typeModal')" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded font-bold text-sm">Cancel</button>
+                        <button type="submit" class="px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded font-bold text-sm shadow">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="templateModal" class="modal-backdrop py-6">
+        <div class="bg-gray-800 w-full max-w-5xl h-full rounded-xl shadow-2xl border border-gray-600 flex flex-col">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-xl">
+                <h3 class="font-bold text-xl text-purple-400"><i class="fas fa-file-contract mr-2"></i>Contract Template Editor</h3>
+                <button onclick="closeModal('templateModal')" class="text-gray-400 hover:text-white text-xl"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 flex-1 flex flex-col overflow-hidden">
+                <form id="templateForm" class="flex-1 flex flex-col space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-400 mb-1">Template Title</label>
+                        <input type="text" id="tplTitle" class="w-full bg-gray-900 border border-gray-600 rounded p-3 text-white focus:outline-none focus:border-purple-500 font-bold text-lg" placeholder="e.g. Seasonal Worker 3-Month Contract" required>
+                    </div>
+                    <input type="hidden" id="tplId">
+                    <div class="flex items-center mb-2">
+                        <input type="checkbox" id="tplHasTranslation" onchange="toggleTranslationBody()" class="w-4 h-4 accent-purple-500 bg-gray-900 border-gray-600 rounded cursor-pointer">
+                        <label for="tplHasTranslation" class="ml-2 text-xs font-bold text-purple-400 cursor-pointer">Include translated version (optional)</label>
+                    </div>
+                    <div class="flex-1 flex flex-col min-h-0 md:flex-row gap-4">
+                        <div class="flex-1 flex flex-col min-h-0">
+                            <label class="block text-sm font-bold text-gray-400 mb-1 flex justify-between items-end">
+                                <span>Primary Contract Body</span>
+                            </label>
+                            <textarea id="tplBody" class="w-full flex-1 bg-gray-900 border border-gray-600 rounded p-4 text-sm text-gray-200 focus:outline-none focus:border-purple-500 resize-none font-sans leading-relaxed whitespace-pre-wrap" placeholder="Enter primary contract terms here..." required></textarea>
+                        </div>
+                        <div id="translatedBodyContainer" class="flex-1 flex flex-col min-h-0 hidden">
+                            <label class="block text-sm font-bold text-purple-400 mb-1 flex justify-between items-end">
+                                <span>Translated Contract Body</span>
+                            </label>
+                            <textarea id="tplBodyTranslated" class="w-full flex-1 bg-gray-900 border border-gray-600 rounded p-4 text-sm text-gray-200 focus:outline-none focus:border-purple-500 resize-none font-sans leading-relaxed whitespace-pre-wrap" placeholder="Paste the translated contract terms here..."></textarea>
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-gray-700 flex justify-between items-center">
+                        <button type="button" onclick="previewContractPDF()" class="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded font-bold shadow transition flex items-center" id="btnPreviewPdf">
+                            <i class="fas fa-file-pdf text-red-400 mr-2 text-lg"></i> Preview Finale PDF
+                        </button>
+                        <div class="space-x-3">
+                            <button type="button" onclick="closeModal('templateModal')" class="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded font-bold shadow transition">Cancel</button>
+                            <button type="submit" class="px-8 py-3 bg-purple-600 hover:bg-purple-500 text-white rounded font-bold shadow-lg transition text-lg" id="btnSaveTemplate">
+                                <i class="fas fa-save mr-2"></i> Save Template
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div style="display:none;">
+        <div id="contractPreviewContent" class="bg-white p-12 text-gray-900 font-serif w-[794px] max-w-none relative mx-auto">
+            <h1 id="pdfContractTitle" class="text-2xl font-bold text-center mb-6 uppercase border-b-2 border-gray-800 pb-4">CONTRACT TITLE</h1>
+            <div id="pdfContractBody" class="text-sm leading-relaxed whitespace-pre-wrap text-justify">
+                </div>
+            <div class="mt-16 pt-8 border-t border-gray-400 grid grid-cols-2 gap-10">
+                <div class="text-center">
+                    <div class="h-16 flex items-end justify-center border-b border-gray-400 mb-2">
+                         <img id="pdfMgrSigImage" src="" class="max-h-full object-contain hidden" />
+                    </div>
+                    <p class="text-xs font-bold uppercase text-left">Employer / Manager Signature</p>
+                    <p class="text-[10px] text-gray-500 mt-1 text-left">Date: ________________</p>
+                </div>
+                <div class="text-center">
+                    <div class="h-16 flex items-end justify-center border-b border-gray-400 mb-2">
+                         <img id="pdfEmpSigImage" src="" class="max-h-full object-contain hidden" />
+                    </div>
+                    <p class="text-xs font-bold uppercase text-left">Employee Signature</p>
+                    <p id="pdfEmpSigName" class="text-[11px] font-bold text-gray-800 mt-1 uppercase text-left"></p>
+                    <p class="text-[10px] text-gray-500 mt-1 text-left">Date: ________________</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="viewModal" class="modal-backdrop overflow-x-auto py-10">
+        <div class="relative mx-auto bg-gray-800 rounded shadow-2xl p-2">
+            
+            <div class="absolute -top-10 right-0 flex space-x-2 z-10" data-html2canvas-ignore="true">
+                <button onclick="closeModal('viewModal')" class="bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 rounded font-bold shadow"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div id="reportContent" class="bg-white flex flex-col w-[794px] h-[1122px] max-w-none p-10 text-gray-800 relative">
+                
+                <div class="flex justify-between items-start border-b-2 border-gray-900 pb-3 mb-4">
+                    <div>
+                        <h1 id="repTenantName" class="text-3xl font-black text-gray-900 tracking-tighter">TNA AFRICA</h1>
+                        <p class="text-xs font-bold text-gray-500 tracking-widest uppercase">Official Record</p>
+                    </div>
+                    <div class="text-right">
+                        <h2 class="text-xl font-black text-red-600 uppercase tracking-wide">Infringement Report</h2>
+                        <p class="text-base font-bold text-gray-800 mt-1" id="repRef">REF: #0000</p>
+                        <p class="text-[10px] text-gray-500 font-mono mt-1" id="repGenDate">Generated: ...</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="border-2 border-gray-200 p-3 rounded bg-gray-50">
+                        <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 border-b pb-1">Employee Details</h3>
+                        <table class="w-full text-xs">
+                            <tr><td class="font-bold text-gray-600 py-1 w-20">Name:</td><td class="font-bold text-gray-900 text-sm" id="repName">...</td></tr>
+                            <tr><td class="font-bold text-gray-600 py-1">PIN:</td><td class="font-mono text-gray-800" id="repPin">...</td></tr>
+                            <tr><td class="font-bold text-gray-600 py-1">Dept:</td><td class="text-gray-800" id="repDept">...</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="border-2 border-gray-200 p-3 rounded bg-gray-50">
+                        <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 border-b pb-1">Incident Details</h3>
+                        <table class="w-full text-xs">
+                            <tr><td class="font-bold text-gray-600 py-1 w-20">Date:</td><td class="font-bold text-gray-900" id="repDate">...</td></tr>
+                            <tr><td class="font-bold text-gray-600 py-1">Type:</td><td class="text-red-600 font-bold" id="repType">...</td></tr>
+                            <tr><td class="font-bold text-gray-600 py-1">Location:</td><td id="repGps">...</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-xs font-black text-gray-800 uppercase bg-gray-200 p-1.5 border-l-4 border-gray-800 mb-1">Description / Comments</h3>
+                    <div class="border border-gray-300 p-3 min-h-[60px] text-xs text-gray-700 whitespace-pre-wrap" id="repComments">...</div>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-xs font-black text-gray-800 uppercase bg-gray-200 p-1.5 border-l-4 border-gray-800 mb-1">Photographic Evidence</h3>
+                    <div class="border border-gray-300 p-2 flex justify-center bg-gray-50">
+                        <img id="repPhoto" src="" alt="No Evidence Provided" class="max-h-56 object-contain hidden mx-auto" />
+                        <p id="repNoPhoto" class="text-[10px] text-gray-400 font-bold py-6">NO PHOTOGRAPHIC EVIDENCE ATTACHED</p>
+                    </div>
+                </div>
+
+                <div class="flex-grow"></div> 
+                
+                <div class="grid grid-cols-2 gap-6 mt-4 border-t-2 border-gray-300 pt-4">
+                    <div class="text-center">
+                        <div class="h-20 flex items-center justify-center border-b border-gray-400 border-dashed mb-1">
+                            <img id="repSigEmp" src="" class="max-h-full object-contain hidden mx-auto" />
+                            <span id="repNoSigEmp" class="text-gray-300 italic text-xs">Not Signed</span>
+                        </div>
+                        <p class="font-bold text-gray-800 uppercase text-xs">Employee Signature</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="h-20 flex items-center justify-center border-b border-gray-400 border-dashed mb-1">
+                            <img id="repSigMgr" src="" class="max-h-full object-contain hidden mx-auto" />
+                            <span id="repNoSigMgr" class="text-gray-300 italic text-xs">Not Signed</span>
+                        </div>
+                        <p class="font-bold text-gray-800 uppercase text-xs">Manager Signature</p>
+                    </div>
+                </div>
+
+                <div class="mt-4 text-center text-[10px] text-gray-500 border-t border-gray-200 pt-3">
+                    <p>This document is an official record generated by the TNA Africa HR System.</p>
+                    <p id="repIdFooter" class="font-mono mt-0.5 mb-1">Generated ID: ...</p>
+                    <p class="font-bold text-gray-400">Powered by TNA AFRICA | <a href="http://www.tnaafrica.co.za" class="text-blue-500 font-normal">www.tnaafrica.co.za</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="hr_dashboard.js"></script>
+</body>
+</html>

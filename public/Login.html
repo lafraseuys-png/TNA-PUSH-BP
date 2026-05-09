@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise System Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>  <style>
+        body { background-color: #0f172a; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: 'Segoe UI', sans-serif; color: #e2e8f0; }
+        form { background: #1e293b; padding: 2.5rem; border-radius: 1rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); width: 100%; max-width: 400px; border: 1px solid #334155; }
+        input::placeholder { color: #64748b; }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="flex flex-col">
+    <div class="flex flex-col items-center">
+        <img src="logo.jpg" alt="TNA Africa Logo" class="w-96 mb-8 drop-shadow-2xl object-contain">
+
+        <form id="loginForm" class="transition-all duration-300 hover:border-cyan-500/50">
+            <h2 class="text-2xl font-black mb-6 text-center text-white tracking-tight uppercase">Enterprise Login</h2>
+            
+            <div class="space-y-4">
+                <div class="relative">
+                    <input type="text" id="licenseKey" placeholder="License Key" required class="w-full p-3 bg-[#0f172a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all">
+                </div>
+                
+                <div class="relative">
+                    <input type="text" id="username" placeholder="Username" required class="w-full p-3 bg-[#0f172a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all">
+                </div>
+
+                <div class="relative">
+                    <input type="password" id="password" placeholder="Password" required class="w-full p-3 bg-[#0f172a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all">
+                </div>
+
+                <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white p-3 rounded-lg font-bold shadow-lg shadow-cyan-900/20 transition-all transform active:scale-95 flex items-center justify-center">
+                    <i class="fas fa-sign-in-alt mr-2"></i> Access Dashboard
+                </button>
+            </div>
+            
+            <p id="error" class="text-red-400 mt-4 text-xs font-bold text-center hidden p-2 bg-red-900/20 rounded border border-red-800/50 uppercase tracking-widest"></p>
+        </form>
+
+        <p class="mt-8 text-gray-500 text-[10px] uppercase tracking-[0.2em] font-bold">
+            Product by <span class="text-gray-400">TNA Africa</span> &bull; All Rights Reserved &copy; 2026
+        </p>
+    </div>
+
+    <script src="login.js"></script>
+</body>
+</html>
