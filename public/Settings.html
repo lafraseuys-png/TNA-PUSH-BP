@@ -241,6 +241,29 @@
                                     <option value="">-- Custom / No Role --</option>
                                 </select>
                             </div>
+                            
+                            <!-- Custom Module Checkboxes (Creation) -->
+                            <h4 class="text-xs font-bold text-blue-400 mb-2">Web Dashboard Modules</h4>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userHr" class="mr-2 accent-blue-500"> HR Management</label>
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userFuel" class="mr-2 accent-blue-500"> Fuel Management</label>
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userStock" class="mr-2 accent-blue-500"> Stock Control</label>
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userAssetTagging" class="mr-2 accent-blue-500"> Asset Tagging</label>
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userTasks" class="mr-2 accent-blue-500"> Agri Piece Work</label>
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userTimeAttendance" class="mr-2 accent-blue-500"> Time & Attendance</label>
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userEmployeeMaster" class="mr-2 accent-blue-500"> Employee Master</label>
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userEmployeeCosts" class="mr-2 accent-blue-500"> Employee Costs</label>
+                                </div>
+                                
+                                <h4 class="text-xs font-bold text-purple-400 mb-2">Mobile App Modules</h4>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userMobileHr" class="mr-2 accent-purple-500"> HR Management</label>
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userMobileFuel" class="mr-2 accent-purple-500"> Fuel Management</label>
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userMobileStock" class="mr-2 accent-purple-500"> Stock Control</label>
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userMobileAssetTagging" class="mr-2 accent-purple-500"> Asset Tagging</label>
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userMobileTasks" class="mr-2 accent-purple-500"> Agri Piece Work</label>
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userMobileTimeAttendance" class="mr-2 accent-purple-500"> Time & Attendance</label>
+                                </div>
                         </div>
                         <div class="flex justify-between items-center">
                             <div>
@@ -381,6 +404,35 @@
                         </table>
                     </div>
                     <p id="tenantDevicesError" class="text-red-400 mt-2 hidden"></p>
+                </div>
+
+                <!-- NEW FACIAL AI LICENSE CARD -->
+                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-pink-500 mt-6">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                        <h3 class="font-bold text-gray-300"><i class="fas fa-id-card-clip mr-2 text-pink-500"></i>Facial AI Offline Licenses</h3>
+                        <div class="flex items-center space-x-4">
+                            <span class="text-xs text-gray-400 font-bold bg-gray-900 px-3 py-1.5 rounded border border-gray-700 shadow-inner">
+                                Used/Generated: <span id="licenseUsageCount" class="text-pink-400 text-sm ml-1">0</span> <span class="text-gray-500 mx-1">/</span> <span id="licenseLimitCount" class="text-white text-sm">0</span> Quota
+                            </span>
+                            </div>
+                    </div>
+                    <p class="text-sm text-gray-400 mb-4">Secure 4-character shortcodes to activate the Facial Recognition engine on mobile devices offline. The Master Admin provisions these. Each code burns upon use and permanently binds to that mobile device.</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm border-collapse">
+                            <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                                <tr>
+                                    <th class="p-3 border-r border-gray-600">Shortcode</th>
+                                    <th class="p-3 border-r border-gray-600 text-center">Status</th>
+                                    <th class="p-3 border-r border-gray-600">Claimed By</th>
+                                    <th class="p-3 border-r border-gray-600">Burned At</th>
+                                    <th class="p-3 text-right">Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody id="facialLicensesTable" class="divide-y divide-gray-700 bg-gray-900">
+                                <tr><td colspan="5" class="p-4 text-center text-gray-500">Loading licenses...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
 

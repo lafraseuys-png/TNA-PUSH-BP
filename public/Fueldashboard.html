@@ -3,19 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RHINO AGRI TECH | Louis Trap | POWERED BY TNA AFRICA</title>
+    <title>FUEL MODULE | POWERED BY TNA AFRICA</title>
     <link rel="icon" type="image/png" href="icon-192.png">
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background-color: #0a0a0a; color: #e5e7eb; }
+        body {
+            background-color: #0f172a; 
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #1e293b; 
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+            z-index: 50;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        .user-info {
+            padding: 1.5rem;
+            border-bottom: 1px solid #334155;
+            text-align: center;
+        }
+        .nav-links {
+            flex-grow: 1;
+            padding: 1rem 0;
+            overflow-y: auto;
+        }
+        .sidebar-item {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: background 0.3s, color 0.3s;
+            text-align: left;
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-size: 0.875rem;
+            font-weight: bold;
+        }
+        .sidebar-item:hover {
+            background-color: #334155;
+            color: white;
+        }
+        .sidebar-item.active { 
+            background-color: #334155; 
+            border-left: 4px solid #70A827; 
+            color: #70A827 !important; 
+        }
+        .sidebar-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        .logout-btn {
+            padding: 1rem;
+            background-color: #475569; 
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s;
+            border: none;
+            width: 100%;
+            font-size: 1rem;
+        }
+        .logout-btn:hover {
+            background-color: #334155;
+        }
         .page-section { display: none; }
         .page-section.active { display: block; }
-        .card { background: #121212; border: 1px solid #252525; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); }
-        .sidebar-item.active { background: #252525; border-left: 4px solid #70A827; color: #70A827 !important; }
+        .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); }
         .form-input { background: #2a2a2a !important; border: 1px solid #333 !important; color: white !important; border-radius: 12px !important; outline: none; transition: border-color 0.2s; }
         .form-input:focus { border-color: #70A827 !important; }
         .table-input { background: transparent; border: 1px solid transparent; color: white; padding: 8px 10px; border-radius: 6px; width: 100%; transition: all 0.2s; outline: none; font-weight: 600; }
@@ -31,44 +105,47 @@
         .evidence-img { width: 100%; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #333; cursor: pointer; }
     </style>
 </head>
-<body class="flex h-screen overflow-hidden">
-    <aside class="w-72 bg-[#0d0d0d] text-white flex flex-col border-r border-[#252525] flex-shrink-0">
-        <div class="p-8 text-center border-b border-[#252525]">
-            <h1 class="text-2xl font-black tracking-tighter text-white">RHINO <span class="text-[#70A827]">AGRI</span></h1>
-            <p class="text-[9px] text-gray-500 uppercase tracking-[0.3em] mt-2 mb-6 font-bold">Louistrap Console</p>
+<body>
+    <div class="sidebar">
+        <div class="user-info">
+            <i class="fas fa-user-circle text-4xl mb-2 text-gray-400"></i>
+            <h3 id="adminName" class="text-xl font-bold text-white">Loading...</h3>
+            <p class="text-[10px] text-[#70A827] font-black mt-2 uppercase tracking-widest">Fuel Module</p>
+        </div>
+        
+        <div class="nav-links">
+            <button onclick="showSection('stats', this)" class="sidebar-item active"><i class="fas fa-chart-pie"></i> Dashboard</button>
+            <button onclick="showSection('transactions', this)" class="sidebar-item"><i class="fas fa-gas-pump"></i> Fuel Logs</button>
+            <button onclick="showSection('triplogs', this)" class="sidebar-item text-indigo-400"><i class="fas fa-route"></i> Trip Logs</button>
             
-            <p class="text-[8px] text-gray-600 uppercase tracking-[0.3em] mb-1 font-bold">POWERED BY</p>
-            <h1 class="text-2xl font-black tracking-tighter text-white">TNA <span class="text-[#70A827]">AFRICA</span></h1>
+            <div class="px-6 py-2 text-[10px] uppercase text-gray-500 font-black tracking-widest mt-2">Fleet Assets</div>
+            <button onclick="showSection('vehicles', this)" class="sidebar-item"><i class="fas fa-truck"></i> Vehicles</button>
+            <button onclick="showSection('drivers', this)" class="sidebar-item"><i class="fas fa-id-card"></i> Drivers</button>
+            <button onclick="showSection('depots', this)" class="sidebar-item"><i class="fas fa-oil-can"></i> Fuel Depots</button>
+            
+            <div class="px-6 py-2 text-[10px] uppercase text-gray-500 font-black tracking-widest mt-2">System Control</div>
+            <button onclick="showSection('management', this)" class="sidebar-item text-[#70A827]"><i class="fas fa-sliders-h"></i> Management</button>
+            <button onclick="showSection('reports', this)" class="sidebar-item text-yellow-500"><i class="fas fa-chart-line"></i> Intel Reports</button>
+            <button onclick="showSection('users', this)" class="sidebar-item text-blue-400"><i class="fas fa-users-cog"></i> User Access</button>
+            <button onclick="showSection('settings', this)" class="sidebar-item text-orange-500"><i class="fas fa-cogs"></i> Settings</button>
         </div>
-        <nav class="flex-1 overflow-y-auto py-6">
-            <button onclick="showSection('stats', this)" class="sidebar-item active w-full flex items-center px-8 py-3 text-sm font-bold hover:bg-[#1a1a1a] transition"><i class="bi bi-grid-1x2-fill mr-3"></i> Dashboard</button>
-            <button onclick="showSection('transactions', this)" class="sidebar-item w-full flex items-center px-8 py-3 text-sm font-bold hover:bg-[#1a1a1a] transition"><i class="bi bi-fuel-pump mr-3"></i> Fuel Logs</button>
-            <button onclick="showSection('triplogs', this)" class="sidebar-item w-full flex items-center px-8 py-3 text-sm font-bold hover:bg-[#1a1a1a] transition text-indigo-400"><i class="bi bi-signpost-split-fill mr-3"></i> Trip Logs</button>
-            <div class="px-8 py-4 text-[10px] uppercase text-gray-600 font-black tracking-widest">Fleet Assets</div>
-            <button onclick="showSection('vehicles', this)" class="sidebar-item w-full flex items-center px-8 py-3 text-sm font-bold hover:bg-[#1a1a1a] transition"><i class="bi bi-truck mr-3"></i> Vehicles</button>
-            <button onclick="showSection('drivers', this)" class="sidebar-item w-full flex items-center px-8 py-3 text-sm font-bold hover:bg-[#1a1a1a] transition"><i class="bi bi-person-badge mr-3"></i> Drivers</button>
-            <button onclick="showSection('depots', this)" class="sidebar-item w-full flex items-center px-8 py-3 text-sm font-bold hover:bg-[#1a1a1a] transition"><i class="bi bi-droplet-half mr-3"></i> Fuel Depots</button>
-            <div class="px-8 py-4 text-[10px] uppercase text-gray-600 font-black tracking-widest">System Control</div>
-            <button onclick="showSection('management', this)" class="sidebar-item w-full flex items-center px-8 py-3 text-sm font-bold text-[#70A827] hover:brightness-110 transition"><i class="bi bi-toggles mr-3"></i> Management</button>
-            <button onclick="showSection('reports', this)" class="sidebar-item w-full flex items-center px-8 py-3 text-sm font-bold text-yellow-500 hover:brightness-110 transition"><i class="bi bi-graph-up-arrow mr-3"></i> Intel Reports</button>
-            <button onclick="showSection('users', this)" class="sidebar-item w-full flex items-center px-8 py-3 text-sm font-bold text-blue-400 hover:brightness-110 transition"><i class="bi bi-people-fill mr-3"></i> User Access</button>
-            <button onclick="showSection('settings', this)" class="sidebar-item w-full flex items-center px-8 py-3 text-sm font-bold text-orange-500 hover:brightness-110 transition"><i class="bi bi-gear-fill mr-3"></i> Settings</button>
-        </nav>
-        <div class="p-6 border-t border-[#252525] bg-[#0a0a0a]">
-            <div class="text-xs text-gray-500 mb-2 uppercase font-black tracking-widest">User Access</div>
-            <div id="adminName" class="text-sm font-black text-white mb-4 italic">Loading...</div>
-            <button onclick="window.location.href='Launchpad.html'" class="text-blue-500 hover:text-blue-400 font-black text-[10px] uppercase tracking-widest flex items-center"><i class="bi bi-grid-3x3-gap-fill mr-2"></i> Back to Launch Pad</button>
-        </div>
-    </aside>
-    <main class="flex-1 flex flex-col overflow-hidden bg-[#121212]">
-        <header class="bg-[#1e1e1e] border-b border-[#333] p-6 flex justify-between items-center z-10">
-            <h2 id="sectionTitle" class="text-lg font-black text-white uppercase tracking-tight">System Overview</h2>
-            <button onclick="refreshAll()" class="bg-[#70A827] text-[#121212] px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:brightness-110 transition shadow-lg">
-                <i class="bi bi-arrow-clockwise mr-2"></i> Sync Engine
-            </button>
-        </header>
+        <button onclick="window.location.href='Launchpad.html'" class="logout-btn">
+            <i class="fas fa-arrow-left mr-2"></i> Back to Launchpad
+        </button>
+    </div>
 
-        <div class="flex-1 overflow-y-auto p-8 space-y-8">
+    <div class="main-content">
+        <div class="flex justify-between items-center mb-8 border-b border-gray-700 pb-4">
+            <h1 class="text-3xl font-bold text-white flex items-center">
+                <i class="fas fa-gas-pump text-[#70A827] mr-3"></i>
+                <span id="sectionTitle">Dashboard</span>
+            </h1>
+            <button onclick="refreshAll()" class="bg-[#70A827] text-gray-900 px-4 py-2 rounded font-bold shadow transition text-xs flex items-center hover:brightness-110">
+                <i class="fas fa-sync-alt mr-2"></i> Sync Engine
+            </button>
+        </div>
+
+        <div class="space-y-8">
             
            <section id="page-stats" class="page-section active">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
@@ -185,6 +262,7 @@
                         <option value="vehicle">By Vehicle (Detailed)</option>
                         <option value="activity">By Activity (Summary)</option>
                         <option value="evidence">Fuel Evidence Report</option>
+                        <option value="accountant">Accountant Fuel Sheet</option>
                         <option value="trip-log">Trip Log Report</option>
                         <option value="trip-evidence">Trip Evidence Report</option>
                         <option value="pallet-sheet">Stop & Pallet Log Sheet</option>
@@ -243,54 +321,61 @@
 
             
             
-            <section id="page-vehicles" class="page-section">
+           <section id="page-vehicles" class="page-section">
                 <div class="card p-6 flex flex-col">
-                    <div class="flex justify-between items-center border-b border-[#333] pb-4 mb-4">
-                        <h3 class="font-black text-white uppercase tracking-widest text-xs text-[#70A827]">Active Fleet Roster</h3>
-                        <div class="flex gap-3">
-                            <button onclick="openAddVehicleModal()" class="bg-[#70A827] text-[#121212] px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest hover:brightness-110 transition shadow"><i class="bi bi-plus-lg mr-2"></i>Add Asset</button>
-                            <button onclick="generateVehicleLicenseReport()" class="bg-red-900/30 text-red-500 border border-red-900/50 px-4 py-2 rounded-lg text-xs font-bold hover:bg-red-900/50 transition">📋 License Audit</button>
+                    <div class="flex flex-wrap justify-between items-center border-b border-[#333] pb-4 mb-4 gap-4">
+                        <div class="flex items-center gap-4">
+                            <h3 class="font-black text-white uppercase tracking-widest text-xs text-[#70A827]">Active Fleet Roster</h3>
+                            <input type="text" id="vehSearch" oninput="renderVehiclesTable()" placeholder="Search Name/Tag..." class="form-input p-2 text-xs w-48">
+                            <select id="vehTypeFilter" onchange="renderVehiclesTable()" class="form-input p-2 text-xs w-32">
+                                <option value="ALL">All Types</option>
+                                <option value="Truck">Truck</option>
+                                <option value="Tractor">Tractor</option>
+                                <option value="Bakkie">Bakkie / Pickup</option>
+                                <option value="Generator">Generator</option>
+                                <option value="Heavy Machinery">Heavy Machinery</option>
+                            </select>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="openAddVehicleModal()" class="bg-[#333] text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-[#444] transition"><i class="fas fa-plus mr-1"></i>Add Asset</button>
+                            <button onclick="generateVehicleLicenseReport()" class="bg-red-900/20 text-red-500 border border-red-900/30 px-4 py-2 rounded-lg text-xs font-bold hover:bg-red-900/40 transition">License Audit</button>
+                            <button onclick="generateServiceAudit()" class="bg-orange-900/20 text-orange-500 border border-orange-900/30 px-4 py-2 rounded-lg text-xs font-bold hover:bg-orange-900/40 transition">Service Audit</button>
                         </div>
                     </div>
                     <div class="overflow-x-auto flex-1">
                         <table class="w-full text-left text-sm">
                             <thead class="bg-[#252525] uppercase text-[10px] font-black text-gray-500 tracking-widest border-b border-[#333]">
-                                <tr><th class="p-4">Name</th><th class="p-4">Asset Tag</th><th class="p-4">Type</th><th class="p-4 text-right">Current KM</th><th class="p-4 text-right">Efficiency</th><th class="p-4 text-center">Last Serv. | Interval</th><th class="p-4 text-center">Expiry</th><th class="p-4 text-center w-32">Action</th></tr>
+                                <tr>
+                                    <th class="p-4 cursor-pointer hover:text-white transition" onclick="sortVehicles('DisplayName')">Name <i class="fas fa-sort ml-1"></i></th>
+                                    <th class="p-4 cursor-pointer hover:text-white transition" onclick="sortVehicles('AssetTag')">Tag <i class="fas fa-sort ml-1"></i></th>
+                                    <th class="p-4 cursor-pointer hover:text-white transition" onclick="sortVehicles('VehicleType')">Type <i class="fas fa-sort ml-1"></i></th>
+                                    <th class="p-4 cursor-pointer hover:text-white text-right transition" onclick="sortVehicles('CurrentKM')">Current KM <i class="fas fa-sort ml-1"></i></th>
+                                    <th class="p-4 cursor-pointer hover:text-white text-right transition" onclick="sortVehicles('LatestKmPerLitre')">Efficiency <i class="fas fa-sort ml-1"></i></th>
+                                    <th class="p-4 text-center">Last Serv. | Interval</th>
+                                    <th class="p-4 cursor-pointer hover:text-white text-center transition w-32" onclick="sortVehicles('LicenseExpiryDate')">Expiry <i class="fas fa-sort ml-1"></i></th>
+                                    <th class="p-4 text-center w-64">Action</th>
+                                </tr>
                             </thead>
                             <tbody id="vehicleBody" class="divide-y divide-[#2a2a2a] text-gray-300"></tbody>
                         </table>
                     </div>
                 </div>
 
-                <div id="vehicleLicenseReport" class="hidden card p-6 border-t-4 border-red-500 mt-8">
+                <div id="vehicleLicenseReport" class="hidden card p-6 border-t-4 border-red-500 mt-8 shadow-2xl relative">
+                    <button onclick="document.getElementById('vehicleLicenseReport').classList.add('hidden')" class="absolute top-4 right-4 text-gray-500 hover:text-white text-xl"><i class="fas fa-times"></i></button>
                     
-                    <div class="card p-6 xl:col-span-3 lg:col-span-2 flex flex-col overflow-hidden">
-                    
-                    <div class="card p-6 col-span-2 flex flex-col">
-                        <div class="flex justify-between items-center border-b border-[#333] pb-4 mb-4">
-                            <h3 class="font-black text-white uppercase tracking-widest text-xs text-[#70A827]">Active Fleet Roster</h3>
-                            <button onclick="generateVehicleLicenseReport()" class="bg-red-900/30 text-red-500 border border-red-900/50 px-4 py-2 rounded-lg text-xs font-bold hover:bg-red-900/50 transition">📋 License Audit</button>
-                        </div>
-                        <div class="overflow-x-auto flex-1">
-                            <table class="w-full text-left text-sm">
-                               <thead class="bg-[#252525] uppercase text-[10px] font-black text-gray-500 tracking-widest border-b border-[#333]">
-                                    <tr><th class="p-4">Name</th><th class="p-4">Asset Tag</th><th class="p-4">Type</th><th class="p-4 text-right">Current KM</th><th class="p-4 text-right">Efficiency</th><th class="p-4 text-center">Last Serv. | Interval</th><th class="p-4 text-center">Expiry</th><th class="p-4 text-center w-32">Action</th></tr>
-                                </thead>
-                                <tbody id="vehicleBody" class="divide-y divide-[#2a2a2a] text-gray-300"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="vehicleLicenseReport" class="hidden card p-6 border-t-4 border-red-500 mt-8">
-                    <div class="flex justify-between items-center border-b border-[#333] pb-4 mb-4">
-                        <h3 class="font-black text-white uppercase tracking-widest text-xs text-red-500">Compliance & License Report</h3>
-                        <button onclick="exportVehicleReportExcel()" class="bg-green-600 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-green-500 transition">📥 Export CSV</button>
+                    <div class="flex justify-between items-center border-b border-[#333] pb-4 mb-4 pr-8">
+                        <h3 class="font-black text-white uppercase tracking-widest text-xs text-red-500">Compliance & Service Report</h3>
+                        <button onclick="exportVehicleReportExcel()" class="bg-[#70A827] text-gray-900 px-4 py-2 rounded-lg text-xs font-bold hover:brightness-110 transition"><i class="fas fa-file-excel mr-2"></i> Export CSV</button>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-sm border-collapse border border-[#333]">
                             <thead class="bg-[#252525] text-gray-500 font-black uppercase text-[10px] tracking-widest">
-                                <tr><th class="p-4 border-b border-[#333]">Asset Name</th><th class="p-4 border-b border-[#333]">Make/Model</th><th class="p-4 border-b border-[#333]">Fleet No</th><th class="p-4 border-b border-[#333]">Expiry Date</th><th class="p-4 border-b border-[#333] text-center">Status</th></tr>
+                                <tr>
+                                    <th class="p-4 border-b border-[#333]">Asset Name</th>
+                                    <th class="p-4 border-b border-[#333]">Metric / Date</th>
+                                    <th class="p-4 border-b border-[#333] text-center">Status</th>
+                                </tr>
                             </thead>
                             <tbody id="vehicleLicenseReportBody" class="divide-y divide-[#2a2a2a] text-gray-300"></tbody>
                         </table>
@@ -305,13 +390,20 @@
                         <form id="addDriverForm" class="space-y-4">
                             <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Full Name</label><input type="text" id="newDriverName" class="form-input p-3 w-full" required></div>
                             <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">ID Number</label><input type="text" id="newDriverID" class="form-input p-3 w-full" placeholder="SA ID Number"></div>
-                            <div class="grid grid-cols-2 gap-4">
+                          <div class="grid grid-cols-2 gap-4">
                                 <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">License No.</label><input type="text" id="newDriverLic" class="form-input p-3 w-full"></div>
                                 <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Code</label><input type="text" id="newDriverCode" class="form-input p-3 w-full" placeholder="EC1, C1"></div>
                             </div>
-                            <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">License Expiry</label><input type="date" id="newDriverExp" class="form-input p-3 w-full"></div>
-                            <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">PDP Expiry</label><input type="date" id="newDriverPDP" class="form-input p-3 w-full"></div>
-                            <button type="button" onclick="addDriver()" class="w-full bg-[#70A827] text-[#121212] py-4 rounded-xl font-black uppercase tracking-widest hover:brightness-110 mt-4 transition">Register Driver</button>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">License Expiry</label><input type="date" id="newDriverExp" class="form-input p-3 w-full"></div>
+                                <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">PDP Expiry</label><input type="date" id="newDriverPDP" class="form-input p-3 w-full"></div>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 text-indigo-400">Link to Mobile User (Optional)</label>
+                                <select id="newDriverLinkedUser" class="form-input p-3 w-full"><option value="">-- No User Linked --</option></select>
+                            </div>
+                            <button type="button" onclick="addDriver()" class="w-full bg-[#70A827] text-[#121212] py-4 rounded-xl font-black uppercase tracking-widest hover:brightness-110 mt-4 transition">Register Driver</button> 
+                        
                         </form>
                     </div>
                     <div class="card p-6 col-span-2">
@@ -319,7 +411,7 @@
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm">
                                 <thead class="bg-[#252525] uppercase text-[10px] font-black text-gray-500 tracking-widest">
-                                    <tr><th class="p-4">Name</th><th class="p-4">License No.</th><th class="p-4">Expiry</th><th class="p-4 text-center w-24">Action</th></tr>
+                                    <tr><th class="p-4">Name</th><th class="p-4">Linked Mobile User</th><th class="p-4">License No.</th><th class="p-4">Expiry</th><th class="p-4 text-center w-24">Action</th></tr>
                                 </thead>
                                 <tbody id="driverBody" class="divide-y divide-[#2a2a2a] text-gray-300"></tbody>
                             </table>
@@ -328,43 +420,26 @@
                 </div>
             </section>
             
-                        <section id="page-depots" class="page-section">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card p-6 h-fit col-span-1">
-                        <h3 class="font-black text-white mb-6 border-b border-[#333] pb-3 uppercase tracking-widest text-xs text-[#70A827]">Add New Depot</h3>
-                        <form id="addDepotForm" class="space-y-4">
-                            <div class="grid grid-cols-2 gap-4">
-                                <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Depot Name</label><input type="text" id="newDepotName" class="form-input p-3 w-full" placeholder="e.g. Main Farm Tank" required></div>
-                                <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Asset Tag (QR)</label><input type="text" id="newDepotTag" class="form-input p-3 w-full text-indigo-400 font-mono" placeholder="Optional Tag"></div>
-                            </div>
-                            <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Location</label><input type="text" id="newDepotLoc" class="form-input p-3 w-full" placeholder="e.g. Workshop"></div>
-                        <div class="grid grid-cols-2 gap-4">
-                                <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Fuel Type</label><select id="newDepotType" class="form-input p-3 w-full"><option value="Diesel 50ppm">Diesel 50ppm</option><option value="Diesel 500ppm">Diesel 500ppm</option><option value="Petrol 95">Petrol 95</option><option value="Petrol 93">Petrol 93</option><option value="Paraffin">Paraffin</option></select></div>
-                                <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Capacity (L)</label><input type="number" id="newDepotSize" class="form-input p-3 w-full font-mono" placeholder="2200" required></div>
-                            </div>
-                            <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Fueling Points</label><input type="number" id="newDepotPoints" class="form-input p-3 w-full" value="1"></div>
-                            
-                            <div class="flex items-center mt-4 bg-[#1a1a1a] p-3 rounded-xl border border-[#333]">
-                                <input type="checkbox" id="newDepotExternal" class="w-5 h-5 accent-[#70A827] mr-3 cursor-pointer">
-                                <div>
-                                    <label class="block text-xs font-black text-white uppercase tracking-widest cursor-pointer" for="newDepotExternal">External / Road Depot</label>
-                                    <p class="text-[9px] text-gray-500 uppercase font-bold mt-1">Disables tank levels and meter tracking for public gas stations.</p>
-                                </div>
-                            </div>
-                            
-                            <button type="button" onclick="addDepot()" class="w-full bg-[#70A827] text-[#121212] py-4 rounded-xl font-black uppercase tracking-widest hover:brightness-110 mt-4 transition">Register Depot</button>
-                        </form>
+              <section id="page-depots" class="page-section">
+                <div class="card p-6 flex flex-col">
+                    <div class="flex justify-between items-center border-b border-[#333] pb-4 mb-4">
+                        <h3 class="font-black text-white uppercase tracking-widest text-xs text-[#70A827]">Fuel Depots & Tanks</h3>
+                        <button onclick="openAddDepotModal()" class="bg-[#333] text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-[#444] transition"><i class="fas fa-plus mr-1"></i>Add Depot / Tank</button>
                     </div>
-                           <div class="card p-6 col-span-2">
-                        <h3 class="font-black text-white uppercase tracking-widest text-xs border-b border-[#333] pb-4 mb-4 text-[#70A827]">Fuel Depots</h3>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-sm">
-                                <thead class="bg-[#252525] uppercase text-[10px] font-black text-gray-500 tracking-widest">
-                                    <tr><th class="p-4">Name</th><th class="p-4">Asset Tag</th><th class="p-4">Location</th><th class="p-4">Fuel Type</th><th class="p-4 w-48">Tank Level</th><th class="p-4 text-center w-24">Action</th></tr>
-                                </thead>
-                                <tbody id="depotBody" class="divide-y divide-[#2a2a2a] text-gray-300"></tbody>
-                            </table>
-                        </div>
+                    <div class="overflow-x-auto flex-1">
+                        <table class="w-full text-left text-sm border-collapse">
+                            <thead class="bg-[#252525] uppercase text-[10px] font-black text-gray-500 tracking-widest border-b border-[#333]">
+                                <tr>
+                                    <th class="p-4">Name</th>
+                                    <th class="p-4 text-center w-24">Pumps</th>
+                                    <th class="p-4 w-32">Location</th>
+                                    <th class="p-4 w-32">Fuel Type</th>
+                                    <th class="p-4 w-48">Tank Level</th>
+                                    <th class="p-4 text-center w-72">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="depotBody" class="divide-y divide-[#2a2a2a] text-gray-300"></tbody>
+                        </table>
                     </div>
                 </div>
             </section>
@@ -504,7 +579,7 @@
                 <div class="bg-gradient-to-br from-[#1e1e1e] to-[#252525] text-white p-8 rounded-2xl shadow-2xl flex justify-between items-center border border-[#333]">
                     <div>
                         <h3 class="text-2xl font-black tracking-tight mb-1 text-[#70A827]">TNA AFRICA CORE</h3>
-                        <p class="text-xs text-gray-400 tracking-widest uppercase">Licensed to <span class="text-white font-bold">Louistrap</span></p>
+                        <p class="text-xs text-gray-400 tracking-widest uppercase">Fuel Management System</p>
                     </div>
                     <div class="text-right text-[10px] text-gray-400 uppercase tracking-widest space-y-1">
                 <p><span class="font-bold text-gray-500">Build:</span> v3.12.8</p>
@@ -512,16 +587,61 @@
                         <p><span class="font-bold text-gray-500">Support:</span> support@tnaafrica.co.za</p>
                     </div>
                 </div>
-            </section>
-        </div>
-        <footer class="bg-[#1e1e1e] border-t border-[#333] py-4 px-6 text-center shrink-0 z-20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
-            <p class="text-[11px] font-bold text-white uppercase tracking-widest">
+                </section>
+        </div> <footer class="border-t border-[#334155] pt-4 mt-8 text-center z-20">
+            <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
                 This software is under license and developed by <span class="text-[#70A827] font-black ml-1">TNA AFRICA 2026</span> <span class="text-gray-600 mx-2">|</span> <a href="https://www.tnaafrica.co.za" target="_blank" class="text-[#70A827] hover:text-white transition hover:underline underline-offset-4 decoration-[#70A827]/50">www.tnaafrica.co.za</a>
             </p>
         </footer>
 
-        <div id="addVehicleModal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-[100] flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-[#1a1a1a] border border-[#333] rounded-2xl shadow-2xl p-8 w-full max-w-md border-t-4 border-[#70A827] max-h-[90vh] overflow-y-auto">
+        <div id="addDepotModal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-[100] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-[#1a1a1a] border border-[#333] rounded-2xl shadow-2xl p-8 w-full max-w-2xl border-t-4 border-[#70A827] max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-black text-white uppercase tracking-widest text-xs">Register New Depot / Tank</h3>
+                <button onclick="document.getElementById('addDepotModal').classList.add('hidden')" class="text-gray-500 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <form id="addDepotForm" class="space-y-6">
+                <div class="bg-[#252525] p-4 rounded-xl border border-[#333] space-y-4">
+                    <h4 class="text-[10px] text-gray-400 font-bold uppercase tracking-widest border-b border-[#333] pb-2">1. Tank Details</h4>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Depot / Tank Name</label><input type="text" id="newDepotName" class="form-input p-3 w-full" placeholder="e.g. Main Farm Tank" required></div>
+                        <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Location</label><input type="text" id="newDepotLoc" class="form-input p-3 w-full" placeholder="e.g. Workshop"></div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Fuel Type</label><select id="newDepotType" class="form-input p-3 w-full"><option value="Diesel 50ppm">Diesel 50ppm</option><option value="Diesel 500ppm">Diesel 500ppm</option><option value="Petrol 95">Petrol 95</option><option value="Petrol 93">Petrol 93</option><option value="Paraffin">Paraffin</option></select></div>
+                        <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Capacity (Liters)</label><input type="number" id="newDepotSize" class="form-input p-3 w-full font-mono" placeholder="2200" required></div>
+                    </div>
+                    
+                    <div class="flex items-center mt-4 bg-[#1a1a1a] p-3 rounded-xl border border-[#333]">
+                        <input type="checkbox" id="newDepotExternal" class="w-5 h-5 accent-[#70A827] mr-3 cursor-pointer" onchange="toggleDepotExternalUI(this.checked)">
+                        <div>
+                            <label class="block text-xs font-black text-white uppercase tracking-widest cursor-pointer" for="newDepotExternal">External / Road Depot</label>
+                            <p class="text-[9px] text-gray-500 uppercase font-bold mt-1">Disables tank levels and meter tracking for public gas stations.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[#252525] p-4 rounded-xl border border-[#333]">
+                    <div class="flex justify-between items-center border-b border-[#333] pb-2 mb-4">
+                        <h4 class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">2. Connected Pumps</h4>
+                        <button type="button" onclick="addPumpRow()" class="text-[#70A827] hover:text-white text-[10px] font-bold uppercase tracking-widest"><i class="fas fa-plus mr-1"></i> Add Pump</button>
+                    </div>
+                    <div id="newDepotPumpsContainer" class="space-y-3">
+                        </div>
+                </div>
+            </form>
+
+            <div class="flex gap-3 mt-8">
+                <button onclick="document.getElementById('addDepotModal').classList.add('hidden')" class="flex-1 bg-[#333] text-gray-400 py-3 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-[#444] transition">Cancel</button>
+                <button type="button" onclick="addDepot()" class="flex-1 bg-[#70A827] text-[#121212] py-3 rounded-xl font-black uppercase tracking-widest text-xs hover:brightness-110 transition shadow-lg">Save Depot & Pumps</button>
+            </div>
+        </div>
+    </div>
+
+    </div> <div id="addVehicleModal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-[100] flex items-center justify-center p-4 backdrop-blur-sm">
+          
+            <div class="bg-[#1a1a1a] border border-[#333] rounded-2xl shadow-2xl p-8 w-full max-w-md border-t-4 border-[#70A827] max-h-[90vh] overflow-y-auto">
             <h3 class="text-lg font-black text-white mb-6 uppercase tracking-widest text-xs">Register New Asset</h3>
             <form id="addVehicleForm" class="space-y-4">
                 <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Asset Name / Reg</label><input type="text" id="newVehName" class="form-input p-3 w-full" required></div>
@@ -544,7 +664,7 @@
             </div>
         </div>
     </div>
-    </main>
+    
 
     <div id="imgModal" class="hidden fixed inset-0 bg-black bg-opacity-90 z-[100] flex items-center justify-center p-4" onclick="this.classList.add('hidden')"><img id="modalImg" src="" class="max-w-full max-h-full rounded shadow-2xl"></div>
 
@@ -595,6 +715,30 @@
         </div>
     </div>
 
+    <div id="meterCalibrationModal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-[100] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-[#1a1a1a] border border-[#333] rounded-2xl shadow-2xl p-8 w-full max-w-sm border-t-4 border-blue-500">
+            <h3 class="text-lg font-black text-white mb-6 uppercase tracking-widest text-xs" id="meterCalibrationModalTitle">Calibrate Pump Meter</h3>
+            <input type="hidden" id="calibrationDepotId">
+            <div class="space-y-4">
+                <div class="bg-blue-900/10 border border-blue-900/30 p-3 rounded text-[10px] text-blue-400 font-bold uppercase tracking-widest mb-4">
+                    <i class="fas fa-info-circle mr-1"></i> Overriding the flow meter creates a strict audit log tied to your user ID.
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Current Reading</label>
+                    <input type="number" id="calibrationCurrentMeter" class="form-input w-full p-3 font-mono text-xl text-gray-500" readonly>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-blue-400 uppercase tracking-widest mb-2">New Meter Reading</label>
+                    <input type="number" id="calibrationNewMeter" class="form-input w-full p-3 font-mono text-xl text-blue-400" placeholder="0.0">
+                </div>
+            </div>
+            <div class="flex gap-3 mt-8">
+                <button onclick="document.getElementById('meterCalibrationModal').classList.add('hidden')" class="flex-1 bg-[#333] text-gray-400 py-3 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-[#444] transition">Cancel</button>
+                <button onclick="submitMeterCalibration()" class="flex-1 bg-blue-600 text-white py-3 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-blue-500 transition shadow-lg">Save Override</button>
+            </div>
+        </div>
+    </div>
+
     <div id="transferModal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-[100] flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-[#1a1a1a] border border-[#333] rounded-2xl shadow-2xl p-8 w-full max-w-sm border-t-4 border-blue-500">
             <h3 class="text-lg font-black text-white mb-6 uppercase tracking-widest text-xs" id="transferModalTitle">Transfer Diesel</h3>
@@ -631,8 +775,8 @@
             <h3 class="text-lg font-black text-white mb-6 uppercase tracking-widest text-xs">Manual Fuel Entry</h3>
             <div class="grid grid-cols-2 gap-6">
                 <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Date & Time</label><input type="datetime-local" id="manTxDate" class="form-input w-full p-3 font-mono text-sm"></div>
-                <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Vehicle / Asset</label><select id="manTxVehicle" class="form-input w-full p-3"></select></div>
-                <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Driver (User)</label><select id="manTxDriver" class="form-input w-full p-3"></select></div>
+               <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Vehicle / Asset</label><select id="manTxVehicle" class="form-input w-full p-3"></select></div>
+                <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Driver</label><select id="manTxDriver" class="form-input w-full p-3"></select></div>
                 <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Depot / Pump</label><select id="manTxDepot" class="form-input w-full p-3"></select></div>
                 <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Farm</label><select id="manTxFarm" class="form-input w-full p-3"></select></div>
                 <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Activity</label><select id="manTxActivity" class="form-input w-full p-3"></select></div>
@@ -644,6 +788,36 @@
             <div class="flex gap-3 mt-8">
                 <button onclick="document.getElementById('manualTxModal').classList.add('hidden')" class="flex-1 bg-[#333] text-gray-400 py-3 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-[#444] transition">Cancel</button>
                 <button onclick="submitManualTransaction()" class="flex-1 bg-[#70A827] text-black py-3 rounded-xl font-black uppercase tracking-widest text-xs hover:brightness-110 transition shadow-lg">Save Transaction</button>
+            </div>
+        </div>
+    </div>
+
+        <div id="managePumpsModal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-[100] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-[#1a1a1a] border border-[#333] rounded-2xl shadow-2xl p-8 w-full max-w-2xl border-t-4 border-indigo-500 max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-start border-b border-[#333] pb-4 mb-4">
+                <div>
+                    <h3 class="text-lg font-black text-white uppercase tracking-widest text-xs" id="managePumpsTitle">Manage Pumps</h3>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1" id="managePumpsSubtitle">Assign QR Asset Tags and Calibrate Flow Meters</p>
+                </div>
+                <button id="btnAddPumpToDepot" class="bg-indigo-900/30 text-indigo-400 border border-indigo-900/50 hover:bg-indigo-900/50 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition"><i class="fas fa-plus mr-1"></i> Add Pump</button>
+            </div>
+            
+            <div class="overflow-y-auto flex-1">
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead class="bg-[#252525] uppercase text-[10px] font-black text-gray-500 tracking-widest border-b border-[#333]">
+                        <tr>
+                            <th class="p-3">Pump Name</th>
+                            <th class="p-3">QR Asset Tag</th>
+                            <th class="p-3 w-32">Meter Reading</th>
+                            <th class="p-3 text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="managePumpsBody" class="divide-y divide-[#2a2a2a] text-gray-300"></tbody>
+                </table>
+            </div>
+            
+            <div class="flex gap-3 mt-6 pt-4 border-t border-[#333]">
+                <button onclick="document.getElementById('managePumpsModal').classList.add('hidden')" class="w-full bg-[#333] text-white py-3 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-[#444] transition shadow-lg">Close Panel</button>
             </div>
         </div>
     </div>

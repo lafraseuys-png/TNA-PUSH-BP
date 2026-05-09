@@ -309,12 +309,25 @@
                     </div>
 
                     
-<!-- Facial Recognition Section -->
+                    <!-- Facial Recognition Section -->
                     <h3 class="text-lg font-bold text-gray-300 mt-6 mb-2 border-b border-gray-700 pb-1"><i class="fas fa-user-astronaut text-pink-400 mr-2"></i>Facial Hardware Module</h3>
                     <div class="grid grid-cols-1 gap-4 mb-6">
                         <div class="bg-gray-800 p-3 rounded border border-gray-600 shadow-inner">
                             <label class="block text-xs text-red-400 font-bold mb-1 uppercase">Once-Off Cost Per License</label>
                             <div class="flex items-center"><span class="bg-gray-700 text-gray-300 px-3 py-1.5 rounded-l border-y border-l border-gray-600">R</span><input type="number" step="0.01" id="facialLicenseCost" class="w-full p-1.5 border-y border-r rounded-r bg-gray-900 text-white border-gray-600 focus:border-red-500 focus:outline-none" required></div>
+                        </div>
+                    </div>
+
+                    <!-- Employee Costs Section -->
+                    <h3 class="text-lg font-bold text-gray-300 mt-6 mb-2 border-b border-gray-700 pb-1"><i class="fas fa-money-check-alt text-yellow-500 mr-2"></i>Employee Costs Module</h3>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="bg-gray-800 p-3 rounded border border-gray-600 shadow-inner">
+                            <label class="block text-xs text-red-400 font-bold mb-1 uppercase">Setup Cost</label>
+                            <div class="flex items-center"><span class="bg-gray-700 text-gray-300 px-3 py-1.5 rounded-l border-y border-l border-gray-600">R</span><input type="number" step="0.01" id="employeeCostsSetupCost" class="w-full p-1.5 border-y border-r rounded-r bg-gray-900 text-white border-gray-600 focus:border-red-500 focus:outline-none" required></div>
+                        </div>
+                        <div class="bg-gray-800 p-3 rounded border border-gray-600 shadow-inner">
+                            <label class="block text-xs text-red-400 font-bold mb-1 uppercase">Per Employee</label>
+                            <div class="flex items-center"><span class="bg-gray-700 text-gray-300 px-3 py-1.5 rounded-l border-y border-l border-gray-600">R</span><input type="number" step="0.01" id="employeeCostsEmployeeCost" class="w-full p-1.5 border-y border-r rounded-r bg-gray-900 text-white border-gray-600 focus:border-red-500 focus:outline-none" required></div>
                         </div>
                     </div>
 
@@ -542,7 +555,11 @@
                         <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modPieceWork" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>Piece Work</span></label>
                         <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modStockAssets" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>Stock & Assets</span></label>
                         <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modFuel" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>Fuel Management</span></label>
-                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modFacial" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>Facial Hardware</span></label>
+                       <div class="flex items-center space-x-2">
+                            <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modFacial" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>Facial Hardware</span></label>
+                            <input type="number" id="advFacialLicenses" placeholder="Qty" min="0" value="0" class="w-16 p-1 bg-gray-800 text-white border border-gray-600 rounded text-xs focus:border-emerald-500">
+                        </div>
+                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modEmployeeCosts" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>Employee Costs</span></label>
                     </div>
 
                     <table class="w-full border-collapse mb-6 text-sm" id="pricingTable">
@@ -569,6 +586,36 @@
                 <button type="button" onclick="submitAdvancedTenant()" id="btnSubmitTenant" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-6 rounded transition shadow-lg"><i class="fas fa-cloud-upload-alt mr-2"></i> Deploy Tenant Architecture</button>
             </footer>
 
+        </div>
+    </div>
+
+    <div id="adminFacialLicensesModal" class="fixed inset-0 z-[150] hidden bg-black/80 backdrop-blur-sm items-center justify-center p-4">
+        <div class="bg-gray-800 border border-gray-600 rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col relative text-white">
+            <header class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
+                <h3 class="text-xl font-bold text-pink-400" id="adminLicenseModalTitle"><i class="fas fa-id-card-clip mr-2"></i>Facial AI Licenses</h3>
+                <button type="button" onclick="closeTenantLicensesModal()" class="text-gray-400 hover:text-white transition"><i class="fas fa-times text-2xl"></i></button>
+            </header>
+            
+            <div class="flex-1 overflow-y-auto p-6">
+                <div class="mb-4 text-sm text-gray-400 font-bold bg-gray-900 px-4 py-2 rounded border border-gray-700 inline-block">
+                    Provisioned Quota: <span id="adminLicenseLimit" class="text-white ml-1">0</span>
+                </div>
+                
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                        <tr>
+                            <th class="p-3 border-r border-gray-600">Shortcode</th>
+                            <th class="p-3 border-r border-gray-600 text-center">Status</th>
+                            <th class="p-3 border-r border-gray-600">Claimed By</th>
+                            <th class="p-3 border-r border-gray-600">Burned At</th>
+                            <th class="p-3 text-right">Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminFacialLicensesTable" class="divide-y divide-gray-700 bg-gray-900">
+                        <tr><td colspan="5" class="p-4 text-center text-gray-500">Loading licenses...</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

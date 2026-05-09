@@ -60,13 +60,23 @@ async function getTenantConnection(dbName) {
                 console.log(`[DB ROUTER] Successfully connected to ${targetDb}!`);
                 tenantPools[targetDb] = pool;
             } catch (err) {
-                console.error(`[DB ROUTER] ❌ FAILED to connect to ${targetDb}. Error:`, err.message);
-                throw err; 
+                // SILENCED: Mute the terminal spam for databases that don't exist yet on QC
+                throw new Error(`Connection to ${targetDb} failed.`); 
             }
         })();
-        await tenantConnecting[targetDb]; 
+        
+        // Catch the rejection right here so it doesn't escape as an Unhandled Promise Rejection!
+        try {
+            await tenantConnecting[targetDb];
+        } catch (e) {} 
+        
         tenantConnecting[targetDb] = null; 
     }
+    
+    if (!tenantPools[targetDb]) {
+        throw new Error(`Database ${targetDb} is unavailable.`);
+    }
+    
     return tenantPools[targetDb];
 }
 

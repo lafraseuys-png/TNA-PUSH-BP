@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Costs - TNA Africa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @media print {
+            body * { visibility: hidden; }
+            #printContainer, #printContainer * { visibility: visible; }
+            #printContainer { position: absolute; left: 0; top: 0; width: 100%; color: black; background: white; font-family: sans-serif; }
+            .print-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+            .print-table th, .print-table td { border: 1px solid #ccc; padding: 6px; text-align: left; }
+            .print-table th { background-color: #f3f4f6 !important; -webkit-print-color-adjust: exact; font-weight: bold; }
+            .print-header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #ccc; padding-bottom: 10px; }
+            .print-footer { margin-top: 40px; display: flex; justify-content: space-between; }
+            .sig-line { border-top: 1px solid black; width: 250px; text-align: center; padding-top: 5px; margin-top: 40px; font-weight: bold; }
+        }
+        body { background-color: #0f172a; color: #e2e8f0; }
+        .page-section { display: none; }
+        .page-section.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .sidebar-item { color: #cbd5e1; transition: background 0.3s, color 0.3s; }
+        .sidebar-item:hover { background-color: #334155; color: white; }
+        .sidebar-item.active { background-color: #1e293b; border-left: 4px solid #eab308; color: white; font-weight: bold; }
+        
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        .modal-backdrop {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.7); z-index: 50; justify-content: center; align-items: center;
+            backdrop-filter: blur(4px);
+        }
+        .modal-backdrop.active { display: flex; }
+    </style>
+</head>
+<body class="font-sans flex h-screen overflow-hidden">
+
+    <aside class="w-64 bg-gray-800 flex flex-col shadow-xl flex-shrink-0 border-r border-gray-700">
+        <div class="p-6 border-b border-gray-700 text-center">
+            <h1 class="text-2xl font-black text-yellow-500"><i class="fas fa-money-check-alt mr-2"></i>EMPLOYEE COSTS</h1>
+            <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Financial Management</p>
+        </div>
+        <nav class="flex-1 overflow-y-auto py-4" id="sidebarNav">
+            <button onclick="showSection('overview', this)" class="sidebar-item active w-full flex items-center p-4 text-left">
+                <i class="fas fa-chart-pie w-6 text-center mr-2"></i> Overview
+            </button>
+            <button onclick="showSection('components', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+                <i class="fas fa-cubes w-6 text-center mr-2"></i> Cost Components
+            </button>
+            <button onclick="showSection('allocation', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+                <i class="fas fa-users w-6 text-center mr-2"></i> Employee Allocation
+            </button>
+            <button onclick="showSection('wage-calc', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+                <i class="fas fa-calculator w-6 text-center mr-2"></i> Monthly Wage Calc
+            </button>
+        </nav>
+
+        <div class="p-4 border-t border-gray-700 text-xs">
+            <button onclick="window.location.href='Launchpad.html'" class="text-gray-400 hover:text-white font-bold w-full text-left flex items-center transition">
+                <i class="fas fa-arrow-left mr-2"></i> Back to Launchpad
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col overflow-hidden bg-gray-900">
+        <header class="bg-gray-800 shadow-sm p-4 flex justify-between items-center z-10 border-b border-gray-700">
+            <h2 id="sectionTitle" class="text-lg font-bold text-gray-200 uppercase tracking-wide">Overview</h2>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-6 relative">
+            
+            <!-- OVERVIEW TAB -->
+            <section id="page-overview" class="page-section active">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-blue-500">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-blue-900/50 text-blue-400 mr-4"><i class="fas fa-users fa-2x"></i></div>
+                            <div>
+                                <p class="text-sm text-gray-400 uppercase font-bold tracking-wider">Configured Employees</p>
+                                <p class="text-3xl font-black text-white" id="dashConfigured">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-green-500">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-green-900/50 text-green-400 mr-4"><i class="fas fa-plus-circle fa-2x"></i></div>
+                            <div>
+                                <p class="text-sm text-gray-400 uppercase font-bold tracking-wider">Active Earnings</p>
+                                <p class="text-3xl font-black text-green-400" id="dashEarnings">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-red-500">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-red-900/50 text-red-400 mr-4"><i class="fas fa-minus-circle fa-2x"></i></div>
+                            <div>
+                                <p class="text-sm text-gray-400 uppercase font-bold tracking-wider">Active Deductions</p>
+                                <p class="text-3xl font-black text-red-400" id="dashDeductions">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-purple-500">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-purple-900/50 text-purple-400 mr-4"><i class="fas fa-building fa-2x"></i></div>
+                            <div>
+                                <p class="text-sm text-gray-400 uppercase font-bold tracking-wider">Active Contributions</p>
+                                <p class="text-3xl font-black text-purple-400" id="dashContributions">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- COST COMPONENTS TAB -->
+            <section id="page-components" class="page-section">
+                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-indigo-500 mb-6">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                        <h3 class="font-bold text-gray-300"><i class="fas fa-cubes mr-2"></i>Global Earnings & Deductions</h3>
+                        <button onclick="openComponentModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow">
+                            <i class="fas fa-plus mr-1"></i> Add Component
+                        </button>
+                    </div>
+                    <p class="text-sm text-gray-400 mb-4">Define standard allowances, bonuses, and deductions to be assigned to employees.</p>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm border-collapse">
+                            <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                                <tr>
+                                    <th class="p-3 border-r border-gray-600">Name</th>
+                                    <th class="p-3 border-r border-gray-600">Type</th>
+                                    <th class="p-3 border-r border-gray-600">Calculation</th>
+                                    <th class="p-3 border-r border-gray-600">Default Amount</th>
+                                    <th class="p-3 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="componentsTableBody" class="divide-y divide-gray-700 bg-gray-900">
+                                <tr><td colspan="5" class="p-4 text-center text-gray-500">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- EMPLOYEE ALLOCATION TAB -->
+            <section id="page-allocation" class="page-section">
+                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-yellow-500">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2 gap-4">
+                        <h3 class="font-bold text-gray-300 whitespace-nowrap"><i class="fas fa-users mr-2"></i>Employee Cost Mapping</h3>
+                        <div class="flex-1 flex justify-end items-center gap-3">
+                            <select id="empDeptFilter" onchange="filterEmployees()" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-yellow-500 w-48">
+                                <option value="">All Departments</option>
+                            </select>
+                            <input type="text" id="empSearch" onkeyup="filterEmployees()" placeholder="Search Name or PIN..." class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-yellow-500 w-64">
+                            <button onclick="openBulkEmpCostModal()" class="bg-yellow-600 hover:bg-yellow-500 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow">
+                                <i class="fas fa-layer-group mr-1"></i> Bulk Allocate
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm border-collapse" id="employeeCostsTable">
+                            <thead class="bg-gray-700 uppercase text-[11px] font-bold text-gray-400 select-none">
+                                <tr>
+                                    <th class="p-3 border-r border-gray-600 text-center w-10"><input type="checkbox" id="selectAllEmp" onclick="toggleSelectAll(this)" class="accent-yellow-500 cursor-pointer"></th>
+                                    <th class="p-3 border-r border-gray-600 cursor-pointer hover:text-white" onclick="sortEmployees('FirstName')">First Name <i class="fas fa-sort ml-1"></i></th>
+                                    <th class="p-3 border-r border-gray-600 cursor-pointer hover:text-white" onclick="sortEmployees('LastName')">Last Name <i class="fas fa-sort ml-1"></i></th>
+                                    <th class="p-3 border-r border-gray-600 cursor-pointer hover:text-white" onclick="sortEmployees('PIN')">PIN <i class="fas fa-sort ml-1"></i></th>
+                                    <th class="p-3 border-r border-gray-600 cursor-pointer hover:text-white" onclick="sortEmployees('Department')">Department <i class="fas fa-sort ml-1"></i></th>
+                                    <th class="p-3 border-r border-gray-600">Base Salary</th>
+                                    <th class="p-3 border-r border-gray-600">Hourly Rate</th>
+                                    <th class="p-3 border-r border-gray-600">Overhead Value</th>
+                                    <th class="p-3 border-r border-gray-600">Custom Components</th>
+                                    <th class="p-3 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="employeeCostsTableBody" class="divide-y divide-gray-700 bg-gray-900">
+                                <tr><td colspan="6" class="p-4 text-center text-gray-500">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+               </div>
+            </section>
+
+            <!-- WAGE CALCULATION TAB -->
+            <section id="page-wage-calc" class="page-section">
+                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-teal-500 mb-6">
+                    <div class="flex justify-between items-end mb-6 border-b border-gray-700 pb-4">
+                        <div>
+                            <h3 class="font-bold text-gray-300 mb-2"><i class="fas fa-calendar-alt mr-2"></i>Date Range Selection</h3>
+                            <div class="flex gap-4">
+                                <div>
+                                    <label class="block text-[10px] text-gray-500 uppercase tracking-wide mb-1">From Date</label>
+                                    <input type="date" id="wageFromDate" class="bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] text-gray-500 uppercase tracking-wide mb-1">To Date</label>
+                                    <input type="date" id="wageToDate" class="bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="openAddWageEmpModal()" class="bg-teal-600 hover:bg-teal-500 text-white px-5 py-2.5 rounded text-sm font-bold transition shadow">
+                            <i class="fas fa-user-plus mr-1"></i> Add Employees
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm border-collapse">
+                            <thead class="bg-gray-700 uppercase text-[11px] font-bold text-gray-400">
+                                <tr>
+                                    <th class="p-3 border-r border-gray-600">PIN</th>
+                                    <th class="p-3 border-r border-gray-600">First Name</th>
+                                    <th class="p-3 border-r border-gray-600">Last Name</th>
+                                    <th class="p-3 border-r border-gray-600">Department</th>
+                                    <th class="p-3 border-r border-gray-600 text-center">TNA Status</th>
+                                    <th class="p-3 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="wageCalcTableBody" class="divide-y divide-gray-700 bg-gray-900">
+                                <tr><td colspan="6" class="p-4 text-center text-gray-500">No employees added yet. Select a date range and add employees.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+    <!-- COMPONENT MODAL -->
+    <div id="componentModal" class="modal-backdrop">
+        <form id="componentForm" class="bg-gray-800 p-6 rounded-lg w-[400px] shadow-2xl border border-gray-600">
+            <h2 class="text-xl font-bold text-indigo-400 mb-4 pb-2 border-b border-gray-700" id="componentModalTitle">Add Component</h2>
+            <input type="hidden" id="compId">
+            
+            <label class="block text-xs font-bold text-gray-400 mb-1">Component Name</label>
+            <input type="text" id="compName" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white mb-4">
+            
+            <label class="block text-xs font-bold text-gray-400 mb-1">Type</label>
+            <select id="compType" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white mb-4">
+                <option value="Earning">Earning (Addition)</option>
+                <option value="Deduction">Deduction (Subtraction)</option>
+                <option value="Contribution">Company Contribution (Cost)</option>
+            </select>
+
+            <label class="block text-xs font-bold text-gray-400 mb-1">Calculation Type</label>
+            <select id="compCalc" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white mb-4">
+                <option value="Fixed">Fixed Amount</option>
+                <option value="Percentage">Percentage (%)</option>
+                <option value="Variable">Variable (Dynamic/Manual Input)</option>
+            </select>
+
+            <label class="block text-xs font-bold text-gray-400 mb-1">Default Amount / %</label>
+            <input type="number" step="0.01" id="compDefault" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white mb-6">
+
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="closeModal('componentModal')" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded text-sm transition">Cancel</button>
+                <button type="submit" class="px-4 py-2 bg-indigo-700 hover:bg-indigo-600 text-white rounded font-bold text-sm shadow transition">Save</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- EMPLOYEE COST MODAL -->
+    <div id="empCostModal" class="modal-backdrop">
+        <form id="empCostForm" class="bg-gray-800 p-0 rounded-lg w-[750px] max-w-[95vw] shadow-2xl border border-gray-600 flex flex-col max-h-[90vh]">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg flex-shrink-0">
+                <h2 class="text-xl font-bold text-yellow-500" id="empCostModalTitle">Allocate Costs</h2>
+                <button type="button" onclick="closeModal('empCostModal')" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto flex-1 space-y-6">
+                <input type="hidden" id="costEmpId">
+                
+                <div class="grid grid-cols-3 gap-4 bg-gray-900 p-4 rounded border border-gray-700">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Base Salary</label>
+                        <input type="number" step="0.01" id="empBaseSalary" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Hourly Rate</label>
+                        <input type="number" step="0.01" id="empHourlyRate" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Overhead Value</label>
+                        <input type="number" step="0.01" id="empOverhead" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white">
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-5">
+                    <div class="bg-gray-900 p-5 rounded border border-green-900/50 shadow-inner">
+                        <h4 class="text-sm font-bold text-green-400 mb-3 border-b border-gray-700 pb-2"><i class="fas fa-plus-circle mr-2"></i>Earnings</h4>
+                        <div id="dynamicEarnings" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                    </div>
+                    <div class="bg-gray-900 p-5 rounded border border-red-900/50 shadow-inner">
+                        <h4 class="text-sm font-bold text-red-400 mb-3 border-b border-gray-700 pb-2"><i class="fas fa-minus-circle mr-2"></i>Deductions</h4>
+                        <div id="dynamicDeductions" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                    </div>
+                    <div class="bg-gray-900 p-5 rounded border border-purple-900/50 shadow-inner">
+                        <h4 class="text-sm font-bold text-purple-400 mb-3 border-b border-gray-700 pb-2"><i class="fas fa-building mr-2"></i>Company Contributions</h4>
+                        <div id="dynamicContributions" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-end gap-3 shadow-inner">
+                <button type="button" onclick="closeModal('empCostModal')" class="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition">Cancel</button>
+                <button type="submit" class="px-6 py-2 bg-yellow-600 hover:bg-yellow-500 text-white rounded font-bold text-sm shadow transition">Save Allocation</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ADD EMPLOYEES TO WAGE RUN MODAL -->
+    <div id="addWageEmpModal" class="modal-backdrop">
+        <div class="bg-gray-800 p-0 rounded-lg w-[700px] max-w-[95vw] shadow-2xl border border-gray-600 flex flex-col max-h-[85vh]">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
+                <h2 class="text-xl font-bold text-teal-400"><i class="fas fa-users mr-2"></i>Select Employees</h2>
+                <button type="button" onclick="closeModal('addWageEmpModal')" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-4 bg-gray-800 border-b border-gray-700 flex gap-4">
+                <select id="wageDeptFilter" onchange="filterWageModalEmployees()" class="bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:border-teal-500 flex-1">
+                    <option value="">All Departments</option>
+                </select>
+                <input type="text" id="wageEmpSearch" onkeyup="filterWageModalEmployees()" placeholder="Search Name or PIN..." class="bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:border-teal-500 flex-1">
+            </div>
+            <div class="overflow-y-auto flex-1 p-0">
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead class="bg-gray-700 uppercase text-[10px] font-bold text-gray-400 sticky top-0 z-10">
+                        <tr>
+                            <th class="p-3 border-b border-gray-600 text-center w-10"><input type="checkbox" id="selectAllWageEmp" onclick="toggleSelectAllWageModal(this)" class="accent-teal-500 cursor-pointer"></th>
+                            <th class="p-3 border-b border-gray-600">PIN</th>
+                            <th class="p-3 border-b border-gray-600">Name</th>
+                            <th class="p-3 border-b border-gray-600">Department</th>
+                        </tr>
+                    </thead>
+                    <tbody id="wageModalTableBody" class="divide-y divide-gray-700 bg-gray-900">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-end gap-3">
+                <button type="button" onclick="closeModal('addWageEmpModal')" class="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition">Cancel</button>
+                <button type="button" onclick="confirmWageEmployees()" class="px-6 py-2 bg-teal-600 hover:bg-teal-500 text-white rounded font-bold text-sm shadow transition">Add Selected</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TIME SHEET MODAL (WIDE VIEW) -->
+    <div id="timeSheetModal" class="modal-backdrop">
+        <div class="bg-gray-800 p-0 rounded-lg w-[1400px] max-w-[98vw] shadow-2xl border border-gray-600 flex flex-col h-[90vh]">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg flex-shrink-0">
+                <h2 class="text-xl font-bold text-blue-400 truncate flex-1" id="timeSheetModalTitle"><i class="fas fa-clock mr-2"></i>Time Sheets & Calculation</h2>
+                <div class="flex gap-3 ml-4 flex-shrink-0">
+                    <button onclick="printTimesheetPDF()" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow border border-gray-600 flex items-center"><i class="fas fa-print mr-2"></i> Print PDF</button>
+                    <button onclick="exportTimesheetExcel()" class="bg-green-700 hover:bg-green-600 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow flex items-center"><i class="fas fa-file-excel mr-2"></i> Export Excel</button>
+                    <button type="button" onclick="closeModal('timeSheetModal')" class="text-gray-400 hover:text-white ml-2"><i class="fas fa-times text-xl"></i></button>
+                </div>
+            </div>
+            <div class="p-0 overflow-y-auto flex-1 bg-gray-900 text-gray-300 relative">
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead class="bg-gray-800 text-gray-400 uppercase font-bold text-[10px] tracking-wider sticky top-0 shadow-sm border-b border-gray-700 z-10" id="tsTableHead">
+                        <!-- Populated by JS to handle Ignore OT dynamic columns -->
+                    </thead>
+                    <tbody id="tsTableBody" class="divide-y divide-gray-800 text-gray-300">
+                        <tr><td colspan="9" class="p-8 text-center text-gray-500 italic">Loading Time Sheet Data...</td></tr>
+                    </tbody>
+                    <tfoot id="tsTableFoot" class="bg-gray-800 text-white font-bold sticky bottom-0 border-t border-gray-600 shadow-[0_-4px_6px_rgba(0,0,0,0.3)] z-10">
+                        <!-- Populated by JS for Grand Totals -->
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- HIDDEN PRINT CONTAINER FOR PDF -->
+    <div id="printContainer"></div>
+
+    <script src="employeeCosts.js"></script>
+</body>
+</html>

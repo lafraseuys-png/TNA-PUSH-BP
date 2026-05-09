@@ -62,8 +62,14 @@
             <button onclick="showSection('teams', this)" class="sidebar-item w-full flex items-center p-4 text-left">
                 <i class="fas fa-users-cog w-6 text-center mr-2 text-indigo-400"></i> Custom Teams
             </button>
-            <button onclick="showSection('hierarchy', this)" class="sidebar-item w-full flex items-center p-4 text-left border-t border-gray-700 mt-2">
-                <i class="fas fa-sitemap w-6 text-center mr-2 text-yellow-500"></i> Org Hierarchy & Managers
+            <button onclick="showSection('leave', this)" class="sidebar-item w-full flex items-center p-4 text-left border-t border-gray-700 mt-2">
+                <i class="fas fa-calendar-alt w-6 text-center mr-2 text-emerald-400"></i> Leave Management
+            </button>
+            <button onclick="showSection('hierarchy', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+                 <i class="fas fa-sitemap w-6 text-center mr-2 text-yellow-500"></i> Org Hierarchy & Managers
+            </button>
+            <button onclick="showSection('reports', this)" class="sidebar-item w-full flex items-center p-4 text-left border-t border-gray-700">
+                <i class="fas fa-chart-bar w-6 text-center mr-2 text-teal-400"></i> Reports & Analytics
             </button>
         </nav>
 
@@ -212,19 +218,26 @@
 
            <section id="page-departments" class="page-section">
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-green-500">
-                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
-                        <h3 class="font-bold text-gray-300"><i class="fas fa-sitemap mr-2"></i>Department Structure</h3>
-                        <div class="flex space-x-2">
-                            <button onclick="openCreateDeptModal()" class="bg-green-700 hover:bg-green-600 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-green-500">
-                                <i class="fas fa-plus mr-2"></i> Create Dept
-                            </button>
-                            <button id="syncDeptBtn" onclick="syncDepartments()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow">
-                                <i class="fas fa-sync-alt mr-2"></i> Sync Departments
-                            </button>
-                        </div>
+                    
+                    <div class="flex border-b border-gray-700 mb-4">
+                        <button onclick="switchDeptTab('structure')" id="btn-tab-structure" class="px-6 py-3 text-sm font-bold border-b-2 transition border-green-500 text-green-400">Departments & Zones</button>
+                        <button onclick="switchDeptTab('rules')" id="btn-tab-rules" class="px-6 py-3 text-sm font-bold border-b-2 transition border-transparent text-gray-400 hover:text-gray-200">Company Rules</button>
                     </div>
 
-                    <div class="flex items-center space-x-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
+                    <div id="tab-dept-structure">
+                        <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                            <h3 class="font-bold text-gray-300"><i class="fas fa-sitemap mr-2"></i>Department Structure</h3>
+                            <div class="flex space-x-2">
+                                <button onclick="openCreateDeptModal()" class="bg-green-700 hover:bg-green-600 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-green-500">
+                                    <i class="fas fa-plus mr-2"></i> Create Dept
+                                </button>
+                                <button id="syncDeptBtn" onclick="syncDepartments()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow">
+                                    <i class="fas fa-sync-alt mr-2"></i> Sync Departments
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
                         <div class="relative flex-1 max-w-sm">
                             <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
                             <input type="text" id="searchDept" onkeyup="filterDepartments()" placeholder="Search Departments..." class="w-full pl-8 pr-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-green-500 transition">
@@ -246,7 +259,30 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
+                    </div> <div id="tab-company-rules" class="hidden">
+                        <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                            <h3 class="font-bold text-gray-300"><i class="fas fa-gavel mr-2"></i>Company Rules & Policies</h3>
+                            <button onclick="openCreateRuleModal()" class="bg-teal-700 hover:bg-teal-600 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-teal-500">
+                                <i class="fas fa-plus mr-2"></i> Add Company Rule
+                            </button>
+                        </div>
+                        <p class="text-[10px] text-gray-400 mb-4 uppercase tracking-wider">Assign specific operational rules or policies to departments.</p>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm border-collapse">
+                                <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                                    <tr>
+                                        <th class="p-3 border-r border-gray-600 w-1/4">Rule Name</th>
+                                        <th class="p-3 border-r border-gray-600 w-2/4">Description</th>
+                                        <th class="p-3 border-r border-gray-600 w-1/4">Assigned Departments</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="rulesTableBody" class="divide-y divide-gray-700 bg-gray-900">
+                                    <tr><td colspan="3" class="p-4 text-center text-gray-500">Loading Rules...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div> </div>
             </section>
 
             <section id="page-deptzones" class="page-section">
@@ -313,6 +349,49 @@
                             </tbody>
                         </table>
                   </div>
+                </div>
+            </section>
+
+            <section id="page-leave" class="page-section">
+                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-emerald-500">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                        <h3 class="font-bold text-gray-300"><i class="fas fa-calendar-alt mr-2"></i>Global Leave Types</h3>
+                    </div>
+                    <p class="text-[10px] text-gray-400 mb-4 uppercase tracking-wider">Configure company-wide leave types. Paid types will automatically appear in employee profiles for balance management.</p>
+
+                    <div class="bg-gray-900 p-4 rounded border border-gray-700 mb-6">
+                        <form id="createLeaveTypeForm" class="flex items-end gap-4">
+                            <div class="flex-1">
+                                <label class="block text-xs font-bold text-gray-400 mb-1">Leave Name</label>
+                                <input type="text" id="newLeaveTypeName" required placeholder="e.g., Annual Leave, Sick Leave" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+                            </div>
+                            <div class="w-48">
+                                <label class="block text-xs font-bold text-gray-400 mb-1">Paid Status</label>
+                                <select id="newLeaveTypeIsPaid" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+                                    <option value="1">Paid Leave</option>
+                                    <option value="0">Unpaid Leave</option>
+                                </select>
+                            </div>
+                            <button type="submit" id="createLeaveTypeBtn" class="bg-emerald-700 hover:bg-emerald-600 text-white px-6 py-2 rounded text-sm font-bold shadow transition h-[38px]">
+                                Add Type
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm border-collapse">
+                            <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                                <tr>
+                                    <th class="p-3 border-r border-gray-600">Leave Name</th>
+                                    <th class="p-3 border-r border-gray-600 text-center">Paid Status</th>
+                                    <th class="p-3 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaveTypesTableBody" class="divide-y divide-gray-700 bg-gray-900">
+                                <tr><td colspan="3" class="p-4 text-center text-gray-500">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
 
@@ -399,11 +478,119 @@
                         </div>
                     </div>
 
+               </div>
+            </section>
+
+            <section id="page-reports" class="page-section pb-20">
+                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-teal-500">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                        <h3 class="font-bold text-gray-300 text-lg"><i class="fas fa-file-csv mr-2"></i>Data & Audit Reports</h3>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row gap-4 mb-6 bg-gray-900 p-4 rounded-lg border border-gray-700">
+                        <div class="flex-1">
+                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Filter by Department</label>
+                            <select id="reportDeptFilter" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-teal-500">
+                                <option value="">All Departments</option>
+                            </select>
+                        </div>
+                        <div class="flex-1">
+                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider" title="Applies to Start Date or Termination Date">Date From (Optional)</label>
+                            <input type="date" id="reportStartDate" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-teal-500">
+                        </div>
+                        <div class="flex-1">
+                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider" title="Applies to Start Date or Termination Date">Date To (Optional)</label>
+                            <input type="date" id="reportEndDate" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-teal-500">
+                        </div>
+                        <div class="flex items-end">
+                            <button onclick="clearReportFilters()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded text-xs font-bold transition h-[34px]">Clear</button>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                        
+                       <div class="bg-gray-900 border border-gray-700 p-4 rounded-lg flex flex-col justify-between hover:border-gray-500 transition">
+                            <div>
+                                <h4 class="text-blue-400 font-bold text-sm mb-1"><i class="fas fa-list mr-1"></i> Full Employee Details</h4>
+                                <p class="text-[10px] text-gray-400 mb-4">A complete export of all active personnel, including extended HR and Time & Attendance fields.</p>
+                            </div>
+                            <button onclick="generateSpecialReport('details')" class="bg-blue-600 hover:bg-blue-500 text-white w-full py-2 rounded text-xs font-bold shadow transition"><i class="fas fa-file-excel mr-1"></i> Download Excel</button>
+                        </div>
+
+                        <div class="bg-gray-900 border border-gray-700 p-4 rounded-lg flex flex-col justify-between hover:border-gray-500 transition">
+                            <div>
+                                <h4 class="text-orange-400 font-bold text-sm mb-1"><i class="fas fa-user-circle mr-1"></i> Missing Photo Report</h4>
+                                <p class="text-[10px] text-gray-400 mb-4">Lists all active employees who do not have a biometric profile photo uploaded in the system.</p>
+                            </div>
+                            <button onclick="generateSpecialReport('missing-photo')" class="bg-orange-600 hover:bg-orange-500 text-white w-full py-2 rounded text-xs font-bold shadow transition"><i class="fas fa-file-excel mr-1"></i> Download Excel</button>
+                        </div>
+
+                        <div class="bg-gray-900 border border-gray-700 p-4 rounded-lg flex flex-col justify-between hover:border-gray-500 transition">
+                            <div>
+                                <h4 class="text-pink-400 font-bold text-sm mb-1"><i class="fas fa-copy mr-1"></i> Potential Duplicates</h4>
+                                <p class="text-[10px] text-gray-400 mb-4">Scans the entire database to flag employees with identical First and Last Names.</p>
+                            </div>
+                            <button onclick="generateSpecialReport('duplicates')" class="bg-pink-600 hover:bg-pink-500 text-white w-full py-2 rounded text-xs font-bold shadow transition"><i class="fas fa-file-excel mr-1"></i> Download Excel</button>
+                        </div>
+
+                        <div class="bg-gray-900 border border-gray-700 p-4 rounded-lg flex flex-col justify-between hover:border-gray-500 transition">
+                            <div>
+                                <h4 class="text-red-400 font-bold text-sm mb-1"><i class="fas fa-user-slash mr-1"></i> Terminated Employees</h4>
+                                <p class="text-[10px] text-gray-400 mb-4">A historical log of all successfully terminated personnel, including their Group Start Dates and Termination Dates.</p>
+                            </div>
+                            <button onclick="generateSpecialReport('terminated')" class="bg-red-700 hover:bg-red-600 text-white w-full py-2 rounded text-xs font-bold shadow transition"><i class="fas fa-file-excel mr-1"></i> Download Excel</button>
+                        </div>
+
+                        <div class="bg-gray-900 border border-gray-700 p-4 rounded-lg flex flex-col justify-between hover:border-gray-500 transition">
+                            <div>
+                                <h4 class="text-yellow-400 font-bold text-sm mb-1"><i class="fas fa-clock mr-1"></i> Pending Terminations</h4>
+                                <p class="text-[10px] text-gray-400 mb-4">Lists currently active employees who have a scheduled termination date in the future.</p>
+                            </div>
+                            <button onclick="generateSpecialReport('pending-term')" class="bg-yellow-600 hover:bg-yellow-500 text-white w-full py-2 rounded text-xs font-bold shadow transition"><i class="fas fa-file-excel mr-1"></i> Download Excel</button>
+                        </div>
+
+                        <div class="bg-gray-900 border border-gray-700 p-4 rounded-lg flex flex-col justify-between hover:border-gray-500 transition">
+                            <div>
+                                <h4 class="text-purple-400 font-bold text-sm mb-1"><i class="fas fa-exclamation-triangle mr-1"></i> Missing Info Report</h4>
+                                <p class="text-[10px] text-gray-400 mb-4">Flags active employees who are missing critical data (ID Number, Start Date, Dept, or Shift ID).</p>
+                            </div>
+                            <button onclick="generateSpecialReport('missing-info')" class="bg-purple-600 hover:bg-purple-500 text-white w-full py-2 rounded text-xs font-bold shadow transition"><i class="fas fa-file-excel mr-1"></i> Download Excel</button>
+                        </div>
+
+                    </div>
                 </div>
             </section>
 
         </div>
     </main>
+
+    <div id="createRuleModal" class="modal-backdrop z-50">
+        <form id="createRuleForm" class="bg-gray-800 p-0 rounded-lg w-[500px] max-w-full shadow-2xl border border-gray-600 flex flex-col">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
+                <h2 class="text-lg font-bold text-teal-400">Add Company Rule</h2>
+                <button type="button" onclick="closeCreateRuleModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Rule Name</label>
+                    <input type="text" id="ruleName" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500" placeholder="e.g., Mandatory PPE">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Description</label>
+                    <textarea id="ruleDescription" rows="3" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500" placeholder="Details of the rule..."></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Assign to Departments</label>
+                    <div id="ruleDepartmentsContainer" class="zone-grid bg-gray-900 p-3 rounded border border-gray-600 max-h-40 overflow-y-auto">
+                        </div>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-end gap-3 shadow-inner">
+                <button type="button" onclick="closeCreateRuleModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition">Cancel</button>
+                <button type="submit" id="saveRuleBtn" class="px-4 py-2 bg-teal-700 hover:bg-teal-600 text-white rounded font-bold text-sm shadow transition">Save Rule</button>
+            </div>
+        </form>
+    </div>
 
     <div id="createEmpModal" class="modal-backdrop">
         <form id="createEmpForm" class="bg-gray-800 p-0 rounded-lg w-[400px] shadow-2xl border border-gray-600 flex flex-col">
@@ -442,6 +629,27 @@
                         </select>
                     </div>
                 </div>
+                <div class="border-t border-gray-700 pt-3 mt-2">
+                    <h4 class="text-xs font-bold text-yellow-400 mb-2"><i class="fas fa-coins mr-1"></i> Payroll & Wage Configuration</h4>
+                    <div class="grid grid-cols-2 gap-3 mb-2">
+                        <div>
+                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Wage Type</label>
+                            <select id="createEmpWageType" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-yellow-500">
+                                <option value="">-- Select Type --</option>
+                                <option value="Hourly">Hourly Rate</option>
+                                <option value="Fixed">Fixed Salary (Monthly)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Rate/Amount</label>
+                            <input type="number" step="0.01" id="createEmpWageRate" placeholder="0.00" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-yellow-500">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Valid From Date</label>
+                        <input type="date" id="createEmpWageDate" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-yellow-500">
+                    </div>
+                </div>
             </div>
             <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-end gap-3 shadow-inner">
                 <button type="button" onclick="closeCreateModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition">Cancel</button>
@@ -450,14 +658,15 @@
         </form>
     </div>
 
-    <div id="editEmpModal" class="modal-backdrop">
-        <form id="editEmpForm" class="bg-gray-800 p-0 rounded-lg w-[450px] shadow-2xl border border-gray-600 flex flex-col max-h-[90vh]">
+   <div id="editEmpModal" class="modal-backdrop">
+        <form id="editEmpForm" class="bg-gray-800 p-0 rounded-lg w-[800px] shadow-2xl border border-gray-600 flex flex-col max-h-[90vh]">
             <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
                 <h2 class="text-lg font-bold text-blue-400">Edit Employee Profile</h2>
                 <button type="button" onclick="closeEditModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
             </div>
-            <div class="p-6 overflow-y-auto flex-1 space-y-4">
-                <div class="flex items-center gap-4 mb-2 pb-4 border-b border-gray-700">
+            <div class="p-6 overflow-y-auto flex-1">
+                
+                <div class="flex items-center gap-4 mb-6 pb-4 border-b border-gray-700">
                     <div class="w-16 h-16 rounded-full bg-gray-900 border border-gray-600 overflow-hidden flex-shrink-0 flex items-center justify-center relative">
                         <span id="editEmpPhotoInitials" class="text-xl font-bold text-gray-400 absolute"></span>
                         <img id="editEmpPhoto" src="" alt="Photo" class="w-full h-full object-cover hidden relative z-10">
@@ -465,40 +674,152 @@
                     <div class="flex-1">
                         <p id="editEmpDisplayName" class="text-lg text-blue-400 font-bold leading-tight"></p>
                         <p id="editEmpDisplayPin" class="text-xs text-gray-400 mb-2"></p>
-                        <input type="file" id="editEmpPhotoUpload" accept="image/*" onchange="handlePhotoUpload(event)" class="w-full text-[10px] text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:font-bold file:bg-blue-700 file:text-white hover:file:bg-blue-600 cursor-pointer">
+                        <input type="file" id="editEmpPhotoUpload" accept="image/*" onchange="handlePhotoUpload(event)" class="w-full max-w-sm text-[10px] text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:font-bold file:bg-blue-700 file:text-white hover:file:bg-blue-600 cursor-pointer">
                     </div>
                 </div>
                 
                 <input type="hidden" id="hiddenPhotoBase64Input">
                 <input type="hidden" id="hiddenPhotoSmallBase64Input">
                 <input type="hidden" id="editEmpPin">
-                
-                <div>
-                    <label class="block text-xs font-bold text-gray-400 mb-1">First Name</label>
-                    <input type="text" id="editEmpFirstName" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-400 mb-1">Last Name</label>
-                    <input type="text" id="editEmpLastName" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-400 mb-1">RFID Card Number</label>
-                    <input type="text" id="editEmpCardNo" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-400 mb-1">Department</label>
-                    <select id="editEmpDept" required onchange="syncHODDept('edit')" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    </select>
-                </div>
-                <div class="border-t border-gray-700 pt-3 mt-2">
-                    <label class="flex items-center cursor-pointer mb-2">
-                        <input type="checkbox" id="editEmpIsHOD" onchange="toggleHODDropdown('edit')" class="w-4 h-4 accent-blue-500 bg-gray-900 border-gray-600 rounded cursor-pointer">
-                        <span class="ml-2 text-xs font-bold text-purple-400"><i class="fas fa-crown mr-1"></i> Make Head of Department (HOD)</span>
-                    </label>
-                    <div id="editEmpHODContainer" class="hidden">
-                        <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">HOD Of Which Department?</label>
-                        <select id="editEmpHODDept" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-purple-500">
+
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1">Personal Details</h4>
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Display PIN / Emp ID <span class="text-red-400">*</span></label>
+                        <input type="text" id="editEmpDisplayPinInput" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500" title="This is the ID shown on reports and tables.">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">First Name <span class="text-red-400">*</span></label>
+                        <input type="text" id="editEmpFirstName" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Last Name <span class="text-red-400">*</span></label>
+                        <input type="text" id="editEmpLastName" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Biological Sex</label>
+                        <select id="editEmpSex" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                            <option value="">-- Select --</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
                         </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">ID/Passport Number</label>
+                        <input type="text" id="editEmpIDNumber" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Nationality</label>
+                        <select id="editEmpNationality" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                            <option value="">-- Select Nationality --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1">Employment & HR</h4>
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Department <span class="text-red-400">*</span></label>
+                        <select id="editEmpDept" required onchange="syncHODDept('edit')" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Occupation / Job Title</label>
+                        <input type="text" id="editEmpOccupation" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Group Start Date <span class="text-red-400">*</span></label>
+                        <input type="date" id="editEmpStartDate" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">RFID Card Number</label>
+                        <input type="text" id="editEmpCardNo" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="col-span-2 pt-2">
+                        <label class="flex items-center cursor-pointer mb-2">
+                            <input type="checkbox" id="editEmpIsHOD" onchange="toggleHODDropdown('edit')" class="w-4 h-4 accent-blue-500 bg-gray-900 border-gray-600 rounded cursor-pointer">
+                            <span class="ml-2 text-xs font-bold text-purple-400"><i class="fas fa-crown mr-1"></i> Make Head of Department (HOD)</span>
+                        </label>
+                        <div id="editEmpHODContainer" class="hidden mt-2">
+                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">HOD Of Which Department?</label>
+                            <select id="editEmpHODDept" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-purple-500"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1">Time & Attendance Configuration</h4>
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Default Shift ID <span class="text-red-400">*</span></label>
+                        <input type="number" id="editEmpDefaultShift" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Overtime Eligibility</label>
+                        <select id="editEmpOvertime" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                            <option value="Paid">Paid Overtime</option>
+                            <option value="Unpaid">Unpaid Overtime</option>
+                            <option value="Time-Off">Time-Off in Lieu</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Default Days Format</label>
+                        <input type="text" id="editEmpDefaultDays" placeholder="e.g. 1111100" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Custom OT Rule ID</label>
+                        <input type="number" id="editEmpCustomOTRule" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Payroll Period ID</label>
+                        <input type="number" id="editEmpPayrollPeriod" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+                <h4 class="text-xs font-bold text-emerald-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1"><i class="fas fa-calendar-check mr-1"></i> Leave Balances (Paid Leave)</h4>
+                <p class="text-[9px] text-gray-400 mb-2">Assign opening/current balances (in days) for this employee. Types are configured in the Leave Management tab.</p>
+                <div id="editEmpLeaveBalancesContainer" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6 bg-gray-900/50 p-3 rounded border border-gray-700">
+                    <!-- Javascript will dynamically inject Paid Leave input fields here -->
+                    <div class="col-span-full text-center text-xs text-gray-500 py-2">Loading leave types...</div>
+                </div>
+
+                <h4 class="text-xs font-bold text-yellow-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1"><i class="fas fa-coins mr-1"></i> Payroll & Wage Ledger</h4>
+                <p class="text-[9px] text-gray-400 mb-2">Changing these values sets a new active wage and logs the old rate to history.</p>
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Wage Type</label>
+                        <select id="editEmpWageType" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-yellow-500">
+                            <option value="">-- Select Type --</option>
+                            <option value="Hourly">Hourly Rate</option>
+                            <option value="Fixed">Fixed Salary (Monthly)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Rate/Amount</label>
+                        <input type="number" step="0.01" id="editEmpWageRate" placeholder="0.00" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-yellow-500">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Valid From Date</label>
+                        <input type="date" id="editEmpWageDate" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-yellow-500">
+                    </div>
+                </div>
+
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1">Attachments & Documents</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-gray-900 p-3 rounded border border-gray-700">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">ID/Passport Document</label>
+                        <input type="file" accept="image/*,application/pdf" onchange="handleDocUpload(event, 'hiddenIDDocBase64')" class="w-full text-[10px] text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:font-bold file:bg-gray-700 file:text-white cursor-pointer mb-1">
+                        <input type="hidden" id="hiddenIDDocBase64">
+                        <div id="idDocStatus" class="hidden flex items-center justify-between bg-green-900/20 border border-green-800 rounded px-2 py-1 mt-1">
+                            <span class="text-[9px] text-green-400"><i class="fas fa-check-circle mr-1"></i> Attached</span>
+                            <button type="button" onclick="viewDocument('hiddenIDDocBase64')" class="text-[9px] text-blue-400 hover:text-blue-300 font-bold underline">View</button>
+                        </div>
+                    </div>
+                    <div class="bg-gray-900 p-3 rounded border border-gray-700">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Work Permit</label>
+                        <input type="file" accept="image/*,application/pdf" onchange="handleDocUpload(event, 'hiddenWorkPermitBase64')" class="w-full text-[10px] text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:font-bold file:bg-gray-700 file:text-white cursor-pointer mb-1">
+                        <input type="hidden" id="hiddenWorkPermitBase64">
+                        <div id="workPermitStatus" class="hidden flex items-center justify-between bg-green-900/20 border border-green-800 rounded px-2 py-1 mt-1">
+                            <span class="text-[9px] text-green-400"><i class="fas fa-check-circle mr-1"></i> Attached</span>
+                            <button type="button" onclick="viewDocument('hiddenWorkPermitBase64')" class="text-[9px] text-blue-400 hover:text-blue-300 font-bold underline">View</button>
+                        </div>
                     </div>
                 </div>
             </div>
