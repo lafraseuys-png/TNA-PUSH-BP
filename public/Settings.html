@@ -255,14 +255,17 @@
                                     <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userEmployeeCosts" class="mr-2 accent-blue-500"> Employee Costs</label>
                                 </div>
                                 
-                                <h4 class="text-xs font-bold text-purple-400 mb-2">Mobile App Modules</h4>
-                                <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userMobileHr" class="mr-2 accent-purple-500"> HR Management</label>
-                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userMobileFuel" class="mr-2 accent-purple-500"> Fuel Management</label>
-                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userMobileStock" class="mr-2 accent-purple-500"> Stock Control</label>
-                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userMobileAssetTagging" class="mr-2 accent-purple-500"> Asset Tagging</label>
-                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userMobileTasks" class="mr-2 accent-purple-500"> Agri Piece Work</label>
-                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userMobileTimeAttendance" class="mr-2 accent-purple-500"> Time & Attendance</label>
+                                <h4 class="text-xs font-bold text-purple-400 mb-2">Mobile App Access (Per Tile)</h4>
+                                <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userTileClock" class="mr-2 accent-purple-500"> Tile: Clock In/Out</label>
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userTilePiecework" class="mr-2 accent-purple-500"> Tile: Piece Work</label>
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userTileTrip" class="mr-2 accent-purple-500"> Tile: Log Trip</label>
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userTileFuel" class="mr-2 accent-purple-500"> Tile: Log Fuel</label>
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userTileHr" class="mr-2 accent-purple-500"> Tile: HR Module</label>
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userTileViolations" class="mr-2 accent-purple-500"> Tile: Violations</label>
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userTileEmployees" class="mr-2 accent-purple-500"> Tile: Employees</label>
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userTileMaintenance" class="mr-2 accent-purple-500"> Tile: Asset Maint</label>
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userTileVerify" class="mr-2 accent-purple-500"> Tile: Verify Identity</label>
                                 </div>
                         </div>
                         <div class="flex justify-between items-center">
@@ -524,9 +527,8 @@
                     <div class="mt-4">
                         <label class="block text-xs font-bold text-blue-400 mb-1">Web Dashboard Modules:</label>
                         <div id="editModules" class="grid grid-cols-2 gap-2 bg-gray-900 p-2 rounded border border-gray-700 max-h-24 overflow-y-auto mb-3"></div>
-                        
-                        <label class="block text-xs font-bold text-purple-400 mb-1">Mobile App Modules:</label>
-                        <div id="editMobileModules" class="grid grid-cols-2 gap-2 bg-gray-900 p-2 rounded border border-gray-700 max-h-24 overflow-y-auto"></div>
+                    <label class="block text-xs font-bold text-purple-400 mb-1">Mobile App Access (Per Tile):</label>
+                        <div id="editMobileModules" class="grid grid-cols-2 gap-2 bg-gray-900 p-2 rounded border border-gray-700 max-h-32 overflow-y-auto"></div>   
                     </div>
                 </div>
 
@@ -578,9 +580,9 @@
             
             <input type="hidden" id="activeMappingShortcode">
             
-            <label class="block text-xs font-bold text-gray-300 mb-2">Connected Tenant Devices</label>
+            <label class="block text-xs font-bold text-gray-300 mb-2">Connected Mobile Devices (UUIDs)</label>
             <select id="licenseTargetDropdown" class="w-full bg-gray-900 border border-gray-600 rounded p-3 text-sm text-white focus:outline-none focus:border-pink-500 mb-6 font-medium">
-                <option value="">-- Loading available devices... --</option>
+                <option value="">-- Loading available mobile devices... --</option>
             </select>
 
             <div class="flex justify-end gap-3">
