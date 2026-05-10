@@ -19,8 +19,8 @@
 <body>
 
     <div id="screen-login" class="screen active min-h-screen flex flex-col justify-center px-6">
-        <div class="absolute top-6 right-6">
-            <button onclick="openSettings()" class="text-gray-400 hover:text-white p-2">
+        <div class="absolute top-6 right-6 z-50">
+            <button onclick="openSettings()" class="text-gray-400 hover:text-white p-2 cursor-pointer active:scale-95 transition-transform">
                 <i class="bi bi-gear-fill text-2xl"></i>
             </button>
         </div>
@@ -50,7 +50,8 @@
         </form>
     </div>
 
-    <div id="modal-settings" class="modal-overlay">
+    
+    <div id="modal-settings" class="modal-overlay" style="z-index: 200;">
         <div class="bg-[#1e1e1e] border border-[#333] w-full max-w-sm rounded-xl p-6 relative">
             <h2 class="text-lg font-bold text-white mb-4 select-none" onclick="triggerSecretEruda()"><i class="bi bi-shield-lock text-[#70A827] mr-2"></i> System Configuration</h2>
             <p class="text-xs text-gray-400 mb-4">Enter your tenant License Key. This is saved locally so you don't need to re-enter it.</p>
