@@ -28,6 +28,10 @@
         .modal-backdrop.active { display: flex; }
         
         .zone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; max-height: 250px; overflow-y: auto; }
+
+        /* Forces tables to scroll left-to-right instead of squishing columns */
+        .overflow-x-auto table { min-width: max-content; }
+        .overflow-x-auto th, .overflow-x-auto td { white-space: nowrap; }
     </style>
 </head>
 <body class="font-sans flex h-screen overflow-hidden">
