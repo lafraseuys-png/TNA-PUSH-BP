@@ -5,3 +5,4 @@ uploads/
 android/
 public/release/
 web.config
+ecosystem.config.js
