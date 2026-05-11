@@ -34,26 +34,28 @@ async function connectMaster() {
 }
 
 async function getTenantConnection(dbName) {
-    // TRACER ROUND: Strip invisible spaces and log the exact target
     if (!dbName) {
         throw new Error("getTenantConnection was called with an undefined or empty database name!");
     }
     
     const targetDb = String(dbName).trim(); 
-    console.log(`[DB ROUTER] Attempting to connect to Tenant DB: >>>${targetDb}<<<`);
     
+    // 1. FAST PATH: Return existing pool instantly. No SELECT 1 ping bottleneck!
     if (tenantPools[targetDb]) {
-        try {
-            await tenantPools[targetDb].request().query('SELECT 1');
-            return tenantPools[targetDb];
-        } catch (e) {
-            console.log(`[DB ROUTER] Existing pool for ${targetDb} died. Rebuilding...`);
-            tenantPools[targetDb] = null;
-        }
+        return tenantPools[targetDb];
     }
-    
+
+    // 2. THE LOCK: If another request is already building the connection, wait for it!
+    if (tenantConnecting[targetDb]) {
+        try { await tenantConnecting[targetDb]; } catch(e) {}
+        if (tenantPools[targetDb]) return tenantPools[targetDb];
+        throw new Error(`Database ${targetDb} is unavailable.`);
+    }
+
+    // 3. BUILD AND LOCK
     if (!tenantPools[targetDb]) {
         tenantConnecting[targetDb] = (async () => {
+            console.log(`[DB ROUTER] Attempting to connect to Tenant DB: >>>${targetDb}<<<`);
             try {
                 const pool = new sql.ConnectionPool({ ...masterConfig, database: targetDb });
                 await pool.connect();
@@ -65,12 +67,11 @@ async function getTenantConnection(dbName) {
             }
         })();
         
-        // Catch the rejection right here so it doesn't escape as an Unhandled Promise Rejection!
         try {
             await tenantConnecting[targetDb];
         } catch (e) {} 
         
-        tenantConnecting[targetDb] = null; 
+        tenantConnecting[targetDb] = null; // Unlock the door
     }
     
     if (!tenantPools[targetDb]) {
