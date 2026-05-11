@@ -785,9 +785,13 @@
             <section id="page-reports" class="page-section pb-32">
 
 
-                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-blue-400">
+                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-blue-400 w-full min-w-0 max-w-full">
                     <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
                         <h3 class="font-bold text-gray-300"><i class="fas fa-chart-pie mr-2"></i>Analytics & Reports</h3>
+                        
+                        <button onclick="exportReportToExcel(event)" class="bg-green-700 hover:bg-green-600 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow flex items-center h-8">
+                            <i class="fas fa-file-excel mr-2"></i> Export to Excel
+                        </button>
                     </div>
 
                     <div class="flex flex-wrap items-end gap-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
@@ -829,23 +833,27 @@
                                 <div class="text-[10px] text-gray-500 italic text-center p-2">Select a department first.</div>
                             </div>
                         </div>
-                        <button onclick="generateReportData(event)" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow h-8">
-                        <i class="fas fa-sync mr-1"></i> Generate
-                        </button>
-                        <button onclick="exportReportToExcel(event)" class="bg-green-700 hover:bg-green-600 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow h-8 ml-auto">
-                            <i class="fas fa-file-excel mr-1"></i> Export to Excel
+                        <button onclick="generateReportData(event)" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-1.5 rounded text-xs font-bold transition shadow h-8">
+                            <i class="fas fa-sync mr-1"></i> Generate
                         </button>
                     </div>
-
-                    <div class="overflow-x-auto overflow-y-auto max-h-[600px] bg-gray-900 border border-gray-700 rounded relative">
-                        <table class="w-full text-left text-sm border-collapse whitespace-nowrap" id="reportPreviewTable">
+                </div> <div class="bg-gray-800 rounded shadow-lg border border-gray-700 flex flex-col" style="width: 100%; max-width: calc(100vw - 300px);">
+                    
+                    <div class="bg-gray-900 px-4 py-3 border-b border-gray-700 flex justify-between items-center rounded-t shrink-0">
+                        <span class="text-xs font-bold text-teal-400 uppercase tracking-widest"><i class="fas fa-table mr-2"></i> Report Data View</span>
+                        <span class="text-[10px] text-gray-500 italic"><i class="fas fa-arrows-alt-h mr-1 text-blue-400"></i> Scroll horizontally for more dates</span>
+                    </div>
+                    
+                    <div class="w-full overflow-x-auto overflow-y-auto max-h-[600px] bg-gray-900 rounded-b relative">
+                        <table class="w-full text-left text-sm border-collapse whitespace-nowrap min-w-full" id="reportPreviewTable">
                             <thead id="reportPreviewHead" class="bg-gray-800 text-gray-400 uppercase text-[10px] font-bold sticky top-0 z-10 shadow-md"></thead>
                             <tbody id="reportPreviewBody" class="divide-y divide-gray-700 text-xs text-gray-300">
-                                <tr><td class="p-4 text-center">Select parameters and click Generate.</td></tr>
+                                <tr><td class="p-8 text-center text-gray-500 italic"><i class="fas fa-file-alt text-2xl mb-2 block opacity-50"></i>Select parameters and click Generate to populate this window.</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
+
             </section>
 
            <section id="page-overtime" class="page-section pb-32">
