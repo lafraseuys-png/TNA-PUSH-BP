@@ -533,11 +533,21 @@
                                 <button onclick="forceRecalculateAttendance(this)" class="bg-green-700 hover:bg-green-600 text-white px-4 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-green-500 ml-2">
                                     <i class="fas fa-sync-alt mr-2"></i> Recalculate Week
                                 </button>
+                                
+                                <div id="attendanceSyncControls" class="flex items-center gap-2 ml-4">
+                                    <button id="btnPullCVS" onclick="pullMissingCvsClocks()" class="hidden bg-purple-600 hover:bg-purple-500 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow border border-purple-500">
+                                        <i class="fas fa-cloud-download-alt mr-1"></i> Pull CVS Clocks
+                                    </button>
+                                    
+                                    <button id="btnPullDevices" onclick="pullMissingDeviceClocks()" class="hidden bg-teal-600 hover:bg-teal-500 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow border border-teal-500">
+                                        <i class="fas fa-microchip mr-1"></i> Pull Device Clocks
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
                         <div id="formatIndicatorBadge" class="bg-gray-900 border border-gray-600 text-blue-400 px-3 py-1.5 rounded text-xs font-bold shadow flex items-center">
-                            <i class="fas fa-clock mr-2"></i> <span id="formatIndicatorText">Displaying: Decimals (8.50)</span>
+                                <i class="fas fa-clock mr-2"></i> <span id="formatIndicatorText">Displaying: Decimals (8.50)</span>
                         </div>
                     </div>
 

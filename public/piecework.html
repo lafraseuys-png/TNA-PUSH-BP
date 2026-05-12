@@ -642,6 +642,7 @@
                         <tr>
                             <th class="p-3 pl-6">Date & Time</th>
                             <th class="p-3">Employee</th>
+                            <th class="p-3 text-center">Evidence</th>
                             <th class="p-3 text-right pr-6">Quantity</th>
                         </tr>
                     </thead>
@@ -898,6 +899,29 @@
             <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b flex justify-end space-x-3 flex-shrink-0">
                 <button type="button" onclick="closeBulkCopyModal()" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded font-bold text-sm shadow transition">Cancel</button>
                 <button type="button" onclick="executeBulkCopy()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded font-bold text-sm shadow transition">Apply Copy</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="evidenceModal" class="modal-backdrop" style="z-index: 90;">
+        <div class="bg-gray-800 w-[500px] max-w-[95vw] rounded shadow-2xl border border-teal-500 flex flex-col p-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg text-teal-400"><i class="fas fa-camera mr-2"></i> Transaction Evidence</h3>
+                <button onclick="document.getElementById('evidenceModal').classList.remove('active')" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <h4 class="text-xs font-bold text-gray-500 uppercase mb-2">Captured Photo</h4>
+                    <div id="evPhotoContainer" class="bg-black rounded min-h-[200px] max-h-[300px] flex items-center justify-center border border-gray-600 overflow-hidden">
+                        <span class="text-gray-600 text-sm italic">No photo provided</span>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold text-gray-500 uppercase mb-2">Employee Signature</h4>
+                    <div id="evSigContainer" class="bg-white rounded min-h-[100px] flex items-center justify-center border border-gray-600 p-2 overflow-hidden">
+                        <span class="text-gray-400 text-sm italic">No signature provided</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
