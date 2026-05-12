@@ -38,25 +38,25 @@
             <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Tenant Configuration</p>
         </div>
         <nav class="flex-1 overflow-y-auto py-4" id="sidebarNav">
-            <button onclick="showSection('api', this)" class="sidebar-item active w-full flex items-center p-4 text-left">
+            <button data-permission="sys_api" onclick="showSection('api', this)" class="sidebar-item active w-full flex items-center p-4 text-left">
                 <i class="fas fa-network-wired w-6 text-center mr-2"></i> Connectivity
             </button>
-            <button onclick="showSection('sync', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+            <button data-permission="sys_api" onclick="showSection('sync', this)" class="sidebar-item w-full flex items-center p-4 text-left">
                 <i class="fas fa-sync w-6 text-center mr-2"></i> Sync Engine
             </button>
-            <button onclick="showSection('users', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+            <button data-permission="sys_users" onclick="showSection('users', this)" class="sidebar-item w-full flex items-center p-4 text-left">
                 <i class="fas fa-users-cog w-6 text-center mr-2"></i> User Access
             </button>
-            <button onclick="showSection('roles', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+            <button data-permission="sys_users" onclick="showSection('roles', this)" class="sidebar-item w-full flex items-center p-4 text-left">
                 <i class="fas fa-shield-alt w-6 text-center mr-2"></i> Roles & Permissions
             </button>
-            <button onclick="showSection('zones', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+            <button data-permission="sys_hardware" onclick="showSection('zones', this)" class="sidebar-item w-full flex items-center p-4 text-left">
                 <i class="fas fa-map-marker-alt w-6 text-center mr-2"></i> Access Zones
             </button>
-            <button onclick="showSection('devices', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+            <button data-permission="sys_hardware" onclick="showSection('devices', this)" class="sidebar-item w-full flex items-center p-4 text-left">
                 <i class="fas fa-microchip w-6 text-center mr-2"></i> Hardware
             </button>
-            <button onclick="showSection('errors', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+            <button data-permission="sys_hardware" onclick="showSection('errors', this)" class="sidebar-item w-full flex items-center p-4 text-left">
                 <i class="fas fa-bug w-6 text-center mr-2 text-red-500"></i> Mobile Errors
             </button>
         </nav>

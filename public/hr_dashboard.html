@@ -7,6 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <style>
         body { background-color: #0f172a; color: #e2e8f0; }
         .page-section { display: none; }
@@ -24,6 +26,10 @@
             background: rgba(0, 0, 0, 0.7); z-index: 50; justify-content: center; align-items: center;
         }
         .modal-backdrop.active { display: flex; }
+        .ql-toolbar { background: #cbd5e1; border-radius: 4px 4px 0 0; }
+        .ql-container { background: #1e293b; color: #e2e8f0; border-radius: 0 0 4px 4px; border: 1px solid #475569 !important; font-family: inherit; font-size: 14px; }
+        .ql-editor { min-height: 250px; }
+        .html2pdf__page-break { page-break-before: always; }
     </style>
 </head>
 <body class="font-sans flex h-screen overflow-hidden">
@@ -248,11 +254,11 @@
                         <h3 class="font-bold text-gray-300"><i class="fas fa-file-signature mr-2"></i>Active Contracts</h3>
                     </div>
 
-                    <div class="flex items-center space-x-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
+                   <div class="flex items-center space-x-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
                         <div class="w-1/3">
-                            <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">Department (Required)</label>
+                            <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">Department Filter (Optional)</label>
                             <select id="activeContractDept" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-white text-xs focus:outline-none focus:border-green-500 transition">
-                                <option value="">-- Select Department --</option>
+                                <option value="">-- All Departments --</option>
                             </select>
                         </div>
                         <div class="flex-1 max-w-sm">
@@ -260,7 +266,7 @@
                             <input type="text" id="activeContractSearch" placeholder="Type Name, Surname or PIN..." class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-green-500 transition">
                         </div>
                         <div class="flex space-x-2 mt-4">
-                            <button onclick="fetchActiveContracts()" class="bg-green-700 hover:bg-green-600 text-white px-4 py-1.5 rounded text-xs font-bold uppercase transition shadow"><i class="fas fa-search mr-1"></i> Search</button>
+                            <button onclick="currentActiveContractPage = 1; fetchActiveContracts()" class="bg-green-700 hover:bg-green-600 text-white px-4 py-1.5 rounded text-xs font-bold uppercase transition shadow"><i class="fas fa-search mr-1"></i> Search / Load All</button>
                         </div>
                     </div>
 
@@ -274,12 +280,21 @@
                                     <th class="p-3 border-b border-gray-600">Valid From</th>
                                     <th class="p-3 border-b border-gray-600">Valid To</th>
                                     <th class="p-3 border-b border-gray-600 text-center">Physical Copy</th>
+                                    <th class="p-3 border-b border-gray-600 text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="activeContractsTableBody" class="divide-y divide-gray-700 bg-gray-800">
-                                <tr><td colspan="6" class="p-4 text-center text-gray-500">Please select a department and click Search.</td></tr>
+                                <tr><td colspan="7" class="p-4 text-center text-gray-500">Click Search / Load All to view active contracts.</td></tr>
                             </tbody>
                         </table>
+                    </div>
+                    
+                    <div class="flex justify-between items-center mt-4 border-t border-gray-700 pt-3">
+                        <span id="activeContractPageInfo" class="text-xs font-bold text-gray-400">Page 1</span>
+                        <div class="space-x-2">
+                            <button onclick="changeActiveContractPage(-1)" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow disabled:opacity-50" id="btnActivePrev" disabled><i class="fas fa-chevron-left mr-1"></i> Prev 20</button>
+                            <button onclick="changeActiveContractPage(1)" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow disabled:opacity-50" id="btnActiveNext" disabled>Next 20 <i class="fas fa-chevron-right ml-1"></i></button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -407,9 +422,9 @@
                                         <input type="date" id="obValidTo" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-yellow-500">
                                     </div>
                                 </div>
-                                <div class="flex items-center mt-2">
-                                    <input type="checkbox" id="obIsPermanent" onchange="togglePermanentContract()" class="w-4 h-4 accent-blue-500 bg-gray-800 border-gray-600 rounded cursor-pointer">
-                                    <label for="obIsPermanent" class="ml-2 text-xs font-bold text-blue-400 cursor-pointer">Set as Permanent Contract (No Expiry)</label>
+                                <div class="flex items-start mt-2">
+                                    <input type="checkbox" id="obIsPermanent" onchange="togglePermanentContract()" class="w-4 h-4 mt-0.5 accent-blue-500 bg-gray-800 border-gray-600 rounded shrink-0 cursor-pointer">
+                                    <label for="obIsPermanent" class="ml-2 text-xs font-bold text-blue-400 cursor-pointer whitespace-normal break-words leading-tight flex-1">Set as Permanent Contract (No Expiry)</label>
                                 </div>
                                 <button onclick="assignContract()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-2 rounded font-bold text-sm shadow transition mt-4" id="btnAssignContract">
                                     Assign Contract
@@ -495,8 +510,9 @@
                     </div>
                 </div>
 
-                <input type="file" id="hiddenContractUpload" accept="image/*" class="hidden">
+                <input type="file" id="hiddenContractUpload" accept="image/*,application/pdf" class="hidden">
                 <input type="hidden" id="uploadContractId">
+                <input type="hidden" id="uploadContractSource" value="manage">
 
                 <div id="onboarding-templates" class="onboarding-tab hidden">
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-purple-500">
@@ -615,15 +631,15 @@
                     <div class="flex-1 flex flex-col min-h-0 md:flex-row gap-4">
                         <div class="flex-1 flex flex-col min-h-0">
                             <label class="block text-sm font-bold text-gray-400 mb-1 flex justify-between items-end">
-                                <span>Primary Contract Body</span>
+                                <span>Primary Contract Body <span class="text-xs text-blue-400 font-normal italic">(Vars: [Employee Name], [PIN], [Department], [Valid From], [Valid To], [ID Number], [Wage Type], [Wage Rate])</span></span>
                             </label>
-                            <textarea id="tplBody" class="w-full flex-1 bg-gray-900 border border-gray-600 rounded p-4 text-sm text-gray-200 focus:outline-none focus:border-purple-500 resize-none font-sans leading-relaxed whitespace-pre-wrap" placeholder="Enter primary contract terms here..." required></textarea>
+                            <div id="tplBodyEditor" class="w-full flex-1 bg-white text-gray-900"></div>
                         </div>
                         <div id="translatedBodyContainer" class="flex-1 flex flex-col min-h-0 hidden">
                             <label class="block text-sm font-bold text-purple-400 mb-1 flex justify-between items-end">
                                 <span>Translated Contract Body</span>
                             </label>
-                            <textarea id="tplBodyTranslated" class="w-full flex-1 bg-gray-900 border border-gray-600 rounded p-4 text-sm text-gray-200 focus:outline-none focus:border-purple-500 resize-none font-sans leading-relaxed whitespace-pre-wrap" placeholder="Paste the translated contract terms here..."></textarea>
+                            <div id="tplBodyTranslatedEditor" class="w-full flex-1 bg-white text-gray-900"></div>
                         </div>
                     </div>
                     <div class="pt-4 border-t border-gray-700 flex justify-between items-center">
@@ -645,7 +661,9 @@
     <div style="display:none;">
         <div id="contractPreviewContent" class="bg-white p-12 text-gray-900 font-serif w-[794px] max-w-none relative mx-auto">
             <h1 id="pdfContractTitle" class="text-2xl font-bold text-center mb-6 uppercase border-b-2 border-gray-800 pb-4">CONTRACT TITLE</h1>
-            <div id="pdfContractBody" class="text-sm leading-relaxed whitespace-pre-wrap text-justify">
+            <div id="pdfContractBody" class="text-sm leading-relaxed text-justify ql-editor" style="padding:0; overflow: visible;">
+                </div>
+            <div id="pdfContractTranslatedBody" class="text-sm leading-relaxed text-justify ql-editor mt-8 pt-8 border-t border-gray-300 hidden" style="padding:0; overflow: visible;">
                 </div>
             <div class="mt-16 pt-8 border-t border-gray-400 grid grid-cols-2 gap-10">
                 <div class="text-center">
