@@ -189,7 +189,17 @@
                         <h3 class="text-sm font-bold mb-6 text-teal-400 uppercase tracking-widest"><i class="fas fa-globe mr-2"></i>Global Calculation Rules</h3>
                         
                         <div class="flex flex-col gap-6">
-                            <!-- Ignore OT Toggle -->
+                            <div class="flex items-center justify-between border-b border-gray-800 pb-4">
+                                <div>
+                                    <div class="font-bold text-gray-200">Allow Employees in Multiple Teams</div>
+                                    <div class="text-xs text-gray-500 mt-1">If enabled, an employee can be assigned to more than one team simultaneously without being removed from their existing team.</div>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="globalAllowMultiTeam" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-500"></div>
+                                </label>
+                            </div>
+
                             <div class="flex items-center justify-between border-b border-gray-800 pb-4">
                                 <div>
                                     <div class="font-bold text-gray-200">Ignore Overtime Calculations</div>
@@ -422,16 +432,31 @@
                     </table>
                 </div>
 
-                <div id="addMembersSection" class="flex flex-col flex-1 overflow-hidden min-h-0">
-                    <h4 class="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Add New Members (Search to filter)</h4>
-                    <div class="relative mb-3 flex-shrink-0">
-                        <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
-                        <input type="text" id="teamSearchInput" oninput="currentAvailableEmpPage = 1; renderAvailableEmployees()" placeholder="Search available employees by Name, PIN, or Department..." class="w-full pl-8 pr-3 py-1.5 bg-gray-900 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-teal-500 transition shadow-inner">
+                <div id="addMembersSection" class="flex flex-col flex-1 overflow-hidden min-h-0 mt-4">
+                    <h4 class="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Add New Members</h4>
+                    
+                    <div class="flex gap-2 mb-3 flex-shrink-0">
+                        <div class="relative flex-1">
+                            <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
+                            <input type="text" id="teamSearchInput" oninput="currentAvailableEmpPage = 1; renderAvailableEmployees()" placeholder="Search Name or PIN..." class="w-full pl-8 pr-3 py-1.5 bg-gray-900 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-teal-500 transition shadow-inner">
+                        </div>
+                        <select id="teamDeptFilter" onchange="currentAvailableEmpPage = 1; renderAvailableEmployees()" class="w-1/3 bg-gray-900 border border-gray-600 rounded px-2 py-1.5 text-xs text-white focus:outline-none focus:border-teal-500 transition shadow-inner">
+                            <option value="">All Departments</option>
+                        </select>
+                    </div>
+
+                    <div class="flex justify-between items-center bg-gray-900 border border-gray-700 p-2 rounded mb-2 flex-shrink-0">
+                        <label class="flex items-center cursor-pointer text-xs font-bold text-gray-300 uppercase tracking-wider">
+                            <input type="checkbox" id="selectAllAvailable" onchange="toggleAllAvailableEmps(this.checked)" class="mr-3 w-4 h-4 accent-teal-500">
+                            Select All (Current Page)
+                        </label>
+                        <button type="button" onclick="addSelectedMembers()" class="bg-teal-700 hover:bg-teal-600 text-white px-3 py-1 rounded text-xs font-bold shadow transition">
+                            <i class="fas fa-plus mr-1"></i> Add Selected
+                        </button>
                     </div>
                     
                     <div class="bg-gray-900 border border-gray-700 rounded flex-1 overflow-y-auto shadow-inner mb-3" id="availableEmployeesList">
-                        <!-- Populated via JS -->
-                    </div>
+                        </div>
 
                     <div class="flex justify-between items-center flex-shrink-0" id="availableEmpPagination">
                         <span id="availableEmpPageInfo" class="text-[10px] text-gray-400 font-bold uppercase tracking-wider"></span>
