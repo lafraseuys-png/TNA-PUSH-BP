@@ -66,6 +66,9 @@
             <button id="tab-grv-manager" onclick="switchTab('grv-manager', this); toggleGrvView('Shortages');" class="sidebar-item w-full flex items-center p-4 text-left">
                 <i class="fas fa-clipboard-check w-6 text-center mr-2 text-blue-400"></i> GRV Manager
             </button>
+            <button onclick="openPrintToolModal()" class="sidebar-item w-full flex items-center p-4 text-left border-t border-gray-700 mt-2 hover:bg-purple-900/30 transition">
+                <i class="fas fa-print w-6 text-center mr-2 text-purple-400"></i> Print Labels & Tags
+            </button>
         </nav>
 
         <div class="p-4 border-t border-gray-700 text-xs">
@@ -99,9 +102,10 @@
                    <div class="flex flex-col xl:flex-row items-center justify-between gap-4 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
                         <div class="flex items-center space-x-3 flex-1 w-full max-w-2xl">
                             <div class="relative flex-1">
-                                <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
-                                <input type="text" id="assetSearch" oninput="filterAssets()" placeholder="Scan Tag or Search Name..." class="w-full pl-8 pr-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-blue-500 transition">
-                            </div>
+                            <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
+                            <input type="text" id="assetSearch" list="assetSearchList" oninput="filterAssets()" placeholder="Scan Tag, Search Name, or Click to Select..." class="w-full pl-8 pr-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-blue-500 transition">
+                            <datalist id="assetSearchList"></datalist>
+                        </div>
                             <select id="assetCategoryFilter" onchange="filterAssets()" class="bg-gray-800 border border-gray-600 rounded py-1.5 px-3 text-xs text-white focus:outline-none focus:border-blue-500 transition w-48">
                                 <option value="">All Categories</option>
                             </select>
@@ -1237,6 +1241,61 @@
 
     <datalist id="employeeList"></datalist>
     <datalist id="departmentList"></datalist>
+
+    <div id="printToolModal" class="modal-backdrop z-[100]">
+        <div class="bg-gray-800 p-0 rounded-lg w-[600px] max-w-full shadow-2xl border border-gray-600 flex flex-col max-h-[90vh]">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
+                <h2 class="text-lg font-bold text-purple-400"><i class="fas fa-print mr-2"></i> Print Labels & Serials</h2>
+                <button type="button" onclick="closePrintToolModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="flex px-6 border-b border-gray-700 bg-gray-800">
+                <button onclick="switchPrintTab('asset')" id="printTabBtn-asset" class="px-4 py-2 text-xs font-bold text-purple-400 border-b-2 border-purple-500 transition">Asset Tag</button>
+                <button onclick="switchPrintTab('stock')" id="printTabBtn-stock" class="px-4 py-2 text-xs font-bold text-gray-400 border-b-2 border-transparent hover:text-gray-200 transition">Stock Item Serial</button>
+            </div>
+
+            <div class="p-6 overflow-y-auto flex-1 bg-gray-800">
+                
+                <div id="printTab-asset" class="space-y-4 block">
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Search Asset</label>
+                    <input type="text" id="webPrintAssetSearch" placeholder="Type Asset Name or Tag..." oninput="filterWebPrintAssets()" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500">
+                    <div id="webPrintAssetList" class="max-h-48 overflow-y-auto border border-gray-700 rounded bg-gray-900 hidden mt-1"></div>
+                    
+                    <div id="webSelectedAssetContainer" class="hidden mt-4 p-4 border border-gray-700 rounded text-center bg-gray-900 shadow-inner">
+                        <h3 id="webPrintAssetName" class="font-bold text-white text-lg"></h3>
+                        <p id="webPrintAssetTag" class="text-purple-400 font-mono inline-block px-3 py-1 bg-purple-900/30 rounded border border-purple-500/50 mt-1"></p>
+                        <button onclick="executeWebPrint('asset')" class="mt-4 w-full bg-purple-600 hover:bg-purple-500 text-white px-6 py-3 rounded text-sm font-bold shadow transition"><i class="fas fa-print mr-2"></i> Send to Printer</button>
+                    </div>
+                </div>
+
+                <div id="printTab-stock" class="hidden space-y-4">
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Search Master Stock Item</label>
+                    <input type="text" id="webPrintStockSearch" placeholder="Type Item Name or Code..." oninput="filterWebPrintStock()" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500">
+                    <div id="webPrintStockList" class="max-h-48 overflow-y-auto border border-gray-700 rounded bg-gray-900 hidden mt-1"></div>
+                    
+                    <div id="webSelectedStockContainer" class="hidden mt-4 p-4 border border-gray-700 rounded bg-gray-900 shadow-inner">
+                        <h3 id="webPrintStockName" class="font-bold text-white text-center text-sm"></h3>
+                        <p id="webPrintStockCode" class="text-gray-400 font-mono text-center text-xs mb-4"></p>
+                        
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Action</label>
+                        <select id="webPrintStockAction" onchange="toggleWebStockPrintAction()" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500 mb-4">
+                            <option value="generate">Generate New Serial (For Reclaimed Part / GRV Labeling)</option>
+                            <option value="existing">Select Existing Serial in Stock</option>
+                        </select>
+                        
+                        <div id="webExistingSerialDiv" class="hidden mb-4">
+                            <label class="block text-xs font-bold text-gray-400 mb-1">Available Serials</label>
+                            <select id="webPrintExistingSerial" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500"></select>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button onclick="executeWebPrint('stock')" class="w-full bg-purple-600 hover:bg-purple-500 text-white px-6 py-3 rounded text-sm font-bold shadow transition"><i class="fas fa-print mr-2"></i> Send to Printer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="AssetTagginght.js"></script>
 </body>
