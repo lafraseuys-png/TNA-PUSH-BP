@@ -45,7 +45,12 @@
             </div>
             <div class="mb-6">
                 <label class="text-xs font-semibold text-gray-400 uppercase">Password</label>
-                <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
+                <div class="relative">
+                    <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password" class="w-full !pr-12">
+                    <button type="button" onclick="togglePasswordVisibility()" class="absolute right-0 top-0 h-full px-4 text-gray-400 hover:text-white transition-colors flex items-center justify-center">
+                        <i id="loginPassIcon" class="bi bi-eye-fill text-lg pointer-events-none"></i>
+                    </button>
+                </div>
             </div>
             <button type="submit" class="btn-primary" id="btnLogin">
                 <i class="bi bi-box-arrow-in-right mr-2"></i> Secure Login
