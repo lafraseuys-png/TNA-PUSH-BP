@@ -4,16 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enterprise System Login</title>
-    <script src="https://cdn.tailwindcss.com"></script>  <style>
-        body { background-color: #0f172a; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: 'Segoe UI', sans-serif; color: #e2e8f0; }
-        form { background: #1e293b; padding: 2.5rem; border-radius: 1rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); width: 100%; max-width: 400px; border: 1px solid #334155; }
+    <style>
+        body { 
+            background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)), url('Background.jpeg') no-repeat center center fixed; 
+            background-size: 100% 100%; /* Compresses the image to fit the screen exactly without cropping */
+            display: flex; justify-content: center; align-items: center; height: 100vh; font-family: 'Segoe UI', sans-serif; color: #e2e8f0; 
+        }
+        form { 
+            background: rgba(30, 41, 59, 0.85); 
+            backdrop-filter: blur(4px); /* Reduced the blur to make the background much clearer */
+            padding: 2.5rem; border-radius: 1rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8); width: 100%; max-width: 400px; border: 1px solid rgba(255, 255, 255, 0.1); 
+        }
         input::placeholder { color: #64748b; }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="flex flex-col">
     <div class="flex flex-col items-center">
-        <img src="logo.jpg" alt="TNA Africa Logo" class="w-96 mb-8 drop-shadow-2xl object-contain">
+        <img id="tenantLogo" src="logo.jpg" alt="TNA Africa Logo" class="w-96 mb-8 drop-shadow-2xl object-contain" onerror="fallbackLogo(this)">
+        <script>
+            // 1. Logo Fallback Logic
+            function fallbackLogo(img) {
+                if (img.src.includes('logo.jpg')) { img.src = 'logo.png'; }
+                else if (img.src.includes('logo.png')) { img.src = 'logo.jpeg'; }
+                else { img.onerror = null; } 
+            }
+
+            // 2. Background Fallback Logic
+            const bgFormats = ['jpeg', 'jpg', 'png'];
+            let bgIndex = 0;
+            
+            function loadDynamicBackground() {
+                if (bgIndex >= bgFormats.length) return; // Stop if none are found
+                
+                let img = new Image();
+                let bgUrl = 'Background.' + bgFormats[bgIndex];
+                
+                img.onload = function() {
+                    // Success! Apply it to the body
+                    document.body.style.background = `linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)), url('${bgUrl}') no-repeat center center fixed`;
+                    document.body.style.backgroundSize = '100% 100%';
+                };
+                
+                img.onerror = function() {
+                    // Failed, try the next format
+                    bgIndex++;
+                    loadDynamicBackground();
+                };
+                
+                img.src = bgUrl;
+            }
+            loadDynamicBackground();
+        </script>
 
         <form id="loginForm" class="transition-all duration-300 hover:border-cyan-500/50">
             <h2 class="text-2xl font-black mb-6 text-center text-white tracking-tight uppercase">Enterprise Login</h2>
@@ -34,6 +77,10 @@
                 <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white p-3 rounded-lg font-bold shadow-lg shadow-cyan-900/20 transition-all transform active:scale-95 flex items-center justify-center">
                     <i class="fas fa-sign-in-alt mr-2"></i> Access Dashboard
                 </button>
+
+                <div class="text-center mt-4">
+                    <button type="button" onclick="openForgotModal()" class="text-cyan-400 hover:text-cyan-300 text-xs font-bold transition-colors">Forgot Password / License Key?</button>
+                </div>
             </div>
             
             <p id="error" class="text-red-400 mt-4 text-xs font-bold text-center hidden p-2 bg-red-900/20 rounded border border-red-800/50 uppercase tracking-widest"></p>
@@ -42,6 +89,39 @@
         <p class="mt-8 text-gray-500 text-[10px] uppercase tracking-[0.2em] font-bold">
             Product by <span class="text-gray-400">TNA Africa</span> &bull; All Rights Reserved &copy; 2026
         </p>
+    </div>
+
+    <div id="forgotModal" class="hidden fixed inset-0 bg-black/80 z-50 flex justify-center items-center backdrop-blur-sm">
+        <form id="forgotForm" class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-md border border-gray-700 relative">
+            <button type="button" onclick="closeForgotModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            <h3 class="text-xl font-bold text-white mb-2"><i class="fas fa-envelope mr-2 text-cyan-500"></i>Reset Access</h3>
+            <p class="text-xs text-gray-400 mb-6">Enter your email address. We will scan all systems and send you a reset link containing your Tenant License Key.</p>
+            
+            <input type="email" id="forgotEmail" placeholder="user@company.com" required class="w-full p-3 mb-4 bg-gray-900 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-cyan-500 transition-all">
+            
+            <button type="submit" id="forgotSubmitBtn" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white p-3 rounded-lg font-bold shadow-lg transition-all flex justify-center items-center">
+                Send Reset Link
+            </button>
+            <p id="forgotMessage" class="text-xs font-bold text-center mt-4 hidden"></p>
+        </form>
+    </div>
+
+    <div id="resetModal" class="hidden fixed inset-0 bg-black/80 z-50 flex justify-center items-center backdrop-blur-sm">
+        <form id="resetForm" class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-md border border-gray-700 relative">
+            <h3 class="text-xl font-bold text-white mb-2"><i class="fas fa-key mr-2 text-cyan-500"></i>Set New Password</h3>
+            <p class="text-xs text-gray-400 mb-6">Please enter the exact License Key provided in your email to confirm the correct tenant, along with your new password.</p>
+            
+            <div class="space-y-4">
+                <input type="text" id="resetLicenseKey" placeholder="License Key (from email)" required class="w-full p-3 bg-gray-900 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-cyan-500 transition-all">
+                <input type="password" id="resetPassword1" placeholder="New Password" required class="w-full p-3 bg-gray-900 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-cyan-500 transition-all">
+                <input type="password" id="resetPassword2" placeholder="Confirm New Password" required class="w-full p-3 bg-gray-900 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-cyan-500 transition-all">
+            </div>
+            
+            <button type="submit" id="resetSubmitBtn" class="w-full bg-green-600 hover:bg-green-500 text-white p-3 mt-6 rounded-lg font-bold shadow-lg transition-all flex justify-center items-center">
+                Confirm & Reset
+            </button>
+            <p id="resetMessage" class="text-xs font-bold text-center mt-4 hidden"></p>
+        </form>
     </div>
 
     <script src="login.js"></script>

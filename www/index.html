@@ -792,6 +792,10 @@
             </div>
         </div>
     </div>
+
+    <div id="modal-maint-defer-part" class="modal-overlay" style="z-index: 150; display: none;">
+        <div class="bg-[#1e1e1e] border border-[#333] w-full max-w-sm rounded-xl p-6 shadow-2xl relative">
+            <h3 class="font-bold text-lg text-red-500 mb-4 border-b border-[#333] pb-2"><i class="bi bi-exclamation-triangle mr-2"></i>Defer Part (Shortage)</h3>
             <p id="deferPartNameDisplay" class="text-sm text-gray-300 mb-4"></p>
             
             <label class="text-xs font-semibold text-gray-400 uppercase">Quantity Missing</label>
@@ -805,7 +809,6 @@
             </div>
         </div>
     </div>
-
     <div id="screen-form-infringement" class="screen px-4 pt-6">
         <div class="flex items-center mb-6">
             <button onclick="navigate('screen-hr-dashboard')" class="text-gray-400 mr-4 text-xl"><i class="bi bi-arrow-left"></i></button>
@@ -919,23 +922,21 @@
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="text-xs font-semibold text-gray-400 uppercase mb-2 block">ID / Passport (Copy)</label>
-                    <input type="file" id="onbIdDocInput" accept="image/*,application/pdf" class="hidden" onchange="handleOnboardDoc(event, 'onbIdDocBase64', 'onbIdDocPreview')">
-                    <button type="button" onclick="document.getElementById('onbIdDocInput').click()" class="w-full bg-[#2a2a2a] border border-[#333] border-dashed p-3 rounded-xl flex flex-col items-center justify-center text-gray-400 hover:text-[#70A827] hover:border-[#70A827] transition-colors">
-                        <i class="bi bi-file-earmark-person text-2xl mb-1"></i>
-                        <span class="text-[10px] font-bold uppercase">Attach File</span>
+                    <button type="button" onclick="openCameraModal('onbIdDoc')" class="w-full bg-[#2a2a2a] border border-[#333] border-dashed p-3 rounded-xl flex flex-col items-center justify-center text-gray-400 hover:text-[#70A827] hover:border-[#70A827] transition-colors">
+                        <i class="bi bi-camera-fill text-2xl mb-1"></i>
+                        <span class="text-[10px] font-bold uppercase text-center">Tap to Capture</span>
                     </button>
-                    <p id="onbIdDocPreview" class="text-[10px] text-[#70A827] mt-1 hidden"><i class="bi bi-check-circle-fill mr-1"></i> Document Attached</p>
-                    <input type="hidden" id="onbIdDocBase64">
+                    <img id="onbIdDocPhotoPreview" class="hidden w-full mt-2 rounded-lg border border-[#333] max-h-32 object-contain bg-black">
+                    <input type="hidden" id="onbIdDocPhotoBase64">
                 </div>
                 <div>
                     <label class="text-xs font-semibold text-gray-400 uppercase mb-2 block">Work Permit (Copy)</label>
-                    <input type="file" id="onbWorkPermitInput" accept="image/*,application/pdf" class="hidden" onchange="handleOnboardDoc(event, 'onbWorkPermitBase64', 'onbWorkPermitPreview')">
-                    <button type="button" onclick="document.getElementById('onbWorkPermitInput').click()" class="w-full bg-[#2a2a2a] border border-[#333] border-dashed p-3 rounded-xl flex flex-col items-center justify-center text-gray-400 hover:text-[#70A827] hover:border-[#70A827] transition-colors">
-                        <i class="bi bi-file-earmark-check text-2xl mb-1"></i>
-                        <span class="text-[10px] font-bold uppercase">Attach File</span>
+                    <button type="button" onclick="openCameraModal('onbWorkPermit')" class="w-full bg-[#2a2a2a] border border-[#333] border-dashed p-3 rounded-xl flex flex-col items-center justify-center text-gray-400 hover:text-[#70A827] hover:border-[#70A827] transition-colors">
+                        <i class="bi bi-camera-fill text-2xl mb-1"></i>
+                        <span class="text-[10px] font-bold uppercase text-center">Tap to Capture</span>
                     </button>
-                    <p id="onbWorkPermitPreview" class="text-[10px] text-[#70A827] mt-1 hidden"><i class="bi bi-check-circle-fill mr-1"></i> Document Attached</p>
-                    <input type="hidden" id="onbWorkPermitBase64">
+                    <img id="onbWorkPermitPhotoPreview" class="hidden w-full mt-2 rounded-lg border border-[#333] max-h-32 object-contain bg-black">
+                    <input type="hidden" id="onbWorkPermitPhotoBase64">
                 </div>
             </div>
 
@@ -978,10 +979,10 @@
                     </div>
                 </div>
                 
-                <div class="flex items-start mt-4 bg-[#1e1e1e] p-3 rounded-lg border border-[#333]">
-                    <input type="checkbox" id="onbIsPermanent" onchange="document.getElementById('onbValidTo').disabled = this.checked; document.getElementById('onbValidTo').value = '';" class="w-6 h-6 mt-0.5 accent-purple-500 rounded border-[#333] bg-[#1e1e1e] flex-shrink-0 cursor-pointer">
-                    <label for="onbIsPermanent" class="ml-3 text-sm font-bold text-gray-300 cursor-pointer whitespace-normal break-words leading-tight flex-1">Permanent Contract (No Expiry)</label>
-                </div>
+                <label class="flex items-center mt-4 bg-[#1e1e1e] p-4 rounded-lg border border-[#333] cursor-pointer hover:bg-[#2a2a2a] transition-colors">
+                    <input type="checkbox" id="onbIsPermanent" onchange="document.getElementById('onbValidTo').disabled = this.checked; document.getElementById('onbValidTo').value = '';" class="w-5 h-5 accent-purple-500 rounded cursor-pointer mr-3">
+                    <span class="text-sm font-bold text-gray-300">Permanent Contract (No Expiry)</span>
+                </label>
             </div>
 
             <div class="mt-6">
