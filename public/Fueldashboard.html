@@ -669,26 +669,50 @@
     <div id="imgModal" class="hidden fixed inset-0 bg-black bg-opacity-90 z-[100] flex items-center justify-center p-4" onclick="this.classList.add('hidden')"><img id="modalImg" src="" class="max-w-full max-h-full rounded shadow-2xl"></div>
 
     <div id="refillModal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-[100] flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-[#1a1a1a] border border-[#333] rounded-2xl shadow-2xl p-8 w-full max-w-sm border-t-4 border-green-500">
-            <h3 class="text-lg font-black text-white mb-6 uppercase tracking-widest text-xs" id="refillModalTitle">Refill Tank</h3>
-            <input type="hidden" id="refillDepotId">
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Refill Date</label>
-                    <input type="datetime-local" id="refillDate" class="form-input w-full p-3 font-mono text-sm">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Liters Added</label>
-                    <input type="number" id="refillLiters" class="form-input w-full p-3 font-mono text-xl text-[#70A827]" placeholder="0.00">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">PO Number / Ref</label>
-                    <input type="text" id="refillPO" class="form-input w-full p-3 font-mono text-sm" placeholder="e.g. PO-12345">
-                </div>
+        <div class="bg-[#1a1a1a] border border-[#333] rounded-2xl shadow-2xl p-8 w-full max-w-3xl border-t-4 border-green-500 max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center mb-6 border-b border-[#333] pb-4">
+                <h3 class="text-lg font-black text-white uppercase tracking-widest text-xs" id="refillModalTitle">Refill Tank</h3>
+                <button onclick="document.getElementById('refillModal').classList.add('hidden')" class="text-gray-500 hover:text-white"><i class="fas fa-times"></i></button>
             </div>
-            <div class="flex gap-3 mt-8">
-                <button onclick="document.getElementById('refillModal').classList.add('hidden')" class="flex-1 bg-[#333] text-gray-400 py-3 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-[#444] transition">Cancel</button>
-                <button onclick="submitRefill()" class="flex-1 bg-green-600 text-white py-3 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-green-500 transition shadow-lg">Save Refill</button>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 overflow-y-auto pr-2">
+                <div>
+                    <h4 class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-4">Add New Refill</h4>
+                    <input type="hidden" id="refillDepotId">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Refill Date</label>
+                            <input type="datetime-local" id="refillDate" class="form-input w-full p-3 font-mono text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Liters Added</label>
+                            <input type="number" id="refillLiters" class="form-input w-full p-3 font-mono text-xl text-[#70A827]" placeholder="0.00">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">PO Number / Ref</label>
+                            <input type="text" id="refillPO" class="form-input w-full p-3 font-mono text-sm" placeholder="e.g. PO-12345">
+                        </div>
+                    </div>
+                    <button onclick="submitRefill()" class="w-full bg-green-600 text-white py-4 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-green-500 transition shadow-lg mt-6">Save Refill Transaction</button>
+                </div>
+
+                <div class="border-l border-[#333] pl-8">
+                    <h4 class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-4 flex justify-between">Refill History <span id="refillHistoryCount" class="text-green-500"></span></h4>
+                    <div class="overflow-y-auto max-h-[300px] tile-scroll pr-2">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-[#252525] text-gray-500 uppercase font-black tracking-widest sticky top-0 z-10">
+                                <tr>
+                                    <th class="p-2">Date</th>
+                                    <th class="p-2 text-right text-[#70A827]">Liters</th>
+                                    <th class="p-2">PO Ref</th>
+                                    <th class="p-2 text-center w-10"><i class="fas fa-cog"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody id="refillHistoryBody" class="divide-y divide-[#2a2a2a] bg-[#1e1e1e] text-gray-300">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
