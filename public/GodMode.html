@@ -141,7 +141,27 @@
                 <tbody></tbody>
             </table>
         </div>
-        </section> <!-- End Tenants Tab -->
+
+        <div class="section mt-6" style="border-color: #3b82f6;">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-semibold"><i class="fas fa-file-invoice text-blue-500 mr-2"></i>Pending Quotes (Soft Adds)</h2>
+                <button onclick="loadQuotes()" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-1 px-3 rounded shadow transition text-sm"><i class="fas fa-sync-alt mr-2"></i> Refresh Quotes</button>
+            </div>
+            <table class="w-full border-collapse text-sm">
+                <thead>
+                    <tr class="bg-gray-700 text-gray-300">
+                        <th class="p-2 border border-gray-600 text-left">Date</th>
+                        <th class="p-2 border border-gray-600 text-left">Tenant Name</th>
+                        <th class="p-2 border border-gray-600 text-left">License Key</th>
+                        <th class="p-2 border border-gray-600 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="quotesTableBody">
+                    <tr><td colspan="4" class="p-4 text-center text-gray-500">Loading quotes...</td></tr>
+                </tbody>
+            </table>
+        </div>
+        </section>
 
         <!-- TAB 4: GLOBAL SETTINGS (Part 1) -->
         <section id="page-global" class="page-section">
@@ -346,6 +366,30 @@
                 </form>
                 <p id="costStatusMsg" class="mt-4 text-green-400 text-sm hidden font-bold"><i class="fas fa-check-circle mr-1"></i> Global settings updated successfully in Master DB!</p>
                 
+                <div class="mt-8 pt-6 border-t border-red-900/50">
+                    <h3 class="text-lg font-bold text-gray-300 mb-2"><i class="fas fa-briefcase text-yellow-500 mr-2"></i>Dynamic Consulting Costs</h3>
+                    <p class="text-xs text-gray-400 mb-4">Create flexible items like Travel, Consulting, or Integration that can be injected dynamically into any tenant's pricing matrix.</p>
+                    
+                    <div class="bg-gray-800 p-4 rounded border border-gray-600 shadow-inner mb-4">
+                        <form id="dynamicCostForm" class="grid grid-cols-5 gap-2">
+                            <input type="text" id="dynCostName" placeholder="Name (e.g., Travel)" required class="col-span-2 p-2 border rounded bg-gray-900 text-white border-gray-600 text-sm focus:border-yellow-500 focus:outline-none">
+                            <input type="text" id="dynUnitType" placeholder="Unit (e.g., km, hr)" required class="p-2 border rounded bg-gray-900 text-white border-gray-600 text-sm focus:border-yellow-500 focus:outline-none">
+                            <div class="flex items-center"><span class="bg-gray-700 text-gray-300 px-2 py-2 rounded-l border-y border-l border-gray-600 text-sm">R</span><input type="number" step="0.01" id="dynDefaultCost" placeholder="Cost" required class="w-full p-2 border-y border-r rounded-r bg-gray-900 text-white border-gray-600 text-sm focus:border-yellow-500 focus:outline-none"></div>
+                            <button type="submit" class="bg-yellow-600 hover:bg-yellow-500 text-white font-bold rounded shadow text-sm transition"><i class="fas fa-plus"></i> Add</button>
+                            <label class="col-span-5 flex items-center space-x-2 text-xs text-gray-400 mt-2"><input type="checkbox" id="dynIsSetup" class="w-3 h-3 text-yellow-500"> <span>This is a Once-Off Setup Fee (Uncheck for Monthly Recurring)</span></label>
+                        </form>
+                    </div>
+
+                    <table class="w-full text-left text-sm border-collapse bg-gray-900 border border-gray-700 rounded mb-6">
+                        <thead class="bg-gray-800 text-xs font-bold text-gray-400 uppercase">
+                            <tr><th class="p-2 border-b border-gray-700">Cost Name</th><th class="p-2 border-b border-gray-700">Unit Type</th><th class="p-2 border-b border-gray-700">Default Cost</th><th class="p-2 border-b border-gray-700">Type</th><th class="p-2 border-b border-gray-700 text-center">Action</th></tr>
+                        </thead>
+                        <tbody id="dynamicCostsTable" class="divide-y divide-gray-800">
+                            <tr><td colspan="5" class="p-3 text-center text-gray-500">Loading dynamic costs...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                
                 <!-- NEW: Manual Master Report Trigger -->
                 <div class="mt-8 pt-6 border-t border-red-900/50">
                     <h3 class="text-lg font-bold text-gray-300 mb-2"><i class="fas fa-paper-plane text-emerald-400 mr-2"></i>Master Billing Report</h3>
@@ -419,7 +463,7 @@
             </div>
         </section>
 
-        <section id="page-audit" class="page-section">
+               <section id="page-audit" class="page-section">
             <div class="flex justify-between items-center mb-6">
                 <div>
                     <h2 class="text-2xl font-bold text-white"><i class="fas fa-history mr-2 text-yellow-500"></i>Master Audit Trail</h2>
@@ -569,8 +613,11 @@
                             <input type="password" id="advPassword" placeholder="Leave blank to keep current password" class="w-full p-2 border rounded bg-gray-900 text-white border-gray-600 focus:border-emerald-500">
                         </div>
                         <div class="col-span-2">
-                            <label class="block text-xs text-gray-400 uppercase mb-1">License Expiry Date *</label>
-                            <input type="date" id="advExpiryDate" class="w-full p-2 border rounded bg-gray-900 text-white border-gray-600 focus:border-emerald-500">
+                            <div class="flex justify-between items-end mb-1">
+                                <label class="block text-xs text-gray-400 uppercase">License Expiry Date (Auto-Calculated)</label>
+                                <button type="button" id="btnAdminUnlockExpiry" onclick="unlockExpiryDate()" class="text-[10px] text-pink-500 hover:text-pink-400 font-bold hidden"><i class="fas fa-lock mr-1"></i> Admin Override</button>
+                            </div>
+                            <input type="date" id="advExpiryDate" readonly class="w-full p-2 border rounded bg-gray-800 text-gray-500 border-gray-600 cursor-not-allowed">
                         </div>
                     </div>
 
@@ -602,6 +649,15 @@
                         <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modEmployeeCosts" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>Employee Costs</span></label>
                     </div>
 
+                    <div class="flex items-center gap-2 mb-4 bg-gray-800 p-3 rounded border border-gray-700">
+                        <span class="text-sm font-bold text-yellow-500"><i class="fas fa-plus-circle mr-1"></i> Add Dynamic Cost:</span>
+                        <select id="tenantDynamicCostSelect" class="flex-1 p-1.5 border rounded bg-gray-900 text-white border-gray-600 text-sm focus:outline-none focus:border-emerald-500">
+                            <option value="">-- Select Item --</option>
+                        </select>
+                        <input type="number" id="tenantDynamicCostQty" placeholder="Qty" min="1" value="1" class="w-20 p-1.5 border rounded bg-gray-900 text-white border-gray-600 text-sm focus:outline-none focus:border-emerald-500">
+                        <button type="button" onclick="addDynamicCostToMatrix()" class="bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-1.5 px-4 rounded transition text-sm shadow">Add</button>
+                    </div>
+
                     <table class="w-full border-collapse mb-6 text-sm" id="pricingTable">
                         <thead>
                             <tr class="bg-gray-700 text-gray-300">
@@ -623,7 +679,8 @@
             <footer class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-end gap-3">
                 <p id="advTenantError" class="text-red-500 text-sm hidden self-center mr-auto font-bold"></p>
                 <button type="button" onclick="closeCreateTenantModal()" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded transition">Cancel</button>
-                <button type="button" onclick="submitAdvancedTenant()" id="btnSubmitTenant" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-6 rounded transition shadow-lg"><i class="fas fa-cloud-upload-alt mr-2"></i> Deploy Tenant Architecture</button>
+                <button type="button" onclick="submitAdvancedTenant(true)" id="btnSaveQuote" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded transition shadow-lg"><i class="fas fa-file-invoice mr-2"></i> Save as Quote</button>
+                <button type="button" onclick="submitAdvancedTenant(false)" id="btnSubmitTenant" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-6 rounded transition shadow-lg"><i class="fas fa-cloud-upload-alt mr-2"></i> Deploy Tenant</button>
             </footer>
 
         </div>
@@ -655,6 +712,32 @@
                         <tr><td colspan="5" class="p-4 text-center text-gray-500">Loading licenses...</td></tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="tenantInfoModal" class="fixed inset-0 z-[150] hidden bg-black/80 backdrop-blur-sm items-center justify-center p-4">
+        <div class="bg-gray-800 border border-gray-600 rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col relative text-white">
+            <header class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
+                <h3 class="text-xl font-bold text-indigo-400" id="infoModalTitle"><i class="fas fa-chart-pie mr-2"></i>Tenant Overview</h3>
+                <button type="button" onclick="closeTenantInfoModal()" class="text-gray-400 hover:text-white transition"><i class="fas fa-times text-2xl"></i></button>
+            </header>
+            
+            <div class="flex-1 overflow-y-auto p-6">
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <div class="bg-gray-900 p-4 rounded border border-gray-700 text-center">
+                        <p class="text-xs text-gray-400 uppercase font-bold tracking-wider mb-1">Active Employees</p>
+                        <p class="text-4xl font-black text-green-400" id="infoActiveEmps"><i class="fas fa-spinner fa-spin text-lg"></i></p>
+                    </div>
+                    <div class="bg-gray-900 p-4 rounded border border-gray-700 text-center">
+                        <p class="text-xs text-gray-400 uppercase font-bold tracking-wider mb-1">Terminated Employees</p>
+                        <p class="text-4xl font-black text-red-400" id="infoTerminatedEmps"><i class="fas fa-spinner fa-spin text-lg"></i></p>
+                    </div>
+                </div>
+                
+                <h4 class="text-lg font-bold text-gray-300 border-b border-gray-700 pb-1 mb-4"><i class="fas fa-address-book mr-2"></i>Key Contacts</h4>
+                <div id="infoContactsContainer" class="space-y-3">
+                    </div>
             </div>
         </div>
     </div>

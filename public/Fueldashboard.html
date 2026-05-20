@@ -191,10 +191,11 @@
                         <h3 class="font-black text-white uppercase tracking-widest text-xs text-[#70A827]">Fuel Log Data Viewer</h3>
                         <button onclick="openManualTransactionModal()" class="bg-[#333] text-[#70A827] px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-[#444] transition border border-[#70A827]/30"><i class="bi bi-pencil-square mr-2"></i>Manual Entry</button>
                     </div>
-                    <div class="flex items-center gap-4">
-                        <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Filter by Week (Mon-Sun)</label>
-                        <input type="date" id="fuelWeekFilter" onchange="loadTransactions()" class="form-input p-2 font-mono text-sm">
-                        <span id="fuelWeekDisplay" class="text-xs font-bold text-[#70A827] w-48 text-right"></span>
+                    <div class="flex items-center gap-2">
+                        <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mr-2">Filter by Day</label>
+                        <button onclick="changeFuelDay(-1)" class="bg-[#333] text-white px-3 py-1 rounded hover:bg-[#444] transition"><i class="fas fa-chevron-left"></i></button>
+                        <input type="date" id="fuelDayFilter" onchange="currentFuelPage = 1; loadTransactions()" class="form-input p-2 font-mono text-sm">
+                        <button onclick="changeFuelDay(1)" class="bg-[#333] text-white px-3 py-1 rounded hover:bg-[#444] transition"><i class="fas fa-chevron-right"></i></button>
                     </div>
                 </div>
                 <div class="card overflow-hidden border-[#333] shadow-2xl">
@@ -216,16 +217,22 @@
                         <tbody id="transactionBody" class="divide-y divide-[#2a2a2a] bg-[#1e1e1e] text-gray-300">
                             </tbody>
                     </table>
+                    <div class="bg-[#252525] border-t border-[#333] p-3 flex justify-between items-center text-xs">
+                        <button onclick="changeFuelPage(-1)" id="btnFuelPrevPage" class="bg-[#333] text-gray-400 px-4 py-2 rounded font-bold uppercase tracking-widest hover:text-white hover:bg-[#444] transition disabled:opacity-50 disabled:cursor-not-allowed">Previous</button>
+                        <span id="fuelPageDisplay" class="text-gray-400 font-mono font-bold">Page 1 of 1</span>
+                        <button onclick="changeFuelPage(1)" id="btnFuelNextPage" class="bg-[#333] text-[#70A827] px-4 py-2 rounded font-bold uppercase tracking-widest hover:text-white hover:bg-[#444] transition disabled:opacity-50 disabled:cursor-not-allowed">Next</button>
+                    </div>
                 </div>
             </section>
 
             <section id="page-triplogs" class="page-section">
                 <div class="flex flex-wrap justify-between items-center mb-6 bg-[#1a1a1a] p-4 rounded-xl border border-[#333]">
                     <h3 class="font-black text-white uppercase tracking-widest text-xs text-indigo-400">Trip Log Data Viewer</h3>
-                    <div class="flex items-center gap-4">
-                        <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Filter by Week (Mon-Sun)</label>
-                        <input type="date" id="tripWeekFilter" onchange="loadTripLogs()" class="form-input p-2 font-mono text-sm">
-                        <span id="tripWeekDisplay" class="text-xs font-bold text-indigo-400 w-48 text-right"></span>
+                    <div class="flex items-center gap-2">
+                        <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mr-2">Filter by Day</label>
+                        <button onclick="changeTripDay(-1)" class="bg-[#333] text-white px-3 py-1 rounded hover:bg-[#444] transition"><i class="fas fa-chevron-left"></i></button>
+                        <input type="date" id="tripDayFilter" onchange="currentTripPage = 1; loadTripLogs()" class="form-input p-2 font-mono text-sm">
+                        <button onclick="changeTripDay(1)" class="bg-[#333] text-white px-3 py-1 rounded hover:bg-[#444] transition"><i class="fas fa-chevron-right"></i></button>
                     </div>
                 </div>
                 <div class="card overflow-hidden border-[#333] shadow-2xl">
@@ -246,6 +253,11 @@
                             <tr><td colspan="8" class="p-8 text-center text-gray-500 font-mono">Initializing Trip Data...</td></tr>
                         </tbody>
                     </table>
+                    <div class="bg-[#252525] border-t border-[#333] p-3 flex justify-between items-center text-xs">
+                        <button onclick="changeTripPage(-1)" id="btnTripPrevPage" class="bg-[#333] text-gray-400 px-4 py-2 rounded font-bold uppercase tracking-widest hover:text-white hover:bg-[#444] transition disabled:opacity-50 disabled:cursor-not-allowed">Previous</button>
+                        <span id="tripPageDisplay" class="text-gray-400 font-mono font-bold">Page 1 of 1</span>
+                        <button onclick="changeTripPage(1)" id="btnTripNextPage" class="bg-[#333] text-indigo-400 px-4 py-2 rounded font-bold uppercase tracking-widest hover:text-white hover:bg-[#444] transition disabled:opacity-50 disabled:cursor-not-allowed">Next</button>
+                    </div>
                 </div>
             </section>
 
