@@ -133,7 +133,7 @@
                     </div>
 
                  <div class="flex flex-col xl:flex-row items-center justify-between gap-4 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
-                        <div class="flex items-center space-x-3 flex-1 w-full max-w-2xl">
+                        <div class="flex items-center space-x-3 flex-1 w-full max-w-3xl">
                             <div class="relative flex-1">
                                 <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
                                 <input type="text" id="searchEmp" oninput="filterEmployees()" placeholder="Search Name or PIN..." class="w-full pl-8 pr-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-blue-500 transition">
@@ -141,6 +141,10 @@
                             <select id="empDeptFilter" onchange="filterEmployees()" class="bg-gray-800 border border-gray-600 rounded py-1.5 px-3 text-xs text-white focus:outline-none focus:border-blue-500 transition w-48">
                                 <option value="">All Departments</option>
                             </select>
+                            <label class="flex items-center space-x-2 text-xs font-bold text-orange-400 cursor-pointer bg-gray-800 border border-gray-600 px-3 py-1.5 rounded hover:border-orange-500 transition whitespace-nowrap">
+                                <input type="checkbox" id="missingPhotoFilter" onchange="filterEmployees()" class="accent-orange-500 w-4 h-4 cursor-pointer">
+                                <span><i class="fas fa-image-slash mr-1"></i> Missing Photos</span>
+                            </label>
                         </div>
                         
                         <div class="flex items-center space-x-2 bg-gray-800 p-1.5 rounded border border-gray-600 w-full xl:w-auto">
@@ -155,10 +159,26 @@
                             <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
                                 <tr>
                                     <th class="p-3 border-r border-gray-600 w-10 text-center"><input type="checkbox" id="selectAllEmps" onchange="toggleSelectAllEmps(this)" class="accent-blue-500 w-4 h-4 cursor-pointer"></th>
-                                    <th class="p-3 border-r border-gray-600">PIN</th>
-                                    <th class="p-3 border-r border-gray-600">First Name</th>
-                                    <th class="p-3 border-r border-gray-600">Last Name</th>
-                                    <th class="p-3 border-r border-gray-600">Department</th>
+                                    <th class="p-0 border-r border-gray-600">
+                                        <button onclick="handleSort('PIN')" class="w-full h-full p-3 flex items-center justify-between hover:bg-gray-600 transition text-left focus:outline-none">
+                                            PIN <i id="sortIcon_PIN" class="fas fa-sort text-gray-500 ml-2"></i>
+                                        </button>
+                                    </th>
+                                    <th class="p-0 border-r border-gray-600">
+                                        <button onclick="handleSort('FirstName')" class="w-full h-full p-3 flex items-center justify-between hover:bg-gray-600 transition text-left focus:outline-none">
+                                            First Name <i id="sortIcon_FirstName" class="fas fa-sort text-gray-500 ml-2"></i>
+                                        </button>
+                                    </th>
+                                    <th class="p-0 border-r border-gray-600">
+                                        <button onclick="handleSort('LastName')" class="w-full h-full p-3 flex items-center justify-between hover:bg-gray-600 transition text-left focus:outline-none">
+                                            Last Name <i id="sortIcon_LastName" class="fas fa-sort text-gray-500 ml-2"></i>
+                                        </button>
+                                    </th>
+                                    <th class="p-0 border-r border-gray-600">
+                                        <button onclick="handleSort('Department')" class="w-full h-full p-3 flex items-center justify-between hover:bg-gray-600 transition text-left focus:outline-none">
+                                            Department <i id="sortIcon_Department" class="fas fa-sort text-gray-500 ml-2"></i>
+                                        </button>
+                                    </th>
                                     <th class="p-3 border-r border-gray-600 text-center">Photo</th>
                                     <th class="p-3 text-right">Actions</th>
                                 </tr>
