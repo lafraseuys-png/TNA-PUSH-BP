@@ -7,11 +7,19 @@
     <link rel="stylesheet" href="/css/styles.css?v=1.0.13">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <style>
+        @media screen {
+            #printContainer { display: none !important; }
+        }
         @media print {
             body * { visibility: hidden; }
-            #printContainer, #printContainer * { visibility: visible; }
-            #printContainer { position: absolute; left: 0; top: 0; width: 100%; color: black; background: white; font-family: sans-serif; }
+            #printContainer { display: block !important; position: absolute; left: 0; top: 0; width: 100%; color: black; background: white; font-family: sans-serif; visibility: visible; }
+            #printContainer * { visibility: visible; }
             .print-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
             .print-table th, .print-table td { border: 1px solid #ccc; padding: 6px; text-align: left; }
             .print-table th { background-color: #f3f4f6 !important; -webkit-print-color-adjust: exact; font-weight: bold; }
@@ -60,6 +68,12 @@
             </button>
             <button onclick="showSection('wage-calc', this)" class="sidebar-item w-full flex items-center p-4 text-left">
                 <i class="fas fa-calculator w-6 text-center mr-2"></i> Monthly Wage Calc
+            </button>
+            <button onclick="showSection('payfiles', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+                <i class="fas fa-file-invoice-dollar w-6 text-center mr-2"></i> Payfiles & Export
+            </button>
+            <button onclick="showSection('wage-advice', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+                <i class="fas fa-envelope-open-text w-6 text-center mr-2"></i> Wage Advice
             </button>
         </nav>
 
@@ -186,6 +200,15 @@
                             </tbody>
                         </table>
                     </div>
+                    
+                    <div class="flex justify-between items-center mt-4 bg-gray-900 p-3 rounded border border-gray-700">
+                        <span id="empPaginationInfo" class="text-xs text-gray-400">Showing 0 to 0 of 0 entries</span>
+                        <div class="flex gap-2">
+                            <button onclick="changeEmpPage(-1)" id="empPrevBtn" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs font-bold transition disabled:opacity-50 disabled:cursor-not-allowed">Previous</button>
+                            <button onclick="changeEmpPage(1)" id="empNextBtn" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs font-bold transition disabled:opacity-50 disabled:cursor-not-allowed">Next</button>
+                        </div>
+                    </div>
+
                </div>
             </section>
 
@@ -231,8 +254,195 @@
                 </div>
             </section>
 
+           <section id="page-payfiles" class="page-section pb-32">
+                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-emerald-500">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                        <h3 class="font-bold text-gray-300"><i class="fas fa-file-invoice-dollar mr-2"></i>Generate Payworx Export & Wage Advice</h3>
+                        <div class="flex items-center gap-3">
+                            <label class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Export Profile:</label>
+                            <select id="pfProfileSelect" onchange="switchPayfileProfile()" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white font-bold focus:outline-none focus:border-emerald-500 w-48">
+                                <option value="">-- Select Profile --</option>
+                            </select>
+                            <button onclick="openPayfileConfigModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow ml-2">
+                                <i class="fas fa-cogs mr-1"></i> Configure Profiles
+                            </button>
+                            <div class="border-l border-gray-700 h-6 mx-1"></div>
+                            <button onclick="exportPayfileCSV()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow">
+                                <i class="fas fa-file-csv mr-1"></i> Payworx CSV
+                            </button>
+                            <button onclick="exportPayfileExcel()" class="bg-green-600 hover:bg-green-500 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow">
+                                <i class="fas fa-file-excel mr-1"></i> Payworx Excel
+                            </button>
+                       </div>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-4 mb-4">
+                        <div>
+                            <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">From Date</label>
+                            <input type="text" id="pfFromDate" class="bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:border-emerald-500 w-32">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">To Date</label>
+                            <input type="text" id="pfToDate" class="bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:border-emerald-500 w-32">
+                        </div>
+                        <div class="flex-1 min-w-[200px]">
+                            <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">Department Filter</label>
+                            <select id="pfDeptFilter" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:border-emerald-500">
+                                <option value="">All Departments</option>
+                            </select>
+                        </div>
+                        <div class="flex items-end">
+                            <button onclick="generatePayfileData(event)" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded text-sm font-bold shadow transition h-[38px]">
+                                <i class="fas fa-sync mr-1"></i> Generate Preview
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto border border-gray-700 rounded">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead class="bg-gray-900 text-gray-400 uppercase font-bold sticky top-0">
+                                <tr>
+                                    <th class="p-2 border-r border-gray-700">Emp #</th>
+                                    <th class="p-2 border-r border-gray-700">Name</th>
+                                    <th class="p-2 border-r border-gray-700">Code</th>
+                                    <th class="p-2 border-r border-gray-700">Input Type</th>
+                                    <th class="p-2 border-r border-gray-700 text-right">Value</th>
+                                    <th class="p-2">Add/Overwrite</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pfTableBody" class="divide-y divide-gray-800 bg-gray-800">
+                                <tr><td colspan="6" class="p-8 text-center text-gray-500">Select dates and click Generate to preview the payload.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-wage-advice" class="page-section pb-32">
+                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-yellow-500">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                        <h3 class="font-bold text-gray-300"><i class="fas fa-envelope-open-text mr-2"></i>Generate Wage Advice</h3>
+                        <div class="flex items-center gap-3">
+                            <button onclick="exportWageAdviceExcel()" class="bg-green-600 hover:bg-green-500 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow">
+                                <i class="fas fa-file-excel mr-1"></i> Download Excel
+                            </button>
+                            <button onclick="printWageAdvicePDF()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow border border-gray-600">
+                                <i class="fas fa-print mr-1"></i> Print PDF
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-4 mb-4">
+                        <div>
+                            <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">From Date</label>
+                            <input type="text" id="waFromDate" class="bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:border-yellow-500 w-32">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">To Date</label>
+                            <input type="text" id="waToDate" class="bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:border-yellow-500 w-32">
+                        </div>
+                        <div class="flex items-end">
+                            <button onclick="openWaEmpModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2 rounded text-sm font-bold shadow transition h-[38px] flex items-center">
+                                <i class="fas fa-users mr-2"></i> Select Employees (<span id="waEmpCount">0</span>)
+                            </button>
+                        </div>
+                        <div class="flex items-end flex-1 justify-end">
+                            <select id="waFormat" onchange="renderWageAdvicePreview()" class="bg-gray-900 border border-gray-600 rounded p-2 text-sm text-gray-300 focus:border-yellow-500 mr-3 h-[38px] font-bold">
+                                <option value="decimal">Decimals (8.50)</option>
+                                <option value="time">Time (08:30)</option>
+                            </select>
+                            <button onclick="generateWageAdviceData(event)" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded text-sm font-bold shadow transition h-[38px]">
+                                <i class="fas fa-sync mr-1"></i> Generate Preview
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto border border-gray-700 rounded">
+                        <table class="w-full text-left text-[11px] border-collapse whitespace-nowrap">
+                            <thead class="bg-gray-900 text-gray-400 font-bold sticky top-0 border-b border-gray-700" id="waTableHead">
+                                <tr>
+                                    <th class="p-2 border-r border-gray-700">Clock nr</th>
+                                    <th class="p-2 border-r border-gray-700">ID Number</th>
+                                    <th class="p-2 border-r border-gray-700">Name & Surname</th>
+                                    <th class="p-2 border-r border-gray-700 text-center">Norm Hrs</th>
+                                    <th class="p-2 border-r border-gray-700 text-right">Rate/Hr</th>
+                                    <th class="p-2 border-r border-gray-700 text-right">Norm Pay</th>
+                                    <th class="p-2 border-r border-gray-700 text-center text-orange-300">OT Hrs</th>
+                                    <th class="p-2 border-r border-gray-700 text-right text-orange-300">OT Pay</th>
+                                    <th class="p-2 border-r border-gray-700 text-right">PPH Pay</th>
+                                    <th class="p-2 border-r border-gray-700 text-right">PW Amt</th>
+                                    <th class="p-2 border-r border-gray-700 text-right">Sunday Pay</th>
+                                    <th class="p-2 border-r border-gray-700 text-right text-teal-400">Custom Earn</th>
+                                    <th class="p-2 border-r border-gray-700 text-right">Total Earned</th>
+                                    <th class="p-2 border-r border-gray-700 text-right text-pink-400">Custom Ded</th>
+                                    <th class="p-2 border-r border-gray-700 text-right">Total Ded</th>
+                                    <th class="p-2 border-r border-gray-700 text-right">Total Pay</th>
+                                </tr>
+                            </thead>
+                            <tbody id="waTableBody" class="divide-y divide-gray-800 bg-gray-800">
+                                <tr><td colspan="16" class="p-8 text-center text-gray-500">Select dates and click Generate to preview the Wage Advice.</td></tr>
+                            </tbody>
+                    </div>
+                </div>
+            </section>
+
         </div>
     </main>
+
+    <div id="payfileConfigModal" class="modal-backdrop">
+        <div class="bg-gray-800 w-[600px] max-w-[95vw] rounded shadow-2xl border border-gray-600 flex flex-col max-h-[90vh]">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t">
+                <h3 class="font-bold text-lg text-indigo-400"><i class="fas fa-cogs mr-2"></i>Export Profile Mapping</h3>
+                <button onclick="closeModal('payfileConfigModal')" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1">
+                <div class="flex gap-4 mb-6">
+                    <div class="flex-1">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Profile Name</label>
+                        <input type="text" id="pfModalName" placeholder="e.g. Sage VIP, Payspace" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div class="w-1/3">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Export Format</label>
+                        <select id="pfModalFormat" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:outline-none focus:border-indigo-500">
+                            <option value="decimal">Decimals (8.50)</option>
+                            <option value="time">Time (08:30)</option>
+                        </select>
+                    </div>
+                    <div class="w-1/3">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Import Action</label>
+                        <select id="pfModalAction" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:outline-none focus:border-indigo-500">
+                            <option value="Add">Add to Existing</option>
+                            <option value="Overwrite">Overwrite Existing</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h4 class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1">Standard Output Codes</h4>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div><label class="block text-[10px] text-gray-400 mb-1">Normal Time</label><input type="text" id="pfModalNormal" class="w-full bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white"></div>
+                    <div><label class="block text-[10px] text-gray-400 mb-1">Overtime</label><input type="text" id="pfModalOT" class="w-full bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white"></div>
+                    <div><label class="block text-[10px] text-gray-400 mb-1">Sunday / Double Time</label><input type="text" id="pfModalSun" class="w-full bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white"></div>
+                    <div><label class="block text-[10px] text-gray-400 mb-1">Public Holiday</label><input type="text" id="pfModalPPH" class="w-full bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white"></div>
+                    <div><label class="block text-[10px] text-gray-400 mb-1">Piecework Wage (Amount)</label><input type="text" id="pfModalPW" class="w-full bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white"></div>
+                </div>
+
+                <h4 class="text-[10px] font-bold text-purple-400 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1">Dynamic Leave Codes</h4>
+                <div id="pfModalLeaveContainer" class="grid grid-cols-2 gap-4">
+                    </div>
+            </div>
+            <div class="p-4 border-t border-gray-700 bg-gray-900 flex justify-between items-center rounded-b">
+                <div class="flex items-center gap-4">
+                    <button onclick="deletePayfileProfile()" class="text-red-400 hover:text-red-300 text-xs font-bold"><i class="fas fa-trash mr-1"></i>Delete Profile</button>
+                    <button onclick="exportProfileCodesCSV()" class="text-blue-400 hover:text-blue-300 text-xs font-bold"><i class="fas fa-file-export mr-1"></i>Export Mapping CSV</button>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="createNewPayfileProfile()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-sm font-bold shadow">New Profile</button>
+                    <button onclick="closeModal('payfileConfigModal')" class="px-4 py-2 bg-gray-700 text-white rounded text-sm font-bold shadow">Cancel</button>
+                    <button onclick="savePayfileProfile()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded text-sm font-bold shadow">Save Profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- COMPONENT MODAL -->
     <div id="componentModal" class="modal-backdrop">
         <form id="componentForm" class="bg-gray-800 p-6 rounded-lg w-[400px] shadow-2xl border border-gray-600">
@@ -318,15 +528,27 @@
     <!-- ADD EMPLOYEES TO WAGE RUN MODAL -->
     <div id="addWageEmpModal" class="modal-backdrop">
         <div class="bg-gray-800 p-0 rounded-lg w-[700px] max-w-[95vw] shadow-2xl border border-gray-600 flex flex-col max-h-[85vh]">
-            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
-                <h2 class="text-xl font-bold text-teal-400"><i class="fas fa-users mr-2"></i>Select Employees</h2>
-                <button type="button" onclick="closeModal('addWageEmpModal')" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="p-4 bg-gray-800 border-b border-gray-700 flex gap-4">
-                <select id="wageDeptFilter" onchange="filterWageModalEmployees()" class="bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:border-teal-500 flex-1">
-                    <option value="">All Departments</option>
-                </select>
-                <input type="text" id="wageEmpSearch" onkeyup="filterWageModalEmployees()" placeholder="Search Name or PIN..." class="bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:border-teal-500 flex-1">
+            <div class="p-4 bg-gray-800 border-b border-gray-700 flex flex-col gap-3">
+                <div class="flex gap-4">
+                    <div class="flex-1">
+                        <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">Departments <span class="text-gray-500 normal-case">(Hold Ctrl/Cmd to select multiple)</span></label>
+                        <select id="wageDeptFilter" multiple onchange="filterWageModalEmployees()" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:border-teal-500 h-24">
+                            </select>
+                    </div>
+                    <div class="flex-1 flex flex-col justify-end">
+                        <input type="text" id="wageEmpSearch" onkeyup="filterWageModalEmployees()" placeholder="Search Name or PIN..." class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:border-teal-500 mb-3">
+                        
+                        <div class="flex justify-between items-center bg-gray-900 p-2 rounded border border-gray-700">
+                            <label class="text-[10px] text-gray-400 uppercase font-bold">Rows per page:</label>
+                            <select id="wageModalRowsPerPage" onchange="changeWageModalRowsPerPage()" class="bg-gray-800 border border-gray-600 rounded px-2 py-1 text-xs text-white focus:border-teal-500">
+                                <option value="20">20</option>
+                                <option value="50" selected>50</option>
+                                <option value="100">100</option>
+                                <option value="all">All</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="overflow-y-auto flex-1 p-0">
                 <table class="w-full text-left text-sm border-collapse">
@@ -339,12 +561,18 @@
                         </tr>
                     </thead>
                     <tbody id="wageModalTableBody" class="divide-y divide-gray-700 bg-gray-900">
-                        <!-- Populated by JS -->
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
-            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-end gap-3">
-                <button type="button" onclick="closeModal('addWageEmpModal')" class="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition">Cancel</button>
+            <div class="p-3 border-t border-gray-700 bg-gray-900 flex justify-between items-center">
+                <span id="wageModalPaginationInfo" class="text-xs text-gray-400">Showing 0 of 0</span>
+                <div class="flex gap-2">
+                    <button type="button" onclick="changeWageModalPage(-1)" id="wageModalPrevBtn" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs font-bold transition disabled:opacity-50 disabled:cursor-not-allowed shadow border border-gray-600">Prev</button>
+                    <button type="button" onclick="changeWageModalPage(1)" id="wageModalNextBtn" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs font-bold transition disabled:opacity-50 disabled:cursor-not-allowed shadow border border-gray-600">Next</button>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-800 bg-gray-900 rounded-b-lg flex justify-end gap-3 shadow-inner">
+                <button type="button" onclick="closeModal('addWageEmpModal')" class="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded font-bold text-sm transition shadow">Cancel</button>
                 <button type="button" onclick="confirmWageEmployees()" class="px-6 py-2 bg-teal-600 hover:bg-teal-500 text-white rounded font-bold text-sm shadow transition">Add Selected</button>
             </div>
         </div>
@@ -355,7 +583,11 @@
         <div class="bg-gray-800 p-0 rounded-lg w-[1400px] max-w-[98vw] shadow-2xl border border-gray-600 flex flex-col h-[90vh]">
             <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg flex-shrink-0">
                 <h2 class="text-xl font-bold text-blue-400 truncate flex-1" id="timeSheetModalTitle"><i class="fas fa-clock mr-2"></i>Time Sheets & Calculation</h2>
-                <div class="flex gap-3 ml-4 flex-shrink-0">
+                <div class="flex gap-3 ml-4 flex-shrink-0 items-center">
+                    <select id="tsFormat" onchange="updateTSFormat()" class="bg-gray-800 border border-gray-600 rounded p-1 text-xs text-gray-300 focus:outline-none mr-2 font-bold">
+                        <option value="decimal">Decimals (8.50)</option>
+                        <option value="time">Time (08:30)</option>
+                    </select>
                     <button onclick="printTimesheetPDF()" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow border border-gray-600 flex items-center"><i class="fas fa-print mr-2"></i> Print PDF</button>
                     <button onclick="exportTimesheetExcel()" class="bg-green-700 hover:bg-green-600 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow flex items-center"><i class="fas fa-file-excel mr-2"></i> Export Excel</button>
                     <button type="button" onclick="closeModal('timeSheetModal')" class="text-gray-400 hover:text-white ml-2"><i class="fas fa-times text-xl"></i></button>
@@ -373,6 +605,48 @@
                         <!-- Populated by JS for Grand Totals -->
                     </tfoot>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="waEmpModal" class="modal-backdrop">
+        <div class="bg-gray-800 p-0 rounded-lg w-[700px] max-w-[95vw] shadow-2xl border border-gray-600 flex flex-col max-h-[85vh]">
+            <div class="p-4 bg-gray-900 border-b border-gray-700 flex justify-between items-center rounded-t-lg">
+                <h3 class="font-bold text-lg text-indigo-400"><i class="fas fa-users mr-2"></i>Select Employees for Wage Advice</h3>
+                <button onclick="closeModal('waEmpModal')" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-4 bg-gray-800 border-b border-gray-700 flex flex-col gap-3">
+                <div class="flex gap-4">
+                    <div class="flex-1">
+                        <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">Departments Filter</label>
+                        <select id="waModalDeptFilter" multiple onchange="filterWaModalEmployees()" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:border-indigo-500 h-24">
+                        </select>
+                    </div>
+                    <div class="flex-1 flex flex-col justify-end">
+                        <input type="text" id="waModalSearch" onkeyup="filterWaModalEmployees()" placeholder="Search Name or PIN..." class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:border-indigo-500">
+                    </div>
+                </div>
+            </div>
+            <div class="overflow-y-auto flex-1 p-0">
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead class="bg-gray-700 uppercase text-[10px] font-bold text-gray-400 sticky top-0 z-10">
+                        <tr>
+                            <th class="p-3 border-b border-gray-600 text-center w-10"><input type="checkbox" id="selectAllWaEmp" onclick="toggleSelectAllWaModal(this)" class="accent-indigo-500 cursor-pointer w-4 h-4"></th>
+                            <th class="p-3 border-b border-gray-600">PIN</th>
+                            <th class="p-3 border-b border-gray-600">Name</th>
+                            <th class="p-3 border-b border-gray-600">Department</th>
+                        </tr>
+                    </thead>
+                    <tbody id="waModalTableBody" class="divide-y divide-gray-700 bg-gray-900">
+                    </tbody>
+                </table>
+            </div>
+            <div class="p-4 border-t border-gray-800 bg-gray-900 rounded-b-lg flex justify-between items-center shadow-inner">
+                <span class="text-xs text-gray-400"><span id="waModalSelectedCount" class="font-bold text-white">0</span> Selected</span>
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeModal('waEmpModal')" class="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded font-bold text-sm transition shadow">Cancel</button>
+                    <button type="button" onclick="confirmWaEmployees()" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded font-bold text-sm shadow transition">Confirm Selection</button>
+                </div>
             </div>
         </div>
     </div>
