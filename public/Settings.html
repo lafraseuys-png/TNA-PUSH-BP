@@ -613,23 +613,26 @@
         </div>
     </div>
 
-    <div id="roleModal" class="modal-backdrop">
-        <form id="editZoneFormBox" class="bg-gray-800 p-6 rounded-lg w-[400px] shadow-xl border border-gray-600">
-            <h2 class="text-xl font-bold text-purple-400 mb-4 pb-2 border-b border-gray-700">Edit Access Zone</h2>
-            <input type="hidden" id="editZoneId">
-            
-            <label class="block text-xs font-bold text-gray-400 mb-1">Zone Name</label>
-            <input type="text" id="editZoneNameInput" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white mb-4">
-            
-            <label class="block mb-2 font-bold text-sm text-gray-300">Select Hardware Devices for this Zone:</label>
-            <div id="editZoneDevicesContainer" class="zone-grid mb-6 bg-gray-900 p-3 rounded border border-gray-700"></div>
-
-            <div class="flex justify-end gap-2">
-                <button type="button" onclick="closeModal('editZoneModal')" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded text-sm transition">Cancel</button>
-                <button type="submit" class="px-4 py-2 bg-purple-700 hover:bg-purple-600 text-white rounded font-bold text-sm shadow transition">Save Changes</button>
+    <div id="zoneModal" class="modal-backdrop z-[60]">
+        <form id="zoneFormBox" class="bg-gray-800 p-0 rounded-lg w-[400px] shadow-2xl border border-gray-600 flex flex-col">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
+                <h2 class="text-lg font-bold text-teal-400"><i class="fas fa-link mr-2"></i>Map Hardware to Zones</h2>
+                <button type="button" onclick="closeModal('zoneModal')" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <p id="zoneDeviceName" class="text-sm font-bold text-gray-300 pb-2 border-b border-gray-700"></p>
+                <input type="hidden" id="zoneDeviceId">
+                <label class="block text-xs font-bold text-gray-400 mb-1">Select Allowed Zones</label>
+                <div id="zoneCheckboxContainer" class="zone-grid bg-gray-900 p-3 rounded border border-gray-700 max-h-48 overflow-y-auto"></div>
+            </div>
+            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-end gap-3 shadow-inner">
+                <button type="button" onclick="closeModal('zoneModal')" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition">Cancel</button>
+                <button type="submit" class="px-4 py-2 bg-teal-700 hover:bg-teal-600 text-white rounded font-bold text-sm shadow transition">Save Mapping</button>
             </div>
         </form>
-    </div> <div id="roleModal" class="modal-backdrop">
+    </div> 
+
+    <div id="roleModal" class="modal-backdrop">
         <form id="roleForm" class="bg-gray-100 p-0 rounded w-[800px] shadow-2xl flex flex-col max-h-[90vh]">
             <div class="p-3 border-b border-gray-300 flex justify-between items-center bg-gray-200 rounded-t">
                 <h2 class="text-sm font-bold text-gray-800" id="roleModalTitle">Create Role</h2>

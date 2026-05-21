@@ -374,10 +374,10 @@
                     </div>
 
                     <div class="flex justify-between items-center mt-4 bg-gray-900 p-3 rounded border border-gray-700 shadow-inner">
-                        <span id="empPaginationInfo" class="text-xs text-gray-400 font-bold tracking-widest uppercase">Showing 0 of 0</span>
+                        <span id="tnaEmpPageInfo" class="text-xs text-gray-400 font-bold tracking-widest uppercase">Showing 0 of 0</span>
                         <div class="flex space-x-2">
-                            <button id="empBtnPrev" onclick="changeEmpPage(-1)" class="bg-gray-800 hover:bg-gray-700 text-teal-400 px-4 py-1.5 rounded text-xs font-bold border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow"><i class="fas fa-chevron-left mr-1"></i> Prev</button>
-                            <button id="empBtnNext" onclick="changeEmpPage(1)" class="bg-gray-800 hover:bg-gray-700 text-teal-400 px-4 py-1.5 rounded text-xs font-bold border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow">Next <i class="fas fa-chevron-right ml-1"></i></button>
+                            <button id="tnaEmpPrevBtn" onclick="changeTnaEmpPage(-1)" class="bg-gray-800 hover:bg-gray-700 text-teal-400 px-4 py-1.5 rounded text-xs font-bold border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow"><i class="fas fa-chevron-left mr-1"></i> Prev</button>
+                            <button id="tnaEmpNextBtn" onclick="changeTnaEmpPage(1)" class="bg-gray-800 hover:bg-gray-700 text-teal-400 px-4 py-1.5 rounded text-xs font-bold border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow">Next <i class="fas fa-chevron-right ml-1"></i></button>
                         </div>
                     </div>
                 </div>
@@ -553,9 +553,9 @@
                     <div class="flex items-center space-x-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
                         <div class="relative flex-1 max-w-sm">
                             <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
-                            <input type="text" id="attendanceSearch" oninput="renderAttendanceGrid()" placeholder="Search Employee Name..." class="w-full pl-8 pr-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-green-500 transition">
+                            <input type="text" id="attendanceSearch" oninput="filterAttendanceGrid()" placeholder="Search Employee Name..." class="w-full pl-8 pr-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-green-500 transition">
                         </div>
-                        <select id="attendanceDeptFilter" onchange="renderAttendanceGrid()" class="bg-gray-800 border border-gray-600 rounded py-1.5 px-3 text-xs text-white focus:outline-none focus:border-green-500 transition w-64">
+                        <select id="attendanceDeptFilter" onchange="filterAttendanceGrid()" class="bg-gray-800 border border-gray-600 rounded py-1.5 px-3 text-xs text-white focus:outline-none focus:border-green-500 transition w-64">
                             <option value="">-- Select Department --</option>
                         </select>
                     </div>
@@ -569,6 +569,14 @@
                             </tbody>
                         </table>
                         <p class="text-[10px] text-gray-500 mt-2"><i class="fas fa-info-circle mr-1"></i>Click on an employee row to drill down into their exact clock punches.</p>
+                        
+                        <div class="flex justify-between items-center mt-4 bg-gray-900 p-3 rounded border border-gray-700 shadow-inner">
+                            <span id="attendancePageInfo" class="text-xs text-gray-400 font-bold tracking-widest uppercase">Showing 0 of 0</span>
+                            <div class="flex space-x-2">
+                                <button id="attBtnPrev" onclick="changeAttendancePage(-1)" class="bg-gray-800 hover:bg-gray-700 text-green-400 px-4 py-1.5 rounded text-xs font-bold border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow"><i class="fas fa-chevron-left mr-1"></i> Prev</button>
+                                <button id="attBtnNext" onclick="changeAttendancePage(1)" class="bg-gray-800 hover:bg-gray-700 text-green-400 px-4 py-1.5 rounded text-xs font-bold border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow">Next <i class="fas fa-chevron-right ml-1"></i></button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -1435,6 +1443,12 @@
                         </label>
                         <p class="text-[10px] text-gray-500 ml-6 mt-1">Ignores exact times, thresholds, and grace periods. Just logs total hours worked between first and last punch.</p>
                         
+                        <label class="flex items-center cursor-pointer mt-4">
+                            <input type="checkbox" id="isPresentShift" class="w-4 h-4 text-teal-600 bg-gray-900 border-gray-600 rounded">
+                            <span class="ml-2 text-sm font-bold text-teal-400">Present Day Shift (Auto-Snap)</span>
+                        </label>
+                        <p class="text-[10px] text-gray-500 ml-6 mt-1 mb-4">If 1 punch: Auto-fills Shift Start & End. If 2+ punches: Snaps IN to Shift Start, calculates OUT accurately.</p>
+
                         <label class="flex items-center cursor-pointer mt-4">
                             <input type="checkbox" id="forceOT" class="w-4 h-4 text-red-600 bg-gray-900 border-gray-600 rounded">
                             <span class="ml-2 text-sm font-bold text-red-400">Force OT Rate (1.5x)</span>
