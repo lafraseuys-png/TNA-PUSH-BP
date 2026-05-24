@@ -368,13 +368,6 @@
                     <span class="text-sm font-bold text-white text-center">Violations</span>
                 </button>
 
-                <button onclick="navigate('screen-employee-edit')" class="bg-[#1e1e1e] border border-[#333] p-5 rounded-2xl flex flex-col items-center active:bg-[#252525] transition-colors">
-                    <div class="w-12 h-12 rounded-full bg-[#70A827]/10 flex items-center justify-center mb-3">
-                        <i class="bi bi-person-badge-fill text-2xl text-[#70A827]"></i>
-                    </div>
-                    <span class="text-sm font-bold text-white text-center">Employees</span>
-                </button>
-
                 <button onclick="navigate('screen-maintenance')" class="bg-[#1e1e1e] border border-[#333] p-5 rounded-2xl flex flex-col items-center active:bg-[#252525] transition-colors shadow-lg shadow-teal-500/10">
                     <div class="w-12 h-12 rounded-full bg-teal-500/10 flex items-center justify-center mb-3">
                         <i class="bi bi-tools text-2xl text-teal-400"></i>
@@ -389,11 +382,12 @@
                     <span class="text-sm font-bold text-white text-center">Verify Identity</span>
                 </button>
 
-                <button onclick="navigate('screen-print-labels')" class="bg-[#1e1e1e] border border-[#333] p-5 rounded-2xl flex flex-col items-center active:bg-[#252525] transition-colors col-span-2 shadow-lg shadow-purple-500/10">
-                    <div class="w-12 h-12 rounded-full bg-purple-500/10 flex items-center justify-center mb-3">
-                        <i class="bi bi-printer-fill text-2xl text-purple-400"></i>
+                <button onclick="navigate('screen-print-labels')" class="bg-[#1e1e1e] border border-[#333] p-5 rounded-2xl flex flex-col items-center active:bg-[#252525] transition-colors">
+                    <div class="w-12 h-12 rounded-full bg-gray-500/10 flex items-center justify-center mb-3">
+                        <i class="bi bi-printer-fill text-2xl text-gray-400"></i>
                     </div>
-                    <span class="text-sm font-bold text-white text-center">Print Labels / Barcodes</span>
+                    <span class="text-sm font-bold text-white text-center">Print Labels</span>
+                </button>
                 </button>
             </div>
     </div>
@@ -1226,7 +1220,10 @@
                 <div class="absolute top-0 w-full h-1 bg-purple-500"></div>
                 <i class="bi bi-phone-vibrate text-5xl text-purple-500 block mb-3"></i>
                 <h3 class="text-lg font-bold text-white mb-2">App Updates</h3>
-                <p class="text-sm text-gray-400 mb-5">Check for and download the latest version of the app directly to your device.</p>
+                <p class="text-sm text-gray-400 mb-4">Check for and download the latest version of the app directly to your device.</p>
+                <div class="bg-[#2a2a2a] inline-block px-3 py-1 rounded-full border border-[#444] mb-5">
+                    <span id="displayCurrentVersion" class="text-[10px] font-bold text-purple-400 uppercase tracking-wider">Current: Unknown</span>
+                </div>
                 
                 <button onclick="openUpdateLink()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3.5 rounded-xl transition shadow-[0_0_15px_rgba(168,85,247,0.3)] flex items-center justify-center">
                     <i class="bi bi-download mr-2"></i> Check for Updates
@@ -1250,11 +1247,11 @@
                 
                 <!-- ⚡ NEW: Face Engine Thresholds -->
                 <div class="bg-[#2a2a2a] p-4 rounded-xl border border-[#333] mb-4 text-left">
-                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 block">Match Likeliness (<span id="devMatchVal">70</span>/100)</label>
-                    <input type="range" id="devFaceMatch" min="40" max="100" value="70" class="w-full accent-green-500 mb-4" oninput="document.getElementById('devMatchVal').innerText=this.value; localStorage.setItem('faceMatchThreshold', this.value);">
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 block">Match Likeliness (<span id="devMatchVal">76</span>/100)</label>
+                    <input type="range" id="devFaceMatch" min="40" max="100" value="76" class="w-full accent-green-500 mb-4" oninput="document.getElementById('devMatchVal').innerText=this.value; localStorage.setItem('faceMatchThreshold', this.value);" onchange="secureSet('persistent_faceMatchThreshold', this.value);">
                     
-                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 block">Liveness / Anti-Spoof (<span id="devLiveVal">0</span>/100)</label>
-                    <input type="range" id="devFaceLive" min="0" max="100" value="0" class="w-full accent-green-500" oninput="document.getElementById('devLiveVal').innerText=this.value; localStorage.setItem('faceLiveThreshold', this.value);">
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 block">Liveness / Anti-Spoof (<span id="devLiveVal">52</span>/100)</label>
+                    <input type="range" id="devFaceLive" min="0" max="100" value="52" class="w-full accent-green-500" oninput="document.getElementById('devLiveVal').innerText=this.value; localStorage.setItem('faceLiveThreshold', this.value);" onchange="secureSet('persistent_faceLiveThreshold', this.value);">
                     
                     <p class="text-[10px] text-gray-500 mt-3"><i class="bi bi-info-circle mr-1"></i> Adjusting these overrides the native C++ engine defaults instantly.</p>
                 </div>
@@ -1267,6 +1264,9 @@
                         Stop Eruda
                     </button>
                 </div>
+                <button onclick="devClearUnsynced()" class="w-full mt-3 bg-orange-900/30 hover:bg-orange-900/50 text-orange-500 border border-orange-500/50 font-bold py-3 rounded-xl transition shadow-lg">
+                    <i class="bi bi-trash mr-2"></i> Wipe Unsynced Records
+                </button>
             </div>
 
         </div>

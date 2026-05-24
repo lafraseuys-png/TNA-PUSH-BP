@@ -1565,14 +1565,20 @@
                     </table>
                 </div>
                 
-                <div class="mt-4 bg-gray-900 p-3 rounded border border-gray-700 flex items-center gap-3">
+                <div class="mt-4 bg-gray-900 p-3 rounded border border-gray-700 flex flex-wrap items-center gap-3">
                     <span class="text-xs font-bold text-gray-400">Add Manual Punch:</span>
+                    <input type="date" id="manualDate" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-green-500">
                     <select id="manualType" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white">
                         <option value="IN">IN</option>
                         <option value="OUT">OUT</option>
                     </select>
-                    <input type="time" id="manualTime" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-teal-500">
-                    <button onclick="addManualClock()" class="bg-teal-600 hover:bg-teal-500 text-white px-3 py-1.5 rounded text-xs font-bold shadow transition"><i class="fas fa-plus mr-1"></i> Add Punch</button>
+                    <input type="time" id="manualTime" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-green-500">
+                    <button onclick="stageManualClock()" class="bg-green-600 hover:bg-green-500 text-white px-3 py-1.5 rounded text-xs font-bold shadow transition"><i class="fas fa-plus mr-1"></i> Add Punch</button>
+                </div>
+                <!-- NEW FOOTER CONTROLS -->
+                <div id="drillDownFooterControls" class="mt-4 pt-4 border-t border-gray-700 flex justify-end space-x-3 hidden">
+                    <button type="button" onclick="cancelDrillDownChanges()" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded font-bold text-sm transition">Cancel</button>
+                    <button type="button" id="btnSaveDrillDown" onclick="saveDrillDownChanges()" class="px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white rounded font-bold text-sm shadow transition"><i class="fas fa-save mr-2"></i> Save & Recalculate</button>
                 </div>
             </div>
         </div>
