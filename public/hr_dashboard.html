@@ -30,54 +30,100 @@
         .ql-container { background: #1e293b; color: #e2e8f0; border-radius: 0 0 4px 4px; border: 1px solid #475569 !important; font-family: inherit; font-size: 14px; }
         .ql-editor { min-height: 250px; }
         .html2pdf__page-break { page-break-before: always; }
+
+        /* Forces tables to scroll horizontally instead of squishing columns */
+        .overflow-x-auto table { min-width: max-content; }
+        .overflow-x-auto th, .overflow-x-auto td { white-space: nowrap; }
+
+        /* Sidebar Collapse Animations */
+        #mainSidebar { transition: width 0.3s ease-in-out; overflow-x: hidden; }
+        #mainSidebar.sidebar-collapsed { width: 4.5rem; }
+        #mainSidebar.sidebar-collapsed .sidebar-text { display: none; }
+        #mainSidebar.sidebar-collapsed .sidebar-item { justify-content: center; padding: 1rem 0; }
+        #mainSidebar.sidebar-collapsed .sidebar-icon { margin-right: 0; font-size: 1.25rem; }
+        #mainSidebar.sidebar-collapsed .toggle-btn-container { justify-content: center; padding-left: 0; padding-right: 0; }
+        #mainSidebar.sidebar-collapsed .brand-header { display: none; }
+
+        /* Mobile Sidebar Adjustments & Scroll Fixes */
+        @media (max-width: 768px) {
+            /* Unlock the body so it scrolls natively as a standard webpage */
+            body.flex { display: block !important; height: auto !important; min-height: 100vh; overflow: visible !important; overscroll-behavior-y: auto; }
+            
+            #mainSidebar { width: 100% !important; height: auto !important; position: relative; border-right: none; border-bottom: 1px solid #374151; z-index: 40; }
+            #mainSidebar.sidebar-collapsed { height: 76px !important; overflow: hidden; }
+            
+            /* Hide the bottom button when collapsed to prevent height bleed */
+            #mainSidebar.sidebar-collapsed .p-4.border-t { display: none; }
+            
+            /* Override collapsed styles for mobile so the header remains intact */
+            #mainSidebar.sidebar-collapsed .sidebar-text { display: block; }
+            #mainSidebar.sidebar-collapsed .toggle-btn-container { justify-content: space-between; padding-left: 1rem; padding-right: 1rem; height: 76px; }
+            #mainSidebar.sidebar-collapsed .brand-header { display: flex; }
+            
+            /* Toggle the actual nav links */
+            #sidebarNav { display: block; }
+            #mainSidebar.sidebar-collapsed #sidebarNav { display: none; }
+            
+            /* Flatten the main container and inner scroll area to destroy flex-spacing gaps */
+            main.flex { display: block !important; height: auto !important; overflow: visible !important; min-height: 100vh; }
+            main > div.flex-1.overflow-y-auto { display: block !important; overflow: visible !important; height: auto !important; padding-bottom: 2rem !important; flex: none !important; }
+        }
     </style>
 </head>
 <body class="font-sans flex h-screen overflow-hidden">
 
-    <aside class="w-64 bg-gray-800 flex flex-col shadow-xl flex-shrink-0 border-r border-gray-700">
-        <div class="p-6 border-b border-gray-700 text-center">
-            <h1 class="text-2xl font-black text-blue-500"><i class="fas fa-users-cog mr-2"></i>TNA AFRICA</h1>
-            <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">HR Management</p>
+    <aside id="mainSidebar" class="w-64 bg-gray-800 flex flex-col shadow-xl flex-shrink-0 border-r border-gray-700 h-screen transition-all">
+        <div class="h-[76px] border-b border-gray-700 flex items-center justify-between px-4 toggle-btn-container">
+            <div class="flex items-center brand-header overflow-hidden whitespace-nowrap">
+                <i class="fas fa-users-cog text-2xl text-blue-500 mr-3"></i>
+                <div class="sidebar-text">
+                    <h1 class="text-xl font-black text-blue-500 leading-none mt-1">TNA AFRICA</h1>
+                    <p class="text-[9px] text-gray-400 uppercase tracking-widest mt-1">HR Management</p>
+                </div>
+            </div>
+            <button onclick="document.getElementById('mainSidebar').classList.toggle('sidebar-collapsed')" class="text-gray-400 hover:text-white transition md:hidden">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
         </div>
-        <nav class="flex-1 overflow-y-auto py-4">
+        <nav class="flex-1 overflow-y-auto py-4" id="sidebarNav">
             <button onclick="showSection('dashboard', this)" class="sidebar-item active w-full flex items-center p-4 text-left">
-                <i class="fas fa-chart-pie w-6 text-center mr-2"></i> Dashboard Overview
+                <i class="fas fa-chart-pie w-6 text-center mr-2 sidebar-icon"></i> <span class="sidebar-text">Dashboard Overview</span>
             </button>
             <button onclick="showSection('employees', this)" class="sidebar-item w-full flex items-center p-4 text-left">
-                <i class="fas fa-users w-6 text-center mr-2"></i> Employee Master
+                <i class="fas fa-users w-6 text-center mr-2 sidebar-icon"></i> <span class="sidebar-text">Employee Master</span>
             </button>
             <button onclick="showSection('infringements', this)" class="sidebar-item w-full flex justify-between items-center p-4 text-left border-l-4 border-transparent">
-                <div><i class="fas fa-exclamation-triangle w-6 text-center mr-2"></i> Infringements</div>
-                <span class="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">0</span>
+                <div class="flex items-center"><i class="fas fa-exclamation-triangle w-6 text-center mr-2 sidebar-icon"></i> <span class="sidebar-text">Infringements</span></div>
+                <span class="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full sidebar-text">0</span>
             </button>
             <button onclick="showSection('performance', this)" class="sidebar-item w-full flex items-center p-4 text-left border-l-4 border-transparent">
-                <i class="fas fa-star w-6 text-center mr-2"></i> Performance Notes
+                <i class="fas fa-star w-6 text-center mr-2 sidebar-icon"></i> <span class="sidebar-text">Performance Notes</span>
             </button>
             <button onclick="showSection('onboarding', this)" class="sidebar-item w-full flex items-center p-4 text-left border-l-4 border-transparent">
-                <i class="fas fa-user-plus w-6 text-center mr-2"></i> Onboarding & Temp
+                <i class="fas fa-user-plus w-6 text-center mr-2 sidebar-icon"></i> <span class="sidebar-text">Onboarding & Temp</span>
             </button>
             <button onclick="showSection('active-contracts', this)" class="sidebar-item w-full flex items-center p-4 text-left border-l-4 border-transparent" id="nav-active-contracts">
-                <i class="fas fa-file-signature w-6 text-center mr-2"></i> Active Contracts
+                <i class="fas fa-file-signature w-6 text-center mr-2 sidebar-icon"></i> <span class="sidebar-text">Active Contracts</span>
             </button>
             <button onclick="showSection('expiring', this)" class="sidebar-item w-full flex justify-between items-center p-4 text-left border-l-4 border-transparent" id="nav-expiring">
-                <div><i class="fas fa-calendar-times w-6 text-center mr-2"></i> Expiring This Month</div>
-                <span id="sidebarExpiringCount" class="bg-yellow-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full hidden">0</span>
+                <div class="flex items-center"><i class="fas fa-calendar-times w-6 text-center mr-2 sidebar-icon"></i> <span class="sidebar-text">Expiring This Month</span></div>
+                <span id="sidebarExpiringCount" class="bg-yellow-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full hidden sidebar-text">0</span>
             </button>
             <button onclick="showSection('settings', this)" class="sidebar-item w-full flex items-center p-4 text-left">
-                <i class="fas fa-cogs w-6 text-center mr-2"></i> HR Settings
+                <i class="fas fa-cogs w-6 text-center mr-2 sidebar-icon"></i> <span class="sidebar-text">HR Settings</span>
             </button>
         </nav>
-        <div class="p-4 border-t border-gray-700 text-xs">
+        <div class="p-4 border-t border-gray-700 text-xs overflow-hidden">
             <button onclick="window.location.href='Launchpad.html'" class="text-gray-400 hover:text-white font-bold w-full text-left flex items-center transition">
-                <i class="fas fa-arrow-left mr-2"></i> Back to Launchpad
+                <i class="fas fa-arrow-left w-6 text-center mr-3 sidebar-icon transition-all"></i> <span class="sidebar-text whitespace-nowrap">Back to Launchpad</span>
             </button>
         </div>
     </aside>
 
     <main class="flex-1 flex flex-col overflow-hidden bg-gray-900">
-        <header class="bg-gray-800 shadow-sm p-4 flex justify-between items-center z-10 border-b border-gray-700">
+        <header class="bg-gray-800 shadow-sm p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 z-10 border-b border-gray-700 flex-shrink-0 w-full">
             <h2 id="sectionTitle" class="text-lg font-bold text-gray-200 uppercase tracking-wide">Dashboard Overview</h2>
-            <button class="bg-gray-700 border border-gray-600 text-gray-200 px-4 py-2 rounded text-xs font-bold hover:bg-gray-600 transition flex items-center">
+            <button class="w-full md:w-auto justify-center bg-gray-700 border border-gray-600 text-gray-200 px-4 py-2 rounded text-xs font-bold hover:bg-gray-600 transition flex items-center">
                 <i class="fas fa-sync-alt mr-2"></i> Refresh Data
             </button>
         </header>
@@ -165,22 +211,22 @@
                         <h3 class="font-bold text-gray-300"><i class="fas fa-exclamation-circle mr-2"></i>Infringement Records</h3>
                     </div>
 
-                    <div class="flex items-center space-x-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
-                        <div>
+                    <div class="flex flex-col md:flex-row md:items-end gap-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
+                        <div class="w-full md:w-auto">
                             <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">Start Date</label>
-                            <input type="date" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-white text-xs focus:outline-none focus:border-red-500">
+                            <input type="date" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-white text-xs focus:outline-none focus:border-red-500">
                         </div>
-                        <div>
+                        <div class="w-full md:w-auto">
                             <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">End Date</label>
-                            <input type="date" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-white text-xs focus:outline-none focus:border-red-500">
+                            <input type="date" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-white text-xs focus:outline-none focus:border-red-500">
                         </div>
-                        <div class="flex-1 max-w-sm">
+                        <div class="w-full md:flex-1 md:max-w-sm">
                             <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">Employee Search</label>
                             <input type="text" placeholder="Type Name or PIN..." class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-red-500 transition">
                         </div>
-                        <div class="flex space-x-2 mt-4">
-                            <button class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs font-bold uppercase transition shadow"><i class="fas fa-search mr-1"></i> Search</button>
-                            <button class="bg-gray-600 hover:bg-gray-500 text-white px-3 py-1.5 rounded text-xs font-bold uppercase transition shadow"><i class="fas fa-times mr-1"></i> Clear</button>
+                        <div class="flex space-x-2 w-full md:w-auto mt-2 md:mt-0">
+                            <button class="flex-1 md:flex-none justify-center bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 md:py-1.5 rounded text-xs font-bold uppercase transition shadow flex items-center"><i class="fas fa-search mr-1"></i> Search</button>
+                            <button class="flex-1 md:flex-none justify-center bg-gray-600 hover:bg-gray-500 text-white px-3 py-2 md:py-1.5 rounded text-xs font-bold uppercase transition shadow flex items-center"><i class="fas fa-times mr-1"></i> Clear</button>
                         </div>
                     </div>
 
@@ -209,22 +255,22 @@
                         <h3 class="font-bold text-gray-300"><i class="fas fa-star mr-2"></i>Performance Notes</h3>
                     </div>
 
-                    <div class="flex items-center space-x-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
-                        <div>
+                    <div class="flex flex-col md:flex-row md:items-end gap-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
+                        <div class="w-full md:w-auto">
                             <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">Start Date</label>
-                            <input type="date" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-white text-xs focus:outline-none focus:border-yellow-500">
+                            <input type="date" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-white text-xs focus:outline-none focus:border-yellow-500">
                         </div>
-                        <div>
+                        <div class="w-full md:w-auto">
                             <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">End Date</label>
-                            <input type="date" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-white text-xs focus:outline-none focus:border-yellow-500">
+                            <input type="date" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-white text-xs focus:outline-none focus:border-yellow-500">
                         </div>
-                        <div class="flex-1 max-w-sm">
+                        <div class="w-full md:flex-1 md:max-w-sm">
                             <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">Employee Search</label>
                             <input type="text" placeholder="Type Name or PIN..." class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-yellow-500 transition">
                         </div>
-                        <div class="flex space-x-2 mt-4">
-                            <button class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs font-bold uppercase transition shadow"><i class="fas fa-search mr-1"></i> Search</button>
-                            <button class="bg-gray-600 hover:bg-gray-500 text-white px-3 py-1.5 rounded text-xs font-bold uppercase transition shadow"><i class="fas fa-times mr-1"></i> Clear</button>
+                        <div class="flex space-x-2 w-full md:w-auto mt-2 md:mt-0">
+                            <button class="flex-1 md:flex-none justify-center bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 md:py-1.5 rounded text-xs font-bold uppercase transition shadow flex items-center"><i class="fas fa-search mr-1"></i> Search</button>
+                            <button class="flex-1 md:flex-none justify-center bg-gray-600 hover:bg-gray-500 text-white px-3 py-2 md:py-1.5 rounded text-xs font-bold uppercase transition shadow flex items-center"><i class="fas fa-times mr-1"></i> Clear</button>
                         </div>
                     </div>
 
@@ -254,19 +300,19 @@
                         <h3 class="font-bold text-gray-300"><i class="fas fa-file-signature mr-2"></i>Active Contracts</h3>
                     </div>
 
-                   <div class="flex items-center space-x-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
-                        <div class="w-1/3">
+                   <div class="flex flex-col md:flex-row md:items-end gap-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
+                        <div class="w-full md:w-1/3">
                             <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">Department Filter (Optional)</label>
                             <select id="activeContractDept" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-white text-xs focus:outline-none focus:border-green-500 transition">
                                 <option value="">-- All Departments --</option>
                             </select>
                         </div>
-                        <div class="flex-1 max-w-sm">
+                        <div class="w-full md:flex-1 md:max-w-sm">
                             <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">Employee Search</label>
                             <input type="text" id="activeContractSearch" placeholder="Type Name, Surname or PIN..." class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-green-500 transition">
                         </div>
-                        <div class="flex space-x-2 mt-4">
-                            <button onclick="currentActiveContractPage = 1; fetchActiveContracts()" class="bg-green-700 hover:bg-green-600 text-white px-4 py-1.5 rounded text-xs font-bold uppercase transition shadow"><i class="fas fa-search mr-1"></i> Search / Load All</button>
+                        <div class="flex space-x-2 w-full md:w-auto mt-2 md:mt-0">
+                            <button onclick="currentActiveContractPage = 1; fetchActiveContracts()" class="flex-1 md:flex-none justify-center bg-green-700 hover:bg-green-600 text-white px-4 py-2 md:py-1.5 rounded text-xs font-bold uppercase transition shadow flex items-center"><i class="fas fa-search mr-1"></i> Search / Load All</button>
                         </div>
                     </div>
 
@@ -468,21 +514,21 @@
                         </div>
 
                        <div class="bg-gray-900 p-3 rounded border border-gray-700 mb-4">
-                            <div class="flex items-center space-x-3">
-                                <div>
+                            <div class="flex flex-col md:flex-row md:items-end gap-3">
+                                <div class="w-full md:w-auto">
                                     <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">Termination From</label>
-                                    <input type="date" id="manageFilterFrom" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-white text-xs focus:outline-none focus:border-green-500 transition">
+                                    <input type="date" id="manageFilterFrom" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-white text-xs focus:outline-none focus:border-green-500 transition">
                                 </div>
-                                <div>
+                                <div class="w-full md:w-auto">
                                     <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">Termination To (Max 1 Month)</label>
-                                    <input type="date" id="manageFilterTo" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-white text-xs focus:outline-none focus:border-green-500 transition">
+                                    <input type="date" id="manageFilterTo" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-white text-xs focus:outline-none focus:border-green-500 transition">
                                 </div>
-                                <div class="flex-1 max-w-sm">
+                                <div class="w-full md:flex-1 md:max-w-sm">
                                     <label class="block text-[10px] text-gray-400 uppercase font-bold mb-1">Employee Search</label>
                                     <input type="text" id="manageFilterSearch" placeholder="Type Name or PIN..." class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-green-500 transition">
                                 </div>
-                                <div class="flex space-x-2 mt-4">
-                                    <button onclick="fetchManagedContracts()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-1.5 rounded text-xs font-bold uppercase transition shadow"><i class="fas fa-search mr-1"></i> View</button>
+                                <div class="flex space-x-2 w-full md:w-auto mt-2 md:mt-0">
+                                    <button onclick="fetchManagedContracts()" class="flex-1 md:flex-none justify-center bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 md:py-1.5 rounded text-xs font-bold uppercase transition shadow flex items-center"><i class="fas fa-search mr-1"></i> View</button>
                                 </div>
                             </div>
                             <div class="flex items-center mt-3 pt-3 border-t border-gray-700">
@@ -768,6 +814,20 @@
         </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebarLinks = document.querySelectorAll('#sidebarNav .sidebar-item');
+            const sidebar = document.getElementById('mainSidebar');
+            
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 768 && sidebar) {
+                        sidebar.classList.add('sidebar-collapsed');
+                    }
+                });
+            });
+        });
+    </script>
     <script src="hr_dashboard.js"></script>
 </body>
 </html>

@@ -21,17 +21,62 @@
         ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #64748b; }
 
-        .section { background: #1f2937; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); margin-bottom: 2rem; border-t: 4px solid #3b82f6; }
+        .section { background: #1f2937; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); margin-bottom: 2rem; border-t: 4px solid #3b82f6; overflow-x: auto; }
         #editModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 100; }
         #editForm { background: #1f2937; padding: 2rem; border-radius: 8px; width: 400px; color: white; }
         .action-btn { width: 120px; }
         table th, table td { border-color: #4b5563; }
         table thead { background-color: #374151; }
+
+        /* Forces tables to scroll horizontally instead of squishing columns */
+        .section table { min-width: max-content; }
+        th, td { white-space: nowrap; }
+
+        /* Sidebar Collapse Animations & Mobile Layout */
+        #mainSidebar { transition: height 0.3s ease-in-out; z-index: 40; }
+        
+        @media (max-width: 768px) {
+            /* Unlock the body so it scrolls natively as a standard webpage */
+            body.flex { display: block !important; height: auto !important; min-height: 100vh; overflow: visible !important; overscroll-behavior-y: auto; }
+            
+            #mainSidebar { width: 100% !important; height: auto !important; position: relative; border-right: none; border-bottom: 1px solid #374151; }
+            #mainSidebar.sidebar-collapsed { height: 76px !important; overflow: hidden; }
+            
+            /* Hide bottom element when collapsed to prevent height bleed */
+            #mainSidebar.sidebar-collapsed .p-4.border-t { display: none; }
+            
+            #mainSidebar.sidebar-collapsed nav { display: none; }
+            nav { display: flex; flex-direction: column; overflow-y: visible; padding: 0; }
+            
+            /* Override collapsed styles for mobile so the header remains intact */
+            .mobile-brand-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem; height: 76px; border-bottom: 1px solid #334155; }
+            aside > .p-6.border-b { display: none; } /* Hide the tall user info on mobile, use the new header */
+            
+            /* Flatten the main container and inner scroll area to destroy flex-spacing gaps */
+            main.flex { display: block !important; height: auto !important; overflow: visible !important; min-height: 100vh; }
+            main > div.flex-1.overflow-y-auto { display: block !important; overflow: visible !important; height: auto !important; padding-bottom: 2rem !important; flex: none !important; }
+        }
+        @media (min-width: 769px) {
+            .mobile-brand-header { display: none; }
+        }
     </style>
 </head>
 <body class="font-sans flex h-screen overflow-hidden bg-gray-900">
 
-    <aside class="w-64 bg-gray-800 flex flex-col shadow-xl flex-shrink-0 border-r border-gray-700">
+    <aside id="mainSidebar" class="w-64 bg-gray-800 flex flex-col shadow-xl flex-shrink-0 border-r border-gray-700 h-screen sidebar-collapsed">
+        <div class="mobile-brand-header">
+            <div class="flex items-center">
+                <i class="fas fa-bolt text-2xl text-red-500 mr-3"></i>
+                <div>
+                    <h1 class="text-xl font-black text-red-500 leading-none mt-1">GOD MODE</h1>
+                    <p class="text-[9px] text-gray-400 uppercase tracking-widest mt-1">SaaS Master Control</p>
+                </div>
+            </div>
+            <button onclick="document.getElementById('mainSidebar').classList.toggle('sidebar-collapsed')" class="text-gray-400 hover:text-white transition">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+
         <div class="p-6 border-b border-gray-700 text-center">
             <h1 id="godModeTrigger" onclick="triggerSecretMode()" class="text-2xl font-black text-red-500 cursor-pointer select-none transition hover:text-red-400"><i class="fas fa-bolt mr-2"></i>GOD MODE</h1>
             <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">SaaS Master Control</p>
@@ -117,12 +162,12 @@
             <!-- TAB 2: TENANTS -->
             <section id="page-tenants" class="page-section">
                 
-                <div class="flex justify-between items-center mb-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                     <div>
                         <h2 class="text-2xl font-bold text-white"><i class="fas fa-building mr-2 text-emerald-500"></i>Tenant Management</h2>
                         <p class="text-sm text-gray-400">Deploy and manage client SaaS environments.</p>
                     </div>
-                    <button onclick="openCreateTenantModal()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-6 rounded shadow-lg transition"><i class="fas fa-plus mr-2"></i> Deploy New Tenant</button>
+                    <button onclick="openCreateTenantModal()" class="w-full sm:w-auto justify-center bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 sm:py-2 px-6 rounded shadow-lg transition flex items-center"><i class="fas fa-plus mr-2"></i> Deploy New Tenant</button>
                 </div>
 
         <div class="section">
@@ -143,9 +188,9 @@
         </div>
 
         <div class="section mt-6" style="border-color: #3b82f6;">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-semibold"><i class="fas fa-file-invoice text-blue-500 mr-2"></i>Pending Quotes (Soft Adds)</h2>
-                <button onclick="loadQuotes()" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-1 px-3 rounded shadow transition text-sm"><i class="fas fa-sync-alt mr-2"></i> Refresh Quotes</button>
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
+                <h2 class="text-xl sm:text-2xl font-semibold"><i class="fas fa-file-invoice text-blue-500 mr-2"></i>Pending Quotes (Soft Adds)</h2>
+                <button onclick="loadQuotes()" class="w-full sm:w-auto justify-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 sm:py-1 px-3 rounded shadow transition text-sm flex items-center"><i class="fas fa-sync-alt mr-2"></i> Refresh Quotes</button>
             </div>
             <table class="w-full border-collapse text-sm">
                 <thead>
@@ -431,17 +476,17 @@
 
         <!-- TAB 5: REPORTS -->
         <section id="page-reports" class="page-section">
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-6 gap-4">
                 <div>
                     <h2 class="text-2xl font-bold text-white"><i class="fas fa-chart-line mr-2 text-blue-500"></i>Financial Reports</h2>
                     <p class="text-sm text-gray-400">View and export tenant billing summaries.</p>
                 </div>
-                <div class="flex gap-2">
-                    <button onclick="exportAllCSV('setup')" class="bg-purple-700 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded shadow transition"><i class="fas fa-tools mr-2"></i> Export All (Setups)</button>
-                    <button onclick="exportAllCSV('internal')" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded shadow transition"><i class="fas fa-file-excel mr-2"></i> Export All (Internal)</button>
-                    <button onclick="exportAllCSV('client')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded shadow transition"><i class="fas fa-file-invoice-dollar mr-2"></i> Export All (Client)</button>
+                <div class="flex flex-wrap gap-2 w-full xl:w-auto">
+                    <button onclick="exportAllCSV('setup')" class="flex-1 sm:flex-none justify-center bg-purple-700 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded shadow transition flex items-center"><i class="fas fa-tools mr-2"></i> Setups</button>
+                    <button onclick="exportAllCSV('internal')" class="flex-1 sm:flex-none justify-center bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded shadow transition flex items-center"><i class="fas fa-file-excel mr-2"></i> Internal</button>
+                    <button onclick="exportAllCSV('client')" class="flex-1 sm:flex-none justify-center bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded shadow transition flex items-center"><i class="fas fa-file-invoice-dollar mr-2"></i> Client</button>
                 </div>
-               </div> 
+               </div>
 
             <div class="section">
                 <table id="reportsTable" class="w-full border-collapse text-sm">
@@ -464,12 +509,12 @@
         </section>
 
                <section id="page-audit" class="page-section">
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                 <div>
                     <h2 class="text-2xl font-bold text-white"><i class="fas fa-history mr-2 text-yellow-500"></i>Master Audit Trail</h2>
                     <p class="text-sm text-gray-400">Tracking all God Mode administrative actions across the master database.</p>
                 </div>
-                <button onclick="loadAuditLogs()" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded shadow transition"><i class="fas fa-sync-alt mr-2"></i> Refresh Logs</button>
+                <button onclick="loadAuditLogs()" class="w-full sm:w-auto justify-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 sm:py-2 px-4 rounded shadow transition flex items-center"><i class="fas fa-sync-alt mr-2"></i> Refresh Logs</button>
             </div>
             <div class="section" style="border-color: #eab308;">
                 <table class="w-full border-collapse text-sm">
@@ -742,4 +787,18 @@
         </div>
     </div>
 
-  <script src="godmode.js"></script>
+  <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebarLinks = document.querySelectorAll('#sidebarNav .sidebar-item');
+            const sidebar = document.getElementById('mainSidebar');
+            
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 768 && sidebar) {
+                        sidebar.classList.add('sidebar-collapsed');
+                    }
+                });
+            });
+        });
+    </script>
+    <script src="godmode.js"></script>

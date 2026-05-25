@@ -33,10 +33,41 @@
         .overflow-x-auto table { min-width: max-content; }
         .overflow-x-auto th, .overflow-x-auto td { white-space: nowrap; }
 
-        /* Mobile Sidebar Transformation - Dropdown Style */
+        /* Forces tables to scroll left-to-right instead of squishing columns */
+        .overflow-x-auto table { min-width: max-content; }
+        .overflow-x-auto th, .overflow-x-auto td { white-space: nowrap; }
+
+        /* Sidebar Collapse Animations & Mobile Layout */
+        #mainSidebar { transition: width 0.3s ease-in-out; overflow-x: hidden; }
+        #mainSidebar.sidebar-collapsed { width: 4.5rem; }
+        #mainSidebar.sidebar-collapsed .sidebar-text { display: none; }
+        #mainSidebar.sidebar-collapsed .sidebar-item { justify-content: center; padding: 1rem 0; }
+        #mainSidebar.sidebar-collapsed .sidebar-icon { margin-right: 0; font-size: 1.25rem; }
+        #mainSidebar.sidebar-collapsed .toggle-btn-container { justify-content: center; padding-left: 0; padding-right: 0; }
+        #mainSidebar.sidebar-collapsed .brand-header { display: none; }
+
         @media (max-width: 768px) {
-            body.flex { flex-direction: column; }
-            aside.w-64 { width: 100%; height: auto; border-bottom: 1px solid #374151; border-right: none; z-index: 40; }
+            /* Unlock the body so it scrolls natively as a standard webpage */
+            body.flex { display: block !important; height: auto !important; min-height: 100vh; overflow: visible !important; overscroll-behavior-y: auto; }
+            
+            #mainSidebar { width: 100% !important; height: auto !important; position: relative; border-right: none; border-bottom: 1px solid #374151; z-index: 40; }
+            #mainSidebar.sidebar-collapsed { height: 76px !important; overflow: hidden; }
+            
+            /* Hide the bottom button when collapsed to prevent height bleed */
+            #mainSidebar.sidebar-collapsed .p-4.border-t { display: none; }
+            
+            /* Override collapsed styles for mobile so the header remains intact */
+            #mainSidebar.sidebar-collapsed .sidebar-text { display: block; }
+            #mainSidebar.sidebar-collapsed .toggle-btn-container { justify-content: space-between; padding-left: 1rem; padding-right: 1rem; height: 76px; }
+            #mainSidebar.sidebar-collapsed .brand-header { display: flex; }
+            
+            /* Toggle the actual nav links */
+            #sidebarNav { display: block; }
+            #mainSidebar.sidebar-collapsed #sidebarNav { display: none; }
+            
+            /* Flatten the main container and inner scroll area to destroy flex-spacing gaps */
+            main.flex { display: block !important; height: auto !important; overflow: visible !important; min-height: 100vh; }
+            main > div.flex-1.overflow-y-auto { display: block !important; overflow: visible !important; height: auto !important; padding-bottom: 2rem !important; flex: none !important; }
         }
     </style>
 </head>
@@ -57,69 +88,68 @@
         <p id="syncStatusText" class="text-gray-300 mt-2 font-mono">Initializing connection...</p>
     </div>
 
-    <aside class="w-64 bg-gray-800 flex flex-col shadow-xl flex-shrink-0 border-r border-gray-700 md:h-screen relative">
-        <div class="md:hidden flex justify-between items-center p-4 border-b border-gray-700 bg-gray-800 cursor-pointer" onclick="document.getElementById('mobileNavWrapper').classList.toggle('hidden')">
-            <h1 class="text-xl font-black text-blue-500"><i class="fas fa-id-card mr-2"></i>DIRECTORY</h1>
-            <button type="button" class="text-gray-300 hover:text-white focus:outline-none">
+    <aside id="mainSidebar" class="w-64 bg-gray-800 flex flex-col shadow-xl flex-shrink-0 border-r border-gray-700 h-screen transition-all">
+        <div class="h-[76px] border-b border-gray-700 flex items-center justify-between px-4 toggle-btn-container">
+            <div class="flex items-center brand-header overflow-hidden whitespace-nowrap">
+                <i class="fas fa-id-card text-2xl text-blue-500 mr-3"></i>
+                <div class="sidebar-text">
+                    <h1 class="text-xl font-black text-blue-500 leading-none mt-1">DIRECTORY</h1>
+                    <p class="text-[9px] text-gray-400 uppercase tracking-widest mt-1">Employee Master</p>
+                </div>
+            </div>
+            <button onclick="document.getElementById('mainSidebar').classList.toggle('sidebar-collapsed')" class="text-gray-400 hover:text-white transition">
                 <i class="fas fa-bars text-xl"></i>
             </button>
         </div>
 
-        <div class="hidden md:block p-6 border-b border-gray-700 text-center">
-            <h1 class="text-2xl font-black text-blue-500"><i class="fas fa-id-card mr-2"></i>DIRECTORY</h1>
-            <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Employee Master</p>
-        </div>
+        <nav class="flex-1 overflow-y-auto py-4" id="sidebarNav">
+            <button onclick="showSection('employees', this)" class="sidebar-item active w-full flex items-center p-4 text-left">
+                <i class="fas fa-users w-6 text-center mr-2 sidebar-icon"></i> <span class="sidebar-text">Active Personnel</span>
+            </button>
+            <button onclick="showSection('terminated', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+                <i class="fas fa-user-slash w-6 text-center mr-2 text-red-400 sidebar-icon"></i> <span class="sidebar-text">Terminated Records</span>
+            </button>
+            <button onclick="showSection('departments', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+                <i class="fas fa-sitemap w-6 text-center mr-2 sidebar-icon"></i> <span class="sidebar-text">Departments</span>
+            </button>
+            <button onclick="showSection('deptzones', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+                <i class="fas fa-shield-alt w-6 text-center mr-2 text-purple-400 sidebar-icon"></i> <span class="sidebar-text">Access Roles</span>
+            </button>
+            <button onclick="showSection('teams', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+                <i class="fas fa-users-cog w-6 text-center mr-2 text-indigo-400 sidebar-icon"></i> <span class="sidebar-text">Custom Teams</span>
+            </button>
+            <button onclick="showSection('leave', this)" class="sidebar-item w-full flex items-center p-4 text-left border-t border-gray-700 mt-2">
+                <i class="fas fa-calendar-alt w-6 text-center mr-2 text-emerald-400 sidebar-icon"></i> <span class="sidebar-text">Leave Management</span>
+            </button>
+            <button onclick="showSection('attributes', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+                <i class="fas fa-tags w-6 text-center mr-2 text-cyan-400 sidebar-icon"></i> <span class="sidebar-text">Custom Attributes</span>
+            </button>
+            <button onclick="showSection('hierarchy', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+                 <i class="fas fa-sitemap w-6 text-center mr-2 text-yellow-500 sidebar-icon"></i> <span class="sidebar-text">Org Hierarchy & Managers</span>
+            </button>
+        </nav>
 
-        <div id="mobileNavWrapper" class="hidden md:flex flex-col flex-1 w-full absolute md:relative top-full md:top-auto left-0 bg-gray-800 shadow-2xl md:shadow-none border-b border-gray-700 md:border-none z-50">
-            <nav class="flex-1 overflow-y-auto py-2 md:py-4">
-                <button onclick="showSection('employees', this); if(window.innerWidth < 768) document.getElementById('mobileNavWrapper').classList.add('hidden');" class="sidebar-item active w-full flex items-center p-4 text-left">
-                    <i class="fas fa-users w-6 text-center mr-2"></i> Active Personnel
-                </button>
-                <button onclick="showSection('terminated', this); if(window.innerWidth < 768) document.getElementById('mobileNavWrapper').classList.add('hidden');" class="sidebar-item w-full flex items-center p-4 text-left">
-                    <i class="fas fa-user-slash w-6 text-center mr-2 text-red-400"></i> Terminated Records
-                </button>
-                <button onclick="showSection('departments', this); if(window.innerWidth < 768) document.getElementById('mobileNavWrapper').classList.add('hidden');" class="sidebar-item w-full flex items-center p-4 text-left">
-                    <i class="fas fa-sitemap w-6 text-center mr-2"></i> Departments
-                </button>
-                <button onclick="showSection('deptzones', this); if(window.innerWidth < 768) document.getElementById('mobileNavWrapper').classList.add('hidden');" class="sidebar-item w-full flex items-center p-4 text-left">
-                    <i class="fas fa-shield-alt w-6 text-center mr-2 text-purple-400"></i> Access Roles
-                </button>
-                <button onclick="showSection('teams', this); if(window.innerWidth < 768) document.getElementById('mobileNavWrapper').classList.add('hidden');" class="sidebar-item w-full flex items-center p-4 text-left">
-                    <i class="fas fa-users-cog w-6 text-center mr-2 text-indigo-400"></i> Custom Teams
-                </button>
-                <button onclick="showSection('leave', this); if(window.innerWidth < 768) document.getElementById('mobileNavWrapper').classList.add('hidden');" class="sidebar-item w-full flex items-center p-4 text-left border-t border-gray-700 mt-2">
-                    <i class="fas fa-calendar-alt w-6 text-center mr-2 text-emerald-400"></i> Leave Management
-                </button>
-                <button onclick="showSection('attributes', this); if(window.innerWidth < 768) document.getElementById('mobileNavWrapper').classList.add('hidden');" class="sidebar-item w-full flex items-center p-4 text-left">
-                    <i class="fas fa-tags w-6 text-center mr-2 text-cyan-400"></i> Custom Attributes
-                </button>
-                <button onclick="showSection('hierarchy', this); if(window.innerWidth < 768) document.getElementById('mobileNavWrapper').classList.add('hidden');" class="sidebar-item w-full flex items-center p-4 text-left">
-                     <i class="fas fa-sitemap w-6 text-center mr-2 text-yellow-500"></i> Org Hierarchy & Managers
-                </button>
-            </nav>
-
-            <div class="p-4 border-t border-gray-700 text-xs">
-                <button onclick="window.location.href='Launchpad.html'" class="text-gray-400 hover:text-white font-bold w-full text-left flex items-center transition">
-                    <i class="fas fa-arrow-left mr-2"></i> Back to Launchpad
-                </button>
-            </div>
+        <div class="p-4 border-t border-gray-700 text-xs overflow-hidden">
+            <button onclick="window.location.href='Launchpad.html'" class="text-gray-400 hover:text-white font-bold w-full text-left flex items-center transition">
+                <i class="fas fa-arrow-left w-6 text-center mr-3 sidebar-icon transition-all"></i> <span class="sidebar-text whitespace-nowrap">Back to Launchpad</span>
+            </button>
         </div>
     </aside>
 
-    <main class="flex-1 flex flex-col bg-gray-900 min-h-0 h-screen">
-        <header class="bg-gray-800 shadow-sm p-4 flex justify-between items-center z-10 border-b border-gray-700 flex-shrink-0">
+    <main class="flex-1 flex flex-col bg-gray-900 min-w-0 min-h-0 h-screen">
+        <header class="bg-gray-800 shadow-sm p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 z-10 border-b border-gray-700 flex-shrink-0">
             <h2 id="sectionTitle" class="text-lg font-bold text-gray-200 uppercase tracking-wide">Active Personnel</h2>
-            <div class="flex items-center gap-3">
-                <button onclick="pullHardwareHistory()" class="bg-yellow-600 hover:bg-yellow-500 text-white px-3 sm:px-4 py-2 rounded text-xs font-bold transition flex items-center shadow border border-yellow-500" title="Pull all missing historical clocks from hardware">
-                    <i class="fas fa-download sm:mr-2"></i> <span class="hidden sm:inline">Pull History</span>
+            <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                <button onclick="pullHardwareHistory()" class="flex-1 md:flex-none justify-center bg-yellow-600 hover:bg-yellow-500 text-white px-4 py-2 rounded text-xs font-bold transition flex items-center shadow border border-yellow-500" title="Pull all missing historical clocks from hardware">
+                    <i class="fas fa-download mr-2"></i> <span>Pull History</span>
                 </button>
-                <button onclick="pushAllToHardware(event)" class="bg-purple-700 hover:bg-purple-600 text-white px-3 sm:px-4 py-2 rounded text-xs font-bold transition flex items-center shadow border border-purple-500">
-                    <i class="fas fa-microchip sm:mr-2"></i> <span class="hidden sm:inline">Push All to Hardware</span>
+                <button onclick="pushAllToHardware(event)" class="flex-1 md:flex-none justify-center bg-purple-700 hover:bg-purple-600 text-white px-4 py-2 rounded text-xs font-bold transition flex items-center shadow border border-purple-500">
+                    <i class="fas fa-microchip mr-2"></i> <span>Push All to Hardware</span>
                 </button>
             </div>
         </header>
 
-        <div class="flex-1 overflow-y-auto p-6 relative">
+        <div class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-6 relative w-full h-full">
             
             <section id="page-employees" class="page-section active">
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-blue-500">
@@ -152,8 +182,9 @@
                                 <i class="fas fa-sync-alt mr-2"></i> Sync Employees
                             </button>
                         </div>
+                    </div>
 
-                 <div class="flex flex-col xl:flex-row items-center justify-between gap-4 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
+                    <div class="flex flex-col xl:flex-row items-center justify-between gap-4 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
                         <div class="flex flex-col sm:flex-row sm:items-center gap-3 flex-1 w-full max-w-3xl">
                             <div class="relative w-full sm:flex-1">
                                 <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
@@ -180,25 +211,25 @@
                             <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
                                 <tr>
                                     <th class="p-3 border-r border-gray-600 w-10 text-center"><input type="checkbox" id="selectAllEmps" onchange="toggleSelectAllEmps(this)" class="accent-blue-500 w-4 h-4 cursor-pointer"></th>
-                                    <th class="p-0 border-r border-gray-600">
-                                        <button onclick="handleSort('PIN')" class="w-full h-full p-3 flex items-center justify-between hover:bg-gray-600 transition text-left focus:outline-none">
+                                    <th class="p-0 border-r border-gray-600 hover:bg-gray-600 transition cursor-pointer" onclick="handleSort('PIN')">
+                                        <div class="w-full p-3 flex items-center justify-between text-left">
                                             PIN <i id="sortIcon_PIN" class="fas fa-sort text-gray-500 ml-2"></i>
-                                        </button>
+                                        </div>
                                     </th>
-                                    <th class="p-0 border-r border-gray-600">
-                                        <button onclick="handleSort('FirstName')" class="w-full h-full p-3 flex items-center justify-between hover:bg-gray-600 transition text-left focus:outline-none">
+                                    <th class="p-0 border-r border-gray-600 hover:bg-gray-600 transition cursor-pointer" onclick="handleSort('FirstName')">
+                                        <div class="w-full p-3 flex items-center justify-between text-left">
                                             First Name <i id="sortIcon_FirstName" class="fas fa-sort text-gray-500 ml-2"></i>
-                                        </button>
+                                        </div>
                                     </th>
-                                    <th class="p-0 border-r border-gray-600">
-                                        <button onclick="handleSort('LastName')" class="w-full h-full p-3 flex items-center justify-between hover:bg-gray-600 transition text-left focus:outline-none">
+                                    <th class="p-0 border-r border-gray-600 hover:bg-gray-600 transition cursor-pointer" onclick="handleSort('LastName')">
+                                        <div class="w-full p-3 flex items-center justify-between text-left">
                                             Last Name <i id="sortIcon_LastName" class="fas fa-sort text-gray-500 ml-2"></i>
-                                        </button>
+                                        </div>
                                     </th>
-                                    <th class="p-0 border-r border-gray-600">
-                                        <button onclick="handleSort('Department')" class="w-full h-full p-3 flex items-center justify-between hover:bg-gray-600 transition text-left focus:outline-none">
+                                    <th class="p-0 border-r border-gray-600 hover:bg-gray-600 transition cursor-pointer" onclick="handleSort('Department')">
+                                        <div class="w-full p-3 flex items-center justify-between text-left">
                                             Department <i id="sortIcon_Department" class="fas fa-sort text-gray-500 ml-2"></i>
-                                        </button>
+                                        </div>
                                     </th>
                                     <th class="p-3 border-r border-gray-600 text-center">Photo</th>
                                     <th class="p-3 text-right">Actions</th>
@@ -1150,6 +1181,20 @@
         </form>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebarLinks = document.querySelectorAll('#sidebarNav .sidebar-item');
+            const sidebar = document.getElementById('mainSidebar');
+            
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 768 && sidebar) {
+                        sidebar.classList.add('sidebar-collapsed');
+                    }
+                });
+            });
+        });
+    </script>
     <script src="employeemaster.js"></script>
 </body>
 </html>

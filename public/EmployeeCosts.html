@@ -47,11 +47,56 @@
             backdrop-filter: blur(4px);
         }
         .modal-backdrop.active { display: flex; }
+
+        /* Forces tables to scroll horizontally instead of squishing columns */
+        .overflow-x-auto table { min-width: max-content; }
+        th, td { white-space: nowrap; }
+
+        /* Sidebar Collapse Animations & Mobile Layout */
+        #mainSidebar { transition: height 0.3s ease-in-out; z-index: 40; }
+        
+        @media (max-width: 768px) {
+            /* Unlock the body so it scrolls natively as a standard webpage */
+            body.flex { display: block !important; height: auto !important; min-height: 100vh; overflow: visible !important; overscroll-behavior-y: auto; }
+            
+            #mainSidebar { width: 100% !important; height: auto !important; position: relative; border-right: none; border-bottom: 1px solid #374151; }
+            #mainSidebar.sidebar-collapsed { height: 76px !important; overflow: hidden; }
+            
+            /* Hide bottom element when collapsed to prevent height bleed */
+            #mainSidebar.sidebar-collapsed .p-4.border-t { display: none; }
+            
+            #mainSidebar.sidebar-collapsed nav { display: none; }
+            nav { display: flex; flex-direction: column; overflow-y: visible; padding: 0; }
+            
+            /* Override collapsed styles for mobile so the header remains intact */
+            .mobile-brand-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem; height: 76px; border-bottom: 1px solid #334155; }
+            aside > .p-6.border-b { display: none; } /* Hide the tall user info on mobile, use the new header */
+            
+            /* Flatten the main container and inner scroll area to destroy flex-spacing gaps */
+            main.flex { display: block !important; height: auto !important; overflow: visible !important; min-height: 100vh; }
+            main > div.flex-1.overflow-y-auto { display: block !important; overflow: visible !important; height: auto !important; padding-bottom: 2rem !important; flex: none !important; }
+        }
+        @media (min-width: 769px) {
+            .mobile-brand-header { display: none; }
+        }
     </style>
 </head>
 <body class="font-sans flex h-screen overflow-hidden">
 
-    <aside class="w-64 bg-gray-800 flex flex-col shadow-xl flex-shrink-0 border-r border-gray-700">
+    <aside id="mainSidebar" class="w-64 bg-gray-800 flex flex-col shadow-xl flex-shrink-0 border-r border-gray-700 h-screen sidebar-collapsed">
+        <div class="mobile-brand-header">
+            <div class="flex items-center">
+                <i class="fas fa-money-check-alt text-2xl text-yellow-500 mr-3"></i>
+                <div>
+                    <h1 class="text-xl font-black text-yellow-500 leading-none mt-1">COSTS</h1>
+                    <p class="text-[9px] text-gray-400 uppercase tracking-widest mt-1">Financial Mgmt</p>
+                </div>
+            </div>
+            <button onclick="document.getElementById('mainSidebar').classList.toggle('sidebar-collapsed')" class="text-gray-400 hover:text-white transition">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+
         <div class="p-6 border-b border-gray-700 text-center">
             <h1 class="text-2xl font-black text-yellow-500"><i class="fas fa-money-check-alt mr-2"></i>EMPLOYEE COSTS</h1>
             <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Financial Management</p>
@@ -169,24 +214,26 @@
             <!-- EMPLOYEE ALLOCATION TAB -->
             <section id="page-allocation" class="page-section">
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-yellow-500">
-                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2 gap-4">
+                    <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-4 border-b border-gray-700 pb-4 xl:pb-2 gap-4">
                         <h3 class="font-bold text-gray-300 whitespace-nowrap"><i class="fas fa-users mr-2"></i>Employee Cost Mapping</h3>
-                        <div class="flex-1 flex justify-end items-center gap-3">
-                            <select id="empDeptFilter" onchange="filterEmployees()" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-yellow-500 w-48">
+                        <div class="flex-1 flex flex-col sm:flex-row flex-wrap xl:justify-end items-stretch sm:items-center gap-3 w-full">
+                            <select id="empDeptFilter" onchange="filterEmployees()" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-yellow-500 w-full sm:w-48">
                                 <option value="">All Departments</option>
                             </select>
-                            <input type="text" id="empSearch" onkeyup="filterEmployees()" placeholder="Search Name or PIN..." class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-yellow-500 w-64">
-                            <div class="border-l border-gray-700 h-6 mx-1"></div>
-                            <button onclick="exportCostAllocations()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow">
-                                <i class="fas fa-file-export mr-1"></i> Export Excel
-                            </button>
-                            <label class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow cursor-pointer">
-                                <i class="fas fa-file-import mr-1"></i> Upload Excel
-                                <input type="file" accept=".xlsx" class="hidden" onchange="uploadCostAllocations(event)">
-                            </label>
-                            <button onclick="openBulkEmpCostModal()" class="bg-yellow-600 hover:bg-yellow-500 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow">
-                                <i class="fas fa-layer-group mr-1"></i> Bulk Allocate
-                            </button>
+                            <input type="text" id="empSearch" onkeyup="filterEmployees()" placeholder="Search Name or PIN..." class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-yellow-500 w-full sm:w-64">
+                            <div class="hidden sm:block border-l border-gray-700 h-6 mx-1"></div>
+                            <div class="flex flex-wrap gap-2 w-full sm:w-auto">
+                                <button onclick="exportCostAllocations()" class="flex-1 sm:flex-none justify-center bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 sm:py-1.5 rounded text-xs font-bold transition shadow flex items-center">
+                                    <i class="fas fa-file-export mr-1"></i> Export
+                                </button>
+                                <label class="flex-1 sm:flex-none justify-center bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2 sm:py-1.5 rounded text-xs font-bold transition shadow cursor-pointer flex items-center m-0">
+                                    <i class="fas fa-file-import mr-1"></i> Upload
+                                    <input type="file" accept=".xlsx" class="hidden" onchange="uploadCostAllocations(event)">
+                                </label>
+                                <button onclick="openBulkEmpCostModal()" class="w-full sm:w-auto justify-center bg-yellow-600 hover:bg-yellow-500 text-white px-4 py-2 sm:py-1.5 rounded text-xs font-bold transition shadow flex items-center">
+                                    <i class="fas fa-layer-group mr-1"></i> Bulk Allocate
+                                </button>
+                            </div>
                         </div>
                     </div>
                     
@@ -226,21 +273,21 @@
             <!-- WAGE CALCULATION TAB -->
             <section id="page-wage-calc" class="page-section">
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-teal-500 mb-6">
-                    <div class="flex justify-between items-end mb-6 border-b border-gray-700 pb-4">
-                        <div>
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 border-b border-gray-700 pb-4 gap-4">
+                        <div class="w-full md:w-auto">
                             <h3 class="font-bold text-gray-300 mb-2"><i class="fas fa-calendar-alt mr-2"></i>Date Range Selection</h3>
-                            <div class="flex gap-4">
-                                <div>
+                            <div class="flex flex-col sm:flex-row gap-4 w-full">
+                                <div class="w-full sm:w-auto">
                                     <label class="block text-[10px] text-gray-500 uppercase tracking-wide mb-1">From Date</label>
-                                    <input type="date" id="wageFromDate" class="bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
+                                    <input type="date" id="wageFromDate" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
                                 </div>
-                                <div>
+                                <div class="w-full sm:w-auto">
                                     <label class="block text-[10px] text-gray-500 uppercase tracking-wide mb-1">To Date</label>
-                                    <input type="date" id="wageToDate" class="bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
+                                    <input type="date" id="wageToDate" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
                                 </div>
                             </div>
                         </div>
-                        <button onclick="openAddWageEmpModal()" class="bg-teal-600 hover:bg-teal-500 text-white px-5 py-2.5 rounded text-sm font-bold transition shadow">
+                        <button onclick="openAddWageEmpModal()" class="w-full md:w-auto justify-center bg-teal-600 hover:bg-teal-500 text-white px-5 py-3 md:py-2.5 rounded text-sm font-bold transition shadow flex items-center">
                             <i class="fas fa-user-plus mr-1"></i> Add Employees
                         </button>
                     </div>
@@ -267,44 +314,49 @@
 
            <section id="page-payfiles" class="page-section pb-32">
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-emerald-500">
-                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                    <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-4 border-b border-gray-700 pb-4 xl:pb-2 gap-4">
                         <h3 class="font-bold text-gray-300"><i class="fas fa-file-invoice-dollar mr-2"></i>Generate Payworx Export & Wage Advice</h3>
-                        <div class="flex items-center gap-3">
-                            <label class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Export Profile:</label>
-                            <select id="pfProfileSelect" onchange="switchPayfileProfile()" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white font-bold focus:outline-none focus:border-emerald-500 w-48">
-                                <option value="">-- Select Profile --</option>
-                            </select>
-                            <button onclick="openPayfileConfigModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow ml-2">
-                                <i class="fas fa-cogs mr-1"></i> Configure Profiles
-                            </button>
-                            <div class="border-l border-gray-700 h-6 mx-1"></div>
-                            <button onclick="exportPayfileCSV()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow">
-                                <i class="fas fa-file-csv mr-1"></i> Payworx CSV
-                            </button>
-                            <button onclick="exportPayfileExcel()" class="bg-green-600 hover:bg-green-500 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow">
-                                <i class="fas fa-file-excel mr-1"></i> Payworx Excel
-                            </button>
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full xl:w-auto">
+                            <div class="flex items-center gap-2 w-full sm:w-auto">
+                                <label class="text-[10px] text-gray-400 font-bold uppercase tracking-wider whitespace-nowrap">Export Profile:</label>
+                                <select id="pfProfileSelect" onchange="switchPayfileProfile()" class="w-full sm:w-48 bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white font-bold focus:outline-none focus:border-emerald-500">
+                                    <option value="">-- Select Profile --</option>
+                                </select>
+                            </div>
+                            <div class="flex flex-wrap gap-2 w-full sm:w-auto">
+                                <button onclick="openPayfileConfigModal()" class="w-full sm:w-auto justify-center bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-2 sm:py-1.5 rounded text-xs font-bold transition shadow flex items-center">
+                                    <i class="fas fa-cogs mr-1"></i> Configure Profiles
+                                </button>
+                                <button onclick="exportPayfileCSV()" class="flex-1 sm:flex-none justify-center bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2 sm:py-1.5 rounded text-xs font-bold transition shadow flex items-center">
+                                    <i class="fas fa-file-csv mr-1"></i> Payworx CSV
+                                </button>
+                                <button onclick="exportPayfileExcel()" class="flex-1 sm:flex-none justify-center bg-green-600 hover:bg-green-500 text-white px-3 py-2 sm:py-1.5 rounded text-xs font-bold transition shadow flex items-center">
+                                    <i class="fas fa-file-excel mr-1"></i> Payworx Excel
+                                </button>
+                            </div>
                        </div>
                     </div>
                     
-                    <div class="flex flex-wrap gap-4 mb-4">
-                        <div>
-                            <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">From Date</label>
-                            <input type="text" id="pfFromDate" class="bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:border-emerald-500 w-32">
+                    <div class="flex flex-col md:flex-row gap-4 mb-4 items-start md:items-end">
+                        <div class="w-full md:w-auto flex gap-4">
+                            <div class="flex-1 md:flex-none md:w-32">
+                                <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">From Date</label>
+                                <input type="text" id="pfFromDate" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:border-emerald-500">
+                            </div>
+                            <div class="flex-1 md:flex-none md:w-32">
+                                <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">To Date</label>
+                                <input type="text" id="pfToDate" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:border-emerald-500">
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">To Date</label>
-                            <input type="text" id="pfToDate" class="bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:border-emerald-500 w-32">
-                        </div>
-                        <div class="flex-1 min-w-[200px]">
+                        <div class="w-full md:flex-1 md:min-w-[200px]">
                             <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">Department Filter</label>
                             <select id="pfDeptFilter" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:border-emerald-500">
                                 <option value="">All Departments</option>
                             </select>
                         </div>
-                        <div class="flex items-end">
-                            <button onclick="generatePayfileData(event)" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded text-sm font-bold shadow transition h-[38px]">
-                                <i class="fas fa-sync mr-1"></i> Generate Preview
+                        <div class="w-full md:w-auto">
+                            <button onclick="generatePayfileData(event)" class="w-full bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 md:py-2 rounded text-sm font-bold shadow transition flex justify-center items-center h-[42px] md:h-[38px]">
+                                <i class="fas fa-sync mr-2"></i> Generate Preview
                             </button>
                         </div>
                     </div>
@@ -331,39 +383,41 @@
 
             <section id="page-wage-advice" class="page-section pb-32">
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-yellow-500">
-                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                   <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 border-b border-gray-700 pb-4 sm:pb-2 gap-3">
                         <h3 class="font-bold text-gray-300"><i class="fas fa-envelope-open-text mr-2"></i>Generate Wage Advice</h3>
-                        <div class="flex items-center gap-3">
-                            <button onclick="exportWageAdviceExcel()" class="bg-green-600 hover:bg-green-500 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow">
+                        <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                            <button onclick="exportWageAdviceExcel()" class="flex-1 sm:flex-none justify-center bg-green-600 hover:bg-green-500 text-white px-4 py-2 sm:py-1.5 rounded text-xs font-bold transition shadow flex items-center">
                                 <i class="fas fa-file-excel mr-1"></i> Download Excel
                             </button>
-                            <button onclick="printWageAdvicePDF()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow border border-gray-600">
+                            <button onclick="printWageAdvicePDF()" class="flex-1 sm:flex-none justify-center bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 sm:py-1.5 rounded text-xs font-bold transition shadow border border-gray-600 flex items-center">
                                 <i class="fas fa-print mr-1"></i> Print PDF
                             </button>
                         </div>
                     </div>
                     
-                    <div class="flex flex-wrap gap-4 mb-4">
-                        <div>
-                            <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">From Date</label>
-                            <input type="text" id="waFromDate" class="bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:border-yellow-500 w-32">
+                    <div class="flex flex-col lg:flex-row gap-4 mb-4 items-start lg:items-end">
+                        <div class="w-full lg:w-auto flex gap-4">
+                            <div class="flex-1 lg:flex-none lg:w-32">
+                                <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">From Date</label>
+                                <input type="text" id="waFromDate" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:border-yellow-500">
+                            </div>
+                            <div class="flex-1 lg:flex-none lg:w-32">
+                                <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">To Date</label>
+                                <input type="text" id="waToDate" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:border-yellow-500">
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">To Date</label>
-                            <input type="text" id="waToDate" class="bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:border-yellow-500 w-32">
-                        </div>
-                        <div class="flex items-end">
-                            <button onclick="openWaEmpModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2 rounded text-sm font-bold shadow transition h-[38px] flex items-center">
+                        <div class="w-full lg:w-auto">
+                            <button onclick="openWaEmpModal()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-3 lg:py-2 rounded text-sm font-bold shadow transition flex justify-center items-center lg:h-[38px]">
                                 <i class="fas fa-users mr-2"></i> Select Employees (<span id="waEmpCount">0</span>)
                             </button>
                         </div>
-                        <div class="flex items-end flex-1 justify-end">
-                            <select id="waFormat" onchange="renderWageAdvicePreview()" class="bg-gray-900 border border-gray-600 rounded p-2 text-sm text-gray-300 focus:border-yellow-500 mr-3 h-[38px] font-bold">
+                        <div class="flex flex-col sm:flex-row gap-3 w-full lg:flex-1 lg:justify-end">
+                            <select id="waFormat" onchange="renderWageAdvicePreview()" class="w-full sm:w-auto bg-gray-900 border border-gray-600 rounded p-2 text-sm text-gray-300 focus:border-yellow-500 font-bold lg:h-[38px]">
                                 <option value="decimal">Decimals (8.50)</option>
                                 <option value="time">Time (08:30)</option>
                             </select>
-                            <button onclick="generateWageAdviceData(event)" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded text-sm font-bold shadow transition h-[38px]">
-                                <i class="fas fa-sync mr-1"></i> Generate Preview
+                            <button onclick="generateWageAdviceData(event)" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 sm:py-2 rounded text-sm font-bold shadow transition flex justify-center items-center lg:h-[38px]">
+                                <i class="fas fa-sync mr-2"></i> Generate Preview
                             </button>
                         </div>
                     </div>
@@ -401,36 +455,38 @@
             <!-- BANK FILES TAB -->
             <section id="page-bank-files" class="page-section pb-32">
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-cyan-500">
-                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 border-b border-gray-700 pb-4 sm:pb-2 gap-3">
                         <h3 class="font-bold text-gray-300"><i class="fas fa-university mr-2"></i>Generate Bank Export Files</h3>
-                        <div class="flex items-center gap-3">
-                            <button onclick="exportStandardBankCSV()" class="bg-cyan-600 hover:bg-cyan-500 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow border border-gray-600 flex items-center">
+                        <div class="flex items-center gap-3 w-full sm:w-auto">
+                            <button onclick="exportStandardBankCSV()" class="w-full sm:w-auto justify-center bg-cyan-600 hover:bg-cyan-500 text-white px-4 py-2 sm:py-1.5 rounded text-xs font-bold transition shadow border border-gray-600 flex items-center">
                                 <i class="fas fa-download mr-2"></i> Standard Bank (.CSV)
                             </button>
                         </div>
                     </div>
                     
-                    <div class="flex flex-wrap gap-4 mb-4">
-                        <div>
-                            <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">From Date</label>
-                            <input type="text" id="bankFromDate" class="bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:border-cyan-500 w-32">
+                    <div class="flex flex-col lg:flex-row gap-4 mb-4 items-start lg:items-end">
+                        <div class="w-full lg:w-auto flex gap-4">
+                            <div class="flex-1 lg:flex-none lg:w-32">
+                                <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">From Date</label>
+                                <input type="text" id="bankFromDate" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:border-cyan-500">
+                            </div>
+                            <div class="flex-1 lg:flex-none lg:w-32">
+                                <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">To Date</label>
+                                <input type="text" id="bankToDate" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:border-cyan-500">
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">To Date</label>
-                            <input type="text" id="bankToDate" class="bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:border-cyan-500 w-32">
-                        </div>
-                        <div class="flex-1 min-w-[200px]">
+                        <div class="w-full lg:flex-1 lg:min-w-[200px]">
                             <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">Target Custom Attribute (E.g. Bank Number)</label>
                             <select id="bankCustomAttrSelect" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:border-cyan-500">
                                 <option value="">Loading Attributes...</option>
                             </select>
                         </div>
-                        <div class="flex items-end gap-3">
-                            <button onclick="openBankEmpModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2 rounded text-sm font-bold shadow transition h-[38px] flex items-center">
+                        <div class="flex flex-col sm:flex-row items-stretch gap-3 w-full lg:w-auto">
+                            <button onclick="openBankEmpModal()" class="w-full sm:w-auto justify-center bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-3 lg:py-2 rounded text-sm font-bold shadow transition flex items-center lg:h-[38px]">
                                 <i class="fas fa-users mr-2"></i> Select Employees (<span id="bankEmpCount">0</span>)
                             </button>
-                            <button onclick="generateBankFileData(event)" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded text-sm font-bold shadow transition h-[38px]">
-                                <i class="fas fa-sync mr-1"></i> Generate Preview
+                            <button onclick="generateBankFileData(event)" class="w-full sm:w-auto justify-center bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 lg:py-2 rounded text-sm font-bold shadow transition flex items-center lg:h-[38px]">
+                                <i class="fas fa-sync mr-2"></i> Generate Preview
                             </button>
                         </div>
                     </div>
@@ -761,6 +817,20 @@
     <!-- HIDDEN PRINT CONTAINER FOR PDF -->
     <div id="printContainer"></div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebarLinks = document.querySelectorAll('#sidebarNav .sidebar-item');
+            const sidebar = document.getElementById('mainSidebar');
+            
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 768 && sidebar) {
+                        sidebar.classList.add('sidebar-collapsed');
+                    }
+                });
+            });
+        });
+    </script>
     <script src="employeeCosts.js"></script>
 </body>
 </html>

@@ -79,18 +79,62 @@
             background: rgba(0, 0, 0, 0.7); z-index: 50; justify-content: center; align-items: center;
         }
         .modal-backdrop.active { display: flex; }
+
+        /* Forces tables to scroll horizontally instead of squishing columns */
+        .overflow-x-auto table { min-width: max-content; }
+        th, td { white-space: nowrap; }
+
+        /* Sidebar Collapse Animations & Mobile Layout */
+        #mainSidebar { transition: height 0.3s ease-in-out; z-index: 40; }
+        
+        @media (max-width: 768px) {
+            /* Unlock the body so it scrolls natively as a standard webpage */
+            body { display: block !important; height: auto !important; min-height: 100vh; overflow: visible !important; overscroll-behavior-y: auto; }
+            
+            #mainSidebar { width: 100% !important; height: auto !important; position: relative; border-right: none; border-bottom: 1px solid #374151; }
+            #mainSidebar.sidebar-collapsed { height: 76px !important; overflow: hidden; }
+            
+            /* Hide bottom element when collapsed to prevent height bleed */
+            #mainSidebar.sidebar-collapsed .logout-btn { display: none; }
+            
+            #mainSidebar.sidebar-collapsed .nav-links { display: none; }
+            .nav-links { display: block; overflow-y: visible; }
+            
+            /* Override collapsed styles for mobile so the header remains intact */
+            .mobile-brand-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem; height: 76px; border-bottom: 1px solid #334155; }
+            .user-info { display: none; } /* Hide the tall user info on mobile, use the new header */
+            
+            /* Flatten the main container and inner scroll area to destroy flex-spacing gaps */
+            .main-content { margin-left: 0; padding: 1rem; display: block !important; height: auto !important; overflow: visible !important; min-height: 100vh; }
+        }
+        @media (min-width: 769px) {
+            .mobile-brand-header { display: none; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
+    <div id="mainSidebar" class="sidebar sidebar-collapsed">
+        <div class="mobile-brand-header">
+            <div class="flex items-center">
+                <i class="fas fa-leaf text-2xl text-pink-400 mr-3"></i>
+                <div>
+                    <h1 class="text-xl font-black text-pink-400 leading-none mt-1">TNA AFRICA</h1>
+                    <p class="text-[9px] text-gray-400 uppercase tracking-widest mt-1">Piece Work</p>
+                </div>
+            </div>
+            <button onclick="document.getElementById('mainSidebar').classList.toggle('sidebar-collapsed')" class="text-gray-400 hover:text-white transition">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+
         <div class="user-info">
             <i class="fas fa-user-circle text-4xl mb-2 text-gray-400"></i>
             <h3 id="displayUsername" class="text-xl font-bold">Loading...</h3>
             <p id="displayTenant" class="text-sm text-gray-400"></p>
         </div>
         
-        <div class="nav-links">
+        <div class="nav-links" id="sidebarNav">
             <button onclick="showSection('dashboard', this)" class="nav-link w-full text-left bg-pink-900 text-white sidebar-btn"><i class="fas fa-tasks"></i> Piece Work Dashboard</button>
             <button onclick="showSection('teams', this)" class="nav-link w-full text-left sidebar-btn"><i class="fas fa-users-cog"></i> Teams</button>
             <button onclick="showSection('activities', this)" class="nav-link w-full text-left sidebar-btn"><i class="fas fa-box-open"></i> Activities & Pricing</button>
@@ -106,13 +150,12 @@
     </div>
 
     <div class="main-content">
-        <div class="flex justify-between items-center mb-8 border-b border-gray-700 pb-4">
-            <h1 class="text-3xl font-bold"><i class="fas fa-leaf text-pink-400 mr-3"></i>Agri Piece Work Dashboard</h1>
-            <div id="godModeBadge" class="hidden bg-red-600 text-white px-4 py-1 rounded-full font-bold animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.8)] border border-red-400">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-gray-700 pb-4 gap-4">
+            <h1 class="text-2xl md:text-3xl font-bold"><i class="fas fa-leaf text-pink-400 mr-3"></i>Agri Piece Work Dashboard</h1>
+            <div id="godModeBadge" class="hidden bg-red-600 text-white px-4 py-2 rounded-full font-bold animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.8)] border border-red-400 w-full md:w-auto text-center">
                 <i class="fas fa-radiation mr-2"></i> GOD MODE ACTIVE
             </div>
         </div>
-
         <!-- Dashboard Section -->
         <div id="page-dashboard" class="page-section block">
             <div class="bg-gray-800 p-6 rounded-lg shadow-lg border-t-4 border-pink-500">
@@ -246,19 +289,21 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                         <div class="bg-gray-900 p-6 rounded-lg border border-gray-700">
                             <h3 class="text-xs font-bold mb-4 text-teal-400 uppercase tracking-widest">Add Parent Farm</h3>
-                            <div class="flex gap-3">
-                                <input type="text" id="newFarmName" placeholder="e.g. Highlands" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-teal-500">
-                                <button onclick="addFarm()" class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-2 rounded text-xs font-bold uppercase tracking-widest shadow">Add</button>
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <input type="text" id="newFarmName" placeholder="e.g. Highlands" class="w-full sm:flex-1 bg-gray-800 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-teal-500">
+                                <button onclick="addFarm()" class="w-full sm:w-auto bg-gray-700 hover:bg-gray-600 text-white px-6 py-2 rounded text-xs font-bold uppercase tracking-widest shadow">Add</button>
                             </div>
                         </div>
                         <div class="bg-gray-900 p-6 rounded-lg border border-gray-700">
                             <h3 class="text-xs font-bold mb-4 text-teal-400 uppercase tracking-widest">Add Field Unit</h3>
                             <div class="space-y-3">
                                 <select id="unitFarmSelect" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-teal-500"></select>
-                                <div class="flex gap-3">
-                                    <input type="text" id="newUnitName" placeholder="Unit Name" class="flex-1 bg-gray-800 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-teal-500">
-                                    <input type="number" id="newUnitSize" placeholder="Ha" class="w-24 bg-gray-800 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-teal-500">
-                                    <button onclick="addUnit()" class="bg-teal-700 hover:bg-teal-600 text-white px-6 py-2 rounded text-xs font-bold uppercase tracking-widest shadow">Add</button>
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <input type="text" id="newUnitName" placeholder="Unit Name" class="w-full sm:flex-1 bg-gray-800 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-teal-500">
+                                    <div class="flex gap-3 w-full sm:w-auto">
+                                        <input type="number" id="newUnitSize" placeholder="Ha" class="flex-1 sm:w-24 bg-gray-800 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-teal-500">
+                                        <button onclick="addUnit()" class="bg-teal-700 hover:bg-teal-600 text-white px-6 py-2 rounded text-xs font-bold uppercase tracking-widest shadow">Add</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -339,46 +384,45 @@
         <!-- Daily Piece Work Section -->
         <div id="page-daily" class="page-section hidden flex flex-col h-[85vh]">
             <div class="bg-gray-800 p-6 rounded-lg shadow-lg border-t-4 border-emerald-500 flex flex-col h-full">
-                <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-4 flex-shrink-0">
+               <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-4 border-b border-gray-700 pb-4 flex-shrink-0 gap-4">
                     <h3 class="font-bold text-gray-300"><i class="fas fa-calendar-day mr-2 text-emerald-400"></i>Daily Piece Work Reconciliation</h3>
                     
-                    <div class="flex gap-4">
-                        <div class="flex items-center gap-2">
-                            <label class="text-xs text-gray-400 font-bold uppercase tracking-wider">Date:</label>
-                            <div class="flex items-stretch">
-                                <button onclick="changeDailyDate(-1)" class="bg-gray-900 hover:bg-gray-800 border border-gray-600 border-r-0 rounded-l px-3 text-emerald-400 transition" title="Previous Day"><i class="fas fa-chevron-left"></i></button>
-                                <input type="date" id="dailyDateFilter" onchange="if(document.getElementById('dailyTeamFilter').value) loadDailyGrid()" class="bg-gray-900 border border-gray-600 p-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
-                                <button onclick="changeDailyDate(1)" class="bg-gray-900 hover:bg-gray-800 border border-gray-600 border-l-0 rounded-r px-3 text-emerald-400 transition" title="Next Day"><i class="fas fa-chevron-right"></i></button>
+                    <div class="flex flex-col sm:flex-row gap-4 w-full xl:w-auto">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
+                            <label class="text-xs text-gray-400 font-bold uppercase tracking-wider mb-1 sm:mb-0">Date:</label>
+                            <div class="flex items-stretch w-full sm:w-auto">
+                                <button onclick="changeDailyDate(-1)" class="bg-gray-900 hover:bg-gray-800 border border-gray-600 border-r-0 rounded-l px-3 py-2 sm:py-0 text-emerald-400 transition flex-1 sm:flex-none" title="Previous Day"><i class="fas fa-chevron-left"></i></button>
+                                <input type="date" id="dailyDateFilter" onchange="if(document.getElementById('dailyTeamFilter').value) loadDailyGrid()" class="w-full sm:w-auto bg-gray-900 border border-gray-600 p-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 text-center">
+                                <button onclick="changeDailyDate(1)" class="bg-gray-900 hover:bg-gray-800 border border-gray-600 border-l-0 rounded-r px-3 py-2 sm:py-0 text-emerald-400 transition flex-1 sm:flex-none" title="Next Day"><i class="fas fa-chevron-right"></i></button>
                             </div>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <label class="text-xs text-gray-400 font-bold uppercase tracking-wider">Team:</label>
-                            <select id="dailyTeamFilter" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 min-w-[200px]">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
+                            <label class="text-xs text-gray-400 font-bold uppercase tracking-wider mb-1 sm:mb-0">Team:</label>
+                            <select id="dailyTeamFilter" class="w-full sm:w-48 bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
                                 <option value="">-- Select Team --</option>
                             </select>
                         </div>
-                        <button onclick="loadDailyGrid()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-1.5 rounded font-bold shadow transition text-xs flex items-center">
+                        <button onclick="loadDailyGrid()" class="w-full sm:w-auto justify-center bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded font-bold shadow transition text-xs flex items-center">
                             <i class="fas fa-sync-alt mr-2"></i> Load Grid
                         </button>
                     </div>
                 </div>
 
-                <!-- Action Bar -->
-                <div id="dailyActionBar" class="hidden justify-between items-center bg-gray-900 p-3 rounded border border-gray-700 mb-4 flex-shrink-0">
-                    <div>
-                        <button onclick="revertDailyEdits()" class="bg-gray-800 hover:bg-gray-700 border border-gray-600 text-orange-400 px-3 py-1.5 rounded font-bold shadow transition text-xs flex items-center" title="Wipe manual edits and restore raw data from the mobile app">
+                <div id="dailyActionBar" class="hidden flex-col lg:flex-row justify-between items-start lg:items-center gap-4 bg-gray-900 p-3 rounded border border-gray-700 mb-4 flex-shrink-0">
+                    <div class="w-full lg:w-auto border-b border-gray-700 lg:border-none pb-3 lg:pb-0">
+                        <button onclick="revertDailyEdits()" class="w-full lg:w-auto justify-center bg-gray-800 hover:bg-gray-700 border border-gray-600 text-orange-400 px-3 py-2 rounded font-bold shadow transition text-xs flex items-center" title="Wipe manual edits and restore raw data from the mobile app">
                             <i class="fas fa-undo mr-2"></i> Revert to Original Data
                         </button>
                     </div>
-                    <div class="flex gap-3">
-                        <span class="text-[10px] text-gray-500 flex items-center mr-2"><i class="fas fa-info-circle mr-1"></i> Changes save automatically when committing</span>
-                        <button onclick="unlockDailyGrid()" class="bg-red-600 hover:bg-red-500 text-white px-4 py-1.5 rounded font-bold shadow transition text-xs flex items-center" title="Unlock committed records for editing">
+                    <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+                        <span class="text-[10px] text-gray-500 flex items-center w-full lg:w-auto mb-2 lg:mb-0"><i class="fas fa-info-circle mr-1"></i> Changes save automatically when committing</span>
+                        <button onclick="unlockDailyGrid()" class="flex-1 lg:flex-none justify-center bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded font-bold shadow transition text-xs flex items-center" title="Unlock committed records for editing">
                             <i class="fas fa-unlock mr-2"></i> Unlock
                         </button>
-                        <button onclick="saveDailyGrid(false)" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-1.5 rounded font-bold shadow transition text-xs flex items-center">
+                        <button onclick="saveDailyGrid(false)" class="flex-1 lg:flex-none justify-center bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded font-bold shadow transition text-xs flex items-center">
                             <i class="fas fa-save mr-2"></i> Save Draft
                         </button>
-                        <button onclick="saveDailyGrid(true)" class="bg-purple-600 hover:bg-purple-500 text-white px-4 py-1.5 rounded font-bold shadow transition text-xs flex items-center">
+                        <button onclick="saveDailyGrid(true)" class="w-full sm:w-auto lg:flex-none justify-center bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded font-bold shadow transition text-xs flex items-center">
                             <i class="fas fa-lock mr-2"></i> Commit to Payroll
                         </button>
                     </div>
@@ -958,6 +1002,20 @@
         </div>
     </div>
 
+   <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebarLinks = document.querySelectorAll('#sidebarNav .sidebar-btn');
+            const sidebar = document.getElementById('mainSidebar');
+            
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 768 && sidebar) {
+                        sidebar.classList.add('sidebar-collapsed');
+                    }
+                });
+            });
+        });
+    </script>
     <script src="piecework.js"></script>
 </body>
 </html>

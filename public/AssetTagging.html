@@ -27,11 +27,56 @@
             background: rgba(0, 0, 0, 0.7); z-index: 50; justify-content: center; align-items: center;
         }
         .modal-backdrop.active { display: flex; }
+
+        /* Forces tables to scroll horizontally instead of squishing columns */
+        .overflow-x-auto table { min-width: max-content; }
+        th, td { white-space: nowrap; }
+
+        /* Sidebar Collapse Animations & Mobile Layout */
+        #mainSidebar { transition: height 0.3s ease-in-out; z-index: 40; }
+        
+        @media (max-width: 768px) {
+            /* Unlock the body so it scrolls natively as a standard webpage */
+            body.flex { display: block !important; height: auto !important; min-height: 100vh; overflow: visible !important; overscroll-behavior-y: auto; }
+            
+            #mainSidebar { width: 100% !important; height: auto !important; position: relative; border-right: none; border-bottom: 1px solid #374151; }
+            #mainSidebar.sidebar-collapsed { height: 76px !important; overflow: hidden; }
+            
+            /* Hide bottom element when collapsed to prevent height bleed */
+            #mainSidebar.sidebar-collapsed .p-4.border-t { display: none; }
+            
+            #mainSidebar.sidebar-collapsed nav { display: none; }
+            nav { display: flex; flex-direction: column; overflow-y: visible; padding: 0; }
+            
+            /* Override collapsed styles for mobile so the header remains intact */
+            .mobile-brand-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem; height: 76px; border-bottom: 1px solid #334155; }
+            aside > .p-6.border-b { display: none; } /* Hide the tall user info on mobile, use the new header */
+            
+            /* Flatten the main container and inner scroll area to destroy flex-spacing gaps */
+            main.flex { display: block !important; height: auto !important; overflow: visible !important; min-height: 100vh; }
+            main > div.flex-1.overflow-y-auto { display: block !important; overflow: visible !important; height: auto !important; padding-bottom: 2rem !important; flex: none !important; }
+        }
+        @media (min-width: 769px) {
+            .mobile-brand-header { display: none; }
+        }
     </style>
 </head>
 <body class="font-sans flex h-screen overflow-hidden">
 
-    <aside class="w-64 bg-gray-800 flex flex-col shadow-xl flex-shrink-0 border-r border-gray-700 h-screen">
+    <aside id="mainSidebar" class="w-64 bg-gray-800 flex flex-col shadow-xl flex-shrink-0 border-r border-gray-700 h-screen sidebar-collapsed">
+        <div class="mobile-brand-header">
+            <div class="flex items-center">
+                <i class="fas fa-boxes text-2xl text-blue-500 mr-3"></i>
+                <div>
+                    <h1 class="text-xl font-black text-blue-500 leading-none mt-1">ASSETS</h1>
+                    <p class="text-[9px] text-gray-400 uppercase tracking-widest mt-1">Asset Tagging</p>
+                </div>
+            </div>
+            <button onclick="document.getElementById('mainSidebar').classList.toggle('sidebar-collapsed')" class="text-gray-400 hover:text-white transition">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+
         <div class="p-6 border-b border-gray-700 text-center">
             <h1 class="text-2xl font-black text-blue-500"><i class="fas fa-boxes mr-2"></i>ASSETS</h1>
             <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Asset Tagging</p>
@@ -87,26 +132,26 @@
 
         <section id="section-assets" class="page-section active">
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-blue-500">
-                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 border-b border-gray-700 pb-4 sm:pb-2 gap-3">
                         <h3 class="font-bold text-gray-300"><i class="fas fa-list mr-2"></i>Fixed Assets Registry</h3>
-                        <div class="flex space-x-2 items-center">
-                            <button onclick="loadAssets()" class="bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-gray-500">
+                        <div class="flex flex-wrap gap-2 items-center w-full sm:w-auto">
+                            <button onclick="loadAssets()" class="flex-1 sm:flex-none justify-center bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-2 sm:py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-gray-500">
                                 <i class="fas fa-sync-alt mr-2"></i> Refresh
                             </button>
-                            <button onclick="openAddAssetModal()" class="bg-green-700 hover:bg-green-600 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-green-500">
+                            <button onclick="openAddAssetModal()" class="flex-1 sm:flex-none justify-center bg-green-700 hover:bg-green-600 text-white px-3 py-2 sm:py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-green-500">
                                 <i class="fas fa-plus mr-2"></i> Register Asset
                             </button>
                         </div>
                     </div>
 
                    <div class="flex flex-col xl:flex-row items-center justify-between gap-4 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
-                        <div class="flex items-center space-x-3 flex-1 w-full max-w-2xl">
-                            <div class="relative flex-1">
-                            <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
-                            <input type="text" id="assetSearch" list="assetSearchList" oninput="filterAssets()" placeholder="Scan Tag, Search Name, or Click to Select..." class="w-full pl-8 pr-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-blue-500 transition">
-                            <datalist id="assetSearchList"></datalist>
-                        </div>
-                            <select id="assetCategoryFilter" onchange="filterAssets()" class="bg-gray-800 border border-gray-600 rounded py-1.5 px-3 text-xs text-white focus:outline-none focus:border-blue-500 transition w-48">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 flex-1 w-full xl:max-w-2xl">
+                            <div class="relative w-full sm:flex-1">
+                                <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
+                                <input type="text" id="assetSearch" list="assetSearchList" oninput="filterAssets()" placeholder="Scan Tag, Search Name, or Click to Select..." class="w-full pl-8 pr-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-blue-500 transition">
+                                <datalist id="assetSearchList"></datalist>
+                            </div>
+                            <select id="assetCategoryFilter" onchange="filterAssets()" class="w-full sm:w-48 bg-gray-800 border border-gray-600 rounded py-1.5 px-3 text-xs text-white focus:outline-none focus:border-blue-500 transition">
                                 <option value="">All Categories</option>
                             </select>
                         </div>
@@ -155,14 +200,14 @@
                         </div>
                     </div>
 
-                    <div class="flex flex-col xl:flex-row items-center justify-between gap-4 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
-                     <div class="relative flex-1 w-full max-w-sm">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
+                        <div class="relative w-full md:flex-1 md:max-w-sm">
                             <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
                             <input type="text" id="categorySearch" oninput="filterCategories()" placeholder="Search categories..." class="w-full pl-8 pr-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-green-500 transition">
                         </div>
-                        <form id="addCategoryForm" class="flex gap-2 w-full xl:w-auto">
-                            <input type="text" id="newCategoryName" placeholder="New Category Name..." required class="w-64 py-1.5 px-3 border border-gray-600 rounded bg-gray-800 text-xs text-white focus:outline-none focus:border-green-500">
-                            <button type="submit" class="bg-green-700 hover:bg-green-600 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow border border-green-500">Add</button>
+                        <form id="addCategoryForm" class="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+                            <input type="text" id="newCategoryName" placeholder="New Category Name..." required class="w-full sm:w-64 py-1.5 px-3 border border-gray-600 rounded bg-gray-800 text-xs text-white focus:outline-none focus:border-green-500">
+                            <button type="submit" class="w-full sm:w-auto bg-green-700 hover:bg-green-600 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow border border-green-500">Add</button>
                         </form>
                     </div>
 
@@ -189,14 +234,14 @@
                         <h3 class="font-bold text-gray-300"><i class="fas fa-map-marker-alt mr-2"></i>Asset Locator Report</h3>
                     </div>
 
-                    <div class="flex flex-col xl:flex-row items-center justify-between gap-4 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
-                        <div class="relative flex-1 w-full max-w-sm">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
+                        <div class="relative w-full md:flex-1 md:max-w-sm">
                             <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
                             <input type="text" id="locatorSearch" oninput="filterLocator()" placeholder="Search locator..." class="w-full pl-8 pr-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-purple-500 transition">
                         </div>
-                        <div class="flex items-center space-x-2 w-full xl:w-auto">
-                            <label class="text-[10px] text-gray-400 font-bold uppercase tracking-wider whitespace-nowrap">Filter Group:</label>
-                            <select id="reportFilter" onchange="generateLocatorReport()" class="bg-gray-800 border border-gray-600 rounded py-1.5 px-3 text-xs text-white focus:outline-none focus:border-purple-500 transition">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full md:w-auto">
+                            <label class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1 sm:mb-0">Filter Group:</label>
+                            <select id="reportFilter" onchange="generateLocatorReport()" class="w-full sm:w-auto bg-gray-800 border border-gray-600 rounded py-1.5 px-3 text-xs text-white focus:outline-none focus:border-purple-500 transition">
                                 <option value="all">Show All Assets</option>
                                 <option value="unassigned">Unassigned (In Storage)</option>
                                 <option value="employees">Assigned to Employees</option>
@@ -268,17 +313,21 @@
                         </button>
                     </div>
 
-                    <div class="flex flex-col xl:flex-row items-center justify-between gap-4 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
-                        <div class="relative flex-1 max-w-sm">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
+                        <div class="relative w-full md:flex-1 md:max-w-sm">
                             <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
                             <input type="text" id="masterMaintSearch" oninput="filterMasterServiceHistory()" placeholder="Search Asset, Tag, or Tech..." class="w-full pl-8 pr-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-yellow-600 transition">
                         </div>
-                        <div class="flex items-center space-x-2 w-full xl:w-auto text-xs">
-                            <label class="text-gray-400 font-bold uppercase tracking-wider">From:</label>
-                            <input type="date" id="masterMaintDateFrom" onchange="filterMasterServiceHistory()" class="bg-gray-800 border border-gray-600 rounded py-1 px-2 text-white focus:outline-none focus:border-yellow-600">
-                            <label class="text-gray-400 font-bold uppercase tracking-wider ml-2">To:</label>
-                            <input type="date" id="masterMaintDateTo" onchange="filterMasterServiceHistory()" class="bg-gray-800 border border-gray-600 rounded py-1 px-2 text-white focus:outline-none focus:border-yellow-600">
-                            <button onclick="clearMasterMaintFilters()" class="ml-2 text-gray-400 hover:text-white transition" title="Clear Filters"><i class="fas fa-times"></i></button>
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full md:w-auto text-xs">
+                            <div class="flex items-center gap-2 w-full sm:w-auto">
+                                <label class="text-gray-400 font-bold uppercase tracking-wider w-10 sm:w-auto">From:</label>
+                                <input type="date" id="masterMaintDateFrom" onchange="filterMasterServiceHistory()" class="flex-1 sm:flex-none bg-gray-800 border border-gray-600 rounded py-1.5 px-2 text-white focus:outline-none focus:border-yellow-600">
+                            </div>
+                            <div class="flex items-center gap-2 w-full sm:w-auto">
+                                <label class="text-gray-400 font-bold uppercase tracking-wider w-10 sm:w-auto">To:</label>
+                                <input type="date" id="masterMaintDateTo" onchange="filterMasterServiceHistory()" class="flex-1 sm:flex-none bg-gray-800 border border-gray-600 rounded py-1.5 px-2 text-white focus:outline-none focus:border-yellow-600">
+                            </div>
+                            <button onclick="clearMasterMaintFilters()" class="w-full sm:w-auto bg-gray-800 border border-gray-600 rounded py-1.5 px-3 text-gray-400 hover:text-white transition" title="Clear Filters"><i class="fas fa-times sm:mr-0 mr-1"></i><span class="sm:hidden">Clear Filters</span></button>
                         </div>
                     </div>
 
@@ -303,21 +352,21 @@
 
             <section id="section-stock-items" class="page-section">
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-teal-500">
-                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
-                        <div class="flex items-center gap-4">
-                            <h3 class="font-bold text-gray-300"><i class="fas fa-box-open mr-2"></i>Master Stock Catalog</h3>
-                            <div class="flex bg-gray-900 rounded p-1 border border-gray-700">
-                                <button id="viewActiveStockBtn" onclick="toggleStockStatusView(true)" class="px-3 py-1 text-xs font-bold rounded bg-teal-700 text-white shadow">Active Items</button>
-                                <button id="viewInactiveStockBtn" onclick="toggleStockStatusView(false)" class="px-3 py-1 text-xs font-bold rounded text-gray-400 hover:text-gray-200">Deactivated</button>
+                    <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-4 border-b border-gray-700 pb-4 xl:pb-2 gap-4">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full xl:w-auto">
+                            <h3 class="font-bold text-gray-300 whitespace-nowrap"><i class="fas fa-box-open mr-2"></i>Master Stock Catalog</h3>
+                            <div class="flex bg-gray-900 rounded p-1 border border-gray-700 w-full sm:w-auto">
+                                <button id="viewActiveStockBtn" onclick="toggleStockStatusView(true)" class="flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded bg-teal-700 text-white shadow">Active Items</button>
+                                <button id="viewInactiveStockBtn" onclick="toggleStockStatusView(false)" class="flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded text-gray-400 hover:text-gray-200">Deactivated</button>
                             </div>
                         </div>
                         
-                        <div class="flex space-x-2 items-center">
-                            <div class="relative group">
-                                <button class="bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-gray-500">
+                        <div class="flex flex-col sm:flex-row gap-2 items-center w-full xl:w-auto">
+                            <div class="relative group w-full sm:w-auto">
+                                <button class="w-full justify-center bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-2 sm:py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-gray-500">
                                     <i class="fas fa-file-excel mr-2 text-green-400"></i> Data Tools <i class="fas fa-chevron-down ml-2 text-[10px]"></i>
                                 </button>
-                                <div class="absolute right-0 top-full pt-2 w-48 z-50 hidden group-hover:block">
+                                <div class="absolute left-0 sm:right-0 sm:left-auto top-full pt-2 w-full sm:w-48 z-50 hidden group-hover:block">
                                     <div class="bg-gray-800 border border-gray-600 rounded shadow-xl overflow-hidden">
                                         <button onclick="downloadStockExcel('template')" class="w-full text-left px-4 py-3 text-xs text-gray-300 hover:bg-gray-700 hover:text-white transition"><i class="fas fa-download mr-2 text-gray-400"></i> Blank Template</button>
                                         <button onclick="downloadStockExcel('all')" class="w-full text-left px-4 py-3 text-xs text-gray-300 hover:bg-gray-700 hover:text-white transition"><i class="fas fa-file-export mr-2 text-teal-400"></i> Export All Stock</button>
@@ -328,18 +377,18 @@
                             </div>
                             <input type="file" id="stockBulkUploadInput" accept=".xlsx" class="hidden" onchange="handleStockBulkUpload(event)">
 
-                            <button onclick="openAddStockItemModal()" class="bg-teal-700 hover:bg-teal-600 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-teal-500">
+                            <button onclick="openAddStockItemModal()" class="w-full sm:w-auto justify-center bg-teal-700 hover:bg-teal-600 text-white px-3 py-2 sm:py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-teal-500">
                                 <i class="fas fa-plus mr-2"></i> Create Stock Item
                             </button>
                         </div>
                     </div>
-                    <div class="flex flex-col xl:flex-row items-center justify-between gap-4 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
-                        <div class="flex items-center space-x-3 flex-1 w-full max-w-2xl">
-                            <div class="relative flex-1">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 flex-1 w-full xl:max-w-2xl">
+                            <div class="relative w-full sm:flex-1">
                                 <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
                                 <input type="text" id="stockItemSearch" oninput="filterStockItems()" placeholder="Search Items or Barcodes..." class="w-full pl-8 pr-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-teal-500 transition">
                             </div>
-                            <select id="stockCategoryFilter" onchange="filterStockItems()" class="bg-gray-800 border border-gray-600 rounded py-1.5 px-3 text-xs text-white focus:outline-none focus:border-teal-500 transition w-48">
+                            <select id="stockCategoryFilter" onchange="filterStockItems()" class="w-full sm:w-48 bg-gray-800 border border-gray-600 rounded py-1.5 px-3 text-xs text-white focus:outline-none focus:border-teal-500 transition">
                                 <option value="">All Categories</option>
                             </select>
                         </div>
@@ -380,13 +429,13 @@
                     </div>
 
                     <div class="flex flex-col xl:flex-row items-center justify-between gap-4 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
-                        <form id="addWarehouseForm" class="flex gap-4 items-center w-full">
-                            <input type="text" id="newWhsName" placeholder="Warehouse Name..." required class="w-64 py-1.5 px-3 border border-gray-600 rounded bg-gray-800 text-xs text-white focus:outline-none focus:border-teal-500">
-                            <label class="flex items-center space-x-2 text-xs text-gray-300 cursor-pointer">
-                                <input type="checkbox" id="newWhsConsumption" class="w-4 h-4 accent-teal-500">
-                                <span>Is Consumption Warehouse (Items here are considered used/deducted)</span>
+                        <form id="addWarehouseForm" class="flex flex-col sm:flex-row gap-4 items-start sm:items-center w-full">
+                            <input type="text" id="newWhsName" placeholder="Warehouse Name..." required class="w-full sm:w-64 py-2 sm:py-1.5 px-3 border border-gray-600 rounded bg-gray-800 text-xs text-white focus:outline-none focus:border-teal-500">
+                            <label class="flex items-center space-x-2 text-xs text-gray-300 cursor-pointer flex-1">
+                                <input type="checkbox" id="newWhsConsumption" class="w-4 h-4 accent-teal-500 shrink-0">
+                                <span class="leading-tight">Is Consumption Warehouse (Items here are considered used/deducted)</span>
                             </label>
-                            <button type="submit" class="bg-teal-700 hover:bg-teal-600 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow border border-teal-500 ml-auto">Add Warehouse</button>
+                            <button type="submit" class="w-full sm:w-auto sm:ml-auto bg-teal-700 hover:bg-teal-600 text-white px-4 py-2 sm:py-1.5 rounded text-xs font-bold transition shadow border border-teal-500">Add Warehouse</button>
                         </form>
                     </div>
 
@@ -452,14 +501,14 @@
 
             <section id="section-grv-manager" class="page-section">
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-blue-500">
-                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-4 border-b border-gray-700 pb-4 lg:pb-2 gap-3">
                         <h3 class="font-bold text-gray-300"><i class="fas fa-clipboard-check mr-2"></i>GRV Manager</h3>
-                        <div class="flex bg-gray-900 rounded p-1 border border-gray-700">
-                            <button id="viewDraftGrvBtn" onclick="toggleGrvView('Draft')" class="px-3 py-1 text-xs font-bold rounded bg-blue-700 text-white shadow">Drafts</button>
-                            <button id="viewCompleteGrvBtn" onclick="toggleGrvView('Completed')" class="px-3 py-1 text-xs font-bold rounded text-gray-400 hover:text-gray-200">Completed</button>
-                            <button id="viewCancelGrvBtn" onclick="toggleGrvView('Cancelled')" class="px-3 py-1 text-xs font-bold rounded text-gray-400 hover:text-gray-200">Cancelled</button>
-                            <div class="w-px bg-gray-700 mx-1"></div>
-                            <button id="viewShortagesBtn" onclick="toggleGrvView('Shortages')" class="px-3 py-1 text-xs font-bold rounded text-red-400 hover:text-red-300">Shortages (Pending GRV)</button>
+                        <div class="flex overflow-x-auto w-full lg:w-auto bg-gray-900 rounded p-1 border border-gray-700">
+                            <button id="viewDraftGrvBtn" onclick="toggleGrvView('Draft')" class="px-4 py-1.5 text-xs font-bold rounded bg-blue-700 text-white shadow whitespace-nowrap">Drafts</button>
+                            <button id="viewCompleteGrvBtn" onclick="toggleGrvView('Completed')" class="px-4 py-1.5 text-xs font-bold rounded text-gray-400 hover:text-gray-200 whitespace-nowrap">Completed</button>
+                            <button id="viewCancelGrvBtn" onclick="toggleGrvView('Cancelled')" class="px-4 py-1.5 text-xs font-bold rounded text-gray-400 hover:text-gray-200 whitespace-nowrap">Cancelled</button>
+                            <div class="w-px bg-gray-700 mx-1 shrink-0"></div>
+                            <button id="viewShortagesBtn" onclick="toggleGrvView('Shortages')" class="px-4 py-1.5 text-xs font-bold rounded text-red-400 hover:text-red-300 whitespace-nowrap">Shortages (Pending GRV)</button>
                         </div>
                     </div>
 
@@ -1297,6 +1346,20 @@
         </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebarLinks = document.querySelectorAll('#mainSidebar .sidebar-item');
+            const sidebar = document.getElementById('mainSidebar');
+            
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 768 && sidebar) {
+                        sidebar.classList.add('sidebar-collapsed');
+                    }
+                });
+            });
+        });
+    </script>
     <script src="AssetTagginght.js"></script>
 </body>
 </html>
