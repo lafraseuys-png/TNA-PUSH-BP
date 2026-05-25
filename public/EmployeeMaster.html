@@ -36,6 +36,12 @@
 </head>
 <body class="font-sans flex h-screen overflow-hidden">
 
+    <div id="globalLoader" class="fixed inset-0 bg-gray-900 z-[9999] flex flex-col justify-center items-center transition-opacity duration-500">
+        <i class="fas fa-circle-notch animate-spin text-6xl text-blue-500 mb-6"></i>
+        <h2 class="text-xl font-black text-gray-200 tracking-widest uppercase animate-pulse">Initializing Master Data</h2>
+        <p class="text-xs text-gray-500 mt-2 animate-pulse">Loading personnel, departments, and active zones...</p>
+    </div>
+
     <div id="syncOverlay" class="fixed inset-0 bg-black bg-opacity-80 hidden flex-col justify-center items-center z-[100]">
         <svg class="animate-spin h-16 w-16 text-blue-500 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -69,11 +75,11 @@
             <button onclick="showSection('leave', this)" class="sidebar-item w-full flex items-center p-4 text-left border-t border-gray-700 mt-2">
                 <i class="fas fa-calendar-alt w-6 text-center mr-2 text-emerald-400"></i> Leave Management
             </button>
+            <button onclick="showSection('attributes', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+                <i class="fas fa-tags w-6 text-center mr-2 text-cyan-400"></i> Custom Attributes
+            </button>
             <button onclick="showSection('hierarchy', this)" class="sidebar-item w-full flex items-center p-4 text-left">
                  <i class="fas fa-sitemap w-6 text-center mr-2 text-yellow-500"></i> Org Hierarchy & Managers
-            </button>
-            <button onclick="showSection('reports', this)" class="sidebar-item w-full flex items-center p-4 text-left border-t border-gray-700">
-                <i class="fas fa-chart-bar w-6 text-center mr-2 text-teal-400"></i> Reports & Analytics
             </button>
         </nav>
 
@@ -412,6 +418,70 @@
                                 </tr>
                             </thead>
                             <tbody id="leaveTypesTableBody" class="divide-y divide-gray-700 bg-gray-900">
+                                <tr><td colspan="3" class="p-4 text-center text-gray-500">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-attributes" class="page-section">
+                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-cyan-500">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                        <h3 class="font-bold text-gray-300"><i class="fas fa-tags mr-2"></i>Custom Employee Attributes</h3>
+                    </div>
+                    <p class="text-[10px] text-gray-400 mb-4 uppercase tracking-wider">Define dynamic fields specific to your farm/company (e.g., Boot Size, Tractor License). These will appear in every employee's edit profile.</p>
+
+                    <div class="bg-gray-900 p-4 rounded border border-gray-700 mb-6 flex flex-col md:flex-row gap-4 justify-between items-end">
+                        <div class="flex-1 flex gap-4 w-full">
+                            <div class="flex-1">
+                                <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Filter by Department</label>
+                                <select id="attrExportDeptFilter" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                                    <option value="">All Departments</option>
+                                </select>
+                            </div>
+                            <div class="flex-1">
+                                <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Filter by PIN (Optional)</label>
+                                <input type="text" id="attrExportPinFilter" placeholder="e.g. 1001" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                            </div>
+                        </div>
+                        <div class="flex gap-2 w-full md:w-auto">
+                            <button onclick="exportCustomAttributes(event)" class="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded text-xs font-bold transition shadow whitespace-nowrap w-full md:w-auto"><i class="fas fa-file-export mr-2"></i> Export Data</button>
+                            <input type="file" id="attrBulkUploadInput" accept=".xlsx" class="hidden" onchange="handleAttrBulkUpload(event)">
+                            <button onclick="document.getElementById('attrBulkUploadInput').click()" class="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded text-xs font-bold transition shadow whitespace-nowrap w-full md:w-auto"><i class="fas fa-upload mr-2"></i> Bulk Upload</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-900 p-4 rounded border border-gray-700 mb-6">
+                        <form id="createAttributeForm" class="flex items-end gap-4">
+                            <div class="flex-1">
+                                <label class="block text-xs font-bold text-gray-400 mb-1">Attribute Name</label>
+                                <input type="text" id="newAttributeName" required placeholder="e.g., Boot Size" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-cyan-500">
+                            </div>
+                            <div class="w-48">
+                                <label class="block text-xs font-bold text-gray-400 mb-1">Data Type</label>
+                                <select id="newAttributeType" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-cyan-500">
+                                    <option value="Text">Text (Short)</option>
+                                    <option value="Number">Number</option>
+                                    <option value="Date">Date</option>
+                                </select>
+                            </div>
+                            <button type="submit" id="createAttributeBtn" class="bg-cyan-700 hover:bg-cyan-600 text-white px-6 py-2 rounded text-sm font-bold shadow transition h-[38px]">
+                                Add Attribute
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm border-collapse">
+                            <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                                <tr>
+                                    <th class="p-3 border-r border-gray-600">Attribute Name</th>
+                                    <th class="p-3 border-r border-gray-600 text-center">Data Type</th>
+                                    <th class="p-3 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attributesTableBody" class="divide-y divide-gray-700 bg-gray-900">
                                 <tr><td colspan="3" class="p-4 text-center text-gray-500">Loading...</td></tr>
                             </tbody>
                         </table>
@@ -803,6 +873,12 @@
                 <p class="text-[9px] text-gray-400 mb-2">Assign opening/current balances (in days) for this employee. Types are configured in the Leave Management tab.</p>
                 <div id="editEmpLeaveBalancesContainer" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6 bg-gray-900/50 p-3 rounded border border-gray-700">
                     <div class="col-span-full text-center text-xs text-gray-500 py-2">Loading leave types...</div>
+                </div>
+
+                <h4 class="text-xs font-bold text-cyan-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1"><i class="fas fa-tags mr-1"></i> Custom Attributes</h4>
+                <p class="text-[9px] text-gray-400 mb-2">Tenant-specific fields defined in the Custom Attributes settings.</p>
+                <div id="editEmpAttributesContainer" class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6 bg-gray-900/50 p-3 rounded border border-gray-700">
+                    <div class="col-span-full text-center text-xs text-gray-500 py-2">Loading custom attributes...</div>
                 </div>
 
                 <div id="cvsAccessZoneSection" class="hidden">

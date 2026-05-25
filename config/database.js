@@ -6,13 +6,16 @@ const masterConfig = {
     password: process.env.DB_PASSWORD, // <-- Back to reading from secrets.env!
     server: process.env.DB_SERVER,
     database: process.env.DB_NAME,
-    options: {
+   options: {
         encrypt: false,
         trustServerCertificate: true,
         connectionTimeout: 30000,
         requestTimeout: 60000,
         useUTC: false
     },
+    // PERFORMANCE FIX: Restrict max connections to 10. 
+    // This forces Node to recycle lightning-fast connections instead of opening 16 concurrent TCP handshakes,
+    // completely preventing SQL Server from triggering its 25-second Anti-DDoS login throttle.
     pool: { max: 10, min: 0, idleTimeoutMillis: 30000 }
 };
 
