@@ -32,6 +32,12 @@
         /* Forces tables to scroll left-to-right instead of squishing columns */
         .overflow-x-auto table { min-width: max-content; }
         .overflow-x-auto th, .overflow-x-auto td { white-space: nowrap; }
+
+        /* Mobile Sidebar Transformation - Dropdown Style */
+        @media (max-width: 768px) {
+            body.flex { flex-direction: column; }
+            aside.w-64 { width: 100%; height: auto; border-bottom: 1px solid #374151; border-right: none; z-index: 40; }
+        }
     </style>
 </head>
 <body class="font-sans flex h-screen overflow-hidden">
@@ -51,42 +57,52 @@
         <p id="syncStatusText" class="text-gray-300 mt-2 font-mono">Initializing connection...</p>
     </div>
 
-    <aside class="w-64 bg-gray-800 flex flex-col shadow-xl flex-shrink-0 border-r border-gray-700 h-screen">
-        <div class="p-6 border-b border-gray-700 text-center">
+    <aside class="w-64 bg-gray-800 flex flex-col shadow-xl flex-shrink-0 border-r border-gray-700 md:h-screen relative">
+        <div class="md:hidden flex justify-between items-center p-4 border-b border-gray-700 bg-gray-800 cursor-pointer" onclick="document.getElementById('mobileNavWrapper').classList.toggle('hidden')">
+            <h1 class="text-xl font-black text-blue-500"><i class="fas fa-id-card mr-2"></i>DIRECTORY</h1>
+            <button type="button" class="text-gray-300 hover:text-white focus:outline-none">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <div class="hidden md:block p-6 border-b border-gray-700 text-center">
             <h1 class="text-2xl font-black text-blue-500"><i class="fas fa-id-card mr-2"></i>DIRECTORY</h1>
             <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Employee Master</p>
         </div>
-        <nav class="flex-1 overflow-y-auto py-4">
-            <button onclick="showSection('employees', this)" class="sidebar-item active w-full flex items-center p-4 text-left">
-                <i class="fas fa-users w-6 text-center mr-2"></i> Active Personnel
-            </button>
-            <button onclick="showSection('terminated', this)" class="sidebar-item w-full flex items-center p-4 text-left">
-                <i class="fas fa-user-slash w-6 text-center mr-2 text-red-400"></i> Terminated Records
-            </button>
-            <button onclick="showSection('departments', this)" class="sidebar-item w-full flex items-center p-4 text-left">
-                <i class="fas fa-sitemap w-6 text-center mr-2"></i> Departments
-            </button>
-            <button onclick="showSection('deptzones', this)" class="sidebar-item w-full flex items-center p-4 text-left">
-                <i class="fas fa-shield-alt w-6 text-center mr-2 text-purple-400"></i> Access Roles
-            </button>
-            <button onclick="showSection('teams', this)" class="sidebar-item w-full flex items-center p-4 text-left">
-                <i class="fas fa-users-cog w-6 text-center mr-2 text-indigo-400"></i> Custom Teams
-            </button>
-            <button onclick="showSection('leave', this)" class="sidebar-item w-full flex items-center p-4 text-left border-t border-gray-700 mt-2">
-                <i class="fas fa-calendar-alt w-6 text-center mr-2 text-emerald-400"></i> Leave Management
-            </button>
-            <button onclick="showSection('attributes', this)" class="sidebar-item w-full flex items-center p-4 text-left">
-                <i class="fas fa-tags w-6 text-center mr-2 text-cyan-400"></i> Custom Attributes
-            </button>
-            <button onclick="showSection('hierarchy', this)" class="sidebar-item w-full flex items-center p-4 text-left">
-                 <i class="fas fa-sitemap w-6 text-center mr-2 text-yellow-500"></i> Org Hierarchy & Managers
-            </button>
-        </nav>
 
-        <div class="p-4 border-t border-gray-700 text-xs">
-            <button onclick="window.location.href='Launchpad.html'" class="text-gray-400 hover:text-white font-bold w-full text-left flex items-center transition">
-                <i class="fas fa-arrow-left mr-2"></i> Back to Launchpad
-            </button>
+        <div id="mobileNavWrapper" class="hidden md:flex flex-col flex-1 w-full absolute md:relative top-full md:top-auto left-0 bg-gray-800 shadow-2xl md:shadow-none border-b border-gray-700 md:border-none z-50">
+            <nav class="flex-1 overflow-y-auto py-2 md:py-4">
+                <button onclick="showSection('employees', this); if(window.innerWidth < 768) document.getElementById('mobileNavWrapper').classList.add('hidden');" class="sidebar-item active w-full flex items-center p-4 text-left">
+                    <i class="fas fa-users w-6 text-center mr-2"></i> Active Personnel
+                </button>
+                <button onclick="showSection('terminated', this); if(window.innerWidth < 768) document.getElementById('mobileNavWrapper').classList.add('hidden');" class="sidebar-item w-full flex items-center p-4 text-left">
+                    <i class="fas fa-user-slash w-6 text-center mr-2 text-red-400"></i> Terminated Records
+                </button>
+                <button onclick="showSection('departments', this); if(window.innerWidth < 768) document.getElementById('mobileNavWrapper').classList.add('hidden');" class="sidebar-item w-full flex items-center p-4 text-left">
+                    <i class="fas fa-sitemap w-6 text-center mr-2"></i> Departments
+                </button>
+                <button onclick="showSection('deptzones', this); if(window.innerWidth < 768) document.getElementById('mobileNavWrapper').classList.add('hidden');" class="sidebar-item w-full flex items-center p-4 text-left">
+                    <i class="fas fa-shield-alt w-6 text-center mr-2 text-purple-400"></i> Access Roles
+                </button>
+                <button onclick="showSection('teams', this); if(window.innerWidth < 768) document.getElementById('mobileNavWrapper').classList.add('hidden');" class="sidebar-item w-full flex items-center p-4 text-left">
+                    <i class="fas fa-users-cog w-6 text-center mr-2 text-indigo-400"></i> Custom Teams
+                </button>
+                <button onclick="showSection('leave', this); if(window.innerWidth < 768) document.getElementById('mobileNavWrapper').classList.add('hidden');" class="sidebar-item w-full flex items-center p-4 text-left border-t border-gray-700 mt-2">
+                    <i class="fas fa-calendar-alt w-6 text-center mr-2 text-emerald-400"></i> Leave Management
+                </button>
+                <button onclick="showSection('attributes', this); if(window.innerWidth < 768) document.getElementById('mobileNavWrapper').classList.add('hidden');" class="sidebar-item w-full flex items-center p-4 text-left">
+                    <i class="fas fa-tags w-6 text-center mr-2 text-cyan-400"></i> Custom Attributes
+                </button>
+                <button onclick="showSection('hierarchy', this); if(window.innerWidth < 768) document.getElementById('mobileNavWrapper').classList.add('hidden');" class="sidebar-item w-full flex items-center p-4 text-left">
+                     <i class="fas fa-sitemap w-6 text-center mr-2 text-yellow-500"></i> Org Hierarchy & Managers
+                </button>
+            </nav>
+
+            <div class="p-4 border-t border-gray-700 text-xs">
+                <button onclick="window.location.href='Launchpad.html'" class="text-gray-400 hover:text-white font-bold w-full text-left flex items-center transition">
+                    <i class="fas fa-arrow-left mr-2"></i> Back to Launchpad
+                </button>
+            </div>
         </div>
     </aside>
 
@@ -94,11 +110,11 @@
         <header class="bg-gray-800 shadow-sm p-4 flex justify-between items-center z-10 border-b border-gray-700 flex-shrink-0">
             <h2 id="sectionTitle" class="text-lg font-bold text-gray-200 uppercase tracking-wide">Active Personnel</h2>
             <div class="flex items-center gap-3">
-                <button onclick="pullHardwareHistory()" class="bg-yellow-600 hover:bg-yellow-500 text-white px-4 py-2 rounded text-xs font-bold transition flex items-center shadow border border-yellow-500" title="Pull all missing historical clocks from hardware">
-                    <i class="fas fa-download mr-2"></i> Pull History
+                <button onclick="pullHardwareHistory()" class="bg-yellow-600 hover:bg-yellow-500 text-white px-3 sm:px-4 py-2 rounded text-xs font-bold transition flex items-center shadow border border-yellow-500" title="Pull all missing historical clocks from hardware">
+                    <i class="fas fa-download sm:mr-2"></i> <span class="hidden sm:inline">Pull History</span>
                 </button>
-                <button onclick="pushAllToHardware(event)" class="bg-purple-700 hover:bg-purple-600 text-white px-4 py-2 rounded text-xs font-bold transition flex items-center shadow border border-purple-500">
-                    <i class="fas fa-microchip mr-2"></i> Push All to Hardware
+                <button onclick="pushAllToHardware(event)" class="bg-purple-700 hover:bg-purple-600 text-white px-3 sm:px-4 py-2 rounded text-xs font-bold transition flex items-center shadow border border-purple-500">
+                    <i class="fas fa-microchip sm:mr-2"></i> <span class="hidden sm:inline">Push All to Hardware</span>
                 </button>
             </div>
         </header>
@@ -107,15 +123,15 @@
             
             <section id="page-employees" class="page-section active">
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-blue-500">
-                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 border-b border-gray-700 pb-4 md:pb-2 gap-3">
                         <h3 class="font-bold text-gray-300"><i class="fas fa-users mr-2"></i>Active Personnel</h3>
-                        <div class="flex space-x-2 items-center">
+                        <div class="flex flex-col sm:flex-row gap-2 items-center w-full md:w-auto">
                             
-                            <div class="relative group">
-                                <button class="bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-gray-500">
+                            <div class="relative group w-full sm:w-auto">
+                                <button class="w-full justify-center bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-gray-500">
                                     <i class="fas fa-file-excel mr-2 text-green-400"></i> Data Tools <i class="fas fa-chevron-down ml-2 text-[10px]"></i>
                                 </button>
-                                <div class="absolute right-0 top-full pt-2 w-56 z-50 hidden group-hover:block">
+                                <div class="absolute left-0 sm:right-0 sm:left-auto top-full pt-2 w-full sm:w-56 z-50 hidden group-hover:block">
                                     <div class="bg-gray-800 border border-gray-600 rounded shadow-xl overflow-hidden">
                                         <button onclick="downloadExcel('template')" class="w-full text-left px-4 py-3 text-xs text-gray-300 hover:bg-gray-700 hover:text-white transition"><i class="fas fa-download mr-2 text-gray-400"></i> Download Blank Template</button>
                                         <button onclick="downloadExcel('current')" class="w-full text-left px-4 py-3 text-xs text-gray-300 hover:bg-gray-700 hover:text-white transition"><i class="fas fa-file-export mr-2 text-blue-400"></i> Export Current Data</button>
@@ -129,22 +145,21 @@
                             <input type="file" id="bulkUploadInput" accept=".xlsx" class="hidden" onchange="handleBulkUpload(event)">
                             <input type="file" id="bulkPhotoInput" webkitdirectory directory multiple accept="image/*" class="hidden" onchange="handleBulkPhotoUpload(event)">
 
-                            <button onclick="openCreateModal()" class="bg-green-700 hover:bg-green-600 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-green-500">
+                            <button onclick="openCreateModal()" class="w-full sm:w-auto justify-center bg-green-700 hover:bg-green-600 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-green-500">
                                 <i class="fas fa-plus mr-2"></i> Create Employee
                             </button>
-                            <button id="syncEmpBtn" onclick="syncEmployees()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-blue-500">
+                            <button id="syncEmpBtn" onclick="syncEmployees()" class="w-full sm:w-auto justify-center bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-blue-500">
                                 <i class="fas fa-sync-alt mr-2"></i> Sync Employees
                             </button>
                         </div>
-                    </div>
 
                  <div class="flex flex-col xl:flex-row items-center justify-between gap-4 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
-                        <div class="flex items-center space-x-3 flex-1 w-full max-w-3xl">
-                            <div class="relative flex-1">
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-3 flex-1 w-full max-w-3xl">
+                            <div class="relative w-full sm:flex-1">
                                 <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
                                 <input type="text" id="searchEmp" oninput="filterEmployees()" placeholder="Search Name or PIN..." class="w-full pl-8 pr-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-blue-500 transition">
                             </div>
-                            <select id="empDeptFilter" onchange="filterEmployees()" class="bg-gray-800 border border-gray-600 rounded py-1.5 px-3 text-xs text-white focus:outline-none focus:border-blue-500 transition w-48">
+                            <select id="empDeptFilter" onchange="filterEmployees()" class="w-full sm:w-48 bg-gray-800 border border-gray-600 rounded py-1.5 px-3 text-xs text-white focus:outline-none focus:border-blue-500 transition">
                                 <option value="">All Departments</option>
                             </select>
                             <label class="flex items-center space-x-2 text-xs font-bold text-orange-400 cursor-pointer bg-gray-800 border border-gray-600 px-3 py-1.5 rounded hover:border-orange-500 transition whitespace-nowrap">
@@ -257,15 +272,14 @@
                     <div id="tab-dept-structure">
                         <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
                             <h3 class="font-bold text-gray-300"><i class="fas fa-sitemap mr-2"></i>Department Structure</h3>
-                            <div class="flex space-x-2">
-                                <button onclick="openCreateDeptModal()" class="bg-green-700 hover:bg-green-600 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-green-500">
+                            <div class="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+                                <button onclick="openCreateDeptModal()" class="w-full sm:w-auto justify-center bg-green-700 hover:bg-green-600 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-green-500">
                                     <i class="fas fa-plus mr-2"></i> Create Dept
                                 </button>
-                                <button id="syncDeptBtn" onclick="syncDepartments()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow">
+                                <button id="syncDeptBtn" onclick="syncDepartments()" class="w-full sm:w-auto justify-center bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow">
                                     <i class="fas fa-sync-alt mr-2"></i> Sync Departments
                                 </button>
                             </div>
-                        </div>
 
                         <div class="flex items-center space-x-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
                         <div class="relative flex-1 max-w-sm">
@@ -686,8 +700,8 @@
         </form>
     </div>
 
-    <div id="createEmpModal" class="modal-backdrop">
-        <form id="createEmpForm" class="bg-gray-800 p-0 rounded-lg w-[400px] shadow-2xl border border-gray-600 flex flex-col">
+    <div id="createEmpModal" class="modal-backdrop p-2">
+        <form id="createEmpForm" class="bg-gray-800 p-0 rounded-lg w-[95%] sm:w-[400px] shadow-2xl border border-gray-600 flex flex-col">
             <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
                 <h2 class="text-lg font-bold text-green-400">Create New Employee</h2>
                 <button type="button" onclick="closeCreateModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
@@ -752,8 +766,8 @@
         </form>
     </div>
 
-   <div id="editEmpModal" class="modal-backdrop">
-        <form id="editEmpForm" class="bg-gray-800 p-0 rounded-lg w-[800px] shadow-2xl border border-gray-600 flex flex-col max-h-[90vh]">
+   <div id="editEmpModal" class="modal-backdrop p-2">
+        <form id="editEmpForm" class="bg-gray-800 p-0 rounded-lg w-[95%] lg:w-[800px] shadow-2xl border border-gray-600 flex flex-col max-h-[90vh]">
             <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
                 <h2 class="text-lg font-bold text-blue-400">Edit Employee Profile</h2>
                 <button type="button" onclick="closeEditModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>

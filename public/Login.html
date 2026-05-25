@@ -13,7 +13,10 @@
         form { 
             background: rgba(30, 41, 59, 0.85); 
             backdrop-filter: blur(4px); /* Reduced the blur to make the background much clearer */
-            padding: 2.5rem; border-radius: 1rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8); width: 100%; max-width: 400px; border: 1px solid rgba(255, 255, 255, 0.1); 
+            padding: 1.5rem; border-radius: 1rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8); width: 90%; max-width: 400px; border: 1px solid rgba(255, 255, 255, 0.1); 
+        }
+        @media (min-width: 640px) {
+            form { padding: 2.5rem; width: 100%; }
         }
         input::placeholder { color: #64748b; }
     </style>
@@ -22,7 +25,7 @@
 </head>
 <body class="flex flex-col">
     <div class="flex flex-col items-center">
-        <img id="tenantLogo" src="logo.jpg" alt="TNA Africa Logo" class="w-96 mb-8 drop-shadow-2xl object-contain" onerror="fallbackLogo(this)">
+        <img id="tenantLogo" src="logo.jpg" alt="TNA Africa Logo" class="w-64 sm:w-80 md:w-96 mb-8 drop-shadow-2xl object-contain" onerror="fallbackLogo(this)">
         <script>
             // 1. Logo Fallback Logic
             function fallbackLogo(img) {
@@ -92,7 +95,7 @@
     </div>
 
     <div id="forgotModal" class="hidden fixed inset-0 bg-black/80 z-50 flex justify-center items-center backdrop-blur-sm">
-        <form id="forgotForm" class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-md border border-gray-700 relative">
+        <form id="forgotForm" class="bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl w-[90%] sm:w-full max-w-md border border-gray-700 relative">
             <button type="button" onclick="closeForgotModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
             <h3 class="text-xl font-bold text-white mb-2"><i class="fas fa-envelope mr-2 text-cyan-500"></i>Reset Access</h3>
             <p class="text-xs text-gray-400 mb-6">Enter your email address. We will scan all systems and send you a reset link containing your Tenant License Key.</p>
@@ -107,7 +110,7 @@
     </div>
 
     <div id="resetModal" class="hidden fixed inset-0 bg-black/80 z-50 flex justify-center items-center backdrop-blur-sm">
-        <form id="resetForm" class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-md border border-gray-700 relative">
+        <form id="resetForm" class="bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl w-[90%] sm:w-full max-w-md border border-gray-700 relative">
             <h3 class="text-xl font-bold text-white mb-2"><i class="fas fa-key mr-2 text-cyan-500"></i>Set New Password</h3>
             <p class="text-xs text-gray-400 mb-6">Please enter the exact License Key provided in your email to confirm the correct tenant, along with your new password.</p>
             

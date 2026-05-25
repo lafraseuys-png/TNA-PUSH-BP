@@ -75,6 +75,9 @@
             <button onclick="showSection('wage-advice', this)" class="sidebar-item w-full flex items-center p-4 text-left">
                 <i class="fas fa-envelope-open-text w-6 text-center mr-2"></i> Wage Advice
             </button>
+            <button onclick="showSection('bank-files', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+                <i class="fas fa-university w-6 text-center mr-2"></i> Bank Files
+            </button>
         </nav>
 
         <div class="p-4 border-t border-gray-700 text-xs">
@@ -173,6 +176,14 @@
                                 <option value="">All Departments</option>
                             </select>
                             <input type="text" id="empSearch" onkeyup="filterEmployees()" placeholder="Search Name or PIN..." class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-yellow-500 w-64">
+                            <div class="border-l border-gray-700 h-6 mx-1"></div>
+                            <button onclick="exportCostAllocations()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow">
+                                <i class="fas fa-file-export mr-1"></i> Export Excel
+                            </button>
+                            <label class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow cursor-pointer">
+                                <i class="fas fa-file-import mr-1"></i> Upload Excel
+                                <input type="file" accept=".xlsx" class="hidden" onchange="uploadCostAllocations(event)">
+                            </label>
                             <button onclick="openBulkEmpCostModal()" class="bg-yellow-600 hover:bg-yellow-500 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow">
                                 <i class="fas fa-layer-group mr-1"></i> Bulk Allocate
                             </button>
@@ -381,6 +392,60 @@
                             </thead>
                             <tbody id="waTableBody" class="divide-y divide-gray-800 bg-gray-800">
                                 <tr><td colspan="16" class="p-8 text-center text-gray-500">Select dates and click Generate to preview the Wage Advice.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BANK FILES TAB -->
+            <section id="page-bank-files" class="page-section pb-32">
+                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-cyan-500">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                        <h3 class="font-bold text-gray-300"><i class="fas fa-university mr-2"></i>Generate Bank Export Files</h3>
+                        <div class="flex items-center gap-3">
+                            <button onclick="exportStandardBankCSV()" class="bg-cyan-600 hover:bg-cyan-500 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow border border-gray-600 flex items-center">
+                                <i class="fas fa-download mr-2"></i> Standard Bank (.CSV)
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-4 mb-4">
+                        <div>
+                            <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">From Date</label>
+                            <input type="text" id="bankFromDate" class="bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:border-cyan-500 w-32">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">To Date</label>
+                            <input type="text" id="bankToDate" class="bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:border-cyan-500 w-32">
+                        </div>
+                        <div class="flex-1 min-w-[200px]">
+                            <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">Target Custom Attribute (E.g. Bank Number)</label>
+                            <select id="bankCustomAttrSelect" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:border-cyan-500">
+                                <option value="">Loading Attributes...</option>
+                            </select>
+                        </div>
+                        <div class="flex items-end gap-3">
+                            <button onclick="openBankEmpModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2 rounded text-sm font-bold shadow transition h-[38px] flex items-center">
+                                <i class="fas fa-users mr-2"></i> Select Employees (<span id="bankEmpCount">0</span>)
+                            </button>
+                            <button onclick="generateBankFileData(event)" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded text-sm font-bold shadow transition h-[38px]">
+                                <i class="fas fa-sync mr-1"></i> Generate Preview
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto border border-gray-700 rounded mt-4">
+                        <table class="w-full text-left text-[11px] border-collapse whitespace-nowrap">
+                            <thead class="bg-gray-900 text-gray-400 font-bold sticky top-0 border-b border-gray-700">
+                                <tr>
+                                    <th class="p-2 border-r border-gray-700">Employee Name</th>
+                                    <th class="p-2 border-r border-gray-700 text-cyan-300">Target Attribute Value</th>
+                                    <th class="p-2 border-r border-gray-700 text-right text-emerald-400">Net Pay (Earned - Ded)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bankTableBody" class="divide-y divide-gray-800 bg-gray-800">
+                                <tr><td colspan="3" class="p-8 text-center text-gray-500">Select dates, target attribute, and click Generate to preview the Bank File.</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -647,6 +712,47 @@
                 <div class="flex gap-3">
                     <button type="button" onclick="closeModal('waEmpModal')" class="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded font-bold text-sm transition shadow">Cancel</button>
                     <button type="button" onclick="confirmWaEmployees()" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded font-bold text-sm shadow transition">Confirm Selection</button>
+                </div>
+            </div>
+       </div>
+    </div>
+
+    <!-- ADD EMPLOYEES TO BANK EXPORT MODAL -->
+    <div id="bankEmpModal" class="modal-backdrop">
+        <div class="bg-gray-800 p-0 rounded-lg w-[700px] max-w-[95vw] shadow-2xl border border-gray-600 flex flex-col max-h-[85vh]">
+            <div class="p-4 bg-gray-900 border-b border-gray-700 flex justify-between items-center rounded-t-lg">
+                <h3 class="font-bold text-lg text-cyan-400"><i class="fas fa-users mr-2"></i>Select Employees for Bank File</h3>
+                <button onclick="closeModal('bankEmpModal')" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-4 bg-gray-800 border-b border-gray-700 flex flex-col gap-3">
+                <div class="flex gap-4">
+                    <div class="flex-1">
+                        <label class="block text-[10px] text-gray-400 uppercase tracking-wide mb-1">Departments Filter</label>
+                        <select id="bankModalDeptFilter" multiple onchange="filterBankModalEmployees()" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:border-cyan-500 h-24"></select>
+                    </div>
+                    <div class="flex-1 flex flex-col justify-end">
+                        <input type="text" id="bankModalSearch" onkeyup="filterBankModalEmployees()" placeholder="Search Name or PIN..." class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:border-cyan-500">
+                    </div>
+                </div>
+            </div>
+            <div class="overflow-y-auto flex-1 p-0">
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead class="bg-gray-700 uppercase text-[10px] font-bold text-gray-400 sticky top-0 z-10">
+                        <tr>
+                            <th class="p-3 border-b border-gray-600 text-center w-10"><input type="checkbox" id="selectAllBankEmp" onclick="toggleSelectAllBankModal(this)" class="accent-cyan-500 cursor-pointer w-4 h-4"></th>
+                            <th class="p-3 border-b border-gray-600">PIN</th>
+                            <th class="p-3 border-b border-gray-600">Name</th>
+                            <th class="p-3 border-b border-gray-600">Department</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bankModalTableBody" class="divide-y divide-gray-700 bg-gray-900"></tbody>
+                </table>
+            </div>
+            <div class="p-4 border-t border-gray-800 bg-gray-900 rounded-b-lg flex justify-between items-center shadow-inner">
+                <span class="text-xs text-gray-400"><span id="bankModalSelectedCount" class="font-bold text-white">0</span> Selected</span>
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeModal('bankEmpModal')" class="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded font-bold text-sm transition shadow">Cancel</button>
+                    <button type="button" onclick="confirmBankEmployees()" class="px-6 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded font-bold text-sm shadow transition">Confirm Selection</button>
                 </div>
             </div>
         </div>

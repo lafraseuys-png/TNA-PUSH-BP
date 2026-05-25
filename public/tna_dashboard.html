@@ -28,7 +28,11 @@
             display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0, 0, 0, 0.7); z-index: 50; justify-content: center; align-items: center;
         }
-        .modal-backdrop.active { display: flex; }
+       .modal-backdrop.active { display: flex; }
+        
+        /* Forces tables to scroll horizontally instead of squishing columns */
+        .overflow-x-auto table { min-width: max-content; }
+        .overflow-x-auto th, .overflow-x-auto td { white-space: nowrap; }
         
         /* Roster Grid Hover Effects */
         .roster-cell { cursor: pointer; transition: background 0.2s; border: 1px solid #334155; }
@@ -43,6 +47,25 @@
         #mainSidebar.sidebar-collapsed .sidebar-icon { margin-right: 0; font-size: 1.25rem; }
         #mainSidebar.sidebar-collapsed .toggle-btn-container { justify-content: center; padding-left: 0; padding-right: 0; }
         #mainSidebar.sidebar-collapsed .brand-header { display: none; }
+
+        /* Mobile Sidebar Adjustments */
+        @media (max-width: 768px) {
+            body.flex { flex-direction: column; }
+            #mainSidebar { width: 100% !important; height: auto; position: relative; border-right: none; border-bottom: 1px solid #374151; z-index: 40; flex-shrink: 0; }
+            #mainSidebar.sidebar-collapsed { height: 76px; overflow: hidden; }
+            
+            /* Override collapsed styles for mobile so the header remains intact */
+            #mainSidebar.sidebar-collapsed .sidebar-text { display: block; }
+            #mainSidebar.sidebar-collapsed .toggle-btn-container { justify-content: space-between; padding-left: 1rem; padding-right: 1rem; }
+            #mainSidebar.sidebar-collapsed .brand-header { display: flex; }
+            
+            /* Toggle the actual nav links */
+            #sidebarNav { display: block; }
+            #mainSidebar.sidebar-collapsed #sidebarNav { display: none; }
+            
+            /* Extra padding to ensure bottom content isn't cut off by the OS navigation bar */
+            .page-section { padding-bottom: 5rem; } 
+        }
     </style>
 </head>
 <body class="font-sans flex h-screen overflow-hidden">
@@ -132,9 +155,9 @@
     </aside>
 
     <main class="flex-1 flex flex-col bg-gray-900 min-h-0 h-screen">
-        <header class="bg-gray-800 shadow-sm p-4 flex justify-between items-center z-10 border-b border-gray-700 flex-shrink-0">
+        <header class="bg-gray-800 shadow-sm p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 z-10 border-b border-gray-700 flex-shrink-0 w-full">
             <h2 id="sectionTitle" class="text-lg font-bold text-gray-200 uppercase tracking-wide">TNA Employee Master</h2>
-            <button onclick="refreshData()" class="bg-gray-700 border border-gray-600 text-gray-200 px-4 py-2 rounded text-xs font-bold hover:bg-gray-600 transition flex items-center">
+            <button onclick="refreshData()" class="w-full md:w-auto justify-center bg-gray-700 border border-gray-600 text-gray-200 px-4 py-2 rounded text-xs font-bold hover:bg-gray-600 transition flex items-center">
                 <i class="fas fa-sync-alt mr-2"></i> Refresh Data
             </button>
         </header>
@@ -144,34 +167,33 @@
 
             
             <section id="page-team-view" class="page-section">
-                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-teal-500 max-w-[1400px]">
-                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+               <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 border-b border-gray-700 pb-4 md:pb-2 gap-3">
                         <h3 class="font-bold text-gray-300"><i class="fas fa-tasks mr-2"></i>Team Timesheet Approvals</h3>
-                        <div class="flex items-center space-x-2">
-                            <button id="tvSmartBulkBtn" disabled onclick="handleSmartBulkAction()" class="bg-gray-600 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow opacity-50 cursor-not-allowed">
+                        <div class="flex items-center w-full md:w-auto">
+                            <button id="tvSmartBulkBtn" disabled onclick="handleSmartBulkAction()" class="w-full md:w-auto justify-center bg-gray-600 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow opacity-50 cursor-not-allowed">
                                 <i class="fas fa-layer-group mr-1"></i> Select Filter for Bulk Action
                             </button>
                         </div>
                     </div>
 
-                    <div class="flex flex-wrap items-end gap-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
-                        <div>
+                    <div class="flex flex-col md:flex-row md:flex-wrap items-stretch md:items-end gap-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
+                        <div class="w-full md:w-auto">
                             <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Start Date</label>
-                            <input type="date" id="tvStartDate" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-teal-500">
+                            <input type="date" id="tvStartDate" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-teal-500">
                         </div>
-                        <div>
+                        <div class="w-full md:w-auto">
                             <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">End Date</label>
-                            <input type="date" id="tvEndDate" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-teal-500">
+                            <input type="date" id="tvEndDate" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-teal-500">
                         </div>
-                        <div>
+                        <div class="w-full md:w-48">
                             <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Hierarchy Node</label>
-                            <select id="tvDeptFilter" onchange="if(typeof renderTeamView === 'function') renderTeamView()" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-teal-500 w-48">
+                            <select id="tvDeptFilter" onchange="if(typeof renderTeamView === 'function') renderTeamView()" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-teal-500">
                                 <option value="">All My Nodes</option>
                             </select>
                         </div>
-                        <div>
+                        <div class="w-full md:w-48">
                             <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Status Filter</label>
-                            <select id="tvStatusFilter" onchange="if(typeof renderTeamView === 'function') renderTeamView()" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-teal-500 w-48">
+                            <select id="tvStatusFilter" onchange="if(typeof renderTeamView === 'function') renderTeamView()" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-teal-500">
                                 <option value="">All Statuses</option>
                                 <option value="Action Required">Action Required</option>
                                 <option value="Complete">Complete (Ready to Approve)</option>
@@ -186,11 +208,11 @@
                                 <option value="Payroll Locked">Payroll Locked</option>
                             </select>
                         </div>
-                        <div class="flex-1 min-w-[200px]">
+                        <div class="w-full md:flex-1 md:min-w-[200px]">
                             <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Search Employee</label>
                             <input type="text" id="tvSearch" oninput="if(typeof renderTeamView === 'function') renderTeamView()" placeholder="Search..." class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-teal-500">
                         </div>
-                        <button onclick="loadTeamView()" class="bg-teal-600 hover:bg-teal-500 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow h-8">
+                        <button onclick="loadTeamView()" class="w-full md:w-auto bg-teal-600 hover:bg-teal-500 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow h-10 md:h-8 flex justify-center items-center mt-2 md:mt-0">
                             <i class="fas fa-filter mr-1"></i> Load Data
                         </button>
                     </div>
@@ -354,9 +376,9 @@
                         </div>
                     </div>
 
-                    <div class="overflow-x-auto">
+                    <div class="overflow-auto max-h-[60vh] rounded border border-gray-700">
                         <table class="w-full text-left text-sm">
-                            <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400 select-none">
+                            <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400 select-none sticky top-0 z-20 shadow-md">
                                 <tr>
                                     <th class="p-3 w-10 text-center"><input type="checkbox" id="selectAllEmps" onchange="toggleSelectAll(this)" class="accent-teal-500 w-4 h-4 cursor-pointer"></th>
                                     <th class="p-3 cursor-pointer hover:text-white transition group" onclick="sortTnaEmployees('PIN')">Employee PIN/ ID <span id="sortIcon-PIN" class="ml-1 text-teal-400 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
@@ -413,53 +435,53 @@
 
             <section id="page-roster" class="page-section">
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-pink-500">
-                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
-                        <div class="flex items-center space-x-4">
-                            <h3 class="font-bold text-gray-300"><i class="fas fa-calendar-alt mr-2"></i>Weekly Roster</h3>
+                  <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-4 border-b border-gray-700 pb-4 xl:pb-2 gap-4">
+                        <div class="flex flex-col md:flex-row items-start md:items-center gap-4 w-full xl:w-auto">
+                            <h3 class="font-bold text-gray-300 whitespace-nowrap"><i class="fas fa-calendar-alt mr-2"></i>Weekly Roster</h3>
                             
-                            <div class="flex bg-gray-900 rounded border border-gray-600 overflow-hidden">
-                                <button id="btnRosterGrid" onclick="toggleRosterView('grid')" class="px-4 py-1 text-xs font-bold bg-pink-600 text-white transition">Grid View</button>
-                                <button id="btnRosterBulk" onclick="toggleRosterView('bulk')" class="px-4 py-1 text-xs font-bold text-gray-400 hover:text-white transition">Bulk Assignment</button>
+                            <div class="flex bg-gray-900 rounded border border-gray-600 overflow-hidden w-full md:w-auto flex-shrink-0">
+                                <button id="btnRosterGrid" onclick="toggleRosterView('grid')" class="flex-1 md:flex-none px-4 py-1.5 text-xs font-bold bg-pink-600 text-white transition">Grid View</button>
+                                <button id="btnRosterBulk" onclick="toggleRosterView('bulk')" class="flex-1 md:flex-none px-4 py-1.5 text-xs font-bold text-gray-400 hover:text-white transition">Bulk Assignment</button>
                             </div>
 
-                            <div id="rosterGridControls" class="flex items-center space-x-4 bg-gray-900 px-3 py-1 rounded border border-gray-600">
-                                <button onclick="changeWeek(-1)" class="text-gray-400 hover:text-white"><i class="fas fa-chevron-left"></i></button>
-                                <span id="rosterWeekLabel" class="text-sm font-bold text-pink-400 w-48 text-center">Loading...</span>
-                                <button onclick="changeWeek(1)" class="text-gray-400 hover:text-white"><i class="fas fa-chevron-right"></i></button>
+                            <div id="rosterGridControls" class="flex items-center justify-between md:justify-center w-full md:w-auto space-x-4 bg-gray-900 px-3 py-1.5 rounded border border-gray-600">
+                                <button onclick="changeWeek(-1)" class="text-gray-400 hover:text-white p-1"><i class="fas fa-chevron-left"></i></button>
+                                <span id="rosterWeekLabel" class="text-sm font-bold text-pink-400 w-40 sm:w-48 text-center truncate">Loading...</span>
+                                <button onclick="changeWeek(1)" class="text-gray-400 hover:text-white p-1"><i class="fas fa-chevron-right"></i></button>
                             </div>
                         </div>
 
-                        <div class="flex space-x-2">
-                            <button onclick="commitRosterChanges(this)" id="btnSaveRosterChanges" class="bg-orange-600 hover:bg-orange-500 text-white px-4 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-orange-500 hidden">
+                        <div class="flex flex-wrap gap-2 w-full xl:w-auto">
+                            <button onclick="commitRosterChanges(this)" id="btnSaveRosterChanges" class="w-full sm:w-auto justify-center bg-orange-600 hover:bg-orange-500 text-white px-4 py-2 rounded text-xs font-bold transition items-center shadow border border-orange-500 hidden">
                                 <i class="fas fa-save mr-2"></i> Save & Recalculate
                             </button>
-                            <button onclick="openPatternModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-indigo-400">
-                            <i class="fas fa-layer-group mr-2"></i> Patterns
+                            <button onclick="openPatternModal()" class="flex-1 sm:flex-none justify-center bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-2 rounded text-xs font-bold transition flex items-center shadow border border-indigo-400">
+                            <i class="fas fa-layer-group sm:mr-2"></i> <span class="hidden sm:inline">Patterns</span>
                             </button>
-                            <button onclick="exportRosterExcel()" class="bg-green-700 hover:bg-green-600 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow">
-                                <i class="fas fa-file-excel mr-2"></i> Excel Template
+                            <button onclick="exportRosterExcel()" class="flex-1 sm:flex-none justify-center bg-green-700 hover:bg-green-600 text-white px-3 py-2 rounded text-xs font-bold transition flex items-center shadow">
+                                <i class="fas fa-file-excel sm:mr-2"></i> <span class="hidden sm:inline">Excel Template</span>
                             </button>
-                            <button id="btnExcelUpload" onclick="document.getElementById('excelUpload').click()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow">
-                                <i class="fas fa-upload mr-2"></i> Upload Excel
+                            <button id="btnExcelUpload" onclick="document.getElementById('excelUpload').click()" class="flex-1 sm:flex-none justify-center bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded text-xs font-bold transition flex items-center shadow">
+                                <i class="fas fa-upload sm:mr-2"></i> <span class="hidden sm:inline">Upload Excel</span>
                             </button>
                             <input type="file" id="excelUpload" accept=".xlsx" class="hidden" onchange="importRosterExcel(event)">
                         </div>
-                    </div>
+                    </div> 
 
                    <div id="rosterGridView">
-                        <div class="flex items-center space-x-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
-                            <div class="relative flex-1 max-w-sm">
+                        <div class="flex flex-col sm:flex-row items-stretch gap-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
+                            <div class="relative w-full sm:flex-1 sm:max-w-sm">
                                 <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
                                 <input type="text" id="rosterSearch" oninput="renderRosterGrid()" placeholder="Search Employee Name or PIN..." class="w-full pl-8 pr-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-pink-500 transition">
                             </div>
-                            <select id="rosterDeptFilter" onchange="handleRosterDeptChange()" class="bg-gray-800 border border-gray-600 rounded py-1.5 px-3 text-xs text-white focus:outline-none focus:border-pink-500 transition w-64">
+                            <select id="rosterDeptFilter" onchange="handleRosterDeptChange()" class="w-full sm:w-64 bg-gray-800 border border-gray-600 rounded py-1.5 px-3 text-xs text-white focus:outline-none focus:border-pink-500 transition">
                                 <option value="">-- Select Department --</option>
                             </select>
                         </div>
 
-                        <div class="overflow-x-auto">
+                        <div class="overflow-auto max-h-[60vh] rounded border border-gray-700">
                             <table class="w-full text-left text-sm border-collapse">
-                                <thead id="rosterHead" class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                                <thead id="rosterHead" class="bg-gray-700 uppercase text-xs font-bold text-gray-400 sticky top-0 z-20 shadow-md">
                                     </thead>
                                 <tbody id="rosterBody" class="divide-y divide-gray-700 bg-gray-800">
                                     <tr><td colspan="8" class="p-4 text-center text-gray-500">Loading roster...</td></tr>
@@ -2011,6 +2033,21 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebarLinks = document.querySelectorAll('#sidebarNav .sidebar-item');
+            const sidebar = document.getElementById('mainSidebar');
+            
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.add('sidebar-collapsed');
+                    }
+                });
+            });
+        });
+    </script>
     <script src="tna_dashboard.js"></script>
 </body>
 </html>
