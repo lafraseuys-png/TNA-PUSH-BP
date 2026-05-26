@@ -671,12 +671,14 @@
                         </div>
                         <div class="pl-6 space-y-2 border-l border-dotted border-gray-400 ml-1.5 pb-2">
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer">
-                                 <input type="checkbox" id="tna_all" onchange="toggleTree('tna', this)" class="accent-green-500 mr-2 w-3.5 h-3.5"> 
+                                 <input type="checkbox" id="tna_all" onchange="toggleTree('tna', this)" class="accent-green-500 mr-2 w-3.5 h-3.5"> 
                                  <span class="font-bold text-gray-600">Select All TNA Access</span>
                              </label>
+                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_dashboard" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> Tab: Dashboard</label>
+                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="tna_dashboard_hr" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> └─ Allow HR View Toggle</label>
                              <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_employees" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> Tab: Employee Master</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_shifts" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> Tab: Shift Rules</label>
-                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_roster" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> Tab: Weekly Roster</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_roster" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> Tab: Weekly Roster</label>
                              <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_inbox" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> Tab: Manager Inbox</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_team_view" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> Tab: Team View</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_attendance" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> Tab: Actual Attendance</label>
@@ -736,13 +738,14 @@
                     <button type="button" onclick="switchOverrideTab('tna')" id="otab_tna" class="override-tab px-4 py-1.5 text-xs font-bold border-t border-l border-r border-gray-300 bg-white text-black translate-y-[1px]">Time & Attendance</button>
                     <button type="button" onclick="switchOverrideTab('sys')" id="otab_sys" class="override-tab px-4 py-1.5 text-xs text-gray-600 hover:text-black transition border-b border-transparent">System Config</button>
                 </div>
-
                 <div class="border border-gray-300 p-4 bg-white h-64 overflow-y-auto">
                     <div id="otree_tna" class="override-tree-view">
                         <div class="pl-6 space-y-2 border-l border-dotted border-gray-400 ml-1.5 pb-2">
+<label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_dashboard" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Dashboard</label>
+ <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="tna_dashboard_hr" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> └─ Allow HR View Toggle</label>
  <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_employees" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Employee Master</label>
- <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_shifts" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Shift Rules</label>
- <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_roster" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Weekly Roster</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_shifts" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Shift Rules</label>
+<label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_roster" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Weekly Roster</label>
 <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_inbox" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Manager Inbox</label>
  <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_team_view" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Team View</label>
  <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_attendance" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Actual Attendance</label>
