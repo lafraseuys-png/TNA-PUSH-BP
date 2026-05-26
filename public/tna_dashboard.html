@@ -193,12 +193,115 @@
                 </div>
 
                 <!-- Manager View Container -->
-                <div id="dashboard-manager-view" class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-indigo-500 w-full flex flex-col items-center justify-center min-h-[400px] transition-opacity duration-300">
-                <div class="text-center">
-                        <i class="fas fa-user-tie text-6xl text-indigo-600 mb-4 opacity-50"></i>
-                        <h2 class="text-2xl font-black text-gray-400 uppercase tracking-widest">Manager Dashboard</h2>
-                        <p class="text-indigo-500 font-bold mt-2 text-lg animate-pulse">Team Analytics Coming Soon</p>
+                <div id="dashboard-manager-view" class="w-full flex flex-col gap-6 min-h-[400px] transition-opacity duration-300">
+                    
+                    <!-- SECTION 1: OVERVIEW -->
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-indigo-500">
+                        <h3 class="font-bold text-gray-300 border-b border-gray-700 pb-2 mb-4"><i class="fas fa-chart-line mr-2"></i>Overview (Current Month)</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                            <!-- Active Employees -->
+                            <div onclick="openActiveEmployeesDrillDown()" class="bg-gray-900 border border-gray-700 rounded p-4 flex items-center justify-between cursor-pointer hover:bg-gray-700 hover:border-indigo-500 transition shadow">
+                                <div>
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Active Emps</p>
+                                    <h4 id="mgrActiveEmpCount" class="text-2xl font-black text-indigo-400">--</h4>
+                                </div>
+                            </div>
+
+                            <!-- Scheduled Man Hours -->
+                            <div class="bg-gray-900 border border-gray-700 rounded p-4 flex items-center justify-between shadow">
+                                <div>
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Sched Hrs</p>
+                                    <h4 id="mgrSchedHrsMonth" class="text-2xl font-black text-teal-400">--</h4>
+                                </div>
+                            </div>
+
+                            <!-- Actual Hours -->
+                            <div class="bg-gray-900 border border-gray-700 rounded p-4 flex items-center justify-between shadow">
+                                <div>
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Actual Hrs</p>
+                                    <h4 id="mgrActHrsMonth" class="text-2xl font-black text-blue-400">--</h4>
+                                    <p id="mgrActHrsMonthPct" class="text-[9px] font-bold text-gray-500 mt-1 uppercase tracking-wider">(--%)</p>
+                                </div>
+                            </div>
+
+                            <!-- Overtime -->
+                            <div class="bg-gray-900 border border-gray-700 rounded p-4 flex items-center justify-between shadow">
+                                <div>
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Overtime</p>
+                                    <h4 id="mgrOTMonth" class="text-2xl font-black text-yellow-400">--</h4>
+                                </div>
+                            </div>
+
+                           <!-- Absences -->
+                            <div onclick="openAbsentDrillDown('month')" class="bg-gray-900 border border-gray-700 rounded p-4 flex items-center justify-between shadow cursor-pointer hover:border-red-500 hover:bg-gray-800 transition">
+                                <div>
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Absences</p>
+                                    <h4 id="mgrAbsMonth" class="text-2xl font-black text-red-400">--</h4>
+                                </div>
+                            </div>
+
+                            <!-- Violations -->
+                            <div class="bg-gray-900 border border-gray-700 rounded p-4 flex items-center justify-between shadow">
+                                <div>
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Violations</p>
+                                    <h4 id="mgrVioMonth" class="text-2xl font-black text-orange-400">--</h4>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- SECTION 2: TODAY'S VIEW -->
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-blue-500">
+                        <h3 class="font-bold text-gray-300 border-b border-gray-700 pb-2 mb-4"><i class="fas fa-calendar-day mr-2"></i>Today's Clock Status</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                            <!-- Clocked In -->
+                            <div class="bg-gray-900 border border-gray-700 rounded p-4 text-center cursor-pointer hover:border-blue-500 transition shadow">
+                                <h4 class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Clocked In</h4>
+                                <p class="text-2xl font-black text-green-400" id="mgrTodayIn">--</p>
+                                <p class="text-[10px] text-gray-500 font-bold mt-1" id="mgrTodayInPct">(--%)</p>
+                            </div>
+                            <!-- Clocked Out -->
+                            <div class="bg-gray-900 border border-gray-700 rounded p-4 text-center cursor-pointer hover:border-blue-500 transition shadow">
+                                <h4 class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Clocked Out</h4>
+                                <p class="text-2xl font-black text-gray-300" id="mgrTodayOut">--</p>
+                                <p class="text-[10px] text-gray-500 font-bold mt-1" id="mgrTodayOutPct">(--%)</p>
+                            </div>
+                            <!-- On Break -->
+                            <div class="bg-gray-900 border border-gray-700 rounded p-4 text-center cursor-pointer hover:border-blue-500 transition shadow">
+                                <h4 class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">On Break</h4>
+                                <p class="text-2xl font-black text-yellow-400" id="mgrTodayBreak">--</p>
+                                <p class="text-[10px] text-gray-500 font-bold mt-1" id="mgrTodayBreakPct">(--%)</p>
+                            </div>
+                            <!-- Absent -->
+                            <div onclick="openAbsentDrillDown('today')" class="bg-gray-900 border border-gray-700 rounded p-4 text-center cursor-pointer hover:border-red-500 hover:bg-gray-800 transition shadow">
+                                <h4 class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Absent</h4>
+                                <p class="text-2xl font-black text-red-400" id="mgrTodayAbsent">--</p>
+                                <p class="text-[10px] text-gray-500 font-bold mt-1" id="mgrTodayAbsentPct">(--%)</p>
+                            </div>
+                            <!-- Remote -->
+                            <div class="bg-gray-900 border border-gray-700 rounded p-4 text-center cursor-pointer hover:border-blue-500 transition shadow">
+                                <h4 class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Remote</h4>
+                                <p class="text-2xl font-black text-purple-400" id="mgrTodayRemote">--</p>
+                                <p class="text-[10px] text-gray-500 font-bold mt-1" id="mgrTodayRemotePct">(--%)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 3: CUSTOM RANGE -->
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-purple-500">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 border-b border-gray-700 pb-4 md:pb-2 gap-3">
+                            <h3 class="font-bold text-gray-300"><i class="fas fa-calendar-alt mr-2"></i>Custom Range Analytics</h3>
+                            <div class="flex items-center w-full md:w-auto gap-2">
+                                <input type="date" id="mgrCustomStart" onchange="loadManagerCustomRange()" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-purple-500 w-full md:w-32">
+                                <span class="text-gray-500 text-xs font-bold px-1">to</span>
+                                <input type="date" id="mgrCustomEnd" onchange="loadManagerCustomRange()" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-purple-500 w-full md:w-32">
+                            </div>
+                        </div>
+                        <div class="text-center p-8 border border-dashed border-gray-600 rounded bg-gray-900" id="mgrCustomContent">
+                            <p class="text-gray-500 italic text-sm">Select a date range and click Load to view analytics.</p>
+                        </div>
+                    </div>
+
                 </div>
             </section>
 
@@ -2128,9 +2231,42 @@
                     </div>
                 </div>
 
-                <div class="flex justify-end space-x-3 border-t border-gray-700 pt-4">
-                    <button type="button" onclick="closeModal('exportAttendanceModal')" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded font-bold text-sm transition">Cancel</button>
-                    <button type="button" id="btnExecuteAttExport" onclick="exportRawAttendanceExcel()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded font-bold text-sm shadow transition"><i class="fas fa-download mr-1"></i> Generate Excel</button>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="closeModal('confirmHolidayToggleModal')" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded font-bold text-sm">Cancel</button>
+                    <button type="button" id="btnConfirmHolidayToggle" onclick="submitToggleHolidayStatus()" class="px-4 py-2 text-white rounded font-bold text-sm shadow">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ABSENT DRILL DOWN MODAL -->
+    <div id="absentDrillDownModal" class="modal-backdrop">
+        <div class="bg-gray-800 w-full max-w-3xl rounded shadow-2xl border border-gray-600 flex flex-col max-h-[90vh]">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t">
+                <h3 class="font-bold text-lg text-red-400" id="absentDrillDownTitle">Absent Employees</h3>
+                <button onclick="closeAbsentDrillDown()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1">
+                <div class="overflow-x-auto border border-gray-700 rounded">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead class="bg-gray-700 text-gray-400 uppercase tracking-wider">
+                            <tr>
+                                <th class="p-3 border-b border-gray-600">Date</th>
+                                <th class="p-3 border-b border-gray-600">PIN</th>
+                                <th class="p-3 border-b border-gray-600">Name</th>
+                                <th class="p-3 border-b border-gray-600">Department</th>
+                            </tr>
+                        </thead>
+                        <tbody id="absentDrillDownBody" class="divide-y divide-gray-700 bg-gray-800">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="flex justify-between items-center mt-4 bg-gray-900 p-3 rounded border border-gray-700 shadow-inner">
+                    <span id="absentPageInfo" class="text-xs text-gray-400 font-bold tracking-widest uppercase">Showing 0 of 0</span>
+                    <div class="flex space-x-2">
+                        <button id="absBtnPrev" onclick="changeAbsentPage(-1)" class="bg-gray-800 hover:bg-gray-700 text-red-400 px-4 py-1.5 rounded text-xs font-bold border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow"><i class="fas fa-chevron-left mr-1"></i> Prev</button>
+                        <button id="absBtnNext" onclick="changeAbsentPage(1)" class="bg-gray-800 hover:bg-gray-700 text-red-400 px-4 py-1.5 rounded text-xs font-bold border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow">Next <i class="fas fa-chevron-right ml-1"></i></button>
+                    </div>
                 </div>
             </div>
         </div>
