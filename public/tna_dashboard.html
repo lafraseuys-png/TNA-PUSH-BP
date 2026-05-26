@@ -605,8 +605,19 @@
                             </div>
                         </div>
 
-                        <div id="formatIndicatorBadge" class="bg-gray-900 border border-gray-600 text-blue-400 px-3 py-1.5 rounded text-xs font-bold shadow flex items-center">
-                                <i class="fas fa-clock mr-2"></i> <span id="formatIndicatorText">Displaying: Decimals (8.50)</span>
+                        <div class="flex items-center gap-3">
+                            <button onclick="openExportAttendanceModal()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-blue-500">
+                                <i class="fas fa-file-export mr-2"></i> Export Raw
+                            </button>
+                            
+                            <button id="btnImportAttendance" onclick="document.getElementById('importAttendanceUpload').click()" class="bg-orange-600 hover:bg-orange-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-orange-500">
+                                <i class="fas fa-file-import mr-2"></i> Import Fixes
+                            </button>
+                            <input type="file" id="importAttendanceUpload" accept=".xlsx" class="hidden" onchange="importAttendanceExcel(event)">
+
+                            <div id="formatIndicatorBadge" class="bg-gray-900 border border-gray-600 text-blue-400 px-3 py-1.5 rounded text-xs font-bold shadow flex items-center ml-2 hidden md:flex">
+                                    <i class="fas fa-clock mr-2"></i> <span id="formatIndicatorText">Displaying: Decimals (8.50)</span>
+                            </div>
                         </div>
                     </div>
 
@@ -2066,6 +2077,60 @@
                 <div class="flex justify-end space-x-3">
                     <button type="button" onclick="closeModal('confirmHolidayToggleModal')" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded font-bold text-sm">Cancel</button>
                     <button type="button" id="btnConfirmHolidayToggle" onclick="submitToggleHolidayStatus()" class="px-4 py-2 text-white rounded font-bold text-sm shadow">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="importConfirmModal" class="modal-backdrop">
+        <div class="bg-gray-800 w-[500px] rounded shadow-2xl border border-gray-600 flex flex-col">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t">
+                <h3 class="font-bold text-lg text-orange-400"><i class="fas fa-exclamation-triangle mr-2"></i>Confirm Import</h3>
+                <button id="btnCloseImportModal" onclick="cancelImport()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-gray-300 mb-4" id="importConfirmMessage"></p>
+                <div class="bg-orange-900/30 border border-orange-500/50 p-3 rounded mb-6">
+                    <p class="text-xs text-orange-300 font-bold"><i class="fas fa-info-circle mr-1"></i>Warning: This action will push changes to the database and force a complete attendance recalculation for all affected employees on the modified dates.</p>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" id="btnCancelImport" onclick="cancelImport()" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded font-bold text-sm transition">Cancel</button>
+                    <button type="button" id="btnExecuteImport" onclick="executeImport()" class="px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white rounded font-bold text-sm shadow transition"><i class="fas fa-check mr-1"></i> Confirm & Import</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="exportAttendanceModal" class="modal-backdrop">
+        <div class="bg-gray-800 w-[500px] rounded shadow-2xl border border-gray-600 flex flex-col">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t">
+                <h3 class="font-bold text-lg text-blue-400"><i class="fas fa-file-excel mr-2"></i>Export Raw Attendance</h3>
+                <button onclick="closeModal('exportAttendanceModal')" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6">
+                <p class="text-xs text-gray-400 mb-4">Export chronological raw clock punches grouped by employee for manual Excel adjustments.</p>
+                
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Start Date</label>
+                        <input type="date" id="exportAttStart" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-blue-500 w-full">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">End Date</label>
+                        <input type="date" id="exportAttEnd" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-blue-500 w-full">
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Filter by Department(s)</label>
+                    <div class="bg-gray-900 border border-gray-600 rounded p-2 max-h-40 overflow-y-auto flex flex-col gap-1" id="exportAttDeptContainer">
+                        <div class="text-center text-gray-500 text-xs italic py-2">Loading departments...</div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-3 border-t border-gray-700 pt-4">
+                    <button type="button" onclick="closeModal('exportAttendanceModal')" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded font-bold text-sm transition">Cancel</button>
+                    <button type="button" id="btnExecuteAttExport" onclick="exportRawAttendanceExcel()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded font-bold text-sm shadow transition"><i class="fas fa-download mr-1"></i> Generate Excel</button>
                 </div>
             </div>
         </div>
