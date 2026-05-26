@@ -169,7 +169,7 @@
             <h2 id="sectionTitle" class="text-lg font-bold text-gray-200 uppercase tracking-wide">Dashboard</h2>
             
             <div class="flex items-center gap-4 ml-auto w-full md:w-auto">
-                <div class="flex bg-gray-900 rounded border border-gray-600 overflow-hidden shadow-inner flex-shrink-0">
+                <div id="dashboardToggleContainer" class="flex bg-gray-900 rounded border border-gray-600 overflow-hidden shadow-inner flex-shrink-0">
                     <button id="btnViewHR" onclick="toggleViewMode('HR')" class="px-4 py-1.5 text-xs font-bold text-gray-400 hover:text-white transition-colors duration-200">HR View</button>
                     <button id="btnViewManager" onclick="toggleViewMode('Manager')" class="px-4 py-1.5 text-xs font-bold bg-indigo-600 text-white transition-colors duration-200">Manager View</button>
                 </div>
@@ -214,11 +214,11 @@
                     </div>
 
                     <div class="flex flex-col md:flex-row md:flex-wrap items-stretch md:items-end gap-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
-                        <div class="w-full md:w-auto">
+                        <div class="w-full md:w-36">
                             <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Start Date</label>
                             <input type="date" id="tvStartDate" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-teal-500">
                         </div>
-                        <div class="w-full md:w-auto">
+                        <div class="w-full md:w-36">
                             <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">End Date</label>
                             <input type="date" id="tvEndDate" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-teal-500">
                         </div>
