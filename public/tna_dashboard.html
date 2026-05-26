@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     
     <style>
         body { background-color: #0f172a; color: #e2e8f0; }
@@ -71,6 +72,21 @@
             /* Flatten the main container and inner scroll area to destroy flex-spacing gaps */
             main.flex { display: block !important; height: auto !important; overflow: visible !important; min-height: 100vh; }
             main > div.flex-1.overflow-y-auto { display: block !important; overflow: visible !important; height: auto !important; padding-bottom: 2rem !important; flex: none !important; }
+        }
+
+        /* ApexCharts Dropdown Dark Theme Overrides */
+        .apexcharts-menu {
+            background-color: #1e293b !important;
+            border: 1px solid #475569 !important;
+            color: #e2e8f0 !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5) !important;
+        }
+        .apexcharts-menu.apexcharts-menu-open {
+            color: #e2e8f0 !important;
+        }
+        .apexcharts-menu-item:hover {
+            background-color: #334155 !important;
+            color: #ffffff !important;
         }
     </style>
 </head>
@@ -184,11 +200,43 @@
 
             <section id="page-dashboard" class="page-section active">
                 <!-- HR View Container -->
-                <div id="dashboard-hr-view" class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-teal-500 w-full flex flex-col items-center justify-center min-h-[400px] hidden transition-opacity duration-300">
-                    <div class="text-center">
-                        <i class="fas fa-users text-6xl text-teal-600 mb-4 opacity-50"></i>
-                        <h2 class="text-2xl font-black text-gray-400 uppercase tracking-widest">HR Dashboard</h2>
-                        <p class="text-teal-500 font-bold mt-2 text-lg animate-pulse">HR Analytics Coming Soon</p>
+                <div id="dashboard-hr-view" class="w-full flex flex-col gap-6 min-h-[400px] hidden transition-opacity duration-300">
+                    
+                    <!-- HR Filters -->
+                    <div class="bg-gray-800 p-4 rounded shadow-lg border-t-4 border-teal-500 flex flex-wrap items-center gap-4">
+                        <h3 class="font-bold text-gray-300 mr-4"><i class="fas fa-filter mr-2"></i>HR Analytics</h3>
+                        <div class="flex items-center gap-2">
+                            <input type="date" id="hrStartDate" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-teal-500 w-32">
+                            <span class="text-gray-500 text-xs font-bold px-1">to</span>
+                            <input type="date" id="hrEndDate" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-teal-500 w-32">
+                        </div>
+                        <button onclick="loadHRAnalytics()" class="bg-teal-600 hover:bg-teal-500 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow h-8">
+                            <i class="fas fa-sync-alt mr-1"></i> Update Charts
+                        </button>
+                    </div>
+
+                    <!-- Line Chart (Trends) -->
+                    <div class="bg-gray-800 p-4 rounded shadow-lg border border-gray-700">
+                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Attendance & Overtime Trends</h4>
+                        <div id="hrLineChart" class="w-full h-[450px]"></div>
+                    </div>
+
+                    <!-- Bar Chart -->
+                    <div class="bg-gray-800 p-4 rounded shadow-lg border border-gray-700">
+                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Hours Breakdown by Department</h4>
+                        <div id="hrBarChart" class="w-full h-[450px]"></div>
+                    </div>
+
+                    <!-- Heatmap -->
+                    <div class="bg-gray-800 p-4 rounded shadow-lg border border-gray-700">
+                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Tardiness / Absence Heatmap</h4>
+                        <div id="hrHeatmap" class="w-full h-[450px]"></div>
+                    </div>
+
+                    <!-- Scheduled vs Actual Hours -->
+                    <div class="bg-gray-800 p-4 rounded shadow-lg border border-gray-700">
+                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Scheduled vs Actual Hours</h4>
+                        <div id="hrSchedVsActualChart" class="w-full h-[450px]"></div>
                     </div>
                 </div>
 
@@ -198,7 +246,7 @@
                     <!-- SECTION 1: OVERVIEW -->
                     <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-indigo-500">
                         <h3 class="font-bold text-gray-300 border-b border-gray-700 pb-2 mb-4"><i class="fas fa-chart-line mr-2"></i>Overview (Current Month)</h3>
-                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
                             <!-- Active Employees -->
                             <div onclick="openActiveEmployeesDrillDown()" class="bg-gray-900 border border-gray-700 rounded p-4 flex items-center justify-between cursor-pointer hover:bg-gray-700 hover:border-indigo-500 transition shadow">
                                 <div>
@@ -220,15 +268,24 @@
                                 <div>
                                     <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Actual Hrs</p>
                                     <h4 id="mgrActHrsMonth" class="text-2xl font-black text-blue-400">--</h4>
-                                    <p id="mgrActHrsMonthPct" class="text-[9px] font-bold text-gray-500 mt-1 uppercase tracking-wider">(--%)</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-900 border border-gray-700 rounded p-4 flex items-center justify-between shadow border-l-4 border-green-500">
+                                <div>
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Att. Rate</p>
+                                    <h4 id="mgrAttRateMonth" class="text-2xl font-black text-green-400">--%</h4>
                                 </div>
                             </div>
 
                             <!-- Overtime -->
-                            <div class="bg-gray-900 border border-gray-700 rounded p-4 flex items-center justify-between shadow">
-                                <div>
+                            <div onclick="openOTDrillDown('month')" class="bg-gray-900 border border-gray-700 rounded p-4 flex flex-col justify-center shadow cursor-pointer hover:border-yellow-500 hover:bg-gray-800 transition">
+                                <div class="w-full">
                                     <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Overtime</p>
                                     <h4 id="mgrOTMonth" class="text-2xl font-black text-yellow-400">--</h4>
+                                </div>
+                                <div id="mgrOTMonthSub" class="w-full mt-2">
+                                    <!-- JS will inject the larger split text here -->
                                 </div>
                             </div>
 
@@ -250,10 +307,60 @@
                         </div>
                     </div>
 
+                    <!-- NEW SECTION: MONTHLY LEADERBOARDS -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Top Absences -->
+                        <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-red-500">
+                           <h3 class="font-bold text-gray-300 border-b border-gray-700 pb-2 mb-4"><i class="fas fa-user-times mr-2 text-red-400"></i>Top 10 Absences</h3>
+                           <div class="overflow-x-auto">
+                               <table class="w-full text-left text-xs">
+                                   <thead class="text-gray-500 border-b border-gray-700">
+                                       <tr><th class="pb-2">Employee</th><th class="pb-2 text-center">Absences</th><th class="pb-2 text-center">Abs. Rate</th></tr>
+                                   </thead>
+                                   <tbody id="mgrAbsencesList" class="text-gray-300 divide-y divide-gray-800">
+                                       <tr><td colspan="3" class="py-4 text-center text-gray-500">Loading...</td></tr>
+                                   </tbody>
+                               </table>
+                           </div>
+                        </div>
+
+                        <!-- Top Tardiness -->
+                        <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-orange-500">
+                           <div class="flex justify-between items-center border-b border-gray-700 pb-2 mb-4">
+                               <h3 class="font-bold text-gray-300"><i class="fas fa-clock mr-2 text-orange-400"></i>Top 10 Tardiness</h3>
+                               <button onclick="openTardyDrillDown('month')" class="text-[10px] bg-gray-900 border border-gray-600 text-orange-400 hover:text-orange-300 hover:border-orange-500 px-2 py-1 rounded transition shadow">View All</button>
+                           </div>
+                           <div class="overflow-x-auto">
+                               <table class="w-full text-left text-xs">
+                                   <thead class="text-gray-500 border-b border-gray-700">
+                                       <tr><th class="pb-2">Employee</th><th class="pb-2 text-center">Lates/Early</th><th class="pb-2 text-center">Tardy Rate</th></tr>
+                                   </thead>
+                                   <tbody id="mgrTardyList" class="text-gray-300 divide-y divide-gray-800">
+                                       <tr><td colspan="3" class="py-4 text-center text-gray-500">Loading...</td></tr>
+                                   </tbody>
+                               </table>
+                           </div>
+                        </div>
+
+                        <!-- Perfect Attendance -->
+                        <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-green-500">
+                           <h3 class="font-bold text-gray-300 border-b border-gray-700 pb-2 mb-4"><i class="fas fa-star mr-2 text-green-400"></i>Top 10 Perfect</h3>
+                           <div class="overflow-x-auto">
+                               <table class="w-full text-left text-xs">
+                                   <thead class="text-gray-500 border-b border-gray-700">
+                                       <tr><th class="pb-2">Employee</th><th class="pb-2 text-center">Worked</th><th class="pb-2 text-center">Status</th></tr>
+                                   </thead>
+                                   <tbody id="mgrPerfectList" class="text-gray-300 divide-y divide-gray-800">
+                                       <tr><td colspan="3" class="py-4 text-center text-gray-500">Loading...</td></tr>
+                                   </tbody>
+                               </table>
+                           </div>
+                        </div>
+                    </div>
                     <!-- SECTION 2: TODAY'S VIEW -->
                     <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-blue-500">
                         <h3 class="font-bold text-gray-300 border-b border-gray-700 pb-2 mb-4"><i class="fas fa-calendar-day mr-2"></i>Today's Clock Status</h3>
-                        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                        <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
                             <!-- Clocked In -->
                             <div class="bg-gray-900 border border-gray-700 rounded p-4 text-center cursor-pointer hover:border-blue-500 transition shadow">
                                 <h4 class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Clocked In</h4>
@@ -283,6 +390,11 @@
                                 <h4 class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Remote</h4>
                                 <p class="text-2xl font-black text-purple-400" id="mgrTodayRemote">--</p>
                                 <p class="text-[10px] text-gray-500 font-bold mt-1" id="mgrTodayRemotePct">(--%)</p>
+                            </div>
+                            
+                            <div class="bg-gray-900 border border-gray-700 rounded p-4 text-center shadow border-b-4 border-green-500">
+                                <h4 class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Att. Rate</h4>
+                                <p class="text-2xl font-black text-green-400" id="mgrTodayAttRate">--%</p>
                             </div>
                         </div>
                     </div>
@@ -2234,6 +2346,75 @@
                 <div class="flex justify-end space-x-3">
                     <button type="button" onclick="closeModal('confirmHolidayToggleModal')" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded font-bold text-sm">Cancel</button>
                     <button type="button" id="btnConfirmHolidayToggle" onclick="submitToggleHolidayStatus()" class="px-4 py-2 text-white rounded font-bold text-sm shadow">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OT DRILL DOWN MODAL -->
+    <div id="otDrillDownModal" class="modal-backdrop">
+        <div class="bg-gray-800 w-full max-w-4xl rounded shadow-2xl border border-gray-600 flex flex-col max-h-[90vh]">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t">
+                <h3 class="font-bold text-lg text-yellow-400" id="otDrillDownTitle">Overtime Records</h3>
+                <button onclick="closeOTDrillDown()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1">
+                <div class="overflow-x-auto border border-gray-700 rounded">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead class="bg-gray-700 text-gray-400 uppercase tracking-wider">
+                            <tr>
+                                <th class="p-3 border-b border-gray-600">Date</th>
+                                <th class="p-3 border-b border-gray-600">Employee</th>
+                                <th class="p-3 border-b border-gray-600 text-center text-yellow-400">Unapproved OT</th>
+                                <th class="p-3 border-b border-gray-600 text-center text-green-400">Approved OT</th>
+                                <th class="p-3 border-b border-gray-600 text-center">Status</th>
+                                <th class="p-3 border-b border-gray-600 text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="otDrillDownBody" class="divide-y divide-gray-700 bg-gray-800">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="flex justify-between items-center mt-4 bg-gray-900 p-3 rounded border border-gray-700 shadow-inner">
+                    <span id="otPageInfo" class="text-xs text-gray-400 font-bold tracking-widest uppercase">Showing 0 of 0</span>
+                    <div class="flex space-x-2">
+                        <button id="otBtnPrev" onclick="changeOTPage(-1)" class="bg-gray-800 hover:bg-gray-700 text-yellow-400 px-4 py-1.5 rounded text-xs font-bold border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow"><i class="fas fa-chevron-left mr-1"></i> Prev</button>
+                        <button id="otBtnNext" onclick="changeOTPage(1)" class="bg-gray-800 hover:bg-gray-700 text-yellow-400 px-4 py-1.5 rounded text-xs font-bold border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow">Next <i class="fas fa-chevron-right ml-1"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TARDY DRILL DOWN MODAL -->
+    <div id="tardyDrillDownModal" class="modal-backdrop">
+        <div class="bg-gray-800 w-full max-w-4xl rounded shadow-2xl border border-gray-600 flex flex-col max-h-[90vh]">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t">
+                <h3 class="font-bold text-lg text-orange-400" id="tardyDrillDownTitle">Tardiness Records</h3>
+                <button onclick="closeTardyDrillDown()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1">
+                <div class="overflow-x-auto border border-gray-700 rounded">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead class="bg-gray-700 text-gray-400 uppercase tracking-wider">
+                            <tr>
+                                <th class="p-3 border-b border-gray-600">Date</th>
+                                <th class="p-3 border-b border-gray-600">Employee</th>
+                                <th class="p-3 border-b border-gray-600">Violation Type</th>
+                                <th class="p-3 border-b border-gray-600">Variance Details</th>
+                                <th class="p-3 border-b border-gray-600 text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tardyDrillDownBody" class="divide-y divide-gray-700 bg-gray-800">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="flex justify-between items-center mt-4 bg-gray-900 p-3 rounded border border-gray-700 shadow-inner">
+                    <span id="tardyPageInfo" class="text-xs text-gray-400 font-bold tracking-widest uppercase">Showing 0 of 0</span>
+                    <div class="flex space-x-2">
+                        <button id="tardyBtnPrev" onclick="changeTardyPage(-1)" class="bg-gray-800 hover:bg-gray-700 text-orange-400 px-4 py-1.5 rounded text-xs font-bold border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow"><i class="fas fa-chevron-left mr-1"></i> Prev</button>
+                        <button id="tardyBtnNext" onclick="changeTardyPage(1)" class="bg-gray-800 hover:bg-gray-700 text-orange-400 px-4 py-1.5 rounded text-xs font-bold border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow">Next <i class="fas fa-chevron-right ml-1"></i></button>
+                    </div>
                 </div>
             </div>
         </div>
