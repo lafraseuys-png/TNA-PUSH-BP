@@ -31,6 +31,12 @@
 </head>
 <body>
 
+    <div id="globalSyncLock" class="hidden fixed inset-0 z-[99999] bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center text-center px-4 pointer-events-auto">
+        <i class="bi bi-cloud-arrow-down text-6xl text-blue-500 animate-bounce mb-4"></i>
+        <h2 class="text-xl font-bold text-white mb-2" id="syncLockTitle">Downloading Data</h2>
+        <p class="text-sm text-gray-400">Please do not close the app or navigate away.</p>
+    </div>
+
     <div id="screen-login" class="screen active min-h-screen flex flex-col justify-center px-6">
         <div class="absolute top-4 left-4 z-[999] block w-14 h-14 pointer-events-auto">
             <button onclick="triggerSecretUpdate()" class="w-full h-full text-[#70A827] hover:text-white p-2 cursor-pointer active:scale-95 transition-transform flex items-center justify-center">
@@ -1266,6 +1272,9 @@
                 </div>
                 <button onclick="devClearUnsynced()" class="w-full mt-3 bg-orange-900/30 hover:bg-orange-900/50 text-orange-500 border border-orange-500/50 font-bold py-3 rounded-xl transition shadow-lg">
                     <i class="bi bi-trash mr-2"></i> Wipe Unsynced Records
+                </button>
+                <button onclick="devPurgeMasterData()" class="w-full mt-3 bg-red-900/30 hover:bg-red-900/50 text-red-500 border border-red-500/50 font-bold py-3 rounded-xl transition shadow-lg">
+                    <i class="bi bi-database-x mr-2"></i> Purge Corrupted Master Data
                 </button>
             </div>
 
