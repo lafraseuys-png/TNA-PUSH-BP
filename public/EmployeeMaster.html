@@ -751,10 +751,26 @@
                     <input type="text" id="createEmpLastName" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-green-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-gray-400 mb-1">Department</label>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Department <span class="text-red-400">*</span></label>
                     <select id="createEmpDept" required onchange="syncHODDept('create')" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-green-500">
                         <option value="">Select Department...</option>
                     </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">ID/Passport Number <span class="text-red-400">*</span></label>
+                    <input type="text" id="createEmpIDNumber" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-green-500">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Group Start Date <span class="text-red-400">*</span></label>
+                        <input type="date" id="createEmpStartDate" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-green-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Default Shift <span class="text-red-400">*</span></label>
+                        <select id="createEmpDefaultShift" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-green-500">
+                            <option value="">-- Select Shift --</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="border-t border-gray-700 pt-3 mt-2">
                     <label class="flex items-center cursor-pointer mb-2">
