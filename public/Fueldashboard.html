@@ -16,6 +16,7 @@
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         body {
@@ -231,6 +232,71 @@
                 <div class="card p-8 bg-[#1a1a1a]">
                     <h4 class="font-black text-white mb-8 text-xs uppercase tracking-[0.2em] flex items-center"><i class="bi bi-fuel-pump-fill text-[#70A827] mr-3"></i> Physical Depot Inventory</h4>
                     <div id="dashboard-tank-levels" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8"></div>
+                </div>
+
+                <div class="card p-8 mt-8 border-t-4 border-[#70A827]">
+                    <h4 class="font-black text-white mb-8 text-xs uppercase tracking-[0.2em] flex items-center"><i class="fas fa-chart-pie text-[#70A827] mr-3"></i> Analytics & Distributions</h4>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                        <div class="bg-[#1a1a1a] p-4 rounded-xl border border-[#333]">
+                            <h5 class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-4 text-center">Activity Distribution (Overall)</h5>
+                            <div class="relative h-64"><canvas id="chartActivityPie"></canvas></div>
+                        </div>
+                        <div class="bg-[#1a1a1a] p-4 rounded-xl border border-[#333]">
+                            <h5 class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-4 text-center">Asset Utilization (Liters / Vehicle)</h5>
+                            <div class="relative h-64"><canvas id="chartAssetBar"></canvas></div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                        <div class="bg-[#1a1a1a] p-4 rounded-xl border border-[#333]">
+                            <h5 class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-4 text-center">Distribution per Farm</h5>
+                            <div class="relative h-64"><canvas id="chartFarmPie"></canvas></div>
+                        </div>
+                        <div class="bg-[#1a1a1a] p-4 rounded-xl border border-[#333]">
+                            <h5 class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-4 text-center">Distribution per Farm Unit</h5>
+                            <div class="relative h-64"><canvas id="chartUnitPie"></canvas></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#1a1a1a] p-4 rounded-xl border border-[#333]">
+                        <h5 class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-4 text-center">Fuel Efficiency (km/L)</h5>
+                        <div class="relative h-64"><canvas id="chartEfficiencyBar"></canvas></div>
+                    </div>
+                </div>
+
+                <div class="card p-8 mt-8 border-t-4 border-orange-500">
+                    <h4 class="font-black text-white mb-6 text-xs uppercase tracking-[0.2em] flex items-center"><i class="fas fa-map-marked-alt text-orange-500 mr-3"></i> Geospatial Heat Map</h4>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6 bg-[#1a1a1a] p-4 rounded-xl border border-[#333]">
+                        <div>
+                            <label class="block text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2">Scope</label>
+                            <select id="heatScope" class="form-input w-full p-2 text-xs text-white">
+                                <option value="farm">By Parent Farm</option>
+                                <option value="unit">By Farm Unit</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2">Metric</label>
+                            <select id="heatMetric" class="form-input w-full p-2 text-xs text-orange-400 font-bold">
+                                <option value="consumption">Total Consumption (Liters)</option>
+                                <option value="efficiency">Average Efficiency (km/L)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2">Activity Filter</label>
+                            <select id="heatActivity" class="form-input w-full p-2 text-xs text-white"><option value="ALL">All Activities</option></select>
+                        </div>
+                        <div>
+                            <label class="block text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2">Asset Filter</label>
+                            <select id="heatVehicle" class="form-input w-full p-2 text-xs text-white"><option value="ALL">All Vehicles</option></select>
+                        </div>
+                        <div class="flex items-end">
+                            <button onclick="updateHeatmap()" class="w-full bg-orange-600 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-orange-500 transition shadow-lg flex items-center justify-center h-[38px]"><i class="fas fa-layer-group mr-2"></i> Render</button>
+                        </div>
+                    </div>
+
+                    <div id="heatMapContainer" class="w-full rounded-xl border border-[#333] z-10 bg-[#111]" style="height: 500px; min-height: 500px; position: relative;"></div>
                 </div>
             </section>
             <section id="page-transactions" class="page-section">
@@ -515,6 +581,7 @@
                         <button onclick="showMgmt('activities', this)" class="mgmt-tab px-6 sm:px-8 py-3 font-black text-gray-500 hover:text-white uppercase text-xs tracking-widest whitespace-nowrap">Activities</button>
                         <button onclick="showMgmt('trips', this)" class="mgmt-tab px-6 sm:px-8 py-3 font-black text-gray-500 hover:text-white uppercase text-xs tracking-widest whitespace-nowrap">Trip Logs</button>
                         <button onclick="showMgmt('clients', this)" class="mgmt-tab px-6 sm:px-8 py-3 font-black text-gray-500 hover:text-white uppercase text-xs tracking-widest whitespace-nowrap">Clients</button>
+                        <button onclick="showMgmt('pricing', this)" class="mgmt-tab px-6 sm:px-8 py-3 font-black text-gray-500 hover:text-white uppercase text-xs tracking-widest whitespace-nowrap">Fuel Pricing</button>
                     </div>
                     
                     <div id="mgmt-farms" class="mgmt-content active">
@@ -578,17 +645,55 @@
                     </div>
 
                     <div id="mgmt-clients" class="mgmt-content">
-                        <div class="max-w-xl bg-[#1a1a1a] p-8 rounded-2xl border border-[#333]">
-                            <h3 class="text-[10px] font-black mb-6 text-[#70A827] uppercase tracking-widest">Client Deliveries List</h3>
-                            <div class="flex flex-col sm:flex-row gap-3 mb-8">
-                                <input type="text" id="newClientName" placeholder="e.g. ABC Fresh Produce" class="form-input w-full sm:flex-1 p-3 text-sm">
-                                <button onclick="addClient()" class="bg-[#70A827] text-black px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest hover:brightness-110 w-full sm:w-auto">Add</button>
+                            <div class="max-w-xl bg-[#1a1a1a] p-8 rounded-2xl border border-[#333]">
+                                <h3 class="text-[10px] font-black mb-6 text-[#70A827] uppercase tracking-widest">Client Deliveries List</h3>
+                                <div class="flex flex-col sm:flex-row gap-3 mb-8">
+                                    <input type="text" id="newClientName" placeholder="e.g. ABC Fresh Produce" class="form-input w-full sm:flex-1 p-3 text-sm">
+                                    <button onclick="addClient()" class="bg-[#70A827] text-black px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest hover:brightness-110 w-full sm:w-auto">Add</button>
+                                </div>
+                                <ul id="clientList" class="divide-y divide-[#333] bg-[#121212] border border-[#333] rounded-xl overflow-hidden"></ul>
                             </div>
-                            <ul id="clientList" class="divide-y divide-[#333] bg-[#121212] border border-[#333] rounded-xl overflow-hidden"></ul>
                         </div>
+
+                        <div id="mgmt-pricing" class="mgmt-content">
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                                <div class="lg:col-span-1 bg-[#1a1a1a] p-6 rounded-2xl border border-[#333] h-fit">
+                                    <h3 class="text-[10px] font-black mb-4 text-orange-500 uppercase tracking-widest">Add / Retroactive Price</h3>
+                                    <div class="space-y-4">
+                                        <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Fuel Type</label>
+                                            <select id="newPriceType" class="form-input p-3 w-full text-sm">
+                                                <option value="Diesel 50ppm">Diesel 50ppm</option><option value="Diesel 500ppm">Diesel 500ppm</option><option value="Petrol 95">Petrol 95</option><option value="Petrol 93">Petrol 93</option><option value="Paraffin">Paraffin</option>
+                                            </select>
+                                        </div>
+                                        <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Price per Litre (R)</label><input type="number" step="0.01" id="newPriceValue" class="form-input p-3 w-full text-sm text-[#70A827] font-black" placeholder="e.g. 23.50"></div>
+                                        <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Valid From Date</label><input type="date" id="newPriceDate" class="form-input p-3 w-full text-sm font-mono"></div>
+                                        <button onclick="addFuelPrice()" class="w-full bg-orange-600 text-white px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-orange-500 transition shadow-lg">Save Price</button>
+                                    </div>
+                                    <div class="mt-8 border-t border-[#333] pt-6">
+                                        <h3 class="text-[10px] font-black mb-4 text-gray-500 uppercase tracking-widest border-b border-[#333] pb-2">Price History</h3>
+                                        <div class="overflow-y-auto max-h-[300px] tile-scroll pr-2">
+                                            <table class="w-full text-left text-xs">
+                                                <tbody id="fuelPriceListBody" class="divide-y divide-[#333]"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="lg:col-span-2 bg-[#1a1a1a] p-6 rounded-2xl border border-[#333]">
+                                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 border-b border-[#333] pb-4">
+                                        <h3 class="text-[10px] font-black text-orange-500 uppercase tracking-widest"><i class="fas fa-chart-line mr-2"></i> Pricing Trends</h3>
+                                        <div class="flex gap-2 items-center">
+                                            <input type="date" id="chartPriceStart" onchange="renderFuelPriceChart()" class="form-input p-2 text-xs font-mono bg-[#111]">
+                                            <span class="text-gray-500 font-bold text-[10px] uppercase">to</span>
+                                            <input type="date" id="chartPriceEnd" onchange="renderFuelPriceChart()" class="form-input p-2 text-xs font-mono bg-[#111]">
+                                        </div>
+                                    </div>
+                                    <div class="relative h-[400px] w-full"><canvas id="chartFuelPricingTrend"></canvas></div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-                </div>
-            </section>
+                </section>
             
             <section id="page-users" class="page-section">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -739,6 +844,35 @@
 
     <div id="imgModal" class="hidden fixed inset-0 bg-black bg-opacity-90 z-[100] flex items-center justify-center p-4" onclick="this.classList.add('hidden')"><img id="modalImg" src="" class="max-w-full max-h-full rounded shadow-2xl"></div>
 
+    <div id="manageDepotModal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-[100] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-[#1a1a1a] border border-[#333] rounded-2xl shadow-2xl p-8 w-full max-w-lg border-t-4 border-blue-500">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-black text-white uppercase tracking-widest text-xs">Manage Depot / Tank</h3>
+                <button onclick="document.getElementById('manageDepotModal').classList.add('hidden')" class="text-gray-500 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <input type="hidden" id="manageDepotId">
+            
+            <div class="space-y-4 mb-6 bg-[#252525] p-4 rounded-xl border border-[#333]">
+                <h4 class="text-[10px] text-gray-400 font-bold uppercase tracking-widest border-b border-[#333] pb-2">Edit Details & Capacity</h4>
+                <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Depot Name</label><input type="text" id="editDepotName" class="form-input p-3 w-full"></div>
+                <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Location</label><input type="text" id="editDepotLoc" class="form-input p-3 w-full"></div>
+                <div><label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Capacity (Liters)</label><input type="number" id="editDepotCap" class="form-input p-3 w-full font-mono text-[#70A827]"></div>
+                <button onclick="saveDepotDetails()" class="w-full bg-[#333] text-[#70A827] py-3 rounded-xl font-black uppercase tracking-widest text-[10px] hover:bg-[#444] transition mt-2">Save Details</button>
+            </div>
+
+            <div class="bg-[#252525] p-4 rounded-xl border border-[#333]">
+                <h4 class="text-[10px] text-gray-400 font-bold uppercase tracking-widest border-b border-[#333] pb-2 mb-4">Actions</h4>
+                <div class="grid grid-cols-2 gap-3">
+                    <button id="btnModalPumps" class="bg-indigo-900/30 text-indigo-400 border border-indigo-900/50 py-3 rounded-lg text-[10px] font-black uppercase hover:bg-indigo-900/50 transition shadow">Manage Pumps</button>
+                    <button id="btnModalRefill" class="bg-green-900/30 text-green-500 border border-green-900/50 py-3 rounded-lg text-[10px] font-black uppercase hover:bg-green-900/50 transition shadow">Refill Tank</button>
+                    <button id="btnModalLevel" class="bg-orange-900/30 text-orange-500 border border-orange-900/50 py-3 rounded-lg text-[10px] font-black uppercase hover:bg-orange-900/50 transition shadow">Set Level</button>
+                    <button id="btnModalTransfer" class="bg-blue-900/30 text-blue-400 border border-blue-900/50 py-3 rounded-lg text-[10px] font-black uppercase hover:bg-blue-900/50 transition shadow">Transfer Fuel</button>
+                </div>
+                <button id="btnModalDelete" class="w-full bg-red-900/30 text-red-500 border border-red-900/50 py-3 rounded-lg text-[10px] font-black uppercase hover:bg-red-900/50 transition mt-3"><i class="fas fa-trash mr-2"></i> Deactivate Depot</button>
+            </div>
+        </div>
+    </div>
     <div id="refillModal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-[100] flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-[#1a1a1a] border border-[#333] rounded-2xl shadow-2xl p-8 w-full max-w-3xl border-t-4 border-green-500 max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center mb-6 border-b border-[#333] pb-4">
