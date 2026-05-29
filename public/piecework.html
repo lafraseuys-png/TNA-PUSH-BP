@@ -7,6 +7,14 @@
     <link rel="stylesheet" href="/css/styles.css?v=1.0.10">
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    
     <style>
         body {
             background-color: #0f172a; 
@@ -136,6 +144,7 @@
         
         <div class="nav-links" id="sidebarNav">
             <button onclick="showSection('dashboard', this)" class="nav-link w-full text-left bg-pink-900 text-white sidebar-btn"><i class="fas fa-tasks"></i> Piece Work Dashboard</button>
+            <button onclick="showSection('maps', this)" class="nav-link w-full text-left sidebar-btn"><i class="fas fa-map-marked-alt"></i> Field Maps</button>
             <button onclick="showSection('teams', this)" class="nav-link w-full text-left sidebar-btn"><i class="fas fa-users-cog"></i> Teams</button>
             <button onclick="showSection('activities', this)" class="nav-link w-full text-left sidebar-btn"><i class="fas fa-box-open"></i> Activities & Pricing</button>
             <button onclick="showSection('tasks', this)" class="nav-link w-full text-left sidebar-btn"><i class="fas fa-clipboard-list"></i> Tasks</button>
@@ -161,6 +170,40 @@
             <div class="bg-gray-800 p-6 rounded-lg shadow-lg border-t-4 border-pink-500">
                 <h2 class="text-xl font-bold mb-4">Module Initialized</h2>
                 <p class="text-gray-400">The Piece Work interface is ready for backend integration.</p>
+            </div>
+        </div>
+
+        <div id="page-maps" class="page-section hidden">
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg border-t-4 border-indigo-500 w-full mb-6 flex flex-col h-full min-h-[800px]">
+                <div class="flex justify-between items-center border-b border-gray-700 pb-2 mb-4 flex-shrink-0">
+                    <h3 class="font-bold text-gray-300"><i class="fas fa-map-marked-alt mr-2"></i>Field Maps (Piece Work Activity)</h3>
+                    <button onclick="savePieceworkMapDefaultLocation()" class="bg-gray-700 hover:bg-gray-600 text-indigo-400 px-3 py-1.5 rounded text-[10px] font-bold transition shadow border border-gray-600">
+                        <i class="fas fa-save mr-1"></i> Save Default View
+                    </button>
+                </div>
+                
+                <div class="flex flex-wrap items-end gap-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700 flex-shrink-0 justify-between w-full">
+                    <div class="flex items-end gap-3">
+                        <div>
+                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Select Date</label>
+                            <input type="date" id="pwMapDate" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-indigo-500 w-36">
+                        </div>
+                        <button onclick="openMapFilterModal()" class="bg-gray-800 hover:bg-gray-700 border border-gray-600 text-indigo-400 px-4 py-1.5 rounded text-xs font-bold transition shadow h-8 flex items-center mb-0.5">
+                            <i class="fas fa-filter mr-2"></i> Select Teams & Tasks <span id="pwMapFilterBadge" class="ml-2 bg-indigo-600 text-white px-1.5 py-0.5 rounded-full text-[9px] hidden">0</span>
+                        </button>
+                        <button onclick="loadPieceworkMapData()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-1.5 rounded text-xs font-bold transition shadow h-8 flex items-center mb-0.5">
+                            <i class="fas fa-map-pin mr-2"></i> Plot Activities
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-gray-900 border border-gray-700 rounded p-2 relative mt-4 w-full" style="height: 600px; min-height: 600px;">
+                    <div id="pwMapContainer" class="w-full h-full rounded z-0" style="height: 100%;"></div>
+                    <div id="pwMapLoader" class="absolute inset-0 bg-gray-900/80 z-10 flex flex-col justify-center items-center hidden rounded">
+                        <i class="fas fa-circle-notch fa-spin text-4xl text-indigo-500 mb-4"></i>
+                        <p class="text-sm font-bold text-gray-300 tracking-widest uppercase animate-pulse">Fetching Field Data...</p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -288,20 +331,26 @@
                 <div id="settings-farms-content">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                         <div class="bg-gray-900 p-6 rounded-lg border border-gray-700">
-                            <h3 class="text-xs font-bold mb-4 text-teal-400 uppercase tracking-widest">Add Parent Farm</h3>
+                            <h3 class="text-xs font-bold mb-4 text-teal-400 uppercase tracking-widest flex justify-between">Add Parent Farm <span id="farmLocBadge" class="text-gray-500"><i class="fas fa-map-marker-alt"></i> Not Set</span></h3>
                             <div class="flex flex-col sm:flex-row gap-3">
+                                <input type="hidden" id="newFarmLat"><input type="hidden" id="newFarmLng"><input type="hidden" id="newFarmRad">
                                 <input type="text" id="newFarmName" placeholder="e.g. Highlands" class="w-full sm:flex-1 bg-gray-800 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-teal-500">
-                                <button onclick="addFarm()" class="w-full sm:w-auto bg-gray-700 hover:bg-gray-600 text-white px-6 py-2 rounded text-xs font-bold uppercase tracking-widest shadow">Add</button>
+                                <div class="flex gap-2">
+                                    <button onclick="openLocationPicker('farm', null, null, null, null)" class="bg-indigo-900/40 text-indigo-400 border border-indigo-900 px-4 py-2 rounded text-xs font-bold hover:bg-indigo-900/60 transition shadow" title="Set Boundary"><i class="fas fa-map-pin"></i></button>
+                                    <button onclick="addFarm()" class="w-full sm:w-auto bg-gray-700 hover:bg-gray-600 text-white px-6 py-2 rounded text-xs font-bold uppercase tracking-widest shadow">Add</button>
+                                </div>
                             </div>
                         </div>
                         <div class="bg-gray-900 p-6 rounded-lg border border-gray-700">
-                            <h3 class="text-xs font-bold mb-4 text-teal-400 uppercase tracking-widest">Add Field Unit</h3>
+                            <h3 class="text-xs font-bold mb-4 text-teal-400 uppercase tracking-widest flex justify-between">Add Field Unit <span id="unitLocBadge" class="text-gray-500"><i class="fas fa-map-marker-alt"></i> Not Set</span></h3>
                             <div class="space-y-3">
+                                <input type="hidden" id="newUnitLat"><input type="hidden" id="newUnitLng"><input type="hidden" id="newUnitRad">
                                 <select id="unitFarmSelect" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-teal-500"></select>
                                 <div class="flex flex-col sm:flex-row gap-3">
                                     <input type="text" id="newUnitName" placeholder="Unit Name" class="w-full sm:flex-1 bg-gray-800 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-teal-500">
-                                    <div class="flex gap-3 w-full sm:w-auto">
-                                        <input type="number" id="newUnitSize" placeholder="Ha" class="flex-1 sm:w-24 bg-gray-800 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-teal-500">
+                                    <div class="flex gap-2 w-full sm:w-auto">
+                                        <input type="number" id="newUnitSize" placeholder="Ha" class="w-20 bg-gray-800 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-teal-500">
+                                        <button onclick="openLocationPicker('unit', null, null, null, null)" class="bg-indigo-900/40 text-indigo-400 border border-indigo-900 px-4 py-2 rounded text-xs font-bold hover:bg-indigo-900/60 transition shadow" title="Set Boundary"><i class="fas fa-map-pin"></i></button>
                                         <button onclick="addUnit()" class="bg-teal-700 hover:bg-teal-600 text-white px-6 py-2 rounded text-xs font-bold uppercase tracking-widest shadow">Add</button>
                                     </div>
                                 </div>
@@ -1002,7 +1051,137 @@
         </div>
     </div>
 
-   <script>
+    <div id="mapFilterModal" class="modal-backdrop" style="z-index: 60;">
+        <div class="bg-gray-800 w-[700px] max-w-[95vw] rounded shadow-2xl border border-indigo-500 flex flex-col max-h-[85vh]">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t flex-shrink-0">
+                <h3 class="font-bold text-lg text-indigo-400"><i class="fas fa-filter mr-2"></i>Filter Map Data</h3>
+                <button onclick="document.getElementById('mapFilterModal').classList.remove('active')" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="flex flex-1 overflow-hidden p-0">
+                <div class="w-1/2 flex flex-col border-r border-gray-700 bg-gray-900">
+                    <div class="p-3 border-b border-gray-700 bg-gray-800/50 flex justify-between items-center shadow-sm z-10">
+                        <h4 class="text-xs font-bold text-gray-300 uppercase tracking-wider">Select Teams</h4>
+                        <div>
+                            <button onclick="toggleAllMapFilters('team', true)" class="text-[10px] text-indigo-400 hover:text-white font-bold transition">All</button>
+                            <span class="text-gray-600 mx-1">|</span>
+                            <button onclick="toggleAllMapFilters('team', false)" class="text-[10px] text-gray-400 hover:text-white transition">None</button>
+                        </div>
+                    </div>
+                    <div class="overflow-y-auto flex-1 p-2 space-y-1 shadow-inner" id="mapFilterTeamList">
+                        </div>
+                </div>
+                <div class="w-1/2 flex flex-col bg-gray-900">
+                    <div class="p-3 border-b border-gray-700 bg-gray-800/50 flex justify-between items-center shadow-sm z-10">
+                        <h4 class="text-xs font-bold text-gray-300 uppercase tracking-wider">Select Tasks</h4>
+                        <div>
+                            <button onclick="toggleAllMapFilters('task', true)" class="text-[10px] text-indigo-400 hover:text-white font-bold transition">All</button>
+                            <span class="text-gray-600 mx-1">|</span>
+                            <button onclick="toggleAllMapFilters('task', false)" class="text-[10px] text-gray-400 hover:text-white transition">None</button>
+                        </div>
+                    </div>
+                    <div class="overflow-y-auto flex-1 p-2 space-y-1 shadow-inner" id="mapFilterTaskList">
+                        </div>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b flex justify-between items-center flex-shrink-0">
+                <span class="text-[10px] text-gray-500 italic"><i class="fas fa-info-circle mr-1"></i>Leave both empty to show ALL map data.</span>
+                <button onclick="applyMapFilters()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded text-xs font-bold shadow transition">Apply & Plot</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="mapPinListModal" class="modal-backdrop" style="z-index: 65;">
+        <div class="bg-gray-800 w-[500px] max-w-[95vw] rounded shadow-2xl border border-indigo-500 flex flex-col max-h-[85vh]">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t flex-shrink-0">
+                <h3 class="font-bold text-lg text-indigo-400"><i class="fas fa-layer-group mr-2"></i>Multiple Transactions Found</h3>
+                <button onclick="document.getElementById('mapPinListModal').classList.remove('active')" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4 space-y-2" id="mapPinListContainer">
+                </div>
+            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b flex justify-end">
+                <button onclick="document.getElementById('mapPinListModal').classList.remove('active')" class="bg-gray-600 hover:bg-gray-500 text-white px-6 py-2 rounded text-xs font-bold shadow transition">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="mapPinDetailsModal" class="modal-backdrop" style="z-index: 70;">
+        <div class="bg-gray-800 w-[600px] max-w-[95vw] rounded shadow-2xl border border-teal-500 flex flex-col max-h-[90vh]">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t flex-shrink-0">
+                <h3 class="font-bold text-lg text-teal-400"><i class="fas fa-map-marker-alt mr-2"></i>Field Transaction Details</h3>
+                <button onclick="document.getElementById('mapPinDetailsModal').classList.remove('active')" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1 space-y-6">
+                
+                <div class="flex gap-4">
+                    <div id="pinModalPhoto" class="w-1/3 bg-black rounded border border-gray-600 flex items-center justify-center overflow-hidden min-h-[120px]">
+                        </div>
+                    <div class="w-2/3 flex flex-col justify-center">
+                        <h4 id="pinModalEmpName" class="text-xl font-bold text-gray-200">Emp Name</h4>
+                        <p id="pinModalTeam" class="text-xs text-indigo-400 font-bold mb-2">Team Name</p>
+                        <div class="grid grid-cols-2 gap-2 text-xs text-gray-400 mb-2">
+                            <div><i class="fas fa-clock mr-1"></i> <span id="pinModalTime" class="text-gray-200">00:00</span></div>
+                            <div><i class="fas fa-map-pin mr-1"></i> <span id="pinModalLocation" class="text-gray-200">Farm - Unit</span></div>
+                        </div>
+                        <div class="bg-gray-900 p-2 rounded border border-gray-700">
+                            <span class="text-[10px] text-gray-500 uppercase tracking-wider block mb-1">Harvested / Completed</span>
+                            <span id="pinModalQty" class="text-lg font-black text-green-400">0.00 Units</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-900 p-4 rounded border border-gray-700">
+                    <h4 class="text-xs font-bold text-blue-400 uppercase tracking-wider mb-2" id="pinModalTaskName">Task Name</h4>
+                    <div class="w-full bg-gray-800 rounded-full h-3 border border-gray-600 relative overflow-hidden mb-1">
+                        <div id="pinModalTaskProgress" class="bg-gradient-to-r from-blue-600 to-blue-400 h-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <div class="flex justify-between text-[10px] font-bold text-gray-400">
+                        <span id="pinModalTaskText">0 / 0 Completed</span>
+                        <span id="pinModalTaskPct">0%</span>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 border-b border-gray-700 pb-1">Nearby Activity (Within 20m)</h4>
+                    <div id="pinModalNearbyList" class="space-y-2 max-h-40 overflow-y-auto pr-2">
+                        </div>
+                </div>
+
+            </div>
+            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b flex justify-end">
+                <button id="btnMapPinClose" onclick="document.getElementById('mapPinDetailsModal').classList.remove('active')" class="bg-gray-600 hover:bg-gray-500 text-white px-6 py-2 rounded text-xs font-bold shadow transition">Close</button>
+            </div>
+        </div>
+    </div>
+
+   <div id="locationPickerModal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-[200] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-gray-800 border border-gray-600 rounded-lg shadow-2xl p-6 w-full max-w-4xl border-t-4 border-indigo-500 flex flex-col">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-white uppercase tracking-widest text-xs"><i class="fas fa-map-marked-alt mr-2 text-indigo-400"></i>Set Location Boundary</h3>
+                <button onclick="document.getElementById('locationPickerModal').classList.add('hidden')" class="text-gray-500 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="flex gap-4 mb-4">
+                <div class="flex-1"><label class="block text-[10px] text-gray-500 uppercase font-bold mb-1">Search Place</label>
+                <div class="flex"><input type="text" id="mapSearchInput" class="w-full bg-gray-900 border border-gray-600 rounded-l p-2 text-sm text-white focus:outline-none focus:border-indigo-500" placeholder="e.g. Pretoria"><button onclick="searchMapLocation()" class="bg-gray-700 px-3 rounded-r hover:bg-gray-600 transition"><i class="fas fa-search"></i></button></div></div>
+                <div class="w-32"><label class="block text-[10px] text-gray-500 uppercase font-bold mb-1">Radius (Meters)</label>
+                <input type="number" id="mapRadiusInput" value="500" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-center font-mono text-white focus:outline-none focus:border-indigo-500" oninput="updateMapRadius()"></div>
+            </div>
+
+            <div id="pickerMapContainer" class="w-full bg-[#111] border border-gray-700 rounded" style="height: 400px; z-index: 10;"></div>
+            
+            <input type="hidden" id="mapTargetType">
+            <input type="hidden" id="mapTargetId">
+            <div class="flex justify-between items-center mt-6">
+                <p class="text-[10px] text-gray-500 italic font-bold"><i class="fas fa-info-circle mr-1"></i> Click map to place boundary. Drag pin to move.</p>
+                <div class="flex gap-3">
+                    <button onclick="document.getElementById('locationPickerModal').classList.add('hidden')" class="bg-gray-600 text-white px-6 py-2 rounded text-xs font-bold shadow hover:bg-gray-500 transition">Cancel</button>
+                    <button onclick="saveLocationPicker()" class="bg-indigo-600 text-white px-6 py-2 rounded text-xs font-bold shadow hover:bg-indigo-500 transition shadow-lg">Confirm Location</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
             const sidebarLinks = document.querySelectorAll('#sidebarNav .sidebar-btn');
             const sidebar = document.getElementById('mainSidebar');
