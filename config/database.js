@@ -3,8 +3,9 @@ const sql = require('mssql');
 // Master DB Config
 const masterConfig = {
     user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD, // <-- Back to reading from secrets.env!
+    password: process.env.DB_PASSWORD, 
     server: process.env.DB_SERVER,
+    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 1433,
     database: process.env.DB_NAME,
    options: {
         encrypt: false,
@@ -27,12 +28,32 @@ const tenantConnecting = {};
 
 async function connectMaster() {
     try {
+        // Primary Phase: Force attempt on standard SQL port 1433
+        masterConfig.port = 1433;
+        masterPool.config.port = 1433;
+        
         if (!masterPool.connected && !masterPool.connecting) {
             await masterPool.connect();
         }
-        console.log('✔ Connected to Master DB');
+        console.log('✔ Connected to Master DB on default port 1433');
     } catch (err) {
-        console.error('✘ Master DB Connection Failed:', err);
+        console.log('✘ Connection failed on 1433. Attempting fallback to secrets.env DB_PORT...');
+        
+        // Fallback Phase: Use custom port from secrets.env
+        if (process.env.DB_PORT) {
+            try {
+                const customPort = parseInt(process.env.DB_PORT, 10);
+                masterConfig.port = customPort;        // Updates config so future Tenant pools use the right port
+                masterPool.config.port = customPort;   // Updates the current Master pool connection logic
+                
+                await masterPool.connect();
+                console.log(`✔ Successfully connected to Master DB on fallback port ${customPort}`);
+            } catch (fallbackErr) {
+                console.error(`✘ Fallback Connection also failed on port ${customPort}:`, fallbackErr.message);
+            }
+        } else {
+            console.error('✘ No DB_PORT found in secrets.env. Cannot attempt fallback.');
+        }
     }
 }
 
