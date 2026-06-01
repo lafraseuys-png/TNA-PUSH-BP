@@ -771,14 +771,15 @@
         </div>
     </div>
 
-    <div id="templateModal" class="modal-backdrop py-6">
-        <div class="bg-gray-800 w-full max-w-5xl h-full rounded-xl shadow-2xl border border-gray-600 flex flex-col">
-            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-xl">
+   <div id="templateModal" class="modal-backdrop z-[150] p-4 md:p-6">
+        <div class="bg-gray-800 w-full max-w-5xl max-h-[90vh] rounded-xl shadow-2xl border border-gray-600 flex flex-col">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-xl shrink-0">
                 <h3 class="font-bold text-xl text-purple-400"><i class="fas fa-file-contract mr-2"></i>Contract Template Editor</h3>
-                <button onclick="closeModal('templateModal')" class="text-gray-400 hover:text-white text-xl"><i class="fas fa-times"></i></button>
+                <button type="button" onclick="closeModal('templateModal')" class="text-gray-400 hover:text-white text-xl"><i class="fas fa-times"></i></button>
             </div>
-            <div class="p-6 flex-1 flex flex-col overflow-hidden">
-                <form id="templateForm" class="flex-1 flex flex-col space-y-4">
+            
+            <form id="templateForm" class="flex-1 flex flex-col min-h-0 overflow-hidden">
+                <div class="p-6 flex-1 overflow-y-auto space-y-4">
                     <div>
                         <label class="block text-sm font-bold text-gray-400 mb-1">Template Title</label>
                         <input type="text" id="tplTitle" class="w-full bg-gray-900 border border-gray-600 rounded p-3 text-white focus:outline-none focus:border-purple-500 font-bold text-lg" placeholder="e.g. Seasonal Worker 3-Month Contract" required>
@@ -788,33 +789,34 @@
                         <input type="checkbox" id="tplHasTranslation" onchange="toggleTranslationBody()" class="w-4 h-4 accent-purple-500 bg-gray-900 border-gray-600 rounded cursor-pointer">
                         <label for="tplHasTranslation" class="ml-2 text-xs font-bold text-purple-400 cursor-pointer">Include translated version (optional)</label>
                     </div>
-                    <div class="flex-1 flex flex-col min-h-0 md:flex-row gap-4">
-                        <div class="flex-1 flex flex-col min-h-0">
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="flex-1 flex flex-col min-h-[400px]">
                             <label class="block text-sm font-bold text-gray-400 mb-1 flex justify-between items-end">
                                 <span>Primary Contract Body <span class="text-xs text-blue-400 font-normal italic">(Vars: [Employee Name], [PIN], [Department], [Valid From], [Valid To], [ID Number], [Wage Type], [Wage Rate])</span></span>
                             </label>
                             <div id="tplBodyEditor" class="w-full flex-1 bg-white text-gray-900"></div>
                         </div>
-                        <div id="translatedBodyContainer" class="flex-1 flex flex-col min-h-0 hidden">
+                        <div id="translatedBodyContainer" class="flex-1 flex flex-col min-h-[400px] hidden">
                             <label class="block text-sm font-bold text-purple-400 mb-1 flex justify-between items-end">
                                 <span>Translated Contract Body</span>
                             </label>
                             <div id="tplBodyTranslatedEditor" class="w-full flex-1 bg-white text-gray-900"></div>
                         </div>
                     </div>
-                    <div class="pt-4 border-t border-gray-700 flex justify-between items-center">
-                        <button type="button" onclick="previewContractPDF()" class="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded font-bold shadow transition flex items-center" id="btnPreviewPdf">
-                            <i class="fas fa-file-pdf text-red-400 mr-2 text-lg"></i> Preview Finale PDF
+                </div>
+                
+                <div class="p-4 border-t border-gray-700 bg-gray-800 flex justify-between items-center shrink-0 rounded-b-xl">
+                    <button type="button" onclick="previewContractPDF()" class="px-4 md:px-6 py-2 md:py-3 bg-gray-700 hover:bg-gray-600 text-white rounded font-bold shadow transition flex items-center" id="btnPreviewPdf">
+                        <i class="fas fa-file-pdf text-red-400 mr-2 text-lg"></i> Preview Final PDF
+                    </button>
+                    <div class="space-x-3 flex">
+                        <button type="button" onclick="closeModal('templateModal')" class="px-4 md:px-6 py-2 md:py-3 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded font-bold shadow transition">Cancel</button>
+                        <button type="submit" class="px-6 md:px-8 py-2 md:py-3 bg-purple-600 hover:bg-purple-500 text-white rounded font-bold shadow-lg transition text-base md:text-lg" id="btnSaveTemplate">
+                            <i class="fas fa-save mr-2"></i> Save Template
                         </button>
-                        <div class="space-x-3">
-                            <button type="button" onclick="closeModal('templateModal')" class="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded font-bold shadow transition">Cancel</button>
-                            <button type="submit" class="px-8 py-3 bg-purple-600 hover:bg-purple-500 text-white rounded font-bold shadow-lg transition text-lg" id="btnSaveTemplate">
-                                <i class="fas fa-save mr-2"></i> Save Template
-                            </button>
-                        </div>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 

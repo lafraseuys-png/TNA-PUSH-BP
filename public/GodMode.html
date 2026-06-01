@@ -703,6 +703,10 @@
                         <button type="button" onclick="addDynamicCostToMatrix()" class="bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-1.5 px-4 rounded transition text-sm shadow">Add</button>
                     </div>
 
+                    <div id="pricingWarningMsg" class="hidden mb-4 p-3 bg-orange-900/40 border border-orange-700 rounded text-orange-400 text-sm font-bold">
+                        <i class="fas fa-exclamation-triangle mr-2"></i> Warning: One or more modules are priced below the recommended global base cost.
+                    </div>
+
                     <table class="w-full border-collapse mb-6 text-sm" id="pricingTable">
                         <thead>
                             <tr class="bg-gray-700 text-gray-300">
