@@ -648,6 +648,14 @@
                                 <tr><td colspan="12" class="p-4 text-center text-gray-500">Select dates and click Load Data.</td></tr>
                             </tbody>
                         </table>
+                        
+                        <div class="flex justify-between items-center mt-4 bg-gray-900 p-3 rounded border border-gray-700 shadow-inner">
+                            <span id="tvPageInfo" class="text-xs text-gray-400 font-bold tracking-widest uppercase">Showing 0 of 0</span>
+                            <div class="flex space-x-2">
+                                <button id="tvBtnPrev" onclick="changeTvPage(-1)" class="bg-gray-800 hover:bg-gray-700 text-teal-400 px-4 py-1.5 rounded text-xs font-bold border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow"><i class="fas fa-chevron-left mr-1"></i> Prev</button>
+                                <button id="tvBtnNext" onclick="changeTvPage(1)" class="bg-gray-800 hover:bg-gray-700 text-teal-400 px-4 py-1.5 rounded text-xs font-bold border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow">Next <i class="fas fa-chevron-right ml-1"></i></button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
