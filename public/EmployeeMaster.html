@@ -168,6 +168,8 @@
                                         <div class="border-t border-gray-700"></div>
                                         <button onclick="document.getElementById('bulkUploadInput').click()" class="w-full text-left px-4 py-3 text-xs text-gray-300 hover:bg-gray-700 hover:text-white transition"><i class="fas fa-upload mr-2 text-green-400"></i> Bulk Upload Excel</button>
                                         <button onclick="document.getElementById('bulkPhotoInput').click()" class="w-full text-left px-4 py-3 text-xs text-gray-300 hover:bg-gray-700 hover:text-white transition"><i class="fas fa-images mr-2 text-purple-400"></i> Bulk Upload Photos</button>
+                                        <div class="border-t border-gray-700"></div>
+                                        <button onclick="generateMissingLogins()" class="w-full text-left px-4 py-3 text-xs text-gray-300 hover:bg-gray-700 hover:text-white transition"><i class="fas fa-key mr-2 text-yellow-400"></i> Generate Missing Logins</button>
                                     </div>
                                 </div>
                             </div>
@@ -231,6 +233,7 @@
                                             Department <i id="sortIcon_Department" class="fas fa-sort text-gray-500 ml-2"></i>
                                         </div>
                                     </th>
+                                    <th class="p-3 border-r border-gray-600 text-left">Reports To</th>
                                     <th class="p-3 border-r border-gray-600 text-center">Photo</th>
                                     <th class="p-3 text-right">Actions</th>
                                 </tr>
@@ -773,6 +776,13 @@
                     </div>
                 </div>
                 <div class="border-t border-gray-700 pt-3 mt-2">
+                    <div class="relative mb-4">
+                        <label class="block text-xs font-bold text-indigo-400 mb-1"><i class="fas fa-user-tie mr-1"></i> Reports To (Direct Manager)</label>
+                        <input type="text" id="createEmpReportsToSearch" oninput="filterReportsToOptions('create')" onfocus="showReportsToDropdown('create')" placeholder="Type to search Name or PIN..." class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <input type="hidden" id="createEmpReportsTo">
+                        <div id="createEmpReportsToDropdown" class="hidden absolute z-[60] w-full bg-gray-800 border border-gray-500 rounded mt-1 max-h-48 overflow-y-auto shadow-2xl"></div>
+                    </div>
+                    
                     <label class="flex items-center cursor-pointer mb-2">
                         <input type="checkbox" id="createEmpIsHOD" onchange="toggleHODDropdown('create')" class="w-4 h-4 accent-green-500 bg-gray-900 border-gray-600 rounded cursor-pointer">
                         <span class="ml-2 text-xs font-bold text-purple-400"><i class="fas fa-crown mr-1"></i> Make Head of Department (HOD)</span>
@@ -888,6 +898,14 @@
                     <div>
                         <label class="block text-xs font-bold text-gray-400 mb-1">RFID Card Number</label>
                         <input type="text" id="editEmpCardNo" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="col-span-3 pt-2 pb-2 border-t border-b border-gray-700">
+                        <div class="relative w-full max-w-md">
+                            <label class="block text-xs font-bold text-indigo-400 mb-1"><i class="fas fa-user-tie mr-1"></i> Reports To (Direct Manager)</label>
+                            <input type="text" id="editEmpReportsToSearch" oninput="filterReportsToOptions('edit')" onfocus="showReportsToDropdown('edit')" placeholder="Type to search Name or PIN..." class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                            <input type="hidden" id="editEmpReportsTo">
+                            <div id="editEmpReportsToDropdown" class="hidden absolute z-[60] w-full bg-gray-800 border border-gray-500 rounded mt-1 max-h-48 overflow-y-auto shadow-2xl"></div>
+                        </div>
                     </div>
                     <div class="col-span-2 pt-2">
                         <label class="flex items-center cursor-pointer mb-2">

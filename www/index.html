@@ -1136,19 +1136,13 @@
                     <h4 class="text-sm font-bold text-white uppercase tracking-wider">Profile & Biometrics</h4>
                 </div>
                 
-                <div class="grid grid-cols-2 gap-3">
-                    <button type="button" id="btnUpdatePhoto" onclick="openCameraModal('edit_photo')" class="w-full bg-[#2a2a2a] hover:bg-[#333] border-2 border-dashed border-[#444] hover:border-blue-500 active:bg-blue-500/10 p-4 rounded-2xl flex flex-col items-center justify-center transition-all group shadow-sm">
-                        <div class="w-10 h-10 rounded-full bg-[#1e1e1e] group-hover:bg-blue-500/20 flex items-center justify-center mb-2 transition-colors">
-                            <i class="bi bi-image text-xl text-gray-400 group-hover:text-blue-500"></i>
+                <div class="grid grid-cols-1 gap-3">
+                    <button type="button" id="btnUpdateAndEnroll" onclick="openCameraModal('edit_combined')" class="w-full bg-[#2a2a2a] hover:bg-[#333] border-2 border-dashed border-[#444] hover:border-[#70A827] active:bg-[#70A827]/10 p-4 rounded-2xl flex flex-col items-center justify-center transition-all group shadow-sm">
+                        <div class="w-12 h-12 rounded-full bg-[#1e1e1e] group-hover:bg-[#70A827]/20 flex items-center justify-center mb-2 transition-colors">
+                            <i class="bi bi-person-bounding-box text-2xl text-gray-400 group-hover:text-[#70A827]"></i>
                         </div>
-                        <span class="text-[10px] font-bold text-white uppercase text-center mt-1">Update Photo</span>
-                    </button>
-                    
-                    <button type="button" id="btnEnrollFace" onclick="openCameraModal('edit_face')" class="w-full bg-[#2a2a2a] hover:bg-[#333] border-2 border-dashed border-[#444] hover:border-[#70A827] active:bg-[#70A827]/10 p-4 rounded-2xl flex flex-col items-center justify-center transition-all group shadow-sm">
-                        <div class="w-10 h-10 rounded-full bg-[#1e1e1e] group-hover:bg-[#70A827]/20 flex items-center justify-center mb-2 transition-colors">
-                            <i class="bi bi-camera text-xl text-gray-400 group-hover:text-[#70A827]"></i>
-                        </div>
-                        <span class="text-[10px] font-bold text-white uppercase text-center mt-1">Enroll Face</span>
+                        <span class="text-sm font-bold text-white uppercase text-center mt-1">Update & Enroll</span>
+                        <span class="text-[10px] text-gray-500 text-center mt-1">Capture photo and map face simultaneously</span>
                     </button>
                 </div>
                 
