@@ -264,9 +264,20 @@
                                     <option value="">-- Custom / No Role --</option>
                                 </select>
                             </div>
+
+                            <!-- NEW: Linked Employee Dropdown -->
+                            <div class="flex-1 min-w-[200px] relative">
+                                <label class="block text-xs font-bold text-teal-400 mb-1"><i class="fas fa-link mr-1"></i> Linked Employee</label>
+                                <input type="text" id="userLinkedEmpSearch" oninput="filterUserLinkedEmp()" onfocus="showUserLinkedEmpDropdown()" placeholder="Search Name or PIN..." class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
+                                <input type="hidden" id="userLinkedEmployee">
+                                <div id="userLinkedEmpDropdown" class="hidden absolute z-[70] w-full bg-gray-700 border border-gray-500 rounded mt-1 max-h-48 overflow-y-auto shadow-2xl"></div>
+                            </div>
                             
+                            <div class="w-full mt-2"></div> <!-- Forces a clean line break -->
+
                             <!-- Custom Module Checkboxes (Creation) -->
-                            <h4 class="text-xs font-bold text-blue-400 mb-2">Web Dashboard Modules</h4>
+                            <div class="w-full">
+                                <h4 class="text-xs font-bold text-blue-400 mb-2">Web Dashboard Modules</h4>
                                 <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
                                     <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userHr" class="mr-2 accent-blue-500"> HR Management</label>
                                     <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userFuel" class="mr-2 accent-blue-500"> Fuel Management</label>
@@ -277,6 +288,7 @@
                                     <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userEmployeeMaster" class="mr-2 accent-blue-500"> Employee Master</label>
                                     <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userEmployeeCosts" class="mr-2 accent-blue-500"> Employee Costs</label>
                                 </div>
+                            </div>
                                 
                                 <h4 class="text-xs font-bold text-purple-400 mb-2">Mobile App Access (Per Tile)</h4>
                                 <div class="grid grid-cols-2 md:grid-cols-3 gap-2">

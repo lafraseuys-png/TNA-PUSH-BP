@@ -18,14 +18,27 @@
             <button onclick="window.location.href='Launchpad.html'" class="text-gray-400 hover:text-white transition p-2 -ml-2 rounded-full hover:bg-gray-700">
                 <i class="fas fa-arrow-left text-lg"></i>
             </button>
-            <h1 class="text-lg font-black text-gray-200 tracking-wide">My ESS</h1>
-            <div class="w-8"></div> </div>
+            <h1 class="text-lg font-black text-gray-200 tracking-wide">Employee Self Service</h1>
+            <div class="w-8"></div>
     </div>
 
     <!-- Main Content -->
     <main class="max-w-3xl mx-auto p-4 sm:p-6 pb-20">
         
-        <!-- Pay Period Selector -->
+        <div class="bg-gray-800 rounded-xl p-4 shadow-lg border border-gray-700 mb-6 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <img id="essProfilePic" src="" class="w-14 h-14 rounded-full object-cover border-2 border-gray-600 hidden">
+                <div id="essProfileInitials" class="w-14 h-14 rounded-full bg-gray-700 border-2 border-gray-600 flex items-center justify-center text-xl font-bold text-gray-400"></div>
+                <div>
+                    <h2 id="essProfileName" class="text-lg font-black text-white">Loading...</h2>
+                    <p id="essProfileDept" class="text-xs text-gray-400 uppercase tracking-wider"></p>
+                </div>
+            </div>
+            <button onclick="openEssInfoModal()" class="bg-blue-600 hover:bg-blue-500 text-white w-10 h-10 rounded-full flex items-center justify-center shadow transition" title="Edit Address & Banking Info">
+                <i class="fas fa-info"></i>
+            </button>
+        </div>
+
         <div class="bg-gray-800 rounded-xl p-4 shadow-lg border border-gray-700 mb-6 relative">
             <label class="block text-[10px] text-gray-400 mb-1 uppercase tracking-wider font-bold">Pay period</label>
             <div class="relative">
@@ -44,6 +57,123 @@
         </div>
 
     </main>
+
+    <!-- ESS Info Modal -->
+    <div id="essInfoModal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-50 flex justify-center items-center p-4">
+        <form id="essInfoForm" onsubmit="saveEssInfo(event)" class="bg-gray-800 p-0 rounded-lg w-full max-w-md shadow-2xl border border-gray-600 flex flex-col max-h-[90vh]">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
+                <h2 class="text-lg font-bold text-blue-400"><i class="fas fa-user-edit mr-2"></i>Update Information</h2>
+                <button type="button" onclick="closeEssInfoModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-4">
+                
+                <!-- Read-Only Profile Header -->
+                <div class="flex items-center gap-4 pb-4 border-b border-gray-700">
+                    <img id="essModalProfilePic" src="" class="w-14 h-14 rounded-full object-cover border-2 border-gray-600 hidden">
+                    <div id="essModalProfileInitials" class="w-14 h-14 rounded-full bg-gray-700 border-2 border-gray-600 flex items-center justify-center text-xl font-bold text-gray-400 hidden"></div>
+                    <div>
+                        <h3 id="essModalProfileName" class="text-base font-bold text-gray-200 leading-tight"></h3>
+                        <p class="text-[10px] text-gray-400 mt-1"><i class="fas fa-lock mr-1 text-gray-500"></i>Photo changes must be requested via HR.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Street 1 <span class="text-red-400">*</span></label>
+                        <input type="text" id="essStreet1" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Street 2</label>
+                        <input type="text" id="essStreet2" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Suburb</label>
+                        <input type="text" id="essSuburb" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">City <span class="text-red-400">*</span></label>
+                        <input type="text" id="essCity" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Province</label>
+                        <input type="text" id="essProvince" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Country <span class="text-red-400">*</span></label>
+                        <input type="text" id="essCountry" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Postal Code</label>
+                        <input type="text" id="essPostalCode" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+                <div class="border-t border-gray-700 pt-3">
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Bank Name</label>
+                    <input type="text" id="essBankName" placeholder="e.g. FNB, Capitec, Standard Bank" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Account Number</label>
+                    <input type="text" id="essBankAccountNumber" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Branch Code</label>
+                        <input type="text" id="essBankBranchCode" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Account Type</label>
+                        <select id="essBankAccountType" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                            <option value="">-- Select --</option>
+                            <option value="Cheque">Cheque / Current</option>
+                            <option value="Savings">Savings</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="pt-2 border-t border-gray-700 mt-2">
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Upload Proof of Bank Account (Optional)</label>
+                    <input type="file" id="essBankProof" accept="image/*,application/pdf" class="w-full text-[10px] text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:font-bold file:bg-gray-700 file:text-white cursor-pointer">
+                    <p class="text-[9px] text-gray-500 mt-1">Upload a photo of your bank card or a recent bank statement.</p>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-end gap-3 shadow-inner">
+                <button type="button" onclick="closeEssInfoModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition">Cancel</button>
+                <button type="submit" id="saveEssInfoBtn" class="px-4 py-2 bg-blue-700 hover:bg-blue-600 text-white rounded font-bold text-sm shadow transition">Submit Updates</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ESS Leave Request Modal -->
+    <div id="essLeaveModal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-50 flex justify-center items-center p-4">
+        <form id="essLeaveForm" onsubmit="submitEssLeave(event)" class="bg-gray-800 p-0 rounded-lg w-full max-w-sm shadow-2xl border border-gray-600 flex flex-col">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
+                <h2 class="text-lg font-bold text-red-400"><i class="fas fa-plane-departure mr-2"></i>Log Leave</h2>
+                <button type="button" onclick="closeEssLeaveModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <input type="hidden" id="essLeaveDate">
+                <div class="text-center mb-4">
+                    <p class="text-xs text-gray-400 uppercase tracking-widest mb-1">Date of Absence</p>
+                    <p id="essLeaveDateDisplay" class="text-lg font-black text-gray-200"></p>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Leave Type <span class="text-red-400">*</span></label>
+                    <select id="essLeaveType" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-red-500">
+                        <option value="">Loading types...</option>
+                    </select>
+                </div>
+                <div class="pt-2 border-t border-gray-700 mt-2">
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Upload Proof (Doctor's Note, etc.)</label>
+                    <!-- capture="environment" encourages mobile devices to offer the camera -->
+                    <input type="file" id="essLeaveProof" accept="image/*,application/pdf" capture="environment" class="w-full text-[10px] text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:font-bold file:bg-gray-700 file:text-white cursor-pointer">
+                    <p class="text-[9px] text-gray-500 mt-1">Take a photo or upload a document to support your request.</p>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-end gap-3 shadow-inner">
+                <button type="button" onclick="closeEssLeaveModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition">Cancel</button>
+                <button type="submit" id="saveEssLeaveBtn" class="px-4 py-2 bg-red-700 hover:bg-red-600 text-white rounded font-bold text-sm shadow transition">Submit Request</button>
+            </div>
+        </form>
+    </div>
 
     <script src="ess_dashboard.js"></script>
 </body>

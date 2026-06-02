@@ -664,7 +664,7 @@
     <iframe id="empMasterIframe" data-src="EmployeeMaster.html" class="w-full h-full border-0"></iframe>
 </section>
 
-            <section id="page-workflow" class="page-section">
+           <section id="page-workflow" class="page-section">
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-pink-500">
                     <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
                         <h3 class="font-bold text-gray-300"><i class="fas fa-inbox mr-2"></i>Manager Inbox (Pending Approvals)</h3>
@@ -690,6 +690,64 @@
                                 <tr><td colspan="6" class="p-4 text-center text-gray-500">Loading inbox...</td></tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </section>
+                        <div class="flex space-x-2">
+                            <button onclick="bulkWorkflowAction('APPROVE')" class="bg-green-700 hover:bg-green-600 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow border border-green-500">
+                                <i class="fas fa-check-double mr-1"></i> Bulk Approve
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-end gap-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
+                        <div>
+                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Start Date</label>
+                            <input type="date" id="wfStartDate" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-pink-500 w-32">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">End Date</label>
+                            <input type="date" id="wfEndDate" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-pink-500 w-32">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Department</label>
+                            <select id="wfDeptFilter" onchange="filterWorkflowInbox()" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-pink-500 w-48">
+                                <option value="">-- Select Department --</option>
+                            </select>
+                        </div>
+                        <div class="flex-1 min-w-[200px]">
+                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Search Employee Name or PIN</label>
+                            <input type="text" id="wfSearch" oninput="filterWorkflowInbox()" placeholder="Search..." class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-pink-500">
+                        </div>
+                        <button onclick="filterWorkflowInbox()" class="bg-pink-600 hover:bg-pink-500 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow h-8">
+                            <i class="fas fa-filter mr-1"></i> Filter
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto rounded border border-gray-700">
+                        <table class="w-full text-left text-sm border-collapse">
+                            <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                                <tr>
+                                    <th class="p-3 w-10 text-center"><input type="checkbox" id="selectAllWf" onchange="toggleSelectAllWf(this)" class="accent-pink-500 w-4 h-4 cursor-pointer"></th>
+                                    <th class="p-3">Date</th>
+                                    <th class="p-3">Employee</th>
+                                    <th class="p-3">Exception / Detail</th>
+                                    <th class="p-3 text-center">Current Level</th>
+                                    <th class="p-3 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="workflowBody" class="divide-y divide-gray-700 bg-gray-900">
+                                <tr><td colspan="6" class="p-4 text-center text-gray-500">Loading inbox...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="flex justify-between items-center mt-4 bg-gray-900 p-3 rounded border border-gray-700 shadow-inner">
+                        <span id="wfPageInfo" class="text-xs text-gray-400 font-bold tracking-widest uppercase">Showing 0 of 0</span>
+                        <div class="flex space-x-2">
+                            <button id="wfBtnPrev" onclick="changeWfPage(-1)" class="bg-gray-800 hover:bg-gray-700 text-pink-400 px-4 py-1.5 rounded text-xs font-bold border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow"><i class="fas fa-chevron-left mr-1"></i> Prev</button>
+                            <button id="wfBtnNext" onclick="changeWfPage(1)" class="bg-gray-800 hover:bg-gray-700 text-pink-400 px-4 py-1.5 rounded text-xs font-bold border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow">Next <i class="fas fa-chevron-right ml-1"></i></button>
+                        </div>
                     </div>
                 </div>
             </section>

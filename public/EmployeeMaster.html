@@ -989,8 +989,65 @@
                     </div>
                 </div>
 
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1"><i class="fas fa-home mr-1"></i> Address & Banking Details</h4>
+                
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                    <div class="col-span-2 lg:col-span-4">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Street 1</label>
+                        <input type="text" id="editEmpStreet1" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="col-span-2 lg:col-span-4">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Street 2</label>
+                        <input type="text" id="editEmpStreet2" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="col-span-1 lg:col-span-1">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Suburb</label>
+                        <input type="text" id="editEmpSuburb" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="col-span-1 lg:col-span-1">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">City</label>
+                        <input type="text" id="editEmpCity" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="col-span-1 lg:col-span-1">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Province</label>
+                        <input type="text" id="editEmpProvince" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="col-span-1 lg:col-span-1">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Country</label>
+                        <input type="text" id="editEmpCountry" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="col-span-1 lg:col-span-1">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Postal Code</label>
+                        <input type="text" id="editEmpPostalCode" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6 border-t border-gray-700 pt-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Bank Name</label>
+                        <input type="text" id="editEmpBankName" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Account Number</label>
+                        <input type="text" id="editEmpBankAccountNumber" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Branch Code</label>
+                        <input type="text" id="editEmpBankBranchCode" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Account Type</label>
+                        <select id="editEmpBankAccountType" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                            <option value="">-- Select Type --</option>
+                            <option value="Cheque">Cheque</option>
+                            <option value="Current">Current</option>
+                            <option value="Savings">Savings</option>
+                        </select>
+                    </div>
+                </div>
+
                 <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1">Attachments & Documents</h4>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
                     <div class="bg-gray-900 p-3 rounded border border-gray-700">
                         <label class="block text-xs font-bold text-gray-400 mb-1">ID/Passport Document</label>
                         <input type="file" accept="image/*,application/pdf" onchange="handleDocUpload(event, 'hiddenIDDocBase64')" class="w-full text-[10px] text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:font-bold file:bg-gray-700 file:text-white cursor-pointer mb-1">
@@ -1007,6 +1064,15 @@
                         <div id="workPermitStatus" class="hidden flex items-center justify-between bg-green-900/20 border border-green-800 rounded px-2 py-1 mt-1">
                             <span class="text-[9px] text-green-400"><i class="fas fa-check-circle mr-1"></i> Attached</span>
                             <button type="button" onclick="viewDocument('hiddenWorkPermitBase64')" class="text-[9px] text-blue-400 hover:text-blue-300 font-bold underline">View</button>
+                        </div>
+                    </div>
+                    <div class="bg-gray-900 p-3 rounded border border-gray-700">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Bank Confirmation</label>
+                        <input type="file" accept="image/*,application/pdf" onchange="handleDocUpload(event, 'hiddenBankProofBase64')" class="w-full text-[10px] text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:font-bold file:bg-gray-700 file:text-white cursor-pointer mb-1">
+                        <input type="hidden" id="hiddenBankProofBase64">
+                        <div id="bankProofStatus" class="hidden flex items-center justify-between bg-green-900/20 border border-green-800 rounded px-2 py-1 mt-1">
+                            <span class="text-[9px] text-green-400"><i class="fas fa-check-circle mr-1"></i> Attached</span>
+                            <button type="button" onclick="viewDocument('hiddenBankProofBase64')" class="text-[9px] text-blue-400 hover:text-blue-300 font-bold underline">View</button>
                         </div>
                     </div>
                 </div>
