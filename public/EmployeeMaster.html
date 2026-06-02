@@ -307,15 +307,16 @@
                         <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
                             <h3 class="font-bold text-gray-300"><i class="fas fa-sitemap mr-2"></i>Department Structure</h3>
                             <div class="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
-                                <button onclick="openCreateDeptModal()" class="w-full sm:w-auto justify-center bg-green-700 hover:bg-green-600 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-green-500">
-                                    <i class="fas fa-plus mr-2"></i> Create Dept
-                                </button>
-                                <button id="syncDeptBtn" onclick="syncDepartments()" class="w-full sm:w-auto justify-center bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow">
-                                    <i class="fas fa-sync-alt mr-2"></i> Sync Departments
-                                </button>
-                            </div>
+                            <button onclick="openCreateDeptModal()" class="w-full sm:w-auto justify-center bg-green-700 hover:bg-green-600 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-green-500">
+                                <i class="fas fa-plus mr-2"></i> Create Dept
+                            </button>
+                            <button id="syncDeptBtn" onclick="syncDepartments()" class="w-full sm:w-auto justify-center bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow">
+                                <i class="fas fa-sync-alt mr-2"></i> Sync Departments
+                            </button>
+                        </div>
+                    </div>
 
-                        <div class="flex items-center space-x-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
+                    <div class="flex items-center space-x-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
                         <div class="relative flex-1 max-w-sm">
                             <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
                             <input type="text" id="searchDept" onkeyup="filterDepartments()" placeholder="Search Departments..." class="w-full pl-8 pr-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-green-500 transition">
