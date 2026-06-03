@@ -287,6 +287,7 @@
                                     <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userTimeAttendance" class="mr-2 accent-blue-500"> Time & Attendance</label>
                                     <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userEmployeeMaster" class="mr-2 accent-blue-500"> Employee Master</label>
                                     <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userEmployeeCosts" class="mr-2 accent-blue-500"> Employee Costs</label>
+                                    <label class="flex items-center text-xs text-gray-300"><input type="checkbox" id="userEssMaster" class="mr-2 accent-blue-500"> ESS Master</label>
                                 </div>
                             </div>
                                 
@@ -673,6 +674,7 @@
                     <button type="button" onclick="switchRoleTab('tna')" id="tab_tna" class="role-tab px-4 py-1.5 text-xs font-bold border-t border-l border-r border-gray-300 bg-white text-black translate-y-[1px]">Time & Attendance</button>
                     <button type="button" onclick="switchRoleTab('hr')" id="tab_hr" class="role-tab px-4 py-1.5 text-xs text-gray-600 hover:text-black transition border-b border-transparent">HR Module</button>
                     <button type="button" onclick="switchRoleTab('sys')" id="tab_sys" class="role-tab px-4 py-1.5 text-xs text-gray-600 hover:text-black transition border-b border-transparent">System Config</button>
+                    <button type="button" onclick="switchRoleTab('ess')" id="tab_ess" class="role-tab px-4 py-1.5 text-xs text-gray-600 hover:text-black transition border-b border-transparent">ESS Master</button>
                 </div>
 
                 <div class="border border-gray-300 p-4 bg-white h-64 overflow-y-auto">
@@ -727,6 +729,25 @@
                         </div>
                     </div>
 
+                    <div id="tree_ess" class="role-tree-view hidden">
+                        <div class="flex items-center mb-2">
+                            <span class="text-gray-400 mr-2 text-[10px]"><i class="fas fa-caret-down"></i></span>
+                            <i class="fas fa-folder-open text-orange-500 mr-2"></i>
+                            <span class="text-xs text-gray-800 font-bold">ESS Master Configuration</span>
+                        </div>
+                        <div class="pl-6 space-y-2 border-l border-dotted border-gray-400 ml-1.5 pb-2">
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer">
+                                <input type="checkbox" id="ess_all" onchange="toggleTree('ess', this)" class="accent-orange-500 mr-2 w-3.5 h-3.5"> 
+                                <span class="font-bold text-gray-600">Select All ESS Access</span>
+                            </label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ess_overview" class="perm-chk-ess accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Overview</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ess_employees" class="perm-chk-ess accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Employee Master</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ess_requests" class="perm-chk-ess accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Mobile Requests</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ess_app_settings" class="perm-chk-ess accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: App Settings</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ess_global_settings" class="perm-chk-ess accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Global Settings</label>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             
@@ -751,6 +772,7 @@
                 <div class="flex border-b border-gray-300 bg-gray-100 px-2 pt-2">
                     <button type="button" onclick="switchOverrideTab('tna')" id="otab_tna" class="override-tab px-4 py-1.5 text-xs font-bold border-t border-l border-r border-gray-300 bg-white text-black translate-y-[1px]">Time & Attendance</button>
                     <button type="button" onclick="switchOverrideTab('sys')" id="otab_sys" class="override-tab px-4 py-1.5 text-xs text-gray-600 hover:text-black transition border-b border-transparent">System Config</button>
+                    <button type="button" onclick="switchOverrideTab('ess')" id="otab_ess" class="override-tab px-4 py-1.5 text-xs text-gray-600 hover:text-black transition border-b border-transparent">ESS Master</button>
                 </div>
                 <div class="border border-gray-300 p-4 bg-white h-64 overflow-y-auto">
                     <div id="otree_tna" class="override-tree-view">
@@ -777,6 +799,15 @@
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="sys_users" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Manage Users & Roles</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="sys_hardware" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Hardware & Zones</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="sys_api" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> API Connectivity</label>
+                        </div>
+                    </div>
+                         <div id="otree_ess" class="override-tree-view hidden">
+                        <div class="pl-6 space-y-2 border-l border-dotted border-gray-400 ml-1.5 pb-2">
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ess_overview" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Overview</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ess_employees" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Employee Master</label>   
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ess_requests" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Mobile Requests</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ess_app_settings" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: App Settings</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ess_global_settings" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Global Settings</label>
                         </div>
                     </div>
                 </div>

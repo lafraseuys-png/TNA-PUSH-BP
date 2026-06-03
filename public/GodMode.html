@@ -399,6 +399,19 @@
                         </div>
                     </div>
 
+                    <!-- ESS Master Section -->
+                    <h3 class="text-lg font-bold text-gray-300 mt-6 mb-2 border-b border-gray-700 pb-1"><i class="fas fa-mobile-alt text-orange-500 mr-2"></i>ESS Master Module</h3>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="bg-gray-800 p-3 rounded border border-gray-600 shadow-inner">
+                            <label class="block text-xs text-red-400 font-bold mb-1 uppercase">Setup Cost</label>
+                            <div class="flex items-center"><span class="bg-gray-700 text-gray-300 px-3 py-1.5 rounded-l border-y border-l border-gray-600">R</span><input type="number" step="0.01" id="essMasterSetupCost" class="w-full p-1.5 border-y border-r rounded-r bg-gray-900 text-white border-gray-600 focus:border-red-500 focus:outline-none" required></div>
+                        </div>
+                        <div class="bg-gray-800 p-3 rounded border border-gray-600 shadow-inner">
+                            <label class="block text-xs text-red-400 font-bold mb-1 uppercase">Per Employee</label>
+                            <div class="flex items-center"><span class="bg-gray-700 text-gray-300 px-3 py-1.5 rounded-l border-y border-l border-gray-600">R</span><input type="number" step="0.01" id="essMasterEmployeeCost" class="w-full p-1.5 border-y border-r rounded-r bg-gray-900 text-white border-gray-600 focus:border-red-500 focus:outline-none" required></div>
+                        </div>
+                    </div>
+
                     <!-- System Automation Emails -->
                     <h3 class="text-lg font-bold text-gray-300 mt-6 mb-2 border-b border-gray-700 pb-1"><i class="fas fa-envelope-open-text text-blue-400 mr-2"></i>Automated System Notifications</h3>
                     <div class="bg-gray-800 p-4 rounded border border-gray-600 shadow-inner mb-6">
@@ -692,6 +705,27 @@
                             <input type="number" id="advFacialLicenses" placeholder="Qty" min="0" value="0" class="w-16 p-1 bg-gray-800 text-white border border-gray-600 rounded text-xs focus:border-emerald-500">
                         </div>
                         <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modEmployeeCosts" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>Employee Costs</span></label>
+                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modESSMaster" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>ESS Master</span></label>
+                    </div>
+
+                    <h4 class="text-lg font-bold text-gray-300 border-b border-gray-700 pb-1 mb-2 mt-6">4. Restricted Tile Visibility</h4>
+                    <p class="text-xs text-gray-400 mb-4">For modules this tenant does NOT have access to, select which tiles should be completely hidden (checked) versus greyed out (unchecked) on the Launchpad.</p>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 bg-gray-800 p-4 rounded border border-gray-700">
+                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" class="hidden-tile-chk w-4 h-4 text-emerald-500" value="timeAttendance"> <span class="text-gray-300">Time & Attendance</span></label>
+                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" class="hidden-tile-chk w-4 h-4 text-emerald-500" value="hr"> <span class="text-gray-300">HR & Contracts</span></label>
+                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" class="hidden-tile-chk w-4 h-4 text-emerald-500" value="tasks"> <span class="text-gray-300">Piece Work</span></label>
+                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" class="hidden-tile-chk w-4 h-4 text-emerald-500" value="stock"> <span class="text-gray-300">Stock & Assets</span></label>
+                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" class="hidden-tile-chk w-4 h-4 text-emerald-500" value="fuel"> <span class="text-gray-300">Fuel Management</span></label>
+                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" class="hidden-tile-chk w-4 h-4 text-emerald-500" value="employeeCosts"> <span class="text-gray-300">Employee Costs</span></label>
+                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" class="hidden-tile-chk w-4 h-4 text-emerald-500" value="essMaster"> <span class="text-gray-300">ESS Master</span></label>
+                        
+                        <div class="col-span-2 md:col-span-4 mt-2 pt-2 border-t border-gray-700">
+                            <label class="flex items-center space-x-2 text-sm cursor-pointer text-gray-300">
+                                <input type="checkbox" id="advHideRestrictedTiles" class="w-4 h-4 text-emerald-500">
+                                <span><strong>Global Hide:</strong> Ignore individual checkboxes and completely hide ALL restricted tiles.</span>
+                            </label>
+                        </div>
                     </div>
 
                     <div class="flex items-center gap-2 mb-4 bg-gray-800 p-3 rounded border border-gray-700">
