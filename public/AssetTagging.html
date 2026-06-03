@@ -1291,6 +1291,24 @@
     <datalist id="employeeList"></datalist>
     <datalist id="departmentList"></datalist>
 
+    <div id="viewBarcodesModal" class="modal-backdrop z-[60]">
+        <div class="bg-gray-800 p-0 rounded-lg w-[500px] shadow-2xl border border-gray-600 flex flex-col max-h-[80vh]">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
+                <h2 id="viewBarcodesTitle" class="text-lg font-bold text-teal-400">Inspect Serials</h2>
+                <button type="button" onclick="closeViewBarcodesModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-0 overflow-y-auto flex-1">
+                <table class="w-full text-left text-sm border-collapse">
+                    <tbody id="viewBarcodesList" class="divide-y divide-gray-700 bg-gray-900">
+                        </tbody>
+                </table>
+            </div>
+            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-end shadow-inner">
+                <button type="button" onclick="closeViewBarcodesModal()" class="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition font-bold shadow">Close</button>
+            </div>
+        </div>
+    </div>
+
     <div id="printToolModal" class="modal-backdrop z-[100]">
         <div class="bg-gray-800 p-0 rounded-lg w-[600px] max-w-full shadow-2xl border border-gray-600 flex flex-col max-h-[90vh]">
             <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">

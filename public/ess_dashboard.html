@@ -25,18 +25,48 @@
     <!-- Main Content -->
     <main class="max-w-3xl mx-auto p-4 sm:p-6 pb-20">
         
-        <div class="bg-gray-800 rounded-xl p-4 shadow-lg border border-gray-700 mb-6 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <img id="essProfilePic" src="" class="w-14 h-14 rounded-full object-cover border-2 border-gray-600 hidden">
-                <div id="essProfileInitials" class="w-14 h-14 rounded-full bg-gray-700 border-2 border-gray-600 flex items-center justify-center text-xl font-bold text-gray-400"></div>
-                <div>
-                    <h2 id="essProfileName" class="text-lg font-black text-white">Loading...</h2>
-                    <p id="essProfileDept" class="text-xs text-gray-400 uppercase tracking-wider"></p>
+        <div class="bg-gray-800 rounded-xl p-4 shadow-lg border border-gray-700 mb-6">
+            <div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-700">
+                <div class="flex items-center gap-4">
+                    <img id="essProfilePic" src="" class="w-14 h-14 rounded-full object-cover border-2 border-gray-600 hidden">
+                    <div id="essProfileInitials" class="w-14 h-14 rounded-full bg-gray-700 border-2 border-gray-600 flex items-center justify-center text-xl font-bold text-gray-400"></div>
+                    <div>
+                        <h2 id="essProfileName" class="text-lg font-black text-white">Loading...</h2>
+                        <p id="essProfileDept" class="text-xs text-gray-400 uppercase tracking-wider"></p>
+                        <p id="essProfileIdNum" class="text-[10px] text-gray-500 font-mono mt-0.5 hidden"></p>
+                    </div>
                 </div>
             </div>
-            <button onclick="openEssInfoModal()" class="bg-blue-600 hover:bg-blue-500 text-white w-10 h-10 rounded-full flex items-center justify-center shadow transition" title="Edit Address & Banking Info">
-                <i class="fas fa-info"></i>
-            </button>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Address -->
+                <div class="bg-gray-900 p-3 rounded border border-gray-700 relative">
+                    <button onclick="openEssInfoModal()" class="absolute top-2 right-2 text-blue-400 hover:text-blue-300 text-[10px] font-bold"><i class="fas fa-edit mr-1"></i>Edit</button>
+                    <h3 class="text-[10px] text-gray-500 uppercase tracking-wider font-bold mb-1"><i class="fas fa-map-marker-alt mr-1"></i> Address</h3>
+                    <div id="essDisplayAddress" class="text-xs text-gray-300 leading-relaxed min-h-[2rem] mt-2">Loading...</div>
+                </div>
+                
+                <!-- Banking -->
+                <div class="bg-gray-900 p-3 rounded border border-gray-700 relative">
+                    <button onclick="openEssInfoModal()" class="absolute top-2 right-2 text-blue-400 hover:text-blue-300 text-[10px] font-bold"><i class="fas fa-edit mr-1"></i>Edit</button>
+                    <h3 class="text-[10px] text-gray-500 uppercase tracking-wider font-bold mb-1"><i class="fas fa-university mr-1"></i> Banking Details</h3>
+                    <div id="essDisplayBank" class="text-xs text-gray-300 leading-relaxed min-h-[2rem] mt-2">Loading...</div>
+                </div>
+                
+                <!-- Leave Balances -->
+                <div class="bg-gray-900 p-3 rounded border border-gray-700">
+                    <h3 class="text-[10px] text-gray-500 uppercase tracking-wider font-bold mb-2"><i class="fas fa-calendar-check mr-1"></i> Available Leave</h3>
+                    <div id="essDisplayLeaves" class="space-y-1.5 min-h-[2rem]">
+                        <span class="text-xs text-gray-500 italic">Loading balances...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW: Upcoming Leave Panel -->
+        <div id="essUpcomingLeaveContainer" class="hidden bg-gray-800 rounded-xl p-4 shadow-lg border border-purple-500/50 mb-6">
+            <h3 class="text-xs font-bold text-purple-400 uppercase tracking-wider mb-3"><i class="fas fa-calendar-alt mr-2"></i>Upcoming Approved & Pending Leave</h3>
+            <div id="essUpcomingLeaveList" class="space-y-2 max-h-40 overflow-y-auto pr-2"></div>
         </div>
 
         <div class="bg-gray-800 rounded-xl p-4 shadow-lg border border-gray-700 mb-6 relative">
@@ -150,17 +180,27 @@
                 <button type="button" onclick="closeEssLeaveModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
             </div>
             <div class="p-6 space-y-4">
-                <input type="hidden" id="essLeaveDate">
-                <div class="text-center mb-4">
-                    <p class="text-xs text-gray-400 uppercase tracking-widest mb-1">Date of Absence</p>
-                    <p id="essLeaveDateDisplay" class="text-lg font-black text-gray-200"></p>
+                <div class="grid grid-cols-2 gap-3 mb-2">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Start Date <span class="text-red-400">*</span></label>
+                        <input type="date" id="essLeaveStart" required onchange="calculateEssLeaveDays()" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-red-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">End Date <span class="text-red-400">*</span></label>
+                        <input type="date" id="essLeaveEnd" required onchange="calculateEssLeaveDays()" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-red-500">
+                    </div>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-400 mb-1">Leave Type <span class="text-red-400">*</span></label>
-                    <select id="essLeaveType" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-red-500">
+                    <select id="essLeaveType" required onchange="calculateEssLeaveDays()" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-red-500">
                         <option value="">Loading types...</option>
                     </select>
                 </div>
+                <!-- Warning Container -->
+                <div id="essLeaveWarning" class="hidden bg-red-900/40 border border-red-700 p-2 rounded text-[10px] text-red-300 font-bold leading-tight">
+                    Warning: You do not have enough leave days. This request will put your balance into the negative.
+                </div>
+                <div class="text-[10px] text-gray-400 font-bold text-right" id="essLeaveCalcText">Days Requested: 0</div>
                 <div class="pt-2 border-t border-gray-700 mt-2">
                     <label class="block text-xs font-bold text-gray-400 mb-1">Upload Proof (Doctor's Note, etc.)</label>
                     <!-- capture="environment" encourages mobile devices to offer the camera -->

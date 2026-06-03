@@ -725,7 +725,7 @@
                         </div>
                     </div>
                 </div>
-            </section> 
+            </section>
 
             <section id="page-workflow-routing" class="page-section pb-32">
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-purple-500 max-w-6xl">
@@ -2374,9 +2374,12 @@
                         </label>
                     </div>
 
-                    <div class="flex justify-end space-x-3">
-                        <button type="button" onclick="closeRosterModal()" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded font-bold text-sm">Cancel</button>
-                        <button type="button" onclick="saveRosterLeave()" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded font-bold text-sm shadow">Log Leave</button>
+                    <div class="flex justify-between items-center w-full">
+                        <button type="button" id="btnRevokeRosterLeave" onclick="revokeRosterLeave()" class="hidden px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded font-bold text-sm shadow"><i class="fas fa-trash mr-1"></i> Revoke & Refund</button>
+                        <div class="flex space-x-3 ml-auto">
+                            <button type="button" onclick="closeRosterModal()" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded font-bold text-sm">Cancel</button>
+                            <button type="button" id="btnSaveRosterLeave" onclick="saveRosterLeave()" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded font-bold text-sm shadow">Log Leave</button>
+                        </div>
                     </div>
                 </div>
             </div>
