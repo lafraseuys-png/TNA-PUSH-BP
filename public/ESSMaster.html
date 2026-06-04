@@ -20,6 +20,13 @@
         ::-webkit-scrollbar-track { background: #1e293b; }
         ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        /* MODAL BEHAVIOR */
+        .modal-backdrop {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.7); z-index: 50; justify-content: center; align-items: center;
+        }
+        .modal-backdrop.active { display: flex; }
     </style>
 </head>
 <body class="font-sans flex h-screen overflow-hidden">
@@ -89,24 +96,134 @@
             <!-- EMPLOYEE MASTER SECTION -->
             <section id="page-employees" class="page-section">
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-emerald-500 mb-6">
-                    <h3 class="font-bold text-gray-300 mb-4"><i class="fas fa-users mr-2"></i>Employee Master Data</h3>
-                    <p class="text-sm text-gray-400 mb-4">View and manage employees mapped to the ESS system. Data source parameters are controlled in Global Settings.</p>
-                    
-                    <div class="overflow-x-auto">
-                        <table id="essEmployeesTable" class="w-full text-left text-sm border-collapse">
-                            <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
-                                <tr>
-                                    <th class="p-3 border-r border-gray-600">PIN</th>
-                                    <th class="p-3 border-r border-gray-600">Name</th>
-                                    <th class="p-3 border-r border-gray-600">Department</th>
-                                    <th class="p-3 border-r border-gray-600">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-700 bg-gray-900">
-                                <tr><td colspan="4" class="p-4 text-center text-gray-500">Loading employees...</td></tr>
-                            </tbody>
-                        </table>
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-3">
+                        <div>
+                            <h3 class="font-bold text-gray-300"><i class="fas fa-users mr-2"></i>ESS Personnel</h3>
+                            <p class="text-sm text-gray-400">Manage employees mapped to the ESS portal.</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-2 items-center w-full md:w-auto">
+                            <button class="w-full sm:w-auto justify-center bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-gray-500">
+                                <i class="fas fa-file-excel mr-2 text-green-400"></i> Data Tools
+                            </button>
+                            <button class="w-full sm:w-auto justify-center bg-green-700 hover:bg-green-600 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-green-500">
+                                <i class="fas fa-plus mr-2"></i> Create Employee
+                            </button>
+                            <button class="w-full sm:w-auto justify-center bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-blue-500">
+                                <i class="fas fa-sync-alt mr-2"></i> Sync Employees
+                            </button>
+                        </div>
                     </div>
+
+                    <!-- TOP TABS -->
+                    <div class="flex border-b border-gray-700 mb-4">
+                        <button onclick="switchEssEmpTab('active')" id="btn-tab-ess-active" class="px-6 py-3 text-sm font-bold border-b-2 transition border-emerald-500 text-emerald-400">Active Personnel</button>
+                        <button onclick="switchEssEmpTab('term')" id="btn-tab-ess-term" class="px-6 py-3 text-sm font-bold border-b-2 transition border-transparent text-gray-400 hover:text-gray-200">Terminated Records</button>
+                    </div>
+
+                    <!-- TAB CONTENT: ACTIVE -->
+                    <div id="tab-ess-active">
+                        <div class="flex flex-col xl:flex-row items-center justify-between gap-4 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-3 flex-1 w-full max-w-3xl">
+                                <div class="relative w-full sm:flex-1">
+                                    <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
+                                    <input type="text" id="searchEssEmp" oninput="renderESSEmployees()" placeholder="Search Name or PIN..." class="w-full pl-8 pr-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-emerald-500 transition">
+                                </div>
+                                <select id="essDeptFilter" onchange="renderESSEmployees()" class="w-full sm:w-48 bg-gray-800 border border-gray-600 rounded py-1.5 px-3 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
+                                    <option value="">All Departments</option>
+                                </select>
+                                <label class="flex items-center space-x-2 text-xs font-bold text-orange-400 cursor-pointer bg-gray-800 border border-gray-600 px-3 py-1.5 rounded hover:border-orange-500 transition whitespace-nowrap">
+                                    <input type="checkbox" id="essMissingPhotoFilter" onchange="renderESSEmployees()" class="accent-orange-500 w-4 h-4 cursor-pointer">
+                                    <span><i class="fas fa-image-slash mr-1"></i> Missing Photos</span>
+                                </label>
+                            </div>
+                            
+                            <div class="flex items-center space-x-2 bg-gray-800 p-1.5 rounded border border-gray-600 w-full xl:w-auto">
+                                <span class="text-[10px] text-gray-400 font-bold ml-2 uppercase tracking-wider whitespace-nowrap">Bulk Action:</span>
+                                <button onclick="alert('Bulk move requires the main Employee Master module.')" class="bg-indigo-700 hover:bg-indigo-600 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow whitespace-nowrap"><i class="fas fa-exchange-alt mr-1"></i> Move Dept/Team</button>
+                                <button onclick="openBulkTerminateModal()" class="bg-red-700 hover:bg-red-600 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow whitespace-nowrap"><i class="fas fa-user-slash mr-1"></i> Terminate</button>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm border-collapse">
+                                <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                                    <tr>
+                                        <th class="p-3 border-r border-gray-600 w-10 text-center"><input type="checkbox" id="selectAllEssEmps" onchange="toggleSelectAllEssEmps(this)" class="accent-emerald-500 w-4 h-4 cursor-pointer"></th>
+                                        <th class="p-0 border-r border-gray-600 hover:bg-gray-600 transition cursor-pointer" onclick="handleEssSort('PIN')">
+                                            <div class="w-full p-3 flex items-center justify-between text-left">
+                                                PIN <i id="sortIcon_PIN" class="fas fa-sort text-gray-500 ml-2"></i>
+                                            </div>
+                                        </th>
+                                        <th class="p-0 border-r border-gray-600 hover:bg-gray-600 transition cursor-pointer" onclick="handleEssSort('FirstName')">
+                                            <div class="w-full p-3 flex items-center justify-between text-left">
+                                                First Name <i id="sortIcon_FirstName" class="fas fa-sort text-gray-500 ml-2"></i>
+                                            </div>
+                                        </th>
+                                        <th class="p-0 border-r border-gray-600 hover:bg-gray-600 transition cursor-pointer" onclick="handleEssSort('LastName')">
+                                            <div class="w-full p-3 flex items-center justify-between text-left">
+                                                Last Name <i id="sortIcon_LastName" class="fas fa-sort text-gray-500 ml-2"></i>
+                                            </div>
+                                        </th>
+                                        <th class="p-0 border-r border-gray-600 hover:bg-gray-600 transition cursor-pointer" onclick="handleEssSort('Department')">
+                                            <div class="w-full p-3 flex items-center justify-between text-left">
+                                                Department <i id="sortIcon_Department" class="fas fa-sort text-gray-500 ml-2"></i>
+                                            </div>
+                                        </th>
+                                        <th class="p-3 border-r border-gray-600 text-center">Photo</th>
+                                        <th class="p-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="essActiveTableBody" class="divide-y divide-gray-700 bg-gray-900">
+                                    <tr><td colspan="7" class="p-4 text-center text-gray-500">Loading employees...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="flex justify-between items-center mt-4 bg-gray-900 p-3 rounded border border-gray-700">
+                            <div class="text-xs text-gray-400" id="essActivePageInfo">Showing 0-0 of 0</div>
+                            <div class="flex space-x-2 text-xs">
+                                <button id="essActivePrevBtn" onclick="changeEssPage('active', -1)" class="px-3 py-1 bg-gray-800 text-gray-600 rounded cursor-not-allowed" disabled>Previous</button>
+                                <button id="essActiveNextBtn" onclick="changeEssPage('active', 1)" class="px-3 py-1 bg-gray-800 text-gray-600 rounded cursor-not-allowed" disabled>Next</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB CONTENT: TERMINATED -->
+                    <div id="tab-ess-term" class="hidden">
+                        <div class="flex items-center space-x-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
+                            <div class="relative flex-1 max-w-sm">
+                                <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
+                                <input type="text" id="searchEssTerm" oninput="renderESSEmployees()" placeholder="Search Name or PIN..." class="w-full pl-8 pr-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-red-500 transition">
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm border-collapse">
+                                <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                                    <tr>
+                                        <th class="p-3 border-r border-gray-600">PIN</th>
+                                        <th class="p-3 border-r border-gray-600">First Name</th>
+                                        <th class="p-3 border-r border-gray-600">Last Name</th>
+                                        <th class="p-3 border-r border-gray-600">Department</th>
+                                        <th class="p-3 border-r border-gray-600 text-red-400">Terminated On</th>
+                                        <th class="p-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="essTermTableBody" class="divide-y divide-gray-700 bg-gray-900">
+                                    <tr><td colspan="6" class="p-4 text-center text-gray-500">Loading terminated...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="flex justify-between items-center mt-4 bg-gray-900 p-3 rounded border border-gray-700">
+                            <div class="text-xs text-gray-400" id="essTermPageInfo">Showing 0-0 of 0</div>
+                            <div class="flex space-x-2 text-xs">
+                                <button id="essTermPrevBtn" onclick="changeEssPage('term', -1)" class="px-3 py-1 bg-gray-800 text-gray-600 rounded cursor-not-allowed" disabled>Previous</button>
+                                <button id="essTermNextBtn" onclick="changeEssPage('term', 1)" class="px-3 py-1 bg-gray-800 text-gray-600 rounded cursor-not-allowed" disabled>Next</button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </section>
 
@@ -136,6 +253,302 @@
 
         </div>
     </main>
+
+    <div id="editEmpModal" class="modal-backdrop p-2">
+        <form id="editEmpForm" class="bg-gray-800 p-0 rounded-lg w-[95%] lg:w-[800px] shadow-2xl border border-gray-600 flex flex-col max-h-[90vh]">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
+                <h2 class="text-lg font-bold text-blue-400">Edit Employee Profile</h2>
+                <button type="button" onclick="closeEditModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1">
+                
+                <div class="flex items-center gap-4 mb-6 pb-4 border-b border-gray-700">
+                    <div class="w-16 h-16 rounded-full bg-gray-900 border border-gray-600 overflow-hidden flex-shrink-0 flex items-center justify-center relative">
+                        <span id="editEmpPhotoInitials" class="text-xl font-bold text-gray-400 absolute"></span>
+                        <img id="editEmpPhoto" src="" alt="Photo" class="w-full h-full object-cover hidden relative z-10">
+                    </div>
+                    <div class="flex-1">
+                        <p id="editEmpDisplayName" class="text-lg text-blue-400 font-bold leading-tight"></p>
+                        <p id="editEmpDisplayPin" class="text-xs text-gray-400 mb-2"></p>
+                        <input type="file" id="editEmpPhotoUpload" accept="image/*" onchange="handlePhotoUpload(event)" class="w-full max-w-sm text-[10px] text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:font-bold file:bg-blue-700 file:text-white hover:file:bg-blue-600 cursor-pointer">
+                    </div>
+                </div>
+                
+                <input type="hidden" id="hiddenPhotoBase64Input">
+                <input type="hidden" id="hiddenPhotoSmallBase64Input">
+                <input type="hidden" id="editEmpPin">
+
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1">Personal Details</h4>
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Display PIN / Emp ID <span class="text-red-400">*</span></label>
+                        <input type="text" id="editEmpDisplayPinInput" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500" title="This is the ID shown on reports and tables.">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">First Name <span class="text-red-400">*</span></label>
+                        <input type="text" id="editEmpFirstName" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Last Name <span class="text-red-400">*</span></label>
+                        <input type="text" id="editEmpLastName" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Biological Sex</label>
+                        <select id="editEmpSex" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                            <option value="">-- Select --</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">ID/Passport Number</label>
+                        <input type="text" id="editEmpIDNumber" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Nationality</label>
+                        <select id="editEmpNationality" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                            <option value="">-- Select Nationality --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1">Employment & HR</h4>
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Department <span class="text-red-400">*</span></label>
+                        <select id="editEmpDept" required onchange="syncHODDept('edit')" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Occupation / Job Title</label>
+                        <input type="text" id="editEmpOccupation" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Group Start Date <span class="text-red-400">*</span></label>
+                        <input type="date" id="editEmpStartDate" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">RFID Card Number</label>
+                        <input type="text" id="editEmpCardNo" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="col-span-3 pt-2 pb-2 border-t border-b border-gray-700">
+                        <div class="relative w-full max-w-md">
+                            <label class="block text-xs font-bold text-indigo-400 mb-1"><i class="fas fa-user-tie mr-1"></i> Reports To (Direct Manager)</label>
+                            <input type="text" id="editEmpReportsToSearch" oninput="filterReportsToOptions('edit')" onfocus="showReportsToDropdown('edit')" placeholder="Type to search Name or PIN..." class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                            <input type="hidden" id="editEmpReportsTo">
+                            <div id="editEmpReportsToDropdown" class="hidden absolute z-[60] w-full bg-gray-800 border border-gray-500 rounded mt-1 max-h-48 overflow-y-auto shadow-2xl"></div>
+                        </div>
+                    </div>
+                    <div class="col-span-2 pt-2">
+                        <label class="flex items-center cursor-pointer mb-2">
+                            <input type="checkbox" id="editEmpIsHOD" onchange="toggleHODDropdown('edit')" class="w-4 h-4 accent-blue-500 bg-gray-900 border-gray-600 rounded cursor-pointer">
+                            <span class="ml-2 text-xs font-bold text-purple-400"><i class="fas fa-crown mr-1"></i> Make Head of Department (HOD)</span>
+                        </label>
+                        <div id="editEmpHODContainer" class="hidden mt-2">
+                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">HOD Of Which Department?</label>
+                            <select id="editEmpHODDept" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-purple-500"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1">Time & Attendance Configuration</h4>
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Default Shift</label>
+                        <select id="editEmpDefaultShift" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                            <option value="">-- No Default Shift --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Overtime Eligibility</label>
+                        <select id="editEmpOvertime" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                            <option value="Paid">Paid Overtime</option>
+                            <option value="Unpaid">Unpaid Overtime</option>
+                            <option value="Time-Off">Time-Off in Lieu</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Default Days Format</label>
+                        <input type="text" id="editEmpDefaultDays" placeholder="e.g. 1111100" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Custom OT Rule ID</label>
+                        <input type="number" id="editEmpCustomOTRule" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Payroll Period ID</label>
+                        <input type="number" id="editEmpPayrollPeriod" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+                <h4 class="text-xs font-bold text-emerald-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1"><i class="fas fa-calendar-check mr-1"></i> Leave Balances (Paid Leave)</h4>
+                <div id="editEmpLeaveBalancesContainer" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6 bg-gray-900/50 p-3 rounded border border-gray-700">
+                    <div class="col-span-full text-center text-xs text-gray-500 py-2">Loading leave types...</div>
+                </div>
+
+                <h4 class="text-xs font-bold text-cyan-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1"><i class="fas fa-tags mr-1"></i> Custom Attributes</h4>
+                <div id="editEmpAttributesContainer" class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6 bg-gray-900/50 p-3 rounded border border-gray-700">
+                    <div class="col-span-full text-center text-xs text-gray-500 py-2">Loading custom attributes...</div>
+                </div>
+
+                <div id="cvsAccessZoneSection" class="hidden">
+                    <h4 class="text-xs font-bold text-purple-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1"><i class="fas fa-shield-alt mr-1"></i> ZKTeco Hardware Access Levels</h4>
+                    <div id="editEmpCvsZonesContainer" class="grid grid-cols-2 gap-2 bg-gray-900/50 p-3 rounded border border-gray-700 max-h-48 overflow-y-auto mb-6"></div>
+                </div>
+
+                <h4 class="text-xs font-bold text-yellow-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1"><i class="fas fa-coins mr-1"></i> Payroll & Wage Ledger</h4>
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Wage Type</label>
+                        <select id="editEmpWageType" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-yellow-500">
+                            <option value="">-- Select Type --</option>
+                            <option value="Hourly">Hourly Rate</option>
+                            <option value="Fixed">Fixed Salary (Monthly)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Rate/Amount</label>
+                        <input type="number" step="0.01" id="editEmpWageRate" placeholder="0.00" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-yellow-500">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Valid From Date</label>
+                        <input type="date" id="editEmpWageDate" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-yellow-500">
+                    </div>
+                </div>
+
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1"><i class="fas fa-home mr-1"></i> Address & Banking Details</h4>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                    <div class="col-span-2 lg:col-span-4">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Street 1</label>
+                        <input type="text" id="editEmpStreet1" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="col-span-2 lg:col-span-4">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Street 2</label>
+                        <input type="text" id="editEmpStreet2" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="col-span-1 lg:col-span-1">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Suburb</label>
+                        <input type="text" id="editEmpSuburb" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="col-span-1 lg:col-span-1">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">City</label>
+                        <input type="text" id="editEmpCity" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="col-span-1 lg:col-span-1">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Province</label>
+                        <input type="text" id="editEmpProvince" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="col-span-1 lg:col-span-1">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Country</label>
+                        <input type="text" id="editEmpCountry" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="col-span-1 lg:col-span-1">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Postal Code</label>
+                        <input type="text" id="editEmpPostalCode" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6 border-t border-gray-700 pt-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Bank Name</label>
+                        <input type="text" id="editEmpBankName" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Account Number</label>
+                        <input type="text" id="editEmpBankAccountNumber" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Branch Code</label>
+                        <input type="text" id="editEmpBankBranchCode" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Account Type</label>
+                        <select id="editEmpBankAccountType" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                            <option value="">-- Select Type --</option>
+                            <option value="Cheque">Cheque</option>
+                            <option value="Current">Current</option>
+                            <option value="Savings">Savings</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1">Attachments & Documents</h4>
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="bg-gray-900 p-3 rounded border border-gray-700">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">ID/Passport Document</label>
+                        <input type="file" accept="image/*,application/pdf" onchange="handleDocUpload(event, 'hiddenIDDocBase64')" class="w-full text-[10px] text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:font-bold file:bg-gray-700 file:text-white cursor-pointer mb-1">
+                        <input type="hidden" id="hiddenIDDocBase64">
+                        <div id="idDocStatus" class="hidden flex items-center justify-between bg-green-900/20 border border-green-800 rounded px-2 py-1 mt-1">
+                            <span class="text-[9px] text-green-400"><i class="fas fa-check-circle mr-1"></i> Attached</span>
+                            <button type="button" onclick="viewDocument('hiddenIDDocBase64')" class="text-[9px] text-blue-400 hover:text-blue-300 font-bold underline">View</button>
+                        </div>
+                    </div>
+                    <div class="bg-gray-900 p-3 rounded border border-gray-700">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Work Permit</label>
+                        <input type="file" accept="image/*,application/pdf" onchange="handleDocUpload(event, 'hiddenWorkPermitBase64')" class="w-full text-[10px] text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:font-bold file:bg-gray-700 file:text-white cursor-pointer mb-1">
+                        <input type="hidden" id="hiddenWorkPermitBase64">
+                        <div id="workPermitStatus" class="hidden flex items-center justify-between bg-green-900/20 border border-green-800 rounded px-2 py-1 mt-1">
+                            <span class="text-[9px] text-green-400"><i class="fas fa-check-circle mr-1"></i> Attached</span>
+                            <button type="button" onclick="viewDocument('hiddenWorkPermitBase64')" class="text-[9px] text-blue-400 hover:text-blue-300 font-bold underline">View</button>
+                        </div>
+                    </div>
+                    <div class="bg-gray-900 p-3 rounded border border-gray-700">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Bank Confirmation</label>
+                        <input type="file" accept="image/*,application/pdf" onchange="handleDocUpload(event, 'hiddenBankProofBase64')" class="w-full text-[10px] text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:font-bold file:bg-gray-700 file:text-white cursor-pointer mb-1">
+                        <input type="hidden" id="hiddenBankProofBase64">
+                        <div id="bankProofStatus" class="hidden flex items-center justify-between bg-green-900/20 border border-green-800 rounded px-2 py-1 mt-1">
+                            <span class="text-[9px] text-green-400"><i class="fas fa-check-circle mr-1"></i> Attached</span>
+                            <button type="button" onclick="viewDocument('hiddenBankProofBase64')" class="text-[9px] text-blue-400 hover:text-blue-300 font-bold underline">View</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-end gap-3 shadow-inner">
+                <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition">Cancel</button>
+                <button type="submit" id="saveEmpBtn" class="px-4 py-2 bg-blue-700 hover:bg-blue-600 text-white rounded font-bold text-sm shadow transition">Save Profile</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="terminateModal" class="modal-backdrop">
+        <form id="terminateForm" class="bg-gray-800 p-0 rounded-lg w-[400px] shadow-2xl border border-gray-600 flex flex-col">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
+                <h2 class="text-lg font-bold text-red-400">Schedule Termination</h2>
+                <button type="button" onclick="closeTerminateModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <p id="terminateEmpNameDisplay" class="text-sm font-bold text-gray-300"></p>
+                <input type="hidden" id="terminateEmpPin">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Termination Date</label>
+                    <input type="date" id="terminateEmpDate" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-red-500">
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-end gap-3 shadow-inner">
+                <button type="button" onclick="closeTerminateModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition">Cancel</button>
+                <button type="submit" id="submitTerminateBtn" class="px-4 py-2 bg-red-700 hover:bg-red-600 text-white rounded font-bold text-sm shadow transition">Lock in System</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="reinstateModal" class="modal-backdrop">
+        <form id="reinstateForm" class="bg-gray-800 p-0 rounded-lg w-[400px] shadow-2xl border border-gray-600 flex flex-col">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
+                <h2 class="text-lg font-bold text-green-400">Reinstate Employee</h2>
+                <button type="button" onclick="closeReinstateModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <p id="reinstateEmpNameDisplay" class="text-sm font-bold text-gray-300"></p>
+                <input type="hidden" id="reinstateEmpPin">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Effective Reinstatement Date</label>
+                    <input type="date" id="reinstateEmpDate" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-green-500">
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-end gap-3 shadow-inner">
+                <button type="button" onclick="closeReinstateModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition">Cancel</button>
+                <button type="submit" id="submitReinstateBtn" class="px-4 py-2 bg-green-700 hover:bg-green-600 text-white rounded font-bold text-sm shadow transition">Reinstate</button>
+            </div>
+        </form>
+    </div>
 
     <script src="ess_master.js"></script>
 </body>
