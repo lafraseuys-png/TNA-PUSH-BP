@@ -1290,15 +1290,20 @@
 
             <section id="page-reports" class="page-section pb-32">
 
+                <div class="flex border-b border-gray-700 bg-gray-900 rounded-t shadow-lg mb-4">
+                    <button onclick="toggleReportTab('generator')" id="tab-rep-generator" class="flex-1 py-3 text-sm font-bold text-blue-400 border-b-2 border-blue-400 transition bg-gray-800"><i class="fas fa-file-alt mr-2"></i>Report Generator</button>
+                    <button onclick="toggleReportTab('emailer')" id="tab-rep-emailer" class="flex-1 py-3 text-sm font-bold text-gray-500 border-b-2 border-transparent hover:text-gray-300 hover:bg-gray-800 transition"><i class="fas fa-envelope mr-2"></i>Automated Emailer</button>
+                </div>
 
-                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-blue-400 w-full min-w-0 max-w-full">
-                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
-                        <h3 class="font-bold text-gray-300"><i class="fas fa-chart-pie mr-2"></i>Analytics & Reports</h3>
-                        
-                        <button onclick="exportReportToExcel(event)" class="bg-green-700 hover:bg-green-600 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow flex items-center h-8">
-                            <i class="fas fa-file-excel mr-2"></i> Export to Excel
-                        </button>
-                    </div>
+                <div id="reportGeneratorContent" class="flex flex-col gap-6">
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-blue-400 w-full min-w-0 max-w-full">
+                        <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                            <h3 class="font-bold text-gray-300"><i class="fas fa-chart-pie mr-2"></i>Analytics & Reports</h3>
+                            
+                            <button onclick="exportReportToExcel(event)" class="bg-green-700 hover:bg-green-600 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow flex items-center h-8">
+                                <i class="fas fa-file-excel mr-2"></i> Export to Excel
+                            </button>
+                        </div>
 
                     <div class="flex flex-wrap items-end gap-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
                         
@@ -1359,8 +1364,131 @@
                         </table>
                     </div>
                 </div>
+                </div> <div id="reportEmailerContent" class="hidden flex-col gap-6">
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-teal-500 w-full">
+                        <h3 class="font-bold text-gray-300 border-b border-gray-700 pb-2 mb-4"><i class="fas fa-paper-plane mr-2"></i>Configure Automated Report</h3>
+                        
+                        <form id="emailerForm" onsubmit="saveReportSchedule(event)" class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-900 p-4 rounded border border-gray-700">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-400 mb-1">Report Type</label>
+                                    <select id="emailReportType" required class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
+                                        <option value="weekly">Weekly Attendance Summary</option>
+                                        <option value="detailed_attendance">Employee Detailed Attendance</option>
+                                        <option value="muster">Daily Muster Roll (Present)</option>
+                                        <option value="absent">Absenteeism Report</option>
+                                        <option value="leave">Approved Leave Report</option>
+                                        <option value="violations">Active Violations Report</option>
+                                        <option value="overtime">Overtime & Premium Hours Report</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-400 mb-1">Recipient Email(s) <span class="font-normal text-[10px]">(Comma separated)</span></label>
+                                    <input type="text" id="emailRecipients" required placeholder="manager@tnaafrica.co.za" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
+                                </div>
+                                
+                                <div class="col-span-1 md:col-span-2">
+                                    <label class="block text-xs font-bold text-gray-400 mb-1">Departments <span class="font-normal text-[10px]">(Check all that apply)</span></label>
+                                    <div id="emailDeptCheckboxes" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 p-3 bg-gray-800 border border-gray-600 rounded max-h-32 overflow-y-auto">
+                                        </div>
+                                </div>
+                            </div>
 
-            </section>
+                          <input type="hidden" id="editEmailScheduleId">
+
+                            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 bg-gray-900 p-4 rounded border border-gray-700 items-start">
+                                <div class="lg:col-span-3 w-full">
+                                    <label class="block text-xs font-bold text-gray-400 mb-1">Frequency</label>
+                                    <select id="emailFrequency" required onchange="updateEmailFrequencyUI()" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
+                                        <option value="Daily">Daily (Specific Days)</option>
+                                        <option value="Weekly">Weekly (Specific Day)</option>
+                                        <option value="Monthly">Monthly (Specific Date)</option>
+                                    </select>
+                                </div>
+
+                                <div id="freqContainerDays" class="lg:col-span-7 w-full overflow-hidden">
+                                    <label class="block text-xs font-bold text-gray-400 mb-1" id="freqLabel">Select Days of Week</label>
+                                    
+                                    <div id="freqDailyUI" class="flex flex-wrap gap-2 items-center w-full">
+                                        <label class="text-xs text-gray-300 flex items-center bg-gray-800 px-2 py-1.5 rounded border border-gray-600 cursor-pointer select-none hover:border-teal-500 transition whitespace-nowrap"><input type="checkbox" value="1" class="freq-day-chk mr-1.5 accent-teal-500" checked> Mon</label>
+                                        <label class="text-xs text-gray-300 flex items-center bg-gray-800 px-2 py-1.5 rounded border border-gray-600 cursor-pointer select-none hover:border-teal-500 transition whitespace-nowrap"><input type="checkbox" value="2" class="freq-day-chk mr-1.5 accent-teal-500" checked> Tue</label>
+                                        <label class="text-xs text-gray-300 flex items-center bg-gray-800 px-2 py-1.5 rounded border border-gray-600 cursor-pointer select-none hover:border-teal-500 transition whitespace-nowrap"><input type="checkbox" value="3" class="freq-day-chk mr-1.5 accent-teal-500" checked> Wed</label>
+                                        <label class="text-xs text-gray-300 flex items-center bg-gray-800 px-2 py-1.5 rounded border border-gray-600 cursor-pointer select-none hover:border-teal-500 transition whitespace-nowrap"><input type="checkbox" value="4" class="freq-day-chk mr-1.5 accent-teal-500" checked> Thu</label>
+                                        <label class="text-xs text-gray-300 flex items-center bg-gray-800 px-2 py-1.5 rounded border border-gray-600 cursor-pointer select-none hover:border-teal-500 transition whitespace-nowrap"><input type="checkbox" value="5" class="freq-day-chk mr-1.5 accent-teal-500" checked> Fri</label>
+                                        <label class="text-xs text-gray-300 flex items-center bg-gray-800 px-2 py-1.5 rounded border border-gray-600 cursor-pointer select-none hover:border-teal-500 transition whitespace-nowrap"><input type="checkbox" value="6" class="freq-day-chk mr-1.5 accent-teal-500"> Sat</label>
+                                        <label class="text-xs text-red-400 flex items-center bg-gray-800 px-2 py-1.5 rounded border border-gray-600 cursor-pointer select-none hover:border-red-500 transition whitespace-nowrap"><input type="checkbox" value="0" class="freq-day-chk mr-1.5 accent-red-500"> Sun</label>
+                                    </div>
+
+                                    <select id="freqWeeklyUI" class="hidden w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
+                                        <option value="1">Monday</option>
+                                        <option value="2">Tuesday</option>
+                                        <option value="3">Wednesday</option>
+                                        <option value="4">Thursday</option>
+                                        <option value="5">Friday</option>
+                                        <option value="6">Saturday</option>
+                                        <option value="0">Sunday</option>
+                                    </select>
+
+                                    <div id="freqMonthlyUI" class="hidden flex items-center gap-2">
+                                        <span class="text-xs text-gray-400">Day</span>
+                                        <input type="number" id="freqMonthlyDate" min="1" max="31" value="1" class="w-20 bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white text-center focus:outline-none focus:border-teal-500">
+                                        <span class="text-xs text-gray-500">of the month</span>
+                                    </div>
+                                </div>
+
+                                <div class="lg:col-span-2 w-full">
+                                    <label class="block text-xs font-bold text-gray-400 mb-1">Time to Send</label>
+                                    <input type="time" id="emailRunTime" required value="08:00" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-900 p-3 rounded border border-gray-700 w-full">
+                                <h4 class="text-xs font-bold text-gray-300 mb-2"><i class="fas fa-calendar-alt mr-1"></i>Report Data Range</h4>
+                                <p id="dataRangeDailyText" class="text-[10px] text-gray-400">The generated report will automatically extract data for <strong>Yesterday</strong>.</p>
+                                <p id="dataRangeWeeklyText" class="text-[10px] text-gray-400 hidden">The generated report will automatically extract data for the <strong>Previous 7 Days</strong>.</p>
+                                
+                                <div id="dataRangeMonthlyUI" class="hidden flex items-center gap-4">
+                                    <div>
+                                        <label class="block text-[10px] text-gray-500 mb-1">Start Day (Previous Month)</label>
+                                        <input type="number" id="dataStartDay" min="1" max="31" value="26" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white text-center focus:outline-none focus:border-teal-500">
+                                    </div>
+                                    <div class="text-gray-500 mt-4"><i class="fas fa-arrow-right"></i></div>
+                                    <div>
+                                        <label class="block text-[10px] text-gray-500 mb-1">End Day (Current Month)</label>
+                                        <input type="number" id="dataEndDay" min="1" max="31" value="25" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white text-center focus:outline-none focus:border-teal-500">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-end pt-2 gap-3">
+                                <button type="button" id="btnCancelScheduleEdit" onclick="cancelEditSchedule()" class="hidden bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded text-sm font-bold shadow transition">Cancel Edit</button>
+                                <button type="submit" id="btnSaveSchedule" class="bg-teal-700 hover:bg-teal-600 text-white px-6 py-2 rounded text-sm font-bold shadow transition"><i class="fas fa-save mr-2"></i> Save Schedule</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-indigo-500 w-full">
+                        <h3 class="font-bold text-gray-300 border-b border-gray-700 pb-2 mb-4"><i class="fas fa-list mr-2"></i>Active Schedules</h3>
+                        <div class="overflow-x-auto rounded border border-gray-700">
+                            <table class="w-full text-left text-sm border-collapse">
+                                <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                                    <tr>
+                                        <th class="p-3">Report</th>
+                                        <th class="p-3">Departments</th>
+                                        <th class="p-3">Recipients</th>
+                                        <th class="p-3">Schedule</th>
+                                        <th class="p-3">Data Range</th>
+                                        <th class="p-3 text-center">Status</th>
+                                        <th class="p-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="emailSchedulesBody" class="divide-y divide-gray-700 bg-gray-900">
+                                    <tr><td colspan="6" class="p-4 text-center text-gray-500">Loading schedules...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> </section>
 
            <section id="page-overtime" class="page-section pb-32">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 max-w-4xl">
