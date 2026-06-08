@@ -825,6 +825,18 @@
         </div>
     </div>
 
+    <div id="customPromptModal" class="fixed inset-0 z-[200] hidden bg-black/80 backdrop-blur-sm items-center justify-center p-4">
+        <div class="bg-gray-800 border border-gray-600 rounded-lg shadow-2xl w-full max-w-sm relative text-white p-6">
+            <h3 class="text-lg font-bold text-red-400 mb-2"><i class="fas fa-lock mr-2"></i>Security Verification</h3>
+            <p class="text-sm text-gray-400 mb-4 whitespace-pre-wrap" id="customPromptMessage"></p>
+            <input type="password" id="customPromptInput" class="w-full p-2 border rounded bg-gray-900 text-white border-gray-600 focus:border-red-500 focus:outline-none mb-4" autocomplete="off">
+            <div class="flex justify-end gap-3">
+                <button type="button" id="customPromptCancel" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded transition">Cancel</button>
+                <button type="button" id="customPromptConfirm" class="bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition shadow">Confirm</button>
+            </div>
+        </div>
+    </div>
+
   <script>
         document.addEventListener('DOMContentLoaded', () => {
             const sidebarLinks = document.querySelectorAll('#sidebarNav .sidebar-item');

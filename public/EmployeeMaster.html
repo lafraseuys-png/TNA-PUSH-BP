@@ -849,61 +849,46 @@
                 <input type="hidden" id="editEmpPin">
 
                 <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1">Personal Details</h4>
-                <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Display PIN / Emp ID <span class="text-red-400">*</span></label>
-                        <input type="text" id="editEmpDisplayPinInput" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500" title="This is the ID shown on reports and tables.">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 mb-1">First Name <span class="text-red-400">*</span></label>
-                        <input type="text" id="editEmpFirstName" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Last Name <span class="text-red-400">*</span></label>
-                        <input type="text" id="editEmpLastName" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Biological Sex</label>
-                        <select id="editEmpSex" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                            <option value="">-- Select --</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 mb-1">ID/Passport Number</label>
-                        <input type="text" id="editEmpIDNumber" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Nationality</label>
-                        <select id="editEmpNationality" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                            <option value="">-- Select Nationality --</option>
-                        </select>
-                    </div>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Display PIN / ID <span class="text-red-400">*</span></label><input type="text" id="editEmpDisplayPinInput" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Title</label><input type="text" id="editEmpTitle" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">First Name <span class="text-red-400">*</span></label><input type="text" id="editEmpFirstName" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Second Name</label><input type="text" id="editEmpSecondName" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Last Name <span class="text-red-400">*</span></label><input type="text" id="editEmpLastName" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Known As</label><input type="text" id="editEmpKnownAs" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">ID/Passport No</label><input type="text" id="editEmpIDNumber" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Date of Birth</label><input type="date" id="editEmpDateOfBirth" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Biological Sex</label><select id="editEmpSex" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"><option value="">-- Select --</option><option value="Male">Male</option><option value="Female">Female</option></select></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Gender</label><input type="text" id="editEmpGender" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Marital Status</label><select id="editEmpMaritalStatus" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"><option value="">-- Select --</option><option value="Single">Single</option><option value="Married">Married</option><option value="Divorced">Divorced</option><option value="Widowed">Widowed</option></select></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Language</label><input type="text" id="editEmpLanguage" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Ethnic Group</label><input type="text" id="editEmpEthnicGroup" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Nationality</label><select id="editEmpNationality" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"><option value="">-- Select --</option></select></div>
                 </div>
 
-                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1">Employment & HR</h4>
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1">Contact Information</h4>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Cell Number</label><input type="text" id="editEmpCellNumber" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Home Number</label><input type="text" id="editEmpHomeNumber" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Business Number</label><input type="text" id="editEmpBusinessNumber" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Email Address</label><input type="email" id="editEmpEmailAddress" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                </div>
+
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1">Employment & Job</h4>
                 <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Department <span class="text-red-400">*</span></label>
-                        <select id="editEmpDept" required onchange="syncHODDept('edit')" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500"></select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Occupation / Job Title</label>
-                        <input type="text" id="editEmpOccupation" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Group Start Date <span class="text-red-400">*</span></label>
-                        <input type="date" id="editEmpStartDate" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 mb-1">RFID Card Number</label>
-                        <input type="text" id="editEmpCardNo" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    </div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Department <span class="text-red-400">*</span></label><select id="editEmpDept" required onchange="syncHODDept('edit')" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></select></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Job Title</label><input type="text" id="editEmpJobTitle" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Job Grade</label><input type="text" id="editEmpJobGrade" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Occupation (Legacy)</label><input type="text" id="editEmpOccupation" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Group Start Date <span class="text-red-400">*</span></label><input type="date" id="editEmpStartDate" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Date Engaged</label><input type="date" id="editEmpDateEngaged" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">RFID Card Number</label><input type="text" id="editEmpCardNo" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Passport Number</label><input type="text" id="editEmpPassportNumber" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Passport Country</label><input type="text" id="editEmpPassportCountry" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
                     <div class="col-span-3 pt-2 pb-2 border-t border-b border-gray-700">
                         <div class="relative w-full max-w-md">
-                            <label class="block text-xs font-bold text-indigo-400 mb-1"><i class="fas fa-user-tie mr-1"></i> Reports To (Direct Manager)</label>
-                            <input type="text" id="editEmpReportsToSearch" oninput="filterReportsToOptions('edit')" onfocus="showReportsToDropdown('edit')" placeholder="Type to search Name or PIN..." class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                            <label class="block text-[10px] font-bold text-indigo-400 mb-1"><i class="fas fa-user-tie mr-1"></i> Reports To (Direct Manager)</label>
+                            <input type="text" id="editEmpReportsToSearch" oninput="filterReportsToOptions('edit')" onfocus="showReportsToDropdown('edit')" placeholder="Type to search Name or PIN..." class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-indigo-500">
                             <input type="hidden" id="editEmpReportsTo">
                             <div id="editEmpReportsToDropdown" class="hidden absolute z-[60] w-full bg-gray-800 border border-gray-500 rounded mt-1 max-h-48 overflow-y-auto shadow-2xl"></div>
                         </div>
@@ -920,131 +905,143 @@
                     </div>
                 </div>
 
-                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1">Time & Attendance Configuration</h4>
-                <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Default Shift</label>
-                        <select id="editEmpDefaultShift" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                            <option value="">-- No Default Shift --</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Overtime Eligibility</label>
-                        <select id="editEmpOvertime" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                            <option value="Paid">Paid Overtime</option>
-                            <option value="Unpaid">Unpaid Overtime</option>
-                            <option value="Time-Off">Time-Off in Lieu</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Default Days Format</label>
-                        <input type="text" id="editEmpDefaultDays" placeholder="e.g. 1111100" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Custom OT Rule ID</label>
-                        <input type="number" id="editEmpCustomOTRule" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Payroll Period ID</label>
-                        <input type="number" id="editEmpPayrollPeriod" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1">Tax & Statutory</h4>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Tax Number</label><input type="text" id="editEmpTaxNumber" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Tax Office</label><input type="text" id="editEmpTaxOffice" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Tax Status</label><input type="text" id="editEmpTaxStatus" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">UIF Status</label><input type="text" id="editEmpUIFStatus" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Directive %</label><input type="number" step="0.01" id="editEmpDirectivePercentage" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Directive 1</label><input type="text" id="editEmpDirective1" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Directive 2</label><input type="text" id="editEmpDirective2" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Directive 3</label><input type="text" id="editEmpDirective3" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    
+                    <div class="col-span-4 flex gap-6 pt-2">
+                        <label class="flex items-center cursor-pointer text-[10px] font-bold text-gray-300"><input type="checkbox" id="editEmpLegallyRetired" class="mr-2 accent-blue-500 w-4 h-4"> Legally Retired</label>
+                        <label class="flex items-center cursor-pointer text-[10px] font-bold text-gray-300"><input type="checkbox" id="editEmpSeasonalWorker" class="mr-2 accent-blue-500 w-4 h-4"> Seasonal Worker</label>
+                        <label class="flex items-center cursor-pointer text-[10px] font-bold text-gray-300"><input type="checkbox" id="editEmpExcludeFromOID" class="mr-2 accent-blue-500 w-4 h-4"> Exclude for OID</label>
                     </div>
                 </div>
+
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1">Time & Attendance Configuration</h4>
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Default Shift</label><select id="editEmpDefaultShift" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"><option value="">-- No Default Shift --</option></select></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Overtime Eligibility</label><select id="editEmpOvertime" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"><option value="Paid">Paid Overtime</option><option value="Unpaid">Unpaid Overtime</option><option value="Time-Off">Time-Off in Lieu</option></select></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Default Days Format</label><input type="text" id="editEmpDefaultDays" placeholder="e.g. 1111100" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Custom OT Rule ID</label><input type="number" id="editEmpCustomOTRule" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Payroll Period ID</label><input type="number" id="editEmpPayrollPeriod" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                </div>
+
                 <h4 class="text-xs font-bold text-emerald-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1"><i class="fas fa-calendar-check mr-1"></i> Leave Balances (Paid Leave)</h4>
-                <p class="text-[9px] text-gray-400 mb-2">Assign opening/current balances (in days) for this employee. Types are configured in the Leave Management tab.</p>
                 <div id="editEmpLeaveBalancesContainer" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6 bg-gray-900/50 p-3 rounded border border-gray-700">
                     <div class="col-span-full text-center text-xs text-gray-500 py-2">Loading leave types...</div>
                 </div>
 
                 <h4 class="text-xs font-bold text-cyan-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1"><i class="fas fa-tags mr-1"></i> Custom Attributes</h4>
-                <p class="text-[9px] text-gray-400 mb-2">Tenant-specific fields defined in the Custom Attributes settings.</p>
                 <div id="editEmpAttributesContainer" class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6 bg-gray-900/50 p-3 rounded border border-gray-700">
                     <div class="col-span-full text-center text-xs text-gray-500 py-2">Loading custom attributes...</div>
                 </div>
 
                 <div id="cvsAccessZoneSection" class="hidden">
-                    <h4 class="text-xs font-bold text-purple-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1"><i class="fas fa-shield-alt mr-1"></i> ZKTeco Hardware Access Levels</h4>
-                    <p class="text-[9px] text-gray-400 mb-2">Assign this employee directly to CVS Access Levels. This will sync immediately to the hardware upon saving.</p>
-                    <div id="editEmpCvsZonesContainer" class="zone-grid bg-gray-900/50 p-3 rounded border border-gray-700 max-h-48 overflow-y-auto mb-6">
-                        <div class="col-span-full text-center text-xs text-gray-500 py-2"><i class="fas fa-spinner fa-spin mr-1"></i> Fetching active zones...</div>
-                    </div>
+                    <h4 class="text-xs font-bold text-purple-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1"><i class="fas fa-shield-alt mr-1"></i> ZKTeco Access Levels</h4>
+                    <div id="editEmpCvsZonesContainer" class="zone-grid bg-gray-900/50 p-3 rounded border border-gray-700 max-h-48 overflow-y-auto mb-6"></div>
                 </div>
 
                 <h4 class="text-xs font-bold text-yellow-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1"><i class="fas fa-coins mr-1"></i> Payroll & Wage Ledger</h4>
-                <p class="text-[9px] text-gray-400 mb-2">Changing these values sets a new active wage and logs the old rate to history.</p>
-                <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                    <div>
-                        <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Wage Type</label>
-                        <select id="editEmpWageType" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-yellow-500">
-                            <option value="">-- Select Type --</option>
-                            <option value="Hourly">Hourly Rate</option>
-                            <option value="Fixed">Fixed Salary (Monthly)</option>
-                        </select>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <div><label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Wage Type</label><select id="editEmpWageType" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-yellow-500"><option value="">-- Select --</option><option value="Hourly">Hourly Rate</option><option value="Fixed">Fixed Salary</option></select></div>
+                    <div><label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Rate/Amount</label><input type="number" step="0.01" id="editEmpWageRate" placeholder="0.00" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-yellow-500"></div>
+                    <div><label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Valid From</label><input type="date" id="editEmpWageDate" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-yellow-500"></div>
+                    <div><label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Pay Method</label><select id="editEmpPayMethod" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-yellow-500"><option value="">-- Select --</option><option value="EFT">EFT</option><option value="Cash">Cash</option><option value="Cheque">Cheque</option></select></div>
+                </div>
+
+                <h4 class="text-xs font-bold text-rose-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1"><i class="fas fa-heartbeat mr-1"></i> Dependants & Emergency Contacts</h4>
+                <div class="mb-4 bg-gray-900/50 border border-gray-700 rounded p-3">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs font-bold text-gray-300">Dependants / Medical Aid Beneficiaries</span>
+                        <button type="button" onclick="addDynamicRow('dependants')" class="bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-[10px] font-bold"><i class="fas fa-plus mr-1"></i>Add</button>
                     </div>
-                    <div>
-                        <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Rate/Amount</label>
-                        <input type="number" step="0.01" id="editEmpWageRate" placeholder="0.00" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-yellow-500">
+                    <table class="w-full text-left text-[10px]">
+                        <thead class="bg-gray-700 text-gray-400"><tr><th class="p-2">Full Name</th><th class="p-2">Relationship</th><th class="p-2">DOB</th><th class="p-2 text-center">Med Aid</th><th class="p-2"></th></tr></thead>
+                        <tbody id="editEmpDependantsBody" class="divide-y divide-gray-800 bg-gray-900"></tbody>
+                    </table>
+                </div>
+
+                <div class="mb-6 bg-gray-900/50 border border-gray-700 rounded p-3">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs font-bold text-gray-300">Emergency Contacts</span>
+                        <button type="button" onclick="addDynamicRow('emergency')" class="bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-[10px] font-bold"><i class="fas fa-plus mr-1"></i>Add</button>
                     </div>
-                    <div>
-                        <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Valid From Date</label>
-                        <input type="date" id="editEmpWageDate" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-yellow-500">
+                    <table class="w-full text-left text-[10px]">
+                        <thead class="bg-gray-700 text-gray-400"><tr><th class="p-2">Name</th><th class="p-2">Relationship</th><th class="p-2">Phone</th><th class="p-2">Alt Phone</th><th class="p-2"></th></tr></thead>
+                        <tbody id="editEmpEmergencyBody" class="divide-y divide-gray-800 bg-gray-900"></tbody>
+                    </table>
+                </div>
+
+                <h4 class="text-xs font-bold text-teal-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1"><i class="fas fa-shield-alt mr-1"></i> Fund & Benefit Memberships</h4>
+                <div class="mb-6 bg-gray-900/50 border border-gray-700 rounded p-3">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs font-bold text-gray-300">Active Benefits (Pension, Provident, Medical)</span>
+                        <button type="button" onclick="addDynamicRow('benefits')" class="bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-[10px] font-bold"><i class="fas fa-plus mr-1"></i>Add</button>
+                    </div>
+                    <table class="w-full text-left text-[10px]">
+                        <thead class="bg-gray-700 text-gray-400"><tr><th class="p-2">Type</th><th class="p-2">Provider</th><th class="p-2">Enroll Date</th><th class="p-2">Status</th><th class="p-2"></th></tr></thead>
+                        <tbody id="editEmpBenefitsBody" class="divide-y divide-gray-800 bg-gray-900"></tbody>
+                    </table>
+                </div>
+
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1"><i class="fas fa-home mr-1"></i> Addresses & Banking Details</h4>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-gray-900 p-3 rounded border border-gray-700">
+                        <h5 class="text-[10px] font-bold text-blue-400 mb-2 border-b border-gray-700 pb-1">Residential Address</h5>
+                        <div class="space-y-2">
+                            <input type="text" id="editEmpStreet1" placeholder="Street 1" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-[10px] text-white focus:outline-none focus:border-blue-500">
+                            <input type="text" id="editEmpStreet2" placeholder="Street 2 / Unit" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-[10px] text-white focus:outline-none focus:border-blue-500">
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="text" id="editEmpSuburb" placeholder="Suburb" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-[10px] text-white focus:outline-none focus:border-blue-500">
+                                <input type="text" id="editEmpCity" placeholder="City" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-[10px] text-white focus:outline-none focus:border-blue-500">
+                                <input type="text" id="editEmpProvince" placeholder="Province" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-[10px] text-white focus:outline-none focus:border-blue-500">
+                                <input type="text" id="editEmpPostalCode" placeholder="Code" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-[10px] text-white focus:outline-none focus:border-blue-500">
+                            </div>
+                            <input type="text" id="editEmpCountry" placeholder="Country" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-[10px] text-white focus:outline-none focus:border-blue-500">
+                        </div>
+                    </div>
+                    <div class="bg-gray-900 p-3 rounded border border-gray-700">
+                        <h5 class="text-[10px] font-bold text-green-400 mb-2 border-b border-gray-700 pb-1">Postal Address</h5>
+                        <div class="space-y-2">
+                            <input type="text" id="editEmpPostal_Street1" placeholder="Street 1 / PO Box" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-[10px] text-white focus:outline-none focus:border-green-500">
+                            <input type="text" id="editEmpPostal_Street2" placeholder="Street 2" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-[10px] text-white focus:outline-none focus:border-green-500">
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="text" id="editEmpPostal_Suburb" placeholder="Suburb" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-[10px] text-white focus:outline-none focus:border-green-500">
+                                <input type="text" id="editEmpPostal_City" placeholder="City" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-[10px] text-white focus:outline-none focus:border-green-500">
+                                <input type="text" id="editEmpPostal_Province" placeholder="Province" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-[10px] text-white focus:outline-none focus:border-green-500">
+                                <input type="text" id="editEmpPostal_PostalCode" placeholder="Code" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-[10px] text-white focus:outline-none focus:border-green-500">
+                            </div>
+                            <input type="text" id="editEmpPostal_Country" placeholder="Country" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-[10px] text-white focus:outline-none focus:border-green-500">
+                        </div>
+                    </div>
+                    <div class="bg-gray-900 p-3 rounded border border-gray-700">
+                        <h5 class="text-[10px] font-bold text-orange-400 mb-2 border-b border-gray-700 pb-1">Work Address</h5>
+                        <div class="space-y-2">
+                            <input type="text" id="editEmpWork_Street1" placeholder="Street 1 / Building" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-[10px] text-white focus:outline-none focus:border-orange-500">
+                            <input type="text" id="editEmpWork_Street2" placeholder="Street 2" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-[10px] text-white focus:outline-none focus:border-orange-500">
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="text" id="editEmpWork_Suburb" placeholder="Suburb" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-[10px] text-white focus:outline-none focus:border-orange-500">
+                                <input type="text" id="editEmpWork_City" placeholder="City" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-[10px] text-white focus:outline-none focus:border-orange-500">
+                                <input type="text" id="editEmpWork_Province" placeholder="Province" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-[10px] text-white focus:outline-none focus:border-orange-500">
+                                <input type="text" id="editEmpWork_PostalCode" placeholder="Code" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-[10px] text-white focus:outline-none focus:border-orange-500">
+                            </div>
+                            <input type="text" id="editEmpWork_Country" placeholder="Country" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-[10px] text-white focus:outline-none focus:border-orange-500">
+                        </div>
                     </div>
                 </div>
 
-                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1"><i class="fas fa-home mr-1"></i> Address & Banking Details</h4>
-                
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-                    <div class="col-span-2 lg:col-span-4">
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Street 1</label>
-                        <input type="text" id="editEmpStreet1" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div class="col-span-2 lg:col-span-4">
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Street 2</label>
-                        <input type="text" id="editEmpStreet2" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div class="col-span-1 lg:col-span-1">
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Suburb</label>
-                        <input type="text" id="editEmpSuburb" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div class="col-span-1 lg:col-span-1">
-                        <label class="block text-xs font-bold text-gray-400 mb-1">City</label>
-                        <input type="text" id="editEmpCity" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div class="col-span-1 lg:col-span-1">
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Province</label>
-                        <input type="text" id="editEmpProvince" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div class="col-span-1 lg:col-span-1">
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Country</label>
-                        <input type="text" id="editEmpCountry" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div class="col-span-1 lg:col-span-1">
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Postal Code</label>
-                        <input type="text" id="editEmpPostalCode" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6 border-t border-gray-700 pt-4">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Bank Name</label>
-                        <input type="text" id="editEmpBankName" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Account Number</label>
-                        <input type="text" id="editEmpBankAccountNumber" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Branch Code</label>
-                        <input type="text" id="editEmpBankBranchCode" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Account Type</label>
-                        <select id="editEmpBankAccountType" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                            <option value="">-- Select Type --</option>
-                            <option value="Cheque">Cheque</option>
-                            <option value="Current">Current</option>
-                            <option value="Savings">Savings</option>
-                        </select>
-                    </div>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6 bg-gray-900 border border-gray-700 rounded p-3">
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Bank Name</label><input type="text" id="editEmpBankName" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Account Number</label><input type="text" id="editEmpBankAccountNumber" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Branch Code</label><input type="text" id="editEmpBankBranchCode" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
+                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Account Type</label><select id="editEmpBankAccountType" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"><option value="">-- Select --</option><option value="Cheque">Cheque</option><option value="Current">Current</option><option value="Savings">Savings</option></select></div>
                 </div>
 
                 <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-700 pb-1">Attachments & Documents</h4>

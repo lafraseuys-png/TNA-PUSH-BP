@@ -222,12 +222,16 @@
                     <button onclick="switchTeamTab('inactive')" id="tab-teams-inactive" class="px-6 py-2 text-sm font-bold text-gray-500 border-b-2 border-transparent hover:text-gray-300 transition">Deactivated Teams</button>
                 </div>
                 
-                <form id="teamForm" onsubmit="createTeam(event)" class="mb-6 bg-gray-900 p-4 rounded border border-gray-700 flex gap-4 items-end">
-                    <div class="flex-1">
+                <form id="teamForm" onsubmit="createTeam(event)" class="mb-6 bg-gray-900 p-4 rounded border border-gray-700 flex flex-wrap md:flex-nowrap gap-4 items-end">
+                    <div class="flex-1 min-w-[200px]">
                         <label class="block text-xs font-bold text-gray-400 mb-1">New Team Name</label>
                         <input type="text" id="newTeamName" required placeholder="e.g. Harvesting Team A" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-teal-500">
                     </div>
-                    <button type="submit" class="bg-teal-600 hover:bg-teal-500 text-white px-6 py-2 rounded font-bold shadow transition h-10">
+                    <div class="flex-1 min-w-[200px]">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Asset Tag / Barcode (Optional)</label>
+                        <input type="text" id="newTeamAssetTag" placeholder="e.g. TAG-001" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-teal-500">
+                    </div>
+                    <button type="submit" class="bg-teal-600 hover:bg-teal-500 text-white px-6 py-2 rounded font-bold shadow transition h-10 w-full md:w-auto">
                         <i class="fas fa-plus mr-2"></i> Create Team
                     </button>
                 </form>
@@ -505,8 +509,11 @@
             <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t flex-shrink-0">
                 <div class="flex items-center gap-3 w-full mr-4">
                     <i class="fas fa-users-cog text-teal-400 text-xl"></i>
-                    <input type="text" id="editTeamNameInput" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-white font-bold text-lg w-1/2 focus:outline-none focus:border-teal-500">
-                    <button id="btnRenameTeam" onclick="renameTeam()" class="bg-teal-700 hover:bg-teal-600 text-white px-3 py-1.5 rounded text-xs font-bold shadow transition" title="Save Team Name">Save Name</button>
+                    <div class="flex flex-col gap-1 w-1/2">
+                        <input type="text" id="editTeamNameInput" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-white font-bold text-sm focus:outline-none focus:border-teal-500" placeholder="Team Name">
+                        <input type="text" id="editTeamAssetTagInput" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-white font-mono text-xs focus:outline-none focus:border-teal-500" placeholder="Asset Tag (Optional)">
+                    </div>
+                    <button id="btnRenameTeam" onclick="renameTeam()" class="bg-teal-700 hover:bg-teal-600 text-white px-3 py-1.5 rounded text-xs font-bold shadow transition h-full" title="Save Details">Save Details</button>
                 </div>
                 <button onclick="closeTeamModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
             </div>
@@ -558,11 +565,23 @@
                     <div class="bg-gray-900 border border-gray-700 rounded flex-1 overflow-y-auto shadow-inner mb-3" id="availableEmployeesList">
                         </div>
 
-                    <div class="flex justify-between items-center flex-shrink-0" id="availableEmpPagination">
+                    <div class="flex justify-between items-center flex-shrink-0 mb-4" id="availableEmpPagination">
                         <span id="availableEmpPageInfo" class="text-[10px] text-gray-400 font-bold uppercase tracking-wider"></span>
                         <div class="flex space-x-2">
                             <button type="button" id="btnPrevAvailable" onclick="changeAvailableEmpPage(-1)" class="bg-gray-800 hover:bg-gray-700 text-teal-400 px-3 py-1 rounded text-xs font-bold border border-gray-600 transition shadow disabled:opacity-50 disabled:cursor-not-allowed">Prev</button>
                             <button type="button" id="btnNextAvailable" onclick="changeAvailableEmpPage(1)" class="bg-gray-800 hover:bg-gray-700 text-teal-400 px-3 py-1 rounded text-xs font-bold border border-gray-600 transition shadow disabled:opacity-50 disabled:cursor-not-allowed">Next</button>
+                        </div>
+                    </div>
+                    
+                    <div class="border-t border-gray-700 pt-3 flex-shrink-0">
+                        <h4 class="text-xs font-bold text-purple-400 mb-2 uppercase tracking-wider"><i class="fas fa-user-tie mr-1"></i> Assign Team Manager</h4>
+                        <div class="flex gap-2">
+                            <select id="teamManagerSelect" class="flex-1 bg-gray-900 border border-gray-600 rounded px-2 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500 transition shadow-inner">
+                                <option value="">-- Select an Employee --</option>
+                            </select>
+                            <button type="button" onclick="assignTeamManager()" class="bg-purple-700 hover:bg-purple-600 text-white px-4 py-1.5 rounded text-xs font-bold shadow transition flex items-center">
+                                Assign
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -658,9 +677,15 @@
                     <label class="block text-xs font-bold text-gray-400 mb-1">Unit of Measure (UOM)</label>
                     <input type="text" id="actUomInput" required placeholder="e.g. Bin, Kg, Tree" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-yellow-500">
                 </div>
-                <div class="mb-6" id="initialRateContainer">
-                    <label class="block text-xs font-bold text-gray-400 mb-1">Initial Rate (Pricing)</label>
-                    <input type="number" id="actRateInput" step="0.01" required placeholder="0.00" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-yellow-500">
+                <div class="grid grid-cols-2 gap-4 mb-6" id="initialRateContainer">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Worker Rate</label>
+                        <input type="number" id="actRateInput" step="0.01" required placeholder="0.00" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-yellow-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Manager Rate (Optional)</label>
+                        <input type="number" id="actManagerRateInput" step="0.01" placeholder="0.00" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-yellow-500">
+                    </div>
                 </div>
                 <div class="flex justify-end space-x-3">
                     <button type="button" onclick="closeActivityModal()" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded font-bold text-sm">Cancel</button>
@@ -683,11 +708,15 @@
                 <div class="flex gap-2 items-end">
                     <input type="hidden" id="pricingActivityId">
                     <div class="flex-1">
-                        <label class="block text-[10px] text-gray-500 mb-1">New Rate</label>
+                        <label class="block text-[10px] text-gray-500 mb-1">Worker Rate</label>
                         <input type="number" id="newPriceRate" step="0.01" placeholder="0.00" class="w-full bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-yellow-500">
                     </div>
                     <div class="flex-1">
-                        <label class="block text-[10px] text-gray-500 mb-1">Effective Date & Time</label>
+                        <label class="block text-[10px] text-gray-500 mb-1">Manager Rate</label>
+                        <input type="number" id="newPriceManagerRate" step="0.01" placeholder="0.00" class="w-full bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-yellow-500">
+                    </div>
+                    <div class="flex-1">
+                        <label class="block text-[10px] text-gray-500 mb-1">Effective Date</label>
                         <input type="datetime-local" id="newPriceDate" class="w-full bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-yellow-500">
                     </div>
                     <button onclick="saveNewPrice()" class="bg-teal-600 hover:bg-teal-500 text-white px-4 py-1.5 rounded font-bold shadow transition text-xs h-8">Log Price</button>
@@ -793,7 +822,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-900 p-4 rounded border border-gray-700">
                     <h4 class="col-span-full text-[10px] font-bold text-red-400 uppercase tracking-wider border-b border-gray-700 pb-1">Mandatory Selections</h4>
                     
-                    <!-- Searchable Farm -->
+                    <div class="col-span-full mb-2">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Task Name (Required)</label>
+                        <input type="text" id="taskNameInput" required placeholder="e.g. Morning Apple Harvest" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white font-bold focus:outline-none focus:border-blue-500">
+                    </div>
+
                     <div>
                         <label class="block text-xs font-bold text-gray-400 mb-1">Farm</label>
                         <div class="flex gap-1 mb-1">
@@ -818,23 +851,48 @@
                     </div>
 
                     <!-- Searchable Activity -->
-                    <div class="col-span-full">
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Activity</label>
-                        <div class="flex gap-1 mb-1">
-                            <i class="fas fa-search text-gray-500 mt-2 text-xs"></i>
-                            <input type="text" id="searchActivity" oninput="renderTaskDropdowns()" placeholder="Search..." class="w-full bg-gray-800 border border-gray-600 rounded p-1 text-xs text-white focus:outline-none focus:border-blue-500">
+                    <div class="col-span-full border-t border-gray-700 mt-2 pt-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="block text-xs font-bold text-gray-400">Activities & Targets</label>
+                            <button type="button" onclick="addTaskActivityRow()" class="bg-blue-900/50 text-blue-400 hover:text-white px-2 py-1 rounded text-[10px] font-bold border border-blue-800 transition"><i class="fas fa-plus mr-1"></i> Add Activity</button>
                         </div>
-                        <select id="taskActivitySelect" required class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500">
-                            <option value="">-- Select Activity --</option>
-                        </select>
+                        <div id="taskActivitiesContainer" class="space-y-2">
+                            </div>
                     </div>
                 </div>
 
                 <!-- Assignment Fields -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-900 p-4 rounded border border-gray-700">
+                    <h4 class="col-span-full text-[10px] font-bold text-purple-400 uppercase tracking-wider border-b border-gray-700 pb-1">Mobile Evidence Rules</h4>
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Photo Evidence</label>
+                        <select id="taskPhotoReq" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                            <option value="Optional">Optional</option>
+                            <option value="Mandatory">Mandatory</option>
+                            <option value="Disabled">Disabled</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Signatures</label>
+                        <select id="taskSigReq" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                            <option value="Optional">Optional</option>
+                            <option value="Mandatory">Mandatory</option>
+                            <option value="Disabled">Disabled</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Evidence Scope</label>
+                        <select id="taskEvidenceScope" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                            <option value="PerTask">Per Task (Once at end)</option>
+                            <option value="PerActivity">Per Activity (Each scan)</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-900 p-4 rounded border border-gray-700">
                     <h4 class="col-span-full text-[10px] font-bold text-teal-400 uppercase tracking-wider border-b border-gray-700 pb-1">Assignment & Payment</h4>
                     
-                    <!-- Payment Method (Mandatory) -->
                     <div class="col-span-full border-b border-gray-800 pb-3 mb-1">
                         <label class="block text-xs font-bold text-gray-400 mb-2">Payment Method</label>
                         <select id="taskPaymentMethod" required class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm font-bold text-white focus:outline-none focus:border-teal-500">
@@ -869,12 +927,8 @@
                 </div>
 
                 <!-- Schedule & Targets -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-900 p-4 rounded border border-gray-700">
-                    <h4 class="col-span-full text-[10px] font-bold text-orange-400 uppercase tracking-wider border-b border-gray-700 pb-1">Schedule & Targets</h4>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Estimated Qty (Target)</label>
-                        <input type="number" id="taskEstQty" step="0.01" required placeholder="0.00" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-orange-500">
-                    </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-900 p-4 rounded border border-gray-700">
+                    <h4 class="col-span-full text-[10px] font-bold text-orange-400 uppercase tracking-wider border-b border-gray-700 pb-1">Schedule</h4>
                     <div>
                         <label class="block text-xs font-bold text-gray-400 mb-1">Start Date</label>
                         <input type="date" id="taskStartDate" required class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-orange-500">
@@ -904,16 +958,10 @@
                         <span id="taskDetailsStatus" class="text-xs uppercase tracking-widest bg-gray-800 px-2 py-1 rounded border border-gray-600">Status</span>
                     </h3>
                     <div class="mt-2 text-xs text-gray-400 font-mono">
-                        <span id="taskDetailsSub">Farm - Unit | Activity</span>
+                        <span id="taskDetailsSub">Farm - Unit | Payment Method</span>
                     </div>
-                    <!-- Task Progress Bar -->
-                    <div class="mt-4 w-full bg-gray-800 rounded-full h-3 border border-gray-600 relative overflow-hidden">
-                        <div id="taskDetailsProgressBar" class="bg-gradient-to-r from-blue-600 to-blue-400 h-full transition-all duration-500" style="width: 0%"></div>
-                    </div>
-                    <div class="flex justify-between mt-1 text-[10px] font-bold text-gray-500">
-                        <span id="taskDetailsProgressText">0 / 0 Units Completed</span>
-                        <span id="taskDetailsProgressPct">0%</span>
-                    </div>
+                    <div id="taskDetailsActivitiesProgress" class="mt-4 space-y-3">
+                        </div>
                 </div>
                 <button onclick="document.getElementById('taskDetailsModal').classList.remove('active')" class="text-gray-400 hover:text-white ml-2"><i class="fas fa-times"></i></button>
             </div>
@@ -1006,6 +1054,7 @@
                 <p class="text-xs text-gray-400 mb-4">Select the employees you want to copy these exact times to. <br><span class="font-bold text-indigo-300" id="bulkCopyTimeDisplay">00:00 - 00:00</span></p>
                 
                 <input type="hidden" id="bulkCopyTaskId">
+                <input type="hidden" id="bulkCopyActivityId">
                 <input type="hidden" id="bulkCopyStartTime">
                 <input type="hidden" id="bulkCopyEndTime">
 
@@ -1147,7 +1196,8 @@
                 </div>
 
             </div>
-            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b flex justify-end">
+            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b flex justify-between items-center">
+                <button id="btnMapPinPrint" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded text-xs font-bold shadow transition flex items-center"><i class="fas fa-print mr-2"></i> Print Evidence</button>
                 <button id="btnMapPinClose" onclick="document.getElementById('mapPinDetailsModal').classList.remove('active')" class="bg-gray-600 hover:bg-gray-500 text-white px-6 py-2 rounded text-xs font-bold shadow transition">Close</button>
             </div>
         </div>

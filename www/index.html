@@ -360,7 +360,7 @@
                     <span class="text-sm font-bold text-white">Clock In/Out</span>
                 </button>
                 
-                <button onclick="navigate('screen-piecework')" class="bg-[#1e1e1e] border border-[#333] p-5 rounded-2xl flex flex-col items-center active:bg-[#252525] transition-colors shadow-lg shadow-[#70A827]/10">
+                <button onclick="navigate('screen-pw-landing')" class="bg-[#1e1e1e] border border-[#333] p-5 rounded-2xl flex flex-col items-center active:bg-[#252525] transition-colors shadow-lg shadow-[#70A827]/10">
                     <div class="w-12 h-12 rounded-full bg-[#70A827]/10 flex items-center justify-center mb-3">
                         <i class="bi bi-clipboard2-check-fill text-2xl text-[#70A827]"></i>
                     </div>
@@ -1549,7 +1549,110 @@
         </div>
     </div>
 
-    <!-- PIECE WORK SCREENS -->
+    <!-- NEW PIECE WORK LANDING PAGE -->
+    <div id="screen-pw-landing" class="screen px-4 pt-6 pb-24">
+        <div class="flex items-center mb-8">
+            <button onclick="navigate('screen-launchpad')" class="text-gray-400 mr-4 text-xl"><i class="bi bi-arrow-left"></i></button>
+            <h1 class="text-xl font-bold text-white">Select Capture Mode</h1>
+        </div>
+
+        <div class="space-y-4">
+            <button onclick="navigate('screen-piecework')" class="w-full bg-[#1e1e1e] border border-[#333] p-6 rounded-2xl flex flex-col items-center active:bg-[#252525] transition-colors shadow-lg shadow-[#70A827]/10">
+                <div class="w-16 h-16 rounded-full bg-[#70A827]/20 flex items-center justify-center mb-3 border border-[#70A827]/50">
+                    <i class="bi bi-person-bounding-box text-3xl text-[#70A827]"></i>
+                </div>
+                <span class="text-lg font-bold text-white">Individual Tasks</span>
+                <span class="text-xs text-gray-500 mt-1 uppercase tracking-wider">Uses Face Scanner</span>
+            </button>
+
+            <button onclick="navigate('screen-pw-team-tasks'); renderPwTeamTasks();" class="w-full bg-[#1e1e1e] border border-[#333] p-6 rounded-2xl flex flex-col items-center active:bg-[#252525] transition-colors shadow-lg shadow-blue-500/10">
+                <div class="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center mb-3 border border-blue-500/50">
+                    <i class="bi bi-people-fill text-3xl text-blue-500"></i>
+                </div>
+                <span class="text-lg font-bold text-white">Team Tasks</span>
+                <span class="text-xs text-gray-500 mt-1 uppercase tracking-wider">Uses Asset Tags / Barcodes</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- NEW TEAM TASKS LIST -->
+    <div id="screen-pw-team-tasks" class="screen px-4 pt-6 pb-24">
+        <div class="flex items-center mb-6">
+            <button onclick="navigate('screen-pw-landing')" class="text-gray-400 mr-4 text-xl"><i class="bi bi-arrow-left"></i></button>
+            <h1 class="text-xl font-bold text-white">Team Tasks</h1>
+        </div>
+
+        <div class="bg-[#1e1e1e] p-5 rounded-xl border border-[#333] mb-6 shadow-lg">
+            <label class="text-xs font-semibold text-gray-400 uppercase">Quick Select / Scan Team</label>
+            <div class="flex gap-2 mt-1">
+                <select id="pwQuickTeamSelect" class="flex-1 bg-[#2a2a2a] border border-[#444] rounded-lg p-3 text-white focus:border-blue-500 outline-none" onchange="handleTeamDropdownSelect()">
+                    <option value="">-- Select Team --</option>
+                </select>
+                <button type="button" onclick="scanAssetTag('pwTeamCapture', 'team_tag')" class="bg-[#2a2a2a] border border-[#444] w-[46px] rounded-lg flex items-center justify-center text-blue-500 hover:bg-[#333] transition-colors shrink-0">
+                    <i class="bi bi-upc-scan text-xl"></i>
+                </button>
+            </div>
+            <p class="text-[10px] text-gray-500 mt-2 leading-tight">Select a team from the dropdown or scan their physical asset tag to instantly unlock their task.</p>
+        </div>
+        
+        <h2 class="text-xs font-semibold text-gray-500 uppercase mb-3 tracking-wider">Active Team Tasks</h2>
+
+        <div class="relative z-40 mb-4">
+            <div class="p-6 text-center text-gray-500 text-sm border border-[#333] border-dashed rounded-xl">Loading team tasks...</div>
+        </div>
+    </div>
+
+    <!-- NEW TEAM CAPTURE SCREEN -->
+    <div id="screen-pw-team-capture" class="screen px-4 pt-6 pb-24">
+        <div class="flex items-center mb-6">
+            <button onclick="navigate('screen-pw-team-tasks')" class="text-gray-400 mr-4 text-xl"><i class="bi bi-arrow-left"></i></button>
+            <h1 class="text-xl font-bold text-white">Team Capture</h1>
+        </div>
+
+        <div class="bg-[#1e1e1e] p-4 rounded-xl border border-[#333] mb-4">
+            <h3 id="pwTeamCapTitle" class="text-sm font-bold text-blue-400 mb-1">Team Name</h3>
+            <p id="pwTeamCapSub" class="text-[10px] text-gray-500 uppercase tracking-wider font-mono">Farm - Unit</p>
+        </div>
+
+        <div>
+            <label class="text-xs font-semibold text-gray-400 uppercase">Select Activity</label>
+            <select id="pwTeamCapActivity" class="w-full bg-[#2a2a2a] border border-[#444] rounded-lg p-4 text-white mt-1 shadow-inner focus:border-blue-500 outline-none">
+                <option value="">-- Select Activity --</option>
+            </select>
+        </div>
+
+        <div class="mt-4">
+            <div class="flex justify-between items-end mb-1">
+                <label class="text-xs font-semibold text-gray-400 uppercase">Total QTY (Whole Team)</label>
+                <span id="pwTeamCapUom" class="text-[10px] text-blue-400 font-bold uppercase">Units</span>
+            </div>
+            <input type="number" id="pwTeamCapQty" placeholder="0.0" step="0.1" class="w-full bg-[#2a2a2a] border border-[#444] rounded-lg p-4 text-3xl text-center text-white focus:border-blue-500 font-bold mt-1 shadow-inner">
+        </div>
+
+        <div class="mt-4 border-t border-[#333] pt-4" id="pwTeamCapPhotoDiv">
+            <label class="text-xs font-semibold text-gray-400 uppercase mb-2 block">Photo Evidence <span id="pwTeamPhotoReqBadge" class="text-[9px] bg-[#333] px-1.5 py-0.5 rounded ml-1 text-gray-400"></span></label>
+            <button type="button" onclick="openCameraModal('pwTeamLog')" class="w-full bg-[#2a2a2a] border border-[#444] border-dashed p-4 rounded-xl flex flex-col items-center justify-center text-gray-400 hover:text-blue-400 transition-colors">
+                <i class="bi bi-camera-fill text-2xl mb-1"></i>
+                <span class="text-[10px] font-bold uppercase text-center">Tap to Capture</span>
+            </button>
+            <img id="pwTeamLogPhotoPreview" class="hidden w-full mt-2 rounded-lg border border-[#333] max-h-32 object-contain bg-black">
+            <input type="hidden" id="pwTeamLogPhotoBase64">
+        </div>
+
+        <div class="mt-4 mb-4" id="pwTeamCapSigDiv">
+            <div class="flex justify-between items-end mb-2">
+                <label class="text-xs font-semibold text-gray-400 uppercase">Manager Signature <span id="pwTeamSigReqBadge" class="text-[9px] bg-[#333] px-1.5 py-0.5 rounded ml-1 text-gray-400"></span></label>
+                <button type="button" onclick="clearSig('pwTeamSigPad')" class="text-[10px] text-blue-400 font-bold uppercase">Clear</button>
+            </div>
+            <canvas id="pwTeamSigPad" class="signature-pad w-full h-32 border border-[#444] rounded-xl bg-white"></canvas>
+        </div>
+
+        <button onclick="saveTeamPwLog()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl shadow-lg transition text-lg mt-4">
+            <i class="bi bi-cloud-arrow-up mr-2"></i> Save Bulk Log
+        </button>
+    </div>
+
+    <!-- PIECE WORK SCREENS (Legacy / Individual) -->
     <div id="screen-piecework" class="screen px-4 pt-6 pb-24">
         <div class="flex items-center justify-between mb-6">
             <div class="flex items-center">
@@ -1567,12 +1670,16 @@
         </div>
     </div>
 
-    <div id="screen-pw-new-task" class="screen px-4 pt-6 pb-24">
+   <div id="screen-pw-new-task" class="screen px-4 pt-6 pb-24">
         <div class="flex items-center mb-6">
             <button onclick="navigate('screen-piecework')" class="text-gray-400 mr-4 text-xl"><i class="bi bi-arrow-left"></i></button>
             <h1 class="text-xl font-bold text-white">Start New Task</h1>
         </div>
         <div class="bg-[#1e1e1e] p-5 rounded-xl border border-[#333] space-y-4 shadow-lg">
+            <div>
+                <label class="text-xs font-semibold text-gray-400 uppercase">Task Name (Required)</label>
+                <input type="text" id="pwNewTaskName" placeholder="e.g. Block A Harvest" class="w-full bg-[#2a2a2a] border border-[#444] rounded-lg p-3 text-white mt-1 font-bold focus:border-[#70A827] outline-none">
+            </div>
             <div>
                 <label class="text-xs font-semibold text-gray-400 uppercase">Farm</label>
                 <select id="pwNewFarm" class="w-full bg-[#2a2a2a] border border-[#444] rounded-lg p-3 text-white mt-1" onchange="renderPwNewUnits()">
@@ -1605,15 +1712,15 @@
 
     <div id="screen-pw-task-details" class="screen px-4 pt-6 pb-24 flex flex-col min-h-screen">
         <div class="flex items-center justify-between mb-4 flex-shrink-0">
-            <div class="flex items-center">
-                <button onclick="navigate('screen-piecework')" class="text-gray-400 mr-4 text-xl"><i class="bi bi-arrow-left"></i></button>
-                <div>
-                    <h1 id="pwDetTitle" class="text-lg font-bold text-[#70A827] truncate w-48">Task Info</h1>
-                    <p id="pwDetSub" class="text-[10px] text-gray-400 uppercase tracking-wider">Farm - Unit</p>
+                <div class="flex items-center">
+                    <button onclick="navigate('screen-piecework')" class="text-gray-400 mr-4 text-xl"><i class="bi bi-arrow-left"></i></button>
+                    <div>
+                        <h1 id="pwDetTitle" class="text-lg font-bold text-[#70A827] truncate w-48">Task Info</h1>
+                        <p id="pwDetSub" class="text-[10px] text-gray-400 uppercase tracking-wider">Farm - Unit</p>
+                    </div>
                 </div>
+                <button onclick="openPwCapture()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded-lg font-bold text-xs shadow-lg transition"><i class="bi bi-upc-scan mr-1"></i> Capture</button>
             </div>
-            <button onclick="navigate('screen-pw-capture')" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded-lg font-bold text-xs shadow-lg transition"><i class="bi bi-upc-scan mr-1"></i> Capture</button>
-        </div>
         
         <div class="bg-[#1e1e1e] rounded-xl border border-[#333] shadow-lg flex-1 flex flex-col overflow-hidden">
             <div class="grid grid-cols-12 bg-[#2a2a2a] p-3 border-b border-[#444] text-[10px] font-bold text-gray-400 uppercase tracking-wider">
@@ -1649,7 +1756,14 @@
                 <input type="hidden" id="pwCapName">
             </div>
 
-            <div>
+            <div class="mt-4">
+                <label class="text-xs font-semibold text-gray-400 uppercase">Select Activity</label>
+                <select id="pwCapActivity" class="w-full bg-[#2a2a2a] border border-[#444] rounded-lg p-4 text-white mt-1 shadow-inner focus:border-[#70A827] outline-none">
+                    <option value="">-- Select Activity --</option>
+                </select>
+            </div>
+
+            <div class="mt-4">
                 <div class="flex justify-between items-end mb-1">
                     <label class="text-xs font-semibold text-gray-400 uppercase">QTY Completed</label>
                     <span id="pwCapUom" class="text-[10px] text-[#70A827] font-bold uppercase">Units</span>
@@ -1676,8 +1790,8 @@
             </div>
 
             <div class="grid grid-cols-2 gap-3 pt-4 border-t border-[#333]">
-                <button onclick="savePwLog(false)" class="bg-[#2a2a2a] border border-[#444] hover:bg-[#333] text-white font-bold py-3.5 rounded-xl shadow-lg transition">Save & Exit</button>
-                <button onclick="savePwLog(true)" class="bg-[#70A827] hover:bg-green-600 text-white font-bold py-3.5 rounded-xl shadow-lg transition">Save & Next</button>
+                <button id="btnSavePwExit" onclick="savePwLog(false)" class="bg-[#2a2a2a] border border-[#444] hover:bg-[#333] text-white font-bold py-3.5 rounded-xl shadow-lg transition">Save & Exit</button>
+                <button id="btnSavePwNext" onclick="savePwLog(true)" class="bg-[#70A827] hover:bg-green-600 text-white font-bold py-3.5 rounded-xl shadow-lg transition">Save & Next</button>
             </div>
         </div>
     </div>
