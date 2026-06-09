@@ -228,8 +228,11 @@
                         <input type="text" id="newTeamName" required placeholder="e.g. Harvesting Team A" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-teal-500">
                     </div>
                     <div class="flex-1 min-w-[200px]">
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Asset Tag / Barcode (Optional)</label>
-                        <input type="text" id="newTeamAssetTag" placeholder="e.g. TAG-001" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-teal-500">
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Asset Tags (Type & Press Enter)</label>
+                        <div id="newTeamTagsContainer" class="w-full bg-gray-800 border border-gray-600 rounded p-1 flex flex-wrap gap-1 items-center focus-within:border-teal-500 transition min-h-[42px] cursor-text" onclick="document.getElementById('newTeamAssetTagVisible').focus()">
+                            <input type="text" id="newTeamAssetTagVisible" placeholder="Add tag..." class="bg-transparent border-none outline-none text-white text-sm p-1 flex-1 min-w-[80px]" onkeydown="handleTagInput(event, 'newTeamTagsContainer', 'newTeamAssetTag')">
+                        </div>
+                        <input type="hidden" id="newTeamAssetTag">
                     </div>
                     <button type="submit" class="bg-teal-600 hover:bg-teal-500 text-white px-6 py-2 rounded font-bold shadow transition h-10 w-full md:w-auto">
                         <i class="fas fa-plus mr-2"></i> Create Team
@@ -511,7 +514,10 @@
                     <i class="fas fa-users-cog text-teal-400 text-xl"></i>
                     <div class="flex flex-col gap-1 w-1/2">
                         <input type="text" id="editTeamNameInput" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-white font-bold text-sm focus:outline-none focus:border-teal-500" placeholder="Team Name">
-                        <input type="text" id="editTeamAssetTagInput" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-white font-mono text-xs focus:outline-none focus:border-teal-500" placeholder="Asset Tag (Optional)">
+                        <div id="editTeamTagsContainer" class="bg-gray-800 border border-gray-600 rounded p-1 flex flex-wrap gap-1 items-center focus-within:border-teal-500 transition min-h-[34px] cursor-text" onclick="document.getElementById('editTeamAssetTagVisible').focus()">
+                            <input type="text" id="editTeamAssetTagVisible" placeholder="Add tag (Enter)..." class="bg-transparent border-none outline-none text-white font-mono text-xs p-0.5 flex-1 min-w-[80px]" onkeydown="handleTagInput(event, 'editTeamTagsContainer', 'editTeamAssetTagInput')">
+                        </div>
+                        <input type="hidden" id="editTeamAssetTagInput">
                     </div>
                     <button id="btnRenameTeam" onclick="renameTeam()" class="bg-teal-700 hover:bg-teal-600 text-white px-3 py-1.5 rounded text-xs font-bold shadow transition h-full" title="Save Details">Save Details</button>
                 </div>
