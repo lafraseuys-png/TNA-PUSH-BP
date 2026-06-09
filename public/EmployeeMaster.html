@@ -164,7 +164,7 @@
                                 <div class="absolute left-0 sm:right-0 sm:left-auto top-full pt-2 w-full sm:w-56 z-50 hidden group-hover:block">
                                     <div class="bg-gray-800 border border-gray-600 rounded shadow-xl overflow-hidden">
                                         <button onclick="downloadExcel('template')" class="w-full text-left px-4 py-3 text-xs text-gray-300 hover:bg-gray-700 hover:text-white transition"><i class="fas fa-download mr-2 text-gray-400"></i> Download Blank Template</button>
-                                        <button onclick="downloadExcel('current')" class="w-full text-left px-4 py-3 text-xs text-gray-300 hover:bg-gray-700 hover:text-white transition"><i class="fas fa-file-export mr-2 text-blue-400"></i> Export Current Data</button>
+                                        <button onclick="openExportModal()" class="w-full text-left px-4 py-3 text-xs text-gray-300 hover:bg-gray-700 hover:text-white transition"><i class="fas fa-file-export mr-2 text-blue-400"></i> Custom Export Data</button>
                                         <div class="border-t border-gray-700"></div>
                                         <button onclick="openImportWizard()" class="w-full text-left px-4 py-3 text-xs text-gray-300 hover:bg-gray-700 hover:text-white transition"><i class="fas fa-upload mr-2 text-green-400"></i> Data Import Wizard</button>
                                         <button onclick="document.getElementById('bulkPhotoInput').click()" class="w-full text-left px-4 py-3 text-xs text-gray-300 hover:bg-gray-700 hover:text-white transition"><i class="fas fa-images mr-2 text-purple-400"></i> Bulk Upload Photos</button>
@@ -1280,6 +1280,55 @@
                 <button type="submit" id="saveTeamBtn" class="px-4 py-2 bg-indigo-700 hover:bg-indigo-600 text-white rounded font-bold text-sm shadow transition">Save Team</button>
             </div>
         </form>
+    </div>
+
+    <div id="exportConfigModal" class="modal-backdrop z-[60]">
+        <div class="bg-gray-800 p-0 rounded-lg w-[95%] lg:w-[600px] shadow-2xl border border-gray-600 flex flex-col">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
+                <h2 class="text-lg font-bold text-blue-400"><i class="fas fa-file-export mr-2"></i> Custom Data Export</h2>
+                <button type="button" onclick="closeExportModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto max-h-[70vh]">
+                <p class="text-xs text-gray-400 mb-4">Select the fields you want to include in your Excel export. Mandatory system fields cannot be removed.</p>
+                
+                <h3 class="text-sm font-bold text-gray-300 mb-2 border-b border-gray-700 pb-1">Mandatory Fields</h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+                    <label class="flex items-center text-xs text-gray-400"><input type="checkbox" checked disabled class="mr-2 accent-blue-500 w-4 h-4"> PIN</label>
+                    <label class="flex items-center text-xs text-gray-400"><input type="checkbox" checked disabled class="mr-2 accent-blue-500 w-4 h-4"> First Name</label>
+                    <label class="flex items-center text-xs text-gray-400"><input type="checkbox" checked disabled class="mr-2 accent-blue-500 w-4 h-4"> Last Name</label>
+                    <label class="flex items-center text-xs text-gray-400"><input type="checkbox" checked disabled class="mr-2 accent-blue-500 w-4 h-4"> Department</label>
+                </div>
+
+                <h3 class="text-sm font-bold text-gray-300 mb-2 border-b border-gray-700 pb-1">Optional HR Fields</h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4" id="exportOptionalFields">
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="dpin" checked class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Display PIN</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="cardno" checked class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Card No</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="idnum" checked class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> ID Number</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="startdate" checked class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Start Date</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="nationality" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Nationality</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="sex" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Sex</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="occupation" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Occupation</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="ishod" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Is HOD</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="hoddept" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> HOD Dept</label>
+                </div>
+
+                <h3 class="text-sm font-bold text-gray-300 mb-2 border-b border-gray-700 pb-1">Time & Wage Fields</h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="wtype" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Wage Type</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="wrate" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Wage Rate</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="wdate" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Wage Valid From</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="shiftname" checked class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Default Shift</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="defdays" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Default Days</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="payrollid" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Payroll Period</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="otelig" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> OT Eligibility</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="otrule" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Custom OT Rule</label>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-end gap-3 shadow-inner">
+                <button type="button" onclick="closeExportModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition">Cancel</button>
+                <button type="button" onclick="executeCustomExport()" class="px-6 py-2 bg-blue-700 hover:bg-blue-600 text-white rounded font-bold text-sm shadow transition"><i class="fas fa-download mr-2"></i> Generate Excel</button>
+            </div>
+        </div>
     </div>
 
     <div id="importWizardModal" class="modal-backdrop z-[60]">

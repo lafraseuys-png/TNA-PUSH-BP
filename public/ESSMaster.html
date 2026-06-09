@@ -102,16 +102,26 @@
                             <p class="text-sm text-gray-400">Manage employees mapped to the ESS portal.</p>
                         </div>
                         <div class="flex flex-col sm:flex-row gap-2 items-center w-full md:w-auto">
-                            <button class="w-full sm:w-auto justify-center bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-gray-500">
-                                <i class="fas fa-file-excel mr-2 text-green-400"></i> Data Tools
+                        <div class="relative group w-full sm:w-auto">
+                            <button class="w-full justify-center bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-gray-500">
+                                <i class="fas fa-file-excel mr-2 text-green-400"></i> Data Tools <i class="fas fa-chevron-down ml-2 text-[10px]"></i>
                             </button>
-                            <button class="w-full sm:w-auto justify-center bg-green-700 hover:bg-green-600 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-green-500">
-                                <i class="fas fa-plus mr-2"></i> Create Employee
-                            </button>
-                            <button class="w-full sm:w-auto justify-center bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-blue-500">
-                                <i class="fas fa-sync-alt mr-2"></i> Sync Employees
-                            </button>
+                            <div class="absolute left-0 sm:right-0 sm:left-auto top-full pt-2 w-full sm:w-56 z-50 hidden group-hover:block">
+                                <div class="bg-gray-800 border border-gray-600 rounded shadow-xl overflow-hidden">
+                                    <button onclick="openExportModal()" class="w-full text-left px-4 py-3 text-xs text-gray-300 hover:bg-gray-700 hover:text-white transition"><i class="fas fa-file-export mr-2 text-blue-400"></i> Custom Export Data</button>
+                                    <div class="border-t border-gray-700"></div>
+                                    <button onclick="openImportWizard()" class="w-full text-left px-4 py-3 text-xs text-gray-300 hover:bg-gray-700 hover:text-white transition"><i class="fas fa-upload mr-2 text-green-400"></i> Data Import Wizard</button>
+                                </div>
+                            </div>
                         </div>
+                        <input type="file" id="wizardFileInput" accept=".xlsx" class="hidden" onchange="processWizardFile(event)">
+                        <button onclick="alert('Please use the main Employee Master module to create new employees.')" class="w-full sm:w-auto justify-center bg-green-700 hover:bg-green-600 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-green-500">    
+                                <i class="fas fa-plus mr-2"></i> Create Employee
+                        </button>
+                        <button onclick="loadESSEmployees()" class="w-full sm:w-auto justify-center bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-blue-500">
+                            <i class="fas fa-sync-alt mr-2"></i> Refresh List
+                        </button>
+                    </div>
                     </div>
 
                     <!-- TOP TABS -->
@@ -554,6 +564,138 @@
         </form>
     </div>
 
+    <div id="exportConfigModal" class="modal-backdrop z-[60]">
+        <div class="bg-gray-800 p-0 rounded-lg w-[95%] lg:w-[600px] shadow-2xl border border-gray-600 flex flex-col">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
+                <h2 class="text-lg font-bold text-blue-400"><i class="fas fa-file-export mr-2"></i> Custom Data Export</h2>
+                <button type="button" onclick="closeExportModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto max-h-[70vh]">
+                <p class="text-xs text-gray-400 mb-4">Select the fields you want to include in your Excel export. Mandatory system fields cannot be removed.</p>
+                
+                <h3 class="text-sm font-bold text-gray-300 mb-2 border-b border-gray-700 pb-1">Mandatory Fields</h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+                    <label class="flex items-center text-xs text-gray-400"><input type="checkbox" checked disabled class="mr-2 accent-blue-500 w-4 h-4"> PIN</label>
+                    <label class="flex items-center text-xs text-gray-400"><input type="checkbox" checked disabled class="mr-2 accent-blue-500 w-4 h-4"> First Name</label>
+                    <label class="flex items-center text-xs text-gray-400"><input type="checkbox" checked disabled class="mr-2 accent-blue-500 w-4 h-4"> Last Name</label>
+                    <label class="flex items-center text-xs text-gray-400"><input type="checkbox" checked disabled class="mr-2 accent-blue-500 w-4 h-4"> Department</label>
+                </div>
+
+                <h3 class="text-sm font-bold text-gray-300 mb-2 border-b border-gray-700 pb-1">Optional HR Fields</h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4" id="exportOptionalFields">
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="dpin" checked class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Display PIN</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="cardno" checked class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Card No</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="idnum" checked class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> ID Number</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="startdate" checked class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Start Date</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="nationality" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Nationality</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="sex" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Sex</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="occupation" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Occupation</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="ishod" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Is HOD</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="hoddept" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> HOD Dept</label>
+                </div>
+
+                <h3 class="text-sm font-bold text-gray-300 mb-2 border-b border-gray-700 pb-1">Time & Wage Fields</h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="wtype" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Wage Type</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="wrate" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Wage Rate</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="wdate" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Wage Valid From</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="shiftname" checked class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Default Shift</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="defdays" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Default Days</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="payrollid" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Payroll Period</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="otelig" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> OT Eligibility</label>
+                    <label class="flex items-center text-xs text-gray-300 cursor-pointer"><input type="checkbox" value="otrule" class="export-col-chk mr-2 accent-blue-500 w-4 h-4"> Custom OT Rule</label>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-end gap-3 shadow-inner">
+                <button type="button" onclick="closeExportModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition">Cancel</button>
+                <button type="button" onclick="executeCustomExport()" class="px-6 py-2 bg-blue-700 hover:bg-blue-600 text-white rounded font-bold text-sm shadow transition"><i class="fas fa-download mr-2"></i> Generate Excel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="importWizardModal" class="modal-backdrop z-[60]">
+        <div class="bg-gray-800 p-0 rounded-lg w-[95%] lg:w-[1000px] shadow-2xl border border-gray-600 flex flex-col max-h-[95vh]">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
+                <h2 class="text-lg font-bold text-green-400"><i class="fas fa-magic mr-2"></i> Data Importer Wizard</h2>
+                <button type="button" onclick="cancelWizard()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto flex-1">
+                <div id="wizardStep1">
+                    <div class="bg-blue-900/20 border border-blue-800 rounded p-4 mb-6">
+                        <h3 class="text-blue-400 font-bold text-sm mb-2"><i class="fas fa-cog mr-1"></i> Global Configuration</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-400 mb-1">Row containing Headers?</label>
+                                <input type="number" id="wizHeaderRow" value="5" min="1" onchange="renderMappingTable()" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:border-green-500">
+                                <p class="text-[9px] text-gray-500 mt-1">Rows before this will be ignored.</p>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-400 mb-1">Date Format in File</label>
+                                <select id="wizDateFormat" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:border-green-500">
+                                    <option value="auto">Auto-Detect (Excel Native)</option>
+                                    <option value="DD/MM/YYYY">DD/MM/YYYY (e.g. 31/12/2026)</option>
+                                    <option value="MM/DD/YYYY">MM/DD/YYYY (e.g. 12/31/2026)</option>
+                                    <option value="YYYY-MM-DD">YYYY-MM-DD (e.g. 2026-12-31)</option>
+                                </select>
+                            </div>
+                            <div class="flex items-end">
+                                <button type="button" onclick="runDryRun()" class="w-full bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 rounded text-xs shadow transition"><i class="fas fa-vial mr-2"></i> Run Validation (Dry Run)</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="text-gray-300 font-bold text-sm mb-3 border-b border-gray-700 pb-1">Column Mapping</h3>
+                            <div class="max-h-[400px] overflow-y-auto pr-2" id="mappingContainer">
+                                </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-gray-300 font-bold text-sm mb-3 border-b border-gray-700 pb-1">Raw File Preview</h3>
+                            <div class="overflow-x-auto bg-gray-900 border border-gray-700 rounded h-[400px] overflow-y-auto">
+                                <table class="w-full text-left text-[10px] whitespace-nowrap">
+                                    <thead id="previewThead" class="bg-gray-800 text-gray-400 font-mono"></thead>
+                                    <tbody id="previewTbody" class="divide-y divide-gray-800 text-gray-300 font-mono"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="wizardStep2" class="hidden">
+                    <h3 class="text-gray-300 font-bold text-sm mb-3 border-b border-gray-700 pb-1">Validation Results</h3>
+                    <div id="dryRunSummary" class="mb-4"></div>
+                    <div class="overflow-x-auto bg-gray-900 border border-gray-700 rounded h-[400px] overflow-y-auto">
+                        <table class="w-full text-left text-xs whitespace-nowrap">
+                            <thead class="bg-gray-800 text-gray-400 sticky top-0">
+                                <tr>
+                                    <th class="p-2">Status</th>
+                                    <th class="p-2">PIN</th>
+                                    <th class="p-2">Name</th>
+                                    <th class="p-2">Details / Errors</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dryRunTbody" class="divide-y divide-gray-800"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-between items-center shadow-inner">
+                <button type="button" onclick="cancelWizard()" class="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition font-bold">Cancel Import</button>
+                <div id="wizardActions" class="space-x-2 hidden">
+                    <button type="button" onclick="backToMapping()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition">Back to Mapping</button>
+                    <button type="button" onclick="executeImport()" class="px-6 py-2 bg-green-700 hover:bg-green-600 text-white rounded font-bold text-sm shadow transition"><i class="fas fa-check-double mr-2"></i> Commit to Database</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="ess_master.js"></script>
+</body>
+</html>
 </body>
 </html>
