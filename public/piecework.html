@@ -518,7 +518,7 @@
                 <button onclick="closeTeamModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
             </div>
             
-            <div class="p-6 flex flex-col flex-1 overflow-hidden">
+            <div class="p-6 flex flex-col flex-1 overflow-y-auto">
                 <input type="hidden" id="detailsTeamId">
                 <input type="hidden" id="detailsTeamActiveState">
                 
@@ -539,7 +539,7 @@
                     </table>
                 </div>
 
-                <div id="addMembersSection" class="flex flex-col flex-1 overflow-hidden min-h-0 mt-4">
+                <div id="addMembersSection" class="flex flex-col flex-1 overflow-visible min-h-0 mt-4">
                     <h4 class="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Add New Members</h4>
                     
                     <div class="flex gap-2 mb-3 flex-shrink-0">
@@ -562,7 +562,7 @@
                         </button>
                     </div>
                     
-                    <div class="bg-gray-900 border border-gray-700 rounded flex-1 overflow-y-auto shadow-inner mb-3" id="availableEmployeesList">
+                    <div class="bg-gray-900 border border-gray-700 rounded flex-1 overflow-y-auto shadow-inner mb-3 min-h-[150px]" id="availableEmployeesList">
                         </div>
 
                     <div class="flex justify-between items-center flex-shrink-0 mb-4" id="availableEmpPagination">
