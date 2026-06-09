@@ -81,8 +81,64 @@
 
             <section id="page-requests" class="page-section">
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-blue-500">
-                    <h3 class="font-bold text-gray-300 mb-4"><i class="fas fa-inbox mr-2"></i>Employee Requests</h3>
-                    <p class="text-sm text-gray-400">Incoming requests from the mobile app will appear here.</p>
+                    <div class="flex justify-between items-center mb-2 border-b border-gray-700 pb-2">
+                        <h3 class="font-bold text-gray-300"><i class="fas fa-inbox mr-2"></i>Mobile Requests (Pending Approvals)</h3>
+                        <div class="flex space-x-2">
+                            <button onclick="bulkWorkflowAction('APPROVE')" class="bg-green-700 hover:bg-green-600 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow border border-green-500">
+                                <i class="fas fa-check-double mr-1"></i> Bulk Approve
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-end gap-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
+                        <div>
+                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Start Date</label>
+                            <input type="date" id="wfStartDate" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-blue-500 w-32">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">End Date</label>
+                            <input type="date" id="wfEndDate" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-blue-500 w-32">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Department</label>
+                            <select id="wfDeptFilter" onchange="filterWorkflowInbox()" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-blue-500 w-48">
+                                <option value="">-- Select Department --</option>
+                            </select>
+                        </div>
+                        <div class="flex-1 min-w-[200px]">
+                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Search Employee Name or PIN</label>
+                            <input type="text" id="wfSearch" oninput="filterWorkflowInbox()" placeholder="Search..." class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-blue-500">
+                        </div>
+                        <button onclick="filterWorkflowInbox()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow h-8">
+                            <i class="fas fa-filter mr-1"></i> Filter
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto rounded border border-gray-700">
+                        <table class="w-full text-left text-sm border-collapse whitespace-nowrap">
+                            <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                                <tr>
+                                    <th class="p-3 w-10 text-center"><input type="checkbox" id="selectAllWf" onchange="toggleSelectAllWf(this)" class="accent-blue-500 w-4 h-4 cursor-pointer"></th>
+                                    <th class="p-3">Date</th>
+                                    <th class="p-3">Employee</th>
+                                    <th class="p-3">Request / Detail</th>
+                                    <th class="p-3 text-center">Current Level</th>
+                                    <th class="p-3 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="workflowBody" class="divide-y divide-gray-700 bg-gray-900">
+                                <tr><td colspan="6" class="p-4 text-center text-gray-500">Loading inbox...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="flex justify-between items-center mt-4 bg-gray-900 p-3 rounded border border-gray-700 shadow-inner">
+                        <span id="wfPageInfo" class="text-xs text-gray-400 font-bold tracking-widest uppercase">Showing 0 of 0</span>
+                        <div class="flex space-x-2">
+                            <button id="wfBtnPrev" onclick="changeWfPage(-1)" class="bg-gray-800 hover:bg-gray-700 text-blue-400 px-4 py-1.5 rounded text-xs font-bold border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow"><i class="fas fa-chevron-left mr-1"></i> Prev</button>
+                            <button id="wfBtnNext" onclick="changeWfPage(1)" class="bg-gray-800 hover:bg-gray-700 text-blue-400 px-4 py-1.5 rounded text-xs font-bold border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow">Next <i class="fas fa-chevron-right ml-1"></i></button>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -258,6 +314,69 @@
                         </div>
                         <p id="essGlobalSuccess" class="text-green-400 text-sm font-bold hidden text-right mt-2"><i class="fas fa-check-circle mr-1"></i> Settings saved successfully!</p>
                     </form>
+                </div>
+
+                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-purple-500 w-full mb-6">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                        <h3 class="font-bold text-gray-300"><i class="fas fa-project-diagram mr-2"></i>Workflow Routing Configuration</h3>
+                    </div>
+                    <p class="text-xs text-gray-400 mb-4">Define sequential approval paths (1st, 2nd, 3rd Approvers) for specific Departments or individual Employee overrides.</p>
+                    
+                    <form id="workflowRoutingForm" onsubmit="saveWorkflowRouting(event)" class="bg-gray-900 p-4 rounded border border-gray-700 mb-6 space-y-4 shadow-inner">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="relative">
+                                <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Target Node (Apply to whole Department/Team)</label>
+                                <input type="text" id="wfDeptSearch" oninput="filterWfDept()" onfocus="showWfDeptDropdown()" placeholder="Search Department or Team..." class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                                <input type="hidden" id="wfDeptCode">
+                                <div id="wfDeptDropdown" class="hidden absolute z-50 w-full bg-gray-800 border border-gray-500 rounded mt-1 max-h-48 overflow-y-auto shadow-2xl"></div>
+                            </div>
+                            <div class="relative">
+                                <label class="block text-[10px] text-pink-400 mb-1 uppercase tracking-wider">OR Target Employee (Overrides Node Default)</label>
+                                <input type="text" id="wfEmpSearch" oninput="filterWfEmp()" onfocus="showWfEmpDropdown()" placeholder="Search Employee Name or PIN..." class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-pink-500">
+                                <input type="hidden" id="wfEmpId">
+                                <div id="wfEmpDropdown" class="hidden absolute z-50 w-full bg-gray-800 border border-gray-500 rounded mt-1 max-h-48 overflow-y-auto shadow-2xl"></div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 border-t border-gray-700 pt-4">
+                            <div>
+                                <label class="block text-[10px] text-purple-400 font-bold mb-1 uppercase">1st Approver</label>
+                                <select id="wfLevel1" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none"></select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-purple-400 font-bold mb-1 uppercase">2nd Approver</label>
+                                <select id="wfLevel2" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none"></select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-purple-400 font-bold mb-1 uppercase">3rd Approver</label>
+                                <select id="wfLevel3" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none"></select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-blue-400 font-bold mb-1 uppercase">Standing / Backup Approver</label>
+                                <select id="wfStanding" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none"></select>
+                            </div>
+                        </div>
+                        <div class="flex justify-end pt-2 border-t border-gray-800 mt-2">
+                            <button type="submit" class="bg-purple-600 hover:bg-purple-500 text-white px-6 py-2 rounded text-xs font-bold shadow transition">Save Routing Rule</button>
+                        </div>
+                    </form>
+
+                    <div class="overflow-x-auto bg-gray-900 border border-gray-700 rounded p-2">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead class="bg-gray-800 text-gray-400 uppercase font-bold">
+                                <tr>
+                                    <th class="p-3 border-b border-gray-700">Target Type</th>
+                                    <th class="p-3 border-b border-gray-700">Target Name</th>
+                                    <th class="p-3 border-b border-gray-700">L1 Approver</th>
+                                    <th class="p-3 border-b border-gray-700">L2 Approver</th>
+                                    <th class="p-3 border-b border-gray-700">L3 Approver</th>
+                                    <th class="p-3 text-right border-b border-gray-700">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="routingBody" class="divide-y divide-gray-800 text-gray-300">
+                                <tr><td colspan="6" class="p-4 text-center text-gray-500">Loading configurations...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
 
@@ -562,6 +681,41 @@
                 <button type="submit" id="submitReinstateBtn" class="px-4 py-2 bg-green-700 hover:bg-green-600 text-white rounded font-bold text-sm shadow transition">Reinstate</button>
             </div>
         </form>
+    </div>
+
+    <div id="resolveRequestModal" class="modal-backdrop z-[60]">
+        <div class="bg-gray-800 w-[450px] rounded shadow-2xl border border-gray-600 flex flex-col max-h-[90vh]">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t">
+                <h3 class="font-bold text-lg text-blue-400">Resolve Request</h3>
+                <button onclick="document.getElementById('resolveRequestModal').classList.remove('active')" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto">
+                <p id="resolveModalContext" class="text-xs text-gray-400 mb-4 font-bold border-b border-gray-700 pb-2"></p>
+                <input type="hidden" id="resolveWfId">
+                <input type="hidden" id="resolveEmpId">
+                <input type="hidden" id="resolveDate">
+
+                <div id="resolveLeaveProofContainer" class="mb-4 hidden">
+                    <div class="flex justify-between items-center mb-2">
+                        <p class="text-[10px] text-gray-400 uppercase tracking-wider font-bold"><i class="fas fa-camera mr-1"></i> Uploaded Evidence</p>
+                    </div>
+                    <img id="resolveEvidenceImage" src="" class="w-full max-h-48 object-contain rounded border border-gray-600 bg-black mb-4">
+                </div>
+
+                <div id="resolveLeaveTypeContainer" class="mb-6 hidden">
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Select Leave Type to Deduct</label>
+                    <select id="resolveLeaveType" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-blue-500">
+                        <option value="">-- Select Leave Type --</option>
+                    </select>
+                </div>
+
+                <div class="flex justify-end space-x-3 border-t border-gray-700 pt-4 mt-2">
+                    <button onclick="document.getElementById('resolveRequestModal').classList.remove('active')" class="px-4 py-2 bg-gray-700 text-white rounded text-sm font-bold">Cancel</button>
+                    <button id="btnRejectRequest" onclick="submitResolveAction('REJECT')" class="px-4 py-2 bg-red-700 hover:bg-red-600 text-white rounded text-sm font-bold shadow transition"><i class="fas fa-times mr-1"></i> Reject</button>
+                    <button id="btnApproveRequest" onclick="submitResolveAction('APPROVE')" class="px-4 py-2 bg-green-700 hover:bg-green-600 text-white rounded text-sm font-bold shadow transition"><i class="fas fa-check mr-1"></i> Approve</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id="exportConfigModal" class="modal-backdrop z-[60]">
