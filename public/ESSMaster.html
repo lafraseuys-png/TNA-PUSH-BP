@@ -52,6 +52,9 @@
             <button data-permission="ess_global_settings" onclick="showSection('global', this)" class="sidebar-item w-full flex items-center p-4 text-left">
                 <i class="fas fa-globe w-6 text-center mr-2"></i> Global Settings
             </button>
+            <button data-permission="ess_leave_policies" onclick="showSection('leavepolicies', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+                <i class="fas fa-calendar-check w-6 text-center mr-2"></i> Leave Policies
+            </button>
         </nav>
         <div class="p-4 border-t border-gray-700 text-xs">
             <button onclick="window.location.href='Launchpad.html'" class="text-gray-400 hover:text-white font-bold w-full text-left flex items-center transition">
@@ -70,6 +73,37 @@
 
         <div class="flex-1 overflow-y-auto p-6 relative">
             
+            <section id="page-leavepolicies" class="page-section">
+                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-yellow-500 mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h3 class="font-bold text-gray-300"><i class="fas fa-calendar-check mr-2"></i>Leave Policy Engine</h3>
+                            <p class="text-sm text-gray-400">Configure rules, document requirements, and leave types.</p>
+                        </div>
+                        <button onclick="openLeaveTypeModal()" class="bg-yellow-700 hover:bg-yellow-600 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-yellow-500">
+                            <i class="fas fa-plus mr-2"></i> Add Leave Type
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto rounded border border-gray-700 mt-4">
+                        <table class="w-full text-left text-sm border-collapse whitespace-nowrap">
+                            <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                                <tr>
+                                    <th class="p-3">Leave Name</th>
+                                    <th class="p-3 text-center">Paid Status</th>
+                                    <th class="p-3">Attachment Rules</th>
+                                    <th class="p-3 text-center">Status</th>
+                                    <th class="p-3 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leavePoliciesBody" class="divide-y divide-gray-700 bg-gray-900">
+                                <tr><td colspan="5" class="p-4 text-center text-gray-500">Loading leave types...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
             <section id="page-dashboard" class="page-section active">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                     <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-orange-500">
@@ -846,6 +880,47 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div id="leaveTypeModal" class="modal-backdrop z-[60]">
+        <form id="leaveTypeForm" onsubmit="saveLeaveType(event)" class="bg-gray-800 p-0 rounded-lg w-[95%] lg:w-[500px] shadow-2xl border border-gray-600 flex flex-col">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
+                <h2 id="leaveTypeModalTitle" class="text-lg font-bold text-yellow-400">Add Leave Type</h2>
+                <button type="button" onclick="closeLeaveTypeModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <input type="hidden" id="editLeaveTypeId">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Leave Name <span class="text-red-400">*</span></label>
+                    <input type="text" id="ltName" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-yellow-500">
+                </div>
+                <div class="flex items-center space-x-4 pt-2">
+                    <label class="flex items-center cursor-pointer text-sm font-bold text-gray-300"><input type="checkbox" id="ltIsPaid" class="mr-2 accent-yellow-500 w-4 h-4"> Is Paid Leave</label>
+                    <label class="flex items-center cursor-pointer text-sm font-bold text-gray-300"><input type="checkbox" id="ltIsActive" checked class="mr-2 accent-yellow-500 w-4 h-4"> Active</label>
+                </div>
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 mt-4 border-b border-gray-700 pb-1">Policy Engine Rules</h4>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Require Attachment if Consecutive Days ></label>
+                    <input type="number" id="ltReqDays" min="0" value="0" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-yellow-500">
+                    <p class="text-[10px] text-gray-500 mt-1">Set to 0 to disable. E.g., if set to 2, requesting 3 days triggers mandatory attachment.</p>
+                </div>
+                <div class="pt-2 space-y-3 mt-2 border-t border-gray-700">
+                    <label class="flex items-center cursor-pointer text-sm font-bold text-gray-300">
+                        <input type="checkbox" id="ltReqMonFri" class="mr-2 accent-yellow-500 w-4 h-4 flex-shrink-0"> Require Attachment on Mondays/Fridays
+                    </label>
+                    <label class="flex items-center cursor-pointer text-sm font-bold text-gray-300">
+                        <input type="checkbox" id="ltReqHoliday" class="mr-2 accent-yellow-500 w-4 h-4 flex-shrink-0"> Require Attachment Before/After Public Holidays
+                    </label>
+                    <label class="flex items-center cursor-pointer text-sm font-bold text-gray-300">
+                        <input type="checkbox" id="ltReqPayday" class="mr-2 accent-yellow-500 w-4 h-4 flex-shrink-0"> Require Attachment Before/After/Weekend of Payday
+                    </label>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-end gap-3 shadow-inner">
+                <button type="button" onclick="closeLeaveTypeModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition">Cancel</button>
+                <button type="submit" id="saveLeaveTypeBtn" class="px-4 py-2 bg-yellow-700 hover:bg-yellow-600 text-white rounded font-bold text-sm shadow transition">Save Policy</button>
+            </div>
+        </form>
     </div>
 
     <script src="ess_master.js"></script>

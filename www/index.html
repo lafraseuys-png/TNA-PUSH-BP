@@ -338,6 +338,7 @@
                     <div>
                         <h1 class="text-xl font-black text-[#70A827] tracking-tight">TNA SUITE</h1>
                         <p class="text-xs text-gray-500 font-bold tracking-wider uppercase mt-0.5">Powered by TNA Africa</p>
+                        <p class="text-[10px] text-blue-400 font-bold uppercase mt-1" id="launchpadTenantName"></p>
                         <div class="flex items-center mt-2 space-x-2">
                             <p class="text-xs text-gray-400" id="launchpadGreeting">Hello, User</p>
                             <div id="gpsStatusBadge" class="text-[10px] bg-[#1e1e1e] text-gray-500 px-2 py-0.5 rounded-full border border-[#333] flex items-center hidden">
@@ -1272,7 +1273,12 @@
                 <div class="absolute top-0 w-full h-1 bg-green-500"></div>
                 <h3 class="text-lg font-bold text-green-500 mb-4"><i class="bi bi-terminal mr-2"></i>Developer Mode</h3>
                 
-                <!-- ⚡ NEW: Face Engine Thresholds -->
+                <div class="bg-[#2a2a2a] p-4 rounded-xl border border-[#333] mb-4 text-left cursor-pointer hover:border-green-500 transition-colors shadow-sm" onclick="promptLogoutForUrlEdit()">
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1 block">Active Server URL</label>
+                    <div id="devActiveUrl" class="text-sm font-mono text-green-400 truncate select-none">Loading...</div>
+                    <p class="text-[9px] text-gray-500 mt-2 uppercase"><i class="bi bi-pencil-square mr-1"></i>Tap to edit</p>
+                </div>
+
                 <div class="bg-[#2a2a2a] p-4 rounded-xl border border-[#333] mb-4 text-left">
                     <label class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 block">Match Likeliness (<span id="devMatchVal">76</span>/100)</label>
                     <input type="range" id="devFaceMatch" min="40" max="100" value="76" class="w-full accent-green-500 mb-4" oninput="document.getElementById('devMatchVal').innerText=this.value; localStorage.setItem('faceMatchThreshold', this.value);" onchange="secureSet('persistent_faceMatchThreshold', this.value);">
