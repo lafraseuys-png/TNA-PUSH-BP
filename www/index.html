@@ -1279,6 +1279,7 @@
                     <p class="text-[9px] text-gray-500 mt-2 uppercase"><i class="bi bi-pencil-square mr-1"></i>Tap to edit</p>
                 </div>
 
+                <!-- ⚡ NEW: Face Engine Thresholds -->
                 <div class="bg-[#2a2a2a] p-4 rounded-xl border border-[#333] mb-4 text-left">
                     <label class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 block">Match Likeliness (<span id="devMatchVal">76</span>/100)</label>
                     <input type="range" id="devFaceMatch" min="40" max="100" value="76" class="w-full accent-green-500 mb-4" oninput="document.getElementById('devMatchVal').innerText=this.value; localStorage.setItem('faceMatchThreshold', this.value);" onchange="secureSet('persistent_faceMatchThreshold', this.value);">
@@ -1287,6 +1288,19 @@
                     <input type="range" id="devFaceLive" min="0" max="100" value="52" class="w-full accent-green-500" oninput="document.getElementById('devLiveVal').innerText=this.value; localStorage.setItem('faceLiveThreshold', this.value);" onchange="secureSet('persistent_faceLiveThreshold', this.value);">
                     
                     <p class="text-[10px] text-gray-500 mt-3"><i class="bi bi-info-circle mr-1"></i> Adjusting these overrides the native C++ engine defaults instantly.</p>
+                </div>
+
+                <!-- ⚡ NEW: Background Sync Settings -->
+                <div class="bg-[#2a2a2a] p-4 rounded-xl border border-[#333] mb-4 text-left shadow-sm">
+                    <label class="flex items-center cursor-pointer mb-4">
+                        <input type="checkbox" id="devAutoSyncToggle" class="w-5 h-5 accent-green-500 rounded cursor-pointer mr-3" onchange="localStorage.setItem('autoSyncEnabled', this.checked); secureSet('persistent_autoSyncEnabled', this.checked);">
+                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Enable Auto-Sync</span>
+                    </label>
+                    
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 block">Sync Interval (Minutes): <span id="devSyncIntervalVal" class="text-green-400">30</span></label>
+                    <input type="range" id="devSyncInterval" min="1" max="120" value="30" class="w-full accent-green-500" oninput="document.getElementById('devSyncIntervalVal').innerText=this.value; localStorage.setItem('autoSyncInterval', this.value);" onchange="secureSet('persistent_autoSyncInterval', this.value);">
+                    
+                    <p class="text-[10px] text-gray-500 mt-3"><i class="bi bi-info-circle mr-1"></i> Longer intervals save RAM on low-spec devices.</p>
                 </div>
 
                 <div class="flex gap-3">
@@ -1620,6 +1634,13 @@
             <p id="pwTeamCapSub" class="text-[10px] text-gray-500 uppercase tracking-wider font-mono">Farm - Unit</p>
         </div>
 
+        <div class="mb-4" id="pwTeamCapUnitDiv">
+            <label class="text-xs font-semibold text-gray-400 uppercase">Select Farm Unit</label>
+            <select id="pwTeamCapUnit" class="w-full bg-[#2a2a2a] border border-[#444] rounded-lg p-4 text-white mt-1 shadow-inner focus:border-blue-500 outline-none">
+                <option value="">-- Select Unit --</option>
+            </select>
+        </div>
+
         <div>
             <label class="text-xs font-semibold text-gray-400 uppercase">Select Activity</label>
             <select id="pwTeamCapActivity" class="w-full bg-[#2a2a2a] border border-[#444] rounded-lg p-4 text-white mt-1 shadow-inner focus:border-blue-500 outline-none">
@@ -1670,6 +1691,21 @@
                 <button onclick="navigate('screen-pw-new-task')" class="bg-[#70A827] text-white px-3 py-1.5 rounded-lg font-bold text-xs shadow-lg"><i class="bi bi-plus-lg mr-1"></i>New Task</button>
             </div>
         </div>
+
+        <div class="bg-[#1e1e1e] p-5 rounded-xl border border-[#333] mb-6 shadow-lg">
+            <label class="text-xs font-semibold text-gray-400 uppercase">Quick Search / Scan Task</label>
+            <div class="flex gap-2 mt-1">
+                <div class="relative flex-1">
+                    <i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                    <input type="text" id="pwTaskSearch" placeholder="Search task, tag, or vehicle..." class="w-full pl-8 bg-[#2a2a2a] border border-[#444] rounded-lg p-3 text-sm text-white focus:outline-none focus:border-[#70A827] !mt-0" autocomplete="off" oninput="renderPwTaskList()">
+                </div>
+                <button type="button" onclick="scanAssetTag('pwTaskCapture', 'task_tag')" class="bg-[#2a2a2a] border border-[#444] w-[46px] rounded-lg flex items-center justify-center text-[#70A827] hover:bg-[#333] transition-colors shrink-0">
+                    <i class="bi bi-upc-scan text-xl"></i>
+                </button>
+            </div>
+            <p class="text-[10px] text-gray-500 mt-2 leading-tight">Search or scan a vehicle's asset tag to instantly find its assigned tasks.</p>
+        </div>
+
         <h2 class="text-xs font-semibold text-gray-500 uppercase mb-3 tracking-wider">My Active Tasks</h2>
         <div id="pwTaskList" class="space-y-3">
             <div class="p-6 text-center text-gray-500 text-sm border border-[#333] border-dashed rounded-xl">Loading tasks...</div>
@@ -1760,6 +1796,13 @@
                 <div id="pwEmpDropdown" class="hidden absolute z-[100] w-full mt-1 bg-[#2a2a2a] border border-[#333] rounded-lg shadow-2xl max-h-48 overflow-y-auto"></div>
                 <input type="hidden" id="pwCapPin">
                 <input type="hidden" id="pwCapName">
+            </div>
+
+            <div class="mt-4" id="pwCapUnitDiv">
+                <label class="text-xs font-semibold text-gray-400 uppercase">Select Farm Unit</label>
+                <select id="pwCapUnit" class="w-full bg-[#2a2a2a] border border-[#444] rounded-lg p-4 text-white mt-1 shadow-inner focus:border-[#70A827] outline-none">
+                    <option value="">-- Select Unit --</option>
+                </select>
             </div>
 
             <div class="mt-4">

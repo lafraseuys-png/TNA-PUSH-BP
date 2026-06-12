@@ -55,6 +55,9 @@
             <button data-permission="ess_leave_policies" onclick="showSection('leavepolicies', this)" class="sidebar-item w-full flex items-center p-4 text-left">
                 <i class="fas fa-calendar-check w-6 text-center mr-2"></i> Leave Policies
             </button>
+            <button data-permission="ess_expense_policies" onclick="showSection('expensepolicies', this)" class="sidebar-item w-full flex items-center p-4 text-left">
+                <i class="fas fa-receipt w-6 text-center mr-2"></i> Expense Policies
+            </button>
         </nav>
         <div class="p-4 border-t border-gray-700 text-xs">
             <button onclick="window.location.href='Launchpad.html'" class="text-gray-400 hover:text-white font-bold w-full text-left flex items-center transition">
@@ -98,6 +101,38 @@
                             </thead>
                             <tbody id="leavePoliciesBody" class="divide-y divide-gray-700 bg-gray-900">
                                 <tr><td colspan="5" class="p-4 text-center text-gray-500">Loading leave types...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-expensepolicies" class="page-section">
+                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-pink-500 mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h3 class="font-bold text-gray-300"><i class="fas fa-receipt mr-2"></i>Expense & Claim Policies</h3>
+                            <p class="text-sm text-gray-400">Configure expense types, reimbursement rules, and fixed rates.</p>
+                        </div>
+                        <button onclick="openExpenseTypeModal()" class="bg-pink-700 hover:bg-pink-600 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-pink-500">
+                            <i class="fas fa-plus mr-2"></i> Add Expense Type
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto rounded border border-gray-700 mt-4">
+                        <table class="w-full text-left text-sm border-collapse whitespace-nowrap">
+                            <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                                <tr>
+                                    <th class="p-3">Expense Name</th>
+                                    <th class="p-3">Logic Type</th>
+                                    <th class="p-3 text-right">Value / Rate</th>
+                                    <th class="p-3 text-center">Attachment</th>
+                                    <th class="p-3 text-center">Status</th>
+                                    <th class="p-3 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="expensePoliciesBody" class="divide-y divide-gray-700 bg-gray-900">
+                                <tr><td colspan="6" class="p-4 text-center text-gray-500">Loading expense types...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -408,6 +443,57 @@
                             </thead>
                             <tbody id="routingBody" class="divide-y divide-gray-800 text-gray-300">
                                 <tr><td colspan="6" class="p-4 text-center text-gray-500">Loading configurations...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-indigo-500 w-full mb-6">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                        <h3 class="font-bold text-gray-300"><i class="fas fa-calendar-alt mr-2"></i>Payroll Period Configuration</h3>
+                    </div>
+                    <p class="text-xs text-gray-400 mb-4">Define payroll cycles to calculate pay dates and timesheet cut-offs dynamically.</p>
+                    
+                    <form id="payrollPeriodForm" onsubmit="savePayrollPeriod(event)" class="bg-gray-900 p-4 rounded border border-gray-700 mb-6 space-y-4 shadow-inner">
+                        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                            <div class="md:col-span-2">
+                                <label class="block text-[10px] text-indigo-400 font-bold mb-1 uppercase">Period Name</label>
+                                <input type="text" id="ppName" required placeholder="e.g. Monthly Standard" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-indigo-500">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-indigo-400 font-bold mb-1 uppercase">Period Type</label>
+                                <select id="ppType" required class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-indigo-500">
+                                    <option value="Monthly">Monthly</option>
+                                    <option value="Fortnightly">Fortnightly</option>
+                                    <option value="Weekly">Weekly</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-indigo-400 font-bold mb-1 uppercase">Start / Cut-off Day</label>
+                                <input type="number" id="ppStartDay" required min="1" max="31" placeholder="e.g. 25" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-indigo-500">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-indigo-400 font-bold mb-1 uppercase">Target Pay Day</label>
+                                <input type="number" id="ppPayDay" required min="1" max="31" placeholder="e.g. 25" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-indigo-500">
+                            </div>
+                        </div>
+                        <div class="flex justify-end pt-2 border-t border-gray-800 mt-2">
+                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded text-xs font-bold shadow transition">Save Payroll Period</button>
+                        </div>
+                    </form>
+
+                    <div class="overflow-x-auto bg-gray-900 border border-gray-700 rounded p-2">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead class="bg-gray-800 text-gray-400 uppercase font-bold">
+                                <tr>
+                                    <th class="p-3 border-b border-gray-700">ID</th>
+                                    <th class="p-3 border-b border-gray-700">Period Name</th>
+                                    <th class="p-3 border-b border-gray-700">Type</th>
+                                    <th class="p-3 border-b border-gray-700">Config Details</th>
+                                </tr>
+                            </thead>
+                            <tbody id="payrollPeriodsBody" class="divide-y divide-gray-800 text-gray-300">
+                                <tr><td colspan="4" class="p-4 text-center text-gray-500">Loading configurations...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -919,6 +1005,50 @@
             <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-end gap-3 shadow-inner">
                 <button type="button" onclick="closeLeaveTypeModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition">Cancel</button>
                 <button type="submit" id="saveLeaveTypeBtn" class="px-4 py-2 bg-yellow-700 hover:bg-yellow-600 text-white rounded font-bold text-sm shadow transition">Save Policy</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="expenseTypeModal" class="modal-backdrop z-[60]">
+        <form id="expenseTypeForm" onsubmit="saveExpenseType(event)" class="bg-gray-800 p-0 rounded-lg w-[95%] lg:w-[500px] shadow-2xl border border-gray-600 flex flex-col">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
+                <h2 id="expenseTypeModalTitle" class="text-lg font-bold text-pink-400">Add Expense Type</h2>
+                <button type="button" onclick="closeExpenseTypeModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <input type="hidden" id="editExpenseTypeId">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Expense Name <span class="text-red-400">*</span></label>
+                    <input type="text" id="etName" required placeholder="e.g. Mileage, Per Diem, General Travel" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-pink-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Description</label>
+                    <input type="text" id="etDesc" placeholder="Optional context for employees..." class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-pink-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Calculation Logic <span class="text-red-400">*</span></label>
+                    <select id="etLogic" required onchange="toggleExpenseRateField()" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-pink-500">
+                        <option value="Simple">Simple (Employee enters exact amount)</option>
+                        <option value="Fixed">Fixed Amount (Admin sets strict payout)</option>
+                        <option value="Rate">Rate-Based (e.g. Rate per KM)</option>
+                    </select>
+                </div>
+                <div id="etRateContainer" class="hidden">
+                    <label id="etRateLabel" class="block text-xs font-bold text-gray-400 mb-1">Value / Rate</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-2 text-gray-500 font-bold">R</span>
+                        <input type="number" id="etRateValue" step="0.01" min="0" value="0" class="w-full bg-gray-900 border border-gray-600 rounded p-2 pl-7 text-sm text-white focus:outline-none focus:border-pink-500">
+                    </div>
+                    <p class="text-[10px] text-gray-500 mt-1 italic">Saved as a raw numerical value in DB. Currency handled dynamically.</p>
+                </div>
+                <div class="flex items-center space-x-4 pt-2 border-t border-gray-700 mt-4">
+                    <label class="flex items-center cursor-pointer text-sm font-bold text-gray-300"><input type="checkbox" id="etReqAtt" class="mr-2 accent-pink-500 w-4 h-4"> Require Receipt/Attachment</label>
+                    <label class="flex items-center cursor-pointer text-sm font-bold text-gray-300"><input type="checkbox" id="etIsActive" checked class="mr-2 accent-pink-500 w-4 h-4"> Active</label>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-end gap-3 shadow-inner">
+                <button type="button" onclick="closeExpenseTypeModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition">Cancel</button>
+                <button type="submit" id="saveExpenseTypeBtn" class="px-4 py-2 bg-pink-700 hover:bg-pink-600 text-white rounded font-bold text-sm shadow transition">Save Policy</button>
             </div>
         </form>
     </div>

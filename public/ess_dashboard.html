@@ -214,6 +214,10 @@
                         <option value="">Loading types...</option>
                     </select>
                 </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Reason / Notes</label>
+                    <textarea id="essLeaveNotes" rows="2" placeholder="Optional details..." class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-red-500"></textarea>
+                </div>
                 <!-- Warning Container -->
                 <div id="essLeaveWarning" class="hidden bg-red-900/40 border border-red-700 p-2 rounded text-[10px] text-red-300 font-bold leading-tight">
                     Warning: You do not have enough leave days. This request will put your balance into the negative.
@@ -229,6 +233,51 @@
             <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-end gap-3 shadow-inner">
                 <button type="button" onclick="closeEssLeaveModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition">Cancel</button>
                 <button type="submit" id="saveEssLeaveBtn" class="px-4 py-2 bg-red-700 hover:bg-red-600 text-white rounded font-bold text-sm shadow transition">Submit Request</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="essExpenseModal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-50 flex justify-center items-center p-4">
+        <form id="essExpenseForm" onsubmit="submitEssExpense(event)" class="bg-gray-800 p-0 rounded-lg w-full max-w-sm shadow-2xl border border-gray-600 flex flex-col">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
+                <h2 class="text-lg font-bold text-pink-400"><i class="fas fa-receipt mr-2"></i>Submit Expense Claim</h2>
+                <button type="button" onclick="closeEssExpenseModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Expense Date <span class="text-red-400">*</span></label>
+                    <input type="date" id="essExpDate" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-pink-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Expense Type <span class="text-red-400">*</span></label>
+                    <select id="essExpType" required onchange="handleExpenseTypeChange()" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-pink-500">
+                        <option value="">Loading types...</option>
+                    </select>
+                </div>
+                <div id="essExpInputContainer" class="hidden">
+                    <label id="essExpInputLabel" class="block text-xs font-bold text-gray-400 mb-1">Input <span class="text-red-400">*</span></label>
+                    <input type="number" id="essExpInputValue" step="0.01" min="0" oninput="calculateExpenseTotal()" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-pink-500">
+                </div>
+                
+                <div class="bg-gray-900/50 border border-gray-700 p-3 rounded text-center">
+                    <p class="text-[10px] text-gray-400 uppercase tracking-wider font-bold mb-1">Total Claim Amount</p>
+                    <p class="text-2xl font-black text-pink-400" id="essExpTotalDisplay">R 0.00</p>
+                    <input type="hidden" id="essExpCalculatedTotal" value="0">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Reason / Notes</label>
+                    <textarea id="essExpNotes" rows="2" placeholder="Optional details..." class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-pink-500"></textarea>
+                </div>
+                <div class="pt-2 border-t border-gray-700 mt-2">
+                    <label id="essExpProofLabel" class="block text-xs font-bold text-gray-400 mb-1">Upload Receipt</label>
+                    <input type="file" id="essExpProof" accept="image/*,application/pdf" capture="environment" class="w-full text-[10px] text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:font-bold file:bg-gray-700 file:text-white cursor-pointer">
+                    <p id="essExpProofHint" class="text-[9px] text-gray-500 mt-1">Take a photo of your receipt or invoice.</p>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-end gap-3 shadow-inner">
+                <button type="button" onclick="closeEssExpenseModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition">Cancel</button>
+                <button type="submit" id="saveEssExpBtn" class="px-4 py-2 bg-pink-700 hover:bg-pink-600 text-white rounded font-bold text-sm shadow transition">Submit Claim</button>
             </div>
         </form>
     </div>
