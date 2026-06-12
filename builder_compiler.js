@@ -59,10 +59,12 @@ function processSingleFile(relativeFilePath) {
                 console.log(`Copied Plain Text: ${item}`);
             } else {
         // Read the plain text JS code
-        const code = fs.readFileSync(srcPath, 'utf8');
-        
-        // Obfuscate the code securely
-        const obfuscationResult = JavaScriptObfuscator.obfuscate(code, {
+                const code = fs.readFileSync(srcPath, 'utf8');
+                
+                console.log(`⏳ Attempting to obfuscate: ${item}...`);
+                
+                // Obfuscate the code securely
+                const obfuscationResult = JavaScriptObfuscator.obfuscate(code, {
             compact: true,
             controlFlowFlattening: true,
             deadCodeInjection: true,
@@ -89,9 +91,8 @@ function processDirectory(currentDir, targetDir) {
         const srcPath = path.join(currentDir, item);
         const destPath = path.join(targetDir, item);
 
-       // Completely skip node_modules, the build folder itself, git history, and secrets files so environments don't overwrite each other
-        if (item === 'node_modules' || item === 'build_encrypted' || item === '.git' || item === 'secrets.env' || item === '.env') continue;
-
+       // Completely skip node_modules, the build folder itself, git history, secrets files, and the www folder so environments don't overwrite each other
+        if (item === 'node_modules' || item === 'build_encrypted' || item === '.git' || item === 'secrets.env' || item === '.env' || item === 'www') continue;
         const isIgnored = ignoreList.includes(item);
 
         if (fs.statSync(srcPath).isDirectory()) {
