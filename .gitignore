@@ -7,3 +7,4 @@ public/release/
 web.config
 ecosystem.config.js
 builder_compiler.js
+www/

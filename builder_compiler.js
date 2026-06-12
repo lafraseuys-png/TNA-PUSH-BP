@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const JavaScriptObfuscator = require('javascript-obfuscator');
+const minifyHtml = require('html-minifier').minify;
+const CleanCSS = require('clean-css');
 
 // Define your directories here
 const sourceDir = __dirname; // Change 'src' to wherever your JS files live
@@ -28,11 +30,34 @@ function processSingleFile(relativeFilePath) {
 
     const isIgnored = ignoreList.includes(item);
 
-    if (isIgnored || !item.endsWith('.js')) {
-        // Copy non-JS files and ignored config files exactly as they are
+    if (isIgnored) {
         fs.copyFileSync(srcPath, destPath);
         console.log(`✅ Copied Plain Text: ${relativeFilePath}`);
-    } else {
+    } else if (item.endsWith('.html')) {
+        const htmlCode = fs.readFileSync(srcPath, 'utf8');
+        const minifiedHtml = minifyHtml(htmlCode, {
+            collapseWhitespace: true,
+            removeComments: true,
+            minifyCSS: true,
+            minifyJS: true
+        });
+        fs.writeFileSync(destPath, minifiedHtml);
+        console.log(`🗜️ Minified HTML: ${relativeFilePath}`);
+    } else if (item.endsWith('.css')) {
+        const cssCode = fs.readFileSync(srcPath, 'utf8');
+        const minifiedCss = new CleanCSS().minify(cssCode).styles;
+        fs.writeFileSync(destPath, minifiedCss);
+        console.log(`🎨 Minified CSS: ${relativeFilePath}`);
+    } else if (item.endsWith('.css')) {
+                const cssCode = fs.readFileSync(srcPath, 'utf8');
+                const minifiedCss = new CleanCSS().minify(cssCode).styles;
+                fs.writeFileSync(destPath, minifiedCss);
+                console.log(`🎨 Minified CSS: ${item}`);
+            } else if (!item.endsWith('.js')) {
+                // Copy other non-JS files exactly as they are
+                fs.copyFileSync(srcPath, destPath);
+                console.log(`Copied Plain Text: ${item}`);
+            } else {
         // Read the plain text JS code
         const code = fs.readFileSync(srcPath, 'utf8');
         
@@ -73,8 +98,21 @@ function processDirectory(currentDir, targetDir) {
             // If it is a folder, run the function again to go deeper
             processDirectory(srcPath, destPath);
         } else {
-            if (isIgnored || !item.endsWith('.js')) {
-                // Copy non-JS files and ignored config files exactly as they are
+            if (isIgnored) {
+                fs.copyFileSync(srcPath, destPath);
+                console.log(`Copied Plain Text: ${item}`);
+            } else if (item.endsWith('.html')) {
+                const htmlCode = fs.readFileSync(srcPath, 'utf8');
+                const minifiedHtml = minifyHtml(htmlCode, {
+                    collapseWhitespace: true,
+                    removeComments: true,
+                    minifyCSS: true,
+                    minifyJS: true
+                });
+                fs.writeFileSync(destPath, minifiedHtml);
+                console.log(`Minified HTML: ${item}`);
+            } else if (!item.endsWith('.js')) {
+                // Copy other non-JS files exactly as they are
                 fs.copyFileSync(srcPath, destPath);
                 console.log(`Copied Plain Text: ${item}`);
             } else {
