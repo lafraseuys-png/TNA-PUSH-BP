@@ -30,6 +30,11 @@ function processSingleFile(relativeFilePath) {
 
     const isIgnored = ignoreList.includes(item);
 
+    if (item === 'ecosystem.config.js') {
+        console.log(`⏭️ Skipped completely (not copied): ${relativeFilePath}`);
+        return;
+    }
+
     if (isIgnored) {
         fs.copyFileSync(srcPath, destPath);
         console.log(`✅ Copied Plain Text: ${relativeFilePath}`);
@@ -92,7 +97,7 @@ function processDirectory(currentDir, targetDir) {
         const destPath = path.join(targetDir, item);
 
        // Completely skip node_modules, the build folder itself, git history, secrets files, and the www folder so environments don't overwrite each other
-        if (item === 'node_modules' || item === 'build_encrypted' || item === '.git' || item === 'secrets.env' || item === '.env' || item === 'www') continue;
+        if (item === 'node_modules' || item === 'build_encrypted' || item === '.git' || item === 'secrets.env' || item === '.env' || item === 'www' || item === 'ecosystem.config.js') continue;
         const isIgnored = ignoreList.includes(item);
 
         if (fs.statSync(srcPath).isDirectory()) {
