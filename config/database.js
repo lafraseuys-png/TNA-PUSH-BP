@@ -2,12 +2,10 @@ const sql = require('mssql');
 
 // Master DB Config
 const masterConfig = {
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD, 
     server: process.env.DB_SERVER,
     port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 1433,
     database: process.env.DB_NAME,
-   options: {
+    options: {
         encrypt: false,
         trustServerCertificate: true,
         connectionTimeout: 30000,
@@ -19,6 +17,21 @@ const masterConfig = {
     // completely preventing SQL Server from triggering its 25-second Anti-DDoS login throttle.
     pool: { max: 10, min: 0, idleTimeoutMillis: 30000 }
 };
+
+// AUTO-HEAL: Support both standard SQL Authentication and Domain NTLM Authentication
+if (process.env.DB_DOMAIN) {
+    masterConfig.authentication = {
+        type: 'ntlm',
+        options: {
+            domain: process.env.DB_DOMAIN,
+            userName: process.env.DB_USER,
+            password: process.env.DB_PASSWORD
+        }
+    };
+} else {
+    masterConfig.user = process.env.DB_USER;
+    masterConfig.password = process.env.DB_PASSWORD;
+}
 
 const masterPool = new sql.ConnectionPool(masterConfig);
 masterPool.on('error', err => console.error('⚠️ Master SQL Pool Error Caught:', err.message));
@@ -41,8 +54,8 @@ async function connectMaster() {
         
         // Fallback Phase: Use custom port from secrets.env
         if (process.env.DB_PORT) {
+            const customPort = parseInt(process.env.DB_PORT, 10);
             try {
-                const customPort = parseInt(process.env.DB_PORT, 10);
                 masterConfig.port = customPort;        // Updates config so future Tenant pools use the right port
                 masterPool.config.port = customPort;   // Updates the current Master pool connection logic
                 
@@ -50,6 +63,7 @@ async function connectMaster() {
                 console.log(`✔ Successfully connected to Master DB on fallback port ${customPort}`);
             } catch (fallbackErr) {
                 console.error(`✘ Fallback Connection also failed on port ${customPort}:`, fallbackErr.message);
+                throw fallbackErr; // Send the real error up to server.js
             }
         } else {
             console.error('✘ No DB_PORT found in secrets.env. Cannot attempt fallback.');
