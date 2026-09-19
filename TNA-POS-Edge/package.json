@@ -1,0 +1,21 @@
+{
+  "name": "tna-pos-edge",
+  "version": "1.0.0",
+  "description": "TNA POS Edge - the installed till. Serves the POS on this PC, keeps selling when the internet is down and syncs when it is back.",
+  "main": "index.js",
+  "bin": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "build": "pkg . --targets node18-win-x64 --output dist/TNA-POS-Edge.exe"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3"
+  },
+  "devDependencies": {
+    "pkg": "^5.8.1"
+  },
+  "pkg": {
+    "assets": ["web/**/*"],
+    "outputPath": "dist"
+  }
+}
