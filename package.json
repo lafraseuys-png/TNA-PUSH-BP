@@ -52,6 +52,7 @@
   "devDependencies": {
     "@capacitor/cli": "^8.3.0",
     "@tailwindcss/cli": "^4.3.0",
+    "javascript-obfuscator": "^5.7.0",
     "tailwindcss": "^4.3.0"
   }
 }

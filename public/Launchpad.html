@@ -1,5 +1,2283 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Launchpad - TNA Systems</title><script>(()=>{var e=null;try{e=localStorage.getItem("tnaafrica_theme")}catch(e){}"light"!==e&&"dark"!==e&&(e="dark"),window.__TNA_THEME=e,document.documentElement.classList.remove("dark-mode"),document.documentElement.classList.remove("light-mode"),document.documentElement.classList.add("dark"===e?"dark-mode":"light-mode"),document.documentElement.setAttribute("data-theme",e)})()</script><link rel="stylesheet" href="/css/styles.css?v=1.0.4"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif}body,html{height:100%;background-color:#fff;color:#333;position:relative;overflow-x:hidden;overflow-y:scroll}.background-container{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;background-color:#131314;background-image:linear-gradient(rgba(0,0,0,.15),rgba(0,0,0,.15)),url(background.png);background-size:cover;background-position:right center;background-repeat:no-repeat;pointer-events:none;filter:blur(6px);transform:scale(1);transform-origin:right center}.navbar{display:flex;justify-content:space-between;align-items:center;padding:20px 50px;background:0 0;position:relative;z-index:20}.logo-container{width:240px;height:auto;display:flex;align-items:center;justify-content:flex-start;cursor:pointer}.logo-container img{width:100%;max-height:90px;height:auto;object-fit:contain;object-position:left center;transition:transform .2s ease}.logo-container:active img,.logo-container:hover img{transform:translateY(-2px)}.search-container{flex:1;display:flex;justify-content:center}.search-wrapper{position:relative;width:400px}.search-bar{width:100%;padding:12px 45px 12px 24px;border-radius:30px;border:1px solid #ccc;outline:0;font-size:14px;background-color:#fff;box-shadow:0 2px 10px rgba(0,0,0,.02);transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease;-webkit-appearance:none;appearance:none;cursor:text}.search-bar::-webkit-search-cancel-button,.search-bar::-webkit-search-decoration,.search-bar::-webkit-search-results-button,.search-bar::-webkit-search-results-decoration{-webkit-appearance:none;display:none}.search-bar:hover{box-shadow:0 4px 15px rgba(0,0,0,.06);transform:translateY(-1px)}.search-bar:focus{border-color:#1a4c7b;box-shadow:0 4px 15px rgba(0,0,0,.06);transform:translateY(-1px)}.search-icon{position:absolute;right:18px;top:50%;transform:translateY(-50%);color:#888;font-size:16px;pointer-events:none}.search-suggestions{position:absolute;top:calc(100% + 10px);left:0;width:100%;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.1);border:1px solid rgba(224,224,224,.8);z-index:100;display:none;flex-direction:column;overflow:hidden;max-height:300px;overflow-y:auto}.search-suggestions.show{display:flex}.suggestion-item{padding:12px 20px;font-size:13px;color:#475569;cursor:pointer;border-bottom:1px solid #f1f5f9;transition:background .2s,color .2s;display:flex;align-items:center;gap:10px}.suggestion-item:last-child{border-bottom:none}.suggestion-item:hover{background:#f8fafc;color:#1a4c7b}body.dark-mode .search-suggestions{background:rgba(30,41,59,.95);border-color:rgba(255,255,255,.1);box-shadow:0 10px 30px rgba(0,0,0,.5)}body.dark-mode .suggestion-item{color:#cbd5e1;border-bottom-color:rgba(255,255,255,.05)}body.dark-mode .suggestion-item:hover{background:rgba(255,255,255,.05);color:#60a5fa}.profile-button{display:flex;align-items:center;gap:10px;padding:5px 15px 5px 5px;border:1px solid #e0e0e0;border-radius:30px;background:#fff;cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,.02);transition:box-shadow .2s ease,transform .2s ease}.profile-button:hover{box-shadow:0 4px 12px rgba(0,0,0,.06);transform:translateY(-1px)}.profile-avatar-custom{width:35px;height:35px;border-radius:50%;background-color:#eaf1f8;color:#1a4c7b;padding:6px;display:flex;align-items:center;justify-content:center}.profile-name{font-size:14px;font-weight:600;color:#333}.profile-dropdown-icon{font-size:12px;color:#666;margin-left:2px}.profile-menu-container{position:relative;width:240px;display:flex;justify-content:flex-end}.profile-dropdown-menu{display:flex;opacity:0;visibility:hidden;transform:translateY(-15px);transition:opacity .2s ease-out,transform .2s ease-out,visibility .2s;position:absolute;top:55px;right:0;background-color:#fff;min-width:220px;box-shadow:0 8px 25px rgba(0,0,0,.08);border-radius:8px;border:1px solid #eee;z-index:100;flex-direction:column;overflow:hidden}.profile-dropdown-menu.show{opacity:1;visibility:visible;transform:translateY(0)}.dropdown-item{padding:12px 20px;text-decoration:none;color:#444;font-size:13px;font-weight:500;display:flex;align-items:center;gap:12px;transition:background .2s}.dropdown-item i{color:#1a4c7b;width:16px;text-align:center}.dropdown-item:hover{background-color:#f5f8fa}.dropdown-item.logout{color:#d9534f}.dropdown-item.logout i{color:#d9534f}.dropdown-divider{height:1px;background-color:#f0f0f0;margin:4px 0}.theme-toggle-item{justify-content:space-between;cursor:default}.theme-toggle-item:hover{background-color:transparent}.theme-switch{position:relative;display:inline-block;width:36px;height:20px}.theme-switch input{position:absolute;opacity:0;width:100%;height:100%;top:0;left:0;z-index:5;cursor:pointer;margin:0}.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;transition:.4s;z-index:1}.slider:before{position:absolute;content:"";height:14px;width:14px;left:3px;bottom:3px;background-color:#fff;transition:.4s}input:checked+.slider{background-color:#1a4c7b}input:checked+.slider:before{transform:translateX(16px)}.slider.round{border-radius:34px}.slider.round:before{border-radius:50%}.main-content{padding:80px 10vw 40px 10vw;display:flex;justify-content:center;position:relative;z-index:10}.module-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;width:100%;max-width:900px;margin-top:5vh}.module-card{background:rgba(255,255,255,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(224,224,224,.8);border-radius:8px;padding:20px 15px;text-align:center;box-shadow:0 4px 15px rgba(0,0,0,.03);min-height:115px;display:flex;flex-direction:column;justify-content:center;transition:transform .3s cubic-bezier(.25,.8,.25,1),box-shadow .3s ease,border-color .3s ease;cursor:pointer}.module-card:hover{transform:translateY(-5px);box-shadow:0 12px 30px rgba(0,0,0,.08);border-color:rgba(26,76,123,.3)}.module-icon{font-size:24px;color:#1a4c7b;margin:0 auto 10px auto;display:block;transition:transform .3s cubic-bezier(.175,.885,.32,1.275)}.module-card:hover .module-icon{transform:scale(1.15)}.module-card h3{font-size:14px;color:#1a4c7b;margin-bottom:8px}.module-card p{font-size:11px;color:#666;margin-bottom:15px}.module-card span{font-size:12px;font-weight:700;color:#444;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:color .3s ease}.module-card span::after{content:"\f061";font-family:"Font Awesome 6 Free";font-weight:900;font-size:11px;opacity:0;transform:translateX(-10px);transition:opacity .3s ease,transform .3s cubic-bezier(.25,.8,.25,1);color:#1a4c7b}.module-card:hover span::after{opacity:1;transform:translateX(0)}.footer{position:fixed;bottom:20px;width:100%;text-align:center;font-size:10px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px}.footer-highlight{color:#4caf50}.modal-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.3);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;z-index:9999;opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s ease}.modal-overlay.show{opacity:1;visibility:visible}.modal-content{background:rgba(255,255,255,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(224,224,224,.8);border-radius:8px;width:100%;max-width:450px;padding:25px;box-shadow:0 10px 40px rgba(0,0,0,.1);transform:translateY(-20px);transition:transform .3s cubic-bezier(.25,.8,.25,1)}.modal-overlay.show .modal-content{transform:translateY(0)}.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.modal-header h2{font-size:18px;color:#1a4c7b;display:flex;align-items:center;gap:10px}.modal-close{background:0 0;border:none;font-size:18px;color:#64748b;cursor:pointer;transition:color .2s}.modal-close:hover{color:#d9534f}.modal-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:15px}.modal-form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:15px}.modal-form-group.full-width{grid-column:span 2}.modal-form-group label{font-size:12px;font-weight:600;color:#475569}.modal-form-control{background-color:#fff;border:1px solid #cbd5e1;border-radius:6px;padding:10px 12px;font-size:13px;color:#333;outline:0;transition:all .3s}.modal-form-control:focus{border-color:#1a4c7b;box-shadow:0 0 0 3px rgba(26,76,123,.15)}.modal-form-control:disabled{background-color:#f1f5f9;color:#94a3b8;cursor:not-allowed;border-color:#e2e8f0}.modal-info-text{font-size:11px;color:#b45309;display:flex;align-items:center;gap:6px;margin-bottom:15px}.modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;padding-top:20px;border-top:1px solid #e2e8f0}.modal-btn{background:linear-gradient(135deg,#1a4c7b 0,#143b61 100%);color:#fff;border:none;padding:10px 20px;font-size:13px;font-weight:600;border-radius:6px;cursor:pointer;transition:all .2s}.modal-btn:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(26,76,123,.2)}.modal-btn.locked{background:#e2e8f0;color:#64748b;box-shadow:none;cursor:pointer;border:1px solid #cbd5e1;transition:all .3s ease}.modal-btn.locked.unlocking{background-color:#4caf50!important;color:#fff!important;border-color:#4caf50!important;transition:all 2s linear}.modal-btn-secondary{background:#e2e8f0;color:#333;border:1px solid #cbd5e1}.modal-btn-secondary:hover{background:#cbd5e1}.update-tab{position:fixed;left:0;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(224,224,224,.8);border-left:none;padding:15px 10px;border-radius:0 8px 8px 0;cursor:pointer;z-index:40;box-shadow:2px 0 10px rgba(0,0,0,.05);transition:padding .2s ease,background .3s ease;display:flex;align-items:center;justify-content:center}.update-tab:hover{padding-left:15px;background:#fff}.update-tab i{color:#1a4c7b;font-size:18px;display:inline-block}@keyframes bellRing{0%,100%{transform:rotate(0)}10%,30%,50%{transform:rotate(15deg)}20%,40%{transform:rotate(-15deg)}60%{transform:rotate(0)}}.update-tab i.ringing{animation:bellRing 1.5s ease-in-out infinite;transform-origin:top center}.update-badge-count{position:absolute;top:4px;right:4px;background-color:#ef4444;color:#fff;font-size:10px;font-weight:800;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(239,68,68,.6);border:2px solid #fff;z-index:2}body.dark-mode .update-badge-count{border-color:#1e293b}.update-backdrop{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.3);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:45;opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s ease}.update-backdrop.active{opacity:1;visibility:visible}.update-panel{position:fixed;top:20px;left:-400px;width:350px;height:calc(100vh - 40px);background:rgba(255,255,255,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(224,224,224,.8);border-radius:12px;z-index:50;box-shadow:10px 10px 40px rgba(0,0,0,.15);transition:left .4s cubic-bezier(.25,.8,.25,1);display:flex;flex-direction:column}.update-panel.active{left:20px}.update-header{padding:20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(0,0,0,.1)}.update-greeting{font-size:18px;font-weight:500;color:#475569;letter-spacing:.5px}body.dark-mode .update-greeting{color:#94a3b8}.update-header h2{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;font-size:18px;font-weight:500;letter-spacing:.5px;color:#475569;margin:0;display:flex;align-items:center}.update-close{background:0 0;border:none;font-size:16px;color:#64748b;cursor:pointer;transition:color .2s}.update-close:hover{color:#d9534f}.update-content{padding:20px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:15px}@keyframes slideInFade{from{opacity:0;transform:translateX(-15px)}to{opacity:1;transform:translateX(0)}}.update-card{background:rgba(248,250,252,.8);border:none;border-left:3px solid #cbd5e1;border-radius:12px;padding:12px 15px;box-shadow:0 2px 5px rgba(0,0,0,.02);transition:transform .2s ease,background .2s ease,box-shadow .2s ease;opacity:0}.update-panel.active .update-card{animation:slideInFade .4s cubic-bezier(.16,1,.3,1) forwards}.update-panel.active .update-card:nth-child(2){animation-delay:.1s}.update-panel.active .update-card:nth-child(3){animation-delay:.2s}.update-panel.active .update-card:nth-child(4){animation-delay:.3s}.update-card:hover{transform:translateX(4px);background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.05);cursor:pointer}.update-card.feature{border-left-color:#3b82f6}.update-card.maintenance{border-left-color:#10b981}.update-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.update-badge{font-size:9px;font-weight:700;text-transform:uppercase;padding:3px 6px;border-radius:4px;letter-spacing:.5px}.badge-new{background:rgba(59,130,246,.1);color:#3b82f6;border:1px solid rgba(59,130,246,.2)}.badge-fix{background:rgba(16,185,129,.1);color:#10b981;border:1px solid rgba(16,185,129,.2)}.update-date{font-size:10px;color:#94a3b8;font-weight:600}.update-card-header{display:flex;justify-content:space-between;align-items:flex-start;cursor:pointer;margin-bottom:0}.update-card:hover .update-card-header{margin-bottom:8px}.update-card h4{font-size:18px;font-weight:700;color:#334155;margin:0;transition:color .2s}.update-card-header:hover h4{color:#1a4c7b}body.dark-mode .update-card-header:hover h4{color:#60a5fa}.update-card>:not(.update-card-header){max-height:0;opacity:0;overflow:hidden;margin-top:0!important;transition:all .3s ease}.update-card:hover>:not(.update-card-header){max-height:200px;opacity:1;margin-top:8px!important}.update-card p{font-size:15px;color:#64748b;line-height:1.5;margin:0}.pin-btn{background:0 0;border:none;color:#cbd5e1;cursor:pointer;font-size:16px;transition:color .2s,transform .2s;padding:2px}.pin-btn:hover{color:#1a4c7b;transform:scale(1.1)}.update-card.is-pinned .pin-btn{color:#f97316;transform:rotate(-45deg)}body.dark-mode .pin-btn:hover{color:#60a5fa}.solid-label{display:inline-block;padding:4px 8px;border-radius:4px;font-size:9px;font-weight:800;text-transform:uppercase;color:#fff;letter-spacing:.5px}.solid-label.bug{background-color:#ef4444}.update-card.ess-live{opacity:1!important;border-left-color:#f97316;animation:none!important}.update-card.ess-live>:not(.update-card-header){max-height:200px;opacity:1;margin-top:8px!important}.update-card.ess-live h4{font-size:15px}.ess-live-count{background:#f97316;color:#fff;font-size:11px;font-weight:800;min-width:22px;text-align:center;padding:2px 7px;border-radius:999px}.ess-divider{height:1px;background:rgba(148,163,184,.25);margin-top:15px}body.dark-mode .update-card.ess-live{border-left-color:#fb923c}.ess-notice{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:14px;background:#fff;border:1px solid rgba(148,163,184,.22);box-shadow:0 1px 2px rgba(15,23,42,.04);cursor:pointer;opacity:0;transform:translateY(6px);animation:essNoticeIn .35s cubic-bezier(.16,1,.3,1) forwards;transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease}@keyframes essNoticeIn{to{opacity:1;transform:translateY(0)}}.ess-notice:hover{transform:translateY(-1px);border-color:rgba(26,76,123,.35);box-shadow:0 6px 16px rgba(15,23,42,.08)}.ess-notice-icon{flex:0 0 38px;width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:15px;background:rgba(148,163,184,.14);color:#64748b}.ess-notice.tone-amber .ess-notice-icon{background:rgba(249,115,22,.11);color:#ea580c}.ess-notice.tone-blue .ess-notice-icon{background:rgba(59,130,246,.11);color:#2563eb}.ess-notice.tone-rose .ess-notice-icon{background:rgba(244,63,94,.11);color:#e11d48}.ess-notice-body{flex:1;min-width:0}.ess-notice-title{display:block;font-size:13.5px;font-weight:700;color:#0f172a;line-height:1.3;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ess-notice-sub{display:block;font-size:11.5px;color:#64748b;margin-top:3px;line-height:1.35}.ess-notice-count{flex:0 0 auto;min-width:22px;height:22px;padding:0 7px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;background:rgba(15,23,42,.06);color:#334155}.ess-notice.tone-amber .ess-notice-count{background:rgba(249,115,22,.13);color:#c2410c}.ess-notice.tone-blue .ess-notice-count{background:rgba(59,130,246,.13);color:#1d4ed8}.ess-notice.tone-rose .ess-notice-count{background:rgba(244,63,94,.13);color:#be123c}.ess-notice-cta{flex:0 0 auto;font-size:11px;color:#94a3b8;opacity:0;transform:translateX(-4px);transition:opacity .2s ease,transform .2s ease}.ess-notice:hover .ess-notice-cta{opacity:1;transform:translateX(0)}body.dark-mode .ess-notice{background:rgba(30,41,59,.6);border-color:rgba(255,255,255,.08);box-shadow:none}body.dark-mode .ess-notice:hover{border-color:rgba(96,165,250,.45);box-shadow:0 6px 18px rgba(0,0,0,.28)}body.dark-mode .ess-notice-title{color:#e2e8f0}body.dark-mode .ess-notice-sub{color:#94a3b8}body.dark-mode .ess-notice-count{background:rgba(255,255,255,.08);color:#cbd5e1}body.dark-mode .ess-notice.tone-amber .ess-notice-icon{background:rgba(251,146,60,.16);color:#fb923c}body.dark-mode .ess-notice.tone-blue .ess-notice-icon{background:rgba(96,165,250,.16);color:#60a5fa}body.dark-mode .ess-notice.tone-rose .ess-notice-icon{background:rgba(251,113,133,.16);color:#fb7185}body.dark-mode .ess-notice.tone-amber .ess-notice-count{background:rgba(251,146,60,.16);color:#fdba74}body.dark-mode .ess-notice.tone-blue .ess-notice-count{background:rgba(96,165,250,.16);color:#93c5fd}body.dark-mode .ess-notice.tone-rose .ess-notice-count{background:rgba(251,113,133,.16);color:#fda4af}body.dark-mode .update-tab{background:rgba(30,41,59,.65);border-color:rgba(255,255,255,.08)}body.dark-mode .update-tab:hover{background:rgba(30,41,59,.9)}body.dark-mode .update-tab i{color:#cbd5e1}body.dark-mode .update-panel{background:rgba(30,41,59,.65);border-color:rgba(255,255,255,.08)}body.dark-mode .update-header{border-color:rgba(255,255,255,.1)}body.dark-mode .update-header h2{color:#cbd5e1}body.dark-mode .update-card{background:rgba(255,255,255,.05);border:none;border-left:3px solid #475569}body.dark-mode .update-card:hover{background:rgba(255,255,255,.1);box-shadow:0 4px 15px rgba(0,0,0,.4)}body.dark-mode .update-card.feature{border-left-color:#3b82f6}body.dark-mode .update-card.maintenance{border-left-color:#10b981}body.dark-mode .update-card h4{color:#f8fafc}body.dark-mode .update-card p{color:#94a3b8}.module-loader{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,.85);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);display:flex;justify-content:center;align-items:center;z-index:99999;opacity:0;visibility:hidden;transition:opacity .5s cubic-bezier(.4,0,.2,1),visibility .5s}.module-loader.active{opacity:1;visibility:visible}.loader-content{display:flex;flex-direction:column;align-items:center;gap:30px;transform:translateY(20px);transition:transform .5s cubic-bezier(.16,1,.3,1)}.module-loader.active .loader-content{transform:translateY(0)}.dots-loader{display:flex;gap:6px}.dots-loader div{width:10px;height:10px;border-radius:50%;background-color:#1a4c7b;animation:dotWave 1.2s infinite ease-in-out both}.dots-loader div:nth-child(1){animation-delay:-.6s}.dots-loader div:nth-child(2){animation-delay:-.5s}.dots-loader div:nth-child(3){animation-delay:-.4s}.dots-loader div:nth-child(4){animation-delay:-.3s}.dots-loader div:nth-child(5){animation-delay:-.2s}.dots-loader div:nth-child(6){animation-delay:-.1s}@keyframes dotWave{0%,100%,80%{transform:translateY(0);opacity:.3}40%{transform:translateY(-6px);opacity:1}}.loader-text{font-size:13px;font-weight:800;color:#1a4c7b;letter-spacing:4px;text-transform:uppercase;animation:pulseText 1.5s ease-in-out infinite}@keyframes pulseText{0%,100%{opacity:.4}50%{opacity:1;text-shadow:0 0 10px rgba(26,76,123,.3)}}html.dark-mode,html.dark-mode body{background-color:#0f172a!important;color:#e2e8f0!important}body.dark-mode .background-container,html.dark-mode .background-container{background-image:linear-gradient(rgba(19,19,20,.75),rgba(19,19,20,.75)),url(black.png)}body.dark-mode .module-card{background:rgba(30,41,59,.65);border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 32px rgba(0,0,0,.2);transition:transform .3s cubic-bezier(.25,.8,.25,1),box-shadow .3s ease,border-color .3s ease,background .3s ease}body.dark-mode .module-card:hover{background:rgba(30,41,59,.85);border-color:rgba(203,213,225,.2);box-shadow:0 12px 30px rgba(0,0,0,.4)}body.dark-mode .module-card h3,body.dark-mode .module-icon{color:#cbd5e1}body.dark-mode .module-card p,body.dark-mode .module-card span{color:#94a3b8}body.dark-mode .module-card span::after{color:#60a5fa}body.dark-mode .search-bar{background-color:rgba(30,41,59,.8);border-color:rgba(255,255,255,.1);color:#e2e8f0}body.dark-mode .search-bar:focus,body.dark-mode .search-bar:hover{box-shadow:0 4px 15px rgba(0,0,0,.3)}body.dark-mode .search-bar::placeholder,body.dark-mode .search-icon{color:#64748b}body.dark-mode .profile-button{background-color:rgba(30,41,59,.8)!important;border-color:rgba(255,255,255,.1)!important}body.dark-mode .profile-avatar-custom{background-color:#334155!important;color:#cbd5e1!important}body.dark-mode .profile-dropdown-icon,body.dark-mode .profile-name{color:#e2e8f0!important}body.dark-mode .profile-dropdown-menu{background-color:rgba(30,41,59,.75);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-color:rgba(255,255,255,.1);box-shadow:0 8px 32px rgba(0,0,0,.5)}body.dark-mode .dropdown-item{color:#e2e8f0}body.dark-mode .dropdown-item i{color:#cbd5e1}body.dark-mode .dropdown-divider,body.dark-mode .dropdown-item:hover{background-color:rgba(255,255,255,.08)}body.dark-mode .footer{color:#64748b}body.dark-mode .modal-content{background:rgba(30,41,59,.65);border-color:rgba(255,255,255,.08);box-shadow:0 10px 40px rgba(0,0,0,.5)}body.dark-mode .modal-header h2{color:#cbd5e1}body.dark-mode .modal-form-group label{color:#94a3b8}body.dark-mode .modal-form-control{background-color:rgba(15,23,42,.5);border:1px solid rgba(255,255,255,.1);color:#e2e8f0}body.dark-mode .modal-form-control:focus{background-color:rgba(15,23,42,.8);border-color:rgba(203,213,225,.4);box-shadow:0 0 0 3px rgba(255,255,255,.05)}body.dark-mode .modal-form-control:disabled{background-color:rgba(15,23,42,.2);color:#64748b;border-color:rgba(255,255,255,.03);cursor:not-allowed}body.dark-mode .modal-info-text{color:#fde047}body.dark-mode .modal-footer{border-color:rgba(255,255,255,.1)}body.dark-mode .modal-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15)}body.dark-mode .modal-btn:hover{background:rgba(255,255,255,.15)}body.dark-mode .modal-btn-secondary{background:0 0;color:#cbd5e1;border-color:rgba(255,255,255,.15)}body.dark-mode .modal-btn-secondary:hover{background:rgba(255,255,255,.05);color:#fff}body.dark-mode .module-loader{background:rgba(15,23,42,.85)}body.dark-mode .dots-loader div{background-color:#cbd5e1;box-shadow:0 0 8px rgba(255,255,255,.4)}body.dark-mode .loader-text{color:#cbd5e1;text-shadow:0 0 10px rgba(255,255,255,.1)}.sugg-icon{color:#1a4c7b}.sugg-title{color:#334155}.sugg-module{color:#64748b}body.dark-mode .sugg-icon,body.dark-theme .sugg-icon{color:#94a3b8}body.dark-mode .sugg-title,body.dark-theme .sugg-title{color:#fff}body.dark-mode .sugg-module,body.dark-theme .sugg-module{color:#cbd5e1}@media (max-width:950px){.module-grid{grid-template-columns:repeat(2,1fr)}.search-wrapper{width:300px}}@media (max-width:650px){.navbar{flex-direction:column;gap:20px;padding:20px}.search-wrapper{width:100%}.module-grid{grid-template-columns:1fr}.main-content{padding:20px 5vw}.footer{position:static;padding:20px}}.hidden{display:none!important}</style></head><body><div class="background-container"></div><div class="update-tab" onclick="toggleUpdatePanel()" title="System Updates"><div class="update-badge-count" id="updateUnreadDot" style="display:none">0</div><i class="fas fa-bell"></i></div><div class="update-backdrop" id="updateBackdrop" onclick="closeUpdatePanel()"></div><div class="update-panel" id="updatePanel"><div class="update-header"><h2><i class="fas fa-bell" style="margin-right:8px"></i>System Notifications</h2><button class="update-close" onclick="closeUpdatePanel()"><i class="fas fa-chevron-left"></i></button></div><div class="update-content"><div id="essNotifyBlock" class="hidden"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px"><span class="update-greeting">ESS Notifications</span> <button onclick='loadModule("ESSMaster.html?section=requests")' style="background:0 0;border:none;color:#64748b;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px"><i class="fas fa-arrow-right-to-bracket"></i> View All</button></div><div id="essNotifyList" style="display:flex;flex-direction:column;gap:10px"></div><div class="ess-divider"></div></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px" id="updateActionBar"><span class="update-greeting">System Log</span> <button onclick="clearAllUpdates()" style="background:0 0;border:none;color:#64748b;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;transition:color .2s"><i class="fas fa-check-double"></i> Clear All</button></div><div id="updateEmptyState" style="display:none;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;opacity:.6"><i class="fas fa-inbox" style="font-size:40px;color:#94a3b8;margin-bottom:15px"></i><h4 style="color:#64748b;font-size:14px;margin-bottom:5px">You're all caught up!</h4><p style="color:#94a3b8;font-size:11px;max-width:200px">There are no new system updates or announcements at this time.</p></div></div></div><nav class="navbar"><div class="logo-container"><img id="tenantLogo" src="logo.png" alt="tnaafrica Logo" class="hidden"><div id="tenantLogoPlaceholder" class="text-xs text-gray-500 font-bold ml-2">Logo Placeholder</div></div><div class="search-container"><div class="search-wrapper"><input type="search" id="mainSearchInput" name="lp_global_query" class="search-bar" placeholder="Search..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" readonly="readonly" data-form-type="other" data-lpignore="true" data-1p-ignore data-bwignore="true" aria-label="Search screens and modules"> <i class="fa-solid fa-magnifying-glass search-icon"></i><div id="searchSuggestions" class="search-suggestions"></div></div></div><div class="profile-menu-container"><div class="profile-button" onclick="toggleDropdown()"><svg id="launchpadProfileIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="profile-avatar-custom" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M32 30 C35 30, 36 45, 33 50 C29 48, 28 32, 32 30 Z"/><path d="M68 28 C71 29, 72 46, 68 49 C64 47, 63 31, 68 28 Z"/><path d="M15 55 C35 85, 65 85, 85 55 C70 75, 30 75, 15 55 Z"/></svg> <img id="launchpadProfilePic" src="" class="hidden" style="display:none;width:35px;height:35px;border-radius:50%;object-fit:cover;border:1px solid #cbd5e1"> <span class="profile-name" id="displayUsername">Loading...</span> <span class="profile-dropdown-icon">▼</span></div><div class="profile-dropdown-menu" id="profileDropdown"><div id="displayTenant" class="hidden"></div><a href="#" class="dropdown-item" onclick="openProfileModal()"><i class="fa-solid fa-user"></i> Profile</a> <a href="Settings.html" class="dropdown-item hidden" id="btnSettings"><i class="fa-solid fa-gear"></i> Settings</a> <a href="ess_dashboard.html" class="dropdown-item"><i class="fa-solid fa-mobile-screen-button"></i> ESS</a><div class="dropdown-divider"></div><div class="dropdown-item theme-toggle-item"><label for="themeToggle" style="cursor:pointer;flex:1"><i class="fa-solid fa-moon"></i> Dark Mode</label> <label class="theme-switch"><input type="checkbox" id="themeToggle" data-theme-toggle> <span class="slider round"></span></label></div><div class="dropdown-divider"></div><a href="#" onclick="logout()" class="dropdown-item logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></div></div></nav><main class="main-content"><div style="position:absolute;top:20px;right:20px;z-index:50"><div id="godModeBadge" class="hidden" style="background-color:#dc2626;color:#fff;padding:4px 16px;border-radius:9999px;font-weight:700;border:1px solid #f87171;box-shadow:0 0 10px rgba(220,38,38,.8);font-size:12px;animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite"><i class="fas fa-radiation mr-2"></i> GOD MODE ACTIVE</div></div><div id="mainModuleGrid" class="module-grid"><div id="module-empMaster" class="module-card opacity-50" onclick='document.getElementById("btn-empMaster").disabled||loadModule("employeemaster.html")'><i class="fa-solid fa-address-card module-icon"></i><h3>Employee Master</h3><p>Manage employee profiles, departments, and sync hardware access.</p><span id="btn-empMaster" disabled="disabled">Access Restricted</span></div><div id="module-timeAttendance" class="module-card opacity-50" onclick='document.getElementById("btn-timeAttendance").disabled||loadModule("tna_dashboard.html")'><i class="fa-solid fa-user-clock module-icon"></i><h3>Time & Attendance</h3><p>Manage employee clock-ins, timesheets, and offline sync logs.</p><span id="btn-timeAttendance" disabled="disabled">Access Restricted</span></div><div id="module-hr" class="module-card opacity-50" onclick='document.getElementById("btn-hr").disabled||loadModule("hr_dashboard.html")'><i class="fa-solid fa-users-gear module-icon"></i><h3>HR Management</h3><p>Track infringements, performance notes, and field HR records.</p><span id="btn-hr" disabled="disabled">Access Restricted</span></div><div id="module-fuel" class="module-card opacity-50" onclick='document.getElementById("btn-fuel").disabled||loadModule("Fueldashboard.html")'><i class="fa-solid fa-gas-pump module-icon"></i><h3>Fuel Management</h3><p>Track fuel dispensing, vehicle efficiency, and generate reports.</p><span id="btn-fuel" disabled="disabled">Access Restricted</span></div><div id="module-tasks" class="module-card opacity-50" onclick='document.getElementById("btn-tasks").disabled||loadModule("piecework.html")'><i class="fa-solid fa-list-check module-icon"></i><h3>Production Pay</h3><p>Job assignments, progress tracking, and production reporting</p><span id="btn-tasks" disabled="disabled">Access Restricted</span></div><div id="module-stock" class="hidden"><button id="btn-stock"></button></div><div id="module-assetTagging" class="module-card opacity-50" onclick='document.getElementById("btn-assetTagging").disabled||loadModule("AssetTagging.html")'><i class="fa-solid fa-boxes-stacked module-icon"></i><h3>Asset Tagging & Stock Control</h3><p>Hardware lifecycle, inventory tracking, allocations, and stock management.</p><span id="btn-assetTagging" disabled="disabled">Access Restricted</span></div><div id="module-employeeCosts" class="module-card opacity-50" onclick='document.getElementById("btn-employeeCosts").disabled||loadModule("EmployeeCosts.html")'><i class="fa-solid fa-file-invoice-dollar module-icon"></i><h3>Employee Costs</h3><p>Manage employee wages, hourly rates, and overhead costing structures.</p><span id="btn-employeeCosts" disabled="disabled">Access Restricted</span></div><div id="module-essMaster" class="module-card opacity-50" onclick='document.getElementById("btn-essMaster").disabled||loadModule("ESSMaster.html")'><i class="fa-solid fa-mobile-screen-button module-icon"></i><h3>ESS Master</h3><p>Manage Employee Self Service portals, mobile configurations, and requests.</p><span id="btn-essMaster" disabled="disabled">Access Restricted</span></div><div id="module-contractors" class="module-card opacity-50" onclick='document.getElementById("btn-contractors").disabled||loadModule("Contractors.html")'><i class="fa-solid fa-truck-fast module-icon"></i><h3>Contractors & Distribution</h3><p>Manage third-party contractors, logistics, and distribution routes.</p><span id="btn-contractors" disabled="disabled">Access Restricted</span></div></div></main><footer class="footer">THIS SOFTWARE IS UNDER LICENSE AND DEVELOPED BY <span class="footer-highlight">TNA AFRICA "2026"</span> | <a href="https://www.tnaafrica.co.za" target="_blank" style="color:inherit;text-decoration:none">WWW.TNAAFRICA.CO.ZA</a><br><button type="button" onclick="openPapiaModal()" style="background:0 0;border:none;color:#4caf50;cursor:pointer;font-size:9px;margin-top:5px;text-transform:uppercase;font-weight:700">READ PAPIA / POPIA ACT</button></footer><div class="modal-overlay hidden" id="profileModal"><div class="modal-content"><div class="modal-header"><h2><i class="fa-solid fa-user-pen"></i> My Profile</h2><button class="modal-close" onclick="closeProfileModal()"><i class="fa-solid fa-xmark"></i></button></div><div class="modal-form-grid"><div class="modal-form-group"><label>First Name</label> <input type="text" id="profFirstName" class="modal-form-control"></div><div class="modal-form-group"><label>Last Name</label> <input type="text" id="profLastName" class="modal-form-control"></div></div><div class="modal-form-group"><label>Email Address</label> <input type="email" id="profEmail" class="modal-form-control"></div><div class="modal-info-text"><i class="fa-solid fa-circle-info"></i> Leave password fields blank if you do not want to change it.</div><div class="modal-form-group"><label>New Password</label> <input type="password" id="profPassword" class="modal-form-control" placeholder="••••••••" autocomplete="new-password" data-form-type="other"></div><div class="modal-form-group"><label>Confirm New Password</label> <input type="password" id="profConfirmPassword" class="modal-form-control" placeholder="••••••••" autocomplete="new-password" data-form-type="other"></div><div class="modal-footer"><button class="modal-btn modal-btn-secondary" onclick="closeProfileModal()">Cancel</button> <button class="modal-btn" id="modalSaveBtn" onclick="saveProfile()"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button></div></div></div><div id="moduleLoader" class="module-loader hidden"><div class="loader-content"><div class="dots-loader"><div></div><div></div><div></div><div></div><div></div><div></div></div></div></div><div id="papiaViewModal" class="hidden fixed inset-0 bg-black/90 z-[80] flex justify-center items-center backdrop-blur-md p-4"><div class="bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-2xl border border-purple-500/50 relative flex flex-col max-h-[90vh]"><button type="button" onclick="closePapiaModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition"><i class="fas fa-times text-xl"></i></button><h3 class="text-xl font-bold text-white mb-2"><i class="fas fa-shield-alt mr-2 text-purple-500"></i>PAPIA / POPIA Act</h3><p class="text-xs text-gray-400 mb-4">Master Data Privacy Policy for TNA Africa.</p><div id="papiaViewContent" class="flex-1 overflow-y-auto bg-gray-900 border border-gray-700 rounded p-4 text-sm text-gray-300 mb-6 font-mono whitespace-pre-wrap leading-relaxed shadow-inner"><div class="text-center text-gray-500 py-10"><i class="fas fa-spinner fa-spin text-3xl mb-4"></i><br>Loading...</div></div><div class="flex mt-auto pt-4 border-t border-gray-700"><button type="button" onclick="printPapia()" class="w-full bg-purple-700 hover:bg-purple-600 text-white p-3 rounded-lg font-bold shadow transition-all flex justify-center items-center"><i class="fas fa-file-pdf mr-2"></i> Print PDF</button></div></div></div><script src="theme.js?v=1.0.0"></script><script src="launchpad.js"></script><script>function loadModule(e){var t=document.getElementById("moduleLoader");t.classList.remove("hidden"),t.classList.add("active"),setTimeout(()=>{window.location.href=e},2e3)}function toggleDropdown(){document.getElementById("profileDropdown").classList.toggle("show")}window.addEventListener("pageshow",function(e){let t=document.getElementById("moduleLoader");t&&(t.classList.remove("active"),setTimeout(()=>{t.classList.add("hidden")},500))});let originalOpenProfile=window.openProfileModal,originalCloseProfile=(window.openProfileModal=function(e){e&&e.preventDefault(),"function"==typeof originalOpenProfile&&originalOpenProfile(),document.getElementById("profileModal").classList.remove("hidden"),setTimeout(()=>{document.getElementById("profileModal").classList.add("show")},10),document.getElementById("profileDropdown").classList.remove("show")},window.closeProfileModal),mainSearchInput=(window.closeProfileModal=function(){document.getElementById("profileModal").classList.remove("show"),setTimeout(()=>{document.getElementById("profileModal").classList.add("hidden"),"function"==typeof originalCloseProfile&&originalCloseProfile()},300)},window.lockProfileModal=function(){console.log("Profile lock disabled by system settings.")},window.unlockProfileModal=function(){console.log("Profile unlock disabled by system settings.")},document.getElementById("mainSearchInput")),suggestionsBox=document.getElementById("searchSuggestions"),systemScreens=[{name:"Active Personnel",url:"EmployeeMaster.html?view=employees",icon:"fa-users",module:"Employee Master"},{name:"Terminated Records",url:"EmployeeMaster.html?view=terminated",icon:"fa-user-slash",module:"Employee Master"},{name:"Departments Structure",url:"EmployeeMaster.html?view=departments",icon:"fa-sitemap",module:"Employee Master"},{name:"Leave Management",url:"EmployeeMaster.html?view=leave",icon:"fa-calendar-alt",module:"Employee Master"}];if(mainSearchInput){let e=function(){mainSearchInput.hasAttribute("readonly")&&mainSearchInput.removeAttribute("readonly")};mainSearchInput.addEventListener("mousedown",e),mainSearchInput.addEventListener("focus",e),mainSearchInput.addEventListener("touchstart",e,{passive:!0}),mainSearchInput.addEventListener("blur",function(){mainSearchInput.value||mainSearchInput.setAttribute("readonly","readonly")}),mainSearchInput.name&&!/user|email|login|name|account/i.test(mainSearchInput.name)||(mainSearchInput.name="lp_global_query"),mainSearchInput.setAttribute("autocomplete","off"),mainSearchInput.setAttribute("data-form-type","other"),mainSearchInput.setAttribute("data-lpignore","true"),mainSearchInput.setAttribute("data-1p-ignore",""),mainSearchInput.setAttribute("data-bwignore","true"),document.querySelectorAll('input[type="password"]').forEach(function(e){e.getAttribute("autocomplete")||e.setAttribute("autocomplete","new-password")})}mainSearchInput&&suggestionsBox&&mainSearchInput.addEventListener("input",function(){let t=this.value.toLowerCase().trim();var e;suggestionsBox.innerHTML="",0!==t.length&&0<(e=systemScreens.filter(e=>e.name.toLowerCase().includes(t)||e.module.toLowerCase().includes(t))).length?(e.forEach(e=>{var t=document.createElement("div");t.className="suggestion-item",t.innerHTML=`<div style="width: 24px; text-align: center;"><i class="fa-solid ${e.icon} sugg-icon"></i></div>
-                                         <div style="display: flex; flex-direction: column;">
-                                             <span class="sugg-title" style="font-weight: 600; font-size: 13px;">${e.name}</span>
-                                             <span class="sugg-module" style="font-size: 10px; text-transform: uppercase;">${e.module}</span>
-                                         </div>`,t.onclick=function(){loadModule(e.url)},suggestionsBox.appendChild(t)}),suggestionsBox.classList.add("show")):suggestionsBox.classList.remove("show")}),window.onclick=function(e){e.target.closest(".profile-menu-container")||document.querySelectorAll(".profile-dropdown-menu.show").forEach(e=>e.classList.remove("show")),!e.target.closest(".search-wrapper")&&suggestionsBox&&suggestionsBox.classList.remove("show"),e.target===document.getElementById("profileModal")&&closeProfileModal()};let themeToggleCheckbox=document.getElementById("themeToggle");function applyLaunchpadTheme(e){window.TnaTheme?(window.TnaTheme.apply(e),window.TnaTheme.bind()):(e="dark"===e,document.documentElement.classList.toggle("dark-mode",e),document.documentElement.classList.toggle("light-mode",!e),document.body.classList.toggle("dark-mode",e),document.body.classList.toggle("light-mode",!e),themeToggleCheckbox&&(themeToggleCheckbox.checked=e))}function toggleUpdatePanel(){document.getElementById("updatePanel").classList.toggle("active"),document.getElementById("updateBackdrop").classList.toggle("active");var e=document.getElementById("updateUnreadDot"),e=(e&&(e.style.display="none"),document.querySelector(".update-tab i"));e&&e.classList.remove("ringing")}function closeUpdatePanel(){document.getElementById("updatePanel").classList.remove("active"),document.getElementById("updateBackdrop").classList.remove("active")}function togglePin(e,t){t&&t.stopPropagation(),e.closest(".update-card").classList.toggle("is-pinned")}function clearAllUpdates(){var e=document.querySelectorAll(".update-card:not(.ess-live)");let t=document.querySelectorAll(".update-card.ess-live").length;e.forEach(e=>{e.classList.contains("is-pinned")?t++:(e.style.transition="opacity 0.3s, transform 0.3s",e.style.opacity="0",e.style.transform="translateX(20px)",setTimeout(()=>e.style.display="none",300))}),0===t&&((e=document.getElementById("updateActionBar"))&&(e.querySelector("button").style.display="none"),setTimeout(()=>{var e=document.getElementById("updateEmptyState");e&&(e.style.display="flex",e.style.animation="slideInFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards")},300))}window.TnaTheme?(window.TnaTheme.apply(window.TnaTheme.get()),window.TnaTheme.bind(),window.TnaTheme.syncFromServer()):(console.warn("theme.js did not load - falling back to local theme only."),applyLaunchpadTheme("light"===localStorage.getItem("tnaafrica_theme")?"light":"dark")),setTimeout(()=>{var e=document.querySelector(".update-tab i");e&&e.classList.add("ringing")},500)</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Accurate loading screen: must stay the FIRST script on the page. Safe to remove. -->
+    <script src="tna_loader.js?v=1"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Launchpad - TNA Systems</title>
+     <script>
+        /* Anti-Flash Engine: Execute before DOM paints. Mirrors theme.js exactly. */
+        /* Deliberately does NOT seed localStorage - that caused the local/DB desync. */
+        (function () {
+            var v = null;
+            try { v = localStorage.getItem("tnaafrica_theme"); } catch (e) {}
+            if (v !== "light" && v !== "dark") v = "dark";
+            window.__TNA_THEME = v;
+            document.documentElement.classList.remove("dark-mode");
+            document.documentElement.classList.remove("light-mode");
+            document.documentElement.classList.add(v === "dark" ? "dark-mode" : "light-mode");
+            document.documentElement.setAttribute("data-theme", v);
+        })();
+    </script>
+    <link rel="stylesheet" href="/css/styles.css?v=1.0.4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+       body, html {
+            height: 100%;
+            background-color: #ffffff;
+            color: #333333;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: scroll; /* Forces vertical scrollbar to prevent horizontal UI jumping */
+        }
+
+        /* Background Image Container */
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw; 
+            height: 100vh;
+            z-index: 0; 
+            background-color: #131314; 
+            background-image: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), url('background.png'); 
+            background-size: cover; 
+            background-position: right center; 
+            background-repeat: no-repeat;
+            pointer-events: none;
+            filter: blur(6px); 
+            transform: scale(1); 
+            transform-origin: right center; 
+        }
+
+        /* Top Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: transparent;
+            position: relative;
+            z-index: 20; 
+        }
+
+        .logo-container {
+            width: 240px;
+            height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            cursor: pointer; 
+        }
+        
+        .logo-container img {
+            width: 100%;
+            max-height: 90px; /* Restores your logo size while preventing square logos from breaking the navbar */
+            height: auto;
+            object-fit: contain;
+            object-position: left center;
+            transition: transform 0.2s ease; 
+        }
+
+        .logo-container:hover img,
+        .logo-container:active img {
+            transform: translateY(-2px); 
+        }
+
+        .search-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 400px;
+        }
+
+         .search-bar {
+            width: 100%;
+            padding: 12px 45px 12px 24px; 
+            border-radius: 30px;
+            border: 1px solid #ccc;
+            outline: none;
+            font-size: 14px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease; 
+            -webkit-appearance: none;
+            appearance: none;
+            cursor: text;
+        }
+
+        /* Kill the native clear "X" that type="search" adds in WebKit/Blink */
+        .search-bar::-webkit-search-cancel-button,
+        .search-bar::-webkit-search-decoration,
+        .search-bar::-webkit-search-results-button,
+        .search-bar::-webkit-search-results-decoration {
+            -webkit-appearance: none;
+            display: none;
+        }
+
+        .search-bar:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06); 
+            transform: translateY(-1px); 
+        }
+
+        .search-bar:focus {
+            border-color: #1a4c7b; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06); 
+            transform: translateY(-1px);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 16px;
+            pointer-events: none; 
+        }
+
+        /* Search Suggestions Dropdown */
+        .search-suggestions {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(224, 224, 224, 0.8);
+            z-index: 100;
+            display: none; 
+            flex-direction: column;
+            overflow: hidden;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .search-suggestions.show {
+            display: flex;
+        }
+
+        .suggestion-item {
+            padding: 12px 20px;
+            font-size: 13px;
+            color: #475569;
+            cursor: pointer;
+            border-bottom: 1px solid #f1f5f9;
+            transition: background 0.2s, color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item:hover,
+        .suggestion-item.kb-active {
+            background: #f8fafc;
+            color: #1a4c7b;
+        }
+
+        body.dark-mode .search-suggestions {
+            background: rgba(30, 41, 59, 0.95);
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        body.dark-mode .suggestion-item {
+            color: #cbd5e1;
+            border-bottom-color: rgba(255, 255, 255, 0.05);
+        }
+
+         body.dark-mode .suggestion-item:hover,
+        body.dark-mode .suggestion-item.kb-active {
+            background: rgba(255, 255, 255, 0.05);
+            color: #60a5fa;
+        }
+
+        .profile-button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 5px 15px 5px 5px;
+            border: 1px solid #e0e0e0;
+            border-radius: 30px;
+            background: #ffffff;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        .profile-button:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            transform: translateY(-1px);
+        }
+
+       .profile-avatar-custom {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: #eaf1f8; 
+            color: #1a4c7b; 
+            padding: 6px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .profile-dropdown-icon {
+            font-size: 12px;
+            color: #666;
+            margin-left: 2px;
+        }
+
+        /* Profile Dropdown Menu Elements */
+        .profile-menu-container {
+            position: relative;
+            width: 240px; 
+            display: flex;
+            justify-content: flex-end; 
+        }
+
+        .profile-dropdown-menu {
+            display: flex; 
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-15px); 
+            transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0.2s; 
+            
+            position: absolute;
+            top: 55px;
+            right: 0;
+            background-color: #ffffff;
+            min-width: 220px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            border-radius: 8px;
+            border: 1px solid #eee;
+            z-index: 100;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .profile-dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0); 
+        }
+
+        .dropdown-item {
+            padding: 12px 20px;
+            text-decoration: none;
+            color: #444;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background 0.2s;
+        }
+
+        .dropdown-item i {
+            color: #1a4c7b;
+            width: 16px;
+            text-align: center;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f5f8fa;
+        }
+
+        .dropdown-item.logout {
+            color: #d9534f;
+        }
+
+        .dropdown-item.logout i {
+            color: #d9534f;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background-color: #f0f0f0;
+            margin: 4px 0;
+        }
+
+        /* Light/Dark Mode Toggle Switch */
+        .theme-toggle-item {
+            justify-content: space-between;
+            cursor: default;
+        }
+
+        .theme-toggle-item:hover {
+            background-color: transparent; 
+        }
+
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 36px;
+            height: 20px;
+        }
+
+        .theme-switch input { 
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 5; 
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            z-index: 1; 
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #1a4c7b; 
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(16px);
+        }
+
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        /* Main Grid Layout */
+        .main-content {
+            padding: 80px 10vw 40px 10vw; 
+            display: flex;
+            justify-content: center;
+            position: relative;
+            z-index: 10; 
+        }
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px; 
+            width: 100%;
+            max-width: 900px; 
+            margin-top: 5vh; 
+        }
+
+        .module-card {
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(10px); 
+            -webkit-backdrop-filter: blur(10px); 
+            border: 1px solid rgba(224, 224, 224, 0.8);
+            border-radius: 8px;
+            padding: 20px 15px; 
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            min-height: 115px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease, border-color 0.3s ease; 
+            cursor: pointer;
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px); 
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08); 
+            border-color: rgba(26, 76, 123, 0.3); 
+        }
+
+        .module-icon {
+            font-size: 24px; 
+            color: #1a4c7b; 
+            margin: 0 auto 10px auto; 
+            display: block;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+
+        .module-card:hover .module-icon {
+            transform: scale(1.15); 
+        }
+
+        .module-card h3 {
+            font-size: 14px; 
+            color: #1a4c7b; 
+            margin-bottom: 8px;
+        }
+
+        .module-card p {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .module-card span {
+            font-size: 12px;
+            font-weight: bold;
+            color: #444;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: color 0.3s ease;
+        }
+
+        .module-card span::after {
+            content: "\f061"; 
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            font-size: 11px;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            color: #1a4c7b;
+        }
+
+        .module-card:hover span::after {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 10px; 
+            font-weight: bold;
+            color: #555555; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-highlight {
+            color: #4CAF50; 
+        }
+
+        /* --- Profile Modal Styles --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.3); 
+            backdrop-filter: blur(8px); 
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999; 
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(224, 224, 224, 0.8);
+            border-radius: 8px;
+            width: 100%;
+            max-width: 450px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transform: translateY(-20px);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: translateY(0); 
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 18px;
+            color: #1a4c7b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: #64748b;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .modal-close:hover {
+            color: #d9534f;
+        }
+
+        .modal-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .modal-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+
+        .modal-form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .modal-form-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .modal-form-control {
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-size: 13px;
+            color: #333;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .modal-form-control:focus {
+            border-color: #1a4c7b;
+            box-shadow: 0 0 0 3px rgba(26, 76, 123, 0.15);
+        }
+
+        .modal-form-control:disabled {
+            background-color: #f1f5f9;
+            color: #94a3b8;
+            cursor: not-allowed;
+            border-color: #e2e8f0;
+        }
+
+        .modal-info-text {
+            font-size: 11px;
+            color: #b45309; 
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .modal-btn {
+            background: linear-gradient(135deg, #1a4c7b 0%, #143b61 100%);
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(26, 76, 123, 0.2);
+        }
+
+        .modal-btn.locked {
+            background: #e2e8f0;
+            color: #64748b;
+            box-shadow: none;
+            cursor: pointer; 
+            border: 1px solid #cbd5e1;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn.locked.unlocking {
+            background-color: #4CAF50 !important;
+            color: #ffffff !important;
+            border-color: #4CAF50 !important;
+            transition: all 2s linear; 
+        }
+
+        .modal-btn-secondary {
+            background: #e2e8f0;
+            color: #333333;
+            border: 1px solid #cbd5e1;
+        }
+        
+        .modal-btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        /* --- System Updates Panel --- */
+        .update-tab {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(224, 224, 224, 0.8);
+            border-left: none;
+            padding: 15px 10px;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            z-index: 40;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            transition: padding 0.2s ease, background 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .update-tab:hover {
+            padding-left: 15px;
+            background: #ffffff;
+        }
+        
+        .update-tab i {
+            color: #1a4c7b;
+            font-size: 18px;
+            display: inline-block; 
+        }
+        
+        @keyframes bellRing {
+            0%, 100% { transform: rotate(0); }
+            10%, 30%, 50% { transform: rotate(15deg); }
+            20%, 40% { transform: rotate(-15deg); }
+            60% { transform: rotate(0); }
+        }
+        
+        .update-tab i.ringing {
+            animation: bellRing 1.5s ease-in-out infinite;
+            transform-origin: top center;
+        }
+        
+        .update-badge-count {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background-color: #ef4444;
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: 800;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(239, 68, 68, 0.6);
+            border: 2px solid #ffffff;
+            z-index: 2;
+        }
+        body.dark-mode .update-badge-count { border-color: rgba(30, 41, 59, 1); }
+
+        .update-backdrop {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+            z-index: 45; 
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .update-backdrop.active {
+            opacity: 1; visibility: visible;
+        }
+        
+        .update-panel {
+            position: fixed;
+            top: 20px;
+            left: -400px; 
+            width: 350px;
+            height: calc(100vh - 40px);
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(224, 224, 224, 0.8);
+            border-radius: 12px;
+            z-index: 50;
+            box-shadow: 10px 10px 40px rgba(0,0,0,0.15);
+            transition: left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .update-panel.active {
+            left: 20px; 
+        }
+        
+        .update-header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .update-greeting { font-size: 18px; font-weight: 500; color: #475569; letter-spacing: 0.5px; }
+        body.dark-mode .update-greeting { color: #94a3b8; }
+
+        .update-header h2 {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            color: #475569;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .update-close {
+            background: none;
+            border: none;
+            font-size: 16px;
+            color: #64748b;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .update-close:hover { color: #d9534f; }
+        
+        .update-content {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        @keyframes slideInFade {
+            from { opacity: 0; transform: translateX(-15px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .update-card {
+            background: rgba(248, 250, 252, 0.8);
+            border: none;
+            border-left: 3px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 12px 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+            opacity: 0; 
+        }
+        
+        .update-panel.active .update-card {
+            animation: slideInFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        
+        .update-panel.active .update-card:nth-child(2) { animation-delay: 0.1s; }
+        .update-panel.active .update-card:nth-child(3) { animation-delay: 0.2s; }
+        .update-panel.active .update-card:nth-child(4) { animation-delay: 0.3s; }
+
+        .update-card:hover {
+            transform: translateX(4px);
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            cursor: pointer;
+        }
+        
+        .update-card.feature { border-left-color: #3b82f6; }
+        .update-card.maintenance { border-left-color: #10b981; }
+        
+        .update-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .update-badge {
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 3px 6px;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+        }
+        
+        .badge-new { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border: 1px solid rgba(59,130,246,0.2); }
+        .badge-fix { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.2); }
+        
+        .update-date { font-size: 10px; color: #94a3b8; font-weight: 600; }
+        
+        .update-card-header { display: flex; justify-content: space-between; align-items: flex-start; cursor: pointer; margin-bottom: 0; }
+        .update-card:hover .update-card-header { margin-bottom: 8px; }
+        .update-card h4 { font-size: 18px; font-weight: 700; color: #334155; margin: 0; transition: color 0.2s; }
+        .update-card-header:hover h4 { color: #1a4c7b; }
+        body.dark-mode .update-card-header:hover h4 { color: #60a5fa; }
+        
+        .update-card > :not(.update-card-header) { max-height: 0; opacity: 0; overflow: hidden; margin-top: 0 !important; transition: all 0.3s ease; }
+        .update-card:hover > :not(.update-card-header) { max-height: 200px; opacity: 1; margin-top: 8px !important; }
+        
+        .update-card p { font-size: 15px; color: #64748b; line-height: 1.5; margin: 0; }
+        
+        .pin-btn { background: none; border: none; color: #cbd5e1; cursor: pointer; font-size: 16px; transition: color 0.2s, transform 0.2s; padding: 2px; }
+        .pin-btn:hover { color: #1a4c7b; transform: scale(1.1); }
+        .update-card.is-pinned .pin-btn { color: #f97316; transform: rotate(-45deg); }
+        body.dark-mode .pin-btn:hover { color: #60a5fa; }
+
+        .solid-label { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 9px; font-weight: 800; text-transform: uppercase; color: #ffffff; letter-spacing: 0.5px; }
+        .solid-label.bug { background-color: #ef4444; }
+
+        /* --- ESS LIVE NOTIFICATIONS --- */
+        /* Auto-heal: forced visible so these never depend on the panel's entry animation */
+        .update-card.ess-live { opacity: 1 !important; border-left-color: #f97316; animation: none !important; }
+        .update-card.ess-live > :not(.update-card-header) { max-height: 200px; opacity: 1; margin-top: 8px !important; }
+        .update-card.ess-live h4 { font-size: 15px; }
+        .ess-live-count { background: #f97316; color: #ffffff; font-size: 11px; font-weight: 800; min-width: 22px; text-align: center; padding: 2px 7px; border-radius: 999px; }
+        .ess-divider { height: 1px; background: rgba(148, 163, 184, 0.25); margin-top: 15px; }
+                body.dark-mode .update-card.ess-live { border-left-color: #fb923c; }
+
+        /* --- ESS NOTICE (modern card) ---
+           Standalone component so it does not inherit .update-card's
+           hover-reveal + entry animation rules. */
+        .ess-notice {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 14px;
+            border-radius: 14px;
+            background: #ffffff;
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(6px);
+            animation: essNoticeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        @keyframes essNoticeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .ess-notice:hover {
+            transform: translateY(-1px);
+            border-color: rgba(26, 76, 123, 0.35);
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+        }
+
+        .ess-notice-icon {
+            flex: 0 0 38px;
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            background: rgba(148, 163, 184, 0.14);
+            color: #64748b;
+        }
+        .ess-notice.tone-amber .ess-notice-icon { background: rgba(249, 115, 22, 0.11); color: #ea580c; }
+        .ess-notice.tone-blue  .ess-notice-icon { background: rgba(59, 130, 246, 0.11); color: #2563eb; }
+        .ess-notice.tone-rose  .ess-notice-icon { background: rgba(244, 63, 94, 0.11);  color: #e11d48; }
+
+        .ess-notice-body { flex: 1; min-width: 0; }
+        .ess-notice-title {
+            display: block;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .ess-notice-sub {
+            display: block;
+            font-size: 11.5px;
+            color: #64748b;
+            margin-top: 3px;
+            line-height: 1.35;
+        }
+
+        .ess-notice-count {
+            flex: 0 0 auto;
+            min-width: 22px;
+            height: 22px;
+            padding: 0 7px;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 800;
+            background: rgba(15, 23, 42, 0.06);
+            color: #334155;
+        }
+        .ess-notice.tone-amber .ess-notice-count { background: rgba(249, 115, 22, 0.13); color: #c2410c; }
+        .ess-notice.tone-blue  .ess-notice-count { background: rgba(59, 130, 246, 0.13); color: #1d4ed8; }
+        .ess-notice.tone-rose  .ess-notice-count { background: rgba(244, 63, 94, 0.13);  color: #be123c; }
+
+        .ess-notice-cta {
+            flex: 0 0 auto;
+            font-size: 11px;
+            color: #94a3b8;
+            opacity: 0;
+            transform: translateX(-4px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .ess-notice:hover .ess-notice-cta { opacity: 1; transform: translateX(0); }
+
+        /* Dark mode */
+        body.dark-mode .ess-notice {
+            background: rgba(30, 41, 59, 0.6);
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow: none;
+        }
+        body.dark-mode .ess-notice:hover {
+            border-color: rgba(96, 165, 250, 0.45);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+        }
+        body.dark-mode .ess-notice-title { color: #e2e8f0; }
+        body.dark-mode .ess-notice-sub { color: #94a3b8; }
+        body.dark-mode .ess-notice-count { background: rgba(255, 255, 255, 0.08); color: #cbd5e1; }
+        body.dark-mode .ess-notice.tone-amber .ess-notice-icon { background: rgba(251, 146, 60, 0.16); color: #fb923c; }
+        body.dark-mode .ess-notice.tone-blue  .ess-notice-icon { background: rgba(96, 165, 250, 0.16); color: #60a5fa; }
+        body.dark-mode .ess-notice.tone-rose  .ess-notice-icon { background: rgba(251, 113, 133, 0.16); color: #fb7185; }
+        body.dark-mode .ess-notice.tone-amber .ess-notice-count { background: rgba(251, 146, 60, 0.16); color: #fdba74; }
+        body.dark-mode .ess-notice.tone-blue  .ess-notice-count { background: rgba(96, 165, 250, 0.16); color: #93c5fd; }
+        body.dark-mode .ess-notice.tone-rose  .ess-notice-count { background: rgba(251, 113, 133, 0.16); color: #fda4af; }
+        
+        /* Dark Mode Overrides */
+        body.dark-mode .update-tab { background: rgba(30, 41, 59, 0.65); border-color: rgba(255, 255, 255, 0.08); }
+        body.dark-mode .update-tab:hover { background: rgba(30, 41, 59, 0.9); }
+        body.dark-mode .update-tab i { color: #cbd5e1; }
+        body.dark-mode .update-panel { background: rgba(30, 41, 59, 0.65); border-color: rgba(255, 255, 255, 0.08); }
+        body.dark-mode .update-header { border-color: rgba(255,255,255,0.1); }
+        body.dark-mode .update-header h2 { color: #cbd5e1; }
+        body.dark-mode .update-card { background: rgba(255, 255, 255, 0.05); border: none; border-left: 3px solid #475569; }
+        body.dark-mode .update-card:hover { background: rgba(255, 255, 255, 0.1); box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+        body.dark-mode .update-card.feature { border-left-color: #3b82f6; }
+        body.dark-mode .update-card.maintenance { border-left-color: #10b981; }
+        body.dark-mode .update-card h4 { color: #f8fafc; }
+        body.dark-mode .update-card p { color: #94a3b8; }
+        
+        /* Modern Loading Overlay */
+        .module-loader {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            display: flex; justify-content: center; align-items: center; z-index: 99999; 
+            opacity: 0; visibility: hidden; transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s;
+        }
+        .module-loader.active { opacity: 1; visibility: visible; }
+        
+        /* Adds a subtle lift effect when the loader appears */
+        .loader-content { display: flex; flex-direction: column; align-items: center; gap: 30px; transform: translateY(20px); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        .module-loader.active .loader-content { transform: translateY(0); }
+        
+        /* Bouncing Dots Animation */
+        .dots-loader { display: flex; gap: 6px; }
+        .dots-loader div {
+            width: 10px; height: 10px; border-radius: 50%; background-color: #1a4c7b;
+            animation: dotWave 1.2s infinite ease-in-out both;
+        }
+        .dots-loader div:nth-child(1) { animation-delay: -0.6s; }
+        .dots-loader div:nth-child(2) { animation-delay: -0.5s; }
+        .dots-loader div:nth-child(3) { animation-delay: -0.4s; }
+        .dots-loader div:nth-child(4) { animation-delay: -0.3s; }
+        .dots-loader div:nth-child(5) { animation-delay: -0.2s; }
+        .dots-loader div:nth-child(6) { animation-delay: -0.1s; }
+        
+        @keyframes dotWave {
+            0%, 80%, 100% { transform: translateY(0); opacity: 0.3; }
+            40% { transform: translateY(-6px); opacity: 1; }
+        }
+        
+        /* Glowing Breathing Text */
+        .loader-text { font-size: 13px; font-weight: 800; color: #1a4c7b; letter-spacing: 4px; text-transform: uppercase; animation: pulseText 1.5s ease-in-out infinite; }
+        @keyframes pulseText { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; text-shadow: 0 0 10px rgba(26, 76, 123, 0.3); } }
+
+       /* Dark Mode */
+        html.dark-mode, html.dark-mode body { background-color: #0f172a !important; color: #e2e8f0 !important; }
+        html.dark-mode .background-container, body.dark-mode .background-container { background-image: linear-gradient(rgba(19, 19, 20, 0.75), rgba(19, 19, 20, 0.75)), url('black.png'); }
+        body.dark-mode .module-card { background: rgba(30, 41, 59, 0.65); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease; }
+        body.dark-mode .module-card:hover { background: rgba(30, 41, 59, 0.85); border-color: rgba(203, 213, 225, 0.2); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4); }
+        body.dark-mode .module-card h3, body.dark-mode .module-icon { color: #cbd5e1; }
+        body.dark-mode .module-card p, body.dark-mode .module-card span { color: #94a3b8; }
+        body.dark-mode .module-card span::after { color: #60a5fa; }
+        body.dark-mode .search-bar { background-color: rgba(30, 41, 59, 0.8); border-color: rgba(255, 255, 255, 0.1); color: #e2e8f0; }
+        body.dark-mode .search-bar:hover, body.dark-mode .search-bar:focus { box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        body.dark-mode .search-bar::placeholder, body.dark-mode .search-icon { color: #64748b; }
+        body.dark-mode .profile-button { background-color: rgba(30, 41, 59, 0.8) !important; border-color: rgba(255, 255, 255, 0.1) !important; }
+        body.dark-mode .profile-avatar-custom { background-color: #334155 !important; color: #cbd5e1 !important; }
+        body.dark-mode .profile-name, body.dark-mode .profile-dropdown-icon { color: #e2e8f0 !important; }
+        body.dark-mode .profile-dropdown-menu { background-color: rgba(30, 41, 59, 0.75); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
+        body.dark-mode .dropdown-item { color: #e2e8f0; }
+        body.dark-mode .dropdown-item i { color: #cbd5e1; }
+        body.dark-mode .dropdown-item:hover, body.dark-mode .dropdown-divider { background-color: rgba(255, 255, 255, 0.08); }
+        body.dark-mode .footer { color: #64748b; }
+        body.dark-mode .modal-content { background: rgba(30, 41, 59, 0.65); border-color: rgba(255, 255, 255, 0.08); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); }
+        body.dark-mode .modal-header h2 { color: #cbd5e1; }
+        body.dark-mode .modal-form-group label { color: #94a3b8; }
+        body.dark-mode .modal-form-control { background-color: rgba(15, 23, 42, 0.5); border: 1px solid rgba(255, 255, 255, 0.1); color: #e2e8f0; }
+        body.dark-mode .modal-form-control:focus { background-color: rgba(15, 23, 42, 0.8); border-color: rgba(203, 213, 225, 0.4); box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05); }
+        body.dark-mode .modal-form-control:disabled { background-color: rgba(15, 23, 42, 0.2); color: #64748b; border-color: rgba(255, 255, 255, 0.03); cursor: not-allowed; }
+        body.dark-mode .modal-info-text { color: #fde047; }
+        body.dark-mode .modal-footer { border-color: rgba(255, 255, 255, 0.1); }
+        body.dark-mode .modal-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.15); }
+        body.dark-mode .modal-btn:hover { background: rgba(255, 255, 255, 0.15); }
+        body.dark-mode .modal-btn-secondary { background: transparent; color: #cbd5e1; border-color: rgba(255, 255, 255, 0.15); }
+       body.dark-mode .modal-btn-secondary:hover { background: rgba(255, 255, 255, 0.05); color: #ffffff; }
+        
+       /* Dark Mode overrides for the Modern Loader */
+        body.dark-mode .module-loader { background: rgba(15, 23, 42, 0.85); }
+        body.dark-mode .dots-loader div { background-color: #cbd5e1; box-shadow: 0 0 8px rgba(255, 255, 255, 0.4); }
+        body.dark-mode .loader-text { color: #cbd5e1; text-shadow: 0 0 10px rgba(255, 255, 255, 0.1); }
+
+        .sugg-icon { color: #1a4c7b; }
+        .sugg-title { color: #334155; }
+        .sugg-module { color: #64748b; }
+        body.dark-mode .sugg-icon, body.dark-theme .sugg-icon { color: #94a3b8; }
+        body.dark-mode .sugg-title, body.dark-theme .sugg-title { color: #ffffff; }
+        body.dark-mode .sugg-module, body.dark-theme .sugg-module { color: #cbd5e1; }
+
+        /* Responsive */
+        @media (max-width: 950px) { .module-grid { grid-template-columns: repeat(2, 1fr); } .search-wrapper { width: 300px; } }
+        @media (max-width: 650px) { .navbar { flex-direction: column; gap: 20px; padding: 20px; } .search-wrapper { width: 100%; } .module-grid { grid-template-columns: 1fr; } .main-content { padding: 20px 5vw; } .footer { position: static; padding: 20px; } }
+
+        /* --- AUTO HEAL: JS VISIBILITY HELPERS --- */
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <!-- Background Image Layer -->
+    <div class="background-container"></div>
+    
+    <!-- System Updates Panel & Trigger -->
+    <div class="update-tab" onclick="toggleUpdatePanel()" title="System Updates">
+        <div class="update-badge-count" id="updateUnreadDot" style="display: none;">0</div>
+        <i class="fas fa-bell"></i>
+    </div>
+
+    <div class="update-backdrop" id="updateBackdrop" onclick="closeUpdatePanel()"></div>
+
+    <div class="update-panel" id="updatePanel">
+        <div class="update-header">
+            <h2><i class="fas fa-bell" style="margin-right: 8px;"></i>System Notifications</h2>
+            <button class="update-close" onclick="closeUpdatePanel()"><i class="fas fa-chevron-left"></i></button>
+        </div>
+       <div class="update-content">
+
+            <!-- ESS NOTIFICATIONS (LIVE) - populated by loadEssNotifications() in launchpad.js -->
+            <div id="essNotifyBlock" class="hidden">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <span class="update-greeting">ESS Notifications</span>
+                    <button onclick="loadModule('ESSMaster.html?section=requests')" style="background: none; border: none; color: #64748b; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                        <i class="fas fa-arrow-right-to-bracket"></i> View All
+                    </button>
+                </div>
+                                <div id="essNotifyList" style="display: flex; flex-direction: column; gap: 10px;"></div>
+                <div class="ess-divider"></div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;" id="updateActionBar">
+                <span class="update-greeting">System Log</span>
+                <button onclick="clearAllUpdates()" style="background: none; border: none; color: #64748b; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: color 0.2s;">
+                    <i class="fas fa-check-double"></i> Clear All
+                </button>
+            </div>
+            <div id="updateEmptyState" style="display: none; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; opacity: 0.6;">
+                <i class="fas fa-inbox" style="font-size: 40px; color: #94a3b8; margin-bottom: 15px;"></i>
+                <h4 style="color: #64748b; font-size: 14px; margin-bottom: 5px;">You're all caught up!</h4>
+                <p style="color: #94a3b8; font-size: 11px; max-width: 200px;">There are no new system updates or announcements at this time.</p>
+            </div>
+            <!-- Notifications will inject here -->
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <nav class="navbar">
+        <div class="logo-container">
+            <img id="tenantLogo" src="logo.png" alt="tnaafrica Logo" class="hidden">
+            <div id="tenantLogoPlaceholder" class="text-xs text-gray-500 font-bold ml-2">Logo Placeholder</div>
+        </div>
+        <div class="search-container">
+            <div class="search-wrapper">
+                <input type="search" id="mainSearchInput" name="lp_global_query" class="search-bar" placeholder="Search..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" readonly data-form-type="other" data-lpignore="true" data-1p-ignore data-bwignore="true" aria-label="Search screens and modules">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <div id="searchSuggestions" class="search-suggestions"></div>
+            </div>
+        </div>
+        <div class="profile-menu-container">
+            <div class="profile-button" onclick="toggleDropdown()">
+                <!-- Custom Inline SVG Smiley -->
+                <svg id="launchpadProfileIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="profile-avatar-custom" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M32 30 C35 30, 36 45, 33 50 C29 48, 28 32, 32 30 Z" />
+                    <path d="M68 28 C71 29, 72 46, 68 49 C64 47, 63 31, 68 28 Z" />
+                    <path d="M15 55 C35 85, 65 85, 85 55 C70 75, 30 75, 15 55 Z" />
+                </svg>
+                <img id="launchpadProfilePic" src="" class="hidden" style="display: none; width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 1px solid #cbd5e1;">
+                <span class="profile-name" id="displayUsername">Loading...</span>
+                <span class="profile-dropdown-icon">▼</span>
+            </div>
+            
+            <!-- Hidden Dropdown Menu -->
+            <div class="profile-dropdown-menu" id="profileDropdown">
+                <!-- Kept hidden for JS auto-heal compatibility -->
+                <div id="displayTenant" class="hidden"></div>
+                
+                <a href="#" class="dropdown-item" onclick="openProfileModal()"><i class="fa-solid fa-user"></i> Profile</a>
+                <a href="Settings.html" class="dropdown-item hidden" id="btnSettings"><i class="fa-solid fa-gear"></i> Settings</a>
+               <a href="ess_dashboard.html" class="dropdown-item"><i class="fa-solid fa-mobile-screen-button"></i> ESS</a>
+              <a href="#" class="dropdown-item hidden" id="btnConnectPhone" onclick="if (typeof openLaunchpadConnectQr === 'function') openLaunchpadConnectQr(event); return false;"><i class="fa-solid fa-qrcode"></i> Connect a Phone</a>
+                <a href="#" class="dropdown-item" id="btnDownloadApp" onclick="if (typeof openLaunchpadAppDownloadQr === 'function') openLaunchpadAppDownloadQr(event); return false;"><i class="fa-brands fa-android"></i> Download the App</a>
+                
+                <div class="dropdown-divider"></div>
+                
+                <div class="dropdown-item theme-toggle-item">
+                    <!-- Auto-Heal: Converted span to a linked label so clicking the text toggles the switch -->
+                    <label for="themeToggle" style="cursor: pointer; flex: 1;"><i class="fa-solid fa-moon"></i> Dark Mode</label>
+                    <label class="theme-switch">
+                        <input type="checkbox" id="themeToggle" data-theme-toggle>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                
+                <div class="dropdown-divider"></div>
+                
+                <a href="#" onclick="logout()" class="dropdown-item logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <!-- Kept God Mode Badge for JS Targeting -->
+        <div style="position: absolute; top: 20px; right: 20px; z-index: 50;">
+            <div id="godModeBadge" class="hidden" style="background-color: #dc2626; color: white; padding: 4px 16px; border-radius: 9999px; font-weight: bold; border: 1px solid #f87171; box-shadow: 0 0 10px rgba(220,38,38,0.8); font-size: 12px; animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;">
+                <i class="fas fa-radiation mr-2"></i> GOD MODE ACTIVE
+            </div>
+        </div>
+
+        <div id="mainModuleGrid" class="module-grid">
+            
+            <div id="module-empMaster" class="module-card opacity-50" onclick="if(!document.getElementById('btn-empMaster').disabled) loadModule('employeemaster.html')">
+                <i class="fa-solid fa-address-card module-icon"></i>
+                <h3>Employee Master</h3>
+                <p>Manage employee profiles, departments, and sync hardware access.</p>
+                <span id="btn-empMaster" disabled>Access Restricted</span>
+            </div>
+
+            <div id="module-timeAttendance" class="module-card opacity-50" onclick="if(!document.getElementById('btn-timeAttendance').disabled) loadModule('tna_dashboard.html')">
+                <i class="fa-solid fa-user-clock module-icon"></i>
+                <h3>Time & Attendance</h3>
+                <p>Manage employee clock-ins, timesheets, and offline sync logs.</p>
+                <span id="btn-timeAttendance" disabled>Access Restricted</span>
+            </div>
+
+            <div id="module-hr" class="module-card opacity-50" onclick="if(!document.getElementById('btn-hr').disabled) loadModule('hr_dashboard.html')">
+                <i class="fa-solid fa-users-gear module-icon"></i>
+                <h3>HR Management</h3>
+                <p>Track infringements, performance notes, and field HR records.</p>
+                <span id="btn-hr" disabled>Access Restricted</span>
+            </div>
+
+            <div id="module-fuel" class="module-card opacity-50" onclick="if(!document.getElementById('btn-fuel').disabled) loadModule('Fueldashboard.html')">
+                <i class="fa-solid fa-gas-pump module-icon"></i>
+                <h3>Fuel Management</h3>
+                <p>Track fuel dispensing, vehicle efficiency, and generate reports.</p>
+                <span id="btn-fuel" disabled>Access Restricted</span>
+            </div>
+
+            <div id="module-tasks" class="module-card opacity-50" onclick="if(!document.getElementById('btn-tasks').disabled) loadModule('piecework.html')">
+                <i class="fa-solid fa-list-check module-icon"></i>
+                <h3>Production Pay</h3>
+                <p>Job assignments, progress tracking, and production reporting</p>
+                <span id="btn-tasks" disabled>Access Restricted</span>
+            </div>
+
+            <!-- Stock module hidden but required by launchpad.js -->
+            <div id="module-stock" class="hidden">
+                <button id="btn-stock"></button>
+            </div>
+
+            <div id="module-assetTagging" class="module-card opacity-50" onclick="if(!document.getElementById('btn-assetTagging').disabled) loadModule('AssetTagging.html')">
+                <i class="fa-solid fa-boxes-stacked module-icon"></i>
+                <h3>Asset Tagging & Stock Control</h3>
+                <p>Hardware lifecycle, inventory tracking, allocations, and stock management.</p>
+                <span id="btn-assetTagging" disabled>Access Restricted</span>
+            </div>
+
+            <div id="module-employeeCosts" class="module-card opacity-50" onclick="if(!document.getElementById('btn-employeeCosts').disabled) loadModule('EmployeeCosts.html')">
+                <i class="fa-solid fa-file-invoice-dollar module-icon"></i>
+                <h3>Employee Costs</h3>
+                <p>Manage employee wages, hourly rates, and overhead costing structures.</p>
+                <span id="btn-employeeCosts" disabled>Access Restricted</span>
+            </div>
+
+            <div id="module-essMaster" class="module-card opacity-50" onclick="if(!document.getElementById('btn-essMaster').disabled) loadModule('ESSMaster.html')">
+                <i class="fa-solid fa-mobile-screen-button module-icon"></i>
+                <h3>ESS Master</h3>
+                <p>Manage Employee Self Service portals, mobile configurations, and requests.</p>
+                <span id="btn-essMaster" disabled>Access Restricted</span>
+            </div>
+
+            <div id="module-contractors" class="module-card opacity-50" onclick="if(!document.getElementById('btn-contractors').disabled) loadModule('Contractors.html')">
+                <i class="fa-solid fa-truck-fast module-icon"></i>
+                <h3>Contractors & Distribution</h3>
+                <p>Manage third-party contractors, logistics, and distribution routes.</p>
+                <span id="btn-contractors" disabled>Access Restricted</span>
+            </div>
+
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        THIS SOFTWARE IS UNDER LICENSE AND DEVELOPED BY <span class="footer-highlight">TNA AFRICA "2026"</span> | <a href="https://www.tnaafrica.co.za" target="_blank" style="color:inherit; text-decoration:none;">WWW.TNAAFRICA.CO.ZA</a><br>
+        <button type="button" onclick="openPapiaModal()" style="background:none; border:none; color:#4CAF50; cursor:pointer; font-size:9px; margin-top:5px; text-transform:uppercase; font-weight:bold;">READ PAPIA / POPIA ACT</button>
+    </footer>
+
+    
+    <!-- New Profile Edit Modal -->
+    <div class="modal-overlay hidden" id="profileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-user-pen"></i> My Profile</h2>
+                <button class="modal-close" onclick="closeProfileModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="modal-form-grid">
+                <div class="modal-form-group">
+                    <label>First Name</label>
+                    <input type="text" id="profFirstName" class="modal-form-control">
+                </div>
+                <div class="modal-form-group">
+                    <label>Last Name</label>
+                    <input type="text" id="profLastName" class="modal-form-control">
+                </div>
+            </div>
+            
+            <div class="modal-form-group">
+                <label>Email Address</label>
+                <input type="email" id="profEmail" class="modal-form-control">
+            </div>
+            
+            <div class="modal-info-text">
+                <i class="fa-solid fa-circle-info"></i> Leave password fields blank if you do not want to change it.
+            </div>
+            
+            <div class="modal-form-group">
+                <label>New Password</label>
+                 <input type="password" id="profPassword" class="modal-form-control" placeholder="••••••••" autocomplete="new-password" data-form-type="other">
+            </div>
+            
+            <div class="modal-form-group">
+                <label>Confirm New Password</label>
+                <input type="password" id="profConfirmPassword" class="modal-form-control" placeholder="••••••••" autocomplete="new-password" data-form-type="other">
+            </div>
+            
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" onclick="closeProfileModal()">Cancel</button>
+                <button class="modal-btn" id="modalSaveBtn" onclick="saveProfile();"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Module Loader Overlay -->
+    <div id="moduleLoader" class="module-loader hidden">
+        <div class="loader-content">
+            <div class="dots-loader">
+                <div></div><div></div><div></div><div></div><div></div><div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Public PAPIA View Modal (Unchanged) -->
+    <div id="papiaViewModal" class="hidden fixed inset-0 bg-black/90 z-[80] flex justify-center items-center backdrop-blur-md p-4">
+        <div class="bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-2xl border border-purple-500/50 relative flex flex-col max-h-[90vh]">
+            <button type="button" onclick="closePapiaModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition"><i class="fas fa-times text-xl"></i></button>
+            <h3 class="text-xl font-bold text-white mb-2"><i class="fas fa-shield-alt mr-2 text-purple-500"></i>PAPIA / POPIA Act</h3>
+            <p class="text-xs text-gray-400 mb-4">Master Data Privacy Policy for TNA Africa.</p>
+            
+            <div id="papiaViewContent" class="flex-1 overflow-y-auto bg-gray-900 border border-gray-700 rounded p-4 text-sm text-gray-300 mb-6 font-mono whitespace-pre-wrap leading-relaxed shadow-inner">
+                <div class="text-center text-gray-500 py-10"><i class="fas fa-spinner fa-spin text-3xl mb-4"></i><br>Loading...</div>
+            </div>
+
+            <div class="flex mt-auto pt-4 border-t border-gray-700">
+                <button type="button" onclick="printPapia()" class="w-full bg-purple-700 hover:bg-purple-600 text-white p-3 rounded-lg font-bold shadow transition-all flex justify-center items-center">
+                    <i class="fas fa-file-pdf mr-2"></i> Print PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="theme.js?v=1.0.0"></script>
+    <script src="launchpad.js"></script>
+
+    <!-- UI Interaction Scripts (Injected AFTER launchpad.js to Auto-Heal interactions) -->
+    <script>
+        // --- 1. Module Loader Engine ---
+        function loadModule(targetUrl) {
+            // Same loading screen as every page (tna_loader.js): shown instantly here and carried
+            // straight on by the next page - one seamless loader instead of two.
+            // AUTO-HEAL: falls back to the old dots animation if tna_loader.js is not loaded.
+            if (window.TnaLoader) {
+                const root = document.documentElement;
+                let dark = true;
+                try { dark = localStorage.getItem('tnaafrica_theme') !== 'light'; } catch (e) {}
+                root.classList.toggle('tnl-dark', dark);
+                root.classList.remove('tnl-fading');
+                root.classList.add('tnl-loading');
+                window.location.href = targetUrl;
+                return;
+            }
+
+            const loader = document.getElementById('moduleLoader');
+            loader.classList.remove('hidden');
+            loader.classList.add('active');
+             // Short transition only - the module page now shows its own accurate loading screen
+            setTimeout(() => { window.location.href = targetUrl; }, 300);
+        }
+
+        // Auto-Heal: Hide loader when returning via browser back button (bfcache)
+        window.addEventListener('pageshow', function(event) {
+            // Coming back with the Back button: clear the loading screen started by loadModule()
+            if (event.persisted) {
+                document.documentElement.classList.remove('tnl-loading', 'tnl-fading', 'tnl-dark', 'tnl-slow');
+            }
+            const loader = document.getElementById('moduleLoader');
+            if (loader) {
+                loader.classList.remove('active');
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                }, 500); // Matches the CSS transition duration for a smooth fade out
+            }
+        });
+
+        // --- 2. Top Dropdown Toggle ---
+        function toggleDropdown() {
+            document.getElementById("profileDropdown").classList.toggle("show");
+        }
+
+        // --- 3. Auto-Heal: Patch Profile Modal Open/Close ---
+        // We override the functions so we can animate the new glass modal
+        // while still executing the data population inside launchpad.js
+        const originalOpenProfile = window.openProfileModal;
+        window.openProfileModal = function(e) {
+            if(e) e.preventDefault();
+            // Call original to populate data
+            if(typeof originalOpenProfile === 'function') originalOpenProfile();
+            
+            document.getElementById("profileModal").classList.remove('hidden');
+            setTimeout(() => { document.getElementById("profileModal").classList.add("show"); }, 10);
+            document.getElementById("profileDropdown").classList.remove("show");
+        };
+
+        const originalCloseProfile = window.closeProfileModal;
+        window.closeProfileModal = function() {
+            document.getElementById("profileModal").classList.remove("show");
+            setTimeout(() => {
+                document.getElementById("profileModal").classList.add("hidden");
+                // Reset standard hidden classes if launchpad.js needs it
+                if(typeof originalCloseProfile === 'function') originalCloseProfile();
+            }, 300);
+        };
+
+        // --- 4. Hold-to-Unlock Engine for Profile Modal (Removed for standard click saving) ---
+        // Auto-Heal: Leaving empty lock/unlock definitions in case external scripts try to call them
+        window.lockProfileModal = function() { console.log("Profile lock disabled by system settings."); };
+        window.unlockProfileModal = function() { console.log("Profile unlock disabled by system settings."); };
+
+        // --- 5. Global Search Engine ---
+        const mainSearchInput = document.getElementById('mainSearchInput');
+        const suggestionsBox = document.getElementById('searchSuggestions');
+       // ==========================================================
+        // SEARCHABLE SCREENS INSIDE EACH MODULE
+        // [ link id, screen name, icon, permission key, extra search words ]
+        // 'module' must match the tile title exactly - the tile's lock state
+        // is checked first, then the screen's own permission key.
+        // ==========================================================
+        const lpScr = (module, base, rows, extra) => rows.map(r => Object.assign({
+            module: module, url: base + r[0], name: r[1], icon: r[2], perm: r[3] || null, keys: r[4] || ''
+        }, extra || {}));
+
+        const systemScreens = [].concat(
+            lpScr('Employee Master', 'EmployeeMaster.html?view=', [
+                ['employees',  'Active Personnel',   'fa-users',       'tna_employees',          'employees staff people personnel profiles'],
+                ['terminated', 'Terminated Records', 'fa-user-slash',  'emp_master_terminated',  'terminated resigned dismissed former'],
+                ['departments','Departments',        'fa-sitemap',     'emp_master_departments', 'departments cost centres company rules'],
+                ['deptzones',  'Access Roles',       'fa-shield-alt',  'emp_master_access_roles','access roles zones doors biometric'],
+                ['teams',      'Custom Teams',       'fa-users-cog',   'emp_master_teams',       'teams groups crews'],
+                ['leave',      'Leave Management',   'fa-calendar-alt','emp_master_leave',       'leave balances annual sick days'],
+                ['attributes', 'Custom Attributes',  'fa-tags',        'emp_master_attributes',  'custom fields attributes'],
+                ['hierarchy',  'Org Hierarchy',      'fa-layer-group', 'emp_master_hierarchy',   'organogram reporting lines managers structure'],
+                ['audit',      'Audit & History',    'fa-history',     'emp_master_audit',       'audit history changes log'],
+                ['reports',    'Data Reports',       'fa-file-csv',    'emp_master_reports',     'reports export csv data']
+            ]),
+            lpScr('Time & Attendance', 'tna_dashboard.html?view=', [
+                ['core-master',      'Global Master Data',  'fa-users-cog',          'tna_employees',  'employees master data shifts profiles'],
+                ['high-level',       'High Level Overview', 'fa-globe-africa',       'tna_dashboard',  'overview summary'],
+                ['maps',             'Maps',                'fa-map-marked-alt',     'tna_maps',       'map geofence locations gps'],
+                ['dashboard',        'Dashboard',           'fa-chart-line',         'tna_dashboard',  'dashboard charts'],
+                ['shifts',           'Shift Rules',         'fa-calendar-alt',       'tna_shifts',     'shifts rules hours'],
+                ['roster',           'Weekly Roster',       'fa-clipboard-list',     'tna_roster',     'roster schedule week'],
+                ['workflow',         'Manager Inbox',       'fa-inbox',              'tna_inbox',      'inbox approvals exceptions workflow'],
+                ['team-view',        'Team View',           'fa-users-cog',          'tna_team_view',  'team status'],
+                ['attendance',       'Actual Attendance',   'fa-user-check',         'tna_attendance', 'attendance present clockings'],
+                ['violations',       'Auto-Violations',     'fa-exclamation-triangle','tna_violations','violations late absent missing punch'],
+                ['ot-validations',   'OT Validations',      'fa-stopwatch',          'tna_overtime',   'overtime validations approve'],
+                ['timelogs',         'Time Logs',           'fa-history',            'tna_logs',       'time logs punches clock records'],
+                ['reports',          'Analytics & Reports', 'fa-chart-pie',          'tna_reports',    'reports analytics'],
+                ['workflow-routing', 'Workflow Routing',    'fa-project-diagram',    'tna_routing',    'routing approvers workflow'],
+                ['overtime',         'Overtime Rules',      'fa-balance-scale',      'tna_ot_rules',   'overtime rules premium'],
+                ['settings',         'System Settings',     'fa-cogs',               'tna_settings',   'settings configuration']
+            ]),
+            lpScr('Time & Attendance', 'tna_dashboard.html?view=reports&report=', [
+                ['weekly',              'Weekly Attendance Summary',       'fa-file-lines', 'rep_weekly',           'report'],
+                ['detailed_attendance', 'Employee Detailed Attendance',    'fa-file-lines', 'rep_detailed',         'report'],
+                ['mdb_attendance',      'MDB Attendance Report',           'fa-file-lines', 'rep_mdb',              'report'],
+                ['team_status',         'Team View Status Report',         'fa-file-lines', 'rep_team_status',      'report'],
+                ['muster',              'Daily Muster Roll (Present)',     'fa-file-lines', 'rep_muster',           'report present'],
+                ['absent',              'Absenteeism Report',              'fa-file-lines', 'rep_absent',           'report absent'],
+                ['leave',               'Approved Leave Report',           'fa-file-lines', 'rep_leave',            'report leave'],
+                ['violations',          'Active Violations Report',        'fa-file-lines', 'rep_violations',       'report'],
+                ['break_violations',    'Break Violations Report',         'fa-file-lines', 'rep_break_violations', 'report breaks'],
+                ['geo_violations',      'Geofence Violations Report',      'fa-file-lines', 'rep_violations',       'report gps location'],
+                ['overtime',            'Overtime & Premium Hours Report', 'fa-file-lines', 'rep_overtime',         'report ot'],
+                ['periodic_new',        'Periodic Summary (New Totals)',   'fa-file-lines', 'rep_periodic',         'report totals'],
+                ['ben_span',            'BEN SPAN (Wage Estimates)',       'fa-file-lines', 'rep_ben_span',         'report wages'],
+                ['legacy_timesheet',    'Detailed Timesheet (Legacy)',     'fa-file-lines', 'rep_legacy',           'report timesheet'],
+                ['sync_report',         'Mobile User Sync Report',         'fa-file-lines', 'rep_sync',             'report mobile']
+            ]),
+            lpScr('Employee Costs', 'EmployeeCosts.html?view=', [
+                ['overview',    'Overview',            'fa-chart-pie',            null, 'costs summary'],
+                ['components',  'Cost Components',     'fa-cubes',                null, 'components earnings deductions'],
+                ['allocation',  'Employee Allocation', 'fa-users',                null, 'allocation rates'],
+                ['wage-calc',   'Monthly Wage Calc',   'fa-calculator',           null, 'wages salary calculation payroll'],
+                ['payfiles',    'Payfiles & Export',   'fa-file-invoice-dollar',  null, 'payfile export payroll'],
+                ['wage-advice', 'Wage Advice',         'fa-envelope-open-text',   null, 'payslip wage advice'],
+                ['bank-files',  'Bank Files',          'fa-university',           null, 'bank eft payments'],
+                ['settings',    'Settings',            'fa-cogs',                 null, 'cost settings']
+            ]),
+         // Asset Tagging shows every screen to anyone with the tile; its Asset Rights
+            // only govern changes, which assetRightsGuard.js enforces on the server
+            lpScr('Asset Tagging & Stock Control', 'AssetTagging.html?view=', [
+                ['assets',          'Asset Registry',         'fa-list',               null, 'assets register fixed assets tags'],
+                ['categories',      'Asset Categories',       'fa-tags',               null, 'asset categories types'],
+                ['reports',         'Locator Report',         'fa-location-dot',       null, 'locator where assets location report'],
+                ['movements',       'Movement History',       'fa-right-left',         null, 'movements transfers asset history'],
+                ['service-history', 'Master Service History', 'fa-screwdriver-wrench', null, 'service maintenance repairs history'],
+                ['stock-items',     'Stock Catalog',          'fa-box-open',           null, 'stock items catalog products barcodes'],
+                ['stock-categories','Stock Categories',       'fa-tags',               null, 'stock categories'],
+                ['warehouses',      'Warehouses',             'fa-warehouse',          null, 'warehouses stores locations'],
+                ['stock-inventory', 'Live Inventory & GRV',   'fa-cubes',              null, 'inventory stock levels grv receive'],
+                ['grv-manager',     'GRV Manager',            'fa-clipboard-check',    null, 'grv shortages goods received'],
+                ['pos-settings',    'POS Settings',           'fa-cash-register',      null, 'pos point of sale tills settings']
+            ]),
+            // HR has no screen-level permissions - anyone with the HR tile sees every screen
+            lpScr('HR Management', 'hr_dashboard.html?view=', [
+                ['dashboard',     'Dashboard Overview',     'fa-chart-pie',           null, 'hr overview summary'],
+                ['kpi',           'Core KPIs',              'fa-tachometer-alt',      null, 'kpi metrics turnover headcount'],
+                ['employees',     'Employee Master',        'fa-users',               null, 'hr employees staff records'],
+                ['infringements', 'Infringements',          'fa-exclamation-triangle',null, 'infringements discipline warnings misconduct'],
+                ['performance',   'Performance Notes',      'fa-star',                null, 'performance notes reviews appraisal'],
+                ['onboarding',    'Contracts & Onboarding', 'fa-user-plus',           null, 'contracts onboarding new hires employment'],
+                ['workflows',     'Workflows',              'fa-project-diagram',     null, 'hr workflows approvals'],
+                ['hierarchies',   'Routing & Stand-ins',    'fa-sitemap',             null, 'routing stand-ins stand-in hierarchy approvers'],
+                ['settings',      'HR Settings',            'fa-cogs',                null, 'hr settings categories types templates']
+            ]),
+            // Contractors: 4th column is the contractor_perms.js screen key (con_*)
+            lpScr('Contractors & Distribution', 'Contractors.html?view=', [
+                ['dashboard',    'Dashboard',             'fa-tachometer-alt',  'con_dashboard', 'contractors overview'],
+                ['contractors',  'Contractors Master',    'fa-hard-hat',        'con_master',    'contractors profiles growers'],
+                ['contracts',    'Contracts',             'fa-file-signature',  'con_contracts', 'contracts templates renew'],
+                ['inbox',        'Inbox',                 'fa-inbox',           'con_inbox',     'contractors inbox approvals'],
+                ['distribution', 'Distribution Master',   'fa-route',           'con_dist',      'distribution stock grv warehouses cycles'],
+                ['progress',     'Progress',              'fa-tasks',           'con_progress',  'progress tracking'],
+                ['reports',      'Reports',               'fa-file-csv',        'con_reports',   'contractors reports sla batch'],
+                ['sms',          'SMS & Broadcast',       'fa-comment-sms',     'con_sms',       'sms broadcast messages'],
+                ['settings',     'Settings',              'fa-cog',             'con_settings',  'contractors settings currency seasons'],
+                ['hierarchy',    'Contractors Hierarchy', 'fa-sitemap',         'con_hierarchy', 'hierarchy managers levels nodes'],
+                ['locations',    'Locations Master',      'fa-map-signs',       'con_locations', 'locations areas'],
+                ['workflow',     'Workflow',              'fa-project-diagram', 'con_workflow',  'workflow rules stand-ins'],
+                ['audit',        'Audit Log',             'fa-history',         'con_audit',     'contractors audit log']
+            ], { contractors: true }),
+            // ESS actions: 4th column is the ESS permission ('leave' / 'claim'), not a role key
+            lpScr('ESS', 'ess_dashboard.html?open=', [
+                ['leave',     'Apply for Leave',        'fa-calendar-plus',        'leave', 'leave request holiday'],
+                ['claim',     'Submit an Expense Claim','fa-receipt',              'claim', 'expense claim reimbursement'],
+                ['payslips',  'My Payslips',            'fa-file-invoice-dollar',  null,    'payslip salary'],
+                ['documents', 'My Documents',           'fa-folder-open',          null,    'documents files'],
+                ['profile',   'Update My Profile',      'fa-user-pen',             null,    'profile details contact']
+            ], { ess: true })
+        );
+
+        // Same rule the module pages use: admin bypass, then the screen's own key.
+        // Includes T&A's legacy rule - general report access with no per-report
+        // keys means every report is allowed.
+        const LP_REPORT_KEYS = ['rep_weekly','rep_detailed','rep_mdb','rep_team_status','rep_muster','rep_absent','rep_leave','rep_violations','rep_break_violations','rep_overtime','rep_periodic','rep_ben_span','rep_legacy','rep_sync'];
+
+        function lpScreenAllowed(perm) {
+            if (!perm) return true;
+            if (localStorage.getItem('isGodMode') === 'true' || localStorage.getItem('isTenantAdmin') === 'true') return true;
+            let perms = {};
+            try { perms = JSON.parse(localStorage.getItem('granularPermissions') || '{}'); } catch (e) {}
+            if (perms.all === true) return true;
+            if (perm.indexOf('rep_') === 0 && perms[perm] === undefined &&
+                !LP_REPORT_KEYS.some(k => perms[k] === true) && (perms.tna_reports || perms.tna_reports_export)) return true;
+            return !!perms[perm];
+        }
+
+      // Contractors screens: the exact rule from contractor_perms.js. A role with NO
+        // con_ keys = full access (its backwards-compat default); otherwise the screen key.
+        function lpContractorAllowed(key) {
+            if (!key) return true;
+            let p = {};
+            try { p = JSON.parse(localStorage.getItem('granularPermissions') || '{}') || {}; } catch (e) {}
+            if (typeof window.conBuildCan === 'function') return window.conBuildCan(p)(key);
+            const configured = Object.keys(p).some(k => k.indexOf('con_') === 0 && p[k] === true);
+            if (p.all === true || p.con_all === true || !configured) return true;
+            return p[key] === true;
+        }
+
+        // Same parsing as ess_dashboard.js - missing = allowed (its backwards-compat default)
+        function lpEssAllowed(key) {
+            if (!key) return true;
+            let p = {};
+            try {
+                const raw = localStorage.getItem('essPermissions');
+                if (typeof raw === 'string' && raw.startsWith('{')) {
+                    p = JSON.parse(raw);
+                    if (typeof p === 'string') p = JSON.parse(p);
+                }
+            } catch (e) {}
+            return p[key] !== false;
+        }
+ // --- AUTO-HEAL: stop browsers / password managers from targeting the search bar ---
+        if (mainSearchInput) {
+            const unlockSearch = function () {
+                if (mainSearchInput.hasAttribute('readonly')) {
+                    mainSearchInput.removeAttribute('readonly');
+                }
+            };
+            mainSearchInput.addEventListener('mousedown', unlockSearch);
+            mainSearchInput.addEventListener('focus', unlockSearch);
+            mainSearchInput.addEventListener('touchstart', unlockSearch, { passive: true });
+
+            // Re-arm the trap once the user leaves an empty box
+            mainSearchInput.addEventListener('blur', function () {
+                if (!mainSearchInput.value) {
+                    mainSearchInput.setAttribute('readonly', 'readonly');
+                }
+            });
+
+            // Applies even if the HTML above was not updated (works with old markup)
+            if (!mainSearchInput.name || /user|email|login|name|account/i.test(mainSearchInput.name)) {
+                mainSearchInput.name = 'lp_global_query';
+            }
+            mainSearchInput.setAttribute('autocomplete', 'off');
+            mainSearchInput.setAttribute('data-form-type', 'other');
+            mainSearchInput.setAttribute('data-lpignore', 'true');
+            mainSearchInput.setAttribute('data-1p-ignore', '');
+            mainSearchInput.setAttribute('data-bwignore', 'true');
+
+            // Belt-and-braces: mark any password field on the page as a change-password field
+            document.querySelectorAll('input[type="password"]').forEach(function (pw) {
+                if (!pw.getAttribute('autocomplete')) {
+                    pw.setAttribute('autocomplete', 'new-password');
+                }
+            });
+        }
+
+         // ==========================================================
+        // ACCESS-AWARE SEARCH
+        // The list is rebuilt on every keystroke from what THIS user can
+        // actually open, so search can never offer a screen the Launchpad
+        // or the Settings sidebar would hide from them.
+        // ==========================================================
+
+        // Settings screens - permission keys copied from the Settings sidebar
+        const LP_SETTINGS_SCREENS = [
+            { id: 'profile',       name: 'Company Profile',     icon: 'fa-building',            perm: 'set_profile',                        keys: 'company logo details entity' },
+            { id: 'api',           name: 'Connectivity',        icon: 'fa-network-wired',       perm: 'set_api,sys_api',                    keys: 'email smtp sso api zkteco sage integration' },
+            { id: 'sync',          name: 'Sync Engine',         icon: 'fa-rotate',              perm: 'set_sync,sys_api',                   keys: 'mobile app preferences hierarchy manual sync' },
+            { id: 'users',         name: 'User Access',         icon: 'fa-users',               perm: 'set_users,sys_users',                keys: 'users logins accounts create user password' },
+            { id: 'roles',         name: 'Roles & Permissions', icon: 'fa-shield-halved',       perm: 'set_roles,sys_users',                keys: 'roles permissions access rights' },
+            { id: 'zones',         name: 'Access Zones',        icon: 'fa-location-dot',        perm: 'set_zones,sys_hardware',             keys: 'zones geofence locations sites' },
+            { id: 'devices',       name: 'Hardware',            icon: 'fa-microchip',           perm: 'set_devices,sys_hardware',           keys: 'devices biometric terminals phones hardware' },
+            { id: 'errors',        name: 'Mobile Errors',       icon: 'fa-bug',                 perm: 'set_errors,sys_hardware',            keys: 'crash bug reports app errors' },
+            { id: 'billing',       name: 'Billing & Quota',     icon: 'fa-file-invoice-dollar', perm: 'set_billing',                        keys: 'billing invoice licence license quota' },
+            { id: 'audit',         name: 'Audit Trail',         icon: 'fa-clipboard-list',      perm: 'set_audit,sys_users',                keys: 'audit log history changes' },
+            { id: 'mobile-tx',     name: 'Mobile Transactions', icon: 'fa-exchange-alt',        perm: 'set_mobile_tx,sys_api',              keys: 'sync logs batches transactions' },
+            { id: 'my-tickets',    name: 'My Tickets',          icon: 'fa-headset',             perm: 'set_tickets',                        keys: 'support tickets help' },
+            { id: 'notifications', name: 'Notifications',       icon: 'fa-bell',                perm: 'set_notifications,set_sync,sys_api', keys: 'reminders alerts clock violations email' }
+        ];
+
+        // SAME rule as enforceGranularPermissions() on the Settings page
+        function lpSettingsAllowed(permList) {
+            if (localStorage.getItem('isGodMode') === 'true' || localStorage.getItem('isTenantAdmin') === 'true') return true;
+            let perms = {};
+            try { perms = JSON.parse(localStorage.getItem('granularPermissions') || '{}'); } catch (e) {}
+            if (perms.all === true) return true;
+            return String(permList || '').split(',').map(k => k.trim()).filter(Boolean).some(k => perms[k] === true);
+        }
+
+        // Modules are read from the tiles themselves, so new tiles are found automatically.
+        // A tile is open to this user once checkAccess() has removed its 'opacity-50'.
+        function lpModuleCards() {
+            const grid = document.getElementById('mainModuleGrid');
+            if (!grid || grid.classList.contains('hidden')) return [];
+            return Array.from(grid.querySelectorAll('.module-card')).map(card => {
+               // Either quote style - processed copies of this page (e.g. Encrypted) use double quotes
+                const m = (card.getAttribute('onclick') || '').match(/loadModule\(\s*['"]([^'"]+)['"]\s*\)/);
+                const h3 = card.querySelector('h3');
+                const p = card.querySelector('p');
+                return {
+                    name: h3 ? h3.textContent.trim() : '',
+                    desc: p ? p.textContent.trim() : '',
+                    url: m ? m[1] : null,
+                    open: !card.classList.contains('opacity-50') && !card.classList.contains('hidden') && card.style.display !== 'none'
+                };
+             }).filter(c => c.name);   // the title and lock state are all search needs
+        }
+
+        function lpBuildSearchIndex() {
+            const items = [];
+            const cards = lpModuleCards();
+            const isOpen = (moduleName) => cards.some(c => c.open && c.name.toLowerCase() === String(moduleName || '').toLowerCase());
+
+            // Module tiles are NOT search results - search finds screens INSIDE modules.
+            // Tiles are still read above only to check which modules this user can open.
+
+            // The original sub-screens - only when their parent module is open
+            (typeof systemScreens !== 'undefined' ? systemScreens : []).forEach(s => {
+             const allowed = s.ess ? lpEssAllowed(s.perm)
+                    : s.contractors ? (isOpen(s.module) && lpContractorAllowed(s.perm))
+                    : (isOpen(s.module) && lpScreenAllowed(s.perm));
+                if (allowed) items.push({ name: s.name, group: s.module, icon: s.icon, keys: s.keys || '', url: s.url, run: () => loadModule(s.url) });
+            });
+
+            LP_SETTINGS_SCREENS.forEach(s => {
+                if (lpSettingsAllowed(s.perm)) items.push({
+                    name: s.name, group: 'Settings', icon: s.icon, keys: s.keys,
+                    url: `Settings.html?section=${encodeURIComponent(s.id)}`,
+                    run: () => loadModule(`Settings.html?section=${encodeURIComponent(s.id)}`)
+                });
+            });
+// Screens only. Profile, ESS, Connect a Phone and Download the App
+            // live in the profile menu and are deliberately not search results.
+            return items;
+        }
+
+        // Every word typed must match; names starting with the term rank first
+        function lpSearch(term) {
+            const words = term.split(/\s+/).filter(Boolean);
+            return lpBuildSearchIndex()
+                .map(it => {
+                    const name = it.name.toLowerCase();
+                    const hay = `${name} ${String(it.group).toLowerCase()} ${String(it.keys || '').toLowerCase()}`;
+                    if (!words.every(w => hay.includes(w))) return null;
+                    return { it: it, score: name.startsWith(term) ? 0 : (name.includes(term) ? 1 : 2) };
+                })
+                .filter(Boolean)
+                .sort((a, b) => a.score - b.score || a.it.name.localeCompare(b.it.name))
+                .slice(0, 8)
+                .map(x => x.it);
+        }
+
+        if (mainSearchInput && suggestionsBox) {
+            let lpResults = [];
+            let lpActive = -1;
+            const lpEsc = (v) => String(v || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+            const lpOpen = (match) => {
+                suggestionsBox.classList.remove('show');
+                mainSearchInput.value = '';
+                if (match.url && typeof tnaRecordScreenVisit === 'function') tnaRecordScreenVisit(match.url);
+                try { match.run(); } catch (e) { console.warn('[Search] Could not open result:', e); }
+            };
+
+            const lpRender = () => {
+                suggestionsBox.innerHTML = '';
+                if (lpResults.length === 0) {
+                    suggestionsBox.innerHTML = `<div class="suggestion-item" style="cursor: default;"><span class="sugg-module" style="font-size: 12px;">No matching screens you have access to.</span></div>`;
+                    suggestionsBox.classList.add('show');
+                    return;
+                }
+                lpResults.forEach((match, idx) => {
+                    const div = document.createElement('div');
+                    div.className = 'suggestion-item' + (idx === lpActive ? ' kb-active' : '');
+                    div.innerHTML = `<div style="width: 24px; text-align: center;"><i class="fa-solid ${lpEsc(match.icon)} sugg-icon"></i></div>
+                                     <div style="display: flex; flex-direction: column;">
+                                         <span class="sugg-title" style="font-weight: 600; font-size: 13px;">${lpEsc(match.name)}</span>
+                                         <span class="sugg-module" style="font-size: 10px; text-transform: uppercase;">${lpEsc(match.group)}</span>
+                                     </div>`;
+                    div.onmousedown = (e) => e.preventDefault();   // keep focus in the box
+                    div.onclick = () => lpOpen(match);
+                    suggestionsBox.appendChild(div);
+                });
+                suggestionsBox.classList.add('show');
+            };
+
+            mainSearchInput.addEventListener('input', function () {
+                const term = this.value.toLowerCase().trim();
+                if (!term) {
+                    lpResults = [];
+                    suggestionsBox.innerHTML = '';
+                    suggestionsBox.classList.remove('show');
+                    return;
+                }
+                lpResults = lpSearch(term);
+                lpActive = lpResults.length ? 0 : -1;
+                lpRender();
+            });
+
+            mainSearchInput.addEventListener('keydown', function (e) {
+                if (!suggestionsBox.classList.contains('show')) return;
+                if (e.key === 'ArrowDown' && lpResults.length) {
+                    e.preventDefault(); lpActive = (lpActive + 1) % lpResults.length; lpRender();
+                } else if (e.key === 'ArrowUp' && lpResults.length) {
+                    e.preventDefault(); lpActive = (lpActive - 1 + lpResults.length) % lpResults.length; lpRender();
+                } else if (e.key === 'Enter' && lpActive >= 0) {
+                    e.preventDefault(); lpOpen(lpResults[lpActive]);
+                } else if (e.key === 'Escape') {
+                    suggestionsBox.classList.remove('show');
+                }
+            });
+        }
+
+        // AUTO-HEAL: the tiles test btn-X.disabled, but those are <span>s, which have
+        // no .disabled property - so a greyed-out tile was still clickable. This blocks
+        // the click on any tile that checkAccess() has not unlocked, before its own
+        // onclick runs. Unlocked tiles behave exactly as before.
+        (function () {
+            const grid = document.getElementById('mainModuleGrid');
+            if (!grid) return;
+            grid.addEventListener('click', function (e) {
+                const card = e.target.closest('.module-card');
+                if (card && card.classList.contains('opacity-50')) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+            }, true);
+        })();
+
+       // ==========================================================
+        // QUICK ACCESS - most visited screens as cards on hover/focus
+        // ==========================================================
+
+        // --- Visit store: per tenant + user, in this browser ---
+        function tnaVisitStoreKey() {
+            const who = localStorage.getItem('username') || 'user';
+            const tenant = localStorage.getItem('tenant') || 'tenant';
+            return `tna_screen_visits::${tenant}::${who}`.toLowerCase();
+        }
+        function tnaReadVisits() {
+            try { return JSON.parse(localStorage.getItem(tnaVisitStoreKey()) || '{}') || {}; }
+            catch (e) { return {}; }
+        }
+        function tnaRecordScreenVisit(url) {
+            if (!url) return;
+            const store = tnaReadVisits();
+            const now = Date.now();
+            const rec = store[url] || { count: 0, last: 0 };
+            if (now - rec.last < 10000) return;            // same screen within 10s = one visit
+            rec.count += 1;
+            rec.last = now;
+            store[url] = rec;
+            const keys = Object.keys(store);               // keep the 50 most recent
+            if (keys.length > 50) {
+                keys.sort((a, b) => store[a].last - store[b].last)
+                    .slice(0, keys.length - 50)
+                    .forEach(k => delete store[k]);
+            }
+           try { localStorage.setItem(tnaVisitStoreKey(), JSON.stringify(store)); } catch (e) {}
+            tnaScheduleVisitPush();
+        }
+
+        // --- Server copy of the visit history: survives logout, follows the user to other PCs ---
+        let tnaVisitPushTimer = null;
+        let tnaVisitPushPending = false;
+
+        function tnaVisitToken() { return localStorage.getItem('token') || localStorage.getItem('tenantToken'); }
+
+        function tnaPushVisits(keepalive) {
+            tnaVisitPushPending = false;
+            const tok = tnaVisitToken();
+            if (!tok) return;
+            try {
+                fetch('/api/users/me/screen-visits', {
+                    method: 'PUT',
+                    keepalive: !!keepalive,
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${tok}` },
+                    body: JSON.stringify({ visits: tnaReadVisits() })
+                }).catch(() => {});
+            } catch (e) {}
+        }
+
+        function tnaScheduleVisitPush() {
+            tnaVisitPushPending = true;
+            clearTimeout(tnaVisitPushTimer);
+            tnaVisitPushTimer = setTimeout(() => tnaPushVisits(false), 1500);
+        }
+
+        window.addEventListener('pagehide', () => { if (tnaVisitPushPending) tnaPushVisits(true); });
+
+        function tnaMergeVisits(a, b) {
+            const out = {};
+            [a || {}, b || {}].forEach(src => Object.keys(src).forEach(u => {
+                const v = src[u];
+                if (!v || typeof v !== 'object') return;
+                const cur = out[u] || { count: 0, last: 0 };
+                out[u] = { count: Math.max(cur.count, parseInt(v.count, 10) || 0), last: Math.max(cur.last, Number(v.last) || 0) };
+            }));
+            const keys = Object.keys(out);
+            if (keys.length > 50) {
+                keys.sort((x, y) => out[x].last - out[y].last).slice(0, keys.length - 50).forEach(k => delete out[k]);
+            }
+            return out;
+        }
+
+        // Straight after login: bring back this user's history from the server
+        (function tnaPullVisits() {
+            const tok = tnaVisitToken();
+            if (!tok) return;
+            fetch('/api/users/me/screen-visits', { headers: { 'Authorization': `Bearer ${tok}` } })
+                .then(r => (r.ok ? r.json() : null))
+                .then(d => {
+                    if (!d || d.bypassed || !d.visits) return;
+                    const merged = tnaMergeVisits(tnaReadVisits(), d.visits);
+                    try { localStorage.setItem(tnaVisitStoreKey(), JSON.stringify(merged)); } catch (e) {}
+                    if (JSON.stringify(merged) !== JSON.stringify(d.visits)) tnaScheduleVisitPush();
+                })
+                .catch(() => {});
+        })();
+
+        // --- PINNED SCREENS (max 5): kept per user on the server, like the visit history ---
+        const TNA_MAX_PINS = 5;
+        function tnaPinKey() { return tnaVisitStoreKey().replace('tna_screen_visits', 'tna_screen_pins'); }
+
+        function tnaReadPins() {
+            try {
+                const p = JSON.parse(localStorage.getItem(tnaPinKey()) || 'null');
+                if (p && Array.isArray(p.pins)) return { pins: p.pins.slice(0, TNA_MAX_PINS), ts: Number(p.ts) || 0 };
+            } catch (e) {}
+            return { pins: [], ts: 0 };
+        }
+        function tnaWritePins(pins, ts) {
+            try { localStorage.setItem(tnaPinKey(), JSON.stringify({ pins: pins, ts: ts })); } catch (e) {}
+        }
+
+        let tnaPinPushTimer = null;
+        let tnaPinPushPending = false;
+
+        function tnaPushPins(keepalive) {
+            tnaPinPushPending = false;
+            const tok = tnaVisitToken();
+            if (!tok) return;
+            try {
+                fetch('/api/users/me/screen-pins', {
+                    method: 'PUT',
+                    keepalive: !!keepalive,
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${tok}` },
+                    body: JSON.stringify(tnaReadPins())
+                }).catch(() => {});
+            } catch (e) {}
+        }
+        function tnaSchedulePinPush() {
+            tnaPinPushPending = true;
+            clearTimeout(tnaPinPushTimer);
+            tnaPinPushTimer = setTimeout(() => tnaPushPins(false), 800);
+        }
+        window.addEventListener('pagehide', () => { if (tnaPinPushPending) tnaPushPins(true); });
+
+        // Returns false when the pin limit is reached
+        function tnaTogglePin(url) {
+            const p = tnaReadPins();
+            const i = p.pins.indexOf(url);
+            if (i >= 0) {
+                p.pins.splice(i, 1);
+            } else {
+                if (p.pins.length >= TNA_MAX_PINS) return false;
+                p.pins.push(url);
+            }
+            tnaWritePins(p.pins, Date.now());
+            tnaSchedulePinPush();
+            return true;
+        }
+
+        // Straight after login: the most recent change wins (this browser or the server copy)
+        (function tnaPullPins() {
+            const tok = tnaVisitToken();
+            if (!tok) return;
+            fetch('/api/users/me/screen-pins', { headers: { 'Authorization': `Bearer ${tok}` } })
+                .then(r => (r.ok ? r.json() : null))
+                .then(d => {
+                    if (!d || d.bypassed || !Array.isArray(d.pins)) return;
+                    const local = tnaReadPins();
+                    const serverTs = Number(d.ts) || 0;
+                    if (serverTs > local.ts) tnaWritePins(d.pins.slice(0, TNA_MAX_PINS), serverTs);
+                    else if (local.ts > serverTs) tnaSchedulePinPush();
+                })
+                .catch(() => {});
+        })();
+
+        // Frequency x recency. Only screens the user can open RIGHT NOW (the
+        // search index) are eligible; gaps are filled with suggestions.
+       function lpTopScreens(limit) {
+            const index = (typeof lpBuildSearchIndex === 'function' ? lpBuildSearchIndex() : []).filter(it => it.url);
+            const byUrl = new Map(index.map(it => [it.url, it]));
+            const visits = tnaReadVisits();
+            const now = Date.now();
+            const countOf = (u) => (visits[u] && visits[u].count) || 0;
+
+            // 1. Pinned, in the order pinned - only screens this user can still open
+            const pinned = tnaReadPins().pins
+                .filter(u => byUrl.has(u))
+                .slice(0, limit)
+                .map(u => ({ it: byUrl.get(u), count: countOf(u), pinned: true }));
+            const used = new Set(pinned.map(r => r.it.url));
+
+            // 2. Most visited (frequency x recency)
+            const ranked = Object.keys(visits)
+                .filter(u => byUrl.has(u) && !used.has(u))
+                .map(u => {
+                    const v = visits[u];
+                    const days = (now - v.last) / 86400000;
+                    return { it: byUrl.get(u), count: v.count, pinned: false, score: v.count / (1 + days / 7) };
+                })
+                .sort((a, b) => b.score - a.score)
+                .slice(0, Math.max(0, limit - pinned.length));
+            ranked.forEach(r => used.add(r.it.url));
+
+            // 3. Suggestions for any empty slots
+            const fill = index.filter(it => !used.has(it.url))
+                .slice(0, Math.max(0, limit - pinned.length - ranked.length))
+                .map(it => ({ it: it, count: 0, pinned: false }));
+
+            return { visited: ranked.length, pinned: pinned.length, list: pinned.concat(ranked, fill) };
+        }
+
+        (function () {
+            const wrapper = document.querySelector('.search-wrapper');
+            if (!wrapper || !mainSearchInput) return;
+
+            // Styles live here so no <style> edits are needed
+            if (!document.getElementById('lpQuickStyles')) {
+                const st = document.createElement('style');
+                st.id = 'lpQuickStyles';
+                st.textContent = `
+                    .lpq-panel { position:absolute; top:calc(100% + 10px); left:50%; transform:translate(-50%,-6px); width:min(680px,92vw);
+                        background:rgba(255,255,255,0.97); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+                        border:1px solid rgba(224,224,224,0.9); border-radius:14px; box-shadow:0 18px 45px rgba(15,23,42,0.15);
+                        padding:14px; z-index:101; opacity:0; visibility:hidden;
+                        transition:opacity .18s ease, transform .18s ease, visibility .18s; }
+                    .lpq-panel.show { opacity:1; visibility:visible; transform:translate(-50%,0); }
+                    .lpq-head { display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:700;
+                        text-transform:uppercase; letter-spacing:.06em; color:#64748b; margin:2px 4px 12px; }
+                    .lpq-head i { color:#1a4c7b; margin-right:6px; }
+                    .lpq-hint { font-weight:500; text-transform:none; letter-spacing:0; color:#94a3b8; }
+                    .lpq-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
+                    .lpq-card { display:flex; flex-direction:column; align-items:center; text-align:center; gap:6px;
+                        padding:14px 8px 12px; border-radius:12px; border:1px solid #e2e8f0; background:#f8fafc;
+                        cursor:pointer; font-family:inherit; opacity:0; animation:lpqIn .28s ease forwards;
+                        transition:transform .18s, box-shadow .18s, border-color .18s, background .18s; }
+                    .lpq-card:hover, .lpq-card:focus-visible { transform:translateY(-3px); box-shadow:0 10px 22px rgba(26,76,123,.15);
+                        border-color:#1a4c7b; background:#fff; outline:none; }
+                    .lpq-icon { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+                        background:rgba(26,76,123,.1); color:#1a4c7b; font-size:16px; transition:transform .18s; }
+                    .lpq-card:hover .lpq-icon { transform:scale(1.1); }
+                    .lpq-name { font-size:12px; font-weight:700; color:#334155; line-height:1.25; }
+                    .lpq-module { font-size:9px; text-transform:uppercase; letter-spacing:.05em; color:#94a3b8; }
+                    .lpq-count { font-size:9px; color:#1a4c7b; background:rgba(26,76,123,.08); padding:1px 7px; border-radius:999px; }
+                    @keyframes lpqIn { from { opacity:0; } to { opacity:1; } }
+                    .lpq-card { position:relative; }
+                    .lpq-pin { position:absolute; top:6px; right:6px; width:22px; height:22px; border-radius:50%;
+                        display:flex; align-items:center; justify-content:center; font-size:10px; color:#94a3b8;
+                        opacity:0; transform:rotate(45deg); cursor:pointer;
+                        transition:opacity .15s, color .15s, background .15s, transform .15s; }
+                    .lpq-card:hover .lpq-pin { opacity:1; }
+                    .lpq-pin:hover { background:rgba(26,76,123,.1); color:#1a4c7b; }
+                    .lpq-pin.on { opacity:1; transform:rotate(0deg); color:#1a4c7b; background:rgba(26,76,123,.12); }
+                    .lpq-card.pinned { border-color:rgba(26,76,123,.45); }
+                    .lpq-noanim .lpq-card { animation:none; opacity:1; }
+                    .lpq-hint.warn { color:#dc2626; }
+                    @media (hover:none) { .lpq-pin { opacity:.6; } }
+                    body.dark-mode .lpq-pin:hover, body.dark-mode .lpq-pin.on { color:#93c5fd; background:rgba(96,165,250,.15); }
+                    body.dark-mode .lpq-card.pinned { border-color:rgba(96,165,250,.45); }
+                    @media (max-width:650px) { .lpq-grid { grid-template-columns:repeat(2,1fr); } }
+                    body.dark-mode .lpq-panel { background:rgba(30,41,59,.97); border-color:rgba(255,255,255,.1); box-shadow:0 18px 45px rgba(0,0,0,.5); }
+                    body.dark-mode .lpq-card { background:rgba(15,23,42,.6); border-color:rgba(255,255,255,.08); }
+                    body.dark-mode .lpq-card:hover, body.dark-mode .lpq-card:focus-visible { background:rgba(15,23,42,.9); border-color:#60a5fa; }
+                    body.dark-mode .lpq-name { color:#e2e8f0; }
+                    body.dark-mode .lpq-icon { background:rgba(96,165,250,.12); color:#93c5fd; }
+                    body.dark-mode .lpq-head i, body.dark-mode .lpq-count { color:#93c5fd; }
+                    body.dark-mode .lpq-count { background:rgba(96,165,250,.12); }
+                `;
+                document.head.appendChild(st);
+            }
+
+            const panel = document.createElement('div');
+            panel.className = 'lpq-panel';
+            panel.id = 'lpQuickPanel';
+            wrapper.appendChild(panel);
+
+            const esc = (v) => String(v || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+            let timer = null;
+
+             function render(noAnim) {
+                const top = lpTopScreens(5);
+                if (!top.list.length) return false;
+
+                const heading = top.pinned ? 'Pinned & most visited' : (top.visited ? 'Your most visited screens' : 'Suggested screens');
+                const icon = top.pinned ? 'fa-thumbtack' : (top.visited ? 'fa-clock-rotate-left' : 'fa-wand-magic-sparkles');
+
+                panel.innerHTML =
+                    `<div class="lpq-head"><span><i class="fa-solid ${icon}"></i>${heading}</span><span class="lpq-hint">Start typing to search</span></div>` +
+                    `<div class="lpq-grid${noAnim ? ' lpq-noanim' : ''}">` +
+                    top.list.map((r, i) => `
+                        <button type="button" class="lpq-card${r.pinned ? ' pinned' : ''}" data-idx="${i}" style="animation-delay:${i * 45}ms">
+                            <span class="lpq-pin${r.pinned ? ' on' : ''}" data-pin="${i}" role="button"
+                                  title="${r.pinned ? 'Unpin' : 'Pin to keep this card here'}" aria-label="${r.pinned ? 'Unpin' : 'Pin'} ${esc(r.it.name)}">
+                                <i class="fa-solid fa-thumbtack"></i>
+                            </span>
+                            <span class="lpq-icon"><i class="fa-solid ${esc(r.it.icon)}"></i></span>
+                            <span class="lpq-name">${esc(r.it.name)}</span>
+                            <span class="lpq-module">${esc(r.it.group)}</span>
+                            ${r.count ? `<span class="lpq-count">${r.count} visit${r.count > 1 ? 's' : ''}</span>` : ''}
+                        </button>`).join('') +
+                    `</div>`;
+
+                panel.querySelectorAll('.lpq-card').forEach(btn => {
+                    btn.onmousedown = (e) => e.preventDefault();
+                    btn.onclick = () => {
+                        const r = top.list[parseInt(btn.dataset.idx, 10)];
+                        hide();
+                        tnaRecordScreenVisit(r.it.url);
+                        try { r.it.run(); } catch (e) { console.warn('[QuickAccess] Could not open:', e); }
+                    };
+                });
+
+                // The pin never opens the screen - it only pins / unpins
+                panel.querySelectorAll('.lpq-pin').forEach(pin => {
+                    pin.onmousedown = (e) => { e.preventDefault(); e.stopPropagation(); };
+                    pin.onclick = (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const r = top.list[parseInt(pin.dataset.pin, 10)];
+                        if (!tnaTogglePin(r.it.url)) {
+                            const hint = panel.querySelector('.lpq-hint');
+                            if (hint) {
+                                hint.textContent = 'You can pin up to 5 screens - unpin one first';
+                                hint.classList.add('warn');
+                                setTimeout(() => { hint.textContent = 'Start typing to search'; hint.classList.remove('warn'); }, 2500);
+                            }
+                            return;
+                        }
+                        render(true);
+                    };
+                });
+                return true;
+            }
+
+            function show() {
+                if (mainSearchInput.value.trim()) return;   // typing = search results instead
+                if (!render()) return;
+                if (suggestionsBox) suggestionsBox.classList.remove('show');
+                panel.classList.add('show');
+            }
+            function hide() { panel.classList.remove('show'); }
+
+            wrapper.addEventListener('mouseenter', () => {
+                mainSearchInput.removeAttribute('readonly');   // ready to type straight away
+                clearTimeout(timer);
+                if (!panel.classList.contains('show')) timer = setTimeout(show, 120);
+            });
+            wrapper.addEventListener('mouseleave', () => {
+                clearTimeout(timer);
+                if (document.activeElement !== mainSearchInput) timer = setTimeout(hide, 250);
+            });
+            mainSearchInput.addEventListener('focus', show);
+            mainSearchInput.addEventListener('input', () => {
+                if (mainSearchInput.value.trim()) hide(); else show();
+            });
+            mainSearchInput.addEventListener('keydown', (e) => { if (e.key === 'Escape') hide(); });
+            mainSearchInput.addEventListener('blur', () => {
+                setTimeout(() => { if (!wrapper.matches(':hover')) hide(); }, 150);
+            });
+            document.addEventListener('click', (e) => { if (!e.target.closest('.search-wrapper')) hide(); });
+        })();
+
+        // --- 6. Click Outside Handler ---
+        window.onclick = function(event) {
+            if (!event.target.closest('.profile-menu-container')) {
+                document.querySelectorAll(".profile-dropdown-menu.show").forEach(el => el.classList.remove('show'));
+            }
+            if (!event.target.closest('.search-wrapper') && suggestionsBox) {
+                suggestionsBox.classList.remove('show');
+            }
+            if (event.target === document.getElementById("profileModal")) { closeProfileModal(); }
+        };
+
+       // --- 7. Dark Mode Engine (now delegated to theme.js) ---
+        const themeToggleCheckbox = document.getElementById("themeToggle");
+
+        // AUTO-HEAL: kept as a thin wrapper so any legacy call to this name still works.
+        function applyLaunchpadTheme(theme) {
+            if (window.TnaTheme) {
+                window.TnaTheme.apply(theme);
+                window.TnaTheme.bind();
+                return;
+            }
+            // Fallback path if theme.js failed to load for any reason
+            const isDark = (theme === "dark");
+            document.documentElement.classList.toggle("dark-mode", isDark);
+            document.documentElement.classList.toggle("light-mode", !isDark);
+            document.body.classList.toggle("dark-mode", isDark);
+            document.body.classList.toggle("light-mode", !isDark);
+            if (themeToggleCheckbox) themeToggleCheckbox.checked = isDark;
+        }
+
+        if (window.TnaTheme) {
+            // Paint the cached theme immediately and wire up the switch
+            window.TnaTheme.apply(window.TnaTheme.get());
+            window.TnaTheme.bind();
+
+            // THE FIX: pull THIS user's saved ThemePreference from the server on every
+            // load, so the theme follows the USER across devices, not just this browser.
+            window.TnaTheme.syncFromServer();
+        } else {
+            console.warn("theme.js did not load - falling back to local theme only.");
+            applyLaunchpadTheme(localStorage.getItem("tnaafrica_theme") === "light" ? "light" : "dark");
+        }
+
+        // NOTE: the checkbox listener, the localStorage write, the PUT to
+        // /api/users/me/theme and the cross-tab 'storage' listener now ALL live
+        // inside theme.js. Do not re-add them here or the theme will double-fire.
+
+        // --- 8. System Updates Drawer ---
+        function toggleUpdatePanel() {
+            document.getElementById("updatePanel").classList.toggle("active");
+            document.getElementById("updateBackdrop").classList.toggle("active");
+            const dot = document.getElementById("updateUnreadDot");
+            if(dot) dot.style.display = "none";
+            const bellIcon = document.querySelector(".update-tab i");
+            if (bellIcon) bellIcon.classList.remove("ringing");
+        }
+        function closeUpdatePanel() {
+            document.getElementById("updatePanel").classList.remove("active");
+            document.getElementById("updateBackdrop").classList.remove("active");
+        }
+        function togglePin(btn, event) {
+            if (event) event.stopPropagation();
+            btn.closest('.update-card').classList.toggle('is-pinned');
+        }
+         function clearAllUpdates() {
+            // Auto-heal: live ESS notifications are never dismissible - they disappear
+            // on their own once the request is actioned in ESS Master. Seeding pinnedCount
+            // with their count also stops the "You're all caught up" state firing wrongly.
+            const cards = document.querySelectorAll('.update-card:not(.ess-live)');
+            let pinnedCount = document.querySelectorAll('.update-card.ess-live').length;
+            cards.forEach(card => {
+                if (!card.classList.contains('is-pinned')) {
+                    card.style.transition = "opacity 0.3s, transform 0.3s";
+                    card.style.opacity = "0";
+                    card.style.transform = "translateX(20px)";
+                    setTimeout(() => card.style.display = "none", 300);
+                } else { pinnedCount++; }
+            });
+            if (pinnedCount === 0) {
+                const actionBar = document.getElementById('updateActionBar');
+                if(actionBar) actionBar.querySelector('button').style.display = "none";
+                setTimeout(() => {
+                    const emptyState = document.getElementById('updateEmptyState');
+                    if(emptyState) {
+                        emptyState.style.display = "flex";
+                        emptyState.style.animation = "slideInFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards";
+                    }
+                }, 300);
+            }
+        }
+        
+        // Setup initial bell ring if dot exists
+        setTimeout(() => {
+            const bellIcon = document.querySelector(".update-tab i");
+            if (bellIcon) bellIcon.classList.add("ringing");
+        }, 500);
+
+    </script>
+
+</body>
+</html>

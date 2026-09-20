@@ -1,0 +1,3265 @@
+const urlParams = new URLSearchParams(window.location.search);
+        const urlToken = urlParams.get('token');
+        const urlLicense = urlParams.get('licenseKey');
+
+        if (urlToken) {
+            localStorage.setItem('token', urlToken);
+            if (urlLicense) sessionStorage.setItem('LicenseKey', urlLicense);
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        const token = localStorage.getItem('token');
+        if (!token) window.location.href = '/Login.html';
+
+        const storedLicense = sessionStorage.getItem('LicenseKey');
+
+        // --- DYNAMIC TICKETING WIDGET INJECTION ---
+        // Auto-heals by checking if the script is already loaded to prevent duplicates
+        if (storedLicense && !document.getElementById('tna-support-widget-script')) {
+            const script = document.createElement('script');
+            script.id = 'tna-support-widget-script';
+
+            // Auto-route to localhost:2899 if testing locally, otherwise use the corrected production URL
+            const hostname = window.location.hostname;
+            const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.startsWith('192.168.') || hostname.startsWith('10.');
+
+            script.src = isLocal ? `http://${hostname}:2899/widget.js` : 'https://tickets.tnafrica.co.za/widget.js';
+
+            script.setAttribute('data-access-key', storedLicense);
+            script.async = false; // Force synchronous execution
+
+            // Diagnostic Auto-Heal: Alert the console if the script fails to download
+            script.onerror = function() {
+                console.error('TNA Widget failed to load. The browser could not reach:', script.src);
+            };
+
+            document.body.appendChild(script);
+        }
+
+        const ASSET_API = '/api';
+const MAIN_API = '/api';
+
+       let allAssets = [];
+        let allCategories = [];
+        let allMovements = [];
+        let allDepartments = []; 
+        
+        // Pagination Tracking
+        let currentAssetPage = 1;
+        let currentStockPage = 1;
+        let showingActiveStock = true; 
+        let showingActiveCategories = true; // Tracks Active vs Deactivated Categories
+        const itemsPerPage = 20;
+
+        window.onload = async () => {
+            document.getElementById('assetSearch').focus();
+            await loadAssignmentData(); 
+            loadAssets();
+            loadCategories();
+        };
+
+        // --- TAB LOGIC ---
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById('section-' + tabId).classList.add('active');
+            
+            if (btn) {
+                btn.classList.add('active');
+                // AUTO-HEAL: new sidebar keeps the label in a <span> (hidden when the rail is collapsed,
+                // where innerText returns ''); the old sidebar had plain text
+                const labelEl = btn.querySelector('span');
+                const label = (labelEl ? labelEl.textContent : btn.textContent).trim();
+                if (label) document.getElementById('sectionTitle').innerText = label;
+            }
+
+            if(tabId === 'assets') document.getElementById('assetSearch').focus();
+        }
+
+        function toggleAssignmentFields(prefix) {
+            const type = document.getElementById(`${prefix}AssignType`).value;
+            document.getElementById(`${prefix}EmpAssignDiv`).classList.add('hidden');
+            document.getElementById(`${prefix}DeptAssignDiv`).classList.add('hidden');
+            
+            document.getElementById(`${prefix}EmpInput`).value = '';
+            document.getElementById(`${prefix}DeptInput`).value = '';
+
+            if (type === 'employee') document.getElementById(`${prefix}EmpAssignDiv`).classList.remove('hidden');
+            if (type === 'department') document.getElementById(`${prefix}DeptAssignDiv`).classList.remove('hidden');
+        }
+
+        function getDeptName(code) {
+            if(!code) return null;
+            const d = allDepartments.find(dep => dep.DeptCode == code);
+            return d ? d.DeptName : code;
+        }
+
+        function getStatusClass(status) {
+            if (status === 'Active' || status === 'In Stock') return 'bg-green-900 text-green-300 border border-green-700';
+            if (status === 'In Repair' || status === 'Scheduled Stop') return 'bg-orange-900 text-orange-300 border border-orange-700';
+            if (status === 'Disposed' || status === 'Consumed') return 'bg-red-900 text-red-300 border border-red-700';
+            return 'bg-gray-700 text-gray-300 border border-gray-500'; // Default / In Storage
+        }
+
+        function formatAssignmentText(text) {
+            if (!text) return '-';
+            if (text.startsWith('Dept: ')) {
+                const code = text.split('Dept: ')[1].trim();
+                return `Dept: ${getDeptName(code)}`;
+            }
+            return text;
+        }
+
+        async function loadAssets() {
+            try {
+                const res = await fetch(`${ASSET_API}/assets`, { headers: { 'Authorization': `Bearer ${token}` } });
+                if(!res.ok) throw new Error("Failed to load assets");
+                allAssets = await res.json();
+                
+                // Populate the searchable dropdown list
+                const datalist = document.getElementById('assetSearchList');
+                if (datalist) {
+                    datalist.innerHTML = '';
+                    allAssets.forEach(a => {
+                        datalist.innerHTML += `<option value="${a.AssetTag}"> ${a.Name || 'Unknown Asset'} </option>`;
+                    });
+                }
+
+                filterAssets(); // Route through filter to handle pagination
+                if(!document.getElementById('section-reports').classList.contains('hidden')) generateLocatorReport();
+            } catch (err) { console.error(err); }
+        }
+
+        async function loadCategories() {
+            try {
+                const res = await fetch(`${ASSET_API}/categories`, { headers: { 'Authorization': `Bearer ${token}` } });
+                if(!res.ok) throw new Error("Failed to load categories");
+                allCategories = await res.json();
+                renderCategories(allCategories);
+
+                // Populate all Dropdowns
+                const regSelect = document.getElementById('regCategory'); // Asset Creation
+                const stockItemCatSelect = document.getElementById('newItemCategory'); // Stock Creation
+                
+                const assetFilter = document.getElementById('assetCategoryFilter'); // Asset Search
+                const stockFilter = document.getElementById('stockCategoryFilter'); // Stock Search
+                
+                let filterOptions = '<option value="">All Categories</option>';
+                let createOptions = '<option value="">-- Select Category --</option>';
+                
+                allCategories.forEach(c => {
+                    // Search filters get ALL categories (so you can find historical items)
+                    filterOptions += `<option value="${c.CategoryName}">${c.CategoryName}</option>`;
+                    
+                    // Creation dropdowns ONLY get active categories
+                    if (!c.IsDeleted) {
+                        createOptions += `<option value="${c.CategoryName}">${c.CategoryName}</option>`;
+                    }
+                });
+                
+                if(regSelect) regSelect.innerHTML = createOptions;
+                if(stockItemCatSelect) stockItemCatSelect.innerHTML = createOptions;
+                
+                if(assetFilter) assetFilter.innerHTML = filterOptions;
+                if(stockFilter) stockFilter.innerHTML = filterOptions;
+            } catch (err) { console.error(err); }
+        }
+
+        async function loadMovements() {
+            try {
+                const res = await fetch(`${ASSET_API}/assets/movements`, { headers: { 'Authorization': `Bearer ${token}` } });
+                if(!res.ok) throw new Error("Failed to load movements");
+                allMovements = await res.json();
+                renderMovements(allMovements);
+            } catch (err) { console.error(err); }
+        }
+
+        async function loadAssignmentData() {
+            try {
+                const empRes = await fetch(`${MAIN_API}/employees`, { headers: { 'Authorization': `Bearer ${token}` } });
+                if(empRes.ok) {
+                    const employees = await empRes.json();
+                    const empList = document.getElementById('employeeList');
+                    employees.forEach(emp => {
+                        empList.innerHTML += `<option value="${emp.EmployeeID} - ${emp.FirstName} ${emp.LastName}">`;
+                    });
+                }
+
+                const deptRes = await fetch(`${MAIN_API}/departments`, { headers: { 'Authorization': `Bearer ${token}` } });
+                if(deptRes.ok) {
+                    allDepartments = await deptRes.json();
+                    const deptList = document.getElementById('departmentList');
+                    allDepartments.forEach(dept => {
+                        deptList.innerHTML += `<option value="${dept.DeptCode} - ${dept.DeptName}">`;
+                    });
+                }
+            } catch (err) { console.error('Could not load assignment data', err); }
+        }
+
+        // --- PAGINATION HELPERS ---
+        function updatePaginationUI(type, current, totalPages, totalItems) {
+            const pageInfo = document.getElementById(`${type}PageInfo`);
+            const btnPrev = document.getElementById(`${type}PrevBtn`);
+            const btnNext = document.getElementById(`${type}NextBtn`);
+
+            if (pageInfo) {
+                const startItem = totalItems === 0 ? 0 : ((current - 1) * itemsPerPage) + 1;
+                const endItem = Math.min(current * itemsPerPage, totalItems);
+                pageInfo.innerHTML = `Showing <span class="font-bold text-white">${startItem}-${endItem}</span> of <span class="font-bold text-white">${totalItems}</span>`;
+            }
+
+            if (btnPrev) {
+                btnPrev.disabled = current <= 1;
+                btnPrev.className = current <= 1 ? "px-3 py-1 bg-gray-800 text-gray-600 rounded cursor-not-allowed" : "px-3 py-1 bg-blue-700 text-white hover:bg-blue-600 rounded transition shadow";
+            }
+            if (btnNext) {
+                btnNext.disabled = current >= totalPages || totalPages === 0;
+                btnNext.className = current >= totalPages || totalPages === 0 ? "px-3 py-1 bg-gray-800 text-gray-600 rounded cursor-not-allowed" : "px-3 py-1 bg-blue-700 text-white hover:bg-blue-600 rounded transition shadow";
+            }
+        }
+
+        function changeAssetPage(offset) {
+            currentAssetPage += offset;
+            filterAssets(false); // don't reset to page 1
+        }
+
+        function changeStockPage(offset) {
+            currentStockPage += offset;
+            filterStockItems(false); 
+        }
+
+        // --- FILTER / SEARCH LOGIC ---
+        function filterAssets(resetPage = true) {
+            if (resetPage) currentAssetPage = 1;
+            
+            const term = document.getElementById('assetSearch').value.toLowerCase();
+            const catFilter = document.getElementById('assetCategoryFilter').value;
+
+            const filtered = allAssets.filter(a => {
+                const matchSearch = (a.AssetTag && a.AssetTag.toLowerCase().includes(term)) || 
+                                    (a.Name && a.Name.toLowerCase().includes(term)) ||
+                                    (a.SerialNumber && a.SerialNumber.toLowerCase().includes(term));
+                const matchCat = catFilter === "" || a.Category === catFilter;
+                return matchSearch && matchCat;
+            });
+            renderAssets(filtered);
+        }
+
+        // --- RENDER LOGIC ---
+        function renderAssets(data) {
+            const tbody = document.getElementById('assetTableBody');
+            tbody.innerHTML = '';
+            
+            const totalPages = Math.ceil(data.length / itemsPerPage) || 1;
+            if (currentAssetPage > totalPages) currentAssetPage = totalPages;
+
+            const start = (currentAssetPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedData = data.slice(start, end);
+
+            if(paginatedData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-gray-400">No assets found matching criteria.</td></tr>';
+            } else {
+                paginatedData.forEach(a => {
+                    let assignedDisplay = '<span class="text-gray-500 italic">Unassigned</span>';
+                    if (a.AssignedName) {
+                        assignedDisplay = `<span class="text-blue-300 font-semibold">Emp:</span> ${a.AssignedName}`;
+                    } else if (a.AssignedToDepartmentCode) {
+                        assignedDisplay = `<span class="text-green-300 font-semibold">Dept:</span> ${getDeptName(a.AssignedToDepartmentCode)}`;
+                    }
+
+                    let intervalParts = [];
+                    if (a.ServiceIntervalMonths) intervalParts.push(`${a.ServiceIntervalMonths} M`);
+                    if (a.MeterInterval && a.MeterIntervalType) intervalParts.push(`${a.MeterInterval} ${a.MeterIntervalType}`);
+                    let intervalDisplay = intervalParts.length > 0 ? intervalParts.join(' / ') : '-';
+                    
+                    // --- Calculate Next Service Due ---
+                    let serviceStatus = '<span class="text-gray-500 italic text-[10px]">No Schedule</span>';
+                    let isDue = false;
+                    let dueReasons = [];
+
+                    if (a.LastServiceDate && a.ServiceIntervalMonths) {
+                        let nextDate = new Date(a.LastServiceDate);
+                        nextDate.setMonth(nextDate.getMonth() + a.ServiceIntervalMonths);
+                        if (new Date() >= nextDate) { isDue = true; dueReasons.push('Time'); }
+                        else { dueReasons.push(nextDate.toLocaleDateString()); }
+                    }
+
+                    if (a.MeterInterval && a.MeterIntervalType && a.LastServiceMeter !== null) {
+                        let nextMeter = parseFloat(a.LastServiceMeter) + parseFloat(a.MeterInterval);
+                        let currentMeter = parseFloat(a.CurrentMeter || 0);
+                        if (currentMeter >= nextMeter) { isDue = true; dueReasons.push(a.MeterIntervalType); }
+                        else { dueReasons.push(`${nextMeter} ${a.MeterIntervalType}`); }
+                    }
+
+                    if (isDue) {
+                        serviceStatus = `<span class="bg-orange-900 text-orange-300 border border-orange-700 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider animate-pulse shadow"><i class="fas fa-exclamation-triangle mr-1"></i>Due (${dueReasons.join(', ')})</span>`;
+                    } else if (dueReasons.length > 0) {
+                        serviceStatus = `<span class="text-gray-400 text-xs font-mono">${dueReasons.join('<br>')}</span>`;
+                    }
+
+                    if (a.OutstandingPartsCount > 0) {
+                        serviceStatus += `<div class="mt-2"><span class="bg-red-900 text-red-300 border border-red-700 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider shadow animate-pulse"><i class="fas fa-tools mr-1"></i>${a.OutstandingPartsCount} Parts Short</span></div>`;
+                    }
+
+                    let currentMeterDisplay = a.CurrentMeter ? `${parseFloat(a.CurrentMeter).toFixed(1)} ${a.MeterIntervalType || ''}` : '-';
+
+                    tbody.innerHTML += `
+                        <tr class="border-b border-gray-700 hover:bg-gray-800 transition">
+                            <td class="p-3 font-mono text-blue-400 border-r border-gray-700">${a.AssetTag}</td>
+                            <td class="p-3 border-r border-gray-700 font-bold text-gray-200">${a.Name || '-'}</td>
+                            <td class="p-3 border-r border-gray-700 text-xs text-gray-400">${a.Category || '-'}</td>
+                            <td class="p-3 border-r border-gray-700"><span class="px-2 py-1 rounded text-[10px] font-bold ${getStatusClass(a.Status)} uppercase tracking-wider">${a.Status}</span></td>
+                            <td class="p-3 border-r border-gray-700 text-xs">${assignedDisplay}</td>
+                            <td class="p-3 border-r border-gray-700 text-right font-mono text-gray-300 font-bold">${currentMeterDisplay}</td>
+                            <td class="p-3 border-r border-gray-700 text-xs font-mono text-gray-400">${intervalDisplay}</td>
+                            <td class="p-3 border-r border-gray-700 text-center">${serviceStatus}</td>
+                            <td class="p-3 text-right whitespace-nowrap text-lg">
+                                <button onclick="openUpdateMeterModal('${a.AssetID}', '${a.AssetTag}', '${a.Name}', '${a.CurrentMeter || 0}')" class="text-orange-400 hover:text-orange-300 mr-3 transition" title="Update Meter"><i class="fas fa-tachometer-alt"></i></button>
+                                <button onclick="openEditAssetModal('${a.AssetID}')" class="text-teal-400 hover:text-teal-300 mr-3 transition" title="Edit Asset"><i class="fas fa-edit"></i></button>
+                                <button onclick="openMoveModal('${a.AssetTag}', '${a.Name}')" class="text-indigo-400 hover:text-indigo-300 mr-3 transition" title="Move/Reassign"><i class="fas fa-exchange-alt"></i></button>
+                                <button onclick="openMaintModal('${a.AssetID}', '${a.AssetTag}', '${a.Name}')" class="text-yellow-500 hover:text-yellow-400 mr-3 transition" title="Service Console"><i class="fas fa-wrench"></i></button>
+                                <button onclick="printTag('${a.AssetTag}', '${a.Name}')" class="text-blue-400 hover:text-blue-300 transition" title="Print Tag"><i class="fas fa-print"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+            updatePaginationUI('asset', currentAssetPage, totalPages, data.length);
+        }
+
+        function toggleCategoryStatusView(isActive) {
+            showingActiveCategories = isActive;
+            const activeBtn = document.getElementById('viewActiveCategoryBtn');
+            const inactiveBtn = document.getElementById('viewInactiveCategoryBtn');
+            if(isActive) {
+                activeBtn.className = "px-3 py-1 text-xs font-bold rounded bg-green-700 text-white shadow";
+                inactiveBtn.className = "px-3 py-1 text-xs font-bold rounded text-gray-400 hover:text-gray-200";
+            } else {
+                inactiveBtn.className = "px-3 py-1 text-xs font-bold rounded bg-gray-600 text-white shadow";
+                activeBtn.className = "px-3 py-1 text-xs font-bold rounded text-gray-400 hover:text-gray-200";
+            }
+            filterCategories();
+        }
+
+        function filterCategories() {
+            const term = document.getElementById('categorySearch').value.toLowerCase();
+            const filtered = allCategories.filter(c => {
+                const isDel = !!c.IsDeleted;
+                const matchStatus = showingActiveCategories ? !isDel : isDel;
+                const matchSearch = c.CategoryName && c.CategoryName.toLowerCase().includes(term);
+                return matchStatus && matchSearch;
+            });
+            renderCategories(filtered);
+        }
+
+        function renderCategories(data) {
+            const tbody = document.getElementById('categoryTableBody');
+            tbody.innerHTML = '';
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-center text-gray-500">No categories found.</td></tr>';
+                return;
+            }
+            data.forEach(c => {
+                const actionText = c.IsDeleted ? 'Reactivate' : 'Deactivate';
+                const actionColor = c.IsDeleted ? 'text-green-400 hover:text-green-300' : 'text-red-400 hover:text-red-300';
+                
+                tbody.innerHTML += `
+                    <tr class="border-b border-gray-700 hover:bg-gray-800 transition">
+                        <td class="p-3 border-r border-gray-700 text-center font-mono text-gray-500">${c.CategoryID}</td>
+                        <td class="p-3 border-r border-gray-700 font-bold text-gray-200">${c.CategoryName}</td>
+                        <td class="p-3 text-right">
+                            <button onclick="openEditCategoryModal(${c.CategoryID}, '${c.CategoryName}')" class="text-blue-400 hover:text-blue-300 text-xs font-bold mr-3"><i class="fas fa-edit mr-1"></i>Edit</button>
+                            <button onclick="toggleCategoryDeactivation(${c.CategoryID}, ${c.IsDeleted ? 0 : 1})" class="${actionColor} text-xs font-bold"><i class="fas fa-power-off mr-1"></i>${actionText}</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function filterMovements() {
+            const term = document.getElementById('movementSearch').value.toLowerCase();
+            const filtered = allMovements.filter(m => 
+                (m.AssetTag && m.AssetTag.toLowerCase().includes(term)) ||
+                (m.AssetName && m.AssetName.toLowerCase().includes(term)) ||
+                (m.PreviousAssignment && formatAssignmentText(m.PreviousAssignment).toLowerCase().includes(term)) ||
+                (m.NewAssignment && formatAssignmentText(m.NewAssignment).toLowerCase().includes(term))
+            );
+            renderMovements(filtered);
+        }
+
+        function filterLocator() {
+            const term = document.getElementById('locatorSearch').value.toLowerCase();
+            const rows = document.querySelectorAll('#reportTableBody tr');
+            rows.forEach(row => {
+                if(row.innerText.toLowerCase().includes(term)) row.style.display = '';
+                else row.style.display = 'none';
+            });
+        }
+
+        // --- REPORTS LOGIC ---
+        function generateLocatorReport() {
+            const filter = document.getElementById('reportFilter').value;
+            const tbody = document.getElementById('reportTableBody');
+            tbody.innerHTML = '';
+            document.getElementById('locatorSearch').value = ''; 
+
+            let filteredAssets = [];
+            if (filter === 'all') filteredAssets = allAssets;
+            else if (filter === 'unassigned') filteredAssets = allAssets.filter(a => !a.AssignedName && !a.AssignedToDepartmentCode);
+            else if (filter === 'employees') filteredAssets = allAssets.filter(a => !!a.AssignedName);
+            else if (filter === 'departments') filteredAssets = allAssets.filter(a => !!a.AssignedToDepartmentCode);
+
+            filteredAssets.sort((a, b) => {
+                const locA = a.AssignedName || a.AssignedToDepartmentCode || 'Z_Unassigned';
+                const locB = b.AssignedName || b.AssignedToDepartmentCode || 'Z_Unassigned';
+                return locA.localeCompare(locB);
+            });
+
+            if(filteredAssets.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-gray-400">No assets match this criteria.</td></tr>';
+                return;
+            }
+
+            filteredAssets.forEach(a => {
+                let location = '<span class="text-gray-500 italic">Unassigned (Storage)</span>';
+                
+                if (a.AssignedName) {
+                    location = `<span class="text-blue-300 font-semibold">Emp:</span> ${a.AssignedName}`;
+                } else if (a.AssignedToDepartmentCode) {
+                    location = `<span class="text-green-300 font-semibold">Dept:</span> ${getDeptName(a.AssignedToDepartmentCode)}`;
+                }
+
+                tbody.innerHTML += `
+                    <tr class="border-b border-gray-600 hover:bg-gray-800">
+                        <td class="p-2 border-r border-gray-600">${location}</td>
+                        <td class="p-2 border-r border-gray-600 font-mono text-sm text-blue-300">${a.AssetTag}</td>
+                        <td class="p-2 border-r border-gray-600 font-semibold">${a.Name || '-'}</td>
+                        <td class="p-2 border-r border-gray-600 text-sm">${a.Category || '-'}</td>
+                        <td class="p-2 text-center"><span class="px-2 py-1 rounded text-xs font-bold ${getStatusClass(a.Status)}">${a.Status}</span></td>
+                    </tr>
+                `;
+            });
+        }
+
+       // --- MODAL: CREATE CATEGORY ---
+        document.getElementById('addCategoryForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('newCategoryName').value;
+            try {
+                const addRes = await fetch(`${ASSET_API}/categories`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ categoryName: name })
+                });
+                const addData = await addRes.json().catch(() => ({}));
+                if (!addRes.ok) throw new Error(addData.error || addData.message || 'Could not add the category');
+                if (addData.reactivated) alert(addData.message);
+                document.getElementById('newCategoryName').value = '';
+                loadCategories();
+            } catch (err) { alert(err.message); }
+        });
+
+        // --- MODAL: EDIT & DEACTIVATE CATEGORY ---
+        function openEditCategoryModal(id, name) {
+            document.getElementById('editCatId').value = id;
+            document.getElementById('editCatName').value = name;
+            document.getElementById('editCategoryModal').classList.add('active');
+        }
+
+        function closeEditCategoryModal() {
+            document.getElementById('editCategoryModal').classList.remove('active');
+        }
+
+        document.getElementById('editCategoryForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editCatId').value;
+            const name = document.getElementById('editCatName').value;
+            const btn = document.getElementById('saveCatBtn');
+            btn.disabled = true; btn.textContent = 'Saving...';
+            try {
+                const editRes = await fetch(`${ASSET_API}/categories/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ categoryName: name })
+                });
+                const editData = await editRes.json().catch(() => ({}));
+                if (!editRes.ok) throw new Error(editData.error || editData.message || 'Could not save the category');
+                closeEditCategoryModal();
+                loadCategories();
+                loadAssets(); // renamed categories are also renamed on the assets
+            } catch (err) { alert(err.message); } finally { btn.disabled = false; btn.textContent = 'Save Category'; }
+        });
+
+        async function toggleCategoryDeactivation(id, setDeletedValue) {
+            const msg = setDeletedValue === 1 
+                ? "Deactivate this category? (It will be hidden from dropdowns)" 
+                : "Reactivate this category?";
+            if(!confirm(msg)) return;
+            try {
+                await fetch(`${ASSET_API}/categories/${id}/toggle`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ isDeleted: setDeletedValue })
+                });
+                loadCategories();
+            } catch (err) { alert(err.message); }
+        }
+
+        // --- MODAL: ADD ASSET ---
+        function openAddAssetModal() {
+            document.getElementById('addAssetForm').reset();
+            document.getElementById('regPurchaseDate').valueAsDate = new Date();
+            toggleAssignmentFields('reg'); 
+            document.getElementById('addAssetModal').classList.add('active');
+            setTimeout(() => document.getElementById('regAssetTag').focus(), 100);
+        }
+
+        function closeAddAssetModal() {
+            document.getElementById('addAssetModal').classList.remove('active');
+            document.getElementById('assetSearch').focus(); 
+        }
+
+        document.getElementById('addAssetForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('saveAssetBtn');
+            btn.disabled = true; btn.textContent = 'Saving...';
+
+            const payload = {
+                assetTag: document.getElementById('regAssetTag').value,
+                name: document.getElementById('regName').value,
+                category: document.getElementById('regCategory').value,
+                model: document.getElementById('regModel').value,
+                serialNumber: document.getElementById('regSerial').value,
+                status: document.getElementById('regStatus').value,
+                purchaseDate: document.getElementById('regPurchaseDate').value,
+                serviceInterval: document.getElementById('regServiceInterval').value,
+                meterIntervalType: document.getElementById('regMeterType').value,
+                meterInterval: document.getElementById('regMeterValue').value,
+                assignType: document.getElementById('regAssignType').value,
+                assignedToUserId: document.getElementById('regEmpInput').value,
+                assignedToDepartmentCode: document.getElementById('regDeptInput').value
+            };
+
+            try {
+                const res = await fetch(`${ASSET_API}/assets`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify(payload)
+                });
+                if (!res.ok) throw new Error('Failed to save asset');
+                closeAddAssetModal();
+                loadAssets(); 
+            } catch (err) { alert('Error: ' + err.message); } 
+            finally { btn.disabled = false; btn.textContent = 'Save Asset'; }
+        });
+
+        // --- MODAL: EDIT ASSET ---
+        function openEditAssetModal(id) {
+            const asset = allAssets.find(a => String(a.AssetID) === String(id));
+            if(!asset) return;
+
+            document.getElementById('editAssetId').value = asset.AssetID;
+            document.getElementById('editAssetTag').value = asset.AssetTag || '';
+            document.getElementById('editName').value = asset.Name || '';
+            document.getElementById('editCategory').value = asset.Category || '';
+            document.getElementById('editModel').value = asset.Model || '';
+            document.getElementById('editSerial').value = asset.SerialNumber || '';
+            document.getElementById('editStatus').value = asset.Status || 'Active';
+            document.getElementById('editServiceInterval').value = asset.ServiceIntervalMonths || '';
+            document.getElementById('editMeterType').value = asset.MeterIntervalType || '';
+            document.getElementById('editMeterValue').value = asset.MeterInterval || '';
+            
+            if(asset.PurchaseDate) {
+                document.getElementById('editPurchaseDate').value = asset.PurchaseDate.split('T')[0];
+            } else {
+                document.getElementById('editPurchaseDate').value = '';
+            }
+
+            document.getElementById('editAssetModal').classList.add('active');
+        }
+
+        function closeEditAssetModal() {
+            document.getElementById('editAssetModal').classList.remove('active');
+        }
+
+        document.getElementById('editAssetForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('updateAssetBtn');
+            btn.disabled = true; btn.textContent = 'Updating...';
+
+            const id = document.getElementById('editAssetId').value;
+            const payload = {
+                assetTag: document.getElementById('editAssetTag').value,
+                name: document.getElementById('editName').value,
+                category: document.getElementById('editCategory').value,
+                model: document.getElementById('editModel').value,
+                serialNumber: document.getElementById('editSerial').value,
+                status: document.getElementById('editStatus').value,
+                purchaseDate: document.getElementById('editPurchaseDate').value,
+                serviceInterval: document.getElementById('editServiceInterval').value,
+                meterIntervalType: document.getElementById('editMeterType').value,
+                meterInterval: document.getElementById('editMeterValue').value
+            };
+
+            try {
+                const res = await fetch(`${ASSET_API}/assets/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify(payload)
+                });
+                if (!res.ok) throw new Error('Failed to update asset');
+                closeEditAssetModal();
+                loadAssets(); 
+            } catch (err) { alert('Error: ' + err.message); } 
+            finally { btn.disabled = false; btn.textContent = 'Update Asset'; }
+        });
+
+        // --- MODAL: UPDATE METER ---
+        function openUpdateMeterModal(id, tag, name, currentMeter) {
+            document.getElementById('updateMeterForm').reset();
+            document.getElementById('meterAssetId').value = id;
+            document.getElementById('meterAssetDisplay').textContent = `${tag} - ${name}`;
+            document.getElementById('newMeterReading').value = currentMeter;
+            document.getElementById('updateMeterModal').classList.add('active');
+            setTimeout(() => document.getElementById('newMeterReading').focus(), 100);
+        }
+
+        function closeUpdateMeterModal() {
+            document.getElementById('updateMeterModal').classList.remove('active');
+            document.getElementById('assetSearch').focus();
+        }
+
+        document.getElementById('updateMeterForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('saveMeterBtn');
+            btn.disabled = true; btn.textContent = 'Updating...';
+
+            const id = document.getElementById('meterAssetId').value;
+            const payload = { currentMeter: document.getElementById('newMeterReading').value };
+
+            try {
+                const res = await fetch(`${ASSET_API}/assets/${id}/meter`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify(payload)
+                });
+                if (!res.ok) throw new Error('Failed to update meter');
+                closeUpdateMeterModal();
+                loadAssets(); 
+            } catch (err) { alert('Error: ' + err.message); } 
+            finally { btn.disabled = false; btn.textContent = 'Update Meter'; }
+        });
+
+        // --- MODAL: MOVE ASSET ---
+        function openMoveModal(tag, name) {
+            document.getElementById('moveForm').reset();
+            document.getElementById('moveAssetTag').value = tag;
+            document.getElementById('moveAssetDisplay').textContent = `${tag} - ${name}`;
+            toggleAssignmentFields('move');
+            document.getElementById('moveModal').classList.add('active');
+        }
+
+        function closeMoveModal() {
+            document.getElementById('moveModal').classList.remove('active');
+            document.getElementById('assetSearch').focus();
+        }
+
+        document.getElementById('moveForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('saveMoveBtn');
+            btn.disabled = true; btn.textContent = 'Moving...';
+
+            const payload = {
+                assetTag: document.getElementById('moveAssetTag').value,
+                assignType: document.getElementById('moveAssignType').value,
+                newAssignedToUserId: document.getElementById('moveEmpInput').value,
+                newAssignedToDepartmentCode: document.getElementById('moveDeptInput').value
+            };
+
+            try {
+                const res = await fetch(`${ASSET_API}/assets/move`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify(payload)
+                });
+                if (!res.ok) throw new Error('Failed to move asset');
+                closeMoveModal();
+                loadAssets(); 
+            } catch (err) { alert('Error: ' + err.message); } 
+            finally { btn.disabled = false; btn.textContent = 'Apply Move'; }
+        });
+
+       // --- MODAL: MAINTENANCE (3 TABS) ---
+
+       // --- MODAL: MAINTENANCE (3 TABS) ---
+        let currentMaintParts = [];
+
+        function switchMaintTab(tabId) {
+            ['history', 'consume', 'manual', 'adhoc', 'outstanding'].forEach(t => {
+                const btn = document.getElementById(`maintTabBtn-${t}`);
+                if (btn) {
+                    btn.classList.remove('text-yellow-400', 'border-yellow-500', 'text-red-400', 'border-red-500');
+                    btn.classList.add('text-gray-400', 'border-transparent');
+                }
+                const tab = document.getElementById(`maintTab-${t}`);
+                if (tab) {
+                    tab.classList.add('hidden');
+                    tab.classList.remove('block');
+                }
+            });
+            
+            const activeBtn = document.getElementById(`maintTabBtn-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-gray-400', 'border-transparent');
+                if (tabId === 'outstanding') {
+                    activeBtn.classList.add('text-red-400', 'border-red-500');
+                } else {
+                    activeBtn.classList.add('text-yellow-400', 'border-yellow-500');
+                }
+            }
+            
+            const activeTab = document.getElementById(`maintTab-${tabId}`);
+            if (activeTab) {
+                activeTab.classList.remove('hidden');
+                activeTab.classList.add('block');
+            }
+
+            if (tabId === 'manual') initManualServiceTab();
+            if (tabId === 'adhoc') initAdhocTab();
+            if (tabId === 'outstanding') initOutstandingTab();
+        }
+        
+
+        let deferredDuringService = []; // Track deferred items for the payload
+
+        async function initManualServiceTab() {
+            deferredDuringService = [];
+            
+            if (allStockItems.length === 0) await loadStockItems();
+            const extraSelect = document.getElementById('maintExtraPartSelect');
+            extraSelect.innerHTML = '<option value="">-- Master Stock Item --</option>';
+            allStockItems.forEach(i => {
+                extraSelect.innerHTML += `<option value="${i.ItemID}" data-serial="${i.IsSerialized ? '1' : '0'}">${i.Name} (${i.ItemCode || 'No Code'})</option>`;
+            });
+
+            renderManualServiceComparison();
+        }
+
+        function addExtraServicePart() {
+            const select = document.getElementById('maintExtraPartSelect');
+            const qtyInput = document.getElementById('maintExtraPartQty');
+            if(!select.value) return alert("Select a part.");
+            
+            const itemId = parseInt(select.value);
+            const itemName = select.options[select.selectedIndex].text.split(' (')[0];
+            const isSerialized = select.options[select.selectedIndex].getAttribute('data-serial') === '1';
+            const quantity = parseFloat(qtyInput.value);
+            
+            if(isNaN(quantity) || quantity <= 0) return alert("Enter valid quantity.");
+            
+            const exists = currentServiceConsumables.find(p => p.itemId === itemId);
+            if(exists) {
+                exists.quantity += quantity;
+            } else {
+                currentServiceConsumables.push({ itemId, itemName, quantity, isSerialized });
+            }
+            
+            select.value = '';
+            qtyInput.value = '';
+            renderManualServiceComparison();
+        }
+
+        function removeServicePart(index) {
+            currentServiceConsumables.splice(index, 1);
+            renderManualServiceComparison();
+        }
+
+        function decreaseServicePartQty(index) {
+            if (currentServiceConsumables[index].quantity > 1) {
+                currentServiceConsumables[index].quantity -= 1;
+                renderManualServiceComparison();
+            } else {
+                if (confirm("Quantity is 1. Remove this part entirely?")) {
+                    removeServicePart(index);
+                }
+            }
+        }
+
+        function increaseServicePartQty(index) {
+            currentServiceConsumables[index].quantity += 1;
+            renderManualServiceComparison();
+        }
+
+        function deferServicePart(index, shortageQty) {
+            const part = currentServiceConsumables[index];
+            if (!confirm(`Defer ${shortageQty} of ${part.itemName} to Outstanding Parts?`)) return;
+
+            // Reduce the current service requirement to what is actually available
+            part.quantity -= shortageQty;
+            
+            // Add to deferred payload
+            const existingDefer = deferredDuringService.find(d => d.itemId === part.itemId);
+            if (existingDefer) existingDefer.quantity += shortageQty;
+            else deferredDuringService.push({ itemId: part.itemId, quantity: shortageQty });
+
+            // If we deferred all of it, remove from current list
+            if (part.quantity <= 0) currentServiceConsumables.splice(index, 1);
+
+            renderManualServiceComparison();
+        }
+
+        async function renderManualServiceComparison() {
+            const tbody = document.getElementById('manualServicePartsBody');
+            tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Calculating live stock...</td></tr>';
+
+            if (allInventory.length === 0) await loadInventory();
+
+            if (currentServiceConsumables.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-gray-500 italic">No parts required for this service.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = '';
+            for (let index = 0; index < currentServiceConsumables.length; index++) {
+                const part = currentServiceConsumables[index];
+                
+                const totalStock = allInventory
+                    .filter(inv => inv.ItemID === part.itemId)
+                    .reduce((sum, inv) => sum + parseFloat(inv.Quantity || 0), 0);
+
+                const needed = parseFloat(part.quantity || 0);
+                const shortage = needed > totalStock ? needed - totalStock : 0;
+
+                let shortageDisplay = '';
+                if (shortage > 0) {
+                    shortageDisplay = `
+                        <div class="text-red-400 font-bold mb-1">${shortage} Short</div>
+                        <button type="button" onclick="deferServicePart(${index}, ${shortage})" class="bg-red-900/50 hover:bg-red-800 text-red-300 border border-red-700 px-2 py-1 rounded text-[9px] font-bold uppercase transition">Defer</button>
+                    `;
+                } else {
+                    shortageDisplay = `<span class="text-green-400 font-bold">In Stock</span>`;
+                }
+
+                let serialInputs = '';
+                if (part.isSerialized) {
+                    try {
+                        const sRes = await fetch(`${ASSET_API}/stock/items/${part.itemId}/available-units`, { headers: { 'Authorization': `Bearer ${token}` } });
+                        const units = await sRes.json();
+                        
+                        let options = '<option value="">-- Select Serial --</option>';
+                        units.forEach(u => options += `<option value="${u.UnitID}" data-sn="${u.SerialNumber}">${u.SerialNumber} (Loc: ${u.WarehouseName})</option>`);
+                        options += '<option value="MANUAL" class="font-bold text-orange-400">-- Manual (Pending GRV) --</option>';
+
+                        const neededCount = Math.ceil(needed);
+                        for (let i = 0; i < neededCount; i++) {
+                            serialInputs += `
+                                <div class="flex items-center gap-1 mb-1">
+                                    <select class="maint-serial-select flex-1 bg-gray-800 border border-gray-600 rounded p-1 text-[10px] text-white focus:border-yellow-500" data-item="${part.itemName}" data-item-id="${part.itemId}" onchange="toggleManualSerial(this)">
+                                        ${options}
+                                    </select>
+                                    <input type="text" class="maint-serial-manual hidden w-20 bg-gray-800 border border-gray-600 rounded p-1 text-[10px] text-white focus:border-orange-500" placeholder="Type SN">
+                                </div>
+                            `;
+                        }
+                    } catch (e) { serialInputs = '<span class="text-red-400">Error loading</span>'; }
+                } else {
+                    serialInputs = '<span class="text-[10px] text-gray-500 italic">Bulk Item</span>';
+                }
+
+              tbody.innerHTML += `
+                    <tr class="border-b border-gray-800 hover:bg-gray-800 transition">
+                        <td class="p-2 border-r border-gray-700 text-gray-300 font-bold align-top flex items-center">
+                            <button type="button" onclick="removeServicePart(${index})" class="text-red-500 hover:text-red-400 mr-2" title="Remove entire part"><i class="fas fa-times"></i></button>
+                            ${part.itemName}
+                        </td>
+                        <td class="p-2 border-r border-gray-700 text-center text-teal-400 font-bold align-top">
+                            <div class="flex items-center justify-center gap-2">
+                                <button type="button" onclick="decreaseServicePartQty(${index})" class="text-gray-500 hover:text-white bg-gray-800 hover:bg-gray-700 w-5 h-5 rounded flex items-center justify-center transition border border-gray-600 shadow" title="Decrease Quantity"><i class="fas fa-minus text-[8px]"></i></button>
+                                <span class="w-4 text-center">${needed}</span>
+                                <button type="button" onclick="increaseServicePartQty(${index})" class="text-gray-500 hover:text-white bg-gray-800 hover:bg-gray-700 w-5 h-5 rounded flex items-center justify-center transition border border-gray-600 shadow" title="Increase Quantity"><i class="fas fa-plus text-[8px]"></i></button>
+                            </div>
+                        </td>
+                        <td class="p-2 border-r border-gray-700 text-center text-gray-400 align-top">${totalStock}</td>
+                        <td class="p-2 border-r border-gray-700 text-center align-top">${shortageDisplay}</td>
+                        <td class="p-2 align-top">${serialInputs}</td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Toggle visibility of manual input AND prevent duplicate serial selections
+        function toggleManualSerial(selectElement) {
+            const inputElement = selectElement.nextElementSibling;
+            if (selectElement.value === 'MANUAL') {
+                inputElement.classList.remove('hidden');
+                inputElement.focus();
+            } else {
+                inputElement.classList.add('hidden');
+                inputElement.value = '';
+            }
+
+            // Lock out selected serials in other dropdowns for the SAME item
+            const itemName = selectElement.getAttribute('data-item');
+            
+            // Safely find all dropdowns for this specific item
+            const allSelects = document.querySelectorAll('.maint-serial-select');
+            const relatedSelects = Array.from(allSelects).filter(sel => sel.getAttribute('data-item') === itemName);
+            
+            // Gather all currently selected values (excluding empty and MANUAL)
+            const selectedValues = relatedSelects
+                .map(sel => sel.value)
+                .filter(val => val !== '' && val !== 'MANUAL');
+
+            // Loop through and disable options that are already picked elsewhere
+            relatedSelects.forEach(sel => {
+                Array.from(sel.options).forEach(opt => {
+                    if (opt.value === '' || opt.value === 'MANUAL') return; // Never disable base options
+                    
+                    // If selected in another dropdown, disable it here
+                    if (selectedValues.includes(opt.value) && sel.value !== opt.value) {
+                        opt.disabled = true;
+                        if (!opt.text.includes(' (In Use)')) opt.text += ' (In Use)';
+                    } else {
+                        opt.disabled = false;
+                        opt.text = opt.text.replace(' (In Use)', '');
+                    }
+                });
+            });
+        }
+
+       let currentServiceConsumables = [];
+
+        async function openMaintModal(assetId, tag, name) {
+            document.getElementById('maintAssetId').value = assetId;
+            document.getElementById('maintAssetTag').value = tag;
+            document.getElementById('maintAssetDisplay').textContent = `${tag} - ${name}`;
+            
+            // Reset forms
+            document.getElementById('maintTab-manual').reset();
+            document.getElementById('maintDateMan').valueAsDate = new Date();
+            document.getElementById('maintNextHistory').value = '';
+            
+            currentServiceConsumables = [];
+            switchMaintTab('history');
+            
+            document.getElementById('maintenanceModal').classList.add('active');
+            
+            await loadMaintHistory(assetId);
+
+            // Pre-load Master Stock for Consumables List
+            if(allStockItems.length === 0) await loadStockItems();
+            if(allWarehouses.length === 0) await loadWarehouses();
+            
+            const whsSel = document.getElementById('maintSourceWhsMan');
+            whsSel.innerHTML = '<option value="">-- Select Source Warehouse --</option>';
+            allWarehouses.filter(w => !w.IsConsumption).forEach(w => {
+                whsSel.innerHTML += `<option value="${w.WarehouseID}">${w.Name}</option>`;
+            });
+            const defWhs = localStorage.getItem('defaultWarehouse');
+            if (defWhs) whsSel.value = defWhs;
+
+            const itemSel = document.getElementById('maintConsumableSelect');
+            itemSel.innerHTML = '<option value="">-- Select Master Stock Item --</option>';
+            allStockItems.forEach(i => {
+                itemSel.innerHTML += `<option value="${i.ItemID}">${i.Name} (${i.ItemCode || 'No Code'})</option>`;
+            });
+
+            await loadServiceConsumables(assetId);
+        }
+
+        function closeMaintModal() {
+            document.getElementById('maintenanceModal').classList.remove('active');
+            document.getElementById('assetSearch').focus();
+        }
+
+        async function loadMaintHistory(assetId) {
+            const historyBody = document.getElementById('maintHistoryBody');
+            historyBody.innerHTML = '<tr><td colspan="3" class="p-4 text-center text-gray-400">Loading history...</td></tr>';
+        try {
+                const res = await fetch(`${ASSET_API}/assets/${assetId}/maintenance`, { headers: { 'Authorization': `Bearer ${token}` } });
+                const history = await res.json();
+                
+                historyBody.innerHTML = '';
+                if(history.length === 0) {
+                    historyBody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-gray-500 italic">No previous service logs found.</td></tr>';
+                } else {
+                    history.forEach(log => {
+                        const d = new Date(log.ServiceDate).toLocaleDateString();
+                        const cost = log.Cost ? `R ${parseFloat(log.Cost).toFixed(2)}` : '-';
+                        
+                        let evidenceHtml = '<span class="text-[10px] text-gray-600 italic">None</span>';
+                        if (log.PhotoEvidence || log.Signature) {
+                            evidenceHtml = '<div class="flex gap-2 justify-center items-center">';
+                            if (log.PhotoEvidence) {
+                                // Fallback to handle both Base64 and physical file paths
+                                const photoSrc = log.PhotoEvidence.startsWith('data:image') ? log.PhotoEvidence : `${ASSET_API.replace('/api', '')}/uploads/${log.PhotoEvidence}`;
+                                evidenceHtml += `<a href="${photoSrc}" target="_blank" title="View Photo"><img src="${photoSrc}" class="w-8 h-8 object-cover rounded border border-gray-600 hover:border-blue-400 transition"></a>`;
+                            }
+                            if (log.Signature) {
+                                evidenceHtml += `<a href="${log.Signature}" target="_blank" title="View Signature"><img src="${log.Signature}" class="w-8 h-8 object-contain bg-white rounded border border-gray-600 hover:border-blue-400 transition"></a>`;
+                            }
+                            evidenceHtml += '</div>';
+                        }
+
+                        historyBody.innerHTML += `
+                            <tr class="border-b border-gray-700 hover:bg-gray-800 text-gray-300">
+                                <td class="p-2 border-r border-gray-700">${d}</td>
+                                <td class="p-2 border-r border-gray-700 text-sm">${log.Description}</td>
+                                <td class="p-2 border-r border-gray-700 font-mono text-sm">${cost}</td>
+                                <td class="p-2 text-center align-middle">${evidenceHtml}</td>
+                            </tr>
+                        `;
+                    });
+                }
+            } catch(err) { historyBody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-red-400">Error loading history</td></tr>'; }   
+        }
+
+        // --- MAINT TAB 2: DEFINE CONSUMABLES (PICK LIST) ---
+        async function loadServiceConsumables(assetId) {
+            const tbody = document.getElementById('maintConsumablesBody');
+            tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-center text-gray-500">Loading...</td></tr>';
+            try {
+                const res = await fetch(`${ASSET_API}/assets/${assetId}/service-parts`, { headers: { 'Authorization': `Bearer ${token}` } });
+                if(res.ok) {
+                    const parts = await res.json();
+                    currentServiceConsumables = parts.map(p => ({
+                        itemId: p.ItemID,
+                        itemName: p.ItemName,
+                        quantity: p.Quantity,
+                        isSerialized: p.IsSerialized // CRITICAL FIX: Captures tracking type
+                    }));
+                    renderServiceConsumables();
+                }
+            } catch(e) { console.error(e); }
+        }
+
+        function addMaintConsumableRow() {
+            const select = document.getElementById('maintConsumableSelect');
+            const qtyInput = document.getElementById('maintConsumableQty');
+            if(!select.value) return alert("Select an item.");
+            
+            const itemId = parseInt(select.value);
+            const itemName = select.options[select.selectedIndex].text.split(' (')[0];
+            const quantity = parseFloat(qtyInput.value);
+            
+            if(isNaN(quantity) || quantity <= 0) return alert("Enter valid quantity.");
+            
+            const exists = currentServiceConsumables.find(p => p.itemId === itemId);
+            if(exists) exists.quantity += quantity;
+            else currentServiceConsumables.push({ itemId, itemName, quantity });
+            
+            select.value = '';
+            qtyInput.value = '1';
+            renderServiceConsumables();
+        }
+
+        function removeMaintConsumableRow(index) {
+            currentServiceConsumables.splice(index, 1);
+            renderServiceConsumables();
+        }
+
+        function renderServiceConsumables() {
+            const tbody = document.getElementById('maintConsumablesBody');
+            tbody.innerHTML = '';
+            if(currentServiceConsumables.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-center text-gray-500">No parts defined for this asset.</td></tr>';
+                return;
+            }
+            currentServiceConsumables.forEach((item, idx) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="p-2 border-r border-gray-700 font-bold text-gray-300">${item.itemName}</td>
+                        <td class="p-2 border-r border-gray-700 text-center font-bold text-teal-400">${item.quantity}</td>
+                        <td class="p-2 text-center"><button onclick="removeMaintConsumableRow(${idx})" class="text-red-400 hover:text-red-300"><i class="fas fa-trash"></i></button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        async function submitServiceConsumables() {
+            const assetId = document.getElementById('maintAssetId').value;
+            const btn = document.getElementById('submitMaintConBtn');
+            btn.disabled = true; btn.textContent = 'Saving...';
+
+            try {
+                const res = await fetch(`${ASSET_API}/assets/${assetId}/service-parts`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ parts: currentServiceConsumables })
+                });
+                if(!res.ok) throw new Error("Failed to save consumables");
+                alert("Service Consumables updated successfully.");
+            } catch(e) {
+                alert(e.message);
+            } finally {
+                btn.disabled = false; btn.textContent = 'Save Consumables List';
+            }
+        }
+
+        // --- MAINT TAB 3: MANUAL ENTRY ---
+        document.getElementById('maintTab-manual').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const consumptionWhs = allWarehouses.find(w => w.IsConsumption);
+            if(!consumptionWhs) return alert("No Consumption Warehouse found in the system!");
+
+            const sourceWhs = document.getElementById('maintSourceWhsMan').value;
+            if(!sourceWhs) return alert("Please select a Source Warehouse.");
+
+            const btn = document.getElementById('submitMaintManBtn');
+            btn.disabled = true; btn.textContent = 'Logging...';
+            
+            let extractedSerialsText = [];
+            let consumedItemsPayload = [];
+            let missingSerials = false;
+
+            // Loop through the BOM to build the database deduction payload
+            currentServiceConsumables.forEach(part => {
+                if (part.isSerialized) {
+                    let unitIds = [];
+                    let manualCount = 0; // Track manual shortages
+                    
+                    // Find all dropdowns associated with this specific item
+                    document.querySelectorAll(`.maint-serial-select[data-item-id="${part.itemId}"]`).forEach(sel => {
+                        const val = sel.value;
+                        let snText = '';
+
+                        if (val === 'MANUAL') {
+                            const input = sel.nextElementSibling;
+                            snText = input.value.trim();
+                            if (!snText) missingSerials = true;
+                            manualCount++; // Tally missing GRV items
+                        } else if (!val) {
+                            missingSerials = true;
+                        } else {
+                            unitIds.push(parseInt(val));
+                            snText = sel.options[sel.selectedIndex].getAttribute('data-sn');
+                        }
+                        
+                        if (snText) extractedSerialsText.push(`[${part.itemName}: ${snText}]`);
+                    });
+
+                    // Push the actual units we have
+                    if (unitIds.length > 0) {
+                        consumedItemsPayload.push({ itemId: part.itemId, quantity: unitIds.length, isSerialized: true, unitIds: unitIds });
+                    }
+                    
+                    // Force the backend to create a NEGATIVE bulk record for the missing serials!
+                    if (manualCount > 0) {
+                        consumedItemsPayload.push({ itemId: part.itemId, quantity: manualCount, isSerialized: false, unitIds: [] });
+                    }
+                } else {
+                    // Bulk item deduction
+                    consumedItemsPayload.push({
+                        itemId: part.itemId,
+                        quantity: part.quantity,
+                        isSerialized: false,
+                        unitIds: []
+                    });
+                }
+            });
+
+            if (missingSerials) {
+                btn.disabled = false; btn.textContent = 'Log Manual Service';
+                return alert("Validation Failed:\nPlease select or manually enter a serial number for ALL required serialized parts.");
+            }
+
+            const assetId = document.getElementById('maintAssetId').value;
+            const assetTag = document.getElementById('maintAssetTag').value;
+            let finalDesc = document.getElementById('maintDescMan').value;
+            const manualPartsText = document.getElementById('maintPartsMan').value;
+            
+            if (extractedSerialsText.length > 0) finalDesc += `\nAssigned Serials: ` + extractedSerialsText.join(' ');
+            if (manualPartsText) finalDesc += `\nAdditional Notes: ${manualPartsText}`;
+
+           const payload = {
+                assetId: assetId,
+                assetTag: assetTag,
+                serviceDate: document.getElementById('maintDateMan').value,
+                description: finalDesc,
+                cost: 0,
+                sourceWarehouseId: sourceWhs,
+                consumptionWarehouseId: consumptionWhs.WarehouseID,
+                activityName: 'Scheduled Service',
+                consumedItems: consumedItemsPayload,
+                outstandingItems: deferredDuringService // NEW: Send deferred parts
+            };
+            try {
+                const res = await fetch(`${ASSET_API}/assets/maintenance`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify(payload)
+                });
+                if (!res.ok) throw new Error(await readApiError(res, 'Failed to log manual maintenance'));
+                
+                alert('Manual service logged and stock consumed successfully.');
+                closeMaintModal();
+                loadInventory(); 
+            } catch (err) { alert('Error: ' + err.message); } 
+            finally { btn.disabled = false; btn.textContent = 'Log Manual Service'; }
+        });
+
+        // ==========================================
+        // MAINT TAB 5: OUTSTANDING PARTS LOGIC
+        // ==========================================
+        let currentOutstandingPartsList = [];
+
+        async function initOutstandingTab() {
+            if (allWarehouses.length === 0) await loadWarehouses();
+            const whsSelect = document.getElementById('outstandingSourceWhs');
+            whsSelect.innerHTML = '<option value="">-- Select Source Warehouse --</option>';
+            allWarehouses.filter(w => !w.IsConsumption).forEach(w => {
+                whsSelect.innerHTML += `<option value="${w.WarehouseID}">${w.Name}</option>`;
+            });
+            const defWhs = localStorage.getItem('defaultWarehouse');
+            if (defWhs) whsSelect.value = defWhs;
+            
+            await loadOutstandingParts();
+        }
+
+        async function loadOutstandingParts() {
+            const assetId = document.getElementById('maintAssetId').value;
+            const tbody = document.getElementById('outstandingPartsBody');
+            tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Loading...</td></tr>';
+            
+            try {
+                if (allInventory.length === 0) await loadInventory();
+
+                const res = await fetch(`${ASSET_API}/assets/${assetId}/outstanding-parts`, { headers: { 'Authorization': `Bearer ${token}` } });
+                currentOutstandingPartsList = await res.json();
+                
+                tbody.innerHTML = '';
+                if(currentOutstandingPartsList.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-green-500 font-bold"><i class="fas fa-check-circle mr-2"></i>No outstanding parts!</td></tr>';
+                    return;
+                }
+
+                for (const out of currentOutstandingPartsList) {
+                    const totalStock = allInventory
+                        .filter(inv => inv.ItemID === out.ItemID)
+                        .reduce((sum, inv) => sum + parseFloat(inv.Quantity || 0), 0);
+
+                    let serialInput = '';
+                    if (out.IsSerialized) {
+                        try {
+                            const sRes = await fetch(`${ASSET_API}/stock/items/${out.ItemID}/available-units`, { headers: { 'Authorization': `Bearer ${token}` } });
+                            const units = await sRes.json();
+                            let options = '<option value="">-- Select Serial --</option>';
+                            units.forEach(u => options += `<option value="${u.UnitID}" data-sn="${u.SerialNumber}">${u.SerialNumber}</option>`);
+                            
+                            serialInput = `
+                                <select id="resolve-sn-${out.OutstandingID}" class="w-full bg-gray-800 border border-gray-600 rounded p-1 text-[10px] text-white focus:border-red-500 mb-2">
+                                    ${options}
+                                </select>
+                            `;
+                        } catch(e) { serialInput = '<span class="text-red-400">Error</span>'; }
+                    } else {
+                        serialInput = `<span class="text-[10px] text-gray-500 italic block mb-2">Bulk Item</span>`;
+                    }
+
+                    const actionBtn = totalStock >= out.QuantityShort 
+                        ? `<button type="button" onclick="resolveOutstandingPart(${out.OutstandingID}, ${out.ItemID}, ${out.QuantityShort}, ${out.IsSerialized})" class="w-full bg-green-700 hover:bg-green-600 text-white px-3 py-1.5 rounded text-[10px] font-bold shadow transition">Resolve & Consume</button>`
+                        : `<button type="button" disabled class="w-full bg-gray-700 text-gray-500 px-3 py-1.5 rounded text-[10px] font-bold cursor-not-allowed border border-gray-600">Waiting for Stock</button>`;
+
+                    const stockColor = totalStock >= out.QuantityShort ? 'text-green-400' : 'text-red-400';
+
+                    tbody.innerHTML += `
+                        <tr class="border-b border-gray-800 hover:bg-gray-800 transition">
+                            <td class="p-3 border-r border-gray-700 font-bold text-gray-300">
+                                ${out.ItemName}
+                                <div class="text-[9px] text-gray-500 font-normal">Logged: ${new Date(out.LoggedDate).toLocaleDateString()}</div>
+                            </td>
+                            <td class="p-3 border-r border-gray-700 text-center text-red-400 font-black">${out.QuantityShort}</td>
+                            <td class="p-3 border-r border-gray-700 text-center font-bold ${stockColor}">${totalStock}</td>
+                            <td class="p-3 bg-gray-900/50">
+                                ${serialInput}
+                                ${actionBtn}
+                            </td>
+                        </tr>
+                    `;
+                }
+            } catch(e) { console.error(e); }
+        }
+
+        // AUTO-HEAL: true only in the mobile build, where the offline queue exists
+        function canQueueOffline() {
+            return typeof offlineQueue !== 'undefined' && Array.isArray(offlineQueue) && typeof localforage !== 'undefined';
+        }
+
+        // Reads the server's real error message, falls back to a friendly one
+        async function readApiError(res, fallback) {
+            try {
+                const d = await res.json();
+                return (d && (d.error || d.message)) || fallback;
+            } catch (e) { return fallback; }
+        }
+
+        async function resolveOutstandingPart(outstandingId, itemId, qtyShort, isSerialized) {
+            const consumptionWhs = allWarehouses.find(w => w.IsConsumption);
+            if(!consumptionWhs) return alert("No Consumption Warehouse found!");
+
+            const sourceWhs = document.getElementById('outstandingSourceWhs').value;
+            if(!sourceWhs) return alert("Please select a Source Warehouse at the top.");
+
+            const assetId = document.getElementById('maintAssetId').value;
+            const assetTag = document.getElementById('maintAssetTag').value;
+
+            let consumedPayload = { itemId, quantity: qtyShort, isSerialized, unitIds: [] };
+
+            if (isSerialized) {
+                const sel = document.getElementById(`resolve-sn-${outstandingId}`);
+                if (!sel || !sel.value) return alert("Please select a serial number to assign.");
+                consumedPayload.unitIds.push(parseInt(sel.value));
+                // Note: For simplicity, if qtyShort > 1, we currently only resolve 1 serial at a time via the UI.
+                // In a perfect system, we'd spawn multiple dropdowns like the manual tab.
+            }
+
+            const resolvePayload = {
+                outstandingId, assetId, assetTag,
+                sourceWarehouseId: sourceWhs,
+                consumptionWarehouseId: consumptionWhs.WarehouseID,
+                consumedItems: [consumedPayload]
+            };
+            const btn = document.querySelector(`button[onclick*="resolveOutstandingPart(${outstandingId}"]`);
+            const btnOriginalHtml = btn ? btn.innerHTML : '';
+
+            try {
+                // AUTO-HEAL: mobile build queues offline; web build posts straight to the server
+                if (canQueueOffline()) {
+                    offlineQueue.push({ type: 'resolve_part', ...resolvePayload }); // ⚡ Sync Type
+                    localforage.setItem('hr_offline_queue', offlineQueue);
+                    if (typeof updateQueueUI === 'function') updateQueueUI();
+
+                    alert("Outstanding part resolution queued securely offline!");
+
+                    // Dim the button so they know it is pending sync
+                    if (btn) {
+                        btn.disabled = true;
+                        btn.textContent = 'Queued...';
+                        btn.classList.add('opacity-50', 'bg-gray-700');
+                    }
+                    return;
+                }
+
+                if (btn) { btn.disabled = true; btn.textContent = 'Resolving...'; }
+
+                const res = await fetch(`${ASSET_API}/assets/resolve-outstanding`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify(resolvePayload)
+                });
+                if (!res.ok) throw new Error(await readApiError(res, 'Failed to resolve outstanding part'));
+
+                alert("Outstanding part resolved and stock consumed.");
+                await loadInventory();
+                await loadOutstandingParts();
+            } catch(e) {
+                alert(e.message);
+                if (btn) { btn.disabled = false; btn.innerHTML = btnOriginalHtml; }
+            }
+        }
+
+        // ==========================================
+        // MAINT TAB 4: AD-HOC REPAIR LOGIC
+        // ==========================================
+        let currentAdhocParts = [];
+
+        async function initAdhocTab() {
+            document.getElementById('adhocDate').valueAsDate = new Date();
+            document.getElementById('adhocDesc').value = '';
+            currentAdhocParts = [];
+            renderAdhocParts();
+
+            if (allWarehouses.length === 0) await loadWarehouses();
+            if (allInventory.length === 0) await loadInventory();
+
+            const whsSelect = document.getElementById('adhocSourceWhs');
+            whsSelect.innerHTML = '<option value="">-- Select Source Warehouse --</option>';
+            allWarehouses.filter(w => !w.IsConsumption).forEach(w => {
+                whsSelect.innerHTML += `<option value="${w.WarehouseID}">${w.Name}</option>`;
+            });
+            
+            const defWhs = localStorage.getItem('defaultWarehouse');
+            if (defWhs) {
+                whsSelect.value = defWhs;
+                loadAdhocItems();
+            } else {
+                document.getElementById('adhocItemSelect').innerHTML = '<option value="">-- Select Warehouse First --</option>';
+            }
+            document.getElementById('adhocBulkContainer').classList.add('hidden');
+            document.getElementById('adhocSerialContainer').classList.add('hidden');
+        }
+
+        function loadAdhocItems() {
+            const whsId = document.getElementById('adhocSourceWhs').value;
+            const select = document.getElementById('adhocItemSelect');
+            select.innerHTML = '<option value="">-- Select Part to Use --</option>';
+            document.getElementById('adhocBulkContainer').classList.add('hidden');
+            document.getElementById('adhocSerialContainer').classList.add('hidden');
+
+            if(!whsId) return;
+
+            const availableInv = allInventory.filter(i => String(i.WarehouseID) === String(whsId) && i.Quantity > 0);
+            
+            const uniqueItems = [];
+            const itemMap = new Map();
+            for (const inv of availableInv) {
+                if (!itemMap.has(inv.ItemID)) {
+                    itemMap.set(inv.ItemID, true);
+                    uniqueItems.push(inv);
+                }
+            }
+
+            uniqueItems.forEach(i => {
+                select.innerHTML += `<option value="${i.ItemID}" data-serial="${i.IsSerialized ? '1' : '0'}" data-qty="${i.Quantity}">${i.ItemName} (Avail: ${i.Quantity})</option>`;
+            });
+        }
+
+        async function checkAdhocItemType() {
+            const select = document.getElementById('adhocItemSelect');
+            if(!select.value) return;
+            
+            const isSerial = select.options[select.selectedIndex].getAttribute('data-serial') === '1';
+            const maxQty = select.options[select.selectedIndex].getAttribute('data-qty');
+            
+            const bulkDiv = document.getElementById('adhocBulkContainer');
+            const serialDiv = document.getElementById('adhocSerialContainer');
+            
+            bulkDiv.classList.add('hidden');
+            serialDiv.classList.add('hidden');
+
+            if(isSerial) {
+                serialDiv.classList.remove('hidden');
+                const serialSelect = document.getElementById('adhocSerialSelect');
+                serialSelect.innerHTML = '<option value="">Loading specific units...</option>';
+                
+                const whsId = document.getElementById('adhocSourceWhs').value;
+                const itemId = select.value;
+                
+                try {
+                    const res = await fetch(`${ASSET_API}/stock/warehouses/${whsId}/items/${itemId}/units`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (!res.ok) throw new Error("Failed to load units");
+                    const units = await res.json();
+                    
+                    serialSelect.innerHTML = '<option value="">-- Select Specific Serial Number --</option>';
+                    if (units.length === 0) {
+                        serialSelect.innerHTML = '<option value="">No units available in this warehouse</option>';
+                    } else {
+                        units.forEach(u => {
+                            const display = u.SerialNumber ? u.SerialNumber : (u.AssetTag ? u.AssetTag : `Unit ID: ${u.UnitID}`);
+                            serialSelect.innerHTML += `<option value="${u.UnitID}">${display}</option>`;
+                        });
+                    }
+                } catch(e) { serialSelect.innerHTML = '<option value="">Error loading serials</option>'; }
+            } else {
+                bulkDiv.classList.remove('hidden');
+                document.getElementById('adhocBulkQty').setAttribute('max', maxQty);
+                document.getElementById('adhocBulkQty').value = '';
+            }
+        }
+
+        function addAdhocPart() {
+            const whsId = document.getElementById('adhocSourceWhs').value;
+            const itemSel = document.getElementById('adhocItemSelect');
+            const itemId = parseInt(itemSel.value);
+            if(!whsId || !itemId) return alert("Select warehouse and item.");
+
+            const isSerial = itemSel.options[itemSel.selectedIndex].getAttribute('data-serial') === '1';
+            const itemName = itemSel.options[itemSel.selectedIndex].text.split(' (')[0];
+
+            if (isSerial) {
+                const unitSel = document.getElementById('adhocSerialSelect');
+                const unitId = parseInt(unitSel.value);
+                if(!unitId) return alert("Select a serial number.");
+                const serialText = unitSel.options[unitSel.selectedIndex].text;
+
+                let existing = currentAdhocParts.find(p => p.itemId === itemId);
+                if (existing) {
+                    if (existing.unitIds.includes(unitId)) return alert("Serial already added.");
+                    existing.unitIds.push(unitId);
+                    existing.serialsText.push(serialText);
+                    existing.quantity += 1;
+                } else {
+                    currentAdhocParts.push({ itemId, itemName, isSerialized: true, quantity: 1, unitIds: [unitId], serialsText: [serialText] });
+                }
+                // Lock option to prevent double-adding
+                unitSel.options[unitSel.selectedIndex].disabled = true;
+                unitSel.value = '';
+            } else {
+                const qty = parseFloat(document.getElementById('adhocBulkQty').value);
+                const maxQty = parseFloat(document.getElementById('adhocBulkQty').getAttribute('max'));
+                if(isNaN(qty) || qty <= 0) return alert("Invalid quantity.");
+
+                let existing = currentAdhocParts.find(p => p.itemId === itemId);
+                if (existing) {
+                    if (existing.quantity + qty > maxQty) return alert("Exceeds available stock.");
+                    existing.quantity += qty;
+                } else {
+                    currentAdhocParts.push({ itemId, itemName, isSerialized: false, quantity: qty, unitIds: [], serialsText: [] });
+                }
+                document.getElementById('adhocBulkQty').value = '';
+            }
+            renderAdhocParts();
+        }
+
+        function removeAdhocPart(index) {
+            currentAdhocParts.splice(index, 1);
+            renderAdhocParts();
+            checkAdhocItemType(); // Refresh dropdown to unlock serials
+        }
+
+        function renderAdhocParts() {
+            const tbody = document.getElementById('adhocPartsBody');
+            tbody.innerHTML = '';
+            if(currentAdhocParts.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-center text-gray-500">No parts added.</td></tr>';
+                return;
+            }
+            currentAdhocParts.forEach((p, idx) => {
+                const detail = p.isSerialized ? `<span class="text-[10px] text-purple-400">${p.serialsText.join(', ')}</span>` : `<span class="font-bold text-blue-400">${p.quantity}</span>`;
+                tbody.innerHTML += `
+                    <tr class="border-b border-gray-700 hover:bg-gray-800 transition">
+                        <td class="p-2 border-r border-gray-700 text-gray-300 font-bold">${p.itemName}</td>
+                        <td class="p-2 border-r border-gray-700 text-center">${detail}</td>
+                        <td class="p-2 text-center"><button type="button" onclick="removeAdhocPart(${idx})" class="text-red-400 hover:text-red-300"><i class="fas fa-trash"></i></button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Submitting Ad-Hoc Maintenance
+        document.getElementById('maintTab-adhoc').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if(currentAdhocParts.length === 0) return alert("Please add at least one part from stock to process an Ad-Hoc repair.");
+            
+            // The API requires a Consumption Warehouse to dump the stock into
+            const consumptionWhs = allWarehouses.find(w => w.IsConsumption);
+            if(!consumptionWhs) return alert("No Consumption Warehouse found in the system! Please go to Warehouses and create one with 'Consumption' checked first.");
+
+            const btn = document.getElementById('submitAdhocBtn');
+            btn.disabled = true; btn.textContent = 'Processing...';
+
+            const assetId = document.getElementById('maintAssetId').value;
+            const assetTag = document.getElementById('maintAssetTag').value;
+            const desc = document.getElementById('adhocDesc').value + ' [Ad-Hoc Parts Replacement]';
+            const sourceWhs = document.getElementById('adhocSourceWhs').value;
+
+            const payload = {
+                assetId: assetId,
+                assetTag: assetTag,
+                serviceDate: document.getElementById('adhocDate').value,
+                description: desc,
+                cost: 0,
+                sourceWarehouseId: sourceWhs,
+                consumptionWarehouseId: consumptionWhs.WarehouseID,
+                activityName: 'Repair/Ad-Hoc',
+                consumedItems: currentAdhocParts
+            };
+
+            try {
+                const res = await fetch(`${ASSET_API}/assets/maintenance`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify(payload)
+                });
+                if (!res.ok) throw new Error(await readApiError(res, 'Failed to process Ad-Hoc repair'));
+                
+                alert('Ad-Hoc repair logged and stock consumed successfully.');
+                closeMaintModal();
+                loadInventory(); // Refresh live stock numbers in background
+            } catch (err) { alert('Error: ' + err.message); } 
+            finally { btn.disabled = false; btn.textContent = 'Process Ad-Hoc Repair'; }
+        });
+
+        async function updateNextServiceOnly() {
+            const date = document.getElementById('maintNextHistory').value;
+            if(!date) return alert("Select a date first.");
+            
+            const payload = {
+                type: 'maintenance', // ⚡ Tells the sync engine to process it
+                assetId: document.getElementById('maintAssetId').value,
+                serviceDate: new Date().toISOString().split('T')[0],
+                description: 'Updated Next Service Schedule',
+                cost: 0,
+                nextService: date
+            };
+            
+            payload.scheduleOnly = true; // tells the server not to stamp LastServiceDate
+
+            // AUTO-HEAL: mobile build queues offline; web build saves straight to the server
+            if (canQueueOffline()) {
+                offlineQueue.push(payload);
+                localforage.setItem('hr_offline_queue', offlineQueue);
+                if (typeof updateQueueUI === 'function') updateQueueUI();
+
+                alert('Next service date scheduled offline! It will sync in the background.');
+                document.getElementById('maintNextHistory').value = '';
+                return;
+            }
+
+            try {
+                const res = await fetch(`${ASSET_API}/assets/maintenance`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify(payload)
+                });
+                if (!res.ok) throw new Error(await readApiError(res, 'Failed to save next service date'));
+
+                alert('Next service date saved.');
+                document.getElementById('maintNextHistory').value = '';
+                loadMaintHistory(payload.assetId);
+            } catch (e) { alert(e.message); }
+        }
+
+        // Branding updated to TNA Africa
+        function printTag(tag, name) {
+            const printWin = window.open('', '', 'width=400,height=400');
+            printWin.document.write(`
+                <html>
+                <head>
+                    <style>
+                        body { font-family: sans-serif; text-align: center; margin: 0; padding: 10px; }
+                        .label-container { border: 2px solid black; padding: 15px; display: inline-block; border-radius: 8px; }
+                        h3 { margin: 0 0 10px 0; font-size: 16px; text-transform: uppercase; }
+                        p { margin: 5px 0 0 0; font-size: 12px; font-weight: bold; }
+                    </style>
+                </head>
+                <body>
+                    <div class="label-container">
+                        <h3>TNA Africa Fixed Asset</h3>
+                        <svg id="barcode"></svg>
+                        <p>${name}</p>
+                    </div>
+                    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"><\/script>
+                    <script>
+                        JsBarcode("#barcode", "${tag}", {
+                            format: "CODE128",
+                            width: 2,
+                            height: 50,
+                            displayValue: true,
+                            fontSize: 14,
+                            margin: 0
+                        });
+                        window.onload = function() { window.print(); window.close(); }
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWin.document.close();
+        }
+
+        // =========================================================================
+// ========================= STOCK & INVENTORY LOGIC =======================
+// =========================================================================
+
+let allStockItems = [];
+let allWarehouses = [];
+let allInventory = [];
+let currentGrvItems = []; // Holds items temporarily before processing GRV
+
+// --- API DATA FETCHING ---
+async function loadStockItems() {
+    try {
+        const res = await fetch(`${ASSET_API}/stock/items`, { headers: { 'Authorization': `Bearer ${token}` } });
+        if(!res.ok) throw new Error("Failed to load stock items");
+        allStockItems = await res.json();
+        renderStockItems(allStockItems);
+    } catch (err) { console.error(err); }
+}
+
+async function loadWarehouses() {
+    try {
+        const res = await fetch(`${ASSET_API}/stock/warehouses`, { headers: { 'Authorization': `Bearer ${token}` } });
+        if(!res.ok) throw new Error("Failed to load warehouses");
+        allWarehouses = await res.json();
+
+        // Stock levels must be present before rendering, or the counts show as empty.
+        // allWarehouses is already set above, so loadInventory will not call back into here.
+        if (allInventory.length === 0) {
+            await loadInventory();
+            return; // loadInventory re-renders the warehouse table itself
+        }
+
+        renderWarehouses(allWarehouses);
+    } catch (err) { console.error(err); }
+}
+
+async function loadInventory() {
+    try {
+        const res = await fetch(`${ASSET_API}/stock/inventory`, { headers: { 'Authorization': `Bearer ${token}` } });
+        if(!res.ok) throw new Error("Failed to load inventory");
+        allInventory = await res.json();
+        
+        // Ensure warehouses are loaded for the filter dropdown
+        if (allWarehouses.length === 0) await loadWarehouses();
+        
+        const filter = document.getElementById('invWarehouseFilter');
+        const currentVal = filter.value;
+        filter.innerHTML = '<option value="">All Warehouses</option>';
+        // Only show storage warehouses in the filter
+        allWarehouses.filter(w => !w.IsConsumption).forEach(w => {
+            filter.innerHTML += `<option value="${w.WarehouseID}">${w.Name}</option>`;
+        });
+        const defWhs = localStorage.getItem('defaultWarehouse');
+        if (currentVal) filter.value = currentVal;
+        else if (defWhs) filter.value = defWhs;
+
+        renderInventory(allInventory);
+
+        // Keep the warehouse screen's stock counts in step with every inventory change
+        if (allWarehouses.length > 0 && document.getElementById('warehouseTableBody')) {
+            renderWarehouses(allWarehouses);
+        }
+    } catch (err) { console.error(err); }
+}
+
+// --- RENDER LOGIC ---
+function toggleStockStatusView(isActive) {
+    showingActiveStock = isActive;
+    
+    const activeBtn = document.getElementById('viewActiveStockBtn');
+    const inactiveBtn = document.getElementById('viewInactiveStockBtn');
+    
+    if(isActive) {
+        activeBtn.className = "px-3 py-1 text-xs font-bold rounded bg-teal-700 text-white shadow";
+        inactiveBtn.className = "px-3 py-1 text-xs font-bold rounded text-gray-400 hover:text-gray-200";
+    } else {
+        inactiveBtn.className = "px-3 py-1 text-xs font-bold rounded bg-gray-600 text-white shadow";
+        activeBtn.className = "px-3 py-1 text-xs font-bold rounded text-gray-400 hover:text-gray-200";
+    }
+    filterStockItems(true);
+}
+
+// --- MISSING WAREHOUSE & INVENTORY RENDERS ---
+function renderWarehouses(data) {
+    const tbody = document.getElementById('warehouseTableBody');
+    tbody.innerHTML = '';
+
+    if (data.length === 0) {
+         tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-gray-500">No warehouses found.</td></tr>';
+        return;
+    }
+
+    data.forEach(w => {
+        const typeLabel = w.IsConsumption 
+            ? '<span class="bg-orange-900 text-orange-300 border border-orange-700 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider">Consumption</span>' 
+            : '<span class="bg-teal-900 text-teal-300 border border-teal-700 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider">Storage</span>';
+
+        // AUTO-HEAL: older servers do not return IsFuelWarehouse at all, so this simply reads false
+        const isFuel = (w.IsFuelWarehouse === true || w.IsFuelWarehouse === 1);
+
+        let fuelCell;
+
+        if (w.IsConsumption) {
+            fuelCell = '<span class="text-[10px] text-gray-600 italic">Not eligible (Consumption)</span>';
+        } else if (isFuel) {
+            fuelCell = '<span class="bg-amber-900 text-amber-300 border border-amber-600 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mr-2"><i class="fas fa-gas-pump mr-1"></i>Fuel Module</span>'
+                     + '<button onclick="setFuelWarehouse(' + w.WarehouseID + ', false)" class="bg-gray-700 hover:bg-gray-600 text-gray-200 px-2 py-1 rounded text-[10px] font-bold transition border border-gray-500">Unassign</button>';
+        } else {
+            fuelCell = '<button onclick="setFuelWarehouse(' + w.WarehouseID + ', true)" class="bg-amber-800 hover:bg-amber-700 text-amber-100 px-3 py-1 rounded text-[10px] font-bold transition border border-amber-600">Assign to Fuel</button>';
+        }
+
+               // What is actually sitting in this warehouse right now
+        const whsStock = (typeof allInventory !== 'undefined' ? allInventory : [])
+            .filter(i => String(i.WarehouseID) === String(w.WarehouseID))
+            .sort((a, b) => String(a.ItemName || '').localeCompare(String(b.ItemName || '')));
+
+        const totalUnits = whsStock.reduce((sum, i) => sum + Number(i.Quantity || 0), 0);
+
+        const stockCell = whsStock.length === 0
+            ? '<span class="text-[10px] text-gray-600 italic">Empty</span>'
+            : `<span class="font-bold text-gray-200">${whsStock.length}</span> <span class="text-[10px] text-gray-500">item${whsStock.length === 1 ? '' : 's'}</span>
+               <span class="text-gray-600 mx-1">/</span>
+               <span class="font-mono font-bold text-teal-300">${totalUnits.toLocaleString()}</span> <span class="text-[10px] text-gray-500">units</span>`;
+
+        let actionCell = '';
+
+        if (whsStock.length > 0) {
+            actionCell += `<button id="whsStockBtn-${w.WarehouseID}" onclick="toggleWarehouseStock(${w.WarehouseID})" class="bg-gray-700 hover:bg-gray-600 text-gray-100 px-3 py-1 rounded text-[10px] font-bold transition shadow border border-gray-500 mr-1"><i class="fas fa-eye mr-1"></i>View Stock</button>`;
+        }
+
+        // Consumption warehouses are excluded from the GRV destination list, so no receive button for them
+        if (!w.IsConsumption) {
+            actionCell += `<button onclick="openGrvForWarehouse(${w.WarehouseID})" class="bg-blue-800 hover:bg-blue-700 text-blue-100 px-3 py-1 rounded text-[10px] font-bold transition shadow border border-blue-600"><i class="fas fa-truck-loading mr-1"></i>Receive</button>`;
+        }
+
+        if (actionCell === '') {
+            actionCell = '<span class="text-[10px] text-gray-600 italic">-</span>';
+        }
+
+        let stockRows = '';
+        whsStock.forEach(i => {
+            stockRows += `
+                <tr class="border-b border-gray-800">
+                    <td class="p-2 font-mono text-[11px] text-gray-500 w-40">${i.ItemCode || '-'}</td>
+                    <td class="p-2 text-gray-300">${i.ItemName || '-'}</td>
+                    <td class="p-2 text-right font-mono font-bold text-teal-300 w-40">${Number(i.Quantity || 0).toLocaleString()}</td>
+                </tr>
+            `;
+        });
+
+        tbody.innerHTML += `
+            <tr class="border-b border-gray-700 hover:bg-gray-800 transition">
+                <td class="p-3 border-r border-gray-700 text-center font-mono text-gray-500">${w.WarehouseID}</td>
+                <td class="p-3 border-r border-gray-700 font-bold text-gray-200">${w.Name}</td>
+                <td class="p-3 border-r border-gray-700 text-center">${typeLabel}</td>
+                <td class="p-3 border-r border-gray-700 text-center">${fuelCell}</td>
+                <td class="p-3 border-r border-gray-700 text-center whitespace-nowrap">${stockCell}</td>
+                <td class="p-3 text-center whitespace-nowrap">${actionCell}</td>
+            </tr>
+            <tr id="whsStockRow-${w.WarehouseID}" class="hidden">
+                <td colspan="6" class="p-0">
+                    <div class="p-4 bg-gray-950 border-b border-gray-700">
+                        <p class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3"><i class="fas fa-cubes mr-1"></i>Contents of ${w.Name}</p>
+                        <table class="w-full text-xs border-collapse bg-gray-900 rounded overflow-hidden">
+                            <thead class="bg-gray-800 text-[10px] uppercase text-gray-500">
+                                <tr>
+                                    <th class="p-2 text-left">Item Code</th>
+                                    <th class="p-2 text-left">Item</th>
+                                    <th class="p-2 text-right">Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>${stockRows}</tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+
+// --- FUEL MODULE: assign / unassign the single Fuel warehouse ---
+async function setFuelWarehouse(whsId, makeFuel) {
+    if (makeFuel) {
+        if (!confirm("Assign this warehouse to the Fuel Module?\n\nOnly ONE warehouse may be assigned at a time. The Fuel module's Inventory screen will show this warehouse and nothing else.")) return;
+    } else {
+        if (!confirm("Unassign this warehouse from the Fuel Module?\n\nThe Fuel module's Inventory screen will show nothing until another warehouse is assigned. The stock itself is not affected.")) return;
+    }
+
+    try {
+        const res = await fetch(`${ASSET_API}/stock/warehouses/${whsId}/fuel`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({ isFuel: makeFuel })
+        });
+
+        // AUTO-HEAL: clear message if the server has not been updated with the new route yet
+        if (res.status === 404) {
+            throw new Error("This server does not have the Fuel Warehouse endpoint yet. Update logic_stock.js and restart the server.");
+        }
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+            throw new Error(data.error || "Failed to update the Fuel Module assignment.");
+        }
+
+        await loadWarehouses();
+
+    } catch (err) {
+        alert(err.message);
+    }
+}
+
+function renderInventory(data) {
+    const tbody = document.getElementById('inventoryTableBody');
+    tbody.innerHTML = '';
+    
+    const filterVal = document.getElementById('invWarehouseFilter').value;
+    const filtered = filterVal ? data.filter(i => String(i.WarehouseID) === String(filterVal)) : data;
+
+    if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-gray-500">No inventory found in this warehouse.</td></tr>';
+        return;
+    }
+
+    filtered.forEach(i => {
+        const isSerial = i.IsSerialized;
+        const typeBadge = isSerial 
+            ? '<span class="bg-purple-900 text-purple-300 border border-purple-700 px-2 py-1 rounded text-[10px] font-bold">Strict (Serial/Asset)</span>' 
+            : '<span class="bg-gray-700 text-gray-300 border border-gray-500 px-2 py-1 rounded text-[10px] font-bold">Bulk Qty</span>';
+        
+        const safeName = (i.ItemName || '').replace(/'/g, "\\'");
+        
+        const inspectBtn = isSerial 
+            ? `<button onclick="openUnitInspectModal(${i.WarehouseID}, ${i.ItemID}, '${safeName}')" class="text-blue-400 hover:text-blue-300 text-xs font-bold transition"><i class="fas fa-search mr-1"></i>Inspect Serials</button>` 
+            : '<span class="text-gray-600 text-[10px] italic">Bulk Item</span>';
+
+        let qtyDisplay = parseFloat(i.Quantity).toFixed(2);
+        let rowClass = "border-b border-gray-700 hover:bg-gray-800 transition";
+        
+        if (i.Quantity < 0) {
+            qtyDisplay = `<span class="text-red-500 font-black flex items-center justify-end"><i class="fas fa-exclamation-triangle mr-2"></i>${qtyDisplay} (GRV REQ)</span>`;
+            rowClass = "border-b border-red-900 bg-red-900/10 hover:bg-red-900/20 transition";
+        } else {
+            qtyDisplay = `<span class="text-teal-400 font-black">${qtyDisplay}</span>`;
+        }
+
+        tbody.innerHTML += `
+            <tr class="${rowClass}">
+                <td class="p-3 border-r border-gray-700 font-bold text-gray-300">${i.WarehouseName}</td>
+                <td class="p-3 border-r border-gray-700 font-mono text-teal-400">${i.ItemCode || '-'}</td>
+                <td class="p-3 border-r border-gray-700 text-gray-200">${i.ItemName}</td>
+                <td class="p-3 border-r border-gray-700 text-center">${typeBadge}</td>
+                <td class="p-3 border-r border-gray-700 text-right text-lg">${qtyDisplay}</td>
+                <td class="p-3 text-center">${inspectBtn}</td>
+            </tr>
+        `;
+    });
+}
+
+
+// --- UNIT INSPECT / SERIAL EDIT LOGIC ---
+async function openUnitInspectModal(whsId, itemId, itemName) {
+    document.getElementById('inspectModalTitle').textContent = `Inspect Units: ${itemName}`;
+    document.getElementById('unitInspectModal').classList.add('active');
+    
+    const tbody = document.getElementById('inspectUnitsBody');
+    tbody.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-gray-500 font-mono"><i class="fas fa-spinner fa-spin mr-2"></i> Fetching active units...</td></tr>';
+
+    try {
+        const res = await fetch(`${ASSET_API}/stock/warehouses/${whsId}/items/${itemId}/units`, { headers: { 'Authorization': `Bearer ${token}` } });
+        if(!res.ok) throw new Error("Failed to load units");
+        const units = await res.json();
+        
+        tbody.innerHTML = '';
+        if(units.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-gray-500 italic">No specific units found in this warehouse.</td></tr>';
+            return;
+        }
+
+        units.forEach(u => {
+            const d = u.DateReceived ? new Date(u.DateReceived).toLocaleString() : '<span class="text-gray-600">-</span>';
+            const po = u.PONumber || '<span class="text-gray-600">-</span>';
+            
+            tbody.innerHTML += `
+                <tr class="hover:bg-gray-800 transition group">
+                    <td class="p-3 border-r border-gray-700 text-gray-400">${d}</td>
+                    <td class="p-3 border-r border-gray-700 font-mono text-blue-400">${po}</td>
+                    <td class="p-3 border-r border-gray-700">
+                        <input type="text" id="edit-sn-${u.UnitID}" value="${u.SerialNumber || ''}" class="w-full bg-gray-900 border border-transparent group-hover:border-gray-600 rounded px-2 py-1 text-xs text-white focus:outline-none focus:border-blue-500 transition" placeholder="Enter Serial...">
+                    </td>
+                    <td class="p-3 text-center whitespace-nowrap">
+                        <button onclick="saveUnitSerial(${u.UnitID})" class="bg-gray-700 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-[10px] font-bold transition shadow border border-gray-600 mr-1">Save</button>
+                        <button onclick="printTag('${u.SerialNumber || u.AssetTag || ''}', '${(itemName || '').replace(/'/g, "\\'")}')" class="bg-purple-700 hover:bg-purple-600 text-white px-3 py-1.5 rounded text-[10px] font-bold transition shadow border border-purple-500" title="Print Tag"><i class="fas fa-print"></i></button>
+                    </td>
+                </tr>
+            `;
+        });
+    } catch(e) {
+        tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-red-400 font-bold">Error: ${e.message}</td></tr>`;
+    }
+}
+
+function closeUnitInspectModal() {
+    document.getElementById('unitInspectModal').classList.remove('active');
+}
+
+async function saveUnitSerial(unitId) {
+    const input = document.getElementById(`edit-sn-${unitId}`);
+    const newSn = input.value.trim();
+    
+    // Visual feedback
+    const originalBg = input.className;
+    input.classList.add('bg-blue-900', 'animate-pulse');
+
+    try {
+        // AUTO-HEAL: mobile build queues offline; web build saves straight to the server
+        if (canQueueOffline()) {
+            offlineQueue.push({
+                type: 'update_serial', // ⚡ New Sync Type
+                unitId: unitId,
+                serialNumber: newSn
+            });
+            localforage.setItem('hr_offline_queue', offlineQueue);
+            if (typeof updateQueueUI === 'function') updateQueueUI();
+        } else {
+            const res = await fetch(`${ASSET_API}/stock/units/${unitId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ serialNumber: newSn })
+            });
+            if (!res.ok) throw new Error(await readApiError(res, 'Failed to update serial number'));
+        }
+        
+        // Success flash
+        input.classList.remove('bg-blue-900', 'animate-pulse');
+        input.classList.add('bg-green-900');
+        setTimeout(() => {
+            input.className = originalBg;
+        }, 1000);
+        
+    } catch(e) {
+        alert(e.message);
+        input.classList.remove('bg-blue-900', 'animate-pulse');
+    }
+}
+
+function filterStockItems(resetPage = true) {
+    if (resetPage) currentStockPage = 1;
+    
+    const term = document.getElementById('stockItemSearch').value.toLowerCase();
+    const catFilter = document.getElementById('stockCategoryFilter').value;
+
+    const filtered = allStockItems.filter(i => {
+        const matchStatus = i.IsActive === showingActiveStock;
+        const matchSearch = (i.Name && i.Name.toLowerCase().includes(term)) || 
+                            (i.ItemCode && i.ItemCode.toLowerCase().includes(term)) ||
+                            (i.Barcodes && i.Barcodes.toLowerCase().includes(term));
+        const matchCat = catFilter === "" || i.Category === catFilter;
+        return matchStatus && matchSearch && matchCat;
+    });
+    renderStockItems(filtered);
+}
+
+function renderStockItems(data) {
+    const tbody = document.getElementById('stockItemTableBody');
+    tbody.innerHTML = '';
+    
+    const totalPages = Math.ceil(data.length / itemsPerPage) || 1;
+    if (currentStockPage > totalPages) currentStockPage = totalPages;
+
+    const start = (currentStockPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const paginatedData = data.slice(start, end);
+
+    if(paginatedData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-gray-400">No stock items found matching criteria.</td></tr>';
+    } else {
+        paginatedData.forEach(item => {
+            const typeBadge = item.IsSerialized 
+                ? `<span class="bg-purple-900 text-purple-300 border border-purple-700 px-2 py-1 rounded text-[10px] font-bold">Strict (Serial/Asset)</span>` 
+                : `<span class="bg-gray-700 text-gray-300 border border-gray-500 px-2 py-1 rounded text-[10px] font-bold">Bulk (Qty)</span>`;
+            
+            let barcodeDisplay = '<span class="text-gray-600 text-[10px] italic">None</span>';
+            if (item.Barcodes) {
+                const bCount = item.Barcodes.split(',').length;
+                const safeName = (item.Name || '').replace(/'/g, "\\'");
+                barcodeDisplay = `<button onclick="openViewBarcodesModal(${item.ItemID}, '${safeName}')" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-[10px] font-bold transition shadow border border-gray-500"><i class="fas fa-list mr-1"></i>Inspect Serials (${bCount})</button>`;
+            }
+
+            tbody.innerHTML += `
+                <tr class="border-b border-gray-700 hover:bg-gray-800 transition">
+                    <td class="p-3 border-r border-gray-700 font-mono text-teal-400">${item.ItemCode || '-'}</td>
+                    <td class="p-3 border-r border-gray-700 font-bold text-gray-200">${item.Name} <div class="text-[10px] text-gray-500 font-normal">${item.Description || ''}</div></td>
+                    <td class="p-3 border-r border-gray-700 text-xs text-gray-400">${item.Category || '-'}</td>
+                    <td class="p-3 border-r border-gray-700 text-center">${typeBadge}</td>
+                    <td class="p-3 border-r border-gray-700 text-center">${barcodeDisplay}</td>
+                    <td class="p-3 text-right">
+                        <button onclick="editStockItem(${item.ItemID})" class="text-teal-400 hover:text-teal-300 text-xs font-bold"><i class="fas fa-edit mr-1"></i>Edit</button>
+                    </td>
+                </tr>
+            `;
+        });
+    }
+    updatePaginationUI('stock', currentStockPage, totalPages, data.length);
+}
+
+function filterInventory() {
+    const selected = document.getElementById('invWarehouseFilter').value;
+    if (selected) {
+        localStorage.setItem('defaultWarehouse', selected);
+    } else {
+        localStorage.removeItem('defaultWarehouse');
+    }
+    renderInventory(allInventory);
+}
+
+// --- WAREHOUSE MANAGEMENT ---
+document.getElementById('addWarehouseForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const fuelBox = document.getElementById('newWhsFuel');   // AUTO-HEAL: may not exist on older HTML
+    const wantsFuel = fuelBox ? fuelBox.checked : false;
+    const isCons = document.getElementById('newWhsConsumption').checked;
+
+    if (wantsFuel && isCons) {
+        return alert("A Consumption warehouse cannot be the Fuel Module warehouse. Untick one of the two.");
+    }
+
+    const payload = {
+        name: document.getElementById('newWhsName').value,
+        isConsumption: isCons,
+        isFuelWarehouse: wantsFuel
+    };
+    try {
+        const res = await fetch(`${ASSET_API}/stock/warehouses`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify(payload)
+        });
+        
+        const data = await res.json();
+        if(!res.ok) throw new Error(data.error || "Failed to add warehouse");
+        
+        document.getElementById('addWarehouseForm').reset();
+        loadWarehouses();
+    } catch (err) { 
+        alert("Error adding warehouse: " + err.message); 
+    }
+});
+
+// --- MODAL: CREATE/EDIT STOCK ITEM & BARCODES ---
+function openAddStockItemModal() {
+        document.getElementById('addStockItemForm').reset();
+        document.getElementById('editStockItemId').value = '';
+        document.getElementById('stockModalTitle').textContent = 'Create Master Stock Item';
+        document.getElementById('initialBarcodeSection').classList.remove('hidden');
+        document.getElementById('barcodeManagementSection').classList.add('hidden');
+        document.getElementById('deactivateStockBtn').classList.add('hidden');
+        document.getElementById('addStockItemModal').classList.add('active');
+    }
+
+async function editStockItem(id) {
+    const item = allStockItems.find(i => i.ItemID === id);
+    if(!item) return;
+
+    document.getElementById('addStockItemForm').reset();
+    document.getElementById('editStockItemId').value = item.ItemID;
+    document.getElementById('stockModalTitle').textContent = `Edit Stock Item: ${item.ItemCode || ''}`;
+    
+    document.getElementById('newItemCode').value = item.ItemCode || '';
+    document.getElementById('newItemCategory').value = item.Category || '';
+    document.getElementById('newItemName').value = item.Name || '';
+    document.getElementById('newItemDesc').value = item.Description || '';
+    document.getElementById('newIsSerialized').checked = item.IsSerialized;
+
+    document.getElementById('deactivateStockBtn').classList.remove('hidden');
+        document.getElementById('deactivateStockBtn').textContent = item.IsActive ? 'Deactivate Item' : 'Reactivate Item';
+        
+        // Hide initial barcode input, show live management section
+        document.getElementById('initialBarcodeSection').classList.add('hidden');
+        document.getElementById('barcodeManagementSection').classList.remove('hidden');
+        await loadItemBarcodes(item.ItemID);
+    await loadItemBarcodes(item.ItemID);
+
+    document.getElementById('addStockItemModal').classList.add('active');
+}
+
+function closeAddStockItemModal() {
+    document.getElementById('addStockItemModal').classList.remove('active');
+}
+
+// Submits the main Item details (Create OR Edit)
+document.getElementById('addStockItemForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('saveStockItemBtn');
+        btn.disabled = true; btn.textContent = 'Saving...';
+        
+        const editId = document.getElementById('editStockItemId').value;
+        const payload = {
+            itemCode: document.getElementById('newItemCode').value,
+            category: document.getElementById('newItemCategory').value,
+            name: document.getElementById('newItemName').value,
+            description: document.getElementById('newItemDesc').value,
+            isSerialized: document.getElementById('newIsSerialized').checked,
+            initialBarcodes: document.getElementById('newInitialBarcodes').value
+        };
+
+    try {
+        const method = editId ? 'PUT' : 'POST';
+        const url = editId ? `${ASSET_API}/stock/items/${editId}` : `${ASSET_API}/stock/items`;
+        
+        const res = await fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify(payload)
+        });
+        
+        if(!res.ok) throw new Error("Failed to save item");
+        closeAddStockItemModal();
+        loadStockItems();
+    } catch (err) { alert(err.message); } finally { btn.disabled = false; btn.textContent = 'Save Item'; }
+});
+
+async function toggleItemDeactivation() {
+    const editId = document.getElementById('editStockItemId').value;
+    if(!editId) return;
+
+    const item = allStockItems.find(i => i.ItemID === parseInt(editId));
+    const confirmMsg = item.IsActive ? "Are you sure you want to deactivate this item? It will hide it from active lists." : "Reactivate this item?";
+    
+    if(!confirm(confirmMsg)) return;
+
+    try {
+        // Send a PUT with the inverse active state, preserving current field values
+        const payload = {
+            itemCode: document.getElementById('newItemCode').value,
+            category: document.getElementById('newItemCategory').value,
+            name: document.getElementById('newItemName').value,
+            description: document.getElementById('newItemDesc').value,
+            isSerialized: document.getElementById('newIsSerialized').checked,
+            isActive: !item.IsActive
+        };
+
+        const res = await fetch(`${ASSET_API}/stock/items/${editId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify(payload)
+        });
+        if(!res.ok) throw new Error("Failed to change item status");
+        
+        closeAddStockItemModal();
+        loadStockItems();
+    } catch(e) { alert(e.message); }
+}
+
+// --- Live Barcode Management ---
+function closeViewBarcodesModal() {
+    document.getElementById('viewBarcodesModal').classList.remove('active');
+}
+
+async function openViewBarcodesModal(itemId, itemName) {
+    document.getElementById('viewBarcodesTitle').textContent = `Inspect Serials: ${itemName}`;
+    document.getElementById('viewBarcodesModal').classList.add('active');
+    
+    const container = document.getElementById('viewBarcodesList');
+    container.innerHTML = '<tr><td colspan="2" class="p-4 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i>Loading serials...</td></tr>';
+    
+    try {
+        const res = await fetch(`${ASSET_API}/stock/items/${itemId}/barcodes`, { headers: { 'Authorization': `Bearer ${token}` } });
+        const barcodes = await res.json();
+        
+        container.innerHTML = '';
+        if(barcodes.length === 0) {
+            container.innerHTML = '<tr><td colspan="2" class="p-4 text-center text-gray-500 italic">No serials linked yet.</td></tr>';
+        } else {
+            barcodes.forEach(b => {
+                const statusClass = b.IsActive ? 'text-gray-200' : 'text-gray-500 line-through';
+                const safeName = (itemName || '').replace(/'/g, "\\'");
+                container.innerHTML += `
+                    <tr class="border-b border-gray-700 hover:bg-gray-800 transition">
+                        <td class="p-3 font-mono ${statusClass}"><i class="fas fa-barcode mr-2 text-gray-500"></i>${b.Barcode}</td>
+                        <td class="p-3 text-right">
+                            <button onclick="printTag('${b.Barcode}', '${safeName}')" class="bg-purple-700 hover:bg-purple-600 text-white px-3 py-1.5 rounded text-[10px] font-bold shadow transition border border-purple-500"><i class="fas fa-print mr-1"></i>Print</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+    } catch(e) { container.innerHTML = '<tr><td colspan="2" class="p-4 text-center text-red-400">Failed to load serials.</td></tr>'; }
+}
+
+async function loadItemBarcodes(itemId) {
+    const container = document.getElementById('barcodeListContainer');
+    container.innerHTML = '<li class="p-2 text-gray-500 text-center">Loading barcodes...</li>';
+    try {
+        const res = await fetch(`${ASSET_API}/stock/items/${itemId}/barcodes`, { headers: { 'Authorization': `Bearer ${token}` } });
+        const barcodes = await res.json();
+        
+        container.innerHTML = '';
+        if(barcodes.length === 0) {
+            container.innerHTML = '<li class="p-2 text-gray-500 text-center italic">No barcodes linked yet.</li>';
+        } else {
+            barcodes.forEach(b => {
+                const statusClass = b.IsActive ? 'text-gray-200' : 'text-gray-500 line-through';
+                const actionBtn = b.IsActive 
+                    ? `<button type="button" onclick="toggleBarcodeStatus(${b.BarcodeID}, false, ${itemId})" class="text-red-400 hover:text-red-300">Disable</button>`
+                    : `<button type="button" onclick="toggleBarcodeStatus(${b.BarcodeID}, true, ${itemId})" class="text-green-400 hover:text-green-300">Enable</button>`;
+                
+                container.innerHTML += `
+                    <li class="flex justify-between items-center p-2 hover:bg-gray-800 transition">
+                        <span class="font-mono ${statusClass}"><i class="fas fa-barcode mr-2"></i>${b.Barcode}</span>
+                        ${actionBtn}
+                    </li>
+                `;
+            });
+        }
+    } catch(e) { container.innerHTML = '<li class="p-2 text-red-400 text-center">Failed to load barcodes.</li>'; }
+}
+
+async function submitNewBarcode() {
+    const editId = document.getElementById('editStockItemId').value;
+    const barcodeText = document.getElementById('addBarcodeText').value;
+    
+    if(!editId) return alert("You must save the item first before adding dynamic barcodes.");
+    if(!barcodeText) return;
+
+    try {
+        const res = await fetch(`${ASSET_API}/stock/items/${editId}/barcodes`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({ barcode: barcodeText })
+        });
+        if(!res.ok) throw new Error("Barcode might already exist or server error");
+        
+        document.getElementById('addBarcodeText').value = '';
+        loadItemBarcodes(editId);
+        // Refresh master list quietly so the table updates in the background
+        fetch(`${ASSET_API}/stock/items`, { headers: { 'Authorization': `Bearer ${token}` } })
+            .then(r => r.json()).then(data => allStockItems = data);
+            
+    } catch(e) { alert(e.message); }
+}
+
+async function toggleBarcodeStatus(barcodeId, isActive, itemId) {
+    try {
+        await fetch(`${ASSET_API}/stock/barcodes/${barcodeId}/toggle`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({ isActive: isActive })
+        });
+        loadItemBarcodes(itemId);
+        // Refresh master list quietly
+        fetch(`${ASSET_API}/stock/items`, { headers: { 'Authorization': `Bearer ${token}` } })
+            .then(r => r.json()).then(data => allStockItems = data);
+    } catch(e) { alert(e.message); }
+}
+
+// --- GRV MANAGER LOGIC ---
+let allGRVs = [];
+let currentGrvView = 'Shortages';
+
+async function loadGRVs() {
+    try {
+        const res = await fetch(`${ASSET_API}/stock/grvs`, { headers: { 'Authorization': `Bearer ${token}` } });
+        if(!res.ok) throw new Error("Failed to load GRVs");
+        allGRVs = await res.json();
+        renderGRVs();
+    } catch (err) { console.error(err); }
+}
+
+async function toggleGrvView(view) {
+    currentGrvView = view;
+    ['Draft', 'Completed', 'Cancelled', 'Shortages'].forEach(v => {
+        const btn = document.getElementById(`view${v}GrvBtn`);
+        if(!btn) return;
+        
+        let colorClass = "bg-gray-700";
+        if(v === 'Draft') colorClass = 'bg-blue-700';
+        if(v === 'Completed') colorClass = 'bg-green-700';
+        if(v === 'Cancelled') colorClass = 'bg-gray-600';
+        if(v === 'Shortages') colorClass = 'bg-red-600 animate-pulse';
+
+        if (v === view) btn.className = `px-3 py-1 text-xs font-bold rounded text-white shadow ${colorClass}`;
+        else btn.className = `px-3 py-1 text-xs font-bold rounded hover:text-gray-200 ${v==='Shortages'?'text-red-400':'text-gray-400'}`;
+    });
+
+    if (view === 'Shortages') {
+        await loadInventory(); // Force refresh live stock to catch new negative deficits
+    }
+    renderGRVs();
+}
+
+function renderGRVs() {
+    const thead = document.querySelector('#section-grv-manager thead tr');
+    const tbody = document.getElementById('grvTableBody');
+    tbody.innerHTML = '';
+    
+    if (currentGrvView === 'Shortages') {
+        thead.innerHTML = `
+            <th class="p-3 border-r border-gray-600">Warehouse Deficit</th>
+            <th class="p-3 border-r border-gray-600">Item Name</th>
+            <th class="p-3 border-r border-gray-600 text-center">Shortage Quantity</th>
+            <th class="p-3 text-right">Action</th>
+        `;
+        
+        const shortages = allInventory.filter(i => i.Quantity < 0);
+        if (shortages.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-green-500 font-bold"><i class="fas fa-check-circle mr-2"></i>No stock shortages detected.</td></tr>`;
+            return;
+        }
+        
+        shortages.forEach(s => {
+            tbody.innerHTML += `
+                <tr class="border-b border-red-900 bg-red-900/10 hover:bg-red-900/20 transition">
+                    <td class="p-3 border-r border-red-800 text-gray-300 font-bold">${s.WarehouseName}</td>
+                    <td class="p-3 border-r border-red-800 text-gray-300">${s.ItemName} <span class="text-[10px] text-gray-500">(${s.ItemCode || 'No Code'})</span></td>
+                    <td class="p-3 border-r border-red-800 text-center text-red-500 font-black text-lg">${s.Quantity}</td>
+                    <td class="p-3 text-right"><button onclick="openGrvForShortage(${s.WarehouseID}, ${s.ItemID})" class="bg-red-700 hover:bg-red-600 text-white px-3 py-1 rounded text-xs font-bold shadow"><i class="fas fa-truck-loading mr-1"></i>GRV Now</button></td>
+                </tr>
+            `;
+        });
+        return;
+    }
+
+    // Standard headers for GRV views
+    thead.innerHTML = `
+        <th class="p-3 border-r border-gray-600">Date / ID</th>
+        <th class="p-3 border-r border-gray-600">PO Number</th>
+        <th class="p-3 border-r border-gray-600">Destination</th>
+        <th class="p-3 border-r border-gray-600">Status</th>
+        <th class="p-3 text-right">Actions</th>
+    `;
+
+    const filtered = allGRVs.filter(g => g.Status === currentGrvView);
+    
+    if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-gray-500">No ${currentGrvView} GRVs found.</td></tr>`;
+        return;
+    }
+
+    filtered.forEach(g => {
+        let actions = '';
+        if (g.Status === 'Draft') {
+            actions = `
+                <button onclick="editGrv(${g.GRVID})" class="text-blue-400 hover:text-blue-300 font-bold text-xs mr-3"><i class="fas fa-edit mr-1"></i>Edit / Complete</button>
+                <button onclick="cancelGrv(${g.GRVID})" class="text-red-400 hover:text-red-300 font-bold text-xs"><i class="fas fa-ban mr-1"></i>Cancel</button>
+            `;
+        } else {
+            actions = `<span class="text-[10px] text-gray-500 italic">Locked</span>`;
+        }
+
+        const dateDisplay = g.CompletedDate ? new Date(g.CompletedDate).toLocaleDateString() : new Date(g.CreatedDate).toLocaleDateString();
+
+        tbody.innerHTML += `
+            <tr class="border-b border-gray-700 hover:bg-gray-800 transition">
+                <td class="p-3 border-r border-gray-700">
+                    <div class="font-bold text-gray-300">${dateDisplay}</div>
+                    <div class="text-[10px] font-mono text-gray-500">ID: ${g.GRVID}</div>
+                </td>
+                <td class="p-3 border-r border-gray-700 font-mono text-blue-400">${g.PONumber || 'N/A'}</td>
+                <td class="p-3 border-r border-gray-700 text-xs text-gray-300">${g.WarehouseName || '-'}</td>
+                <td class="p-3 border-r border-gray-700 text-xs font-bold text-gray-400">${g.Status}</td>
+                <td class="p-3 text-right">${actions}</td>
+            </tr>
+        `;
+    });
+}
+
+async function editGrv(id) {
+    const grv = allGRVs.find(g => g.GRVID === id);
+    if (!grv) return;
+
+    if(allWarehouses.length === 0) await loadWarehouses();
+    if(allStockItems.length === 0) await loadStockItems();
+
+    await openGrvModal(); // setup dropdowns
+    
+    document.getElementById('editGrvId').value = grv.GRVID;
+    document.getElementById('grvPO').value = grv.PONumber;
+    document.getElementById('grvWarehouse').value = grv.ToWarehouseID;
+    
+    currentGrvItems = grv.items.map(i => ({
+        itemId: i.ItemID,
+        itemName: i.ItemName,
+        isSerialized: i.IsSerialized,
+        quantity: i.Quantity,
+        serials: i.serials || []
+    }));
+    
+    renderGrvPending();
+}
+
+async function cancelGrv(id) {
+    if(!confirm("Are you sure you want to cancel this Draft GRV?")) return;
+    try {
+        const res = await fetch(`${ASSET_API}/stock/grvs/${id}/cancel`, {
+            method: 'PUT',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if(!res.ok) throw new Error("Failed to cancel GRV");
+        loadGRVs();
+    } catch(e) { alert(e.message); }
+}
+
+// --- Expand/collapse a warehouse's contents inline ---
+function toggleWarehouseStock(whsId) {
+    const row = document.getElementById('whsStockRow-' + whsId);
+    const btn = document.getElementById('whsStockBtn-' + whsId);
+    if (!row) return;
+
+    const isNowHidden = row.classList.toggle('hidden');
+
+    if (btn) {
+        btn.innerHTML = isNowHidden
+            ? '<i class="fas fa-eye mr-1"></i>View Stock'
+            : '<i class="fas fa-eye-slash mr-1"></i>Hide Stock';
+    }
+}
+
+// --- MODAL: GRV (RECEIVE STOCK) ---
+// Opens the standard GRV modal straight from a warehouse row, destination pre-selected
+async function openGrvForWarehouse(whsId) {
+    await openGrvModal();
+
+    const whsSelect = document.getElementById('grvWarehouse');
+    whsSelect.value = String(whsId);
+
+    // AUTO-HEAL: if the warehouse is not in the destination list, say so rather than silently receiving into the wrong place
+    if (String(whsSelect.value) !== String(whsId)) {
+        alert("This warehouse cannot receive stock. Consumption warehouses are not valid GRV destinations.");
+        closeGrvModal();
+        return;
+    }
+
+    checkGrvItemType();
+    document.getElementById('grvPO').focus();
+}
+async function openGrvForShortage(whsId, itemId) {
+    await openGrvModal();
+    document.getElementById('grvWarehouse').value = whsId;
+    document.getElementById('grvItemSelect').value = itemId;
+    checkGrvItemType();
+}
+
+async function openGrvModal() {
+    document.getElementById('editGrvId').value = '';
+    document.getElementById('grvPO').value = '';
+    currentGrvItems = [];
+    renderGrvPending();
+    
+    if(allWarehouses.length === 0) await loadWarehouses();
+    if(allStockItems.length === 0) await loadStockItems();
+
+    const whsSelect = document.getElementById('grvWarehouse');
+    whsSelect.innerHTML = '<option value="">-- Select Destination --</option>';
+    allWarehouses.filter(w => !w.IsConsumption).forEach(w => {
+        whsSelect.innerHTML += `<option value="${w.WarehouseID}">${w.Name}</option>`;
+    });
+
+    const itemSelect = document.getElementById('grvItemSelect');
+    itemSelect.innerHTML = '<option value="">-- Select Item --</option>';
+    allStockItems.forEach(i => {
+        itemSelect.innerHTML += `<option value="${i.ItemID}" data-serial="${i.IsSerialized ? '1' : '0'}">${i.Name} (${i.ItemCode || 'No Code'})</option>`;
+    });
+
+    document.getElementById('grvModal').classList.add('active');
+    checkGrvItemType();
+}
+
+function closeGrvModal() { document.getElementById('grvModal').classList.remove('active'); }
+
+function checkGrvItemType() {
+    const select = document.getElementById('grvItemSelect');
+    const isSerial = select.options[select.selectedIndex]?.getAttribute('data-serial') === '1';
+    
+    document.getElementById('grvBulkInputContainer').classList.toggle('hidden', isSerial);
+    document.getElementById('grvSerialInputContainer').classList.toggle('hidden', !isSerial);
+    document.getElementById('grvBulkQty').value = '';
+    document.getElementById('grvSerials').value = '';
+}
+
+function addGrvRow() {
+    const select = document.getElementById('grvItemSelect');
+    if(!select.value) return alert("Select an item first.");
+    
+    const itemId = parseInt(select.value);
+    const itemName = select.options[select.selectedIndex].text;
+    const isSerialized = select.options[select.selectedIndex].getAttribute('data-serial') === '1';
+    
+    if(isSerialized) {
+        const serialsRaw = document.getElementById('grvSerials').value;
+        // Split by comma or newline
+        const serialsArray = serialsRaw.split(/[\n,]+/).map(s => s.trim()).filter(s => s !== '');
+        if(serialsArray.length === 0) return alert("Enter at least one serial number.");
+        
+        const serialObjects = serialsArray.map(s => ({ serialNumber: s, assetTag: s }));
+        currentGrvItems.push({ itemId, itemName, isSerialized: true, quantity: serialsArray.length, serials: serialObjects });
+    } else {
+        const qty = parseFloat(document.getElementById('grvBulkQty').value);
+        if(isNaN(qty) || qty <= 0) return alert("Enter a valid bulk quantity.");
+        currentGrvItems.push({ itemId, itemName, isSerialized: false, quantity: qty, serials: [] });
+    }
+    
+    // Reset inputs
+    select.value = '';
+    checkGrvItemType();
+    renderGrvPending();
+}
+
+function removeGrvRow(index) {
+    currentGrvItems.splice(index, 1);
+    renderGrvPending();
+}
+
+function renderGrvPending() {
+    const tbody = document.getElementById('grvPendingBody');
+    tbody.innerHTML = '';
+    if(currentGrvItems.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-center text-gray-500">No items added to GRV yet.</td></tr>';
+        return;
+    }
+    currentGrvItems.forEach((item, idx) => {
+        const detail = item.isSerialized ? `<span class="text-[10px] text-purple-400">${item.quantity} Serials</span>` : `<span class="font-bold">${item.quantity}</span>`;
+        tbody.innerHTML += `
+            <tr>
+                <td class="p-2 border-r border-gray-700 font-bold text-gray-300">${item.itemName}</td>
+                <td class="p-2 border-r border-gray-700 text-right">${detail}</td>
+                <td class="p-2 text-center"><button onclick="removeGrvRow(${idx})" class="text-red-400 hover:text-red-300"><i class="fas fa-trash"></i></button></td>
+            </tr>
+        `;
+    });
+}
+
+async function submitGrv(status) {
+    if(currentGrvItems.length === 0) return alert("Add items to the GRV list first.");
+    const poNumber = document.getElementById('grvPO').value;
+    const toWarehouseId = document.getElementById('grvWarehouse').value;
+    const grvId = document.getElementById('editGrvId').value;
+    
+    if(!poNumber || !toWarehouseId) return alert("PO Number and Destination Warehouse are required.");
+
+    const btn = document.getElementById(status === 'Draft' ? 'saveGrvDraftBtn' : 'submitGrvBtn');
+    const originalText = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Processing...';
+
+    const payload = { grvId, poNumber, toWarehouseId, items: currentGrvItems, status: status };
+
+    try {
+        const res = await fetch(`${ASSET_API}/stock/grv`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify(payload)
+        });
+        if(!res.ok) throw new Error(await readApiError(res, "Failed to process GRV"));
+        
+        alert(`GRV ${status === 'Draft' ? 'Saved as Draft' : 'Processed Successfully'}`);
+        closeGrvModal();
+        loadInventory();
+        loadGRVs(); // refresh manager list
+    } catch (err) { alert(err.message); } 
+    finally { btn.disabled = false; btn.textContent = originalText; }
+}
+
+// --- MODAL: TRANSFER & CONSUME ---
+async function openTransferStockModal() {
+    document.getElementById('transReason').value = '';
+    document.getElementById('transQty').value = '';
+    
+    if(allWarehouses.length === 0) await loadWarehouses();
+    if(allInventory.length === 0) await loadInventory();
+
+    const fromWhs = document.getElementById('transFromWhs');
+    const toWhs = document.getElementById('transToWhs');
+    
+    fromWhs.innerHTML = '<option value="">-- Select Source --</option>';
+    toWhs.innerHTML = '<option value="">-- Select Destination --</option>';
+    
+    allWarehouses.forEach(w => {
+        if(!w.IsConsumption) fromWhs.innerHTML += `<option value="${w.WarehouseID}">${w.Name}</option>`;
+        toWhs.innerHTML += `<option value="${w.WarehouseID}">${w.Name} ${w.IsConsumption ? '(Consumption)' : ''}</option>`;
+    });
+
+    const defWhs = localStorage.getItem('defaultWarehouse');
+    if (defWhs) {
+        fromWhs.value = defWhs;
+        loadTransferItems(); // Auto-load items for the default warehouse
+    } else {
+        document.getElementById('transItemSelect').innerHTML = '<option value="">-- Select Source First --</option>';
+    }
+    document.getElementById('transSerialInputContainer').classList.add('hidden');
+
+    document.getElementById('transferStockModal').classList.add('active');
+}
+
+function closeTransferStockModal() { document.getElementById('transferStockModal').classList.remove('active'); }
+
+function loadTransferItems() {
+    const whsId = document.getElementById('transFromWhs').value;
+    const select = document.getElementById('transItemSelect');
+    
+    select.innerHTML = '<option value="">-- Select Item --</option>';
+    if(!whsId) return;
+
+    // Filter inventory currently sitting in the selected source warehouse
+    const availableInv = allInventory.filter(i => String(i.WarehouseID) === String(whsId) && i.Quantity > 0);
+    
+    // Group by ItemID to remove duplicates (since serialized items count per warehouse)
+    const uniqueItems = [];
+    const itemMap = new Map();
+    for (const inv of availableInv) {
+        if (!itemMap.has(inv.ItemID)) {
+            itemMap.set(inv.ItemID, true);
+            uniqueItems.push(inv);
+        }
+    }
+
+    uniqueItems.forEach(i => {
+        select.innerHTML += `<option value="${i.ItemID}" data-serial="${i.IsSerialized ? '1' : '0'}" data-qty="${i.Quantity}">${i.ItemName} (Avail: ${i.Quantity})</option>`;
+    });
+}
+
+async function checkTransferItemType() {
+    const select = document.getElementById('transItemSelect');
+    if(!select.value) return;
+    
+    const isSerial = select.options[select.selectedIndex].getAttribute('data-serial') === '1';
+    const maxQty = select.options[select.selectedIndex].getAttribute('data-qty');
+    
+    const bulkDiv = document.getElementById('transBulkInputContainer');
+    const serialDiv = document.getElementById('transSerialInputContainer');
+    
+    bulkDiv.classList.add('hidden');
+    serialDiv.classList.add('hidden');
+
+    if(isSerial) {
+        serialDiv.classList.remove('hidden');
+        const serialSelect = document.getElementById('transSerialSelect');
+        serialSelect.innerHTML = '<option value="">Loading specific units...</option>';
+        
+        // Fetch specific units sitting in this warehouse
+        const whsId = document.getElementById('transFromWhs').value;
+        const itemId = select.value;
+        
+        try {
+            const res = await fetch(`${ASSET_API}/stock/warehouses/${whsId}/items/${itemId}/units`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (!res.ok) throw new Error("Failed to load units");
+            
+            const units = await res.json();
+            
+            serialSelect.innerHTML = '<option value="">-- Select Specific Serial Number --</option>';
+            if (units.length === 0) {
+                serialSelect.innerHTML = '<option value="">No units available in this warehouse</option>';
+            } else {
+                units.forEach(u => {
+                    // Display pure Serial Number (critical for barcode scanning match), fallback to Asset Tag, fallback to DB ID
+                    const display = u.SerialNumber ? u.SerialNumber : (u.AssetTag ? u.AssetTag : `Unit ID: ${u.UnitID}`);
+                    serialSelect.innerHTML += `<option value="${u.UnitID}">${display}</option>`;
+                });
+            }
+        } catch(e) {
+            serialSelect.innerHTML = '<option value="">Error loading serials</option>';
+        }
+
+    } else {
+        bulkDiv.classList.remove('hidden');
+        document.getElementById('transMaxQty').textContent = `(Max: ${maxQty})`;
+        document.getElementById('transQty').setAttribute('max', maxQty);
+    }
+}
+
+async function submitTransfer() {
+    const fromWarehouseId = document.getElementById('transFromWhs').value;
+    const toWarehouseId = document.getElementById('transToWhs').value;
+    const reason = document.getElementById('transReason').value;
+    const select = document.getElementById('transItemSelect');
+    const itemId = select.value;
+    
+    if(!fromWarehouseId || !toWarehouseId || !itemId) return alert("Select source, destination, and item.");
+    if(fromWarehouseId === toWarehouseId) return alert("Source and Destination cannot be the same.");
+
+    const isSerial = select.options[select.selectedIndex].getAttribute('data-serial') === '1';
+    let payloadItems = [];
+
+    if(isSerial) {
+        const unitId = document.getElementById('transSerialSelect').value;
+        if(!unitId) return alert("Select a specific serialized unit to transfer.");
+        payloadItems.push({ itemId, quantity: 1, isSerialized: true, unitIds: [unitId] });
+    } else {
+        const qty = parseFloat(document.getElementById('transQty').value);
+        const maxQty = parseFloat(select.options[select.selectedIndex].getAttribute('data-qty'));
+        if(isNaN(qty) || qty <= 0 || qty > maxQty) return alert("Enter a valid transfer quantity.");
+        payloadItems.push({ itemId, quantity: qty, isSerialized: false });
+    }
+
+    const payload = { fromWarehouseId, toWarehouseId, reason, items: payloadItems };
+    const btn = document.getElementById('submitTransferBtn');
+    btn.disabled = true; btn.textContent = 'Processing...';
+
+    try {
+        const res = await fetch(`${ASSET_API}/stock/transfer`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify(payload)
+        });
+        if(!res.ok) throw new Error(await readApiError(res, "Failed to transfer stock"));
+        
+        alert("Transfer Processed Successfully");
+        closeTransferStockModal();
+        loadInventory();
+    } catch (err) { alert(err.message); } finally { btn.disabled = false; btn.textContent = 'Process Transfer'; }
+}
+
+// --- BULK EXPORT & UPLOAD EXCEL ---
+async function downloadStockExcel(type) {
+    try {
+        const url = `${ASSET_API}/stock/export?type=${type}`;
+        const response = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` } });
+        
+        if (!response.ok) throw new Error("Failed to generate Excel file.");
+        
+        const blob = await response.blob();
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = `Stock_Catalog_${type}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(downloadUrl);
+    } catch (err) {
+        alert("Export Error: " + err.message);
+    }
+}
+
+async function handleStockBulkUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Reset input so user can upload same file again if needed
+    event.target.value = '';
+
+    const formData = new FormData();
+    formData.append('excelFile', file);
+
+    // Visual loading state
+    const btn = document.getElementById('viewActiveStockBtn');
+    const originalText = btn.textContent;
+    btn.textContent = 'Processing Excel...';
+
+    try {
+        const res = await fetch(`${ASSET_API}/stock/bulk-upload`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }, // FormData auto-sets Content-Type
+            body: formData
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Upload failed.");
+
+        alert(data.message);
+        loadStockItems(); // Refresh the table
+    } catch (err) {
+        alert("Upload Error: " + err.message);
+    } finally {
+        btn.textContent = originalText;
+    }
+}
+
+// ==========================================
+// MASTER SERVICE HISTORY LOGIC
+// ==========================================
+let allMasterMaintLogs = [];
+
+async function loadMasterServiceHistory() {
+    const tbody = document.getElementById('masterMaintTableBody');
+    tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i>Loading records...</td></tr>';
+    try {
+        const res = await fetch(`${ASSET_API}/assets/all-maintenance`, { headers: { 'Authorization': `Bearer ${token}` } });
+        if (!res.ok) throw new Error("Failed to load records");
+        allMasterMaintLogs = await res.json();
+        filterMasterServiceHistory();
+    } catch (err) { 
+        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-red-400">Error: ${err.message}</td></tr>`; 
+    }
+}
+
+function clearMasterMaintFilters() {
+    document.getElementById('masterMaintSearch').value = '';
+    document.getElementById('masterMaintDateFrom').value = '';
+    document.getElementById('masterMaintDateTo').value = '';
+    filterMasterServiceHistory();
+}
+
+function filterMasterServiceHistory() {
+    const term = document.getElementById('masterMaintSearch').value.toLowerCase();
+    const dateFrom = document.getElementById('masterMaintDateFrom').value;
+    const dateTo = document.getElementById('masterMaintDateTo').value;
+
+    let filtered = allMasterMaintLogs.filter(log => {
+        const matchSearch = 
+            (log.AssetTag && log.AssetTag.toLowerCase().includes(term)) ||
+            (log.AssetName && log.AssetName.toLowerCase().includes(term)) ||
+            (log.Description && log.Description.toLowerCase().includes(term)) ||
+            (log.LoggedBy && log.LoggedBy.toLowerCase().includes(term));
+        
+        let matchDate = true;
+        const logDate = new Date(log.ServiceDate);
+        logDate.setHours(0,0,0,0);
+
+        if (dateFrom) {
+            const from = new Date(dateFrom);
+            from.setHours(0,0,0,0);
+            if (logDate < from) matchDate = false;
+        }
+        if (dateTo) {
+            const to = new Date(dateTo);
+            to.setHours(0,0,0,0);
+            if (logDate > to) matchDate = false;
+        }
+
+        return matchSearch && matchDate;
+    });
+
+    // Limit to exactly 20 for UI cleanliness as requested
+    renderMasterServiceHistory(filtered.slice(0, 20));
+}
+
+function renderMasterServiceHistory(data) {
+    const tbody = document.getElementById('masterMaintTableBody');
+    tbody.innerHTML = '';
+    if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-gray-500">No maintenance records match your filters.</td></tr>';
+        return;
+    }
+    
+    data.forEach(log => {
+        const d = new Date(log.ServiceDate).toLocaleDateString();
+        const user = log.LoggedBy ? `<span class="text-green-400 font-bold"><i class="fas fa-mobile-alt mr-1 text-[10px]"></i>${log.LoggedBy}</span>` : '<span class="text-gray-500 italic">System / Admin</span>';
+        
+        tbody.innerHTML += `
+            <tr class="border-b border-gray-700 hover:bg-gray-800 transition">
+                <td class="p-3 border-r border-gray-700 text-gray-300 font-bold">${d}</td>
+                <td class="p-3 border-r border-gray-700">
+                    <div class="font-mono text-blue-400">${log.AssetTag}</div>
+                    <div class="text-[10px] text-gray-400">${log.AssetName}</div>
+                </td>
+                <td class="p-3 border-r border-gray-700 text-xs text-gray-300 whitespace-pre-wrap break-words max-w-xs md:max-w-md lg:max-w-lg">${log.Description}</td>
+                <td class="p-3 border-r border-gray-700 text-xs">${user}</td>
+                <td class="p-3 text-right whitespace-nowrap">
+                    <button onclick="openViewMasterMaintModal(${log.MaintenanceID})" class="text-blue-400 hover:text-blue-300 text-xs font-bold mr-3"><i class="fas fa-eye mr-1"></i>View / Print</button>
+                    <button onclick="openEditMasterMaintModal(${log.MaintenanceID})" class="text-yellow-500 hover:text-yellow-400 text-xs font-bold"><i class="fas fa-edit mr-1"></i>Edit</button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+function openEditMasterMaintModal(id) {
+    const log = allMasterMaintLogs.find(m => m.MaintenanceID === id);
+    if(!log) return;
+
+    document.getElementById('editMasterMaintId').value = log.MaintenanceID;
+    document.getElementById('editMasterMaintAssetDisplay').textContent = `Editing Record for: ${log.AssetTag} - ${log.AssetName}`;
+    
+    const d = new Date(log.ServiceDate);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    document.getElementById('editMasterMaintDate').value = `${year}-${month}-${day}`;
+    
+    document.getElementById('editMasterMaintDesc').value = log.Description || '';
+    document.getElementById('editMasterMaintModal').classList.add('active');
+}
+
+function closeEditMasterMaintModal() {
+    document.getElementById('editMasterMaintModal').classList.remove('active');
+}
+
+// --- VIEW & PRINT JOB CARD LOGIC ---
+function openViewMasterMaintModal(id) {
+    const log = allMasterMaintLogs.find(m => m.MaintenanceID === id);
+    if(!log) return;
+
+    document.getElementById('viewMaintAsset').textContent = log.AssetTag || 'Unknown Asset';
+    document.getElementById('viewMaintAssetName').textContent = log.AssetName || '';
+    document.getElementById('viewMaintDate').textContent = new Date(log.ServiceDate).toLocaleDateString();
+    document.getElementById('viewMaintTech').innerHTML = log.LoggedBy ? `<i class="fas fa-wrench mr-1"></i>Tech: ${log.LoggedBy}` : 'Logged by System/Admin';
+    document.getElementById('viewMaintDesc').textContent = log.Description || 'No description provided.';
+
+    // Check for both fields since DB has PhotoEvidence and EvidenceImage
+    const evidenceUrl = log.PhotoEvidence || log.EvidenceImage;
+    const signatureUrl = log.Signature || log.SignatureImage;
+
+    const evidenceContainer = document.getElementById('viewMaintEvidence');
+    if (evidenceUrl) {
+        const photoSrc = evidenceUrl.startsWith('data:image') ? evidenceUrl : `${ASSET_API.replace('/api', '')}/uploads/${evidenceUrl}`;
+        evidenceContainer.innerHTML = `<img src="${photoSrc}" class="w-full h-full object-contain" alt="Evidence">`;
+    } else {
+        evidenceContainer.innerHTML = `<span class="text-gray-600 text-xs italic">No evidence captured</span>`;
+    }
+
+    const signatureContainer = document.getElementById('viewMaintSignature');
+    if (signatureUrl) {
+        signatureContainer.innerHTML = `<img src="${signatureUrl}" class="w-full h-full object-contain" alt="Signature">`;
+    } else {
+        signatureContainer.innerHTML = `<span class="text-gray-400 text-xs italic">No signature on file</span>`;
+    }
+
+    document.getElementById('printJobCardBtn').onclick = () => printJobCard(id);
+    document.getElementById('viewMasterMaintModal').classList.add('active');
+}
+
+function closeViewMasterMaintModal() {
+    document.getElementById('viewMasterMaintModal').classList.remove('active');
+}
+
+function printJobCard(id) {
+    const log = allMasterMaintLogs.find(m => m.MaintenanceID === id);
+    if(!log) return;
+
+    const evidenceUrl = log.PhotoEvidence || log.EvidenceImage;
+    const signatureUrl = log.Signature || log.SignatureImage;
+
+    let evidenceHtml = '<i>No evidence captured</i>';
+    if (evidenceUrl) {
+        const photoSrc = evidenceUrl.startsWith('data:image') ? evidenceUrl : `/uploads/${evidenceUrl}`;
+        evidenceHtml = `<img src="${photoSrc}" style="max-height: 250px; border: 1px solid #ccc; border-radius: 4px;">`;
+    }
+
+    let signatureHtml = '<i>No signature on file</i>';
+    if (signatureUrl) {
+        signatureHtml = `<img src="${signatureUrl}" style="max-height: 150px;">`;
+    }
+
+    const printWin = window.open('', '', 'width=800,height=900');
+    printWin.document.write(`
+        <html>
+        <head>
+            <title>Job Card - ${log.AssetTag}</title>
+            <style>
+                body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; margin: 0; padding: 40px; }
+                .header { border-bottom: 2px solid #2563eb; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; }
+                .title { margin: 0; color: #1e293b; font-size: 24px; text-transform: uppercase; letter-spacing: 1px; }
+                .company { color: #64748b; font-size: 12px; margin-top: 5px; }
+                .grid { display: flex; gap: 40px; margin-bottom: 30px; }
+                .col { flex: 1; }
+                .label { font-size: 10px; text-transform: uppercase; color: #64748b; font-weight: bold; margin-bottom: 4px; }
+                .value { font-size: 16px; font-weight: bold; margin: 0; color: #0f172a; }
+                .sub-value { font-size: 12px; color: #475569; margin: 2px 0 0 0; }
+                .section { margin-bottom: 40px; }
+                .desc-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px; font-family: monospace; white-space: pre-wrap; font-size: 13px; line-height: 1.5; }
+                .media-grid { display: flex; gap: 20px; }
+                .media-box { flex: 1; border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px; text-align: center; background: #fff; }
+                .footer { text-align: center; margin-top: 50px; font-size: 10px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 20px; }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <div>
+                    <h1 class="title">Service Job Card</h1>
+                    <div class="company">TNA Africa Fleet Management</div>
+                </div>
+                <div style="text-align: right;">
+                    <div class="label">Job ID</div>
+                    <div class="value">#${log.MaintenanceID}</div>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="col">
+                    <div class="label">Asset Information</div>
+                    <div class="value">${log.AssetTag || 'N/A'}</div>
+                    <div class="sub-value">${log.AssetName || ''}</div>
+                </div>
+                <div class="col">
+                    <div class="label">Execution Details</div>
+                    <div class="value">${new Date(log.ServiceDate).toLocaleDateString()}</div>
+                    <div class="sub-value">Tech: ${log.LoggedBy || 'System Admin'}</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="label">Description of Work & Consumables</div>
+                <div class="desc-box">${log.Description || 'No details provided.'}</div>
+            </div>
+
+            <div class="media-grid">
+                <div class="media-box">
+                    <div class="label" style="margin-bottom: 15px;">Photographic Evidence</div>
+                    ${evidenceHtml}
+                </div>
+                <div class="media-box">
+                    <div class="label" style="margin-bottom: 15px;">Technician Signature</div>
+                    ${signatureHtml}
+                </div>
+            </div>
+
+            <div class="footer">
+                Document Generated on ${new Date().toLocaleString()}<br>
+                This is an official system-generated audit record.
+            </div>
+
+            <script>
+                // Auto-print when images load
+                window.onload = function() { setTimeout(() => { window.print(); window.close(); }, 500); }
+            </script>
+        </body>
+        </html>
+    `);
+    printWin.document.close();
+}
+
+document.getElementById('editMasterMaintForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('saveMasterMaintBtn');
+    btn.disabled = true; btn.textContent = 'Updating...';
+
+    const id = document.getElementById('editMasterMaintId').value;
+    const payload = {
+        serviceDate: document.getElementById('editMasterMaintDate').value,
+        description: document.getElementById('editMasterMaintDesc').value
+    };
+
+    try {
+        const res = await fetch(`${ASSET_API}/assets/maintenance/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error('Failed to update record');
+        
+        closeEditMasterMaintModal();
+        loadMasterServiceHistory(); // Refresh table
+    } catch (err) { alert('Error: ' + err.message); } 
+    finally { btn.disabled = false; btn.textContent = 'Update Record'; }
+});
+
+// ==========================================
+// PRINT TOOL MODAL LOGIC
+// ==========================================
+function openPrintToolModal() {
+    document.getElementById('printToolModal').classList.add('active');
+    switchPrintTab('asset'); // Default to asset tab
+}
+
+function closePrintToolModal() {
+    document.getElementById('printToolModal').classList.remove('active');
+}
+
+function switchPrintTab(tabId) {
+    document.getElementById('printTabBtn-asset').classList.remove('text-purple-400', 'border-purple-500');
+    document.getElementById('printTabBtn-asset').classList.add('text-gray-400', 'border-transparent');
+    document.getElementById('printTabBtn-stock').classList.remove('text-purple-400', 'border-purple-500');
+    document.getElementById('printTabBtn-stock').classList.add('text-gray-400', 'border-transparent');
+
+    document.getElementById('printTab-asset').classList.add('hidden');
+    document.getElementById('printTab-stock').classList.add('hidden');
+
+    document.getElementById(`printTabBtn-${tabId}`).classList.remove('text-gray-400', 'border-transparent');
+    document.getElementById(`printTabBtn-${tabId}`).classList.add('text-purple-400', 'border-purple-500');
+    document.getElementById(`printTab-${tabId}`).classList.remove('hidden');
+    document.getElementById(`printTab-${tabId}`).classList.add('block');
+
+    if (tabId === 'stock' && allStockItems.length === 0) {
+        loadStockItems();
+    }
+}
+
+function filterWebPrintAssets() {
+    const term = document.getElementById('webPrintAssetSearch').value.toLowerCase();
+    const list = document.getElementById('webPrintAssetList');
+    const container = document.getElementById('webSelectedAssetContainer');
+
+    if (term.length < 2) {
+        list.classList.add('hidden');
+        container.classList.add('hidden');
+        return;
+    }
+
+    const filtered = allAssets.filter(a =>
+        (a.AssetTag && a.AssetTag.toLowerCase().includes(term)) ||
+        (a.Name && a.Name.toLowerCase().includes(term))
+    ).slice(0, 10); // Limit to 10 results for quick picking
+
+    list.innerHTML = '';
+    if (filtered.length === 0) {
+        list.innerHTML = '<div class="p-2 text-gray-500 text-xs text-center">No assets found.</div>';
+    } else {
+        filtered.forEach(a => {
+            list.innerHTML += `
+                <div class="p-2 border-b border-gray-700 hover:bg-gray-800 cursor-pointer transition text-xs"
+                     onclick="selectWebPrintAsset('${a.AssetTag}', '${(a.Name || '').replace(/'/g, "\\'")}')">
+                    <span class="font-bold text-gray-300">${a.Name}</span>
+                    <span class="text-purple-400 font-mono ml-2">${a.AssetTag}</span>
+                </div>
+            `;
+        });
+    }
+    list.classList.remove('hidden');
+}
+
+function selectWebPrintAsset(tag, name) {
+    document.getElementById('webPrintAssetSearch').value = '';
+    document.getElementById('webPrintAssetList').classList.add('hidden');
+    document.getElementById('webSelectedAssetContainer').classList.remove('hidden');
+    document.getElementById('webPrintAssetName').textContent = name;
+    document.getElementById('webPrintAssetTag').textContent = tag;
+}
+
+function filterWebPrintStock() {
+    const term = document.getElementById('webPrintStockSearch').value.toLowerCase();
+    const list = document.getElementById('webPrintStockList');
+    const container = document.getElementById('webSelectedStockContainer');
+
+    if (term.length < 2) {
+        list.classList.add('hidden');
+        container.classList.add('hidden');
+        return;
+    }
+
+    const filtered = allStockItems.filter(i =>
+        i.IsSerialized && // Only show serialized items for printing individual tags
+        ((i.Name && i.Name.toLowerCase().includes(term)) ||
+         (i.ItemCode && i.ItemCode.toLowerCase().includes(term)))
+    ).slice(0, 10);
+
+    list.innerHTML = '';
+    if (filtered.length === 0) {
+        list.innerHTML = '<div class="p-2 text-gray-500 text-xs text-center">No serialized stock found.</div>';
+    } else {
+        filtered.forEach(i => {
+            list.innerHTML += `
+                <div class="p-2 border-b border-gray-700 hover:bg-gray-800 cursor-pointer transition text-xs"
+                     onclick="selectWebPrintStock(${i.ItemID}, '${i.ItemCode || ''}', '${(i.Name || '').replace(/'/g, "\\'")}')">
+                    <span class="font-bold text-gray-300">${i.Name}</span>
+                    <span class="text-gray-500 font-mono ml-2">${i.ItemCode || ''}</span>
+                </div>
+            `;
+        });
+    }
+    list.classList.remove('hidden');
+}
+
+async function selectWebPrintStock(itemId, code, name) {
+    document.getElementById('webPrintStockSearch').value = '';
+    document.getElementById('webPrintStockList').classList.add('hidden');
+    document.getElementById('webSelectedStockContainer').classList.remove('hidden');
+    document.getElementById('webPrintStockName').textContent = name;
+    document.getElementById('webPrintStockCode').textContent = code;
+    document.getElementById('webSelectedStockContainer').dataset.itemId = itemId;
+
+    toggleWebStockPrintAction();
+}
+
+async function toggleWebStockPrintAction() {
+    const action = document.getElementById('webPrintStockAction').value;
+    const serialDiv = document.getElementById('webExistingSerialDiv');
+    const itemId = document.getElementById('webSelectedStockContainer').dataset.itemId;
+
+    if (action === 'existing') {
+        serialDiv.classList.remove('hidden');
+        const select = document.getElementById('webPrintExistingSerial');
+        select.innerHTML = '<option>Loading...</option>';
+
+        try {
+            // Fetch all units for this item across all storage warehouses
+            const res = await fetch(`${ASSET_API}/stock/items/${itemId}/available-units`, { headers: { 'Authorization': `Bearer ${token}` } });
+            const units = await res.json();
+            select.innerHTML = '';
+            if(units.length === 0) {
+                select.innerHTML = '<option value="">No stock available</option>';
+            } else {
+                units.forEach(u => {
+                     select.innerHTML += `<option value="${u.SerialNumber || u.AssetTag}">${u.SerialNumber || u.AssetTag}</option>`;
+                });
+            }
+        } catch(e) {
+            select.innerHTML = '<option value="">Error loading serials</option>';
+        }
+    } else {
+        serialDiv.classList.add('hidden');
+    }
+}
+
+function executeWebPrint(type) {
+    let tag = '';
+    let name = '';
+
+    if (type === 'asset') {
+        tag = document.getElementById('webPrintAssetTag').textContent;
+        name = document.getElementById('webPrintAssetName').textContent;
+    } else if (type === 'stock') {
+        name = document.getElementById('webPrintStockName').textContent;
+        const action = document.getElementById('webPrintStockAction').value;
+
+        if (action === 'existing') {
+            tag = document.getElementById('webPrintExistingSerial').value;
+            if(!tag) return alert("Select an existing serial number first.");
+        } else {
+             // Generate a placeholder serial format for GRV tagging
+             tag = 'SN-' + Math.floor(100000 + Math.random() * 900000);
+        }
+    }
+
+    if(!tag) return;
+    printTag(tag, name); // Sends to the existing print function
+}
