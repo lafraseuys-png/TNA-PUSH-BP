@@ -6,11 +6,18 @@
     <script src="tna_loader.js?v=1"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Costs - TNA Africa</title>
+    <!-- THEME BOOT (same as Employee Master): must stay INLINE and stay HERE (before any stylesheet) -->
     <script>
-        /* Force dark ash theme immediately to prevent white flash in iframe */
-        if (localStorage.getItem("tnaafrica_theme") === "dark" || !localStorage.getItem("tnaafrica_theme")) {
-            document.documentElement.classList.add("dark-mode");
-        }
+        (function () {
+            var v = null;
+            try { v = localStorage.getItem("tnaafrica_theme"); } catch (e) {}
+            if (v !== "light" && v !== "dark") v = "dark";
+            window.__TNA_THEME = v;
+            document.documentElement.classList.remove("dark-mode");
+            document.documentElement.classList.remove("light-mode");
+            document.documentElement.classList.add(v === "dark" ? "dark-mode" : "light-mode");
+            document.documentElement.setAttribute("data-theme", v);
+        })();
     </script>
     <link rel="stylesheet" href="/css/styles.css?v=1.0.13">
     <link rel="stylesheet" href="/css/contractors.css">
@@ -22,7 +29,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+    <!-- Flatpickr dark theme: enabled/disabled with the page theme (same as Employee Master) -->
+    <link id="flatpickrDarkTheme" rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+    <script>
+        (function () {
+            var link = document.getElementById('flatpickrDarkTheme');
+            function syncFlatpickrTheme() {
+                if (!link) return;
+                link.disabled = (document.documentElement.getAttribute('data-theme') === 'light');
+            }
+            syncFlatpickrTheme();
+            document.addEventListener('tna:themechange', syncFlatpickrTheme);
+        })();
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <style>
@@ -351,13 +370,25 @@
             background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='%23cbd5e1' d='M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 64 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192h352v256c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192z'/%3E%3C/svg%3E");
         }
     </style>
+    <!-- Shared Employee Master look & feel. Must stay AFTER the <style> block above. -->
+    <link rel="stylesheet" href="/css/tna_shell.css">
 </head>
 <body>
+    <script>
+        // THEME SYNC (same as Employee Master): applies the <head> boot decision to <body>
+        // immediately, so there is no flash of the wrong theme on load.
+        (function () {
+            var t = window.__TNA_THEME || "dark";
+            document.body.classList.remove("dark-mode");
+            document.body.classList.remove("light-mode");
+            document.body.classList.add(t === "dark" ? "dark-mode" : "light-mode");
+        })();
+    </script>
     <div class="background-container"></div>
 
     <aside class="sidebar" id="mainSidebar">
         <!-- Floating Toggle Button -->
-        <div class="sidebar-toggle-btn" onclick="document.getElementById('mainSidebar').classList.toggle('sidebar-collapsed')" title="Toggle Sidebar">
+        <div class="sidebar-toggle-btn" onclick="toggleDesktopSidebar()" title="Toggle Sidebar">
             <i class="fas fa-chevron-left" style="font-size: 12px;"></i>
         </div>
         
@@ -393,16 +424,16 @@
                             <path d="M15 55 C35 85, 65 85, 85 55 C70 75, 30 75, 15 55 Z" />
                         </svg>
                         <img id="sidebarProfilePic" src="" class="hidden" style="display: none; width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid #cbd5e1;">
-                        <span class="profile-name" id="sidebarProfileName">User</span>
+                        <span class="profile-name" id="sidebarProfileName">Loading...</span>
                     </div>
                     <span class="profile-dropdown-icon">▲</span>
                 </div>
                 
                 <div class="profile-dropdown-menu" id="profileDropdown">
                     <a href="#" onclick="toggleUserTheme(); return false;" class="dropdown-item"><i class="fa-solid fa-moon"></i> Toggle Theme</a>
-                    <a href="Launchpad.html" class="dropdown-item"><i class="fa-solid fa-rocket"></i> Launchpad</a>
+                    <a href="Launchpad.html" class="dropdown-item"><i class="fa-solid fa-rocket"></i> Back to Launchpad</a>
                     <div class="dropdown-divider"></div>
-                    <a href="login.html" class="dropdown-item logout" onclick="executeLogout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                    <a href="Login.html" class="dropdown-item logout" onclick="executeLogout(); return false;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
                 </div>
             </div>
         </div>
@@ -1284,36 +1315,40 @@
     <div id="printContainer"></div>
 
     <script>
-        // Check local storage for unified Dark Mode Theme fallback
-        if (localStorage.getItem("tnaafrica_theme") === "dark") {
-            document.body.classList.add("dark-mode");
-            document.documentElement.classList.add("dark-mode");
-        }
+        // THEME FALLBACK: the <head> boot already set the theme; keep <body> in step (auto-heal for old cached pages)
+        (function () {
+            var t = (window.__TNA_THEME) || (localStorage.getItem("tnaafrica_theme") === "light" ? "light" : "dark");
+            document.body.classList.toggle("dark-mode", t === "dark");
+            document.body.classList.toggle("light-mode", t !== "dark");
+            document.documentElement.classList.toggle("dark-mode", t === "dark");
+            document.documentElement.classList.toggle("light-mode", t !== "dark");
+        })();
 
         // Workspace Background Engine
+        // Now uses the Employee Master background from /css/tna_shell.css.
+        // AUTO-HEAL: a custom background saved earlier (employee_master_bg_dark / _light) is still honoured;
+        // with no custom background, inline styles are cleared so the shared shell background shows.
         function initWorkspaceBackground() {
             const isDarkMode = document.body.classList.contains("dark-mode");
             const storageKey = isDarkMode ? "employee_master_bg_dark" : "employee_master_bg_light";
-            const savedBg = localStorage.getItem(storageKey);
+            let savedBg = null;
+            try { savedBg = localStorage.getItem(storageKey); } catch (e) {}
             const bgContainer = document.querySelector('.background-container');
-            
-            if (bgContainer) {
-                // Determine which tint to use based on the theme
-                const gradient = isDarkMode 
-                    ? `linear-gradient(rgba(19, 19, 20, 0.85), rgba(19, 19, 20, 0.85))` 
+            if (!bgContainer) return;
+
+            if (savedBg) {
+                const gradient = isDarkMode
+                    ? `linear-gradient(rgba(19, 19, 20, 0.85), rgba(19, 19, 20, 0.85))`
                     : `linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05))`;
-                
-                if (savedBg) {
-                    bgContainer.style.backgroundImage = `${gradient}, url('${savedBg}')`;
-                } else if (isDarkMode) {
-                    bgContainer.style.backgroundImage = `linear-gradient(rgba(19, 19, 20, 0.95), rgba(19, 19, 20, 0.95))`;
-                } else {
-                    bgContainer.style.backgroundImage = 'none';
-                    bgContainer.style.backgroundColor = '#e2e8f0';
-                }
+                bgContainer.style.backgroundImage = `${gradient}, url('${savedBg}')`;
+            } else {
+                bgContainer.style.removeProperty('background-image');
+                bgContainer.style.removeProperty('background-color');
             }
         }
         initWorkspaceBackground();
+        // theme.js announces theme changes; keep the background in step
+        document.addEventListener('tna:themechange', initWorkspaceBackground);
 
         document.addEventListener('DOMContentLoaded', () => {
             const sidebarLinks = document.querySelectorAll('#sidebarNav .sidebar-item');
@@ -1322,6 +1357,7 @@
             sidebarLinks.forEach(link => {
                 link.addEventListener('click', () => {
                     if (window.innerWidth <= 768 && sidebar) {
+                        sidebar.classList.add('collapsed');
                         sidebar.classList.add('sidebar-collapsed');
                     }
                 });
@@ -1377,6 +1413,28 @@
             } catch(e) {}
         });
 
+        // Desktop Sidebar Collapse Engine (same as Employee Master, same saved state across modules)
+        // AUTO-HEAL: toggles both 'collapsed' (Master) and 'sidebar-collapsed' (older CSS on this page).
+        function toggleDesktopSidebar() {
+            const sidebar = document.getElementById("mainSidebar");
+            if (!sidebar) return;
+            const collapse = !sidebar.classList.contains("collapsed");
+            sidebar.classList.toggle("collapsed", collapse);
+            sidebar.classList.toggle("sidebar-collapsed", collapse);
+            try { localStorage.setItem("tnaafrica_sidebar", collapse ? "collapsed" : "expanded"); } catch (e) {}
+        }
+
+        // Initialize Sidebar State on Load
+        (function () {
+            let saved = null;
+            try { saved = localStorage.getItem("tnaafrica_sidebar"); } catch (e) {}
+            const sidebar = document.getElementById("mainSidebar");
+            if (sidebar && saved === "collapsed") {
+                sidebar.classList.add("collapsed");
+                sidebar.classList.add("sidebar-collapsed");
+            }
+        })();
+
         // Toggle Profile Dropdown
         function toggleDropdown() {
             const dropdown = document.getElementById("profileDropdown");
@@ -1396,44 +1454,28 @@
             }
         });
 
-        // --- THEME ENGINE ---
+        // --- THEME ENGINE (now delegated to theme.js, same as Employee Master) ---
+        // AUTO-HEAL: kept under the same name so the dropdown still works whether or not theme.js loaded.
         async function toggleUserTheme() {
+            if (window.TnaTheme) {
+                await window.TnaTheme.toggle();
+                initWorkspaceBackground();
+                return;
+            }
+
+            // Fallback path if theme.js failed to load
             const isDark = document.body.classList.contains('dark-mode');
             const newTheme = isDark ? 'light' : 'dark';
-            
-            // Instantly apply visually
-            if (newTheme === 'dark') {
-                document.documentElement.classList.add("dark-mode");
-                document.body.classList.add("dark-mode");
-            } else {
-                document.documentElement.classList.remove("dark-mode");
-                document.body.classList.remove("dark-mode");
-            }
-            
-            // Re-run background initialization
-            const storageKey = newTheme === 'dark' ? "employee_master_bg_dark" : "employee_master_bg_light";
-            const savedBg = localStorage.getItem(storageKey);
-            const bgContainer = document.querySelector('.background-container');
-            
-            if (bgContainer) {
-                const gradient = newTheme === 'dark'
-                    ? `linear-gradient(rgba(19, 19, 20, 0.85), rgba(19, 19, 20, 0.85))` 
-                    : `linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05))`;
-                
-                if (savedBg) {
-                    bgContainer.style.backgroundImage = `${gradient}, url('${savedBg}')`;
-                } else if (newTheme === 'dark') {
-                    bgContainer.style.backgroundImage = `linear-gradient(rgba(19, 19, 20, 0.95), rgba(19, 19, 20, 0.95))`;
-                } else {
-                    bgContainer.style.backgroundImage = 'none';
-                    bgContainer.style.backgroundColor = '#e2e8f0';
-                }
-            }
-            
-            // Save locally
-            localStorage.setItem("tnaafrica_theme", newTheme);
 
-           // Sync to Database for profile persistence if token exists
+            document.documentElement.classList.toggle("dark-mode", newTheme === 'dark');
+            document.documentElement.classList.toggle("light-mode", newTheme !== 'dark');
+            document.body.classList.toggle("dark-mode", newTheme === 'dark');
+            document.body.classList.toggle("light-mode", newTheme !== 'dark');
+            document.documentElement.setAttribute("data-theme", newTheme);
+            try { localStorage.setItem("tnaafrica_theme", newTheme); } catch (e) {}
+            try { document.dispatchEvent(new CustomEvent('tna:themechange', { detail: { theme: newTheme } })); } catch (e) {}
+            initWorkspaceBackground();
+
             try {
                 const tk = localStorage.getItem('token');
                 if (tk) {
@@ -1666,6 +1708,8 @@
             });
         });
     </script>
+    <!-- Shared theme engine (same as Employee Master). Safe to remove: the page falls back to its own toggle. -->
+    <script src="theme.js"></script>
     <script src="employeeCosts.js"></script>
     <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
     <script src="tna_topbar.js?v=9"></script>

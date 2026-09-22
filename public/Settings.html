@@ -465,7 +465,7 @@
                 <li data-permission="set_zones,sys_hardware"><a onclick="showSection('zones', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-location-dot"></i> <span>Access Zones</span></a></li>
                 <li data-permission="set_devices,sys_hardware"><a onclick="showSection('devices', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-microchip"></i> <span>Hardware</span></a></li>
                 <li data-permission="set_errors,sys_hardware"><a onclick="showSection('errors', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-bug icon-red"></i> <span>Mobile Errors</span></a></li>
-                <li data-permission="set_billing"><a onclick="showSection('billing', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-file-invoice-dollar icon-green"></i> <span>Billing & Quota</span></a></li>
+                <li data-permission="set_billing"><a onclick="showSection('billing', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-file-invoice-dollar icon-green"></i> <span>Usage & Quota</span></a></li>
                 <li data-permission="set_audit,sys_users"><a onclick="showSection('audit', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-clipboard-list"></i> <span>Audit Trail</span></a></li>
                 <li data-permission="set_mobile_tx,sys_api"><a onclick="showSection('mobile-tx', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-exchange-alt text-teal-500"></i> <span>Mobile Transactions</span></a></li>
                                <li data-permission="set_tickets"><a onclick="showSection('my-tickets', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-headset text-orange-500"></i> <span>My Tickets</span></a></li>
@@ -1858,76 +1858,11 @@
                     </div>
                 </div>
             </section>
-
-           <section id="page-billing" class="page-section">
-                <div class="grid grid-cols-2 gap-6 mb-6">
-                    <div class="glass-panel p-6 rounded-lg border-t-[3px] border-t-[#1a4c7b] text-center">
-                        <p class="text-xs text-slate-500 dark:text-gray-400 uppercase font-bold tracking-wider mb-1">Active Employees</p>
-                        <p class="text-4xl font-black text-[#1a4c7b] dark:text-emerald-400" id="billActiveEmps">0</p>
-                    </div>
-                    <div class="glass-panel p-6 rounded-lg border-t-[3px] border-t-[#1a4c7b] text-center">
-                        <p class="text-xs text-slate-500 dark:text-gray-400 uppercase font-bold tracking-wider mb-1">Active Assets</p>
-                        <p class="text-4xl font-black text-[#1a4c7b] dark:text-blue-400" id="billActiveAssets">0</p>
-                    </div>
-                </div>
-
-                <div class="glass-panel p-6 rounded-lg border-t-[3px] border-t-[#1a4c7b] mb-6">
-                    <h3 class="font-bold text-slate-700 dark:text-gray-300 mb-4 pb-2 border-b border-slate-300 dark:border-gray-700"><i class="fas fa-tools mr-2 text-[#1a4c7b] dark:text-purple-400"></i>Your Once-Off Setup Costs</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm border-collapse">
-                            <thead class="bg-slate-200 dark:bg-gray-700 uppercase text-xs font-bold text-slate-600 dark:text-gray-400">
-                                <tr>
-                                    <th class="p-3 border-r border-slate-300 dark:border-gray-600">Item Description</th>
-                                    <th class="p-3 border-r border-slate-300 dark:border-gray-600 text-center">Qty</th>
-                                    <th class="p-3 border-r border-slate-300 dark:border-gray-600 text-right">Unit Price</th>
-                                    <th class="p-3 text-right text-slate-800 dark:text-white">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody id="billSetupTable" class="divide-y divide-slate-200 dark:divide-gray-700 bg-white dark:bg-gray-900 text-slate-700 dark:text-gray-300">
-                                <tr><td colspan="4" class="p-4 text-center text-slate-500 dark:text-gray-500">Loading setup costs...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded text-yellow-600 dark:text-yellow-500 text-xs font-bold flex items-start shadow-inner">
-                        <i class="fas fa-exclamation-triangle mt-0.5 mr-2 text-sm"></i>
-                        <p>Financed once-off cost billed at rate as per finance contract and might include additional costs for hardware and other items.</p>
-                    </div>
-                </div>
-
-                <div class="glass-panel p-6 rounded-lg border-t-[3px] border-t-[#1a4c7b] mb-6">
-                    <h3 class="font-bold text-slate-700 dark:text-gray-300 mb-4 pb-2 border-b border-slate-300 dark:border-gray-700"><i class="fas fa-calendar-alt mr-2 text-[#1a4c7b] dark:text-emerald-400"></i>Estimated Monthly Recurring Bill</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm border-collapse">
-                            <thead class="bg-slate-200 dark:bg-gray-700 uppercase text-xs font-bold text-slate-600 dark:text-gray-400">
-                                <tr>
-                                    <th class="p-3 border-r border-slate-300 dark:border-gray-600">Module / Description</th>
-                                    <th class="p-3 border-r border-slate-300 dark:border-gray-600 text-center">Multiplier (Active Count)</th>
-                                    <th class="p-3 border-r border-slate-300 dark:border-gray-600 text-right">Cost Per Unit</th>
-                                    <th class="p-3 text-right text-green-600 dark:text-emerald-400 font-bold">Estimated Total</th>
-                                </tr>
-                            </thead>
-                            <tbody id="billMonthlyTable" class="divide-y divide-slate-200 dark:divide-gray-700 bg-white dark:bg-gray-900 text-slate-700 dark:text-gray-300">
-                                <tr><td colspan="4" class="p-4 text-center text-slate-500 dark:text-gray-500">Loading monthly estimate...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div class="flex justify-end mt-4 pt-4 border-t border-slate-300 dark:border-gray-700">
-                        <div class="text-right">
-                            <p class="text-xs text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-1">Total Estimated Monthly Bill</p>
-                            <p class="text-3xl font-black text-[#1a4c7b] dark:text-emerald-400" id="billGrandTotal">R 0.00</p>
-                        </div>
-                    </div>
-
-                    <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded text-[#1a4c7b] dark:text-blue-400 text-xs font-bold space-y-2 shadow-inner">
-                        <div class="flex items-start">
-                            <i class="fas fa-info-circle mt-0.5 mr-2 text-sm"></i>
-                            <p>Monthly charges estimated on active employees. Ensure non-active employees are terminated in the Employee Master.</p>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-info-circle mt-0.5 mr-2 text-sm"></i>
-                            <p>Monthly charges estimated on active assets. Ensure non-active assets are marked inactive or terminated in the Asset Master.</p>
-                        </div>
+            <section id="page-billing" class="page-section">
+                           <div class="glass-panel p-6 rounded-lg border-t-[3px] border-t-[#1a4c7b] mb-6">
+                    <div class="flex items-start text-sm text-slate-600 dark:text-gray-400">
+                        <i class="fas fa-info-circle mt-0.5 mr-2 text-[#1a4c7b] dark:text-blue-400"></i>
+                        <p>Your usage is counted on active employees and active assets. Keep these accurate by terminating employees who have left (Employee Master) and marking unused assets inactive (Asset Master). For billing queries, please contact your TNA Africa partner.</p>
                     </div>
                 </div>
             </section>
@@ -2216,6 +2151,7 @@
                             <label class="flex items-center text-sm text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"><input type="checkbox" id="userEmployeeCosts" class="mr-3 accent-[#1a4c7b] w-4 h-4"> Employee Costs</label>
                             <label class="flex items-center text-sm text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"><input type="checkbox" id="userEssMaster" class="mr-3 accent-[#1a4c7b] w-4 h-4"> ESS Master</label>
                             <label class="flex items-center text-sm text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"><input type="checkbox" id="userContractors" class="mr-3 accent-[#1a4c7b] w-4 h-4"> Contractors & Dist</label>
+                            <label class="flex items-center text-sm text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"><input type="checkbox" id="userAccessControl" class="mr-3 accent-[#1a4c7b] w-4 h-4"> Access Control</label>
                             <label class="flex items-center text-sm text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"><input type="checkbox" id="userPayslips" class="mr-3 accent-[#1a4c7b] w-4 h-4"> Payslips</label>
                         </div>
                     </div>
@@ -2594,6 +2530,7 @@
                     <button type="button" onclick="switchRoleTab('sys')" id="tab_sys" class="role-tab px-3 py-1.5 text-[11px] text-slate-500 hover:text-slate-800 dark:text-gray-400 dark:hover:text-white transition border-b border-transparent">System Config</button>
                     <button type="button" onclick="switchRoleTab('settings')" id="tab_settings" class="role-tab px-3 py-1.5 text-[11px] text-slate-500 hover:text-slate-800 dark:text-gray-400 dark:hover:text-white transition border-b border-transparent">Settings</button>
                     <button type="button" onclick="switchRoleTab('ess')" id="tab_ess" class="role-tab px-3 py-1.5 text-[11px] text-slate-500 hover:text-slate-800 dark:text-gray-400 dark:hover:text-white transition border-b border-transparent">ESS Master</button>
+                    <button type="button" onclick="switchRoleTab('ac')" id="tab_ac" class="role-tab px-3 py-1.5 text-[11px] text-slate-500 hover:text-slate-800 dark:text-gray-400 dark:hover:text-white transition border-b border-transparent">Access Control</button>
                    <button type="button" onclick="switchRoleTab('reports')" id="tab_reports" class="role-tab px-3 py-1.5 text-[11px] text-slate-500 hover:text-slate-800 dark:text-gray-400 dark:hover:text-white transition border-b border-transparent">Reports</button>
                     <button type="button" onclick="switchRoleTab('modules')" id="tab_modules" class="role-tab px-3 py-1.5 text-[11px] text-slate-500 hover:text-slate-800 dark:text-gray-400 dark:hover:text-white transition border-b border-transparent">App Modules</button>
                 </div>
@@ -2775,6 +2712,26 @@
                         </div>
                     </div>
 
+                            <!-- NEW: Access Control screens (ac_* keys). The tab is hidden unless the tenant is licensed. -->
+                    <div id="tree_ac" class="role-tree-view hidden">
+                        <div class="flex items-center mb-2">
+                            <span class="text-gray-400 mr-2 text-[10px]"><i class="fas fa-caret-down"></i></span>
+                            <i class="fas fa-folder-open text-amber-500 mr-2"></i>
+                            <span class="text-xs text-gray-800 font-bold">Access Control</span>
+                        </div>
+                        <div class="pl-6 space-y-2 border-l border-dotted border-gray-400 ml-1.5 pb-2">
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" id="ac_all" value="ac_all" onchange="toggleTree('ac', this)" class="accent-amber-500 mr-2 w-3.5 h-3.5"> <span class="font-bold text-gray-600">Full Access Control (all screens, all departments)</span></label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ac_dashboard" class="perm-chk-ac accent-amber-500 mr-2 w-3.5 h-3.5"> Screen: Dashboard</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ac_doors" class="perm-chk-ac accent-amber-500 mr-2 w-3.5 h-3.5"> Screen: Doors &amp; Readers (incl. Sync now)</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ac_timezones" class="perm-chk-ac accent-amber-500 mr-2 w-3.5 h-3.5"> Screen: Time Zones &amp; Holidays</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ac_levels" class="perm-chk-ac accent-amber-500 mr-2 w-3.5 h-3.5"> Screen: Access Levels</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ac_assign" class="perm-chk-ac accent-amber-500 mr-2 w-3.5 h-3.5"> Screen: Assignments (people &amp; departments)</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ac_rules" class="perm-chk-ac accent-amber-500 mr-2 w-3.5 h-3.5"> Screen: Schedule Rules</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ac_zones" class="perm-chk-ac accent-amber-500 mr-2 w-3.5 h-3.5"> Screen: Zones &amp; Who's Inside</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ac_reports" class="perm-chk-ac accent-amber-500 mr-2 w-3.5 h-3.5"> Screen: Reports</label>
+                        </div>
+                    </div>
+
                     <div id="tree_ess" class="role-tree-view hidden">
                         <div class="flex items-center mb-2">
                             <span class="text-gray-400 mr-2 text-[10px]"><i class="fas fa-caret-down"></i></span>
@@ -2852,6 +2809,7 @@
                                 <label class="flex items-center cursor-pointer hover:opacity-80"><input type="checkbox" value="employeeCosts" data-group="modules" class="role-mod-chk mr-2 accent-[#1a4c7b] w-4 h-4"> Employee Costs</label>
                                 <label class="flex items-center cursor-pointer hover:opacity-80"><input type="checkbox" value="essMaster" data-group="modules" class="role-mod-chk mr-2 accent-[#1a4c7b] w-4 h-4"> ESS Master</label>
                                 <label class="flex items-center cursor-pointer hover:opacity-80"><input type="checkbox" value="contractors" data-group="modules" class="role-mod-chk mr-2 accent-[#1a4c7b] w-4 h-4"> Contractors &amp; Dist</label>
+                                <label class="flex items-center cursor-pointer hover:opacity-80"><input type="checkbox" id="role_mod_accessControl" value="accessControl" data-group="modules" class="role-mod-chk mr-2 accent-[#1a4c7b] w-4 h-4"> Access Control</label>
                                 <label class="flex items-center cursor-pointer hover:opacity-80"><input type="checkbox" value="payslips" data-group="modules" class="role-mod-chk mr-2 accent-[#1a4c7b] w-4 h-4"> Payslips</label>
                             </div>
 
@@ -2908,6 +2866,7 @@
                      <button type="button" onclick="switchOverrideTab('sys')" id="otab_sys" class="override-tab px-3 py-1.5 text-[11px] text-slate-500 hover:text-slate-800 dark:text-gray-400 dark:hover:text-white transition border-b border-transparent">System Config</button>
                     <button type="button" onclick="switchOverrideTab('settings')" id="otab_settings" class="override-tab px-3 py-1.5 text-[11px] text-slate-500 hover:text-slate-800 dark:text-gray-400 dark:hover:text-white transition border-b border-transparent">Settings</button>
                     <button type="button" onclick="switchOverrideTab('ess')" id="otab_ess" class="override-tab px-3 py-1.5 text-[11px] text-slate-500 hover:text-slate-800 dark:text-gray-400 dark:hover:text-white transition border-b border-transparent">ESS Master</button>
+                    <button type="button" onclick="switchOverrideTab('ac')" id="otab_ac" class="override-tab px-3 py-1.5 text-[11px] text-slate-500 hover:text-slate-800 dark:text-gray-400 dark:hover:text-white transition border-b border-transparent">Access Control</button>
                     <button type="button" onclick="switchOverrideTab('reports')" id="otab_reports" class="override-tab px-3 py-1.5 text-[11px] text-slate-500 hover:text-slate-800 dark:text-gray-400 dark:hover:text-white transition border-b border-transparent">Reports</button>
                 </div>
 
@@ -3073,6 +3032,26 @@
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="set_audit" class="operm-chk operm-chk-settings accent-orange-500 mr-2 w-3.5 h-3.5"> Screen: Audit Trail</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="set_mobile_tx" class="operm-chk operm-chk-settings accent-orange-500 mr-2 w-3.5 h-3.5"> Screen: Mobile Transactions</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="set_tickets" class="operm-chk operm-chk-settings accent-orange-500 mr-2 w-3.5 h-3.5"> Screen: My Tickets</label>
+                        </div>
+                    </div>
+
+                    <!-- NEW: Access Control screens (ac_* keys). The tab is hidden unless the tenant is licensed. -->
+                    <div id="otree_ac" class="override-tree-view hidden">
+                        <div class="flex items-center mb-2">
+                            <span class="text-gray-400 mr-2 text-[10px]"><i class="fas fa-caret-down"></i></span>
+                            <i class="fas fa-folder-open text-amber-500 mr-2"></i>
+                            <span class="text-xs text-gray-800 font-bold">Access Control</span>
+                        </div>
+                        <div class="pl-6 space-y-2 border-l border-dotted border-gray-400 ml-1.5 pb-2">
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ac_all" onchange="toggleOverrideTree('ac', this)" class="operm-chk accent-amber-500 mr-2 w-3.5 h-3.5"> <span class="font-bold text-gray-600">Full Access Control (all screens, all departments)</span></label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ac_dashboard" class="operm-chk operm-chk-ac accent-amber-500 mr-2 w-3.5 h-3.5"> Screen: Dashboard</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ac_doors" class="operm-chk operm-chk-ac accent-amber-500 mr-2 w-3.5 h-3.5"> Screen: Doors &amp; Readers (incl. Sync now)</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ac_timezones" class="operm-chk operm-chk-ac accent-amber-500 mr-2 w-3.5 h-3.5"> Screen: Time Zones &amp; Holidays</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ac_levels" class="operm-chk operm-chk-ac accent-amber-500 mr-2 w-3.5 h-3.5"> Screen: Access Levels</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ac_assign" class="operm-chk operm-chk-ac accent-amber-500 mr-2 w-3.5 h-3.5"> Screen: Assignments (people &amp; departments)</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ac_rules" class="operm-chk operm-chk-ac accent-amber-500 mr-2 w-3.5 h-3.5"> Screen: Schedule Rules</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ac_zones" class="operm-chk operm-chk-ac accent-amber-500 mr-2 w-3.5 h-3.5"> Screen: Zones &amp; Who's Inside</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="ac_reports" class="operm-chk operm-chk-ac accent-amber-500 mr-2 w-3.5 h-3.5"> Screen: Reports</label>
                         </div>
                     </div>
 
@@ -3290,6 +3269,7 @@
                             <label class="flex items-center text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"><input type="checkbox" id="bulk_mod_employeeCosts" class="mr-3 accent-[#1a4c7b] w-4 h-4"> Employee Costs</label>
                             <label class="flex items-center text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"><input type="checkbox" id="bulk_mod_essMaster" class="mr-3 accent-[#1a4c7b] w-4 h-4"> ESS Master</label>
                             <label class="flex items-center text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"><input type="checkbox" id="bulk_mod_contractors" class="mr-3 accent-[#1a4c7b] w-4 h-4"> Contractors & Dist</label>
+                            <label class="flex items-center text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"><input type="checkbox" id="bulk_mod_accessControl" class="mr-3 accent-[#1a4c7b] w-4 h-4"> Access Control</label>
                             <label class="flex items-center text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"><input type="checkbox" id="bulk_mod_payslips" class="mr-3 accent-[#1a4c7b] w-4 h-4"> Payslips</label>
                         </div>
                     </div>
@@ -3649,6 +3629,7 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
      <script src="theme.js?v=1.0.0"></script>
   <script src="settings.js"></script>
+  <script src="hw_queue.js"></script>
    <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
    <script src="tna_topbar.js?v=9"></script>
     <script src="csvimport.js"></script>

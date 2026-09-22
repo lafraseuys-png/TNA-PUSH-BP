@@ -1200,6 +1200,7 @@
                 
                 <a href="#" class="dropdown-item" onclick="openProfileModal()"><i class="fa-solid fa-user"></i> Profile</a>
                 <a href="Settings.html" class="dropdown-item hidden" id="btnSettings"><i class="fa-solid fa-gear"></i> Settings</a>
+                <a href="AccessControl.html" class="dropdown-item hidden" id="btnAccessControl"><i class="fa-solid fa-door-closed"></i> Access Control</a>
                <a href="ess_dashboard.html" class="dropdown-item"><i class="fa-solid fa-mobile-screen-button"></i> ESS</a>
               <a href="#" class="dropdown-item hidden" id="btnConnectPhone" onclick="if (typeof openLaunchpadConnectQr === 'function') openLaunchpadConnectQr(event); return false;"><i class="fa-solid fa-qrcode"></i> Connect a Phone</a>
                 <a href="#" class="dropdown-item" id="btnDownloadApp" onclick="if (typeof openLaunchpadAppDownloadQr === 'function') openLaunchpadAppDownloadQr(event); return false;"><i class="fa-brands fa-android"></i> Download the App</a>
@@ -1561,7 +1562,7 @@
             // Contractors: 4th column is the contractor_perms.js screen key (con_*)
             lpScr('Contractors & Distribution', 'Contractors.html?view=', [
                 ['dashboard',    'Dashboard',             'fa-tachometer-alt',  'con_dashboard', 'contractors overview'],
-                ['contractors',  'Contractors Master',    'fa-hard-hat',        'con_master',    'contractors profiles growers'],
+                 ['contractors',  'Farmers Master',        'fa-hard-hat',        'con_master',    'farmers farmer contractors profiles growers'],
                 ['contracts',    'Contracts',             'fa-file-signature',  'con_contracts', 'contracts templates renew'],
                 ['inbox',        'Inbox',                 'fa-inbox',           'con_inbox',     'contractors inbox approvals'],
                 ['distribution', 'Distribution Master',   'fa-route',           'con_dist',      'distribution stock grv warehouses cycles'],
@@ -1573,7 +1574,23 @@
                 ['locations',    'Locations Master',      'fa-map-signs',       'con_locations', 'locations areas'],
                 ['workflow',     'Workflow',              'fa-project-diagram', 'con_workflow',  'workflow rules stand-ins'],
                 ['audit',        'Audit Log',             'fa-history',         'con_audit',     'contractors audit log']
-            ], { contractors: true }),
+              ], { contractors: true }),
+            // Fuel has no screen-level permissions - anyone with the Fuel Management tile sees every screen.
+            // 'Fuel Management' must match the tile title. Deep links (?view=) are opened by Fueldashboard.js
+            lpScr('Fuel Management', 'Fueldashboard.html?view=', [
+                ['stats',        'Fuel Dashboard', 'fa-chart-pie',       null, 'fuel overview summary heatmap consumption'],
+                ['transactions', 'Fuel Logs',      'fa-gas-pump',        null, 'fuel logs dispensing diesel petrol refuel transactions'],
+                ['fueling-data', 'Fueling Data',   'fa-table',           null, 'fueling data litres pump meter records'],
+                ['triplogs',     'Trip Logs',      'fa-route',           null, 'trips trip logs kilometres odometer routes'],
+                ['deliveries',   'Deliveries',     'fa-truck-ramp-box',  null, 'deliveries collections returns pod epod'],
+                ['vehicles',     'Vehicles',       'fa-truck',           null, 'vehicles fleet trucks registration'],
+                ['drivers',      'Drivers',        'fa-id-card',         null, 'drivers licences operators'],
+                ['depots',       'Fuel Depots',    'fa-oil-can',         null, 'depots tanks bowsers sites'],
+                ['inventory',    'Fuel Inventory', 'fa-boxes-stacked',   null, 'inventory stock tanks levels issue'],
+                ['management',   'Fuel Management','fa-sliders-h',       null, 'management fuel admin'],
+                ['reports',      'Intel Reports',  'fa-chart-line',      null, 'fuel reports intel accountant sars export'],
+                ['settings',     'Fuel Settings',  'fa-cogs',            null, 'fuel settings configuration']
+            ]),
             // ESS actions: 4th column is the ESS permission ('leave' / 'claim'), not a role key
             lpScr('ESS', 'ess_dashboard.html?open=', [
                 ['leave',     'Apply for Leave',        'fa-calendar-plus',        'leave', 'leave request holiday'],

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Control - TNA AFRICA</title>
+
+    <!-- THEME BOOT: must stay INLINE and stay HERE (before any stylesheet or Tailwind). Mirrors Settings/Launchpad. -->
+    <script>
+        (function () {
+            var v = null;
+            try { v = localStorage.getItem("tnaafrica_theme"); } catch (e) {}
+            if (v !== "light" && v !== "dark") v = "dark";
+            window.__TNA_THEME = v;
+            document.documentElement.classList.remove("dark-mode");
+            document.documentElement.classList.remove("light-mode");
+            document.documentElement.classList.add(v === "dark" ? "dark-mode" : "light-mode");
+            document.documentElement.setAttribute("data-theme", v);
+        })();
+    </script>
+
+    <link rel="stylesheet" href="/css/styles.css?v=1.0.11">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: ['class', '.dark-mode'] }
+    </script>
+
+    <style>
+        /* ==========================================================
+           Same look as Settings.html: background image, floating
+           pill sidebar with logo, profile menu, glass panels.
+           ========================================================== */
+        body { background-color: transparent; color: #333333; display: block !important; }
+
+        .background-container {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), url('settingswhite.png');
+            background-size: cover; background-position: right center; background-repeat: no-repeat;
+            pointer-events: none; filter: blur(6px); transform: scale(1.03); opacity: 0.85;
+            transition: background-image 0.3s ease, opacity 0.3s ease;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.65) !important;
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6) !important;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            color: #334155;
+        }
+        html.dark-mode, body.dark-mode { background-color: #131314 !important; color: #e2e8f0 !important; }
+        body.dark-mode .background-container {
+            background-image: linear-gradient(rgba(19, 19, 20, 0.85), rgba(19, 19, 20, 0.85)), url('settings.png');
+            opacity: 1;
+        }
+        body.dark-mode .glass-panel {
+            background: rgba(30, 41, 59, 0.65) !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+            color: #e2e8f0;
+        }
+
+        /* Page stays hidden until the access check passes, so nobody sees a flash of the module */
+        #acApp { display: none; }
+        #acApp.ready { display: block; }
+
+        /* ---------- Sidebar (from Settings) ---------- */
+        .sidebar {
+            width: 260px !important; display: flex; flex-direction: column; justify-content: space-between;
+            height: calc(100vh - 40px) !important; position: fixed !important; left: 20px !important; top: 20px !important;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 50; overflow: visible !important;
+        }
+        .sidebar-header { padding: 30px 20px 15px 20px; display: flex; flex-direction: column; align-items: center; gap: 15px; text-align: center; }
+        /* Fixed-height logo slot. Height is set inline by TnaLogo (theme.js); 90px is the fallback. */
+        .logo-container { width: 180px; height: 120px; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; text-decoration: none; }
+        .logo-container img { height: 90px; width: auto; max-width: 160px; object-fit: contain; transition: transform 0.2s ease; }
+        .logo-container:hover img, .logo-container:active img { transform: translateY(-2px); }
+        .sidebar-header-text h2 { font-size: 20px; font-weight: 900; color: #0f172a; letter-spacing: 1px; }
+        .sidebar-header-text p { font-size: 10px; color: #334155; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+        .sidebar-menu { list-style: none; flex-grow: 1; padding: 0 10px; }
+        .sidebar-menu li { margin-bottom: 5px; }
+        .sidebar-menu a { text-decoration: none; color: #475569; font-size: 14px; padding: 12px 15px; display: flex; align-items: center; gap: 15px; border-radius: 6px; transition: all 0.2s ease; white-space: nowrap; }
+        .sidebar-menu a i { width: 20px; text-align: center; font-size: 14px; color: #1a4c7b; transition: color 0.3s ease; }
+        .sidebar-menu a:hover { background-color: rgba(241, 245, 249, 0.7); color: #0f172a; transform: translateX(5px); }
+        .sidebar-menu a.active { background: rgba(255, 255, 255, 0.8); color: #1a4c7b; font-weight: 700; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); border: 1px solid rgba(26, 76, 123, 0.15); }
+        .sidebar.collapsed { width: 80px !important; }
+        .sidebar.collapsed .sidebar-header-text, .sidebar.collapsed .logo-container { opacity: 0; pointer-events: none; display: none; }
+        .sidebar.collapsed .sidebar-menu a span { display: none; }
+        .sidebar.collapsed .sidebar-menu a { justify-content: center; padding: 12px 0; }
+        .sidebar.collapsed .sidebar-menu a i { margin: 0; font-size: 18px; }
+        .sidebar-toggle-btn { position: absolute; top: 40px; right: -14px; width: 28px; height: 28px; background: #0f172a; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 60; border: 2px solid #ffffff; }
+        .sidebar-toggle-btn:hover { transform: scale(1.15); box-shadow: 0 6px 16px rgba(0,0,0,0.2); }
+        .sidebar.collapsed .sidebar-toggle-btn { transform: rotate(180deg); }
+
+        /* ---------- Profile block (from Settings) ---------- */
+        .profile-menu-container { position: relative; }
+        .profile-button { display: flex; align-items: center; gap: 10px; padding: 5px 15px 5px 5px; border: 1px solid #cbd5e1; border-radius: 30px; background: #ffffff; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.02); transition: all 0.2s ease; }
+        .profile-button:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06); transform: translateY(-1px); }
+        .profile-avatar-custom { width: 32px; height: 32px; border-radius: 50%; background-color: rgba(26, 76, 123, 0.1); color: #1a4c7b; padding: 6px; display: flex; align-items: center; justify-content: center; }
+        .profile-name { font-size: 13px; font-weight: 600; color: #334155; }
+        .profile-dropdown-icon { font-size: 10px; color: #64748b; }
+        .profile-dropdown-menu { display: flex; opacity: 0; visibility: hidden; transform: translateY(15px); transition: all 0.2s ease-out; position: absolute; bottom: 50px; left: 0; background-color: #ffffff; min-width: 200px; box-shadow: 0 -8px 25px rgba(0,0,0,0.08); border-radius: 8px; border: 1px solid #e2e8f0; z-index: 100; flex-direction: column; overflow: hidden; }
+        .profile-dropdown-menu.show { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-item { padding: 12px 20px; text-decoration: none; color: #475569; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 12px; transition: background 0.2s; cursor: pointer; }
+        .dropdown-item i { color: #1a4c7b; width: 16px; text-align: center; }
+        .dropdown-item:hover { background-color: #f1f5f9; color: #0f172a; }
+        .dropdown-item.logout { color: #d9534f; }
+        .dropdown-item.logout i { color: #d9534f !important; }
+        .dropdown-divider { height: 1px; background-color: #e2e8f0; margin: 4px 0; }
+        .sidebar.collapsed .profile-name, .sidebar.collapsed .profile-dropdown-icon { display: none; }
+        .sidebar.collapsed .profile-button { justify-content: center; padding: 5px; }
+
+        /* ---------- Main area (from Settings) ---------- */
+        .main-content { margin-left: 300px !important; padding: 20px 40px 40px 0 !important; width: auto !important; min-height: 100vh; transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .sidebar.collapsed ~ .main-content { margin-left: 120px !important; }
+
+        /* ---------- Buttons and inputs (from Settings) ---------- */
+        .form-control { background-color: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px 14px; color: #333333; font-size: 13px; outline: none; width: 100%; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .form-control:hover { border-color: #94a3b8; }
+        .form-control:focus { border-color: #1a4c7b; box-shadow: 0 0 0 3px rgba(26, 76, 123, 0.15); background-color: #f8fafc; }
+        .btn-primary { background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(26, 76, 123, 0.15); color: #1a4c7b; padding: 10px 20px; font-size: 13px; font-weight: 700; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-primary:hover { background: rgba(255, 255, 255, 1); border-color: rgba(26, 76, 123, 0.3); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
+        .btn-primary i { color: #1a4c7b; }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        /* ---------- Dark mode (from Settings) ---------- */
+        body.dark-mode .sidebar-header-text h2 { color: #f8fafc; text-shadow: 0 2px 10px rgba(255,255,255,0.1); }
+        body.dark-mode .sidebar-header-text p { color: #94a3b8; }
+        body.dark-mode .sidebar-menu a { color: #94a3b8; }
+        body.dark-mode .sidebar-menu a:hover { background-color: rgba(255, 255, 255, 0.05); color: #cbd5e1; transform: translateX(5px); }
+        body.dark-mode .sidebar-menu a.active { background: rgba(255, 255, 255, 0.05); color: #ffffff; border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
+        body.dark-mode .sidebar-menu a i, body.dark-mode .sidebar-menu a.active i { color: #ffffff !important; }
+        body.dark-mode .sidebar-toggle-btn { background: #f8fafc; color: #0f172a; border-color: #1e293b; }
+        body.dark-mode .sidebar-toggle-btn:hover { background: #e2e8f0; }
+        body.dark-mode .profile-button { background-color: rgba(30, 41, 59, 0.65); border-color: rgba(255, 255, 255, 0.1); }
+        body.dark-mode .profile-avatar-custom { background-color: rgba(255,255,255,0.1); color: #cbd5e1; }
+        body.dark-mode .profile-name { color: #e2e8f0; }
+        body.dark-mode .profile-dropdown-menu { background-color: rgba(30, 41, 59, 0.95); border-color: rgba(255, 255, 255, 0.1); }
+        body.dark-mode .dropdown-item { color: #cbd5e1; }
+        body.dark-mode .dropdown-item:hover { background-color: rgba(255, 255, 255, 0.05); color: #ffffff; }
+        body.dark-mode .dropdown-item i { color: #cbd5e1 !important; }
+        body.dark-mode .dropdown-divider { background-color: rgba(255, 255, 255, 0.1); }
+        body.dark-mode .dropdown-item.logout { color: #ef4444; }
+        body.dark-mode .dropdown-item.logout i { color: #ef4444 !important; }
+        body.dark-mode .form-control { background-color: rgba(15, 23, 42, 0.6); border-color: rgba(255, 255, 255, 0.12); color: #e2e8f0; }
+        body.dark-mode .form-control:focus { background-color: rgba(15, 23, 42, 0.8); border-color: #60a5fa; box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2); }
+        body.dark-mode .btn-primary { background: rgba(255, 255, 255, 0.06); border-color: rgba(255, 255, 255, 0.12); color: #ffffff; }
+        body.dark-mode .btn-primary:hover { background: rgba(255, 255, 255, 0.12); }
+        body.dark-mode .btn-primary i { color: #ffffff; }
+
+        /* ---------- Phones and small tablets: the sidebar sits on top ---------- */
+        @media (max-width: 768px) {
+            .sidebar { position: relative !important; width: auto !important; height: auto !important; left: 0 !important; top: 0 !important; margin: 12px; }
+            .sidebar-toggle-btn { display: none; }
+            .sidebar-header { padding: 16px 12px 8px; }
+            .logo-container { height: 70px; }
+            .logo-container img { height: 56px; }
+            .sidebar-menu { max-height: 40vh; }
+            .main-content { margin-left: 0 !important; padding: 0 12px 24px !important; }
+            .profile-dropdown-menu { bottom: auto; top: 50px; }
+        }
+
+        a:focus-visible, button:focus-visible, [role="button"]:focus-visible { outline: 2px solid #f59e0b; outline-offset: 2px; }
+    </style>
+</head>
+<body class="font-sans min-h-screen">
+    <script>
+        // THEME SYNC: applies the <head> boot decision to <body> before anything paints.
+        (function () {
+            var t = window.__TNA_THEME || "dark";
+            document.body.classList.remove("dark-mode");
+            document.body.classList.remove("light-mode");
+            document.body.classList.add(t === "dark" ? "dark-mode" : "light-mode");
+        })();
+    </script>
+
+    <!-- Background Image (same as Settings) -->
+    <div class="background-container"></div>
+
+    <!-- Shown while the licence and user access are being checked -->
+    <div id="acChecking" class="min-h-screen flex items-center justify-center text-sm text-slate-500 dark:text-gray-400">
+        <i class="fas fa-spinner fa-spin mr-2"></i> Checking your access...
+    </div>
+
+    <div id="acApp">
+        <!-- Floating Pill Sidebar (same as Settings). The menu is built by access_control.js from the user's screen access. -->
+        <aside class="sidebar glass-panel rounded-[20px]" id="mainSidebar">
+            <div class="sidebar-toggle-btn" onclick="AC.toggleSidebar()" title="Toggle Sidebar" role="button" tabindex="0" aria-label="Collapse or expand the menu">
+                <i class="fas fa-chevron-left" style="font-size: 12px;"></i>
+            </div>
+
+            <div style="display: flex; flex-direction: column; height: 100%;">
+                <div class="sidebar-header">
+                    <a href="Launchpad.html" class="logo-container hover:opacity-80 transition-opacity" title="Back to Launchpad" style="margin-bottom: 10px;">
+                        <img src="logo.png" alt="Company Logo" data-logo-context="rail" data-logo-fit>
+                    </a>
+                    <div class="sidebar-header-text">
+                        <h2>ACCESS CONTROL</h2>
+                        <p>Doors &amp; Security</p>
+                    </div>
+                </div>
+
+                <ul class="sidebar-menu" id="acMenu" style="flex-grow: 1; overflow-y: auto; margin-top: 10px;" aria-label="Access Control menu">
+                    <li class="px-3 py-2 text-xs text-slate-500 dark:text-gray-400"><i class="fas fa-spinner fa-spin mr-2"></i>Loading...</li>
+                </ul>
+
+                <!-- Profile Block at Bottom of Sidebar -->
+                <div class="profile-menu-container" style="padding: 15px;">
+                    <div class="profile-button" onclick="AC.toggleProfileMenu()" style="width: 100%; justify-content: space-between;" role="button" tabindex="0" aria-haspopup="true">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <svg id="sidebarProfileIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="profile-avatar-custom" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M32 30 C35 30, 36 45, 33 50 C29 48, 28 32, 32 30 Z" />
+                                <path d="M68 28 C71 29, 72 46, 68 49 C64 47, 63 31, 68 28 Z" />
+                                <path d="M15 55 C35 85, 65 85, 85 55 C70 75, 30 75, 15 55 Z" />
+                            </svg>
+                            <img id="sidebarProfilePic" src="" alt="" class="hidden" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid #cbd5e1;">
+                            <span class="profile-name" id="sidebarProfileName">Loading...</span>
+                        </div>
+                        <span class="profile-dropdown-icon">▲</span>
+                    </div>
+
+                    <div class="profile-dropdown-menu" id="profileDropdown">
+                        <a href="#" class="dropdown-item" data-theme-toggle><i class="fa-solid fa-moon"></i> Toggle Theme</a>
+                        <a href="Launchpad.html" class="dropdown-item"><i class="fa-solid fa-rocket"></i> Launchpad</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item logout" onclick="AC.logout(); return false;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content flex flex-col bg-transparent relative z-10">
+            <header class="pb-4 mb-4 flex flex-wrap justify-between items-center gap-2 z-10 border-b border-slate-300 dark:border-gray-700">
+                <h2 id="acSectionTitle" class="text-xl font-bold text-slate-800 dark:text-gray-200 uppercase tracking-wide">Access Control</h2>
+                <span id="acTenantName" class="text-sm text-slate-500 dark:text-gray-400"></span>
+            </header>
+
+            <div class="flex-1 relative">
+                <section id="acContent" class="glass-panel p-6 rounded-lg border-t-[3px] border-t-[#1a4c7b]">
+                    <p class="text-sm text-slate-600 dark:text-gray-300"><i class="fas fa-spinner fa-spin mr-2"></i>Loading Access Control...</p>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="theme.js?v=1.0.0"></script>
+    <!-- Command Queue viewer (shared with Settings / God Mode) and the Access Control screens. Safe to remove. -->
+    <script src="hw_queue.js"></script>
+    <script src="access_control.js"></script>
+
+</body>
+</html>

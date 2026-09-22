@@ -6,12 +6,37 @@
     <script src="tna_loader.js?v=1"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Time & Attendance Dashboard</title>
+    <!-- THEME BOOT (same as Employee Master): must stay INLINE and stay HERE (before any stylesheet) -->
+    <script>
+        (function () {
+            var v = null;
+            try { v = localStorage.getItem("tnaafrica_theme"); } catch (e) {}
+            if (v !== "light" && v !== "dark") v = "dark";
+            window.__TNA_THEME = v;
+            document.documentElement.classList.remove("dark-mode");
+            document.documentElement.classList.remove("light-mode");
+            document.documentElement.classList.add(v === "dark" ? "dark-mode" : "light-mode");
+            document.documentElement.setAttribute("data-theme", v);
+        })();
+    </script>
     <link rel="stylesheet" href="/css/styles.css?v=1.0.5">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+    <!-- Flatpickr dark theme: enabled/disabled with the page theme (same as Employee Master) -->
+    <link id="flatpickrDarkTheme" rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+    <script>
+        (function () {
+            var link = document.getElementById('flatpickrDarkTheme');
+            function syncFlatpickrTheme() {
+                if (!link) return;
+                link.disabled = (document.documentElement.getAttribute('data-theme') === 'light');
+            }
+            syncFlatpickrTheme();
+            document.addEventListener('tna:themechange', syncFlatpickrTheme);
+        })();
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <!-- Leaflet Maps API -->
@@ -95,104 +120,97 @@
             color: #ffffff !important;
         }
     </style>
+    <!-- Shared Employee Master look & feel + Tailwind theme adapter. Must stay AFTER the <style> block above. -->
+    <link rel="stylesheet" href="/css/tna_shell.css">
+    <link rel="stylesheet" href="/css/tna_tailwind_theme.css">
+    <!-- Employee Master content skin (buttons, cards, words, tables). Must stay LAST. Safe to remove. -->
+    <link rel="stylesheet" href="/css/tna_em_skin.css">
 </head>
 <body class="font-sans flex h-screen overflow-hidden">
+    <script>
+        // THEME SYNC (same as Employee Master): applies the <head> boot decision to <body> immediately
+        (function () {
+            var t = window.__TNA_THEME || "dark";
+            document.body.classList.remove("dark-mode");
+            document.body.classList.remove("light-mode");
+            document.body.classList.add(t === "dark" ? "dark-mode" : "light-mode");
+        })();
+    </script>
     <div id="globalLoader" class="fixed inset-0 bg-gray-900 z-[9999] flex flex-col justify-center items-center transition-opacity duration-500">
         <i class="fas fa-circle-notch animate-spin text-6xl text-teal-500 mb-6"></i>
         <h2 class="text-xl font-black text-gray-200 tracking-widest uppercase animate-pulse">Initializing T&A Engine</h2>
         <p class="text-xs text-gray-500 mt-2 animate-pulse">Loading core datasets, shifts, and memory caches...</p>
     </div>
 
-    <aside id="mainSidebar" class="w-64 bg-gray-800 flex flex-col shadow-xl flex-shrink-0 border-r border-gray-700 h-screen transition-all">
-        <div class="h-[76px] border-b border-gray-700 flex items-center justify-between px-4 toggle-btn-container">
-            <div class="flex items-center brand-header overflow-hidden whitespace-nowrap">
-                <i class="fas fa-user-clock text-2xl text-teal-400 mr-3"></i>
-                <div class="sidebar-text">
-                    <h1 class="text-xl font-black text-teal-400 leading-none mt-1">TNA AFRICA</h1>
-                    <p class="text-[9px] text-gray-400 uppercase tracking-widest mt-1">Management Engine</p>
+    <div class="background-container"></div>
+
+    <aside class="sidebar" id="mainSidebar">
+        <!-- Floating Toggle Button (same as Employee Master) -->
+        <div class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Toggle Sidebar">
+            <i class="fas fa-chevron-left" style="font-size: 12px;"></i>
+        </div>
+
+        <div style="display: flex; flex-direction: column; height: 100%;">
+            <div class="sidebar-header">
+                <a href="Launchpad.html" class="logo-container" title="Back to Launchpad" style="margin-bottom: 10px; display: flex; justify-content: center;">
+                    <img src="logo.png" alt="TNA AFRICA Logo" style="max-width: 140px;" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='">
+                </a>
+                <div class="sidebar-header-text">
+                    <h2>TIME &amp; ATTENDANCE</h2>
+                    <p>Management Engine</p>
                 </div>
             </div>
-            <button onclick="toggleSidebar()" class="text-gray-400 hover:text-white transition">
-                <i class="fas fa-bars text-xl"></i>
-            </button>
-        </div>
-<nav class="flex-1 overflow-y-auto py-4" id="sidebarNav">
 
-    <button data-permission="tna_employees" onclick="showSection('core-master', this)" class="sidebar-item w-full flex items-center p-4 text-left text-indigo-300">
-        <i class="fas fa-users-cog w-6 text-center mr-2"></i> Global Master Data
-    </button>
+            <!-- AUTO-HEAL: id="sidebarNav", class="sidebar-item", onclick and data-permission are kept exactly,
+                 so showSection, tab permissions, granular permissions and deep links all work unchanged. -->
+            <ul class="sidebar-menu" id="sidebarNav" style="flex-grow: 1; overflow-y: auto; margin-top: 10px;">
+                <li><a data-permission="tna_employees" onclick="showSection('core-master', this)" class="sidebar-item" title="Global Master Data"><i class="fas fa-users-cog"></i> <span>Global Master Data</span></a></li>
+                <li><a data-permission="tna_dashboard" onclick="showSection('high-level', this)" class="sidebar-item" title="High Level Overview"><i class="fas fa-globe-africa"></i> <span>High Level Overview</span></a></li>
+                <li><a data-permission="tna_maps" onclick="showSection('maps', this)" class="sidebar-item" title="Maps"><i class="fas fa-map-marked-alt"></i> <span>Maps</span></a></li>
+                <li><a data-permission="tna_dashboard" onclick="showSection('dashboard', this)" class="sidebar-item active" title="Dashboard"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
+                <li><a data-permission="tna_shifts" onclick="showSection('shifts', this)" class="sidebar-item" title="Shift Rules"><i class="fas fa-calendar-alt"></i> <span>Shift Rules</span></a></li>
+                <li><a data-permission="tna_roster" onclick="showSection('roster', this)" class="sidebar-item" title="Weekly Roster"><i class="fas fa-clipboard-list"></i> <span>Weekly Roster</span></a></li>
+                <li><a data-permission="tna_inbox" onclick="showSection('workflow', this)" class="sidebar-item" title="Manager Inbox"><i class="fas fa-inbox"></i> <span>Manager Inbox</span></a></li>
+                <li><a data-permission="tna_team_view" onclick="showSection('team-view', this)" class="sidebar-item" title="Team View"><i class="fas fa-users-cog"></i> <span>Team View</span></a></li>
+                <li><a data-permission="tna_attendance" onclick="showSection('attendance', this)" class="sidebar-item" title="Actual Attendance"><i class="fas fa-user-check"></i> <span>Actual Attendance</span></a></li>
+                <li><a data-permission="tna_violations" onclick="showSection('violations', this)" class="sidebar-item" title="Auto-Violations"><i class="fas fa-exclamation-triangle"></i> <span>Auto-Violations</span></a></li>
+                <li><a data-permission="tna_overtime" onclick="showSection('ot-validations', this)" class="sidebar-item" title="OT Validations"><i class="fas fa-stopwatch"></i> <span>OT Validations</span></a></li>
+                <li><a data-permission="tna_logs" onclick="showSection('timelogs', this)" class="sidebar-item" title="Time Logs"><i class="fas fa-history"></i> <span>Time Logs</span></a></li>
+                <li><a data-permission="tna_reports" onclick="showSection('reports', this)" class="sidebar-item" title="Analytics & Reports"><i class="fas fa-chart-pie"></i> <span>Analytics & Reports</span></a></li>
+                <li><a data-permission="tna_routing" onclick="showSection('workflow-routing', this)" class="sidebar-item" title="Workflow Routing"><i class="fas fa-project-diagram"></i> <span>Workflow Routing</span></a></li>
+                <li><a data-permission="tna_ot_rules" onclick="showSection('overtime', this)" class="sidebar-item" title="Overtime Rules"><i class="fas fa-balance-scale"></i> <span>Overtime Rules</span></a></li>
+                <li><a data-permission="tna_sage_queue" onclick="showSection('sage-queue', this)" class="sidebar-item" title="Sage Push Queue"><i class="fas fa-paper-plane"></i> <span>Sage Push Queue</span></a></li>
+                <li><a data-permission="tna_settings" onclick="showSection('settings', this)" class="sidebar-item" title="System Settings"><i class="fas fa-cogs"></i> <span>System Settings</span></a></li>
+            </ul>
 
-    <button data-permission="tna_dashboard" onclick="showSection('high-level', this)" class="sidebar-item w-full flex items-center p-4 text-left">
-        <i class="fas fa-globe-africa w-6 text-center mr-2"></i> High Level Overview
-    </button>
+            <!-- Profile Block at Bottom of Sidebar (same as Employee Master) -->
+            <div class="profile-menu-container" style="padding: 15px;">
+                <div class="profile-button" onclick="toggleDropdown()">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <svg id="sidebarProfileIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="profile-avatar-custom" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M32 30 C35 30, 36 45, 33 50 C29 48, 28 32, 32 30 Z" />
+                            <path d="M68 28 C71 29, 72 46, 68 49 C64 47, 63 31, 68 28 Z" />
+                            <path d="M15 55 C35 85, 65 85, 85 55 C70 75, 30 75, 15 55 Z" />
+                        </svg>
+                        <img id="sidebarProfilePic" src="" class="hidden" style="display: none;">
+                        <span class="profile-name" id="sidebarProfileName">Loading...</span>
+                    </div>
+                    <span class="profile-dropdown-icon">&#9650;</span>
+                </div>
 
-    <button data-permission="tna_maps" onclick="showSection('maps', this)" class="sidebar-item w-full flex items-center p-4 text-left">
-        <i class="fas fa-map-marked-alt w-6 text-center mr-2"></i> Maps
-    </button>
-
-    <button data-permission="tna_dashboard" onclick="showSection('dashboard', this)" class="sidebar-item active w-full flex items-center p-4 text-left">
-        <i class="fas fa-chart-line w-6 text-center mr-2"></i> Dashboard
-    </button>
-
-    <button data-permission="tna_shifts" onclick="showSection('shifts', this)" class="sidebar-item w-full flex items-center p-4 text-left">
-        <i class="fas fa-calendar-alt w-6 text-center mr-2"></i> Shift Rules
-    </button>
-
-    <button data-permission="tna_roster" onclick="showSection('roster', this)" class="sidebar-item w-full flex items-center p-4 text-left">
-        <i class="fas fa-clipboard-list w-6 text-center mr-2"></i> Weekly Roster
-    </button>
-
-    <button data-permission="tna_inbox" onclick="showSection('workflow', this)" class="sidebar-item w-full flex items-center p-4 text-left">
-        <i class="fas fa-inbox w-6 text-center mr-2"></i> Manager Inbox
-    </button>
-
-    <button data-permission="tna_team_view" onclick="showSection('team-view', this)" class="sidebar-item w-full flex items-center p-4 text-left">
-        <i class="fas fa-users-cog w-6 text-center mr-2"></i> Team View
-    </button>
-
-    <button data-permission="tna_attendance" onclick="showSection('attendance', this)" class="sidebar-item w-full flex items-center p-4 text-left">
-        <i class="fas fa-user-check w-6 text-center mr-2"></i> Actual Attendance
-    </button>
-
-    <button data-permission="tna_violations" onclick="showSection('violations', this)" class="sidebar-item w-full flex items-center p-4 text-left">
-        <i class="fas fa-exclamation-triangle w-6 text-center mr-2"></i> Auto-Violations
-    </button>
-
-    <button data-permission="tna_overtime" onclick="showSection('ot-validations', this)" class="sidebar-item w-full flex items-center p-4 text-left">
-        <i class="fas fa-stopwatch w-6 text-center mr-2"></i> OT Validations
-    </button>
-
-    <button data-permission="tna_logs" onclick="showSection('timelogs', this)" class="sidebar-item w-full flex items-center p-4 text-left">
-        <i class="fas fa-history w-6 text-center mr-2"></i> Time Logs
-    </button>
-
-    <button data-permission="tna_reports" onclick="showSection('reports', this)" class="sidebar-item w-full flex items-center p-4 text-left">
-        <i class="fas fa-chart-pie w-6 text-center mr-2"></i> Analytics & Reports
-    </button>
-
-    <button data-permission="tna_routing" onclick="showSection('workflow-routing', this)" class="sidebar-item w-full flex items-center p-4 text-left">
-        <i class="fas fa-project-diagram w-6 text-center mr-2"></i> Workflow Routing
-    </button>
-
-    <button data-permission="tna_ot_rules" onclick="showSection('overtime', this)" class="sidebar-item w-full flex items-center p-4 text-left">
-        <i class="fas fa-balance-scale w-6 text-center mr-2"></i> Overtime Rules
-    </button>
-
-    <button data-permission="tna_settings" onclick="showSection('settings', this)" class="sidebar-item w-full flex items-center p-4 text-left">
-        <i class="fas fa-cogs w-6 text-center mr-2"></i> System Settings
-    </button>
-
-</nav>
-        <div class="p-4 border-t border-gray-700 text-xs overflow-hidden">
-            <button onclick="window.location.href='Launchpad.html'" title="Back to Launchpad" class="text-gray-400 hover:text-white font-bold w-full text-left flex items-center transition">
-                <i class="fas fa-arrow-left w-6 text-center mr-3 sidebar-icon transition-all"></i> <span class="sidebar-text whitespace-nowrap">Back to Launchpad</span>
-            </button>
+                <div class="profile-dropdown-menu" id="profileDropdown">
+                    <a href="#" onclick="toggleUserTheme(); return false;" class="dropdown-item"><i class="fa-solid fa-moon"></i> Toggle Theme</a>
+                    <a href="Launchpad.html" class="dropdown-item"><i class="fa-solid fa-rocket"></i> Back to Launchpad</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="Login.html" class="dropdown-item logout" onclick="tnaShellLogout(); return false;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                </div>
+            </div>
         </div>
     </aside>
 
-    <main class="flex-1 flex flex-col bg-gray-900 min-h-0 h-screen">
-        <header class="bg-gray-800 shadow-sm p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 z-10 border-b border-gray-700 flex-shrink-0 w-full">
-            <h2 id="sectionTitle" class="text-lg font-bold text-gray-200 uppercase tracking-wide">Dashboard</h2>
+    <main class="main-content tna-main flex-1 flex flex-col min-h-0">
+        <header class="page-header-row tna-page-header flex flex-col md:flex-row justify-between items-start md:items-center gap-3 z-10 flex-shrink-0 w-full">
+            <div class="tna-title-wrap"><h2 id="sectionTitle" class="page-title">Dashboard</h2></div>
             
           <div class="flex items-center gap-4 ml-auto w-full md:w-auto">
                 <div id="dashboardToggleContainer" data-permission="tna_dashboard_hr" class="flex bg-gray-900 rounded border border-gray-600 overflow-hidden shadow-inner flex-shrink-0">
@@ -200,13 +218,11 @@
                     <button id="btnViewManager" onclick="toggleViewMode('Manager')" class="px-4 py-1.5 text-xs font-bold bg-indigo-600 text-white transition-colors duration-200">Manager View</button>
                 </div>
                 
-                <button onclick="refreshData()" class="w-full md:w-auto justify-center bg-gray-700 border border-gray-600 text-gray-200 px-4 py-2 rounded text-xs font-bold hover:bg-gray-600 transition flex items-center">
-            <i class="fas fa-sync-alt mr-2"></i> Refresh Data
-                </button>
+                 <!-- Refresh Data button removed: the browser refresh reloads everything (refreshData() still runs on page load) -->
             </div>
         </header>
 
-       <div class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-6 pb-40 relative w-full h-full">
+       <div class="tna-scroll flex-1 min-h-0 overflow-y-auto overflow-x-hidden pb-40 relative w-full h-full">
 
             <section id="page-high-level" class="page-section">
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-emerald-500 w-full mb-6">
@@ -576,8 +592,98 @@
             <section id="page-team-view" class="page-section">
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-blue-500 w-full">
                   <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-4 border-b border-gray-700 pb-4 xl:pb-2 gap-4">
-                        <h3 class="font-bold text-gray-300 whitespace-nowrap"><i class="fas fa-tasks mr-2"></i>Team Timesheet Approvals</h3>
-                        <div class="flex flex-wrap items-center justify-start xl:justify-end w-full gap-2">
+                       <h3 class="font-bold text-gray-300 whitespace-nowrap"><i class="fas fa-tasks mr-2"></i>Team Timesheet Approvals</h3>
+                        <!-- Bulk controls moved to the contextual bulk toolbar above the table (tvContextualBulkToolbar) -->
+                    </div>
+
+                    <!-- Team View filters - Employee Master "Active Personnel" look.
+                         Order: Search | Dates (one range picker) | Department | Status | Options ... Load Data
+                         AUTO-HEAL: every original id / onchange / oninput is unchanged.
+                         tvStartDate / tvEndDate are kept (hidden) - loadTeamView() and the week auto-fill still use them;
+                         the visible tvDateRange picker only writes into them. -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: flex-end; gap: 15px; flex: 1; flex-wrap: wrap;">
+                            <div class="form-group" style="width: 240px;">
+                                <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">Search Employee</label>
+                                <input type="text" id="tvSearch" oninput="if(typeof renderTeamView === 'function') renderTeamView()" placeholder="Name or PIN..." class="form-control">
+                            </div>
+                            <div class="form-group" style="width: 250px;">
+                                <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">Dates</label>
+                                <input type="text" id="tvDateRange" placeholder="Pick start and end date..." class="form-control" title="Click a start date, then an end date (max 7 days)">
+                                <!-- Original date fields: hidden, still the source of truth for loadTeamView() -->
+                                <div style="display: none;">
+                                    <input type="date" id="tvStartDate">
+                                    <input type="date" id="tvEndDate">
+                                </div>
+                            </div>
+                            <div class="form-group" style="width: 200px;">
+                                <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">Department</label>
+                                <select id="tvDeptFilter" onchange="if(typeof renderTeamView === 'function') renderTeamView()" class="form-control" style="appearance: none; -webkit-appearance: none; cursor: pointer; padding-right: 36px; background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%2364748b%22%3E%3Cpath d=%22M7 10l5 5 5-5z%22/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 10px center; background-size: 24px;">
+                                    <option value="">All Departments</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="width: 210px;">
+                                <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">Status Filter</label>
+                                <select id="tvStatusFilter" onchange="if(typeof renderTeamView === 'function') renderTeamView()" class="form-control" style="appearance: none; -webkit-appearance: none; cursor: pointer; padding-right: 36px; background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%2364748b%22%3E%3Cpath d=%22M7 10l5 5 5-5z%22/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 10px center; background-size: 24px;">
+                                    <option value="">All Statuses</option>
+                                    <option value="Action Required">Action Required</option>
+                                    <option value="No Shift Allocated">No Shift Allocated (Worked)</option>
+                                    <option value="Complete">Complete (Ready to Approve)</option>
+                                    <option value="Pending Overtime">Pending Overtime</option>
+                                    <option value="OT Within Threshold">OT Within Threshold</option>
+                                    <option value="Unauthorized OT">Unauthorized OT</option>
+                                    <option value="Missing Punch">Missing Punch</option>
+                                    <option value="Late Entry">Late Entry</option>
+                                    <option value="Early Leave">Early Leave</option>
+                                    <option value="Absent">Absent</option>
+                                    <option value="Present">Present</option>
+                                    <option value="Off">Off / Rest Day</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Payroll Locked">Payroll Locked</option>
+                                </select>
+                            </div>
+
+                            <!-- Options dropdown (same as Employee Master > Active Personnel).
+                                 AUTO-HEAL: checkbox id / onchange / default are unchanged, renderTeamView still reads it by id. -->
+                            <div id="tvOptionsContainer" style="position: relative; flex-shrink: 0;">
+                                <button type="button" class="btn btn-secondary" onclick="var m = document.getElementById('tvOptionsMenu'); if (m) m.classList.toggle('show');" style="height: 38px; padding: 0 15px; white-space: nowrap;">
+                                    <i class="fas fa-sliders-h"></i> Options
+                                </button>
+                                <div id="tvOptionsMenu" class="profile-dropdown-menu" style="top: calc(100% + 8px); left: 0; bottom: auto; min-width: 200px; z-index: 105; padding: 15px; display: flex; flex-direction: column; gap: 15px; overflow: visible;">
+                                    <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid rgba(148, 163, 184, 0.2); padding-bottom: 5px;">View Options</div>
+                                    <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; cursor: pointer; margin: 0;" title="If checked, 'A10' and 'B10' will sort simply as '10'">
+                                        <input type="checkbox" id="tvIgnoreLettersFilter" onchange="if(typeof renderTeamView === 'function') renderTeamView()" style="width: 16px; height: 16px; accent-color: #1a4c7b;" checked>
+                                        <i class="fas fa-sort-numeric-up text-center" style="width: 16px;"></i> Ignore Letters
+                                    </label>
+                                </div>
+                            </div>
+                            <script>
+                                // Close the Team View Options menu when clicking outside it (same behaviour as Employee Master)
+                                window.addEventListener('click', function (event) {
+                                    if (event.target.closest && event.target.closest('#tvOptionsContainer')) return;
+                                    var m = document.getElementById('tvOptionsMenu');
+                                    if (m && m.classList.contains('show')) m.classList.remove('show');
+                                });
+                            </script>
+                        </div>
+
+                        <!-- Primary action (right side, like Employee Master). onclick must stay exactly "loadTeamView()" - the loading spinner finds the button by it. -->
+                        <div style="display: flex; gap: 10px;">
+                            <button onclick="loadTeamView()" class="btn" style="height: 38px; padding: 0 18px; white-space: nowrap;">
+                                <i class="fas fa-filter mr-1"></i> Load Data
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Contextual Bulk Toolbar (Employee Master style). Shown only while rows are ticked.
+                         AUTO-HEAL: visible by default - tvUpdateBulkToolbar() in tna_dashboard.js hides it when nothing is ticked.
+                         All ids / onclicks inside are unchanged, so every bulk action and permission rule still finds them. -->
+                    <div id="tvContextualBulkToolbar" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 8px; padding: 12px 20px; margin-bottom: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div id="tvSelectedCount" style="background: #3b82f6; color: #ffffff; min-width: 28px; height: 28px; padding: 0 6px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);">0</div>
+                            <span class="action-box-title" style="font-size: 13px;">Records Selected</span>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-start xl:justify-end gap-2">
                             <div class="flex items-center bg-gray-900 border border-gray-600 rounded overflow-hidden shadow">
                                 <input type="number" id="tvBulkBreakMins" placeholder="Break (min)" class="bg-transparent border-none py-1.5 px-3 text-xs text-white w-24 focus:outline-none" min="0">
                                 <button onclick="executeBulkBreakOverride()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 text-xs font-bold transition border-l border-gray-600 whitespace-nowrap">Set Break</button>
@@ -597,56 +703,6 @@
                                 <i class="fas fa-layer-group mr-1"></i> Bulk Action
                             </button>
                         </div>
-                    </div>
-
-                    <div class="flex flex-col md:flex-row md:flex-wrap items-stretch md:items-end gap-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
-                        <div class="w-full md:w-36">
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Start Date</label>
-                            <input type="date" id="tvStartDate" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-teal-500">
-                        </div>
-                        <div class="w-full md:w-36">
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">End Date</label>
-                            <input type="date" id="tvEndDate" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-teal-500">
-                        </div>
-                        <div class="w-full md:w-48">
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Hierarchy Node</label>
-                            <select id="tvDeptFilter" onchange="if(typeof renderTeamView === 'function') renderTeamView()" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-teal-500">
-                                <option value="">All My Nodes</option>
-                            </select>
-                        </div>
-                        <div class="w-full md:w-48">
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Status Filter</label>
-                            <select id="tvStatusFilter" onchange="if(typeof renderTeamView === 'function') renderTeamView()" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-teal-500">
-                                <option value="">All Statuses</option>
-                                <option value="Action Required">Action Required</option>
-                                <option value="No Shift Allocated">No Shift Allocated (Worked)</option>
-                                <option value="Complete">Complete (Ready to Approve)</option>
-                                <option value="Pending Overtime">Pending Overtime</option>
-                                <option value="OT Within Threshold">OT Within Threshold</option>
-                                <option value="Unauthorized OT">Unauthorized OT</option>
-                                <option value="Missing Punch">Missing Punch</option>
-                                <option value="Late Entry">Late Entry</option>
-                                <option value="Early Leave">Early Leave</option>
-                                <option value="Absent">Absent</option>
-                                <option value="Present">Present</option>
-                                <option value="Off">Off / Rest Day</option>
-                                <option value="Approved">Approved</option>
-                                <option value="Payroll Locked">Payroll Locked</option>
-                            </select>
-                        </div>
-                        <div class="w-full md:flex-1 md:min-w-[200px]">
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Search Employee</label>
-                            <div class="flex gap-2">
-                                <input type="text" id="tvSearch" oninput="if(typeof renderTeamView === 'function') renderTeamView()" placeholder="Search..." class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-teal-500">
-                                <label class="flex items-center space-x-2 text-[10px] font-bold text-teal-400 cursor-pointer bg-gray-800 border border-gray-600 px-2 py-1.5 rounded hover:border-teal-500 transition whitespace-nowrap" title="If checked, 'A10' and 'B10' will sort simply as '10'">
-                                    <input type="checkbox" id="tvIgnoreLettersFilter" onchange="if(typeof renderTeamView === 'function') renderTeamView()" class="accent-teal-500 w-3 h-3 cursor-pointer" checked>
-                                    <span><i class="fas fa-sort-numeric-up mr-1"></i> Ignore Letters</span>
-                                </label>
-                            </div>
-                        </div>
-                        <button onclick="loadTeamView()" class="w-full md:w-auto bg-teal-600 hover:bg-teal-500 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow h-10 md:h-8 flex justify-center items-center mt-2 md:mt-0">
-                            <i class="fas fa-filter mr-1"></i> Load Data
-                        </button>
                     </div>
 
                     <div class="overflow-x-auto bg-gray-900 rounded border border-gray-700">
@@ -758,64 +814,192 @@
             <section id="page-workflow-routing" class="page-section pb-32">
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-purple-500 max-w-6xl">
                     <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
-                        <h3 class="font-bold text-gray-300"><i class="fas fa-project-diagram mr-2"></i>Workflow Routing Configuration</h3>
+                        <h3 class="font-bold text-gray-300"><i class="fas fa-project-diagram mr-2"></i>Workflow Routing</h3>
                     </div>
-                    <p class="text-xs text-gray-400 mb-4">Define sequential approval paths (1st, 2nd, 3rd Approvers) for specific Departments or individual Employee overrides.</p>
-                    
-                    <form id="workflowRoutingForm" onsubmit="saveWorkflowRouting(event)" class="bg-gray-900 p-4 rounded border border-gray-700 mb-6 space-y-4 shadow-inner">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="relative">
-                                <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Target Node (Apply to whole Department/Team)</label>
-                                <input type="text" id="wfDeptSearch" oninput="filterWfDept()" onfocus="showWfDeptDropdown()" placeholder="Search Department or Team..." class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-purple-500">
-                                <input type="hidden" id="wfDeptCode">
-                                <div id="wfDeptDropdown" class="hidden absolute z-50 w-full bg-gray-800 border border-gray-500 rounded mt-1 max-h-48 overflow-y-auto shadow-2xl"></div>
-                            </div>
-                            <div class="relative">
-                                <label class="block text-[10px] text-pink-400 mb-1 uppercase tracking-wider">OR Target Employee (Overrides Node Default)</label>
-                                <input type="text" id="wfEmpSearch" oninput="filterWfEmp()" onfocus="showWfEmpDropdown()" placeholder="Search Employee Name or PIN..." class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-pink-500">
-                                <input type="hidden" id="wfEmpId">
-                                <div id="wfEmpDropdown" class="hidden absolute z-50 w-full bg-gray-800 border border-gray-500 rounded mt-1 max-h-48 overflow-y-auto shadow-2xl"></div>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 border-t border-gray-700 pt-4">
-                            <div>
-                                <label class="block text-[10px] text-purple-400 font-bold mb-1 uppercase">1st Approver</label>
-                                <select id="wfLevel1" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none"></select>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] text-purple-400 font-bold mb-1 uppercase">2nd Approver</label>
-                                <select id="wfLevel2" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none"></select>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] text-purple-400 font-bold mb-1 uppercase">3rd Approver</label>
-                                <select id="wfLevel3" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none"></select>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] text-blue-400 font-bold mb-1 uppercase">Standing / Backup Approver</label>
-                                <select id="wfStanding" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none"></select>
-                            </div>
-                        </div>
-                        <div class="flex justify-end pt-2 border-t border-gray-800 mt-2">
-                            <button type="submit" class="bg-purple-600 hover:bg-purple-500 text-white px-6 py-2 rounded text-xs font-bold shadow transition">Save Routing Rule</button>
-                        </div>
-                    </form>
 
-                    <div class="overflow-x-auto bg-gray-900 border border-gray-700 rounded p-2">
-                        <table class="w-full text-left text-xs border-collapse">
-                            <thead class="bg-gray-800 text-gray-400 uppercase font-bold">
-                                <tr>
-                                    <th class="p-3 border-b border-gray-700">Target Type</th>
-                                    <th class="p-3 border-b border-gray-700">Target Name</th>
-                                    <th class="p-3 border-b border-gray-700">L1 Approver</th>
-                                    <th class="p-3 border-b border-gray-700">L2 Approver</th>
-                                    <th class="p-3 border-b border-gray-700">L3 Approver</th>
-                                    <th class="p-3 text-right border-b border-gray-700">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="routingBody" class="divide-y divide-gray-800 text-gray-300">
-                                <tr><td colspan="6" class="p-4 text-center text-gray-500">Loading configurations...</td></tr>
-                            </tbody>
-                        </table>
+                    <!-- Two separate jobs, two tabs -->
+                    <div class="flex border-b border-gray-700 mb-4">
+                        <button type="button" id="wfrTabBtnChains" onclick="wfrShowTab('chains')" class="px-4 py-2 text-xs font-bold text-purple-400 border-b-2 border-purple-400 transition"><i class="fas fa-sitemap mr-1"></i> Approval Chains</button>
+                        <button type="button" id="wfrTabBtnStandins" onclick="wfrShowTab('standins')" class="px-4 py-2 text-xs font-bold text-gray-500 border-b-2 border-transparent hover:text-gray-300 transition"><i class="fas fa-user-clock mr-1"></i> Stand-in Approvers <span id="wfrActiveStandinBadge" class="hidden ml-1 bg-teal-600 text-white text-[9px] px-1.5 py-0.5 rounded-full">0</span></button>
+                    </div>
+
+                    <!-- ================= TAB 1: APPROVAL CHAINS ================= -->
+                    <div id="wfrTabChains">
+                        <p class="text-xs text-gray-400 mb-4">Who approves leave requests, leave cancellations and claims. Set a rule for a whole department, or a rule for one employee (an employee rule replaces the department rule for that person). Requests go to the 1st approver, then the 2nd, then the 3rd.</p>
+
+                        <form id="workflowRoutingForm" onsubmit="saveWorkflowRouting(event)" class="bg-gray-900 p-4 rounded border border-gray-700 mb-6 space-y-4 shadow-inner">
+                            <input type="hidden" id="wfEditStructureId" value="">
+                            <div id="wfrEditBanner" class="hidden bg-indigo-900/40 border border-indigo-500 text-indigo-200 text-xs p-2 rounded flex justify-between items-center">
+                                <span><i class="fas fa-pen mr-1"></i> Editing rule for: <b id="wfrEditLabel"></b></span>
+                                <button type="button" onclick="wfrResetForm()" class="text-indigo-300 hover:text-white text-xs font-bold">Cancel edit</button>
+                            </div>
+
+                            <!-- Step 1: target -->
+                            <div>
+                                <label class="block text-[10px] text-purple-400 font-bold mb-2 uppercase tracking-wider">1. Who does this rule apply to?</label>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <label class="flex items-center bg-gray-800 border border-gray-600 rounded px-3 py-2 text-xs text-gray-200 cursor-pointer hover:border-purple-500 transition">
+                                        <input type="radio" name="wfTargetType" value="dept" checked onchange="wfrSetTargetType('dept')" class="accent-purple-500 mr-2"> <i class="fas fa-sitemap mr-1 text-purple-400"></i> A whole department
+                                    </label>
+                                    <label class="flex items-center bg-gray-800 border border-gray-600 rounded px-3 py-2 text-xs text-gray-200 cursor-pointer hover:border-pink-500 transition">
+                                        <input type="radio" name="wfTargetType" value="emp" onchange="wfrSetTargetType('emp')" class="accent-pink-500 mr-2"> <i class="fas fa-user mr-1 text-pink-400"></i> One employee
+                                    </label>
+                                </div>
+                                <div id="wfTargetDeptWrap" class="relative">
+                                    <input type="text" id="wfDeptSearch" oninput="filterWfDept()" onfocus="showWfDeptDropdown()" autocomplete="off" placeholder="Search department..." class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                                    <input type="hidden" id="wfDeptCode">
+                                    <div id="wfDeptDropdown" class="hidden absolute z-50 w-full bg-gray-800 border border-gray-500 rounded mt-1 max-h-48 overflow-y-auto shadow-2xl"></div>
+                                </div>
+                                <div id="wfTargetEmpWrap" class="relative hidden">
+                                    <input type="text" id="wfEmpSearch" oninput="filterWfEmp()" onfocus="showWfEmpDropdown()" autocomplete="off" placeholder="Search employee name or PIN..." class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-pink-500">
+                                    <input type="hidden" id="wfEmpId">
+                                    <div id="wfEmpDropdown" class="hidden absolute z-50 w-full bg-gray-800 border border-gray-500 rounded mt-1 max-h-48 overflow-y-auto shadow-2xl"></div>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: the chain -->
+                            <div class="border-t border-gray-700 pt-4">
+                                <label class="block text-[10px] text-purple-400 font-bold mb-2 uppercase tracking-wider">2. Approvers, in order</label>
+                                <div class="flex flex-col md:flex-row md:items-end gap-3">
+                                    <div class="flex-1">
+                                        <label class="block text-[10px] text-gray-400 font-bold mb-1 uppercase">1st Approver <span class="text-purple-400">*</span></label>
+                                        <select id="wfLevel1" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none"></select>
+                                    </div>
+                                    <i class="fas fa-arrow-right text-gray-600 hidden md:block pb-3"></i>
+                                    <div class="flex-1">
+                                        <label class="block text-[10px] text-gray-400 font-bold mb-1 uppercase">2nd Approver</label>
+                                        <select id="wfLevel2" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none"></select>
+                                    </div>
+                                    <i class="fas fa-arrow-right text-gray-600 hidden md:block pb-3"></i>
+                                    <div class="flex-1">
+                                        <label class="block text-[10px] text-gray-400 font-bold mb-1 uppercase">3rd Approver</label>
+                                        <select id="wfLevel3" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none"></select>
+                                    </div>
+                                </div>
+                                <p class="text-[10px] text-gray-500 mt-2">Leave the 2nd and 3rd empty for a one-step approval.</p>
+                            </div>
+
+                            <!-- Step 3: backup approver (Administrator only) -->
+                            <div class="border-t border-gray-700 pt-4">
+                                <label class="block text-[10px] text-blue-400 font-bold mb-1 uppercase tracking-wider">3. Backup approver (optional) <span id="wfrStandingAdminNote" class="hidden text-orange-400 normal-case font-normal ml-1"><i class="fas fa-lock mr-1"></i>Only an Administrator can change this</span></label>
+                                <p class="text-[10px] text-gray-500 mb-2">Can approve for this rule at any level while the dates are valid. Leave the dates empty for no end date. To cover one person while they are away, use the <b>Stand-in Approvers</b> tab instead.</p>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                    <div>
+                                        <label class="block text-[10px] text-gray-400 mb-1 uppercase">Backup approver</label>
+                                        <select id="wfStanding" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none"></select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] text-gray-400 mb-1 uppercase">From</label>
+                                        <input type="date" id="wfStandingFrom" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] text-gray-400 mb-1 uppercase">To</label>
+                                        <input type="date" id="wfStandingTo" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end gap-2 pt-3 border-t border-gray-800">
+                                <button type="button" onclick="wfrResetForm()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded text-xs font-bold shadow transition">Clear</button>
+                                <button type="submit" id="btnSaveRoutingRule" class="bg-purple-600 hover:bg-purple-500 text-white px-6 py-2 rounded text-xs font-bold shadow transition"><i class="fas fa-save mr-1"></i> Save Routing Rule</button>
+                            </div>
+                        </form>
+
+                        <div class="flex flex-wrap items-center gap-3 mb-3">
+                            <div class="relative flex-1 min-w-[220px]">
+                                <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
+                                <input type="text" id="wfrRuleSearch" oninput="renderWorkflowRouting()" placeholder="Search department, employee or approver..." class="w-full pl-8 pr-3 py-1.5 bg-gray-900 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-purple-500">
+                            </div>
+                            <select id="wfrRuleTypeFilter" onchange="renderWorkflowRouting()" class="bg-gray-900 border border-gray-600 rounded py-1.5 px-3 text-xs text-white focus:outline-none focus:border-purple-500">
+                                <option value="">All rules</option>
+                                <option value="dept">Department rules</option>
+                                <option value="emp">Employee rules</option>
+                            </select>
+                            <span id="wfrRuleCount" class="text-[10px] text-gray-500 font-bold uppercase tracking-wider"></span>
+                        </div>
+
+                        <div class="overflow-x-auto bg-gray-900 border border-gray-700 rounded p-2">
+                            <table class="w-full text-left text-xs border-collapse">
+                                <thead class="bg-gray-800 text-gray-400 uppercase font-bold">
+                                    <tr>
+                                        <th class="p-3 border-b border-gray-700">Applies To</th>
+                                        <th class="p-3 border-b border-gray-700">Name</th>
+                                        <th class="p-3 border-b border-gray-700">Approval Chain</th>
+                                        <th class="p-3 border-b border-gray-700">Backup Approver</th>
+                                        <th class="p-3 text-right border-b border-gray-700">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="routingBody" class="divide-y divide-gray-800 text-gray-300">
+                                    <tr><td colspan="5" class="p-4 text-center text-gray-500">Loading configurations...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- ================= TAB 2: STAND-IN APPROVERS ================= -->
+                    <div id="wfrTabStandins" class="hidden">
+                        <p class="text-xs text-gray-400 mb-4">When someone is away, choose who approves in their place. Between the From and To dates the stand-in sees and can approve everything the away person could approve, using the away person's access. The away person can still approve too. Every approval by a stand-in is recorded as "on behalf of".</p>
+
+                        <div id="wfrStandinLocked" class="hidden bg-orange-900/30 border border-orange-500 text-orange-300 text-xs p-3 rounded mb-4"><i class="fas fa-lock mr-1"></i> Only an Administrator can add, end or delete stand-ins. You can view them below.</div>
+
+                        <div id="wfrStandinForm" class="bg-gray-900 p-4 rounded border border-gray-700 mb-4 shadow-inner space-y-3">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[10px] text-gray-400 font-bold mb-1 uppercase"><i class="fas fa-plane-departure mr-1 text-orange-400"></i> Who is away</label>
+                                    <select id="wfrAwayUser" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none"></select>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] text-gray-400 font-bold mb-1 uppercase"><i class="fas fa-user-check mr-1 text-teal-400"></i> Who stands in</label>
+                                    <select id="wfrStandInUser" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none"></select>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                                <div>
+                                    <label class="block text-[10px] text-gray-400 font-bold mb-1 uppercase">From</label>
+                                    <input type="date" id="wfrSiFrom" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-teal-500">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] text-gray-400 font-bold mb-1 uppercase">To</label>
+                                    <input type="date" id="wfrSiTo" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-teal-500">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-[10px] text-gray-400 font-bold mb-1 uppercase">Reason (optional)</label>
+                                    <input type="text" id="wfrSiReason" maxlength="500" placeholder="e.g. Annual leave" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-teal-500">
+                                </div>
+                            </div>
+                            <div id="wfrSiMsg" class="hidden text-xs p-2 rounded border"></div>
+                            <div class="flex justify-end">
+                                <button type="button" id="btnSaveStandin" onclick="saveStandin()" class="bg-teal-600 hover:bg-teal-500 text-white px-6 py-2 rounded text-xs font-bold shadow transition"><i class="fas fa-user-plus mr-1"></i> Add Stand-in</button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 mb-3">
+                            <select id="wfrSiStatusFilter" onchange="renderStandins()" class="bg-gray-900 border border-gray-600 rounded py-1.5 px-3 text-xs text-white focus:outline-none focus:border-teal-500">
+                                <option value="current">Active and upcoming</option>
+                                <option value="past">Expired and ended</option>
+                                <option value="all">All</option>
+                            </select>
+                            <span id="wfrSiCount" class="text-[10px] text-gray-500 font-bold uppercase tracking-wider"></span>
+                        </div>
+
+                        <div class="overflow-x-auto bg-gray-900 border border-gray-700 rounded p-2">
+                            <table class="w-full text-left text-xs border-collapse">
+                                <thead class="bg-gray-800 text-gray-400 uppercase font-bold">
+                                    <tr>
+                                        <th class="p-3 border-b border-gray-700">Away</th>
+                                        <th class="p-3 border-b border-gray-700">Stand-in</th>
+                                        <th class="p-3 border-b border-gray-700">Dates</th>
+                                        <th class="p-3 border-b border-gray-700">Reason</th>
+                                        <th class="p-3 border-b border-gray-700 text-center">Status</th>
+                                        <th class="p-3 border-b border-gray-700">Set By</th>
+                                        <th class="p-3 border-b border-gray-700 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="wfrStandinBody" class="divide-y divide-gray-800 text-gray-300">
+                                    <tr><td colspan="7" class="p-4 text-center text-gray-500">Loading stand-ins...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -1805,6 +1989,18 @@
                             </div>
                             <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-gray-800/50 transition">
                                 <div>
+                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-redo text-indigo-400 mr-2"></i>Recalculation Re-opens</h4>
+                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">When hours are recalculated automatically (new punches, roster changes), which Manager Inbox items go back to Pending. A manual "Force Overwrite All" always re-opens everything.</p>
+                                </div>
+                                <div class="flex items-center gap-2 flex-shrink-0">
+                                    <select id="settingRecalcReopen" onchange="saveTNASettings(event)" class="w-48 bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                                        <option value="unapproved">Only unapproved (Default)</option>
+                                        <option value="all">All, incl. approved &amp; rejected</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-gray-800/50 transition">
+                                <div>
                                     <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-tree text-green-400 mr-2"></i>Public Holiday Logic (Not Worked)</h4>
                                     <p class="text-[10px] text-gray-500 mt-1 max-w-xl">If an employee is scheduled on a holiday but does not clock in.</p>
                                 </div>
@@ -2207,6 +2403,71 @@
                         <i class="fas fa-check-circle text-green-500 text-3xl mb-2"></i>
                         <h4 class="text-sm font-black text-green-400 uppercase tracking-widest">Analysis Complete!</h4>
                         <p id="bulkAnalyzeResultText" class="text-xs text-gray-300">Successfully processed X days.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SAGE PUSH QUEUE: staged leave pushes, payroll decides what to push or ignore (logic in tna_sage_queue.js) -->
+            <section id="page-sage-queue" class="page-section pb-32">
+                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-teal-500 w-full mb-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-gray-700 pb-3 mb-4">
+                        <div>
+                            <h3 class="font-bold text-gray-300"><i class="fas fa-paper-plane mr-2 text-teal-400"></i>Sage Push Queue</h3>
+                            <p class="text-[10px] text-gray-500 mt-1">Approved, logged and cancelled leave waits here. Select rows and push them to Sage, or ignore them.</p>
+                        </div>
+                        <div class="flex gap-2 text-[10px] font-bold">
+                            <span class="px-2 py-1 rounded border border-yellow-600 text-yellow-300">Pending <span id="sqCountPending">0</span></span>
+                            <span class="px-2 py-1 rounded border border-red-600 text-red-300">Failed <span id="sqCountFailed">0</span></span>
+                            <span class="px-2 py-1 rounded border border-green-600 text-green-300">Pushed <span id="sqCountPushed">0</span></span>
+                            <span class="px-2 py-1 rounded border border-gray-500 text-gray-300">Ignored <span id="sqCountIgnored">0</span></span>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap items-end gap-3 mb-4">
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 mb-1">Status</label>
+                            <select id="sqStatusFilter" onchange="loadSageQueue()" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white">
+                                <option value="Pending">Pending</option>
+                                <option value="Failed">Failed</option>
+                                <option value="Pushed">Pushed</option>
+                                <option value="Ignored">Ignored</option>
+                                <option value="All">All</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 mb-1">Leave From</label>
+                            <input type="date" id="sqStartDate" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 mb-1">Leave To</label>
+                            <input type="date" id="sqEndDate" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white">
+                        </div>
+                        <button onclick="loadSageQueue()" class="bg-gray-700 border border-gray-600 text-gray-200 px-3 py-1.5 rounded text-xs font-bold hover:bg-gray-600"><i class="fas fa-search mr-1"></i>Load</button>
+                        <div class="flex-1"></div>
+                        <span id="sqSelectedCount" class="text-[10px] text-gray-400"></span>
+                        <button onclick="sageQueuePush()" class="bg-teal-600 text-white px-3 py-1.5 rounded text-xs font-bold hover:bg-teal-500"><i class="fas fa-paper-plane mr-1"></i>Push Selected</button>
+                        <button onclick="sageQueueIgnore()" class="bg-gray-600 text-white px-3 py-1.5 rounded text-xs font-bold hover:bg-gray-500"><i class="fas fa-ban mr-1"></i>Ignore Selected</button>
+                        <button onclick="sageQueueRequeue()" class="bg-indigo-700 text-white px-3 py-1.5 rounded text-xs font-bold hover:bg-indigo-600"><i class="fas fa-undo mr-1"></i>Re-queue Selected</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="text-[10px] uppercase text-gray-400 border-b border-gray-600">
+                                    <th class="p-2 text-center"><input type="checkbox" id="sqCheckAll" onchange="sageQueueToggleAll(this.checked)"></th>
+                                    <th class="p-2">Leave Date</th>
+                                    <th class="p-2">Employee</th>
+                                    <th class="p-2">Action</th>
+                                    <th class="p-2">Leave Type</th>
+                                    <th class="p-2 text-right">Units</th>
+                                    <th class="p-2">Source</th>
+                                    <th class="p-2">Status</th>
+                                    <th class="p-2">Note / Error</th>
+                                    <th class="p-2">Updated</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sqTableBody">
+                                <tr><td colspan="10" class="p-6 text-center text-gray-500 text-xs">Open this page to load the queue.</td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </section>
@@ -3568,13 +3829,93 @@
             sidebarLinks.forEach(link => {
                 link.addEventListener('click', () => {
                     if (window.innerWidth <= 768) {
+                        sidebar.classList.add('collapsed');
                         sidebar.classList.add('sidebar-collapsed');
                     }
                 });
             });
         });
+
+        // Workspace background (same as Employee Master: comes from /css/tna_shell.css).
+        // AUTO-HEAL: a custom background saved earlier (employee_master_bg_dark / _light) is still honoured.
+        function initWorkspaceBackground() {
+            const isDarkMode = document.body.classList.contains("dark-mode");
+            let savedBg = null;
+            try { savedBg = localStorage.getItem(isDarkMode ? "employee_master_bg_dark" : "employee_master_bg_light"); } catch (e) {}
+            const bgContainer = document.querySelector('.background-container');
+            if (!bgContainer) return;
+            if (savedBg) {
+                const gradient = isDarkMode
+                    ? `linear-gradient(rgba(19, 19, 20, 0.85), rgba(19, 19, 20, 0.85))`
+                    : `linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05))`;
+                bgContainer.style.backgroundImage = `${gradient}, url('${savedBg}')`;
+            } else {
+                bgContainer.style.removeProperty('background-image');
+                bgContainer.style.removeProperty('background-color');
+            }
+        }
+        initWorkspaceBackground();
+        document.addEventListener('tna:themechange', initWorkspaceBackground);
+
+        // Toggle Profile Dropdown (same as Employee Master)
+        function toggleDropdown() {
+            const dropdown = document.getElementById("profileDropdown");
+            if (dropdown) dropdown.classList.toggle("show");
+        }
+
+        // Close the profile dropdown when clicking outside it
+        window.addEventListener('click', function (event) {
+            if (!event.target.closest('.profile-menu-container')) {
+                const dd = document.getElementById("profileDropdown");
+                if (dd && dd.classList.contains('show')) dd.classList.remove('show');
+            }
+        });
+
+        // Logout: clears both session tokens, then back to the login page
+        function tnaShellLogout() {
+            try { localStorage.removeItem('token'); localStorage.removeItem('tenantToken'); } catch (e) {}
+            window.location.href = 'Login.html';
+        }
+
+        // --- THEME ENGINE (delegated to theme.js, same as Employee Master) ---
+        // AUTO-HEAL: works on its own if theme.js did not load.
+        async function toggleUserTheme() {
+            if (window.TnaTheme) {
+                await window.TnaTheme.toggle();
+                initWorkspaceBackground();
+                return;
+            }
+            const isDark = document.body.classList.contains('dark-mode');
+            const newTheme = isDark ? 'light' : 'dark';
+            document.documentElement.classList.toggle("dark-mode", newTheme === 'dark');
+            document.documentElement.classList.toggle("light-mode", newTheme !== 'dark');
+            document.body.classList.toggle("dark-mode", newTheme === 'dark');
+            document.body.classList.toggle("light-mode", newTheme !== 'dark');
+            document.documentElement.setAttribute("data-theme", newTheme);
+            try { localStorage.setItem("tnaafrica_theme", newTheme); } catch (e) {}
+            try { document.dispatchEvent(new CustomEvent('tna:themechange', { detail: { theme: newTheme } })); } catch (e) {}
+            initWorkspaceBackground();
+            try {
+                const tk = localStorage.getItem('tenantToken') || localStorage.getItem('token');
+                if (tk) {
+                    await fetch('/api/users/me/theme', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${tk}` },
+                        body: JSON.stringify({ theme: newTheme })
+                    });
+                }
+            } catch (err) { console.warn('Failed to save theme to backend silently.', err); }
+        }
     </script>
    <!-- Added cache-buster to force the browser to load the new JS -->
+   <!-- Shared theme engine (same as Employee Master). Safe to remove: the page falls back to its own toggle. -->
+   <script src="theme.js"></script>
    <script src="tna_dashboard.js?v=2.0.1"></script>
+    <!-- Sage Push Queue page (AUTO-HEAL: if this file is missing, only that page is empty) -->
+   <script src="tna_sage_queue.js"></script>
+   <!-- System Settings: left menu, one section at a time, (i) help, Save moves with the section. Safe to remove. -->
+   <script src="tna_settings_ui.js"></script>
+   <!-- Shared top bar: search + quick access + profile menu (same as Employee Master). Safe to remove. -->
+   <script src="tna_topbar.js"></script>
 </body>
 </html>

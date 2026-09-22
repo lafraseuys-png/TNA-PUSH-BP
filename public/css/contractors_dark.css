@@ -1,0 +1,162 @@
+/* =====================================================================
+   contractors_dark.css - DARK MODE FOR CONTRACTORS & DISTRIBUTION
+   Loaded LAST on Contractors.html. Only applies when dark mode is on
+   (body.dark-mode / html.dark-mode). Light mode is untouched.
+
+   1. Page background = Employee Master's dark mode: #131314 with the same
+      background photo, blurred.
+   2. Cards / boxes that have a hard-coded WHITE or light-grey background
+      (written inline in the page or by the scripts) become dark glass, the
+      same as Employee Master's panels.
+   3. Hard-coded dark text colours on those boxes become light, and the navy
+      used for names / links becomes a light blue that reads on dark.
+   AUTO-HEAL: works by matching the inline colours, so screens added later
+   are covered too. Things that must stay white for printing (the contract
+   preview used to build PDFs) are excluded.
+   ===================================================================== */
+
+/* ---------- 1. Page background (same as Employee Master) ---------- */
+html.dark-mode, html.dark-mode body, body.dark-mode {
+    background-color: #131314 !important;
+    color: #e2e8f0 !important;
+}
+body.dark-mode .background-container {
+    display: block !important;
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), url('employeewhite.png');
+    background-size: cover; background-position: right center; background-repeat: no-repeat;
+    opacity: 1; filter: blur(6px);
+    pointer-events: none;
+}
+
+/* ---------- 2. Light boxes -> dark glass ---------- */
+body.dark-mode :where(.main-content, .modal-backdrop) :is(
+    [style*="background: #ffffff"], [style*="background:#ffffff"], [style*="background-color: #ffffff"],
+    [style*="background: #fff;"], [style*="background: white"], [style*="background-color: white"],
+    [style*="background: #f8fafc"], [style*="background-color: #f8fafc"],
+    [style*="background: #f1f5f9"], [style*="background-color: #f1f5f9"],
+    [style*="background: #f9fafb"], [style*="background-color: #f9fafb"],
+    [style*="background: rgba(148, 163, 184, 0.05)"],
+    [style*="background-color: rgba(255, 255, 255, 0.95)"]
+):not(#contractPreviewContent):not(#contractPreviewContent *) {
+    background: rgba(30, 41, 59, 0.55) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
+}
+/* Pop-up panels: SOLID dark (not see-through glass), however their white was written.
+   The three :not(#...) parts only raise this rule's priority above the general "light box" rule. */
+body.dark-mode .modal-backdrop > :is(.modal-panel, .info-modal-content):not(#contractPreviewContent):not(#contractPreviewContent *):not(#_x) {
+    background: #1e293b !important;
+    background-image: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6) !important;
+    color: #e2e8f0;
+}
+/* Header / footer bands inside pop-ups: slightly lighter than the panel */
+body.dark-mode .modal-backdrop > .modal-panel > :is(.modal-header, [style*="background-color: #f8fafc"], [style*="background: #f8fafc"]):not(#_x):not(#_y):not(#_z) {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+/* Hard-coded light borders -> subtle light borders */
+body.dark-mode :where(.main-content, .modal-backdrop) :is(
+    [style*="border: 1px solid #e2e8f0"], [style*="border-bottom: 1px solid #e2e8f0"], [style*="border-top: 1px solid #e2e8f0"],
+    [style*="border-bottom: 1px solid #f1f5f9"], [style*="border: 1px solid #e5e7eb"], [style*="border: 1px solid #cbd5e1"]
+):not(#contractPreviewContent *) {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* ---------- 3. Dark text -> light text ---------- */
+body.dark-mode :where(.main-content, .modal-backdrop) :is(
+    [style*="color: #0f172a"], [style*="color: #1e293b"], [style*="color: #1f2937"],
+    [style*="color: #334155"], [style*="color: #374151"]
+):not(#contractPreviewContent):not(#contractPreviewContent *) {
+    color: #e2e8f0 !important;
+}
+body.dark-mode :where(.main-content, .modal-backdrop) :is([style*="color: #475569"], [style*="color: #64748b"]):not(#contractPreviewContent *) {
+    color: #94a3b8 !important;
+}
+/* Navy names / links / numbers -> light blue (same accent as Employee Master's dark tabs) */
+body.dark-mode :where(.main-content, .modal-backdrop) :is([style*="color: #1a4c7b"], [style*="color:#1a4c7b"]):not(#contractPreviewContent *) {
+    color: #93c5fd !important;
+}
+/* Navy tint pills (areas, products, quantities) */
+body.dark-mode :where(.main-content, .modal-backdrop) [style*="background: rgba(26, 76, 123, 0.08)"] {
+    background: rgba(147, 197, 253, 0.12) !important;
+    border-color: rgba(147, 197, 253, 0.25) !important;
+    color: #bfdbfe !important;
+}
+
+/* ---------- Form fields ---------- */
+body.dark-mode :where(.main-content, .modal-backdrop) :is(.form-control, input[type="text"], input[type="search"], input[type="number"], input[type="date"], select, textarea):not([type="checkbox"]):not([type="radio"]) {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    color: #e2e8f0 !important;
+    color-scheme: dark;
+}
+body.dark-mode :where(.main-content, .modal-backdrop) :is(input, textarea)::placeholder { color: #64748b !important; }
+body.dark-mode :where(.main-content, .modal-backdrop) :is(input, select, textarea):disabled { opacity: 0.6; }
+
+/* ---------- Screens built by the add-on files ---------- */
+/* Progress > Contracts Rollout */
+body.dark-mode #cpRoot .cp-box { background: rgba(30, 41, 59, 0.55); border-color: rgba(255, 255, 255, 0.08); }
+body.dark-mode #cpRoot .cp-h { color: #93c5fd; }
+body.dark-mode #cpRoot .cp-kpi { background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.08); }
+body.dark-mode #cpRoot .cp-kpi .n { color: #f8fafc; }
+body.dark-mode #cpRoot .cp-kpi .l { color: #cbd5e1; }
+body.dark-mode #cpRoot .cp-bar { background: rgba(255, 255, 255, 0.08); }
+body.dark-mode #cpRoot th { background: rgba(255, 255, 255, 0.04); color: #94a3b8; border-color: rgba(255, 255, 255, 0.08); }
+body.dark-mode #cpRoot td { color: #e2e8f0; border-color: rgba(255, 255, 255, 0.06); }
+body.dark-mode #cpRoot tr.cp-click:hover td { background: rgba(255, 255, 255, 0.04); }
+body.dark-mode #cpRoot .cp-chip { background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.12); color: #cbd5e1; }
+body.dark-mode #cpRoot .cp-chip.on { border-color: #93c5fd; color: #93c5fd; background: rgba(147, 197, 253, 0.1); }
+body.dark-mode #cpRoot .cp-crumb, body.dark-mode #cpRoot .cp-crumb a { color: #93c5fd; }
+
+/* Settings / Workflow section menus */
+body.dark-mode .cs-nav-btn i { color: #93c5fd; }
+body.dark-mode .cs-info:hover, body.dark-mode .cs-info:focus { color: #93c5fd; }
+
+/* Sidebar group titles */
+body.dark-mode #sidebarNav .tsg-title { color: #64748b; }
+body.dark-mode #sidebarNav .tsg-title:hover { color: #cbd5e1; }
+
+/* Tables that use the Tailwind white/grey helpers */
+body.dark-mode :where(.main-content, .modal-backdrop) :is(.bg-white, .bg-gray-50, .bg-slate-50):not(#contractPreviewContent *) {
+    background-color: rgba(30, 41, 59, 0.55) !important;
+}
+
+/* Soft status pills (amber / green / red / blue / teal) -> tinted versions that read on dark */
+body.dark-mode :where(.main-content, .modal-backdrop) [style*="background: #fffbeb"] { background: rgba(245, 158, 11, 0.15) !important; border-color: rgba(245, 158, 11, 0.35) !important; color: #fbbf24 !important; }
+body.dark-mode :where(.main-content, .modal-backdrop) [style*="background: #ecfdf5"] { background: rgba(16, 185, 129, 0.15) !important; border-color: rgba(16, 185, 129, 0.35) !important; color: #34d399 !important; }
+body.dark-mode :where(.main-content, .modal-backdrop) [style*="background: #fef2f2"] { background: rgba(239, 68, 68, 0.15) !important; border-color: rgba(239, 68, 68, 0.35) !important; color: #f87171 !important; }
+body.dark-mode :where(.main-content, .modal-backdrop) [style*="background: #eff6ff"] { background: rgba(59, 130, 246, 0.15) !important; border-color: rgba(59, 130, 246, 0.35) !important; color: #93c5fd !important; }
+body.dark-mode :where(.main-content, .modal-backdrop) [style*="background: #f0fdfa"] { background: rgba(20, 184, 166, 0.15) !important; border-color: rgba(20, 184, 166, 0.35) !important; color: #5eead4 !important; }
+
+/* ---------- Dashboard (uses its own classes, not inline colours) ---------- */
+body.dark-mode #page-dashboard .dash-card {
+    background: rgba(30, 41, 59, 0.55) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
+}
+body.dark-mode #page-dashboard .dash-card-title { color: #cbd5e1 !important; border-bottom-color: rgba(255, 255, 255, 0.08) !important; }
+body.dark-mode #page-dashboard :is(.dash-stat-label, .dash-mini-label, .dash-kv-label) { color: #94a3b8 !important; }
+body.dark-mode #page-dashboard .dash-split > div + div { border-left-color: rgba(255, 255, 255, 0.08) !important; }
+body.dark-mode #page-dashboard .dash-kv + .dash-kv { border-top-color: rgba(255, 255, 255, 0.08) !important; }
+body.dark-mode #page-dashboard .dash-progress { background-color: rgba(255, 255, 255, 0.08) !important; }
+body.dark-mode #dashAreaChartSummary { color: #94a3b8 !important; }
+
+/* Area Hierarchy tree (.dat-*) */
+body.dark-mode .dat-search input { background: rgba(255, 255, 255, 0.05) !important; border-color: rgba(255, 255, 255, 0.12) !important; color: #e2e8f0 !important; }
+body.dark-mode .dat-search input:focus { background: rgba(255, 255, 255, 0.08) !important; border-color: #93c5fd !important; }
+body.dark-mode .dat-chip { background: rgba(255, 255, 255, 0.04) !important; border-color: rgba(255, 255, 255, 0.12) !important; color: #cbd5e1 !important; }
+body.dark-mode .dat-chip.on { background: rgba(245, 158, 11, 0.15) !important; border-color: rgba(245, 158, 11, 0.35) !important; color: #fbbf24 !important; }
+body.dark-mode .dat-stats { color: #94a3b8 !important; }
+body.dark-mode .dat-children { border-left-color: rgba(255, 255, 255, 0.1) !important; }
+body.dark-mode .dat-row:hover { background: rgba(255, 255, 255, 0.05) !important; }
+body.dark-mode :is(.dat-name, .dat-count) { color: #e2e8f0 !important; }
+body.dark-mode :is(.dat-mgr-name, .dat-more) { color: #cbd5e1 !important; }
+body.dark-mode .dat-count-lbl { color: #64748b !important; }
+body.dark-mode .dat-avatar { background: rgba(147, 197, 253, 0.15) !important; color: #93c5fd !important; }
+body.dark-mode .dat-gap { background: rgba(245, 158, 11, 0.15) !important; border-color: rgba(245, 158, 11, 0.35) !important; color: #fbbf24 !important; }
+body.dark-mode .dat-level { filter: brightness(1.2); background-color: rgba(255, 255, 255, 0.08) !important; }
+body.dark-mode .dat-show-more { color: #93c5fd !important; }
+body.dark-mode .dat-chart-btn:hover { background: rgba(255, 255, 255, 0.06) !important; }

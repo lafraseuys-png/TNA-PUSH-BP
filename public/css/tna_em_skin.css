@@ -1,0 +1,308 @@
+/* =====================================================================
+   TNA DASHBOARD - EMPLOYEE MASTER CONTENT SKIN
+   File: public/css/tna_em_skin.css
+   ---------------------------------------------------------------------
+   Finishes the Employee Master look inside the TNA dashboard content
+   (buttons, cards, headings, labels, tables, inputs, modals, loader).
+   Load LAST - after /css/tna_shell.css and /css/tna_tailwind_theme.css.
+
+   SAFE BY DESIGN:
+     - CSS only. No ids, classes, onclick handlers or JS are touched, so
+       every screen, permission, toggle and generated row works as before.
+     - Scoped to .main-content, .modal-backdrop and #globalLoader only.
+       The sidebar and the shared top bar are not affected.
+     AUTO-HEAL: if this file is missing the page looks exactly as before.
+   ===================================================================== */
+
+
+/* ---------------------------------------------------------------------
+   0. GIVE SPACING BACK TO TAILWIND
+   tna_shell.css starts with Master's reset  * { margin: 0; padding: 0; }
+   which is NOT in a cascade layer. styles.css is Tailwind v4, where all
+   utilities live in @layer utilities - and an unlayered rule always beats
+   a layered one. Result: every p-4 / p-6 / mb-6 / space-y-* was wiped.
+   revert-layer hands padding & margin back to Tailwind (utilities, or its
+   own preflight 0 when no class is set). :where() = zero specificity, so
+   every other shell rule (buttons, page header, glass tables) still wins.
+   AUTO-HEAL: browsers without revert-layer ignore it - page stays as is.
+   --------------------------------------------------------------------- */
+:where(.main-content, .modal-backdrop, #globalLoader) * {
+    margin: revert-layer;
+    padding: revert-layer;
+}
+
+
+/* ---------------------------------------------------------------------
+   1. GHOST BUTTONS (tabs / inactive toggles)
+   Buttons that only have a HOVER background (e.g. "hover:bg-gray-800")
+   and no real background were being drawn as full glass buttons by the
+   shell rule button[class*="bg-"]. That made active and inactive tabs
+   look identical (e.g. Report Generator / Automated Emailer).
+   They now stay flat until hovered, exactly like Master's tab buttons.
+   When JS adds the real bg class (active state) they become glass again.
+   --------------------------------------------------------------------- */
+.main-content button[class*="bg-"]:not([class^="bg-"]):not([class*=" bg-"]),
+.modal-backdrop button[class*="bg-"]:not([class^="bg-"]):not([class*=" bg-"]),
+.main-content button[class~="bg-transparent"],
+.modal-backdrop button[class~="bg-transparent"] {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+.main-content button[class*="bg-"]:not([class^="bg-"]):not([class*=" bg-"]):hover,
+.modal-backdrop button[class*="bg-"]:not([class^="bg-"]):not([class*=" bg-"]):hover,
+.main-content button[class~="bg-transparent"]:hover,
+.modal-backdrop button[class~="bg-transparent"]:hover {
+    background: rgba(26, 76, 123, 0.06) !important;
+    border-color: rgba(26, 76, 123, 0.12) !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+body.dark-mode .main-content button[class*="bg-"]:not([class^="bg-"]):not([class*=" bg-"]),
+body.dark-mode .modal-backdrop button[class*="bg-"]:not([class^="bg-"]):not([class*=" bg-"]),
+body.dark-mode .main-content button[class~="bg-transparent"],
+body.dark-mode .modal-backdrop button[class~="bg-transparent"] {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+body.dark-mode .main-content button[class*="bg-"]:not([class^="bg-"]):not([class*=" bg-"]):hover,
+body.dark-mode .modal-backdrop button[class*="bg-"]:not([class^="bg-"]):not([class*=" bg-"]):hover,
+body.dark-mode .main-content button[class~="bg-transparent"]:hover,
+body.dark-mode .modal-backdrop button[class~="bg-transparent"]:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    box-shadow: none !important;
+}
+
+
+/* ---------------------------------------------------------------------
+   2. COMPACT BUTTONS
+   The shell gives every button Master's full size (10px 18px / 13px).
+   Small buttons (tiny text, py-1, p-1, or inside table cells) keep a
+   compact Master size so rows and toolbars don't grow.
+   --------------------------------------------------------------------- */
+.main-content button[class*="bg-"]:is([class~="text-[10px]"], [class~="text-[9px]"], [class~="py-1"], [class~="py-0.5"], [class~="p-1"]),
+.modal-backdrop button[class*="bg-"]:is([class~="text-[10px]"], [class~="text-[9px]"], [class~="py-1"], [class~="py-0.5"], [class~="p-1"]),
+.main-content td button[class*="bg-"],
+.modal-backdrop td button[class*="bg-"] {
+    padding: 5px 10px;
+    font-size: 11px;
+    border-radius: 6px;
+    gap: 6px;
+}
+
+
+/* ---------------------------------------------------------------------
+   3. DANGER BUTTONS keep a red warning colour
+   Master's unified navy glass is kept, but destructive buttons
+   (red background, red hover or red text) show red text and a red-tinted
+   border so actions like "Force Overwrite All" still look dangerous.
+   --------------------------------------------------------------------- */
+.main-content button:is([class~="bg-red-500"], [class~="bg-red-600"], [class~="bg-red-700"], [class~="hover:bg-red-500"], [class~="hover:bg-red-600"], [class~="hover:bg-red-700"], [class~="text-red-400"], [class~="text-red-500"])[class*="bg-"],
+.modal-backdrop button:is([class~="bg-red-500"], [class~="bg-red-600"], [class~="bg-red-700"], [class~="hover:bg-red-500"], [class~="hover:bg-red-600"], [class~="hover:bg-red-700"], [class~="text-red-400"], [class~="text-red-500"])[class*="bg-"] {
+    color: #b91c1c !important;
+    border-color: rgba(185, 28, 28, 0.25) !important;
+}
+body.dark-mode .main-content button:is([class~="bg-red-500"], [class~="bg-red-600"], [class~="bg-red-700"], [class~="hover:bg-red-500"], [class~="hover:bg-red-600"], [class~="hover:bg-red-700"], [class~="text-red-400"], [class~="text-red-500"])[class*="bg-"],
+body.dark-mode .modal-backdrop button:is([class~="bg-red-500"], [class~="bg-red-600"], [class~="bg-red-700"], [class~="hover:bg-red-500"], [class~="hover:bg-red-600"], [class~="hover:bg-red-700"], [class~="text-red-400"], [class~="text-red-500"])[class*="bg-"] {
+    color: #f87171 !important;
+    border-color: rgba(248, 113, 113, 0.3) !important;
+}
+body.dark-mode .main-content button:is([class~="bg-red-500"], [class~="bg-red-600"], [class~="bg-red-700"], [class~="hover:bg-red-500"], [class~="hover:bg-red-600"], [class~="hover:bg-red-700"], [class~="text-red-400"], [class~="text-red-500"])[class*="bg-"] i,
+body.dark-mode .modal-backdrop button:is([class~="bg-red-500"], [class~="bg-red-600"], [class~="bg-red-700"], [class~="hover:bg-red-500"], [class~="hover:bg-red-600"], [class~="hover:bg-red-700"], [class~="text-red-400"], [class~="text-red-500"])[class*="bg-"] i {
+    color: inherit !important;
+}
+
+
+/* ---------------------------------------------------------------------
+   4. SEGMENTED TOGGLES (HR / Manager View, Grid / Bulk, Smart Analyze ...)
+   Container becomes Master's soft pill; buttons inside are compact and
+   don't jump on hover (the container clips them).
+   --------------------------------------------------------------------- */
+.main-content div[class~="flex"][class~="overflow-hidden"][class~="rounded"]:has(> button):not(:has(> input)) {
+    padding: 3px;
+    gap: 3px;
+    border-radius: 10px;
+}
+.main-content div[class~="flex"][class~="overflow-hidden"][class~="rounded"]:has(> button):not(:has(> input)) > button {
+    padding: 6px 14px;
+    font-size: 12px;
+    border-radius: 7px;
+}
+.main-content div[class~="flex"][class~="overflow-hidden"][class~="rounded"]:has(> button):not(:has(> input)) > button:hover,
+.main-content div[class~="flex"][class~="overflow-hidden"][class~="rounded"]:has(> button):not(:has(> input)) > button:active {
+    transform: none !important;
+}
+
+
+/* ---------------------------------------------------------------------
+   5. CARDS - Master panel shape, softer shadow, thin accent strip
+   --------------------------------------------------------------------- */
+.main-content :is([class~="bg-gray-800"], [class~="bg-gray-900"])[class~="rounded"]:not(input, select, textarea, button, span, td, th, tr) {
+    border-radius: 8px;
+}
+/* Coloured accent strips (border-t-4 / border-l-4 / border-b-4) removed:
+   cards get Master's plain 1px border all round. Table rows are excluded so
+   the JS red "flash" on timesheet rows (border-l-4) still shows. */
+body.light-mode .main-content :is([class~="border-t-4"], [class~="border-l-4"], [class~="border-b-4"]):not(tr, td, th),
+body.light-mode .modal-backdrop :is([class~="border-t-4"], [class~="border-l-4"], [class~="border-b-4"]):not(tr, td, th) {
+    border: 1px solid rgba(148, 163, 184, 0.35);
+}
+body.light-mode .main-content .page-section > :is([class~="border-t-4"], [class~="border-l-4"], [class~="border-b-4"]):not(tr, td, th) {
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+body.dark-mode .main-content :is([class~="border-t-4"], [class~="border-l-4"], [class~="border-b-4"]):not(tr, td, th),
+body.dark-mode .modal-backdrop :is([class~="border-t-4"], [class~="border-l-4"], [class~="border-b-4"]):not(tr, td, th) {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+body.light-mode .main-content :is([class~="bg-gray-800"], [class~="bg-gray-900"]):is([class~="shadow"], [class~="shadow-md"], [class~="shadow-lg"], [class~="shadow-xl"]) {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+}
+body.light-mode .main-content [class~="shadow-inner"] {
+    box-shadow: inset 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+
+/* ---------------------------------------------------------------------
+   6. CARD HEADINGS & FIELD LABELS - Master words
+   Heading icons become Master navy (white in dark mode).
+   Uppercase field captions become Master slate labels.
+   Status text/numbers keep their meaning colours (already made readable
+   by tna_tailwind_theme.css).
+   --------------------------------------------------------------------- */
+body.light-mode .main-content .page-section :is(h2, h3, h4) > i,
+body.light-mode .modal-backdrop :is(h2, h3, h4) > i {
+    color: #1a4c7b;
+}
+body.dark-mode .main-content .page-section :is(h2, h3, h4) > i,
+body.dark-mode .modal-backdrop :is(h2, h3, h4) > i {
+    color: #ffffff;
+}
+body.light-mode .main-content label[class~="uppercase"],
+body.light-mode .modal-backdrop label[class~="uppercase"] {
+    color: #475569;
+    font-weight: 700;
+}
+body.dark-mode .main-content label[class~="uppercase"],
+body.dark-mode .modal-backdrop label[class~="uppercase"] {
+    color: #cbd5e1;
+    font-weight: 700;
+}
+
+
+/* ---------------------------------------------------------------------
+   7. TABLES - Master glass-table header and rows
+   Colours only; paddings are left alone so the roster grid and dense
+   tables keep their size.
+   --------------------------------------------------------------------- */
+body.light-mode .main-content thead[class*="bg-gray-"],
+body.light-mode .main-content thead :is(tr, th)[class*="bg-gray-"],
+body.light-mode .modal-backdrop thead[class*="bg-gray-"],
+body.light-mode .modal-backdrop thead :is(tr, th)[class*="bg-gray-"] {
+    background-color: rgba(248, 250, 252, 0.97);
+}
+body.dark-mode .main-content thead[class*="bg-gray-"],
+body.dark-mode .main-content thead :is(tr, th)[class*="bg-gray-"],
+body.dark-mode .modal-backdrop thead[class*="bg-gray-"],
+body.dark-mode .modal-backdrop thead :is(tr, th)[class*="bg-gray-"] {
+    background-color: rgba(30, 41, 59, 0.95);
+}
+body.light-mode .main-content tbody :is(tr, td)[class*="border-gray-"],
+body.light-mode .modal-backdrop tbody :is(tr, td)[class*="border-gray-"] {
+    border-color: rgba(15, 23, 42, 0.06);
+}
+body.light-mode .main-content tbody[class*="divide-gray-"] > * + *,
+body.light-mode .modal-backdrop tbody[class*="divide-gray-"] > * + * {
+    border-color: rgba(15, 23, 42, 0.06);
+}
+body.light-mode .main-content tbody tr:hover,
+body.light-mode .modal-backdrop tbody tr:hover {
+    background-color: rgba(26, 76, 123, 0.04);
+}
+body.dark-mode .main-content tbody tr:hover,
+body.dark-mode .modal-backdrop tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+
+/* ---------------------------------------------------------------------
+   8. INPUTS - Master focus ring and radius
+   --------------------------------------------------------------------- */
+.main-content :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea)[class*="bg-gray-"],
+.modal-backdrop :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea)[class*="bg-gray-"] {
+    border-radius: 6px;
+}
+body.light-mode .main-content :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea):focus,
+body.light-mode .modal-backdrop :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea):focus {
+    outline: none;
+    border-color: #1a4c7b;
+    box-shadow: 0 0 0 3px rgba(26, 76, 123, 0.15);
+}
+body.dark-mode .main-content :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea):focus,
+body.dark-mode .modal-backdrop :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea):focus {
+    outline: none;
+    border-color: rgba(96, 165, 250, 0.5);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+/* Inputs sitting inside an input-group (border-none) keep no ring of their own */
+.main-content input[class~="border-none"]:focus {
+    box-shadow: none;
+}
+
+
+/* ---------------------------------------------------------------------
+   9. MODALS - Master modal shape
+   --------------------------------------------------------------------- */
+/* Stretchable pop-ups (same as Employee Master's .info-modal-content "resize: both"):
+   drag the bottom-right corner to resize horizontally, vertically or diagonally.
+   Content scrolls inside if the pop-up is made smaller than it.
+   Pop-ups OPEN at their normal size (their own w-* / max-w-* classes are kept). */
+.modal-backdrop > [class~="bg-gray-800"] {
+    border-radius: 16px;
+    resize: both;
+    overflow: auto;
+    min-width: 320px;
+    min-height: 200px;
+    max-height: 95vh;
+}
+/* Only once the user drags the corner (the browser writes a width onto the pop-up)
+   is the width cap lifted, so it can grow up to 95% of the screen. */
+.modal-backdrop > [class~="bg-gray-800"][style*="width"] {
+    max-width: 95vw;
+}
+
+/* Hide the support-ticket widget while any pop-up is open, so it can't cover
+   the stretch handle or the Save / Cancel buttons. It comes back when the pop-up closes. */
+body:has(.modal-backdrop.active) #tna-widget-root,
+body:has(.modal-backdrop.active) iframe[id^="tna-widget"] {
+    display: none !important;
+}
+.modal-backdrop > [class~="bg-gray-800"] > :first-child {
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+}
+.modal-backdrop > [class~="bg-gray-800"] > :last-child {
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+}
+
+
+/* ---------------------------------------------------------------------
+   10. LOADING SCREEN - Master navy spinner
+   --------------------------------------------------------------------- */
+body.light-mode #globalLoader > i { color: #1a4c7b; }
+body.dark-mode #globalLoader > i { color: #e2e8f0; }
+body.light-mode #globalLoader p { color: #64748b; }
+
+
+/* ---------------------------------------------------------------------
+   11. HIDE THE SCREEN TITLE (same as Employee Master)
+   The sidebar already shows which screen you are on. The title element
+   stays in the page (hidden), so showSection() can still set its text.
+   The header row keeps its buttons (Refresh Data, HR / Manager toggle).
+   --------------------------------------------------------------------- */
+.main-content .page-header-row .tna-title-wrap {
+    display: none !important;
+}
