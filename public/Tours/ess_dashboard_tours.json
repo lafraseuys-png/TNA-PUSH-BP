@@ -1,0 +1,276 @@
+{
+  "_howto": "Employee self service (ess_dashboard.html) tours. One page (no sidebar); forms get their own offered tours.",
+  "key": "ess_dashboard",
+  "title": "Self service tour",
+  "startDelay": 2500,
+  "blockers": [
+    ".fixed.inset-0:not(.hidden)"
+  ],
+  "whatsNewTitle": "What's new in self service",
+  "whatsNewText": "We've added something new here since you last took the tour.",
+  "steps": [
+    {
+      "id": "es-welcome",
+      "title": "Welcome to your self service",
+      "text": "Your hours, leave, claims, payslips and company documents, all in one place, on your phone or computer.<br><br>Tap <b>Next</b> to see around. Tap outside or <b>Esc</b> to close.",
+      "fullOnly": true
+    },
+    {
+      "id": "es-profile",
+      "target": [
+        "#essProfileName"
+      ],
+      "title": "You",
+      "text": "Your name, number and department.",
+      "placement": "bottom",
+      "climb": 2
+    },
+    {
+      "id": "es-edit",
+      "target": [
+        "button[onclick*='openEssInfoModal']"
+      ],
+      "title": "Update my details",
+      "text": "Your phone numbers, email, emergency contact, address and bank details. Changes to bank details may need proof and approval.",
+      "placement": "bottom"
+    },
+    {
+      "id": "es-install",
+      "target": [
+        "#btnHeaderInstall"
+      ],
+      "title": "Install the app",
+      "text": "Put self service on your phone's home screen, like an app.",
+      "placement": "bottom",
+      "optional": true
+    },
+    {
+      "id": "es-clock",
+      "target": [
+        "#essClockingButtons"
+      ],
+      "title": "Clock in and out",
+      "text": "If your company allows it, clock in and out here. Your location may be checked.",
+      "placement": "bottom",
+      "optional": true
+    },
+    {
+      "id": "es-balances",
+      "target": [
+        "button[onclick*='essLeaveBalancesWrapper']"
+      ],
+      "title": "Leave you have",
+      "text": "Tap to see how much of each kind of leave you have available.",
+      "placement": "bottom"
+    },
+    {
+      "id": "es-docs",
+      "target": [
+        "button[onclick*='openEssDocumentsModal']"
+      ],
+      "title": "Company documents",
+      "text": "Policies and notices from your company. New ones show a red badge; some need you to read and acknowledge them.",
+      "placement": "bottom"
+    },
+    {
+      "id": "es-news",
+      "target": [
+        "#essBroadcastFeed"
+      ],
+      "title": "Company news",
+      "text": "Messages and announcements from your company.",
+      "placement": "top"
+    },
+    {
+      "id": "es-timesheet",
+      "target": [
+        "#essContentContainer"
+      ],
+      "title": "Your hours",
+      "text": "Your hours for the period, split into normal time, overtime, Saturday, Sunday and public holidays, then each day below. Use the arrows to go to other periods.",
+      "placement": "top"
+    },
+    {
+      "id": "es-leave",
+      "target": [
+        "#essContentContainer button[onclick*='openEssLeaveModal']"
+      ],
+      "title": "Apply for leave",
+      "text": "Choose the dates and type of leave. It goes to your manager to approve, and you're told when they have.",
+      "placement": "bottom",
+      "optional": true
+    },
+    {
+      "id": "es-claim",
+      "target": [
+        "#essContentContainer button[onclick*='openEssExpenseModal']"
+      ],
+      "title": "Submit a claim",
+      "text": "Claim back money you spent for work, with a photo of the receipt.",
+      "placement": "bottom",
+      "optional": true
+    },
+    {
+      "id": "es-pending",
+      "target": [
+        "#essUpcomingLeaveContainer"
+      ],
+      "title": "Your requests",
+      "text": "Requests waiting for approval, and leave coming up. You can cancel a request that hasn't been approved yet.",
+      "placement": "top",
+      "optional": true
+    },
+    {
+      "id": "es-payslips",
+      "target": [
+        "button[onclick*='openEssPayslipsModal']"
+      ],
+      "title": "Payslips",
+      "text": "Your payslips and wage advice slips.",
+      "placement": "top"
+    },
+    {
+      "id": "es-team",
+      "target": [
+        "#btnFooterMSS"
+      ],
+      "title": "My Team",
+      "text": "For managers: your team's hours and leave, and requests waiting for you.",
+      "placement": "top",
+      "optional": true
+    },
+    {
+      "id": "es-help",
+      "target": [
+        "#tnaTourHelpBtn"
+      ],
+      "title": "Help is always here",
+      "text": "Tap <b>?</b> any time for this tour and short guides, such as applying for leave.",
+      "placement": "left"
+    },
+    {
+      "id": "es-done",
+      "title": "That's it",
+      "text": "Each form also has a short tour the first time you open it.",
+      "fullOnly": true
+    }
+  ],
+  "sections": [
+    {
+      "key": "ess_dashboard.leave-form",
+      "title": "Leave request",
+      "trigger": "#essLeaveModal:not(.hidden)",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "ess_dashboard.guide.leave",
+      "skipSteps": 1,
+      "stepSuffix": "form"
+    },
+    {
+      "key": "ess_dashboard.claim-form",
+      "title": "Claim",
+      "trigger": "#essExpenseModal:not(.hidden)",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "ess_dashboard.guide.claim",
+      "skipSteps": 1,
+      "stepSuffix": "form"
+    },
+    {
+      "key": "ess_dashboard.details-form",
+      "title": "My details",
+      "trigger": "#essInfoModal:not(.hidden)",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "ess_dashboard.guide.details",
+      "skipSteps": 1,
+      "stepSuffix": "form"
+    },
+    {
+      "key": "ess_dashboard.docs-form",
+      "title": "Company documents",
+      "trigger": "#essDocumentsModal:not(.hidden)",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "ess_dashboard.guide.documents",
+      "skipSteps": 1,
+      "stepSuffix": "form"
+    },
+    {
+      "key": "ess_dashboard.team",
+      "title": "My Team",
+      "trigger": "#essMyTeamModal:not(.hidden)",
+      "overlay": true,
+      "autoStart": "offer",
+      "steps": [
+        {
+          "id": "est-search",
+          "target": [
+            "#mssTeamSearch"
+          ],
+          "title": "Find someone",
+          "text": "Search your team.",
+          "placement": "bottom"
+        },
+        {
+          "id": "est-list",
+          "target": [
+            "#mssTeamList"
+          ],
+          "title": "Your team",
+          "text": "Tap a person to see their hours, leave balances and requests. You can also apply for leave or a claim on their behalf.",
+          "placement": "top"
+        },
+        {
+          "id": "est-tools",
+          "target": [
+            "#essMyTeamModal button[onclick*='openTeamLeaveModal']"
+          ],
+          "title": "Team Leave",
+          "text": "Requests waiting for your approval, and who is off when.",
+          "placement": "top",
+          "optional": true
+        },
+        {
+          "id": "est-rosters",
+          "target": [
+            "#essMyTeamModal button[onclick*='openTeamRosters']"
+          ],
+          "title": "Team rosters",
+          "text": "Who works which shift.",
+          "placement": "top",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "key": "ess_dashboard.team-leave",
+      "title": "Team Leave",
+      "trigger": "#essTeamLeaveModal:not(.hidden)",
+      "overlay": true,
+      "autoStart": "offer",
+      "steps": [
+        {
+          "id": "esl-tabs",
+          "target": [
+            "#tabBtn-pending"
+          ],
+          "title": "Waiting for you",
+          "text": "Requests your team has made. Approve or reject each one; the person is told straight away.",
+          "placement": "bottom"
+        },
+        {
+          "id": "esl-upcoming",
+          "target": [
+            "#tabBtn-upcoming"
+          ],
+          "title": "Coming up",
+          "text": "Approved leave in your team.",
+          "placement": "bottom"
+        }
+      ]
+    }
+  ],
+  "guides": [],
+  "guidesFile": "ess_dashboard_guides.json"
+}

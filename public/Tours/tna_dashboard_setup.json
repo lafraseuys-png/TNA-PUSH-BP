@@ -1,0 +1,125 @@
+{
+  "_howto": "Guided setup for Time & Attendance (Demo / Setup mode).",
+  "key": "setup.tna_dashboard",
+  "title": "Set up Time & Attendance",
+  "intro": "Work through these in order. You're in <b>demo</b>, so nothing affects your live system until you push it. Each step checks itself against what you've set up.",
+  "steps": [
+    {
+      "id": "engine",
+      "title": "How the engine calculates",
+      "section": "settings",
+      "why": "Rounding, duplicate clockings, night shifts, public holidays and leave on premium days. Everything else is calculated with these.",
+      "confirm": true,
+      "confirmLabel": "These are right"
+    },
+    {
+      "id": "holidays",
+      "title": "Public holidays",
+      "section": "settings",
+      "why": "The public holidays for the year, and whether people get normal time for them.",
+      "checks": [
+        {
+          "url": "/api/tna/holidays",
+          "list": "",
+          "where": [
+            "IsActive"
+          ],
+          "min": 1
+        }
+      ],
+      "todo": "At least one active public holiday."
+    },
+    {
+      "id": "shifts",
+      "title": "Shift rules",
+      "section": "shifts",
+      "guide": "tna_dashboard.guide.shift",
+      "why": "The shifts people work. Attendance, overtime and violations are all calculated from them.",
+      "checks": [
+        {
+          "url": "/api/tna/shifts",
+          "list": "",
+          "min": 1
+        }
+      ],
+      "todo": "At least one shift."
+    },
+    {
+      "id": "overtime",
+      "title": "Overtime rules",
+      "section": "overtime",
+      "guide": "tna_dashboard.guide.overtime",
+      "why": "BCEA limits and pay rates for everyone, and rulesets for groups that differ.",
+      "confirm": true,
+      "confirmLabel": "These are right"
+    },
+    {
+      "id": "defaults",
+      "title": "Department defaults",
+      "section": "settings",
+      "needs": [
+        "shifts"
+      ],
+      "why": "Each department's default shift, payroll period and geofences, so new people start on the right ones.",
+      "confirm": true,
+      "confirmLabel": "Departments are set"
+    },
+    {
+      "id": "payroll",
+      "title": "Payroll periods",
+      "section": "settings",
+      "why": "The cycles people are paid on. Everyone must be on one.",
+      "checks": [
+        {
+          "url": "/api/ess/payroll-periods",
+          "list": "periods",
+          "min": 1
+        },
+        {
+          "url": "/api/ess/payroll-periods",
+          "value": "unassignedEmployees",
+          "max": 0
+        }
+      ],
+      "todo": "At least one payroll period, with every active employee on one."
+    },
+    {
+      "id": "routing",
+      "title": "Who approves",
+      "section": "workflow-routing",
+      "why": "Approvers for overtime, leave and exceptions, per department or person.",
+      "checks": [
+        {
+          "url": "/api/tna/workflow/structures",
+          "list": "",
+          "min": 1
+        }
+      ],
+      "todo": "At least one approval routing rule."
+    },
+    {
+      "id": "roster",
+      "title": "Weekly roster",
+      "section": "roster",
+      "guide": "tna_dashboard.guide.roster",
+      "needs": [
+        "shifts"
+      ],
+      "why": "Who works which shift each day. Practise building a week here.",
+      "confirm": true,
+      "confirmLabel": "I've built a week"
+    },
+    {
+      "id": "testrun",
+      "title": "Test run",
+      "section": "attendance",
+      "needs": [
+        "shifts",
+        "roster"
+      ],
+      "why": "Prove it works, all in demo:<ol style=\"margin:6px 0 0 16px;padding:0;\"><li><b>Settings › Bulk Analyzer</b>: recalculate last week for one department.</li><li><b>Actual Attendance</b>: check the worked hours and overtime.</li><li><b>OT Validations</b> and <b>Auto-Violations</b>: approve or dismiss something.</li><li><b>Team View › Visual</b>: move a clock time, save, and approve the day.</li><li><b>Reports</b>: run a weekly attendance summary.</li></ol>Attendance and approvals are never pushed to live.",
+      "confirm": true,
+      "confirmLabel": "It all worked"
+    }
+  ]
+}

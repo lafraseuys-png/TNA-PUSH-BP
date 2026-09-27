@@ -1,0 +1,376 @@
+{
+  "_howto": "Access Control tours. The menu (#acMenu) and screens (#acContent) are drawn by access_control.js; a screen is open when its menu link has class active.",
+  "key": "accesscontrol",
+  "title": "Access Control tour",
+  "startDelay": 2200,
+  "blockers": [
+    "#acModal"
+  ],
+  "whatsNewTitle": "What's new in Access Control",
+  "whatsNewText": "We've added something new here since you last took the tour.",
+  "steps": [
+    {
+      "id": "ac-welcome",
+      "title": "Welcome to Access Control",
+      "text": "Decide who may open which door, and when. The controllers get the changes within about a minute, and you can see who is inside at any time.<br><br>Use <b>Next</b> and <b>Back</b>, or your arrow keys. Press <b>Esc</b> to close.",
+      "fullOnly": true
+    },
+    {
+      "id": "ac-menu",
+      "target": [
+        "#acMenu"
+      ],
+      "title": "All screens",
+      "text": "You only see the screens your role allows. Set up in this order: <b>Time Zones</b>, <b>Doors &amp; Readers</b>, <b>Access Levels</b>, <b>Assignments</b>, then <b>Schedule Rules</b>.",
+      "placement": "right"
+    },
+    {
+      "id": "ac-nav-dashboard",
+      "target": [
+        "#acMenu a[data-key='dashboard']"
+      ],
+      "title": "Dashboard",
+      "text": "Doors, controllers and live events right now, with the emergency release button.",
+      "placement": "right"
+    },
+    {
+      "id": "ac-nav-doors",
+      "target": [
+        "#acMenu a[data-key='doors']"
+      ],
+      "title": "Doors & Readers",
+      "text": "Each controller and the doors on it: name, direction, how long it unlocks, and exit rules.",
+      "placement": "right"
+    },
+    {
+      "id": "ac-nav-timezones",
+      "target": [
+        "#acMenu a[data-key='timezones']"
+      ],
+      "title": "Time Zones",
+      "text": "Weekly timetables: when a door or access level is usable.",
+      "placement": "right"
+    },
+    {
+      "id": "ac-nav-holidays",
+      "target": [
+        "#acMenu a[data-key='holidays']"
+      ],
+      "title": "Holidays",
+      "text": "The public holidays from Time & Attendance; on these days each time zone's holiday row applies.",
+      "placement": "right"
+    },
+    {
+      "id": "ac-nav-levels",
+      "target": [
+        "#acMenu a[data-key='levels']"
+      ],
+      "title": "Access Levels",
+      "text": "A set of doors plus a time zone. People are given levels.",
+      "placement": "right"
+    },
+    {
+      "id": "ac-nav-assign",
+      "target": [
+        "#acMenu a[data-key='assign']"
+      ],
+      "title": "Assignments",
+      "text": "Who gets which access levels: per level, per person, or for a whole department.",
+      "placement": "right"
+    },
+    {
+      "id": "ac-nav-rules",
+      "target": [
+        "#acMenu a[data-key='rules']"
+      ],
+      "title": "Schedule Rules",
+      "text": "How access follows the roster: how early people may enter before their shift and how long after, and whether leave blocks access.",
+      "placement": "right"
+    },
+    {
+      "id": "ac-nav-reports",
+      "target": [
+        "#acMenu a[data-key='reports']"
+      ],
+      "title": "Reports",
+      "text": "Who came and went, and who can open which door.",
+      "placement": "right"
+    },
+    {
+      "id": "ac-nav-zones",
+      "target": [
+        "#acMenu a[data-key='zones']"
+      ],
+      "title": "Zones & Who's Inside",
+      "text": "Split the site into zones and see who is inside each one: your muster list in an evacuation.",
+      "placement": "right"
+    },
+    {
+      "id": "ac-collapse",
+      "target": [
+        ".sidebar-toggle-btn"
+      ],
+      "title": "Make more room",
+      "text": "Collapse the menu to icons only, and click again to open it.",
+      "placement": "right"
+    },
+    {
+      "id": "ac-top-search",
+      "target": [
+        "#tnbBar .tnb-search"
+      ],
+      "title": "Search any screen",
+      "text": "Type what you're looking for, like <b>doors</b> or <b>muster</b>, to jump straight to any screen you have access to, in any module.",
+      "placement": "bottom"
+    },
+    {
+      "id": "ac-profile",
+      "target": [
+        "#tnbBar .tnb-pbtn",
+        ".profile-button"
+      ],
+      "title": "Your menu",
+      "text": "Your profile, other areas of the system, <b>Help &amp; Tours</b>, <b>Demo / Setup mode</b>, Dark Mode and logout.",
+      "placement": "bottom"
+    },
+    {
+      "id": "ac-help",
+      "target": [
+        "#tnaTourHelpBtn"
+      ],
+      "title": "Help is always here",
+      "text": "Click <b>?</b> for this tour, a tour of the screen you're on, and <b>how-to guides</b> such as setting up a door or giving people access.",
+      "placement": "left"
+    },
+    {
+      "id": "ac-done",
+      "title": "You're all set",
+      "text": "Each screen also has its own short tour. It starts the first time you open that screen, and you can replay it any time from <b>?</b>.",
+      "fullOnly": true
+    }
+  ],
+  "sections": [
+    {
+      "key": "accesscontrol.dashboard",
+      "title": "Dashboard",
+      "trigger": "#acMenu a.active[data-key='dashboard']",
+      "steps": [
+        {
+          "id": "acd-tiles",
+          "target": [
+            "#acLiveTiles"
+          ],
+          "title": "Right now",
+          "text": "Doors, controllers online and today's events. It refreshes every few seconds while you watch.",
+          "placement": "bottom"
+        },
+        {
+          "id": "acd-doors",
+          "target": [
+            "#acLiveDoors"
+          ],
+          "title": "Each door",
+          "text": "Whether each door is open or closed (if it has a sensor) and its controller's state.",
+          "placement": "top"
+        },
+        {
+          "id": "acd-events",
+          "target": [
+            "#acLiveEvents"
+          ],
+          "title": "Live events",
+          "text": "Every card swipe, face or fingerprint, granted or refused, as it happens.",
+          "placement": "top"
+        },
+        {
+          "id": "acd-emergency",
+          "target": [
+            "#acContent button[onclick*='AC.openEmergency']",
+            "#acContent"
+          ],
+          "title": "Emergency release",
+          "text": "Opens every emergency-route door at once, for example in a fire. Ending it returns the doors to normal.",
+          "placement": "bottom"
+        }
+      ]
+    },
+    {
+      "key": "accesscontrol.doors",
+      "title": "Doors & Readers",
+      "trigger": "#acMenu a.active[data-key='doors']",
+      "steps": [
+        {
+          "id": "acr-add",
+          "target": [
+            "#acContent button[onclick*='AC.editDoor(null']",
+            "#acContent"
+          ],
+          "title": "Add a door",
+          "text": "Each controller shows here. Add a door for each lock it drives, up to four per controller.",
+          "placement": "bottom"
+        },
+        {
+          "id": "acr-sync",
+          "target": [
+            "#acContent button[onclick*='AC.syncNow']"
+          ],
+          "title": "Send to the controller",
+          "text": "Changes go to the controllers by themselves within about a minute. Use this to resend everything, for example after a controller was replaced.",
+          "placement": "bottom"
+        }
+      ]
+    },
+    {
+      "key": "accesscontrol.timezones",
+      "title": "Time Zones",
+      "trigger": "#acMenu a.active[data-key='timezones']",
+      "steps": [
+        {
+          "id": "act-add",
+          "target": [
+            "#acContent button[onclick*='AC.editTimezone(null)']",
+            "#acContent"
+          ],
+          "title": "Add a time zone",
+          "text": "Up to three open periods per day, plus rows for holidays. <b>24 Hours</b> is always there.",
+          "placement": "bottom"
+        }
+      ]
+    },
+    {
+      "key": "accesscontrol.levels",
+      "title": "Access Levels",
+      "trigger": "#acMenu a.active[data-key='levels']",
+      "steps": [
+        {
+          "id": "acl-add",
+          "target": [
+            "#acContent button[onclick*='AC.editLevel(null)']",
+            "#acContent"
+          ],
+          "title": "Add an access level",
+          "text": "A name, the doors, the time zone, and whether it only works when the person is scheduled to work.",
+          "placement": "bottom"
+        }
+      ]
+    },
+    {
+      "key": "accesscontrol.assign",
+      "title": "Assignments",
+      "trigger": "#acMenu a.active[data-key='assign']",
+      "steps": [
+        {
+          "id": "aca-tabs",
+          "target": [
+            "#acContent button[onclick*=\"AC.assignTab('level')\"]"
+          ],
+          "title": "Three ways",
+          "text": "<b>By level</b>: add people to a level. <b>By person</b>: all of one person's levels, dates and special settings. <b>By department</b>: everyone in a department, including new starters, gets its levels.",
+          "placement": "bottom"
+        }
+      ]
+    },
+    {
+      "key": "accesscontrol.rules",
+      "title": "Schedule Rules",
+      "trigger": "#acMenu a.active[data-key='rules']",
+      "steps": [
+        {
+          "id": "acs-on",
+          "target": [
+            "#acRuleOn"
+          ],
+          "title": "Follow the roster",
+          "text": "For levels marked <b>Only when scheduled</b>: people get in from a number of minutes before their shift until a number of minutes after it.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "acs-mins",
+          "target": [
+            "#acRuleBefore"
+          ],
+          "title": "Before and after",
+          "text": "How early they may come in and how long they may stay. Individual shifts can have their own minutes.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "acs-leave",
+          "target": [
+            "#acRuleLeave"
+          ],
+          "title": "Leave",
+          "text": "Whether being on approved leave blocks access.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "acs-preview",
+          "target": [
+            "#acPreviewSearch"
+          ],
+          "title": "Try it",
+          "text": "Pick a person to see exactly when they could get in over the next days.",
+          "placement": "top",
+          "climb": 2
+        }
+      ]
+    },
+    {
+      "key": "accesscontrol.reports",
+      "title": "Reports",
+      "trigger": "#acMenu a.active[data-key='reports']",
+      "steps": [
+        {
+          "id": "acp-tabs",
+          "target": [
+            "#acContent button[onclick*='AC.reportTab']",
+            "#acContent"
+          ],
+          "title": "Events and door access",
+          "text": "<b>Events</b>: who came and went, filtered by door, person and dates. The other tabs show who can open which door. Everything exports to Excel.",
+          "placement": "bottom"
+        }
+      ]
+    },
+    {
+      "key": "accesscontrol.zones",
+      "title": "Zones & Who's Inside",
+      "trigger": "#acMenu a.active[data-key='zones']",
+      "steps": [
+        {
+          "id": "acz-tabs",
+          "target": [
+            "#acContent button[onclick*='AC.zoneTab']"
+          ],
+          "title": "Inside now, and setup",
+          "text": "See who is in each zone now (print or export it as a muster list), and set up zones and which door leads from which zone to which.",
+          "placement": "bottom"
+        }
+      ]
+    },
+    {
+      "key": "accesscontrol.door-form",
+      "title": "Door",
+      "trigger": "#acModal #acDoorName",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "accesscontrol.guide.door",
+      "skipSteps": 2,
+      "stepSuffix": "form"
+    },
+    {
+      "key": "accesscontrol.level-form",
+      "title": "Access level",
+      "trigger": "#acModal #acLvlName",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "accesscontrol.guide.level",
+      "skipSteps": 2,
+      "stepSuffix": "form"
+    }
+  ],
+  "guides": [],
+  "guidesFile": "accesscontrol_guides.json"
+}

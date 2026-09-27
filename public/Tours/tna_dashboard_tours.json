@@ -1,0 +1,760 @@
+{
+  "_howto": "Time & Attendance tours. steps = page tour. sections = one tour per screen (first visit) plus pop-up form tours. Guides are in tna_dashboard_guides.json. Never reuse a step id.",
+  "key": "tna_dashboard",
+  "title": "Time & Attendance tour",
+  "startDelay": 1800,
+  "blockers": [
+    ".modal-backdrop.active"
+  ],
+  "reset": [
+    {
+      "removeClass": "#tnbBar .tnb-menu",
+      "cls": "show"
+    }
+  ],
+  "whatsNewTitle": "What's new in Time & Attendance",
+  "whatsNewText": "We've added something new here since you last took the tour.",
+  "steps": [
+    {
+      "id": "ta-welcome",
+      "title": "Welcome to Time & Attendance",
+      "text": "Clockings come in from the devices and the app, are matched to each person's shift, and become worked hours, overtime and exceptions, ready for payroll.<br><br>Use <b>Next</b> and <b>Back</b>, or your arrow keys. Press <b>Esc</b> to close.",
+      "fullOnly": true
+    },
+    {
+      "id": "ta-sidebar",
+      "target": [
+        "#sidebarNav"
+      ],
+      "title": "All screens",
+      "text": "Every screen is listed here. You only see those your role allows. Set up in this order: <b>System Settings</b>, <b>Shift Rules</b>, <b>Overtime Rules</b>, <b>Workflow Routing</b>, then the <b>Weekly Roster</b>.",
+      "placement": "right"
+    },
+    {
+      "id": "ta-nav-core-master",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('core-master'\"]"
+      ],
+      "title": "Global Master Data",
+      "text": "The full Employee Master, opened inside Time &amp; Attendance.",
+      "placement": "right"
+    },
+    {
+      "id": "ta-nav-high-level",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('high-level'\"]"
+      ],
+      "title": "High Level Overview",
+      "text": "Company-wide attendance at a glance, across sites and departments.",
+      "placement": "right"
+    },
+    {
+      "id": "ta-nav-maps",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('maps'\"]"
+      ],
+      "title": "Maps",
+      "text": "Where people clocked, on a map, including geofence violations.",
+      "placement": "right"
+    },
+    {
+      "id": "ta-nav-dashboard",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('dashboard'\"]"
+      ],
+      "title": "Dashboard",
+      "text": "Today: who's in, late, absent, on leave or working overtime. Click a number to see the people.",
+      "placement": "right"
+    },
+    {
+      "id": "ta-nav-shifts",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('shifts'\"]"
+      ],
+      "title": "Shift Rules",
+      "text": "Your shifts: times, breaks, grace periods, overtime and allowances. Everything is calculated from these.",
+      "placement": "right"
+    },
+    {
+      "id": "ta-nav-roster",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('roster'\"]"
+      ],
+      "title": "Weekly Roster",
+      "text": "Which shift each person works on each day, one week at a time.",
+      "placement": "right"
+    },
+    {
+      "id": "ta-nav-workflow",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('workflow'\"]"
+      ],
+      "title": "Manager Inbox",
+      "text": "Requests and exceptions waiting for a manager's decision.",
+      "placement": "right"
+    },
+    {
+      "id": "ta-nav-team-view",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('team-view'\"]"
+      ],
+      "title": "Team View",
+      "text": "A team's week at a glance, per person and day.",
+      "placement": "right"
+    },
+    {
+      "id": "ta-new-visual-team-view",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('team-view'\"]"
+      ],
+      "title": "New: Visual Team View",
+      "text": "Team View now has a <b>Visual</b> tab: each person's day on a timeline with the shift, clock times, normal time, overtime, breaks and late starts. Drag a clock time to fix it, decide on overtime and approve days, one at a time or for everyone you tick.",
+      "placement": "right"
+    },
+    {
+      "id": "ta-nav-attendance",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('attendance'\"]"
+      ],
+      "title": "Actual Attendance",
+      "text": "The worked hours per person and day, as calculated from the clockings and the shift.",
+      "placement": "right"
+    },
+    {
+      "id": "ta-nav-violations",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('violations'\"]"
+      ],
+      "title": "Auto-Violations",
+      "text": "Late arrivals, early departures, missed clockings and break violations, found automatically.",
+      "placement": "right"
+    },
+    {
+      "id": "ta-nav-ot-validations",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('ot-validations'\"]"
+      ],
+      "title": "OT Validations",
+      "text": "Overtime waiting to be approved before it's paid.",
+      "placement": "right"
+    },
+    {
+      "id": "ta-nav-timelogs",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('timelogs'\"]"
+      ],
+      "title": "Time Logs",
+      "text": "Every clocking from the devices and the mobile app, as it came in.",
+      "placement": "right"
+    },
+    {
+      "id": "ta-nav-reports",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('reports'\"]"
+      ],
+      "title": "Analytics & Reports",
+      "text": "Attendance, overtime, leave, violations and payroll-ready reports.",
+      "placement": "right"
+    },
+    {
+      "id": "ta-nav-workflow-routing",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('workflow-routing'\"]"
+      ],
+      "title": "Workflow Routing",
+      "text": "Who approves what: approvers per department or person, and stand-ins.",
+      "placement": "right"
+    },
+    {
+      "id": "ta-nav-overtime",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('overtime'\"]"
+      ],
+      "title": "Overtime Rules",
+      "text": "The BCEA limits and pay rates, and your own rulesets for groups or people.",
+      "placement": "right"
+    },
+    {
+      "id": "ta-nav-sage-queue",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('sage-queue'\"]"
+      ],
+      "title": "Sage Push Queue",
+      "text": "What's waiting to be sent to Sage payroll, and what was sent.",
+      "placement": "right"
+    },
+    {
+      "id": "ta-nav-settings",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('settings'\"]"
+      ],
+      "title": "System Settings",
+      "text": "How the engine calculates: holidays, rounding, night shifts, geofences, payroll periods and department defaults.",
+      "placement": "right"
+    },
+    {
+      "id": "ta-collapse",
+      "target": [
+        ".sidebar-toggle-btn"
+      ],
+      "title": "Make more room",
+      "text": "Collapse the menu to icons only, and click again to open it.",
+      "placement": "right"
+    },
+    {
+      "id": "ta-top-search",
+      "target": [
+        "#tnbBar .tnb-search"
+      ],
+      "title": "Search any screen",
+      "text": "Type what you're looking for, like <b>roster</b> or <b>overtime</b>, to jump straight to any screen you have access to, in any module.",
+      "placement": "bottom",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "ta-top-profile",
+      "target": [
+        "#tnbBar .tnb-pbtn"
+      ],
+      "title": "Your menu",
+      "text": "Click your name for your profile, other areas of the system, Dark Mode and logout.",
+      "placement": "bottom",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "ta-top-launchpad",
+      "target": [
+        "#tnbBar .tnb-menu a[href='Launchpad.html']"
+      ],
+      "title": "Launchpad",
+      "text": "Back to your home screen with all your modules.",
+      "placement": "left",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        },
+        {
+          "click": "#tnbBar .tnb-pbtn"
+        }
+      ],
+      "wait": 320
+    },
+    {
+      "id": "ta-top-help",
+      "target": [
+        "#tnbBar .tnb-act-help"
+      ],
+      "title": "Help & Tours",
+      "text": "Opens the same help menu as the <b>?</b> button.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "ta-top-theme",
+      "target": [
+        "#tnbBar .tnb-theme-row"
+      ],
+      "title": "Dark Mode",
+      "text": "Switch between dark and light. Your choice follows your login to any computer.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ],
+      "after": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "ta-help-button",
+      "target": [
+        "#tnaTourHelpBtn"
+      ],
+      "title": "Help is always here",
+      "text": "Click <b>?</b> for this tour, a tour of the screen you're on, what's new, and hands-on <b>how-to guides</b> such as creating a shift or building a roster.",
+      "placement": "left",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "ta-done",
+      "title": "You're all set",
+      "text": "Each screen also has its own short tour. It starts the first time you open that screen, and you can replay it any time from <b>?</b>.",
+      "fullOnly": true
+    }
+  ],
+  "sections": [
+    {
+      "key": "tna_dashboard.shifts",
+      "title": "Shift Rules",
+      "trigger": "#page-shifts.active",
+      "steps": [
+        {
+          "id": "tas-create",
+          "target": [
+            "#page-shifts button[onclick*='openShiftModal()']"
+          ],
+          "title": "Create Shift",
+          "text": "A shift sets the expected times and how the engine treats a day on it: breaks, grace periods, overtime, allowances.",
+          "placement": "left"
+        },
+        {
+          "id": "tas-table",
+          "target": [
+            "#shiftsBody"
+          ],
+          "title": "Your shifts",
+          "text": "Each shift's times, automatic break, grace periods and thresholds. Use the edit button to change one; the change applies to days calculated from then on.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "tna_dashboard.roster",
+      "title": "Weekly Roster",
+      "trigger": "#page-roster.active",
+      "steps": [
+        {
+          "id": "tar-views",
+          "target": [
+            "#btnRosterGrid"
+          ],
+          "title": "Two ways to work",
+          "text": "<b>Grid View</b>: a week per department, one row per person. <b>Bulk Assignment</b>: one shift for many people over a date range.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "tar-dept",
+          "target": [
+            "#rosterDeptFilter"
+          ],
+          "title": "Department and week",
+          "text": "Choose a department and move between weeks with the arrows. Search narrows the list.",
+          "placement": "bottom"
+        },
+        {
+          "id": "tar-grid",
+          "target": [
+            "#rosterBody"
+          ],
+          "title": "Each person's week",
+          "text": "Click a day to set that person's shift for it. Changes wait until you save them.",
+          "placement": "top"
+        },
+        {
+          "id": "tar-auto",
+          "target": [
+            "#page-roster button[onclick*='openAutoPopulateModal']"
+          ],
+          "title": "Auto-Populate Defaults",
+          "text": "Fill the week from each person's default shift and working days in one go.",
+          "placement": "bottom"
+        },
+        {
+          "id": "tar-patterns",
+          "target": [
+            "#page-roster button[onclick*='openPatternModal']"
+          ],
+          "title": "Patterns",
+          "text": "Repeat a rotating pattern, such as 4 days on and 4 off, over a number of cycles, skipping Sundays or holidays if you want.",
+          "placement": "bottom"
+        },
+        {
+          "id": "tar-excel",
+          "target": [
+            "#page-roster button[onclick*='openExportRosterModal']"
+          ],
+          "title": "Excel",
+          "text": "Download a roster template, fill it in, and upload it.",
+          "placement": "bottom"
+        },
+        {
+          "id": "tar-save",
+          "target": [
+            "#btnSaveRosterChanges"
+          ],
+          "title": "Save & Recalculate",
+          "text": "Saves your changes and recalculates attendance for the days you changed. <b>Cancel</b> throws them away.",
+          "placement": "bottom"
+        }
+      ]
+    },
+    {
+      "key": "tna_dashboard.overtime",
+      "title": "Overtime Rules",
+      "trigger": "#page-overtime.active",
+      "steps": [
+        {
+          "id": "tao-threshold",
+          "target": [
+            "#otEarningsThreshold"
+          ],
+          "title": "Who overtime applies to",
+          "text": "The BCEA annual earnings threshold. Employees earning more than it aren't covered by the overtime limits.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "tao-limits",
+          "target": [
+            "#otWeeklyLimit"
+          ],
+          "title": "Limits",
+          "text": "The maximum overtime per week and the maximum total hours per day. Going over is flagged as a violation.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "tao-weekend",
+          "target": [
+            "#otSaturdayAutomatic"
+          ],
+          "title": "Weekends",
+          "text": "Whether Saturday work is automatically overtime, and Sunday automatically paid at 2.0x.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "tao-rates",
+          "target": [
+            "#otRateStandard"
+          ],
+          "title": "Rates and grace",
+          "text": "The pay multipliers for overtime, Sunday and public holidays, and the statutory grace period.",
+          "placement": "top",
+          "climb": 2
+        },
+        {
+          "id": "tao-save",
+          "target": [
+            "#btnSaveOtSettings"
+          ],
+          "title": "Save Global Defaults",
+          "text": "These apply to everyone without their own ruleset.",
+          "placement": "top"
+        },
+        {
+          "id": "tao-custom",
+          "target": [
+            "#page-overtime button[onclick*='openCustomRuleModal']"
+          ],
+          "title": "Custom Rulesets",
+          "text": "Different limits and rates for a group or person, such as security guards. Give it to employees in Employee Master, or to a shift.",
+          "placement": "left"
+        },
+        {
+          "id": "tao-list",
+          "target": [
+            "#customOTRulesBody"
+          ],
+          "title": "Your rulesets",
+          "text": "Each ruleset's method, limits and rates.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "tna_dashboard.routing",
+      "title": "Workflow Routing",
+      "trigger": "#page-workflow-routing.active",
+      "steps": [
+        {
+          "id": "taw-tabs",
+          "target": [
+            "#wfrTabBtnChains"
+          ],
+          "title": "Approvers and stand-ins",
+          "text": "<b>Approval chains</b> set who approves; <b>Stand-ins</b> cover someone who's away.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "taw-target",
+          "target": [
+            "#wfDeptSearch"
+          ],
+          "title": "For a department or a person",
+          "text": "Choose a department, or one employee for their own approvers (this overrides their department).",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "taw-levels",
+          "target": [
+            "#wfLevel1"
+          ],
+          "title": "The approvers",
+          "text": "A request goes to the 1st approver, then the 2nd and 3rd. The standing approver is the backup.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "taw-save",
+          "target": [
+            "#btnSaveRoutingRule"
+          ],
+          "title": "Save",
+          "text": "Requests from then on follow this rule.",
+          "placement": "top"
+        },
+        {
+          "id": "taw-list",
+          "target": [
+            "#routingBody"
+          ],
+          "title": "Your rules",
+          "text": "Every department and personal rule; search or filter by type.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "tna_dashboard.settings",
+      "title": "System Settings",
+      "trigger": "#page-settings.active",
+      "steps": [
+        {
+          "id": "tax-engine",
+          "target": [
+            "#settingIgnoreOT"
+          ],
+          "title": "How the engine calculates",
+          "text": "Ignoring overtime within a threshold, making up short time, filtering duplicate clockings, auto-ignoring geofence violations, how hours are shown, where a night shift's day ends, what a recalculation re-opens, and how public holidays and leave on premium days are treated.",
+          "placement": "bottom",
+          "climb": 3
+        },
+        {
+          "id": "tax-holidays",
+          "target": [
+            "#newHolidayDate"
+          ],
+          "title": "Public Holidays",
+          "text": "Add the date and name, and whether people get normal time for it.",
+          "placement": "top",
+          "climb": 2
+        },
+        {
+          "id": "tax-geo",
+          "target": [
+            "#newGeoName"
+          ],
+          "title": "Approved Geolocations",
+          "text": "Places where clocking on the app is allowed: a name, the map point and a radius.",
+          "placement": "top",
+          "climb": 2
+        },
+        {
+          "id": "tax-save",
+          "target": [
+            "#btnSaveTnaSettings"
+          ],
+          "title": "Save",
+          "text": "Saves the engine settings above. Holidays, leave types and geolocations save as you add them.",
+          "placement": "top"
+        },
+        {
+          "id": "tax-payroll",
+          "target": [
+            "#lockPeriodSelect"
+          ],
+          "title": "Payroll periods",
+          "text": "The same payroll periods as <b>Employee Master › Payroll Periods</b>, where you can also assign them to departments and people.",
+          "placement": "top",
+          "climb": 2
+        },
+        {
+          "id": "tax-defaults",
+          "target": [
+            "#deptDefaultsBody"
+          ],
+          "title": "Department defaults",
+          "text": "The default shift, payroll period and geofences per department. Tick departments and apply them in bulk.",
+          "placement": "top"
+        },
+        {
+          "id": "tax-analyzer",
+          "target": [
+            "#btnRunBulkAnalyzer"
+          ],
+          "title": "Bulk Analyzer",
+          "text": "Recalculates attendance for a date range and department, for example after changing a shift. Tick overwrite to redo days already calculated.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "tna_dashboard.teamview",
+      "title": "Team View",
+      "trigger": "#page-team-view.active",
+      "reset": [
+        {
+          "call": "tvvSetView",
+          "args": [
+            "trad"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "id": "tatv-switch",
+          "target": [
+            "#tvViewSwitch"
+          ],
+          "title": "Traditional or Visual",
+          "text": "<b>Traditional</b> is the approvals table you know. <b>Visual</b> shows one day on a timeline. The screen remembers which one you used last.",
+          "placement": "bottom"
+        },
+        {
+          "id": "tatv-overview",
+          "target": [
+            "#tvViewSwitch [data-tvview='ov']"
+          ],
+          "title": "Overview",
+          "text": "Everyone's day, or a week, two weeks or a month, compressed so problems stand out: red for missing clockings, yellow for overtime to approve. Click any day to fix it in Visual. <b>Print / Save PDF</b> prints it.",
+          "placement": "bottom"
+        },
+        {
+          "id": "tatv-day",
+          "before": [
+            {
+              "call": "tvvSetView",
+              "args": [
+                "vis"
+              ]
+            }
+          ],
+          "target": [
+            "#tvvDate"
+          ],
+          "title": "Pick the day",
+          "text": "Visual works on one day at a time, for everyone you're allowed to see. No department is needed. Use search, department and shift to narrow it down.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "tatv-stats",
+          "target": [
+            "#tvvStats"
+          ],
+          "title": "Click a number to filter",
+          "text": "Scheduled, approved, not approved, OT to approve and more. Click one to see only those people; click it again to see everyone.",
+          "placement": "bottom",
+          "timeout": 4000
+        },
+        {
+          "id": "tatv-timeline",
+          "target": [
+            "#tvvTl"
+          ],
+          "title": "Each person's day",
+          "text": "The top bar is the shift. Below it is what happened: <b>green</b> normal time, <b>yellow</b> overtime, <b>red</b> late or early, <b>amber</b> time inside the threshold (not overtime), <b>grey</b> the break. Hover any part for the times.",
+          "placement": "top"
+        },
+        {
+          "id": "tatv-drag",
+          "target": [
+            "#tvVisualPane .hdl"
+          ],
+          "title": "Drag a clock time",
+          "text": "Drag a white handle to move a clock-in or clock-out, or double-click it to type the time. Saving adds the new clocking and ignores the old one, then recalculates the day.",
+          "placement": "bottom"
+        },
+        {
+          "id": "tatv-ot",
+          "target": [
+            "#tvVisualPane .seg.ot",
+            "#tvVisualPane .seg.th"
+          ],
+          "title": "Decide on overtime",
+          "text": "Click overtime to approve or decline it. Overtime before the shift and after it are decided separately, and only the approved part is paid. Amber time inside the threshold isn't overtime, but you can still give it as overtime.",
+          "placement": "bottom"
+        },
+        {
+          "id": "tatv-shift-ends",
+          "target": [
+            "#tvVisualPane .shdl"
+          ],
+          "title": "Times for this day only",
+          "text": "Drag either end of a shift to change its times for this person's day only. The shift setup is not changed. Click the shift to type the times or to change the shift.",
+          "placement": "bottom"
+        },
+        {
+          "id": "tatv-breaks",
+          "target": [
+            "#tvVisualPane .seg.brk"
+          ],
+          "title": "Breaks",
+          "text": "Drag a break to move it, or drag its ends to make it longer or shorter. Click the green normal time to add another break.",
+          "placement": "bottom"
+        },
+        {
+          "id": "tatv-late",
+          "target": [
+            "#tvVisualPane .seg.late",
+            "#tvVisualPane .seg.early"
+          ],
+          "title": "Late or left early",
+          "text": "Click it to cover the time with partial leave, or to replenish normal time from time worked before or after the shift. Leave it and it stays unpaid, with no leave deducted.",
+          "placement": "bottom"
+        },
+        {
+          "id": "tatv-ticked",
+          "target": [
+            "#tvvSelAll"
+          ],
+          "title": "Many people at once",
+          "text": "Tick rows and a drag on one ticked row goes to all of them: the same time, or the same move (+/- minutes), as set in <b>Ticked rows get</b>. Ticked rows can also be approved or unlocked together.",
+          "placement": "right"
+        },
+        {
+          "id": "tatv-approve",
+          "target": [
+            "#tvVisualPane .apb"
+          ],
+          "title": "Approve the day",
+          "text": "Approves the person's day, the same as in Traditional. A day with missing clockings or overtime still to decide can't be approved yet. Hover <b>Approved</b> to unlock it again.",
+          "placement": "left"
+        }
+      ]
+    },
+    {
+      "key": "tna_dashboard.shift-form",
+      "title": "Shift",
+      "trigger": "#shiftModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "tna_dashboard.guide.shift",
+      "skipSteps": 2,
+      "stepSuffix": "form"
+    }
+  ],
+  "guides": [],
+  "guidesFile": "tna_dashboard_guides.json"
+}

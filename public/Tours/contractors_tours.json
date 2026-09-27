@@ -1,0 +1,648 @@
+{
+  "_howto": "Contractors tours. steps = page tour. sections = one tour per screen plus pop-up form tours. Guides in contractors_guides.json.",
+  "key": "contractors",
+  "title": "Contractors tour",
+  "startDelay": 1800,
+  "blockers": [
+    ".modal-backdrop.active"
+  ],
+  "reset": [
+    {
+      "removeClass": "#tnbBar .tnb-menu",
+      "cls": "show"
+    }
+  ],
+  "whatsNewTitle": "What's new in Contractors",
+  "whatsNewText": "We've added something new here since you last took the tour.",
+  "steps": [
+    {
+      "id": "co-welcome",
+      "title": "Welcome to Contractors & Distribution",
+      "text": "Register farmers, give them contracts, distribute inputs through your warehouses, and follow their progress, with approvals along the way.<br><br>Use <b>Next</b> and <b>Back</b>, or your arrow keys. Press <b>Esc</b> to close.",
+      "fullOnly": true
+    },
+    {
+      "id": "co-sidebar",
+      "target": [
+        "#sidebarNav"
+      ],
+      "title": "All screens",
+      "text": "Grouped by what you do. Click a group title to open or close it. Set up in this order: <b>Settings</b>, <b>Locations Master</b>, <b>Contractors Hierarchy</b>, <b>Workflow</b>, then farmers and contracts.",
+      "placement": "right"
+    },
+    {
+      "id": "co-nav-dashboard",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('dashboard'\"]"
+      ],
+      "title": "Dashboard",
+      "text": "Farmers, contracts, distribution and progress at a glance.",
+      "placement": "right"
+    },
+    {
+      "id": "co-nav-contractors",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('contractors'\"]"
+      ],
+      "title": "Farmers Master",
+      "text": "Every farmer or contractor: profile, photo, biometrics, location and their own fields.",
+      "placement": "right",
+      "before": [
+        {
+          "addClass": "#sidebarNav .tsg[data-group='farmers']",
+          "cls": "open"
+        }
+      ]
+    },
+    {
+      "id": "co-nav-contracts",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('contracts'\"]"
+      ],
+      "title": "Contract Management",
+      "text": "Contracts per farmer: assign one from a template, follow its approval, and manage your templates.",
+      "placement": "right",
+      "before": [
+        {
+          "addClass": "#sidebarNav .tsg[data-group='farmers']",
+          "cls": "open"
+        }
+      ]
+    },
+    {
+      "id": "co-nav-inbox",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('inbox'\"]"
+      ],
+      "title": "Inbox",
+      "text": "Contracts and distributions waiting for your approval.",
+      "placement": "right",
+      "before": [
+        {
+          "addClass": "#sidebarNav .tsg[data-group='farmers']",
+          "cls": "open"
+        }
+      ]
+    },
+    {
+      "id": "co-nav-distribution",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('distribution'\"]"
+      ],
+      "title": "Distribution Master",
+      "text": "Inputs given to farmers and returns: cycles, warehouses, stock items, receiving stock, transfers and the logs from the app.",
+      "placement": "right",
+      "before": [
+        {
+          "addClass": "#sidebarNav .tsg[data-group='dist']",
+          "cls": "open"
+        }
+      ]
+    },
+    {
+      "id": "co-nav-progress",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('progress'\"]"
+      ],
+      "title": "Progress",
+      "text": "How far each area and farmer is, per cycle.",
+      "placement": "right",
+      "before": [
+        {
+          "addClass": "#sidebarNav .tsg[data-group='dist']",
+          "cls": "open"
+        }
+      ]
+    },
+    {
+      "id": "co-nav-reports",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('reports'\"]"
+      ],
+      "title": "Reports",
+      "text": "Farmer, contract and distribution reports, and scheduled report emails.",
+      "placement": "right",
+      "before": [
+        {
+          "addClass": "#sidebarNav .tsg[data-group='reports']",
+          "cls": "open"
+        }
+      ]
+    },
+    {
+      "id": "co-nav-sms",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('sms'\"]"
+      ],
+      "title": "SMS & Broadcast",
+      "text": "Messages to farmers by SMS, and broadcasts to your team.",
+      "placement": "right",
+      "before": [
+        {
+          "addClass": "#sidebarNav .tsg[data-group='reports']",
+          "cls": "open"
+        }
+      ]
+    },
+    {
+      "id": "co-nav-hierarchy",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('hierarchy'\"]"
+      ],
+      "title": "Contractors Hierarchy",
+      "text": "Your structure (for example region > area > field officer) and who manages which part.",
+      "placement": "right",
+      "before": [
+        {
+          "addClass": "#sidebarNav .tsg[data-group='setup']",
+          "cls": "open"
+        }
+      ]
+    },
+    {
+      "id": "co-nav-locations",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('locations'\"]"
+      ],
+      "title": "Locations Master",
+      "text": "The areas farmers belong to, imported from a spreadsheet or added one by one.",
+      "placement": "right",
+      "before": [
+        {
+          "addClass": "#sidebarNav .tsg[data-group='setup']",
+          "cls": "open"
+        }
+      ]
+    },
+    {
+      "id": "co-nav-workflow",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('workflow'\"]"
+      ],
+      "title": "Workflow",
+      "text": "Who approves contracts and distributions, per level, and stand-ins.",
+      "placement": "right",
+      "before": [
+        {
+          "addClass": "#sidebarNav .tsg[data-group='setup']",
+          "cls": "open"
+        }
+      ]
+    },
+    {
+      "id": "co-nav-audit",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('audit'\"]"
+      ],
+      "title": "Audit Log",
+      "text": "Every change, who made it and when.",
+      "placement": "right",
+      "before": [
+        {
+          "addClass": "#sidebarNav .tsg[data-group='setup']",
+          "cls": "open"
+        }
+      ]
+    },
+    {
+      "id": "co-nav-settings",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('settings'\"]"
+      ],
+      "title": "Settings",
+      "text": "Currency, contract and distribution rules, seasons, tobacco types and your own fields.",
+      "placement": "right",
+      "before": [
+        {
+          "addClass": "#sidebarNav .tsg[data-group='setup']",
+          "cls": "open"
+        }
+      ]
+    },
+    {
+      "id": "co-collapse",
+      "target": [
+        ".sidebar-toggle-btn"
+      ],
+      "title": "Make more room",
+      "text": "Collapse the menu to icons only, and click again to open it.",
+      "placement": "right"
+    },
+    {
+      "id": "co-top-search",
+      "target": [
+        "#tnbBar .tnb-search"
+      ],
+      "title": "Search any screen",
+      "text": "Jump straight to any screen you have access to, in any module.",
+      "placement": "bottom",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "co-top-profile",
+      "target": [
+        "#tnbBar .tnb-pbtn"
+      ],
+      "title": "Your menu",
+      "text": "Your profile, other areas of the system, Dark Mode and logout.",
+      "placement": "bottom",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "co-top-help",
+      "target": [
+        "#tnbBar .tnb-act-help"
+      ],
+      "title": "Help & Tours",
+      "text": "Opens the same help menu as the <b>?</b> button.",
+      "placement": "left",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        },
+        {
+          "click": "#tnbBar .tnb-pbtn"
+        }
+      ],
+      "wait": 320
+    },
+    {
+      "id": "co-help-button",
+      "target": [
+        "#tnaTourHelpBtn"
+      ],
+      "title": "Help is always here",
+      "text": "Click <b>?</b> for this tour, a tour of the screen you're on, and <b>how-to guides</b>.",
+      "placement": "left",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "co-done",
+      "title": "You're all set",
+      "text": "Each screen also has its own short tour. It starts the first time you open that screen, and you can replay it any time from <b>?</b>.",
+      "fullOnly": true
+    }
+  ],
+  "sections": [
+    {
+      "key": "contractors.farmers",
+      "title": "Farmers Master",
+      "trigger": "#page-contractors.active",
+      "steps": [
+        {
+          "id": "cof-search",
+          "target": [
+            "#searchContractor"
+          ],
+          "title": "Find a farmer",
+          "text": "Search by name, number or ID. <b>Filters</b> narrow by area or missing details (photo, biometrics).",
+          "placement": "bottom"
+        },
+        {
+          "id": "cof-add",
+          "target": [
+            "#page-contractors button[onclick*='openCreateContractorModal']"
+          ],
+          "title": "Add Contractor",
+          "text": "A new farmer or contractor with their details, area and location.",
+          "placement": "bottom"
+        },
+        {
+          "id": "cof-tools",
+          "target": [
+            "#page-contractors button[onclick*='contDataToolsDropdownMenu']"
+          ],
+          "title": "Data Tools",
+          "text": "Import farmers from a spreadsheet (with a preview before anything changes), export them, and see import history.",
+          "placement": "bottom"
+        },
+        {
+          "id": "cof-tabs",
+          "target": [
+            "#btn-cont-main-active"
+          ],
+          "title": "Active and deactivated",
+          "text": "Deactivated profiles are kept, and can be restored.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "cof-list",
+          "target": [
+            "#contractorsTableBody"
+          ],
+          "title": "Your farmers",
+          "text": "Open a farmer to see and change their profile, contracts and distributions.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "contractors.contracts",
+      "title": "Contract Management",
+      "trigger": "#page-contracts.active",
+      "reset": [
+        {
+          "call": "switchContContractTab",
+          "args": [
+            "manage"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "id": "coc-tabs",
+          "target": [
+            "#tab-c-manage"
+          ],
+          "title": "Contracts and templates",
+          "text": "<b>Manage Contracts</b>: every farmer's contract. <b>Contract Templates</b>: the contracts you give out, written or imported as PDF.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "coc-assign",
+          "target": [
+            "#page-contracts button[onclick*='openContAssignModal']"
+          ],
+          "title": "Assign Contract",
+          "text": "Give a farmer a contract from a template, with its dates, size, product and field location. It then goes through your approval workflow.",
+          "placement": "left"
+        },
+        {
+          "id": "coc-filters",
+          "target": [
+            "#filterContractSearch"
+          ],
+          "title": "Find a contract",
+          "text": "Search, or filter by area, status (approved, in workflow, expired), expiry and approver.",
+          "placement": "bottom"
+        }
+      ]
+    },
+    {
+      "key": "contractors.hierarchy",
+      "title": "Contractors Hierarchy",
+      "trigger": "#page-hierarchy.active",
+      "reset": [
+        {
+          "call": "switchContHierarchyTab",
+          "args": [
+            "levels"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "id": "coh-tabs",
+          "target": [
+            "#tab-h-levels"
+          ],
+          "title": "Levels and managers",
+          "text": "<b>Hierarchy Levels</b>: your structure as a tree. <b>Manager Assignments</b>: who manages each part.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchContHierarchyTab",
+              "args": [
+                "levels"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "coh-add",
+          "target": [
+            "#page-hierarchy button[onclick*='openContLevelModal(null)']"
+          ],
+          "title": "Add Level",
+          "text": "Add a level, for example a region, then the areas or teams under it.",
+          "placement": "left",
+          "before": [
+            {
+              "call": "switchContHierarchyTab",
+              "args": [
+                "levels"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "coh-tree",
+          "target": [
+            "#contLevelsTreeBody"
+          ],
+          "title": "Your structure",
+          "text": "Open or collapse each branch.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchContHierarchyTab",
+              "args": [
+                "levels"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "coh-assign",
+          "target": [
+            "#contAssignmentsBody"
+          ],
+          "title": "Manager Assignments",
+          "text": "Who manages which part of the structure. Assign many at once from a spreadsheet with <b>Data Tools</b>; you check a preview first.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchContHierarchyTab",
+              "args": [
+                "managers"
+              ]
+            }
+          ],
+          "after": [
+            {
+              "call": "switchContHierarchyTab",
+              "args": [
+                "levels"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "contractors.locations",
+      "title": "Locations Master",
+      "trigger": "#page-locations.active",
+      "steps": [
+        {
+          "id": "col-import",
+          "target": [
+            "#btnImportAreas"
+          ],
+          "title": "Import areas",
+          "text": "Download the template, fill it in, and import. <b>Import History</b> shows past imports.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "col-add",
+          "target": [
+            "#page-locations button[onclick*='openAreaModal']"
+          ],
+          "title": "Add Area",
+          "text": "One area at a time, at its level in your structure.",
+          "placement": "bottom"
+        },
+        {
+          "id": "col-list",
+          "target": [
+            "#areasTableBody"
+          ],
+          "title": "Your areas",
+          "text": "Search, or filter by level.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "contractors.workflow",
+      "title": "Workflow",
+      "trigger": "#page-workflow.active",
+      "steps": [
+        {
+          "id": "cow-type",
+          "target": [
+            "#page-workflow button[onclick*=\"setWorkflowRulesType('contracts')\"]"
+          ],
+          "title": "Contracts or distribution",
+          "text": "Approval rules are set separately for contracts, and for distribution (inputs and returns).",
+          "placement": "bottom"
+        },
+        {
+          "id": "cow-rules",
+          "target": [
+            "#workflowRulesBody"
+          ],
+          "title": "Who approves",
+          "text": "Per level: whether it needs approval and who approves it. Then <b>Save Rules</b>.",
+          "placement": "top"
+        },
+        {
+          "id": "cow-preview",
+          "target": [
+            "#workflowPreviewType"
+          ],
+          "title": "Try it",
+          "text": "Pick an area to see exactly who a contract or distribution there would go to.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "cow-standins",
+          "target": [
+            "#standInOrigUser"
+          ],
+          "title": "Stand-ins",
+          "text": "Someone approves for another person while they are away, between two dates.",
+          "placement": "top",
+          "climb": 2
+        }
+      ]
+    },
+    {
+      "key": "contractors.settings",
+      "title": "Settings",
+      "trigger": "#page-settings.active",
+      "steps": [
+        {
+          "id": "cos-currency",
+          "target": [
+            "#globalCurrencySelect"
+          ],
+          "title": "Currency",
+          "text": "The currency for all values in this module.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "cos-rules",
+          "target": [
+            "#settingDistNoContract"
+          ],
+          "title": "Distribution and contract rules",
+          "text": "Whether inputs may go to farmers without a contract, with a pending or expired contract, whether a farmer may have more than one contract, and the value above which a distribution needs extra approval.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "cos-seasons",
+          "target": [
+            "#seasonName"
+          ],
+          "title": "Seasons",
+          "text": "Your growing seasons (cycle years) with their dates.",
+          "placement": "top",
+          "climb": 2
+        },
+        {
+          "id": "cos-products",
+          "target": [
+            "#outProductCode"
+          ],
+          "title": "Tobacco types",
+          "text": "The products farmers grow under contract.",
+          "placement": "top",
+          "climb": 2
+        }
+      ]
+    },
+    {
+      "key": "contractors.distribution",
+      "title": "Distribution Master",
+      "trigger": "#page-distribution.active",
+      "steps": [
+        {
+          "id": "cod-tabs",
+          "target": [
+            "#tab-d-logs"
+          ],
+          "title": "Distribution",
+          "text": "<b>Incoming Logs</b> from the app, <b>Live Inventory &amp; Transfers</b>, <b>Receive Stock (GRV)</b>, <b>Cycles</b>, <b>Warehouses</b> and <b>Stock Items</b>. Set up warehouses, items and a cycle first.",
+          "placement": "bottom",
+          "climb": 1
+        }
+      ]
+    },
+    {
+      "key": "contractors.assign-form",
+      "title": "Assign a contract",
+      "trigger": "#contAssignModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "contractors.guide.assign",
+      "skipSteps": 3,
+      "stepSuffix": "form"
+    }
+  ],
+  "guides": [],
+  "guidesFile": "contractors_guides.json"
+}

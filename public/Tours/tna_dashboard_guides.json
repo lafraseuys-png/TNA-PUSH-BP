@@ -1,0 +1,377 @@
+{
+  "_howto": "Time & Attendance how-to guides. mode click = the user clicks the real button. optional = skipped when not on screen.",
+  "guides": [
+    {
+      "key": "tna_dashboard.guide.shift",
+      "title": "Create a shift",
+      "icon": "fa-calendar-alt",
+      "blurb": "Times, breaks, grace periods, overtime and allowances for a shift.",
+      "steps": [
+        {
+          "id": "tag-sh-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('shifts'\"]"
+          ],
+          "title": "Shift Rules",
+          "text": "Click <b>Shift Rules</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Shift Rules"
+        },
+        {
+          "id": "tag-sh-create",
+          "target": [
+            "#page-shifts button[onclick*='openShiftModal()']"
+          ],
+          "title": "Create Shift",
+          "text": "Click <b>Create Shift</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Create Shift"
+        },
+        {
+          "id": "tag-sh-name",
+          "target": [
+            "#shiftName"
+          ],
+          "title": "Name and colour",
+          "text": "For example <b>Day 07:00-16:00</b>. The colour shows on the roster.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "tag-sh-times",
+          "target": [
+            "#startTime"
+          ],
+          "title": "Start and end",
+          "text": "The expected times. Tick <b>Next Day</b> for a night shift that ends after midnight.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "tag-sh-types",
+          "target": [
+            "#isSplitShift"
+          ],
+          "title": "Special shifts",
+          "text": "<b>Split</b>: two segments a day. <b>Session</b>: several clock-in/out sessions. <b>Floating</b>: flexible hours. <b>Present Day</b>: snaps to the day worked. Leave them off for an ordinary shift.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "tag-sh-min",
+          "target": [
+            "#forceMinimumHours"
+          ],
+          "title": "Minimum hours and forced rates",
+          "text": "Pay at least a number of hours, or force the day's hours to the overtime or Sunday rate.",
+          "placement": "bottom",
+          "climb": 2,
+          "optional": true
+        },
+        {
+          "id": "tag-sh-break",
+          "target": [
+            "#autoBreak"
+          ],
+          "title": "Automatic breaks",
+          "text": "Minutes taken off for a break automatically, and a separate break once overtime passes a number of hours.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "tag-sh-ot",
+          "target": [
+            "#shiftCustomOTRule"
+          ],
+          "title": "Overtime rule and linked leave",
+          "text": "Use a custom overtime ruleset for this shift, or link it to a leave type for paid time off.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "tag-sh-allow",
+          "target": [
+            "#nightShiftAllowanceType"
+          ],
+          "title": "Allowances",
+          "text": "A night shift allowance (fixed or percentage), or make it a standby shift with its own allowance.",
+          "placement": "bottom",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "tag-sh-grace",
+          "target": [
+            "#graceLateIn"
+          ],
+          "title": "Grace periods",
+          "text": "How many minutes late in or early out are still on time. Tick auto-round to snap clockings within the grace period to the shift times.",
+          "placement": "top",
+          "climb": 2
+        },
+        {
+          "id": "tag-sh-thr",
+          "target": [
+            "#beforeThreshold"
+          ],
+          "title": "Thresholds",
+          "text": "The minutes around the shift's start and end the engine uses when deciding what counts as early arrival or overtime.",
+          "placement": "top",
+          "climb": 2
+        },
+        {
+          "id": "tag-sh-breaks",
+          "target": [
+            "#lunchWindowStart"
+          ],
+          "title": "Break tracking",
+          "text": "A lunch window with a maximum length, and how many short breaks are allowed and for how long. Going over is a break violation.",
+          "placement": "top",
+          "climb": 2,
+          "optional": true
+        },
+        {
+          "id": "tag-sh-save",
+          "target": [
+            "#shiftModal button[type='submit']",
+            "#shiftModal button:not([onclick])"
+          ],
+          "title": "Save Shift",
+          "text": "Saves the shift. Give it to people as their default shift in Employee Master, or on the roster.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "tna_dashboard.guide.roster",
+      "title": "Build a weekly roster",
+      "icon": "fa-clipboard-list",
+      "blurb": "Set who works which shift each day, fill a week at once, and save.",
+      "steps": [
+        {
+          "id": "tag-ro-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('roster'\"]"
+          ],
+          "title": "Weekly Roster",
+          "text": "Click <b>Weekly Roster</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Weekly Roster"
+        },
+        {
+          "id": "tag-ro-dept",
+          "target": [
+            "#rosterDeptFilter"
+          ],
+          "title": "1. Department",
+          "text": "Choose the department.",
+          "placement": "bottom",
+          "timeout": 4000
+        },
+        {
+          "id": "tag-ro-auto",
+          "target": [
+            "#page-roster button[onclick*='openAutoPopulateModal']"
+          ],
+          "title": "2. Start from the defaults",
+          "text": "<b>Auto-Populate Defaults</b> fills the week from each person's default shift and working days.",
+          "placement": "bottom"
+        },
+        {
+          "id": "tag-ro-grid",
+          "target": [
+            "#rosterBody"
+          ],
+          "title": "3. Adjust",
+          "text": "Click any day to change that person's shift.",
+          "placement": "top"
+        },
+        {
+          "id": "tag-ro-pattern",
+          "target": [
+            "#page-roster button[onclick*='openPatternModal']"
+          ],
+          "title": "Rotating patterns",
+          "text": "For rotating shifts, use <b>Patterns</b> to repeat them for weeks ahead.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "tag-ro-save",
+          "target": [
+            "#btnSaveRosterChanges"
+          ],
+          "title": "4. Save & Recalculate",
+          "text": "Saves the week and recalculates those days.",
+          "placement": "bottom",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "key": "tna_dashboard.guide.overtime",
+      "title": "Set your overtime rules",
+      "icon": "fa-balance-scale",
+      "blurb": "BCEA limits and rates for everyone, and rulesets for groups that differ.",
+      "steps": [
+        {
+          "id": "tag-ot-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('overtime'\"]"
+          ],
+          "title": "Overtime Rules",
+          "text": "Click <b>Overtime Rules</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Overtime Rules"
+        },
+        {
+          "id": "tag-ot-thr",
+          "target": [
+            "#otEarningsThreshold"
+          ],
+          "title": "1. Earnings threshold",
+          "text": "The current BCEA annual earnings threshold.",
+          "placement": "bottom",
+          "climb": 2,
+          "timeout": 4000
+        },
+        {
+          "id": "tag-ot-lim",
+          "target": [
+            "#otWeeklyLimit"
+          ],
+          "title": "2. Limits",
+          "text": "Weekly overtime and daily total hours limits.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "tag-ot-wk",
+          "target": [
+            "#otSaturdayAutomatic"
+          ],
+          "title": "3. Weekends",
+          "text": "Saturday as overtime, Sunday at 2.0x.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "tag-ot-rates",
+          "target": [
+            "#otRateStandard"
+          ],
+          "title": "4. Rates",
+          "text": "Overtime, Sunday and public holiday multipliers.",
+          "placement": "top",
+          "climb": 2
+        },
+        {
+          "id": "tag-ot-save",
+          "target": [
+            "#btnSaveOtSettings"
+          ],
+          "title": "5. Save Global Defaults",
+          "text": "Applies to everyone without their own ruleset.",
+          "placement": "top"
+        },
+        {
+          "id": "tag-ot-custom",
+          "target": [
+            "#page-overtime button[onclick*='openCustomRuleModal']"
+          ],
+          "title": "Groups that differ",
+          "text": "<b>Add Ruleset</b> for a group with other limits or rates, then give it to their employees or shift.",
+          "placement": "left",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "key": "tna_dashboard.guide.visual-team-view",
+      "title": "Fix and approve a day on the timeline",
+      "icon": "fa-stream",
+      "blurb": "Use the Visual Team View to correct clock times, decide on overtime and approve.",
+      "steps": [
+        {
+          "id": "tag-tv-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('team-view'\"]"
+          ],
+          "title": "Team View",
+          "text": "Click <b>Team View</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Team View"
+        },
+        {
+          "id": "tag-tv-visual",
+          "target": [
+            "#tvViewSwitch [data-tvview='vis']"
+          ],
+          "title": "Visual",
+          "text": "Click <b>Visual</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Visual",
+          "timeout": 4000
+        },
+        {
+          "id": "tag-tv-day",
+          "target": [
+            "#tvvDate"
+          ],
+          "title": "1. The day",
+          "text": "Choose the day to check. Click <b>OT to approve</b> or <b>not approved</b> at the top to see only those people.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "tag-tv-drag",
+          "target": [
+            "#tvVisualPane .hdl"
+          ],
+          "title": "2. Fix a clock time",
+          "text": "Drag a white handle, or double-click it and type the exact time. The change waits in the yellow bar above until you save.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "tag-tv-ot",
+          "target": [
+            "#tvVisualPane .seg.ot"
+          ],
+          "title": "3. Overtime",
+          "text": "Click the overtime and choose <b>Approve OT</b> or <b>Decline OT</b>.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "tag-tv-save",
+          "target": [
+            "#tvvPending .vbtn.save"
+          ],
+          "title": "4. Save changes",
+          "text": "Saves everything waiting, recalculates the days, then applies the overtime decisions.",
+          "placement": "left",
+          "optional": true
+        },
+        {
+          "id": "tag-tv-approve",
+          "target": [
+            "#tvVisualPane .apb"
+          ],
+          "title": "5. Approve",
+          "text": "Approve one person here, or tick several and use <b>Approve times</b>.",
+          "placement": "left",
+          "optional": true
+        }
+      ]
+    }
+  ]
+}

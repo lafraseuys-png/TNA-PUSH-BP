@@ -1,0 +1,1425 @@
+{
+  "_howto": "ESS Master tours. steps = page tour. sections = one tour per screen (first visit) plus pop-up form tours (overlay, offered the first time). Guides are in essmaster_guides.json. Never reuse a step id.",
+  "key": "essmaster",
+  "title": "ESS Master tour",
+  "startDelay": 1800,
+  "blockers": [
+    ".modal-backdrop.active"
+  ],
+  "reset": [
+    {
+      "removeClass": "#profileDropdown",
+      "cls": "show"
+    },
+    {
+      "removeClass": "#tnbBar .tnb-menu",
+      "cls": "show"
+    }
+  ],
+  "whatsNewTitle": "What's new in ESS Master",
+  "whatsNewText": "We've added something new here since you last took the tour.",
+  "steps": [
+    {
+      "id": "es-welcome",
+      "title": "Welcome to ESS Master",
+      "text": "Everything behind employee self-service: requests to approve, leave and its rules, claims, payroll periods and sending to payroll, payslips, documents and messages to the app.<br><br>Use <b>Next</b> and <b>Back</b>, or your arrow keys. Press <b>Esc</b> to close.",
+      "fullOnly": true
+    },
+    {
+      "id": "es-sidebar",
+      "target": [
+        "#sidebarNav"
+      ],
+      "title": "All ESS screens",
+      "text": "Every screen is listed here. You only see the ones your role allows.",
+      "placement": "right"
+    },
+    {
+      "id": "es-nav-overview",
+      "target": [
+        "#sidebarNav [onclick*='dashboard']"
+      ],
+      "title": "Overview",
+      "text": "The requests waiting for you. Click the number to go straight to them.",
+      "placement": "right"
+    },
+    {
+      "id": "es-nav-employees",
+      "target": [
+        "#sidebarNav [onclick*='employees']"
+      ],
+      "title": "Employee Master",
+      "text": "The full Employee Master, opened inside ESS.",
+      "placement": "right"
+    },
+    {
+      "id": "es-nav-requests",
+      "target": [
+        "#sidebarNav [onclick*='requests']"
+      ],
+      "title": "Mobile Requests",
+      "text": "Leave, overtime and profile changes employees asked for in the app, waiting to be approved or rejected.",
+      "placement": "right"
+    },
+    {
+      "id": "es-nav-leavetrans",
+      "target": [
+        "#sidebarNav [onclick*='leavetrans']"
+      ],
+      "title": "Leave Transactions",
+      "text": "Approved leave. Cancelling a record here gives the days back.",
+      "placement": "right"
+    },
+    {
+      "id": "es-nav-hr",
+      "target": [
+        "#sidebarNav [onclick*='hrmodule']"
+      ],
+      "title": "HR Module",
+      "text": "HR Management (contracts, infringements, performance), opened inside ESS.",
+      "placement": "right"
+    },
+    {
+      "id": "es-nav-leave",
+      "target": [
+        "#sidebarNav [onclick*='leavepolicies']"
+      ],
+      "title": "Setting up leave",
+      "text": "<b>Leave Types</b>, <b>Leave Policies</b> (entitlements and accrual), <b>Pack Linkage</b> (which departments get which policy), <b>Bulk Leave</b> (shutdowns and company days) and <b>Leave Take-On</b> (opening balances).",
+      "placement": "right"
+    },
+    {
+      "id": "es-nav-claims",
+      "target": [
+        "#sidebarNav [onclick*='claimsregister']"
+      ],
+      "title": "Claims",
+      "text": "The <b>Claims Register</b> of every claim, and <b>Expense Policies</b> (the claim types and their rules) further down.",
+      "placement": "right"
+    },
+    {
+      "id": "es-nav-payroll",
+      "target": [
+        "#sidebarNav [onclick*='payroll']"
+      ],
+      "title": "Payroll",
+      "text": "Payroll periods, and <b>Send To Payroll</b>: approved leave and claims for a period, sent once and never picked up twice.",
+      "placement": "right"
+    },
+    {
+      "id": "es-nav-insight",
+      "target": [
+        "#sidebarNav [onclick*='leavedash']"
+      ],
+      "title": "Leave at a glance",
+      "text": "<b>Leave Dashboard</b>, <b>Leave Calendar</b> (who's away when) and <b>Reports</b>.",
+      "placement": "right"
+    },
+    {
+      "id": "es-nav-payslips",
+      "target": [
+        "#sidebarNav [onclick*='payslips']"
+      ],
+      "title": "Payslips",
+      "text": "Every payslip published to employees, to view or download.",
+      "placement": "right"
+    },
+    {
+      "id": "es-nav-documents",
+      "target": [
+        "#sidebarNav [onclick*='documents']"
+      ],
+      "title": "Document Center",
+      "text": "Policies and documents for employees to read and acknowledge in the app.",
+      "placement": "right"
+    },
+    {
+      "id": "es-nav-broadcasts",
+      "target": [
+        "#sidebarNav [onclick*='broadcasts']"
+      ],
+      "title": "Global Broadcasts",
+      "text": "Send a message straight to the mobile app and web portal.",
+      "placement": "right"
+    },
+    {
+      "id": "es-nav-field",
+      "target": [
+        "#sidebarNav [onclick*='trips']"
+      ],
+      "title": "Trips and locations",
+      "text": "<b>Live Trip Logs</b> (driving routes and distances) and <b>Locate Employees</b> (latest locations and movement trails).",
+      "placement": "right"
+    },
+    {
+      "id": "es-nav-settings",
+      "target": [
+        "#sidebarNav [onclick*='settings']"
+      ],
+      "title": "App Settings",
+      "text": "When managers are emailed about new leave and expense requests.",
+      "placement": "right"
+    },
+    {
+      "id": "es-nav-global",
+      "target": [
+        "#sidebarNav [onclick*='global']"
+      ],
+      "title": "Global Settings",
+      "text": "System preferences, who approves what (Workflow Routing), and payroll periods.",
+      "placement": "right"
+    },
+    {
+      "id": "es-collapse",
+      "target": [
+        ".sidebar-toggle-btn"
+      ],
+      "title": "Make more room",
+      "text": "Collapse the menu to icons only, and click again to open it.",
+      "placement": "right"
+    },
+    {
+      "id": "es-top-search",
+      "target": [
+        "#tnbBar .tnb-search"
+      ],
+      "title": "Search any screen",
+      "text": "Type what you're looking for, like <b>leave calendar</b> or <b>payslips</b>, to jump straight to any screen you have access to, in any module.",
+      "placement": "bottom",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "es-top-profile",
+      "target": [
+        "#tnbBar .tnb-pbtn"
+      ],
+      "title": "Your menu",
+      "text": "Click your name for your profile, other areas of the system, Dark Mode and logout.",
+      "placement": "bottom",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "es-top-launchpad",
+      "target": [
+        "#tnbBar .tnb-menu a[href='Launchpad.html']"
+      ],
+      "title": "Launchpad",
+      "text": "Back to your home screen with all your modules.",
+      "placement": "left",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        },
+        {
+          "click": "#tnbBar .tnb-pbtn"
+        }
+      ],
+      "wait": 320
+    },
+    {
+      "id": "es-top-help",
+      "target": [
+        "#tnbBar .tnb-act-help"
+      ],
+      "title": "Help & Tours",
+      "text": "Opens the same help menu as the <b>?</b> button.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "es-top-theme",
+      "target": [
+        "#tnbBar .tnb-theme-row"
+      ],
+      "title": "Dark Mode",
+      "text": "Switch between dark and light. Your choice follows your login to any computer.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ],
+      "after": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "es-help-button",
+      "target": [
+        "#tnaTourHelpBtn"
+      ],
+      "title": "Help is always here",
+      "text": "Click <b>?</b> for this tour, a tour of the screen you're on, what's new, and hands-on <b>how-to guides</b> such as approving a request or sending to payroll.",
+      "placement": "left",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "es-done",
+      "title": "You're all set",
+      "text": "Each screen also has its own short tour. It starts the first time you open that screen, and you can replay it any time from <b>?</b>.",
+      "fullOnly": true
+    }
+  ],
+  "sections": [
+    {
+      "key": "essmaster.dashboard",
+      "title": "Overview",
+      "trigger": "#page-dashboard.active",
+      "steps": [
+        {
+          "id": "esd-pending",
+          "target": [
+            "#dashPendingRequests"
+          ],
+          "title": "Pending Requests",
+          "text": "How many requests are waiting for you. Click it to open them.",
+          "placement": "bottom",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "esd-cards",
+          "target": [
+            "#eoCards"
+          ],
+          "title": "Your day at a glance",
+          "text": "Requests waiting (red when some are over a week old), who's off today and in the next two weeks, days when too many people are off, negative balances, open claims, and anyone on no payroll period. Click a card to open its screen.",
+          "placement": "bottom",
+          "timeout": 6000
+        },
+        {
+          "id": "esd-off",
+          "target": [
+            "#eoOffTodayPanel"
+          ],
+          "title": "Off today",
+          "text": "Everyone on leave today, with the leave type.",
+          "placement": "top"
+        },
+        {
+          "id": "esd-thin",
+          "target": [
+            "#eoThinPanel"
+          ],
+          "title": "Thin days",
+          "text": "Days in the next two weeks when a department has too many people off. Worth checking before approving more leave for those days.",
+          "placement": "top"
+        },
+        {
+          "id": "esd-neg",
+          "target": [
+            "#eoNegPanel"
+          ],
+          "title": "Negative or zero balances",
+          "text": "People who have used more leave than they have, or have none left.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "essmaster.requests",
+      "title": "Mobile Requests",
+      "trigger": "#page-requests.active",
+      "steps": [
+        {
+          "id": "esr-filters",
+          "target": [
+            "#wfStartDate"
+          ],
+          "title": "Find requests",
+          "text": "Filter by date, department or employee, then click <b>Filter</b>.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "esr-table",
+          "target": [
+            "#workflowBody"
+          ],
+          "title": "Each request",
+          "text": "When it was asked for, who, what (leave, overtime or a profile change), the detail and their balance, and the <b>Current Level</b>: which approval step it's waiting on.",
+          "placement": "top"
+        },
+        {
+          "id": "esr-actions",
+          "target": [
+            "#workflowBody"
+          ],
+          "title": "Approve or reject",
+          "text": "<b>Approve</b> or <b>Reject</b> each request. For leave, you choose which leave type to take it from and can make it partial hours. <b>View Attachment</b> opens any proof sent with it.",
+          "placement": "top"
+        },
+        {
+          "id": "esr-bulk",
+          "target": [
+            ".main-content button[onclick*=\"bulkWorkflowAction('APPROVE')\"]",
+            "#page-requests button[onclick*='bulkWorkflowAction']"
+          ],
+          "title": "Bulk Approve",
+          "text": "Tick requests (or the box at the top of the list for all of them) and approve them in one go.",
+          "placement": "left"
+        },
+        {
+          "id": "esr-paging",
+          "target": [
+            "#wfBtnNext"
+          ],
+          "title": "More requests",
+          "text": "Move through the list.",
+          "placement": "top",
+          "climb": 1
+        }
+      ]
+    },
+    {
+      "key": "essmaster.leavetrans",
+      "title": "Leave Transactions",
+      "trigger": "#page-leavetrans.active",
+      "steps": [
+        {
+          "id": "esl-filters",
+          "target": [
+            "#ltStartDate"
+          ],
+          "title": "Find leave",
+          "text": "Filter by date, department or employee, then click <b>Filter</b>.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "esl-table",
+          "target": [
+            "#leaveTransBody"
+          ],
+          "title": "Approved leave",
+          "text": "Each day of leave taken: the leave type, hours, and any proof.",
+          "placement": "top"
+        },
+        {
+          "id": "esl-cancel",
+          "target": [
+            "#leaveTransBody"
+          ],
+          "title": "Cancel Leave",
+          "text": "Cancelling a record gives the leave back to the employee's balance. Use it when someone didn't take leave after all.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "essmaster.payroll",
+      "title": "Payroll",
+      "trigger": "#page-payroll.active",
+      "reset": [
+        {
+          "call": "pySwitchTab",
+          "args": [
+            "periods"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "id": "esp-tabs",
+          "target": [
+            "#pyTabPeriods"
+          ],
+          "title": "Two parts",
+          "text": "<b>Periods</b>: the cycles payroll runs on. <b>Send To Payroll</b>: hand over approved leave and claims for a period.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "pySwitchTab",
+              "args": [
+                "periods"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "esp-new",
+          "target": [
+            "#pyPeriodsTab button[onclick*='pyOpenPeriodModal()']"
+          ],
+          "title": "New Period",
+          "text": "A monthly, weekly or fortnightly cycle.",
+          "placement": "left",
+          "before": [
+            {
+              "call": "pySwitchTab",
+              "args": [
+                "periods"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "esp-list",
+          "target": [
+            "#pyPeriodList"
+          ],
+          "title": "Your periods",
+          "text": "Each period with its cycle, how many departments and employees are on it, and its latest windows.<br>&bull; <b>Units</b>: the departments on it.<br>&bull; <b>Override</b>: individual employees on it, whatever their department.<br>&bull; <b>Lock</b> a window once payroll for it is final; locked production can't be changed in Production Pay.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "pySwitchTab",
+              "args": [
+                "periods"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "esp-unassigned",
+          "target": [
+            "#pyUnassignedWarn"
+          ],
+          "title": "Nobody left out",
+          "text": "A warning appears when active employees are on no period at all. Their leave and claims can't be sent until they are.",
+          "placement": "bottom",
+          "optional": true,
+          "before": [
+            {
+              "call": "pySwitchTab",
+              "args": [
+                "periods"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "esp-send",
+          "target": [
+            "#pySendPeriod"
+          ],
+          "title": "Send To Payroll",
+          "text": "Choose the period and the window.",
+          "placement": "bottom",
+          "climb": 2,
+          "before": [
+            {
+              "call": "pySwitchTab",
+              "args": [
+                "send"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "esp-preview",
+          "target": [
+            "#pySendTab button[onclick*='pySendPreview']"
+          ],
+          "title": "What Would Send",
+          "text": "Shows every approved leave day and claim in that window that hasn't been sent yet, before anything is sent.",
+          "placement": "bottom",
+          "before": [
+            {
+              "call": "pySwitchTab",
+              "args": [
+                "send"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "esp-log",
+          "target": [
+            "#pySendLogBody"
+          ],
+          "title": "Sent batches",
+          "text": "Every send, with its period, window and totals. Download a batch for payroll, or <b>unsend</b> it so its items go in the next send.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "pySwitchTab",
+              "args": [
+                "send"
+              ]
+            }
+          ],
+          "after": [
+            {
+              "call": "pySwitchTab",
+              "args": [
+                "periods"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "essmaster.payslips",
+      "title": "Payslips",
+      "trigger": "#page-payslips.active",
+      "steps": [
+        {
+          "id": "ess-filters",
+          "target": [
+            "#adminPayslipSearch"
+          ],
+          "title": "Find a payslip",
+          "text": "Search by name or PIN, or pick a department.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "ess-table",
+          "target": [
+            "#adminPayslipsBody"
+          ],
+          "title": "Payslips",
+          "text": "The pay period, employee and when it was published. <b>View</b> opens it; <b>Download</b> saves the PDF.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "essmaster.documents",
+      "title": "Document Center",
+      "trigger": "#page-documents.active",
+      "steps": [
+        {
+          "id": "esc-upload",
+          "target": [
+            "#page-documents button[onclick*='openDocumentUploadModal']"
+          ],
+          "title": "Upload Document",
+          "text": "A policy, procedure or notice for employees, to everyone, one department or one person.",
+          "placement": "left"
+        },
+        {
+          "id": "esc-filters",
+          "target": [
+            "#adminDocSearch"
+          ],
+          "title": "Find a document",
+          "text": "Search, or filter by tag.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "esc-table",
+          "target": [
+            "#adminDocumentsBody"
+          ],
+          "title": "Your documents",
+          "text": "Who it was sent to, its version, and how many people have acknowledged reading it. <b>Track</b> shows exactly who has and hasn't. <b>Edit</b> uploads a new version.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "essmaster.leavetypes",
+      "title": "Leave Types",
+      "trigger": "#page-leavepolicies.active",
+      "steps": [
+        {
+          "id": "elt-add",
+          "target": [
+            "#page-leavepolicies button[onclick*='openLeaveTypeModal']"
+          ],
+          "title": "Add Leave Type",
+          "text": "The kinds of leave people can ask for, such as Annual, Sick or Family Responsibility.",
+          "placement": "left"
+        },
+        {
+          "id": "elt-table",
+          "target": [
+            "#leavePoliciesBody"
+          ],
+          "title": "Your leave types",
+          "text": "Whether each one is paid, when proof must be attached, and whether it's active. How much people get and how it builds up is set on <b>Leave Policies</b>, not here.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "essmaster.leavepolicyengine",
+      "title": "Leave Policies",
+      "trigger": "#page-leavepolicyengine.active",
+      "steps": [
+        {
+          "id": "elp-source",
+          "target": [
+            "#lpSourceBox"
+          ],
+          "title": "Who owns the balances",
+          "text": "<b>Payroll System</b>: a connected payroll keeps leave balances and they're pulled from it. <b>Our Leave Policies</b>: balances are built up here from the policies below. Choose one; the text explains what changes.",
+          "placement": "bottom"
+        },
+        {
+          "id": "elp-new",
+          "target": [
+            "#lpListView button[onclick*='openNewPolicyModal']"
+          ],
+          "title": "New Policy",
+          "text": "A set of leave rules, for example <b>Permanent Staff</b> or <b>Seasonal Workers</b>. It can start as a copy of another policy.",
+          "placement": "left"
+        },
+        {
+          "id": "elp-list",
+          "target": [
+            "#lpListBody"
+          ],
+          "title": "Your policies",
+          "text": "The live version, how many leave types it covers, how many departments are linked to it, and any change coming up. Open a policy to see and change its rules.",
+          "placement": "top"
+        },
+        {
+          "id": "elp-versions",
+          "target": [
+            "#lpVersionList"
+          ],
+          "title": "Versions",
+          "text": "Every version with the date it starts. Changes never overwrite history: a new version starts from a date you choose.",
+          "placement": "right",
+          "optional": true
+        },
+        {
+          "id": "elp-rules",
+          "target": [
+            "#lpRulesBody"
+          ],
+          "title": "The rules",
+          "text": "Per leave type: the entitlement, the cycle, how it builds up (rhythm, rate and anchor: normal weeks or the payroll cycle), how far negative it may go, who is eligible, and when proof or HR is needed.",
+          "placement": "top",
+          "optional": true
+        },
+        {
+          "id": "elp-buttons",
+          "target": [
+            "#lpBtnPublish"
+          ],
+          "title": "Draft, then publish",
+          "text": "Only a draft can be edited. <b>Save Draft</b> keeps your changes, <b>Publish</b> makes it live from its start date, <b>Discard</b> drops the draft. <b>Change From Date</b> starts a new draft from a future date.",
+          "placement": "bottom",
+          "climb": 1,
+          "optional": true
+        }
+      ]
+    },
+    {
+      "key": "essmaster.leavelinkage",
+      "title": "Pack Linkage",
+      "trigger": "#page-leavelinkage.active",
+      "steps": [
+        {
+          "id": "ell-policy",
+          "target": [
+            "#llPolicySelect"
+          ],
+          "title": "Policy and date",
+          "text": "Choose the policy and the date it applies from.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "ell-depts",
+          "target": [
+            "#llDeptBody"
+          ],
+          "title": "Departments",
+          "text": "Tick the departments that get this policy. Everyone in them inherits it, including people who join later.",
+          "placement": "top"
+        },
+        {
+          "id": "ell-preview",
+          "target": [
+            "#page-leavelinkage button[onclick*='llPreview']"
+          ],
+          "title": "Preview",
+          "text": "Shows, person by person, what would change before anything is saved. Then <b>Apply Linkage</b>.",
+          "placement": "bottom"
+        },
+        {
+          "id": "ell-overrides",
+          "target": [
+            "#llReplaceOverrides"
+          ],
+          "title": "Personal exceptions",
+          "text": "Leave this unticked to keep anyone's personal policy or individual overrides. Tick it only to reset them to the department's policy.",
+          "placement": "top",
+          "climb": 1,
+          "optional": true
+        }
+      ]
+    },
+    {
+      "key": "essmaster.bulkleave",
+      "title": "Bulk Leave",
+      "trigger": "#page-bulkleave.active",
+      "steps": [
+        {
+          "id": "ebl-what",
+          "target": [
+            "#blType"
+          ],
+          "title": "What and when",
+          "text": "The leave type, the dates and a reason, for example a year-end shutdown.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "ebl-who",
+          "target": [
+            "#blDept"
+          ],
+          "title": "Who",
+          "text": "A unit or all your staff, then tick the people in the list.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "ebl-check",
+          "target": [
+            "#page-bulkleave button[onclick*='blPreview']"
+          ],
+          "title": "Check Who Can Go",
+          "text": "Shows who it works for (with the days and their balance afterwards) and who it doesn't, with the reason, before anything is sent.",
+          "placement": "bottom"
+        },
+        {
+          "id": "ebl-submit",
+          "target": [
+            "#blCandidateBody"
+          ],
+          "title": "Individual requests",
+          "text": "<b>Submit Requests</b> creates one request per person, so each follows the normal approval and appears in their history.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "essmaster.leaveimport",
+      "title": "Leave Take-On",
+      "trigger": "#page-leaveimport.active",
+      "steps": [
+        {
+          "id": "eli-template",
+          "target": [
+            "#page-leaveimport button[onclick*='liTemplate']"
+          ],
+          "title": "Template",
+          "text": "Download the spreadsheet layout. Columns are matched by name, so Employee Number, Emp No and PIN all work.",
+          "placement": "left"
+        },
+        {
+          "id": "eli-mode",
+          "target": [
+            "#liMode"
+          ],
+          "title": "What you're loading",
+          "text": "<b>Opening balances</b> when you start using ESS leave, or <b>historic transactions</b> (leave already taken).",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "eli-check",
+          "target": [
+            "#page-leaveimport button[onclick*='liValidate']"
+          ],
+          "title": "Check File",
+          "text": "Every row is checked first. Nothing is written until you choose <b>Load Clean Rows</b>. Rejected rows come with the reason and can be downloaded as an error file to fix.",
+          "placement": "bottom"
+        },
+        {
+          "id": "eli-batches",
+          "target": [
+            "#liBatchBody"
+          ],
+          "title": "Past loads",
+          "text": "Every load, with how many rows went in and how many were rejected, when and by whom.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "essmaster.leavedash",
+      "title": "Leave Dashboard",
+      "trigger": "#page-leavedash.active",
+      "reset": [
+        {
+          "call": "dbSwitch",
+          "args": [
+            "unit"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "id": "eld-tabs",
+          "target": [
+            "#dbTabUnit"
+          ],
+          "title": "Two views",
+          "text": "<b>Unit Manager</b>: your departments this week. <b>HR &amp; Operations</b>: the whole company.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "eld-tiles",
+          "target": [
+            "#dbUnitTiles"
+          ],
+          "title": "Your units",
+          "text": "Off today and over the next two weeks, the inbox, negative balances, thin days and open claims. Filter by unit above.",
+          "placement": "bottom",
+          "timeout": 5000
+        },
+        {
+          "id": "eld-lists",
+          "target": [
+            "#dbByDay"
+          ],
+          "title": "Next two weeks",
+          "text": "Who's booked off per day. <b>Amber</b> marks a day the unit is already thin.",
+          "placement": "top"
+        },
+        {
+          "id": "eld-sick",
+          "target": [
+            "#dbSick"
+          ],
+          "title": "Sick pattern",
+          "text": "Sick leave in the last eight weeks, counted in <b>occasions</b> (separate absences), with how many fell on a Monday.",
+          "placement": "top"
+        },
+        {
+          "id": "eld-hr",
+          "target": [
+            "#dbHrTiles"
+          ],
+          "title": "HR & Operations",
+          "text": "Leave owed to staff, leave advanced, how long approvals take, requests missing notes, claims missing receipts, people on their own rules, and open claims. Below: how much each department uses of what it earns.",
+          "placement": "bottom",
+          "before": [
+            {
+              "call": "dbSwitch",
+              "args": [
+                "hr"
+              ]
+            }
+          ],
+          "after": [
+            {
+              "call": "dbSwitch",
+              "args": [
+                "unit"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "essmaster.leavecalendar",
+      "title": "Leave Calendar",
+      "trigger": "#page-leavecalendar.active",
+      "steps": [
+        {
+          "id": "elc-dept",
+          "target": [
+            "#lcDept"
+          ],
+          "title": "Unit",
+          "text": "Choose a unit, and move between months with the arrows. The gear sets when a day counts as thin.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "elc-grid",
+          "target": [
+            "#lcGrid"
+          ],
+          "title": "Who's away",
+          "text": "<b>Solid</b> is approved leave, <b>outlined</b> is still waiting for approval. Days with too many people off are marked.",
+          "placement": "top"
+        },
+        {
+          "id": "elc-day",
+          "target": [
+            "#lcDayList"
+          ],
+          "title": "A day's detail",
+          "text": "Click a day to see who's off and whether the unit still has enough people. Decisions are made in the inbox: <b>Open the inbox to decide</b>.",
+          "placement": "left",
+          "climb": 1,
+          "optional": true
+        }
+      ]
+    },
+    {
+      "key": "essmaster.reports",
+      "title": "Reports",
+      "trigger": "#page-reports.active",
+      "steps": [
+        {
+          "id": "erp-menu",
+          "target": [
+            "#rpMenu"
+          ],
+          "title": "Pick a report",
+          "text": "Search or choose a report on the left.",
+          "placement": "right"
+        },
+        {
+          "id": "erp-panel",
+          "target": [
+            "#rpPanel"
+          ],
+          "title": "The report",
+          "text": "What question it answers and who it's for, its filters, and the results. <b>Download</b> saves it as a spreadsheet.",
+          "placement": "left",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "key": "essmaster.claimsregister",
+      "title": "Claims Register",
+      "trigger": "#page-claimsregister.active",
+      "steps": [
+        {
+          "id": "ecr-filters",
+          "target": [
+            "#crStatus"
+          ],
+          "title": "Find claims",
+          "text": "Filter by status (pending, approved or rejected), claim type, dates, and whether a <b>receipt</b> is attached or missing, or search by name.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "ecr-totals",
+          "target": [
+            "#crTotals"
+          ],
+          "title": "Totals",
+          "text": "The count and value of the claims you've filtered.",
+          "placement": "bottom"
+        },
+        {
+          "id": "ecr-table",
+          "target": [
+            "#crBody"
+          ],
+          "title": "Each claim",
+          "text": "Date, employee, unit, type, amount, receipt, status, and who captured and approved it.",
+          "placement": "top"
+        },
+        {
+          "id": "ecr-site",
+          "target": [
+            "#page-claimsregister button[onclick*='crBySite']"
+          ],
+          "title": "By Site",
+          "text": "Approved claims per unit: claims, claimants, headcount, total and <b>per head</b>. A site spending more than twice the average per head is flagged.",
+          "placement": "left"
+        },
+        {
+          "id": "ecr-download",
+          "target": [
+            "#page-claimsregister button[onclick*='crExport']"
+          ],
+          "title": "Download",
+          "text": "The filtered claims as a spreadsheet, for payment.",
+          "placement": "left"
+        }
+      ]
+    },
+    {
+      "key": "essmaster.expensepolicies",
+      "title": "Expense Policies",
+      "trigger": "#page-expensepolicies.active",
+      "steps": [
+        {
+          "id": "eep-add",
+          "target": [
+            "#page-expensepolicies button[onclick*='openExpenseTypeModal']"
+          ],
+          "title": "Add Expense Type",
+          "text": "What people can claim for, such as <b>Travel</b>, <b>Meals</b> or <b>Tools</b>.",
+          "placement": "left"
+        },
+        {
+          "id": "eep-table",
+          "target": [
+            "#expensePoliciesBody"
+          ],
+          "title": "Your expense types",
+          "text": "How each is worked out: <b>Simple</b> (the employee enters the amount), <b>Fixed</b> (you set the payout), or <b>Rate-based</b> (for example a rate per kilometre). Plus whether a receipt is required, and whether it's active.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "essmaster.broadcasts",
+      "title": "Global Broadcasts",
+      "trigger": "#page-broadcasts.active",
+      "steps": [
+        {
+          "id": "ebc-msg",
+          "target": [
+            "#bcTitle"
+          ],
+          "title": "The message",
+          "text": "A title and the message. It appears straight away in the mobile app and web portal.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "ebc-aud",
+          "target": [
+            "#bcTargetType"
+          ],
+          "title": "Who gets it",
+          "text": "Everyone, one department, one person, or a custom list of people.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "ebc-send",
+          "target": [
+            "#saveBroadcastBtn"
+          ],
+          "title": "Attachment and send",
+          "text": "Add a file if needed, then <b>Send Broadcast</b>.",
+          "placement": "top"
+        },
+        {
+          "id": "ebc-history",
+          "target": [
+            "#adminBroadcastsBody"
+          ],
+          "title": "Sent messages",
+          "text": "Every broadcast with its audience and attachment. Filter by date.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "essmaster.trips",
+      "title": "Live Trip Logs",
+      "trigger": "#page-trips.active",
+      "steps": [
+        {
+          "id": "etr-search",
+          "target": [
+            "#adminTripSearch"
+          ],
+          "title": "Find a trip",
+          "text": "Search by driver or PIN. <b>Refresh Logs</b> loads the latest trips.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "etr-table",
+          "target": [
+            "#adminTripsBody"
+          ],
+          "title": "Trips",
+          "text": "Each trip logged in the app: the driver, start and end time, and distance. Open a trip to see its route.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "essmaster.locate",
+      "title": "Locate Employees",
+      "trigger": "#page-locate.active",
+      "steps": [
+        {
+          "id": "elo-filters",
+          "target": [
+            "#locStartDate"
+          ],
+          "title": "What to show",
+          "text": "Dates, an optional time window, and a department. Pick one employee to see their <b>breadcrumb trail</b>: where they were, in order.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "elo-go",
+          "target": [
+            "#page-locate button[onclick*='loadGeoLogs']"
+          ],
+          "title": "Locate",
+          "text": "Shows the latest locations (or the trail) on the map, and each location in the list below.",
+          "placement": "bottom"
+        },
+        {
+          "id": "elo-map",
+          "target": [
+            "#locateLeafletMapContainer"
+          ],
+          "title": "Map and list",
+          "text": "Click a pin or a row to see who, where and when.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "essmaster.appsettings",
+      "title": "App Settings",
+      "trigger": "#page-settings.active",
+      "steps": [
+        {
+          "id": "eas-mode",
+          "target": [
+            "#essMailerMode"
+          ],
+          "title": "When managers are emailed",
+          "text": "<b>Instant</b>: an email for each new leave or expense request. <b>Daily Batch</b>: one summary a day, at the time you choose.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "eas-dnd",
+          "target": [
+            "#essMailerDndStart"
+          ],
+          "title": "Do Not Disturb",
+          "text": "Emails created between these times wait until the morning. Tick <b>Skip Weekends</b> to hold Friday afternoon's emails until Monday.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "eas-save",
+          "target": [
+            "#page-settings button[type='submit']",
+            "#page-settings .btn"
+          ],
+          "title": "Save Mailer Rules",
+          "text": "Nothing changes until you save.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "essmaster.global",
+      "title": "Global Settings",
+      "trigger": "#page-global.active",
+      "reset": [
+        {
+          "call": "switchGlobalTab",
+          "args": [
+            "preferences"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "id": "egl-tabs",
+          "target": [
+            "#tab-global-preferences"
+          ],
+          "title": "Three tabs",
+          "text": "<b>System Preferences</b>, <b>Workflow Routing</b> (who approves) and <b>Payroll Periods</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchGlobalTab",
+              "args": [
+                "preferences"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "egl-source",
+          "target": [
+            "#essEmployeeSource"
+          ],
+          "title": "Employee Data Source",
+          "text": "Where ESS gets its employee records: from this system, synced from another system, or uploaded from CSV.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchGlobalTab",
+              "args": [
+                "preferences"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "egl-routing",
+          "target": [
+            "#wfLevel1"
+          ],
+          "title": "Workflow Routing",
+          "text": "Who approves requests, in order: <b>1st</b>, <b>2nd</b> and <b>3rd approver</b>, plus a <b>standing (backup)</b> approver. Set it for a whole department, or for one employee (which overrides their department).",
+          "placement": "bottom",
+          "climb": 2,
+          "before": [
+            {
+              "call": "switchGlobalTab",
+              "args": [
+                "routing"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "egl-rules",
+          "target": [
+            "#routingBody"
+          ],
+          "title": "Routing rules",
+          "text": "Every rule you've set. A request moves to the next approver each time it's approved.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchGlobalTab",
+              "args": [
+                "routing"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "egl-payroll",
+          "target": [
+            "#tab-global-payroll"
+          ],
+          "title": "Payroll Periods",
+          "text": "Payroll periods are now set up on the <b>Payroll</b> screen. This tab lists them for reference.",
+          "placement": "bottom",
+          "after": [
+            {
+              "call": "switchGlobalTab",
+              "args": [
+                "preferences"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "essmaster.employees",
+      "title": "Employee Master",
+      "trigger": "#page-employees.active",
+      "steps": [
+        {
+          "id": "eem-frame",
+          "target": [
+            "#essEmpMasterIframe"
+          ],
+          "title": "Employee Master in ESS",
+          "text": "The full Employee Master, opened inside ESS. It works exactly as it does on its own page, and has its own <b>?</b> (bottom left of this area) with its tours and how-to guides.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "essmaster.hrmodule",
+      "title": "HR Module",
+      "trigger": "#page-hrmodule.active",
+      "steps": [
+        {
+          "id": "ehr-frame",
+          "target": [
+            "#essHrModuleIframe"
+          ],
+          "title": "HR Management in ESS",
+          "text": "The full HR Management module, opened inside ESS, with its own <b>?</b> (bottom left of this area) for its tours and guides.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "essmaster.resolve-form",
+      "title": "Resolve a request",
+      "trigger": "#resolveRequestModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "essmaster.guide.request",
+      "skipSteps": 4,
+      "stepSuffix": "form"
+    },
+    {
+      "key": "essmaster.period-form",
+      "title": "Payroll period",
+      "trigger": "#pyPeriodModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "essmaster.guide.payroll",
+      "skipSteps": 2,
+      "stepSuffix": "form"
+    },
+    {
+      "key": "essmaster.document-form",
+      "title": "Upload a document",
+      "trigger": "#documentUploadModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "essmaster.guide.document",
+      "skipSteps": 2,
+      "stepSuffix": "form"
+    },
+    {
+      "key": "essmaster.leavetype-form",
+      "title": "Leave type",
+      "trigger": "#leaveTypeModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "essmaster.guide.leavesetup",
+      "skipSteps": 2,
+      "stepSuffix": "form"
+    },
+    {
+      "key": "essmaster.newpolicy-form",
+      "title": "New leave policy",
+      "trigger": "#newPolicyModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "essmaster.guide.leavesetup",
+      "skipSteps": 8,
+      "stepSuffix": "form"
+    },
+    {
+      "key": "essmaster.expense-form",
+      "title": "Expense type",
+      "trigger": "#expenseTypeModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "essmaster.guide.expense",
+      "skipSteps": 2,
+      "stepSuffix": "form"
+    }
+  ],
+  "guides": [],
+  "guidesFile": "essmaster_guides.json"
+}

@@ -1,0 +1,194 @@
+{
+  "_howto": "Guided setup for Employee Master (Demo / Setup mode). checks = what the data must show; confirm = the user confirms.",
+  "key": "setup.employeemaster",
+  "title": "Set up Employee Master",
+  "intro": "Work through these in order. You're in <b>demo</b>, so nothing affects your live system until you push it. Each step checks itself against what you've set up.",
+  "steps": [
+    {
+      "id": "departments",
+      "title": "Departments",
+      "section": "departments",
+      "call": {
+        "fn": "switchDeptTab",
+        "args": [
+          "structure"
+        ]
+      },
+      "why": "Every employee belongs to a department. Departments drive who approves, which devices people are sent to, leave policies and reports. Set which department sits under which for your structure.",
+      "checks": [
+        {
+          "url": "/api/departments",
+          "list": "",
+          "where": [
+            "IsActive"
+          ],
+          "min": 1
+        }
+      ],
+      "todo": "At least one active department."
+    },
+    {
+      "id": "costcentres",
+      "title": "Cost centres",
+      "section": "departments",
+      "call": {
+        "fn": "switchDeptTab",
+        "args": [
+          "costcentres"
+        ]
+      },
+      "optional": true,
+      "why": "For financial reporting: which cost centre an employee's costs go to.",
+      "checks": [
+        {
+          "url": "/api/cost-centres",
+          "list": "",
+          "where": [
+            "IsActive"
+          ],
+          "min": 1
+        }
+      ],
+      "todo": "At least one active cost centre."
+    },
+    {
+      "id": "types",
+      "title": "Employee types and custom fields",
+      "section": "attributes",
+      "call": {
+        "fn": "switchAttrTab",
+        "args": [
+          "types"
+        ]
+      },
+      "why": "Your own employee types (beyond Permanent and Seasonal) and any extra fields you keep per employee, such as boot size or licence number.",
+      "confirm": true,
+      "confirmLabel": "These are right"
+    },
+    {
+      "id": "payroll",
+      "title": "Payroll periods",
+      "section": "payroll",
+      "why": "The cycles people are paid on. Every department (or person) must be on one.",
+      "checks": [
+        {
+          "url": "/api/ess/payroll-periods",
+          "list": "periods",
+          "min": 1
+        },
+        {
+          "url": "/api/ess/payroll-periods",
+          "value": "unassignedEmployees",
+          "max": 0
+        }
+      ],
+      "todo": "At least one payroll period, with every active employee on one."
+    },
+    {
+      "id": "leavetypes",
+      "title": "Leave types",
+      "section": "leave",
+      "why": "The kinds of leave people can take. Their rules are set in ESS Master's Leave Policies.",
+      "checks": [
+        {
+          "url": "/api/leaves/types",
+          "list": "",
+          "where": [
+            "IsActive"
+          ],
+          "min": 1
+        }
+      ],
+      "todo": "At least one active leave type."
+    },
+    {
+      "id": "zones",
+      "title": "Device access",
+      "section": "deptzones",
+      "optional": true,
+      "needs": [
+        "departments"
+      ],
+      "why": "Which clocking devices each department is sent to. In demo nothing is sent to devices; after pushing, use Sync Device in live.",
+      "checks": [
+        {
+          "url": "/api/tenant/department-zones",
+          "list": "",
+          "min": 1
+        }
+      ],
+      "todo": "At least one department linked to an access zone."
+    },
+    {
+      "id": "hierarchy",
+      "title": "Managers",
+      "section": "hierarchy",
+      "call": {
+        "fn": "switchHierTab",
+        "args": [
+          "assignments"
+        ]
+      },
+      "optional": true,
+      "needs": [
+        "departments"
+      ],
+      "why": "Who manages whom: hierarchy levels, and a manager for each department or team.",
+      "checks": [
+        {
+          "url": "/api/hierarchy/managers",
+          "list": "",
+          "min": 1
+        }
+      ],
+      "todo": "At least one manager assignment."
+    },
+    {
+      "id": "teams",
+      "title": "Teams",
+      "section": "teams",
+      "optional": true,
+      "why": "Groups of employees across departments, for example a shift crew.",
+      "checks": [
+        {
+          "url": "/api/teams",
+          "list": "teams",
+          "min": 1
+        }
+      ],
+      "todo": "At least one team."
+    },
+    {
+      "id": "employees",
+      "title": "Employees",
+      "section": "employees",
+      "guide": "employeemaster.guide.create-employee",
+      "needs": [
+        "departments",
+        "payroll"
+      ],
+      "why": "Create employees one by one, or bring them all in with the <b>Import</b> wizard. In demo they are for practice; when pushing, you choose employees <b>one by one</b>.",
+      "checks": [
+        {
+          "url": "/api/employees",
+          "list": "",
+          "min": 1
+        }
+      ],
+      "todo": "At least one employee."
+    },
+    {
+      "id": "testrun",
+      "title": "Test run",
+      "section": "employees",
+      "guide": "employeemaster.guide.create-employee",
+      "needs": [
+        "departments",
+        "employees"
+      ],
+      "why": "Prove it works, all in demo:<ol style=\"margin:6px 0 0 16px;padding:0;\"><li>Create a test employee with every tab filled in.</li><li>Open their profile: everything is there.</li><li>Terminate them with a date, then reinstate them.</li></ol>Test runs are never pushed to live.",
+      "confirm": true,
+      "confirmLabel": "It all worked"
+    }
+  ]
+}

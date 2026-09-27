@@ -1,0 +1,997 @@
+{
+  "_howto": "Production Pay tours. steps = page tour. sections = one tour per screen (first visit) plus pop-up form tours (overlay, offered the first time). Guides are in piecework_guides.json. Never reuse a step id.",
+  "key": "piecework",
+  "title": "Production Pay tour",
+  "startDelay": 1800,
+  "blockers": [
+    ".modal-backdrop.active"
+  ],
+  "reset": [
+    {
+      "removeClass": "#profileDropdown",
+      "cls": "show"
+    },
+    {
+      "removeClass": "#tnbBar .tnb-menu",
+      "cls": "show"
+    }
+  ],
+  "whatsNewTitle": "What's new in Production Pay",
+  "whatsNewText": "We've added something new here since you last took the tour.",
+  "steps": [
+    {
+      "id": "pw-welcome",
+      "title": "Welcome to Production Pay",
+      "text": "Pay people for what they produce: set up your farms and units, teams and activities with their rates, give teams tasks, then check each day's production and commit it to payroll.<br><br>Use <b>Next</b> and <b>Back</b>, or your arrow keys. Press <b>Esc</b> to close.",
+      "fullOnly": true
+    },
+    {
+      "id": "pw-sidebar",
+      "target": [
+        "#sidebarNav"
+      ],
+      "title": "All Production Pay screens",
+      "text": "Every screen is listed here. A good order to set up in: <b>Production Settings</b>, <b>Teams</b>, <b>Activities &amp; Pricing</b>, then <b>Tasks</b>.",
+      "placement": "right"
+    },
+    {
+      "id": "pw-nav-dashboard",
+      "target": [
+        "#sidebarNav [onclick*='dashboard']"
+      ],
+      "title": "Production Dashboard",
+      "text": "Today at a glance: production per team and activity, its value, open tasks, days still to commit to payroll, and job costing.",
+      "placement": "right"
+    },
+    {
+      "id": "pw-nav-maps",
+      "target": [
+        "#sidebarNav [onclick*='maps']"
+      ],
+      "title": "Field Maps",
+      "text": "Where production was captured, on a map of your farms and units.",
+      "placement": "right"
+    },
+    {
+      "id": "pw-nav-teams",
+      "target": [
+        "#sidebarNav [onclick*='teams']"
+      ],
+      "title": "Teams",
+      "text": "Your production teams, their members and their manager. These are separate from Employee Master's Custom Teams.",
+      "placement": "right"
+    },
+    {
+      "id": "pw-nav-activities",
+      "target": [
+        "#sidebarNav [onclick*='activities']"
+      ],
+      "title": "Activities & Pricing",
+      "text": "What people are paid for (for example picking, per bin) and the rate for each, with a dated price history.",
+      "placement": "right"
+    },
+    {
+      "id": "pw-nav-tasks",
+      "target": [
+        "#sidebarNav [onclick*='tasks']"
+      ],
+      "title": "Tasks",
+      "text": "Give a team or a phone user work to do: which activities, on which farm and units, and the target.",
+      "placement": "right"
+    },
+    {
+      "id": "pw-nav-daily",
+      "target": [
+        "#sidebarNav [onclick*='daily']"
+      ],
+      "title": "Daily Production",
+      "text": "Check each team's day: quantities captured on the phones, their clockings and pay, then <b>commit it to payroll</b>.",
+      "placement": "right"
+    },
+    {
+      "id": "pw-nav-jobcosting",
+      "target": [
+        "#sidebarNav [onclick*='jobcosting']"
+      ],
+      "title": "Job Costing",
+      "text": "Time people clocked against jobs on the mobile app, with running and flagged jobs.",
+      "placement": "right"
+    },
+    {
+      "id": "pw-nav-reports",
+      "target": [
+        "#sidebarNav [onclick*='reports']"
+      ],
+      "title": "Production Reports",
+      "text": "Production, pay and job costing reports, for printing or Excel.",
+      "placement": "right"
+    },
+    {
+      "id": "pw-nav-settings",
+      "target": [
+        "#sidebarNav [onclick*='settings']"
+      ],
+      "title": "Production Settings",
+      "text": "Farms and units with their GPS boundaries, and the rules that apply to everyone.",
+      "placement": "right"
+    },
+    {
+      "id": "pw-collapse",
+      "target": [
+        ".sidebar-toggle-btn"
+      ],
+      "title": "Make more room",
+      "text": "Collapse the menu to icons only, and click again to open it.",
+      "placement": "right"
+    },
+    {
+      "id": "pw-refresh",
+      "target": [
+        ".main-content button[onclick*='location.reload']"
+      ],
+      "title": "Refresh Data",
+      "text": "Reloads everything on this page, for example after phones have synced new production.",
+      "placement": "bottom"
+    },
+    {
+      "id": "pw-top-search",
+      "target": [
+        "#tnbBar .tnb-search"
+      ],
+      "title": "Search any screen",
+      "text": "Type what you're looking for, like <b>daily production</b> or <b>pricing</b>, to jump straight to any screen you have access to, in any module.",
+      "placement": "bottom",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "pw-top-profile",
+      "target": [
+        "#tnbBar .tnb-pbtn"
+      ],
+      "title": "Your menu",
+      "text": "Click your name for your profile, other areas of the system, Dark Mode and logout.",
+      "placement": "bottom",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "pw-top-launchpad",
+      "target": [
+        "#tnbBar .tnb-menu a[href='Launchpad.html']"
+      ],
+      "title": "Launchpad",
+      "text": "Back to your home screen with all your modules.",
+      "placement": "left",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        },
+        {
+          "click": "#tnbBar .tnb-pbtn"
+        }
+      ],
+      "wait": 320
+    },
+    {
+      "id": "pw-top-help",
+      "target": [
+        "#tnbBar .tnb-act-help"
+      ],
+      "title": "Help & Tours",
+      "text": "Opens the same help menu as the <b>?</b> button.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "pw-top-theme",
+      "target": [
+        "#tnbBar .tnb-theme-row"
+      ],
+      "title": "Dark Mode",
+      "text": "Switch between dark and light. Your choice follows your login to any computer.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ],
+      "after": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "pw-help-button",
+      "target": [
+        "#tnaTourHelpBtn"
+      ],
+      "title": "Help is always here",
+      "text": "Click <b>?</b> for this tour, a tour of the screen you're on, what's new, and hands-on <b>how-to guides</b> such as setting up farms, creating a team, or adding an activity with its rate.",
+      "placement": "left",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "pw-done",
+      "title": "You're all set",
+      "text": "Each screen also has its own short tour. It starts the first time you open that screen, and you can replay it any time from <b>?</b>.",
+      "fullOnly": true
+    }
+  ],
+  "sections": [
+    {
+      "key": "piecework.dashboard",
+      "title": "Production Dashboard",
+      "trigger": "#page-dashboard:not(.hidden)",
+      "steps": [
+        {
+          "id": "pwd-date",
+          "target": [
+            "#pdDate"
+          ],
+          "title": "Which day",
+          "text": "Pick a day, or step back and forward with the arrows. <b>Today</b> jumps back to today.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 6000
+        },
+        {
+          "id": "pwd-cards",
+          "target": [
+            "#pdCards"
+          ],
+          "title": "The day in five numbers",
+          "text": "People who captured production and how many entries, the piece value at worker rates, open and overdue tasks, team-days not yet committed to payroll, and job costing jobs running or flagged. Click a card to open its screen.",
+          "placement": "bottom"
+        },
+        {
+          "id": "pwd-teams",
+          "target": [
+            "#pdTeamsPanel"
+          ],
+          "title": "Production per team",
+          "text": "Each team's people, entries and value, and whether the day is <b>Committed</b> to payroll. <b>Open</b> takes you to that team's Daily Production grid for the day.",
+          "placement": "top"
+        },
+        {
+          "id": "pwd-tasks",
+          "target": [
+            "#pdTasksPanel"
+          ],
+          "title": "Open tasks",
+          "text": "Tasks that have started and aren't completed, soonest due first, with how far along they are. Overdue ones are marked.",
+          "placement": "top"
+        },
+        {
+          "id": "pwd-uncommitted",
+          "target": [
+            "#pdUncommittedPanel"
+          ],
+          "title": "Waiting to be committed",
+          "text": "Every team-day in the last 14 days with production not yet committed to payroll. Click <b>Open</b> to check and commit it.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "piecework.settings",
+      "title": "Production Settings",
+      "trigger": "#page-settings:not(.hidden)",
+      "reset": [
+        {
+          "call": "switchSettingsTab",
+          "args": [
+            "farms"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "id": "pws-tabs",
+          "target": [
+            "#tab-settings-farms"
+          ],
+          "title": "Two tabs",
+          "text": "<b>Farms &amp; Units</b>: where the work happens. <b>Global Production</b>: rules that apply to everyone.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchSettingsTab",
+              "args": [
+                "farms"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pws-farm",
+          "target": [
+            "#newFarmName"
+          ],
+          "title": "Add a farm",
+          "text": "Type the farm's name, set its location with the map pin button, then <b>Add</b>. The location lets the phones and Field Maps know where each farm is.",
+          "placement": "bottom",
+          "climb": 2,
+          "before": [
+            {
+              "call": "switchSettingsTab",
+              "args": [
+                "farms"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pws-unit",
+          "target": [
+            "#unitFarmSelect"
+          ],
+          "title": "Add a field unit",
+          "text": "Units are the blocks, orchards or fields on a farm. Choose the farm, name the unit, add its size in hectares and its location, then <b>Add</b>.",
+          "placement": "bottom",
+          "climb": 2,
+          "before": [
+            {
+              "call": "switchSettingsTab",
+              "args": [
+                "farms"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pws-list",
+          "target": [
+            "#farmUnitListBody"
+          ],
+          "title": "Your farms and units",
+          "text": "Edit a name or size in place, change a map boundary, or deactivate a farm or unit. Tick <b>Show Inactive</b> to see deactivated ones.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchSettingsTab",
+              "args": [
+                "farms"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pws-multiteam",
+          "target": [
+            "#globalAllowMultiTeam"
+          ],
+          "title": "Employees in more than one team",
+          "text": "When ticked, adding someone to a team keeps them in their other teams. Otherwise they move.",
+          "placement": "bottom",
+          "climb": 2,
+          "before": [
+            {
+              "call": "switchSettingsTab",
+              "args": [
+                "global"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pws-ignoreot",
+          "target": [
+            "#globalIgnoreOT"
+          ],
+          "title": "Ignore overtime",
+          "text": "All clocked hours count as normal time, and the overtime columns are hidden in Daily Production.",
+          "placement": "bottom",
+          "climb": 2,
+          "before": [
+            {
+              "call": "switchSettingsTab",
+              "args": [
+                "global"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pws-deduct",
+          "target": [
+            "#globalDeductPWHrs"
+          ],
+          "title": "Deduct piecework hours",
+          "text": "When ticked, hours spent on piecework come off normal time. When not ticked, people earn their full normal time as well as their piecework pay.",
+          "placement": "bottom",
+          "climb": 2,
+          "before": [
+            {
+              "call": "switchSettingsTab",
+              "args": [
+                "global"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pws-wage",
+          "target": [
+            "#globalUseWage"
+          ],
+          "title": "Global Hourly Rate",
+          "text": "When ticked, this rate replaces <b>every</b> employee's own hourly rate in Production Pay, from the date you choose: in Daily Production and the wage reports. Their Employee Master rates are not changed.",
+          "placement": "bottom",
+          "climb": 2,
+          "before": [
+            {
+              "call": "switchSettingsTab",
+              "args": [
+                "global"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pws-jcsource",
+          "target": [
+            "#globalJobCostingSource"
+          ],
+          "title": "Job costing departments",
+          "text": "Where the mobile app's job list comes from when someone clocks into a job: your T&amp;A departments, your farms and units, farming departments, or your own custom list (managed just below).",
+          "placement": "top",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchSettingsTab",
+              "args": [
+                "global"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pws-save",
+          "target": [
+            ".main-content button[onclick*='saveGlobalSettings']"
+          ],
+          "title": "Save Global Settings",
+          "text": "Nothing on this tab applies until you save it.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchSettingsTab",
+              "args": [
+                "global"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pws-payroll",
+          "target": [
+            "#page-settings a[href*='view=payroll']"
+          ],
+          "title": "Payroll periods",
+          "text": "Payroll periods and locking are now set up in <b>Employee Master &rsaquo; Payroll Periods</b>. It's the same list, and a locked period can no longer be changed in Daily Production.",
+          "placement": "top",
+          "climb": 1,
+          "optional": true,
+          "before": [
+            {
+              "call": "switchSettingsTab",
+              "args": [
+                "global"
+              ]
+            }
+          ],
+          "after": [
+            {
+              "call": "switchSettingsTab",
+              "args": [
+                "farms"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "piecework.teams",
+      "title": "Teams",
+      "trigger": "#page-teams:not(.hidden)",
+      "reset": [
+        {
+          "call": "switchTeamTab",
+          "args": [
+            "active"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "id": "pwt-tabs",
+          "target": [
+            "#tab-teams-active"
+          ],
+          "title": "Teams",
+          "text": "Your active teams, and those you've deactivated.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchTeamTab",
+              "args": [
+                "active"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pwt-create",
+          "target": [
+            "#newTeamName"
+          ],
+          "title": "Create a team",
+          "text": "Name the team, add any asset tags (for example the tractor or trailer it uses), and choose how the manager is paid on team work. Then <b>Create Team</b>.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "pwt-manager",
+          "target": [
+            "#newTeamManagerEqualShare"
+          ],
+          "title": "How the manager is paid on team work",
+          "text": "When a team is paid as a team, the quantity is shared among the workers who clocked in:<br>&bull; <b>Neither ticked</b>: the manager is paid for the team's full quantity.<br>&bull; <b>Manager Equal Share</b>: the manager gets an equal share, like a worker.<br>&bull; <b>Manager Average Only</b>: the manager gets the workers' average share.",
+          "placement": "left",
+          "climb": 2
+        },
+        {
+          "id": "pwt-grid",
+          "target": [
+            "#teamsGrid"
+          ],
+          "title": "Your teams",
+          "text": "Each card shows the team's manager and members. Click a card to add or remove members, choose the manager, rename it, see its history, or deactivate it.",
+          "placement": "top"
+        },
+        {
+          "id": "pwt-import",
+          "target": [
+            ".main-content button[onclick*='openTeamImportModal']"
+          ],
+          "title": "Import Teams",
+          "text": "Create teams and assign people in bulk from a spreadsheet.",
+          "placement": "bottom"
+        },
+        {
+          "id": "pwt-transfer",
+          "target": [
+            ".main-content button[onclick*='openTransferModal']"
+          ],
+          "title": "Transfer Employee",
+          "text": "Move someone from one team to another in one step. The move is recorded in both teams' history.",
+          "placement": "bottom"
+        }
+      ]
+    },
+    {
+      "key": "piecework.activities",
+      "title": "Activities & Pricing",
+      "trigger": "#page-activities:not(.hidden)",
+      "reset": [
+        {
+          "call": "switchActivityTab",
+          "args": [
+            "active"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "id": "pwa-add",
+          "target": [
+            ".main-content button[onclick*='openActivityModal']"
+          ],
+          "title": "Add Activity",
+          "text": "What people are paid for, the unit it's counted in (for example <b>bins</b> or <b>trees</b>), and the rate per unit for workers and for managers.",
+          "placement": "bottom"
+        },
+        {
+          "id": "pwa-jc",
+          "target": [
+            ".main-content button[onclick*='openJcActivityModal']"
+          ],
+          "title": "Job Costing Activity",
+          "text": "A job for the Job Costing clock on the mobile app, such as <b>Irrigation</b> or <b>Maintenance</b>. Time is recorded against it; it has no unit or rate.",
+          "placement": "bottom"
+        },
+        {
+          "id": "pwa-tabs",
+          "target": [
+            "#tab-activities-active"
+          ],
+          "title": "Three lists",
+          "text": "<b>Active</b> piecework activities, <b>Deactivated</b> ones, and your <b>Job Costing Activities</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchActivityTab",
+              "args": [
+                "active"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pwa-grid",
+          "target": [
+            "#activitiesGrid"
+          ],
+          "title": "Each activity",
+          "text": "Its current worker and manager rate. <b>Pricing Ledger</b> keeps every rate with the date it started, so past days are paid at the rate that applied then. You can also edit or deactivate it.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchActivityTab",
+              "args": [
+                "active"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "piecework.tasks",
+      "title": "Tasks",
+      "trigger": "#page-tasks:not(.hidden)",
+      "reset": [
+        {
+          "call": "switchTaskTab",
+          "args": [
+            "active"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "id": "pwk-create",
+          "target": [
+            ".main-content button[onclick*='openTaskModal']"
+          ],
+          "title": "Create Task",
+          "text": "Give work to a team or a phone user: which activities and how much, on which farm and units, how they're paid, what evidence the phone must collect, and the dates.",
+          "placement": "bottom"
+        },
+        {
+          "id": "pwk-tabs",
+          "target": [
+            "#tab-tasks-active"
+          ],
+          "title": "Active and completed",
+          "text": "<b>Active Tasks</b> are pending or in progress. <b>Completed Tasks</b> are finished.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchTaskTab",
+              "args": [
+                "active"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pwk-list",
+          "target": [
+            "#taskListBody"
+          ],
+          "title": "Each task",
+          "text": "Where it is, the activities, who it's assigned to, <b>Individual</b> or <b>Team</b> pay, its dates, and a progress bar of what's been captured against the target. Click a task to see its details and everything captured for it.",
+          "placement": "top"
+        },
+        {
+          "id": "pwk-status",
+          "target": [
+            "#taskListBody"
+          ],
+          "title": "From start to finish",
+          "text": "A task starts as <b>Pending</b>: you can still edit or delete it. <b>Start</b> puts it <b>In Progress</b>. <b>Complete</b> moves it to Completed Tasks once the work is done.",
+          "placement": "top"
+        },
+        {
+          "id": "pwk-paging",
+          "target": [
+            "#btnNextTasks"
+          ],
+          "title": "Older and newer",
+          "text": "Move through the list, newest first.",
+          "placement": "top",
+          "climb": 1
+        }
+      ]
+    },
+    {
+      "key": "piecework.daily",
+      "title": "Daily Production",
+      "trigger": "#page-daily:not(.hidden)",
+      "steps": [
+        {
+          "id": "pwy-date",
+          "target": [
+            "#dailyDateFilter"
+          ],
+          "title": "The day",
+          "text": "Pick the day, or step through days with the arrows. The grid reloads for the team you've chosen.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "pwy-team",
+          "target": [
+            "#dailyTeamFilter"
+          ],
+          "title": "The team",
+          "text": "Choose the team, then <b>Load Grid</b>. Each team's day is checked and committed on its own.",
+          "placement": "bottom"
+        },
+        {
+          "id": "pwy-import",
+          "target": [
+            ".main-content button[onclick*='openImportDataModal']"
+          ],
+          "title": "Import Data and Import History",
+          "text": "<b>Import Data</b> brings in production from an Excel sheet: you match its columns, it's validated, then imported. <b>Import History</b> lists past imports, and one can be rolled back if nothing in it has been committed.",
+          "placement": "bottom"
+        },
+        {
+          "id": "pwy-export",
+          "target": [
+            ".main-content button[onclick*='exportDailyGridToExcel']"
+          ],
+          "title": "Export Excel",
+          "text": "The grid on screen, as a spreadsheet.",
+          "placement": "bottom"
+        },
+        {
+          "id": "pwy-grid",
+          "target": [
+            "#dailyGridHead"
+          ],
+          "title": "The grid",
+          "text": "One row per team member. Their shift and clockings from Time &amp; Attendance, a column per task activity with their quantities and times, then their hours and wages: normal, approved and potential overtime, Sunday/public holiday, piece wage and the total.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "pwy-actions",
+          "target": [
+            "#dailyActionBar"
+          ],
+          "title": "Check, then commit",
+          "text": "<b>Save Draft</b> keeps your changes. <b>Commit to Payroll</b> makes the day final: its records lock. <b>Unlock</b> reopens committed records, and <b>Revert Edits</b> puts back what the phones captured.<br><br>If the day falls in a <b>locked payroll period</b> (Employee Master &rsaquo; Payroll Periods), it can't be saved, committed, unlocked or reverted until that period is unlocked. You'll see who and which dates are affected.",
+          "placement": "top",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "key": "piecework.jobcosting",
+      "title": "Job Costing",
+      "trigger": "#page-jobcosting:not(.hidden)",
+      "steps": [
+        {
+          "id": "pwj-dates",
+          "target": [
+            "#jcStartDate"
+          ],
+          "title": "Date range",
+          "text": "Choose the dates and click <b>Load Data</b>. <b>Export</b> saves what's on screen to Excel.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "pwj-summary",
+          "target": [
+            "#jcSummary"
+          ],
+          "title": "The totals",
+          "text": "Total hours, how many people and jobs, jobs still running, and flagged jobs.<br><br>A job is <b>flagged</b> when it ran over 14 hours or has no activity chosen. A job still <b>running</b> has no clock-out yet.",
+          "placement": "bottom"
+        },
+        {
+          "id": "pwj-filters",
+          "target": [
+            "#jcSearch"
+          ],
+          "title": "Find what you need",
+          "text": "Search by name or PIN, choose a department, or click <b>Flagged Only</b> to see just the jobs that need checking.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "pwj-grid",
+          "target": [
+            "#jcGridBody"
+          ],
+          "title": "Jobs per person",
+          "text": "Click a person to open their jobs: the unit, the activity, when it started and ended, how long, and who captured it. Use <b>Edit</b> to correct the unit or activity on a job.",
+          "placement": "top"
+        },
+        {
+          "id": "pwj-where",
+          "target": [
+            "#sidebarNav [onclick*='activities']"
+          ],
+          "title": "Where the job list comes from",
+          "text": "The activities people clock into are the <b>Job Costing Activities</b> under Activities &amp; Pricing. The departments or units come from the setting in <b>Production Settings</b>.",
+          "placement": "right"
+        }
+      ]
+    },
+    {
+      "key": "piecework.reports",
+      "title": "Production Reports",
+      "trigger": "#page-reports:not(.hidden)",
+      "steps": [
+        {
+          "id": "pwr-dates",
+          "target": [
+            "#reportStartDate"
+          ],
+          "title": "Dates",
+          "text": "The date range for the report.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "pwr-filters",
+          "target": [
+            "#reportTeamFilter"
+          ],
+          "title": "Narrow it down",
+          "text": "Filter by department, team, task, or pick particular employees. Leave them on All for everyone.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "pwr-type",
+          "target": [
+            "#reportTypeFilter"
+          ],
+          "title": "Report Type",
+          "text": "&bull; <b>Daily Detailed</b>: each person's production per day.<br>&bull; <b>Employee Daily Evidence</b>: the photos captured with it.<br>&bull; <b>Employee Summary</b> and <b>Activity Summary</b>: totals for the date range, per person or per activity.<br>&bull; <b>Job Costing</b> (by employee), <b>Job Costing Summary</b> (a matrix of people and jobs) and <b>Job Costing Wages</b> (hours &times; hourly rate per day; the Global Hourly Rate applies here when it's switched on).<br>&bull; <b>Global Summary</b>: everything combined.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "pwr-sort",
+          "target": [
+            "#reportSortBy"
+          ],
+          "title": "Sort",
+          "text": "Order by name, PIN or quantity. Tick <b>Ignore Letters in PIN Sort</b> to sort PINs by their numbers only.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "pwr-go",
+          "target": [
+            ".main-content button[onclick*='generateFieldReport']"
+          ],
+          "title": "Generate Report",
+          "text": "Shows the report on screen. <b>Export to Excel</b> at the top saves it as a spreadsheet.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "piecework.maps",
+      "title": "Field Maps",
+      "trigger": "#page-maps:not(.hidden)",
+      "steps": [
+        {
+          "id": "pwm-date",
+          "target": [
+            "#pwMapDate"
+          ],
+          "title": "Which day",
+          "text": "Choose the day to show.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "pwm-filter",
+          "target": [
+            ".main-content button[onclick*='openMapFilterModal']"
+          ],
+          "title": "Teams and tasks",
+          "text": "Choose which teams and tasks to show. The number shows how many you've picked.",
+          "placement": "bottom"
+        },
+        {
+          "id": "pwm-plot",
+          "target": [
+            ".main-content button[onclick*='loadPieceworkMapData']"
+          ],
+          "title": "Plot Activities",
+          "text": "Puts every capture on the map where it was made, over your farms and units. Click a pin to see who captured what, when, and any photo.",
+          "placement": "bottom"
+        },
+        {
+          "id": "pwm-default",
+          "target": [
+            ".main-content button[onclick*='savePieceworkMapDefaultLocation']"
+          ],
+          "title": "Save Default View",
+          "text": "Move and zoom the map to your farms, then save it. The map opens there next time.",
+          "placement": "bottom"
+        }
+      ]
+    },
+    {
+      "key": "piecework.activity-form",
+      "title": "Activity",
+      "trigger": "#activityModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "piecework.guide.activity",
+      "skipSteps": 2,
+      "stepSuffix": "form"
+    },
+    {
+      "key": "piecework.pricing-form",
+      "title": "Pricing Ledger",
+      "trigger": "#pricingModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "piecework.guide.activity",
+      "skipSteps": 8,
+      "stepSuffix": "form"
+    },
+    {
+      "key": "piecework.team-form",
+      "title": "Team details",
+      "trigger": "#teamDetailsModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "piecework.guide.team",
+      "skipSteps": 6,
+      "stepSuffix": "form"
+    },
+    {
+      "key": "piecework.task-form",
+      "title": "Task",
+      "trigger": "#taskModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "piecework.guide.task",
+      "skipSteps": 2,
+      "stepSuffix": "form"
+    }
+  ],
+  "guides": [],
+  "guidesFile": "piecework_guides.json"
+}

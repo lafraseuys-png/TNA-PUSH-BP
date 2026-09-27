@@ -1,0 +1,200 @@
+{
+  "_howto": "Employee Costs how-to guides.",
+  "guides": [
+    {
+      "key": "employeecosts.guide.component",
+      "title": "Add a cost component",
+      "icon": "fa-cubes",
+      "blurb": "An earning, deduction or company contribution, with how it's worked out.",
+      "steps": [
+        {
+          "id": "ecg-c-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('components'\"]"
+          ],
+          "title": "Cost Components",
+          "text": "Click <b>Cost Components</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Cost Components"
+        },
+        {
+          "id": "ecg-c-add",
+          "target": [
+            "#page-components button[onclick*='openComponentModal']"
+          ],
+          "title": "Add Component",
+          "text": "Click <b>Add Component</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Add Component"
+        },
+        {
+          "id": "ecg-c-name",
+          "target": [
+            "#compName"
+          ],
+          "title": "Name",
+          "text": "For example <b>Transport Allowance</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "ecg-c-type",
+          "target": [
+            "#compType"
+          ],
+          "title": "Type",
+          "text": "An earning (added), a deduction (taken off) or a company contribution (a cost to the company, not to the employee).",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "ecg-c-calc",
+          "target": [
+            "#compCalc"
+          ],
+          "title": "How it's worked out",
+          "text": "A fixed amount, a percentage, or a figure typed in each time.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "ecg-c-amt",
+          "target": [
+            "#compDefault"
+          ],
+          "title": "Default amount",
+          "text": "Used when you give it to someone; you can change it per person.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "ecg-c-save",
+          "target": [
+            "#componentModal button[type='submit']",
+            "#componentModal button:not([onclick])"
+          ],
+          "title": "Save Component",
+          "text": "Then give it to people in <b>Employee Allocation</b>.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "employeecosts.guide.allocate",
+      "title": "Give people their components",
+      "icon": "fa-users",
+      "blurb": "Set components for many people at once, or for one person.",
+      "steps": [
+        {
+          "id": "ecg-a-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('allocation'\"]"
+          ],
+          "title": "Employee Allocation",
+          "text": "Click <b>Employee Allocation</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Employee Allocation"
+        },
+        {
+          "id": "ecg-a-filter",
+          "target": [
+            "#empDeptFilter"
+          ],
+          "title": "1. Narrow the list",
+          "text": "Pick a department, or search.",
+          "placement": "bottom",
+          "timeout": 4000
+        },
+        {
+          "id": "ecg-a-tick",
+          "target": [
+            "#selectAllEmp"
+          ],
+          "title": "2. Tick people",
+          "text": "Tick the people who get the same components.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "ecg-a-bulk",
+          "target": [
+            "#page-allocation button[onclick*='openBulkEmpCostModal']"
+          ],
+          "title": "3. Bulk Allocate",
+          "text": "Choose the components and amounts, and save.",
+          "placement": "left"
+        },
+        {
+          "id": "ecg-a-one",
+          "target": [
+            "#employeeCostsTableBody"
+          ],
+          "title": "Or one person",
+          "text": "Click a person to set their own overhead and components.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "employeecosts.guide.payfile",
+      "title": "Make a payroll file",
+      "icon": "fa-file-invoice-dollar",
+      "blurb": "Produce the file for your payroll system for a pay period.",
+      "steps": [
+        {
+          "id": "ecg-p-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('payfiles'\"]"
+          ],
+          "title": "Payfiles & Export",
+          "text": "Click <b>Payfiles &amp; Export</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Payfiles & Export"
+        },
+        {
+          "id": "ecg-p-prof",
+          "target": [
+            "#pfProfileSelect"
+          ],
+          "title": "1. Profile",
+          "text": "Choose your payroll system's layout. Use <b>Config</b> to set it up the first time.",
+          "placement": "bottom",
+          "timeout": 4000
+        },
+        {
+          "id": "ecg-p-dates",
+          "target": [
+            "#pfFromDate"
+          ],
+          "title": "2. Period",
+          "text": "The pay period's dates, and a department if needed.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "ecg-p-gen",
+          "target": [
+            "#page-payfiles button[onclick*='generatePayfileData']"
+          ],
+          "title": "3. Generate Preview",
+          "text": "Check every line.",
+          "placement": "bottom"
+        },
+        {
+          "id": "ecg-p-export",
+          "target": [
+            "#page-payfiles button[onclick*='exportPayfileCSV']"
+          ],
+          "title": "4. Export",
+          "text": "CSV or Excel, ready to import into payroll.",
+          "placement": "bottom"
+        }
+      ]
+    }
+  ]
+}

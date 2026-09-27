@@ -1,0 +1,90 @@
+{
+  "_howto": "Guided setup for Contractors & Distribution (Demo / Setup mode).",
+  "key": "setup.contractors",
+  "title": "Set up Contractors",
+  "intro": "Work through these in order. You're in <b>demo</b>, so nothing affects your live system until you push it.",
+  "steps": [
+    {
+      "id": "settings",
+      "title": "Currency, rules, seasons and tobacco types",
+      "section": "settings",
+      "why": "The currency, when inputs may be given, your seasons and what farmers grow.",
+      "confirm": true,
+      "confirmLabel": "These are set"
+    },
+    {
+      "id": "locations",
+      "title": "Locations",
+      "section": "locations",
+      "why": "The areas farmers belong to. Everything is filtered and approved by area.",
+      "confirm": true,
+      "confirmLabel": "My areas are in"
+    },
+    {
+      "id": "hierarchy",
+      "title": "Hierarchy and managers",
+      "section": "hierarchy",
+      "needs": [
+        "locations"
+      ],
+      "why": "Your structure and who manages each part, so approvals go to the right people.",
+      "confirm": true,
+      "confirmLabel": "Structure and managers are set"
+    },
+    {
+      "id": "workflow",
+      "title": "Approval workflow",
+      "section": "workflow",
+      "needs": [
+        "hierarchy"
+      ],
+      "why": "Who approves contracts and distributions, per level.",
+      "confirm": true,
+      "confirmLabel": "Approvals are set"
+    },
+    {
+      "id": "templates",
+      "title": "Contract templates",
+      "section": "contracts",
+      "call": {
+        "fn": "switchContContractTab",
+        "args": [
+          "templates"
+        ]
+      },
+      "why": "The contracts you give farmers.",
+      "confirm": true,
+      "confirmLabel": "Templates are ready"
+    },
+    {
+      "id": "distribution",
+      "title": "Warehouses, stock items and a cycle",
+      "section": "distribution",
+      "why": "Where inputs are kept, what they are, and the distribution cycle they are given out in.",
+      "confirm": true,
+      "confirmLabel": "Distribution is set up"
+    },
+    {
+      "id": "farmers",
+      "title": "Farmers",
+      "section": "contractors",
+      "why": "Add farmers one by one or import them.",
+      "confirm": true,
+      "confirmLabel": "Farmers are in"
+    },
+    {
+      "id": "testrun",
+      "title": "Test run",
+      "section": "contracts",
+      "guide": "contractors.guide.assign",
+      "needs": [
+        "templates",
+        "farmers",
+        "workflow"
+      ],
+      "why": "Prove it works, all in demo:<ol style=\"margin:6px 0 0 16px;padding:0;\"><li>Give a farmer a contract, and approve it in the <b>Inbox</b>.</li><li>Receive stock into a warehouse (GRV) and give the farmer inputs.</li><li>See it in <b>Progress</b> and a report.</li></ol>Contracts, stock and distributions are never pushed to live.",
+      "confirm": true,
+      "confirmLabel": "It all worked"
+    }
+  ]
+}

@@ -1,0 +1,212 @@
+{
+  "_howto": "Access Control how-to guides.",
+  "guides": [
+    {
+      "key": "accesscontrol.guide.door",
+      "title": "Set up a door",
+      "icon": "fa-door-open",
+      "blurb": "Name a door on a controller, and set its direction, unlock time and exit rule.",
+      "steps": [
+        {
+          "id": "acg-d-open",
+          "target": [
+            "#acMenu a[data-key='doors']"
+          ],
+          "title": "Doors & Readers",
+          "text": "Click <b>Doors &amp; Readers</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Doors & Readers"
+        },
+        {
+          "id": "acg-d-add",
+          "target": [
+            "#acContent button[onclick*='AC.editDoor(null']"
+          ],
+          "title": "Add a door",
+          "text": "Click the add button on the controller the door is on.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click to add a door"
+        },
+        {
+          "id": "acg-d-name",
+          "target": [
+            "#acDoorName"
+          ],
+          "title": "Name",
+          "text": "A name everyone recognises, like <b>Main Gate</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "acg-d-dir",
+          "target": [
+            "#acDoorDirection"
+          ],
+          "title": "Direction",
+          "text": "Entry, exit or both. It decides how the door counts in reports and zones.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "acg-d-unlock",
+          "target": [
+            "#acDoorUnlock"
+          ],
+          "title": "Unlock time and time zones",
+          "text": "How many seconds the lock opens for, when the door may be used at all, and when it stays open (for example during lunch).",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "acg-d-exit",
+          "target": [
+            "#acDoorEarly"
+          ],
+          "title": "Leaving early",
+          "text": "Whether people may leave before their shift ends, and how many minutes early is fine. Blocking exit needs a confirmation.",
+          "placement": "top",
+          "climb": 2,
+          "optional": true
+        },
+        {
+          "id": "acg-d-em",
+          "target": [
+            "#acDoorEmergency"
+          ],
+          "title": "Emergency route",
+          "text": "Emergency routes open with the emergency release and always allow exit.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "acg-d-save",
+          "target": [
+            "#acModal button[onclick*='AC.saveDoor']"
+          ],
+          "title": "Save",
+          "text": "The controller is updated within about a minute.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "accesscontrol.guide.level",
+      "title": "Create an access level",
+      "icon": "fa-layer-group",
+      "blurb": "A set of doors and a time zone that you give to people.",
+      "steps": [
+        {
+          "id": "acg-l-open",
+          "target": [
+            "#acMenu a[data-key='levels']"
+          ],
+          "title": "Access Levels",
+          "text": "Click <b>Access Levels</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Access Levels"
+        },
+        {
+          "id": "acg-l-add",
+          "target": [
+            "#acContent button[onclick*='AC.editLevel(null)']"
+          ],
+          "title": "Add an access level",
+          "text": "Click to add one.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click to add a level"
+        },
+        {
+          "id": "acg-l-name",
+          "target": [
+            "#acLvlName"
+          ],
+          "title": "Name",
+          "text": "For example <b>Main gate, office hours</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "acg-l-tz",
+          "target": [
+            "#acLvlTz"
+          ],
+          "title": "Time zone",
+          "text": "When this level may be used.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "acg-l-sched",
+          "target": [
+            "#acLvlSched"
+          ],
+          "title": "Only when scheduled",
+          "text": "Tick to let people in only around their rostered shift (see Schedule Rules).",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "acg-l-save",
+          "target": [
+            "#acModal button[onclick*='AC.saveLevel']"
+          ],
+          "title": "Choose doors and save",
+          "text": "Tick the doors in this level, then save. Next, give it to people in <b>Assignments</b>.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "accesscontrol.guide.assign",
+      "title": "Give people access",
+      "icon": "fa-user-check",
+      "blurb": "Give a department, a level's people, or one person their access levels.",
+      "steps": [
+        {
+          "id": "acg-a-open",
+          "target": [
+            "#acMenu a[data-key='assign']"
+          ],
+          "title": "Assignments",
+          "text": "Click <b>Assignments</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Assignments"
+        },
+        {
+          "id": "acg-a-dept",
+          "target": [
+            "#acContent button[onclick*=\"AC.assignTab('dept')\"]"
+          ],
+          "title": "Whole departments",
+          "text": "Easiest: give each department its levels. New starters in the department get them too.",
+          "placement": "bottom"
+        },
+        {
+          "id": "acg-a-level",
+          "target": [
+            "#acContent button[onclick*=\"AC.assignTab('level')\"]"
+          ],
+          "title": "Or per level",
+          "text": "Add chosen people to a level, with optional dates (for example contractors on site for a week).",
+          "placement": "bottom"
+        },
+        {
+          "id": "acg-a-person",
+          "target": [
+            "#acContent button[onclick*=\"AC.assignTab('person')\"]"
+          ],
+          "title": "Or one person",
+          "text": "All of one person's levels, plus special settings: not bound to the roster, superuser, longer passage time, or access switched off.",
+          "placement": "bottom"
+        }
+      ]
+    }
+  ]
+}

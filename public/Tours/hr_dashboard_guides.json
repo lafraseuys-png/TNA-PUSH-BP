@@ -1,0 +1,896 @@
+{
+  "_howto": "HR how-to guides (listed under How-to guides in the ? menu). mode click = the user clicks the real button. optional = skipped when that part isn't on screen. Never reuse a step id.",
+  "guides": [
+    {
+      "key": "hr_dashboard.guide.template-editor",
+      "title": "Write a contract template",
+      "icon": "fa-file-signature",
+      "blurb": "Write a contract in the editor, with placeholders that fill in each employee's details.",
+      "steps": [
+        {
+          "id": "hrg-tp-open",
+          "target": [
+            "#sidebarNav a[onclick*='onboarding']"
+          ],
+          "title": "Contracts & Onboarding",
+          "text": "Contract templates live here. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Contracts & Onboarding"
+        },
+        {
+          "id": "hrg-tp-tab",
+          "target": [
+            "#tab-templates"
+          ],
+          "title": "Contract Templates",
+          "text": "Click the <b>Contract Templates</b> tab.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Contract Templates"
+        },
+        {
+          "id": "hrg-tp-create",
+          "target": [
+            "#onboarding-templates button[onclick*='openTemplateModal']"
+          ],
+          "title": "Create New Template",
+          "text": "Click <b>Create New Template</b>. Nothing is saved until you click Save at the bottom.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Create New Template"
+        },
+        {
+          "id": "hrg-tp-title",
+          "target": [
+            "#tplTitle"
+          ],
+          "title": "Template Title",
+          "text": "The name people pick when they assign a contract, for example <b>Seasonal Worker 3-Month Contract</b>. It's also printed as the contract's title.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 5000
+        },
+        {
+          "id": "hrg-tp-v2",
+          "target": [
+            "#tplV2Alert"
+          ],
+          "title": "Imported PDF",
+          "text": "This template is an imported PDF, so the text editors are switched off to keep the document exactly as it is. When it's assigned, the system adds a cover page and signature block.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "hrg-tp-translation",
+          "target": [
+            "#tplHasTranslation"
+          ],
+          "title": "Translated version",
+          "text": "Tick this to add the contract text in a second language (for example the employee's home language) alongside the main text.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hrg-tp-header",
+          "target": [
+            "#tplHeaderEditor"
+          ],
+          "title": "Header and footer",
+          "text": "The <b>Global Header</b> and <b>Global Footer</b> repeat on every page, for example your company name, a reference number or <b>[Page Number]</b>.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hrg-tp-body",
+          "target": [
+            "#tplPrimaryEditor"
+          ],
+          "title": "Contract text",
+          "text": "Type or paste the contract here and format it like a normal document. Put placeholders wherever an employee's details should appear.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "hrg-tp-translated",
+          "target": [
+            "#tplTranslatedEditor"
+          ],
+          "title": "Translated text",
+          "text": "The same contract in the second language, if you ticked the translated version.",
+          "placement": "top",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "hrg-tp-placeholders",
+          "target": [
+            "#templateModal button[onclick*='Company Name']"
+          ],
+          "title": "Dynamic placeholders",
+          "text": "Click a tag to copy it, then paste it into the text. When a contract is printed for an employee, each tag is replaced with their details: name, address, PIN, ID number, department, the contract dates and wage.<br><br><b>[Page Break]</b> starts a new page and <b>[Page Number]</b> numbers the pages.",
+          "placement": "left",
+          "climb": 2
+        },
+        {
+          "id": "hrg-tp-signatures",
+          "target": [
+            "#templateModal button[onclick*='Employee Signature']"
+          ],
+          "title": "Signatures",
+          "text": "Put <b>[Employee Signature]</b> and <b>[Manager Signature]</b> where each person signs. Their captured signatures are printed in those places.",
+          "placement": "left"
+        },
+        {
+          "id": "hrg-tp-preview",
+          "target": [
+            "#tplPreviewEmpSelect"
+          ],
+          "title": "Preview",
+          "text": "Choose an employee (or leave dummy data) and click <b>Preview PDF</b> to see exactly how the contract will print, with the placeholders filled in.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "hrg-tp-save",
+          "target": [
+            "#btnSaveTemplate"
+          ],
+          "title": "Save",
+          "text": "Saves the template. It's then available under <b>Assign Contract</b>. This guide hasn't saved anything: click Cancel if you were only practising.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "hr_dashboard.guide.assign-contract",
+      "title": "Assign and approve a contract",
+      "icon": "fa-user-check",
+      "blurb": "Give an employee a contract, approve it, and file the signed copy.",
+      "steps": [
+        {
+          "id": "hrg-as-open",
+          "target": [
+            "#sidebarNav a[onclick*='onboarding']"
+          ],
+          "title": "Contracts & Onboarding",
+          "text": "Contracts are assigned here. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Contracts & Onboarding"
+        },
+        {
+          "id": "hrg-as-tab",
+          "target": [
+            "#tab-assign"
+          ],
+          "title": "Assign Contract",
+          "text": "Click the <b>Assign Contract</b> tab.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Assign Contract"
+        },
+        {
+          "id": "hrg-as-emp",
+          "target": [
+            "#onboarding-assign button[onclick*='openObEmpModal']"
+          ],
+          "title": "1. Select the employee",
+          "text": "Opens a list where you search by name or PIN and filter by department. You can include terminated employees, for example when a seasonal worker comes back.",
+          "placement": "bottom",
+          "timeout": 3000
+        },
+        {
+          "id": "hrg-as-template",
+          "target": [
+            "#obTemplateSelect"
+          ],
+          "title": "2. Contract template",
+          "text": "Which contract they get. Templates are set up under <b>Contract Templates</b>.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hrg-as-from",
+          "target": [
+            "#obValidFrom"
+          ],
+          "title": "Valid From",
+          "text": "The first day of the contract.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hrg-as-to",
+          "target": [
+            "#obValidTo"
+          ],
+          "title": "Valid To (Auto-Terminate)",
+          "text": "The last day of the contract. The employee is <b>terminated automatically</b> on this date, and it's scheduled as soon as you assign the contract.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hrg-as-perm",
+          "target": [
+            "#obIsPermanent"
+          ],
+          "title": "Permanent",
+          "text": "Tick this for a permanent contract with no end date. Valid To is then switched off.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "hrg-as-wage",
+          "target": [
+            "#onbWageType"
+          ],
+          "title": "Wage (optional)",
+          "text": "The wage type (Hourly or Fixed/Monthly) and rate for this contract. You confirm them again when the contract is approved.",
+          "placement": "top",
+          "climb": 2
+        },
+        {
+          "id": "hrg-as-assign",
+          "target": [
+            "#btnAssignContract"
+          ],
+          "title": "Assign",
+          "text": "Creates the contract and moves it to <b>Awaiting Approval</b>. Nothing has been assigned by this guide.",
+          "placement": "top"
+        },
+        {
+          "id": "hrg-as-awaiting",
+          "target": [
+            "#awaitingTableBody"
+          ],
+          "title": "Awaiting Approval",
+          "text": "New contracts wait here. Use the icons to check signatures and documents, and the printer for the contract PDF. <b>Approve</b> lets you confirm the department, the employee's PIN (you can give a new one) and the wage, then <b>Approve &amp; Activate</b>.",
+          "placement": "top",
+          "before": [
+            {
+              "click": "#tab-awaiting"
+            }
+          ]
+        },
+        {
+          "id": "hrg-as-audit",
+          "target": [
+            "#auditContractsTableBody"
+          ],
+          "title": "Contracts Audit",
+          "text": "Active contracts show here. Once the employee has signed the paper copy, use the <b>upload</b> button on their row so it's on file. The <b>Missing Physical Copy</b> and <b>Expiring in Month</b> filters help you follow up.",
+          "placement": "top",
+          "before": [
+            {
+              "click": "#tab-audit"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "hr_dashboard.guide.import-pdf",
+      "title": "Import a PDF contract and map its fields",
+      "icon": "fa-file-pdf",
+      "blurb": "Use your existing contract PDF as-is, and mark where each employee's details go.",
+      "steps": [
+        {
+          "id": "hrg-pdf-open",
+          "target": [
+            "#sidebarNav a[onclick*='onboarding']"
+          ],
+          "title": "Contracts & Onboarding",
+          "text": "Contract templates live here. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Contracts & Onboarding"
+        },
+        {
+          "id": "hrg-pdf-tab",
+          "target": [
+            "#tab-templates"
+          ],
+          "title": "Contract Templates",
+          "text": "Click the <b>Contract Templates</b> tab.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Contract Templates"
+        },
+        {
+          "id": "hrg-pdf-import",
+          "target": [
+            "#onboarding-templates button[onclick*='hiddenTemplateUploadV2']"
+          ],
+          "title": "Import Contract PDF",
+          "text": "Click <b>Import Contract PDF</b> and choose your contract. It's stored exactly as it is, and the field mapper opens straight after.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click and choose your PDF"
+        },
+        {
+          "id": "hrg-pdf-canvas",
+          "target": [
+            "#mapperCanvasWrap"
+          ],
+          "title": "Your PDF",
+          "text": "This is your contract, exactly as imported; the document itself is never changed. <b>Drag a box</b> over each place where an employee's detail belongs, such as the name line, then choose which detail fills that box.",
+          "placement": "right",
+          "timeout": 120000
+        },
+        {
+          "id": "hrg-pdf-pages",
+          "target": [
+            "#mapperPageInfo"
+          ],
+          "title": "Pages",
+          "text": "Move between the pages of the contract to map fields on each one.",
+          "placement": "left",
+          "climb": 1
+        },
+        {
+          "id": "hrg-pdf-list",
+          "target": [
+            "#mapperFieldList"
+          ],
+          "title": "Mapped fields",
+          "text": "Every box you've placed so far, and the detail each one shows.",
+          "placement": "left"
+        },
+        {
+          "id": "hrg-pdf-save",
+          "target": [
+            "#btnSaveFieldMap"
+          ],
+          "title": "Save Field Map",
+          "text": "Saves your boxes. When this template is assigned, each employee's details are filled into those boxes, and a cover page and signature block are added.<br><br>You can come back any time with the <b>Map Fields</b> button on the template.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "hr_dashboard.guide.infringement-rules",
+      "title": "Set up infringement rules",
+      "icon": "fa-gavel",
+      "blurb": "Create categories and the rules (with severity) that infringements are recorded against.",
+      "steps": [
+        {
+          "id": "hrg-ir-open",
+          "target": [
+            "#sidebarNav a[onclick*='settings']"
+          ],
+          "title": "HR Settings",
+          "text": "Categories and rules live here. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click HR Settings"
+        },
+        {
+          "id": "hrg-ir-cattab",
+          "target": [
+            "#tab-settings-categories"
+          ],
+          "title": "Categories",
+          "text": "Click <b>Categories</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Categories"
+        },
+        {
+          "id": "hrg-ir-catadd",
+          "target": [
+            "#settings-categories button[onclick='openCategoryModal()']"
+          ],
+          "title": "Add a category",
+          "text": "Click to add a category.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click to add a category"
+        },
+        {
+          "id": "hrg-ir-catname",
+          "target": [
+            "#catName"
+          ],
+          "title": "Category Name",
+          "text": "A group for related rules, for example <b>Safety Gear</b>, <b>Attendance</b> or <b>Conduct</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "hrg-ir-cattype",
+          "target": [
+            "#catType"
+          ],
+          "title": "Applies To",
+          "text": "Whether the category is for <b>Infringements</b> or <b>Performance Notes</b>. Save it, then carry on.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hrg-ir-ruletab",
+          "target": [
+            "#tab-settings-rules"
+          ],
+          "title": "HR Rules",
+          "text": "Now the rules. Close the category form (Save or Cancel), then click <b>HR Rules</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Close the form, then click HR Rules"
+        },
+        {
+          "id": "hrg-ir-ruleadd",
+          "target": [
+            "#settings-rules button[onclick='openTypeModal()']"
+          ],
+          "title": "Add a rule",
+          "text": "Click to add a rule.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click to add a rule"
+        },
+        {
+          "id": "hrg-ir-code",
+          "target": [
+            "#typeCode"
+          ],
+          "title": "Rule Code",
+          "text": "A short unique code, for example <b>ATT-01</b>. It identifies the rule on records and reports.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "hrg-ir-cat",
+          "target": [
+            "#typeCat"
+          ],
+          "title": "Category",
+          "text": "Which category the rule belongs to.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hrg-ir-desc",
+          "target": [
+            "#typeDesc"
+          ],
+          "title": "Description",
+          "text": "What the rule is, in plain words. This is what people see when recording an infringement.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hrg-ir-sev",
+          "target": [
+            "#typeSev"
+          ],
+          "title": "Severity",
+          "text": "<b>1</b> Verbal Warning, <b>2</b> Written Warning, <b>3</b> Final Written Warning, <b>4</b> Termination / Dismissal.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "hrg-ir-save",
+          "target": [
+            "#typeForm button[type='submit']"
+          ],
+          "title": "Save",
+          "text": "Saves the rule. It can then be recorded against employees. This guide hasn't saved anything: click Cancel if you were only practising.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "hr_dashboard.guide.workflow",
+      "title": "Build an onboarding workflow",
+      "icon": "fa-project-diagram",
+      "blurb": "Create a workflow, add its steps, and assign it to employees.",
+      "steps": [
+        {
+          "id": "hrg-wf-open",
+          "target": [
+            "#sidebarNav a[onclick*='workflows']"
+          ],
+          "title": "Workflows",
+          "text": "Onboarding workflows live here. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Workflows"
+        },
+        {
+          "id": "hrg-wf-create",
+          "target": [
+            "#workflow-active button[onclick='openWorkflowModal()']"
+          ],
+          "title": "Create Workflow",
+          "text": "Click to create a workflow.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click to create a workflow"
+        },
+        {
+          "id": "hrg-wf-name",
+          "target": [
+            "#wfName"
+          ],
+          "title": "Workflow Name",
+          "text": "For example <b>Seasonal Worker Onboarding</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "hrg-wf-desc",
+          "target": [
+            "#wfDesc"
+          ],
+          "title": "Description",
+          "text": "What this workflow is for.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hrg-wf-mode",
+          "target": [
+            "#wfRoutingMode"
+          ],
+          "title": "Routing Mode",
+          "text": "<b>Custom / Dynamic</b>: steps go to the new employee, their department's HOD, or a specific person.<br><b>System Hierarchy</b>: steps go to the approval levels of a hierarchy from <b>Routing &amp; Stand-ins</b>.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hrg-wf-hier",
+          "target": [
+            "#wfHierarchySelect"
+          ],
+          "title": "Hierarchy",
+          "text": "With System Hierarchy, choose which approval hierarchy the steps follow.",
+          "placement": "bottom",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "hrg-wf-save",
+          "target": [
+            "#workflowBuilderForm button[type='submit']"
+          ],
+          "title": "Save the workflow",
+          "text": "Click <b>Save Workflow</b> (or Cancel if you're only practising), then click <b>Next</b>. Its card then appears in the list, ready for steps.",
+          "placement": "top"
+        },
+        {
+          "id": "hrg-wf-addstep",
+          "target": [
+            "#workflowListContainer button[onclick*='openStepModal']"
+          ],
+          "title": "Add Step",
+          "text": "Each workflow card has <b>Add Step</b>. Click it on your workflow.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Click Add Step",
+          "optional": true
+        },
+        {
+          "id": "hrg-wf-stepname",
+          "target": [
+            "#stepName"
+          ],
+          "title": "Step Name (Task)",
+          "text": "What needs to be done, for example <b>Sign contract</b> or <b>Issue PPE</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "optional": true,
+          "timeout": 4000
+        },
+        {
+          "id": "hrg-wf-stepdesc",
+          "target": [
+            "#stepDesc"
+          ],
+          "title": "Instructions",
+          "text": "How to do it, for whoever gets the task.",
+          "placement": "bottom",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "hrg-wf-assignee",
+          "target": [
+            "#stepAssigneeType"
+          ],
+          "title": "Responsible Party",
+          "text": "Who does this step. With Custom routing: the new employee, their department's HOD, or a specific individual. With System Hierarchy: the Level 1, 2 or 3 approver, or the standing approver.",
+          "placement": "bottom",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "hrg-wf-order",
+          "target": [
+            "#stepOrder"
+          ],
+          "title": "Step Sequence",
+          "text": "The order of the step: 1 first, then 2, and so on.",
+          "placement": "top",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "hrg-wf-esc",
+          "target": [
+            "#stepEscalation"
+          ],
+          "title": "Escalation Days",
+          "text": "If the step isn't done within this many days, it's escalated. <b>0</b> means never.",
+          "placement": "top",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "hrg-wf-doc",
+          "target": [
+            "#stepReqAttachment"
+          ],
+          "title": "Require Document Upload",
+          "text": "Tick this if the step can only be completed with a document attached, for example a signed form.",
+          "placement": "top",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "hrg-wf-stepsave",
+          "target": [
+            "#workflowStepForm button[type='submit']"
+          ],
+          "title": "Save Step",
+          "text": "Saves the step on the workflow. Add as many steps as you need.",
+          "placement": "top",
+          "optional": true
+        },
+        {
+          "id": "hrg-wf-assign",
+          "target": [
+            "#assignWfSelect"
+          ],
+          "title": "Assign it",
+          "text": "Finally, on <b>Assign Workflow</b>, choose the workflow and who it applies to: everyone, a department or one employee.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "closeModal",
+              "args": [
+                "workflowStepModal"
+              ]
+            },
+            {
+              "call": "switchWorkflowTab",
+              "args": [
+                "assign"
+              ]
+            }
+          ],
+          "guideOnly": true
+        }
+      ]
+    },
+    {
+      "key": "hr_dashboard.guide.hierarchy",
+      "title": "Set up approval routing and stand-ins",
+      "icon": "fa-sitemap",
+      "blurb": "Create an approval hierarchy with levels, and cover for a manager who is away.",
+      "steps": [
+        {
+          "id": "hrg-hi-open",
+          "target": [
+            "#sidebarNav a[onclick*='hierarchies']"
+          ],
+          "title": "Routing & Stand-ins",
+          "text": "Approval routing lives here. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Routing & Stand-ins"
+        },
+        {
+          "id": "hrg-hi-create",
+          "target": [
+            "#routing-structures button[onclick='openHierarchyModal()']"
+          ],
+          "title": "Create a hierarchy",
+          "text": "Click to create an approval hierarchy.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click to create a hierarchy"
+        },
+        {
+          "id": "hrg-hi-name",
+          "target": [
+            "#hierarchyName"
+          ],
+          "title": "Hierarchy Name",
+          "text": "For example <b>Farm Operations Approvals</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "hrg-hi-levels",
+          "target": [
+            "#hierarchyModal button[onclick*='addHierarchyLevel']"
+          ],
+          "title": "Approval levels",
+          "text": "Click <b>Add Level</b> for each level of approval. On each level, <b>Select</b> who approves: a department (its HOD) or a specific active user. Level 1 approves first.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "hrg-hi-standing",
+          "target": [
+            "#hStanding"
+          ],
+          "title": "Standing Approver",
+          "text": "Optional fallback: the person who approves when a level has nobody to approve.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "hrg-hi-save",
+          "target": [
+            "#hierarchyForm button[type='submit']"
+          ],
+          "title": "Save Hierarchy",
+          "text": "Saves it, ready for workflows set to <b>System Hierarchy</b>. Click <b>Save Hierarchy</b> (or Cancel if you're only practising), then click <b>Next</b>.",
+          "placement": "top"
+        },
+        {
+          "id": "hrg-hi-sitab",
+          "target": [
+            "#tab-route-standins"
+          ],
+          "title": "Stand-in Management",
+          "text": "Click <b>Stand-in Management</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Stand-in Management"
+        },
+        {
+          "id": "hrg-hi-siadd",
+          "target": [
+            "#routing-standins button[onclick='openStandInModal()']"
+          ],
+          "title": "Assign a stand-in",
+          "text": "Click to assign a stand-in.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click to assign a stand-in"
+        },
+        {
+          "id": "hrg-hi-orig",
+          "target": [
+            "#standInOriginal"
+          ],
+          "title": "Who is away",
+          "text": "The manager who is away.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "hrg-hi-target",
+          "target": [
+            "#standInTarget"
+          ],
+          "title": "Who takes over",
+          "text": "The person approving in their place.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hrg-hi-dates",
+          "target": [
+            "#standInStart"
+          ],
+          "title": "From and to",
+          "text": "The stand-in only applies between these dates. Afterwards, approvals go back to the original manager automatically.",
+          "placement": "top",
+          "climb": 2
+        },
+        {
+          "id": "hrg-hi-sisave",
+          "target": [
+            "#standInForm button[type='submit']"
+          ],
+          "title": "Assign Stand-in",
+          "text": "Saves the stand-in. This guide hasn't saved anything: click Cancel if you were only practising.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "hr_dashboard.guide.kpi-report",
+      "title": "Calculate KPIs and print a report",
+      "icon": "fa-chart-line",
+      "blurb": "Measure attendance KPIs for a period and print an employee, department or company report.",
+      "steps": [
+        {
+          "id": "hrg-kp-open",
+          "target": [
+            "#sidebarNav a[onclick*='kpi']"
+          ],
+          "title": "Core KPIs",
+          "text": "KPIs live here. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Core KPIs"
+        },
+        {
+          "id": "hrg-kp-dates",
+          "target": [
+            "#kpiStartDate"
+          ],
+          "title": "1. Choose the period",
+          "text": "Set the start and end date.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "hrg-kp-who",
+          "target": [
+            "#kpiDeptFilter"
+          ],
+          "title": "2. Who to measure",
+          "text": "A department, or one employee (next to it), or leave both empty for the whole company.<br><br>For a <b>Dept Report</b> choose a department; for an <b>Employee Report</b> choose an employee.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "hrg-kp-calc",
+          "target": [
+            "#page-kpi button[onclick*='loadHRKPIs']"
+          ],
+          "title": "3. Calculate",
+          "text": "Click <b>Calculate</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Calculate"
+        },
+        {
+          "id": "hrg-kp-cards",
+          "target": [
+            "#kpiBradfordCard"
+          ],
+          "title": "4. Read the results",
+          "text": "The seven KPIs for your choice. Click any card to see how it was worked out and whether it's healthy (green), worth watching (amber) or needs action (red).",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 15000
+        },
+        {
+          "id": "hrg-kp-report",
+          "target": [
+            "#kpiReportsDropdown"
+          ],
+          "title": "5. Print a report",
+          "text": "Choose <b>Employee</b>, <b>Dept</b> or <b>Company Report</b>. Each prints the calculation you've just made.",
+          "placement": "left",
+          "before": [
+            {
+              "addClass": "#kpiReportsDropdown",
+              "cls": "show"
+            }
+          ],
+          "after": [
+            {
+              "removeClass": "#kpiReportsDropdown",
+              "cls": "show"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

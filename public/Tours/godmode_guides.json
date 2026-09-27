@@ -1,0 +1,95 @@
+{
+  "guides": [
+    {
+      "key": "gm.guide.deploy-tenant",
+      "title": "Start a tenant onboarding",
+      "icon": "fa-rocket",
+      "blurb": "Fill in the tenant form and save it as a quote",
+      "steps": [
+        {
+          "id": "gm.go.open-tenants",
+          "title": "Open Tenants",
+          "text": "Click <b>Tenants</b> in the menu.",
+          "target": "#sidebarNav button[onclick^=\"showSection('tenants'\"]",
+          "mode": "click",
+          "hint": "Click Tenants"
+        },
+        {
+          "id": "gm.go.start",
+          "title": "Start onboarding",
+          "text": "Click <b>Start onboarding</b>.",
+          "target": "#obStartBtn, #page-tenants button[onclick^=\"openCreateTenantModal\"]",
+          "mode": "click",
+          "hint": "Click Start onboarding",
+          "guideOnly": true
+        },
+        {
+          "id": "gm.go.name",
+          "title": "Company name",
+          "text": "Type the client's company name - that is all you need to save.",
+          "target": "#obName",
+          "placement": "bottom",
+          "timeout": 4000
+        },
+        {
+          "id": "gm.go.key",
+          "title": "Licence key",
+          "text": "Type a licence key or click <b>Suggest</b>.",
+          "target": "#obKey",
+          "placement": "bottom"
+        },
+        {
+          "id": "gm.go.contacts",
+          "title": "Main contact",
+          "text": "The first contact is the main contact: name, surname, email and cell.",
+          "target": "#obContacts",
+          "placement": "top"
+        },
+        {
+          "id": "gm.go.next",
+          "title": "Save and go on",
+          "text": "<b>Save &amp; next</b> takes you to Employees, then Modules and the rest. Stop any time with <b>Save &amp; close</b>.",
+          "target": "#obNext",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "gm.guide.link-device",
+      "title": "Link a clocking device",
+      "icon": "fa-microchip",
+      "blurb": "Connect a device to a tenant",
+      "steps": [
+        {
+          "id": "gm.gl.open-hardware",
+          "target": "#sidebarNav button[onclick^=\"showSection('hardware'\"]",
+          "mode": "click",
+          "hint": "Click Hardware",
+          "title": "Open Hardware",
+          "text": "Click <b>Hardware</b> in the menu."
+        },
+        {
+          "id": "gm.gl.search",
+          "target": "#deviceSearch",
+          "timeout": 3000,
+          "title": "Find the device",
+          "text": "Type part of the serial number or the device name."
+        },
+        {
+          "id": "gm.gl.tenant",
+          "target": "#hardwareTable select[id^=\"assign-\"]",
+          "optional": true,
+          "title": "Pick the tenant",
+          "text": "Choose the tenant in the <b>Assigned Tenant</b> column. Dahua devices also need their admin password."
+        },
+        {
+          "id": "gm.gl.link",
+          "target": "#hardwareTable button[onclick^=\"assignDevice\"]",
+          "optional": true,
+          "title": "Save the link",
+          "text": "Press <b>Update Link</b>. Any held punches move into the tenant and show on timesheets shortly."
+        }
+      ]
+    }
+  ]
+}

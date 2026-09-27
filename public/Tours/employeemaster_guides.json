@@ -1,0 +1,1497 @@
+{
+  "_howto": "Employee Master how-to guides (listed under How-to guides in the ? menu). mode click = the user clicks the real button. optional = skipped when that field isn't on screen. Never reuse a step id.",
+  "guides": [
+    {
+      "key": "employeemaster.guide.create-employee",
+      "title": "Create an employee",
+      "icon": "fa-user-plus",
+      "blurb": "Add a new employee, with what each field on all five tabs is for.",
+      "steps": [
+        {
+          "id": "emg-cr-open",
+          "target": [
+            "#sidebarNav a[data-permission='tna_employees']"
+          ],
+          "title": "Active Personnel",
+          "text": "New employees are added from the Active Personnel list. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Active Personnel"
+        },
+        {
+          "id": "emg-cr-button",
+          "target": [
+            "#page-employees button[onclick*='openCreateModal']"
+          ],
+          "title": "Create Employee",
+          "text": "Click <b>Create Employee</b>. Nothing is saved until you click <b>Create Employee</b> again at the bottom of the form, so it's safe to follow along.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Create Employee"
+        },
+        {
+          "id": "emg-cr-required",
+          "target": [
+            "#createEmpPin"
+          ],
+          "title": "Required fields",
+          "text": "Fields marked with a red <b>*</b> must be filled in: PIN, First Name, Last Name, ID/Passport No, Department, Group Start Date and Default Shift. Everything else is optional and can be added later on Edit.<br><br>The <b>Display PIN / ID</b> is the employee's number on lists, reports and devices. It must be unique.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='personal']"
+            }
+          ],
+          "timeout": 5000
+        },
+        {
+          "id": "emg-cr-names",
+          "target": [
+            "#createEmpFirstName"
+          ],
+          "title": "Names",
+          "text": "<b>First Name</b> and <b>Last Name</b> are required. <b>Title</b>, <b>Initials</b>, <b>Second Name</b> and <b>Known As</b> (the name they go by) are optional.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='personal']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-id",
+          "target": [
+            "#createEmpIDNumber"
+          ],
+          "title": "ID or Passport No (identity)",
+          "text": "Required. Their South African ID number or, if they don't have one, their passport number. This is their identity number on lists, reports and exports.<br><br>If you type a passport number here, <b>Passport Number</b> on the Employment tab fills in by itself.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='personal']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-personal",
+          "target": [
+            "#createEmpDateOfBirth"
+          ],
+          "title": "Personal details",
+          "text": "<b>Date of Birth</b>, <b>Gender</b>, <b>Marital Status</b>, <b>Language</b>, <b>Ethnic Group</b> and <b>Nationality</b>. Optional, kept for HR records and reporting.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='personal']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-contacts",
+          "target": [
+            "#createEmpContactBody"
+          ],
+          "title": "Contact Information",
+          "text": "Click <b>Add Contact</b>, choose the type (Cell, Home, Business, Email or Other) and type the detail. One of each type is saved. Keep the cell number and email address correct.",
+          "placement": "top",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='personal']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-dept",
+          "target": [
+            "#createEmpDeptDisplay"
+          ],
+          "title": "Department",
+          "text": "Required. The department decides which clocking devices the employee is sent to (through <b>Access Roles</b> and Settings &gt; Access Zones, or their Access Control levels), where they sit in the hierarchy, and how they're grouped in reports.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-job",
+          "target": [
+            "#createEmpJobTitle"
+          ],
+          "title": "Job details",
+          "text": "<b>Job Title</b> shows on the list and reports. <b>Job Grade</b> is optional, and <b>Occupation (Legacy)</b> is an older field kept for existing data.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-start",
+          "target": [
+            "#createEmpStartDate"
+          ],
+          "title": "Group Start Date",
+          "text": "Required. Their first day. If it's in the future, they wait under the <b>Pending start</b> filter. On that day they become active automatically and are sent to their clocking devices.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-type",
+          "target": [
+            "#createEmpTypeDisplay"
+          ],
+          "title": "Employee Type",
+          "text": "<b>Permanent</b>, <b>Seasonal</b>, or one of your own types from Custom Attributes.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-end",
+          "target": [
+            "#createEmpScheduledTermDate"
+          ],
+          "title": "Scheduled End Date",
+          "text": "For anyone with a known last day, of any employee type. They are terminated automatically on this date (reason End of Contract). Leave it empty if there's no end date.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='employment']"
+            }
+          ],
+          "optional": true
+        },
+        {
+          "id": "emg-cr-cost",
+          "target": [
+            "#createEmpCostCentre"
+          ],
+          "title": "Cost Centre",
+          "text": "Links the employee to a cost centre for financial reporting (set up in <b>Departments &gt; Cost Centres</b>).",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-prev",
+          "target": [
+            "#createEmpPrevWorked"
+          ],
+          "title": "Previous Period Worked",
+          "text": "For someone who has worked here before: the date of their earlier period of employment.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='employment']"
+            }
+          ],
+          "optional": true
+        },
+        {
+          "id": "emg-cr-engaged",
+          "target": [
+            "#createEmpDateEngaged"
+          ],
+          "title": "Date Engaged",
+          "text": "The date they were engaged, if different from the Group Start Date.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-card",
+          "target": [
+            "#createEmpCardNo"
+          ],
+          "title": "RFID Card Number",
+          "text": "Their access card number, if they clock or open doors with a card. It's sent to their devices with their name and PIN.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-passport",
+          "target": [
+            "#createEmpPassportNumber"
+          ],
+          "title": "Passport (foreign nationals)",
+          "text": "For foreign nationals only. <b>Passport Number</b> fills in by itself from the identity number on the Personal tab, so just check it, then add the <b>Passport Country</b>, <b>Passport Expiry</b> and <b>Work Permit Expiry</b>. Leave this block empty for South African ID holders.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-reports",
+          "target": [
+            "#createEmpReportsToSearch"
+          ],
+          "title": "Reports To",
+          "text": "Their direct manager. Type a name or PIN to find them.",
+          "placement": "right",
+          "climb": 2,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-hod",
+          "target": [
+            "#createEmpIsHOD"
+          ],
+          "title": "Head of Department",
+          "text": "Tick this if the person heads a department, then choose which department(s).",
+          "placement": "right",
+          "climb": 2,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-tax",
+          "target": [
+            "#createEmpTaxNumber"
+          ],
+          "title": "Tax & Statutory",
+          "text": "<b>Tax Number</b>, <b>Tax Office</b>, <b>Tax Status</b>, <b>UIF Status</b>, and up to three tax directives with a <b>Directive %</b>. Filled in for payroll.",
+          "placement": "right",
+          "climb": 2,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-flags",
+          "target": [
+            "#createEmpLegallyRetired"
+          ],
+          "title": "Statutory flags",
+          "text": "<b>Legally Retired</b>, <b>Seasonal Worker</b> and <b>Exclude for OID</b> (leave them out of the Compensation Fund / OID returns). Tick only what applies.",
+          "placement": "right",
+          "climb": 2,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-shift",
+          "target": [
+            "#createEmpDefaultShift"
+          ],
+          "title": "Default Shift",
+          "text": "Required. The shift they normally work, shown with its start and end times (from <b>Time &amp; Attendance &gt; Shift Rules</b>). It drives their roster and how their clockings are worked out: late arrival, early departure and overtime.<br><br>The <b>Effective Date Range</b> next to it is only needed when you change a shift later, on Edit.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-ot",
+          "target": [
+            "#createEmpOvertime"
+          ],
+          "title": "Overtime Eligibility",
+          "text": "How their extra hours are treated: <b>Paid Overtime</b>, <b>Unpaid Overtime</b> or <b>Time-Off in Lieu</b>.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-days",
+          "target": [
+            "#createDayChk_1"
+          ],
+          "title": "Default Working Days",
+          "text": "Tick the days this person normally works. If you tick none, Monday to Friday is used. Days that aren't ticked are their rest days: they aren't expected at work, and time worked on a rest day counts as overtime that needs approval.",
+          "placement": "right",
+          "climb": 2,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-otrule",
+          "target": [
+            "#createEmpCustomOTRule"
+          ],
+          "title": "Custom OT Rule",
+          "text": "An overtime rule just for this person, from <b>Time &amp; Attendance &gt; Overtime Rules</b>. Leave it on <b>No Rule</b> to use the normal rules.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-period",
+          "target": [
+            "#createEmpPayrollPeriod"
+          ],
+          "title": "Payroll Period",
+          "text": "The pay period they belong to, such as weekly or monthly. Their timesheets and payroll exports follow this period.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-attributes",
+          "target": [
+            "#createEmpAttributesContainer"
+          ],
+          "title": "Custom Attributes",
+          "text": "Your company's own fields, created in <b>Custom Attributes</b> (for example Boot Size or Tractor Licence). Fill in any that apply; empty ones are skipped.",
+          "placement": "top",
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='financial']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-allowances",
+          "target": [
+            "#createEmpEligibleNight"
+          ],
+          "title": "Allowances",
+          "text": "Whether they qualify for the <b>Night Allowance</b> and the <b>Standby Allowance</b>. Both are ticked by default.",
+          "placement": "right",
+          "climb": 2,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='financial']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-wage",
+          "target": [
+            "#createEmpWageType"
+          ],
+          "title": "Wage",
+          "text": "<b>Wage Type</b> (Hourly Rate or Fixed Salary), <b>Rate/Amount</b>, the date it's <b>Valid From</b>, and <b>Pay Method</b> (EFT, Cash or Cheque). Employee Costs uses exactly this wage type and rate.",
+          "placement": "right",
+          "climb": 2,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='financial']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-dependants",
+          "target": [
+            "#createEmpDependantsBody"
+          ],
+          "title": "Medical aid beneficiaries",
+          "text": "Click <b>Add</b> for each dependant on their medical aid: name, relationship, date of birth, and whether they're covered.",
+          "placement": "top",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='hr']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-emergency",
+          "target": [
+            "#createEmpEmergencyBody"
+          ],
+          "title": "Emergency contacts",
+          "text": "Click <b>Add</b> for each person to contact in an emergency.",
+          "placement": "top",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='hr']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-benefits",
+          "target": [
+            "#createEmpBenefitsBody"
+          ],
+          "title": "Fund & Benefit Memberships",
+          "text": "Click <b>Add</b> for each fund or benefit they belong to.",
+          "placement": "top",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='hr']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-address",
+          "target": [
+            "#createEmpAddressBody"
+          ],
+          "title": "Addresses",
+          "text": "Click <b>Add Address</b> and choose the type: <b>Residential</b>, <b>Postal</b> or <b>Work</b> (one of each is saved). Use <b>Clone</b> on a row to start another type from the same address.",
+          "placement": "top",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='docs']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-bank",
+          "target": [
+            "#createEmpBankName"
+          ],
+          "title": "Banking details",
+          "text": "<b>Bank Name</b>, <b>Account Number</b>, <b>Branch Code</b> and <b>Account Type</b>, for paying them by EFT.",
+          "placement": "right",
+          "climb": 2,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='docs']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-docs",
+          "target": [
+            "#createEmpModal input[onchange*='createHiddenIDDocBase64']"
+          ],
+          "title": "Attachments",
+          "text": "Upload a copy of their <b>ID or passport</b>, their <b>work permit</b> and a <b>bank confirmation</b> letter (a picture or PDF). They are saved with the employee and can be viewed on their profile.",
+          "placement": "top",
+          "climb": 2,
+          "before": [
+            {
+              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='docs']"
+            }
+          ]
+        },
+        {
+          "id": "emg-cr-save",
+          "target": [
+            "#createEmpBtn"
+          ],
+          "title": "Create Employee",
+          "text": "Saves the new employee with everything you filled in. Straight after that:<br><br>&bull; They are sent to the clocking devices their department and access allow.<br>&bull; A self-service login is created for them. Their username and first password are their PIN, so ask them to change it.<br><br>This guide hasn't created anything: close the form if you were only practising.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "employeemaster.guide.edit-employee",
+      "title": "Every field on an employee profile",
+      "icon": "fa-id-card",
+      "blurb": "Open a profile and go through each tab and field, including Default Shift and working days.",
+      "steps": [
+        {
+          "id": "emg-ed-open",
+          "target": [
+            "#sidebarNav a[data-permission='tna_employees']"
+          ],
+          "title": "Active Personnel",
+          "text": "Employee profiles are opened from the Active Personnel list. Click it to open the list.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Active Personnel"
+        },
+        {
+          "id": "emg-ed-edit",
+          "target": [
+            "#empTableBody button[data-tooltip='Edit Profile']"
+          ],
+          "title": "Open a profile",
+          "text": "Click <b>Edit</b> on any employee. Nothing is saved unless you click <b>Save Profile</b> at the end, so it's safe to look around.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Edit on any employee",
+          "timeout": 5000
+        },
+        {
+          "id": "emg-ed-photo",
+          "target": [
+            "#editEmpPhoto",
+            "#editEmpPhotoPlaceholder"
+          ],
+          "title": "Profile photo",
+          "text": "View, upload, crop or remove the employee's photo. This is their profile photo across the system; the Missing Photo report lists anyone without one.",
+          "placement": "right",
+          "timeout": 5000
+        },
+        {
+          "id": "emg-ed-search",
+          "target": [
+            "#editEmpFieldSearch"
+          ],
+          "title": "Find a field",
+          "text": "Type the name of any field, like <b>shift</b> or <b>bank</b>, to jump straight to it on whichever tab it's on.",
+          "placement": "bottom"
+        },
+        {
+          "id": "emg-ed-pin",
+          "target": [
+            "#editEmpDisplayPinInput"
+          ],
+          "title": "Display PIN / ID",
+          "text": "The employee's number as it appears on lists, reports and exports. It must be filled in and should be unique.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='personal']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-names",
+          "target": [
+            "#editEmpFirstName"
+          ],
+          "title": "Names",
+          "text": "<b>First Name</b> and <b>Last Name</b> are required. <b>Title</b>, <b>Initials</b>, <b>Second Name</b> and <b>Known As</b> (the name they actually go by) are optional.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='personal']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-id",
+          "target": [
+            "#editEmpIDNumber"
+          ],
+          "title": "ID or Passport No (identity)",
+          "text": "Required. Their South African ID number or, if they don't have one, their passport number. This is their identity number on lists, reports and exports.<br><br>If you type a passport number here, <b>Passport Number</b> on the Employment tab fills in by itself.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='personal']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-personal",
+          "target": [
+            "#editEmpDateOfBirth"
+          ],
+          "title": "Personal details",
+          "text": "<b>Date of Birth</b>, <b>Gender</b>, <b>Marital Status</b>, <b>Language</b>, <b>Ethnic Group</b> and <b>Nationality</b>. All optional; they are kept for HR records and reporting.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='personal']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-contacts",
+          "target": [
+            "#editEmpContactBody"
+          ],
+          "title": "Contact Information",
+          "text": "One row per type: <b>Cell</b>, <b>Home</b>, <b>Business</b>, <b>Email</b> and <b>Other</b>. Add a row, choose its type and type the detail. Keep the cell number and email address up to date.",
+          "placement": "top",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='personal']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-dept",
+          "target": [
+            "#editEmpDeptDisplay"
+          ],
+          "title": "Department",
+          "text": "Required. The department decides which clocking devices they can use (through <b>Access Roles</b>), where they sit in the hierarchy, and how they are grouped in reports.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-dept-date",
+          "target": [
+            "#editEmpDeptEffectiveFrom"
+          ],
+          "title": "Transfer Effective Date",
+          "text": "Only appears when you change the department. The date the move takes effect. Leave from that date is measured against the new department.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
+            }
+          ],
+          "optional": true
+        },
+        {
+          "id": "emg-ed-job",
+          "target": [
+            "#editEmpJobTitle"
+          ],
+          "title": "Job details",
+          "text": "<b>Job Title</b> shows on the employee list and reports. <b>Job Grade</b> is optional, and <b>Occupation (Legacy)</b> is an older field kept for existing data.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-start",
+          "target": [
+            "#editEmpStartDate"
+          ],
+          "title": "Group Start Date",
+          "text": "Required. Their first day with the group. If it's still in the future, they show under the <b>Pending start</b> filter until that day.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-type",
+          "target": [
+            "#editEmpTypeDisplay"
+          ],
+          "title": "Employee Type",
+          "text": "<b>Permanent</b>, <b>Seasonal</b>, or one of your own types from Custom Attributes.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-end",
+          "target": [
+            "#editEmpScheduledTermDate"
+          ],
+          "title": "Scheduled End Date",
+          "text": "For fixed-term people: the employee is automatically scheduled for termination on this date.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
+            }
+          ],
+          "optional": true
+        },
+        {
+          "id": "emg-ed-cost",
+          "target": [
+            "#editEmpCostCentre"
+          ],
+          "title": "Cost Centre",
+          "text": "Links the employee to a cost centre for financial reporting. Cost centres are set up in <b>Departments &gt; Cost Centres</b>.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-prev",
+          "target": [
+            "#editEmpPrevWorked"
+          ],
+          "title": "Previous Period Worked",
+          "text": "The date of an earlier period of employment, for someone who has worked here before.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
+            }
+          ],
+          "optional": true
+        },
+        {
+          "id": "emg-ed-card",
+          "target": [
+            "#editEmpCardNo"
+          ],
+          "title": "RFID Card Number",
+          "text": "The number of their access card, if they clock or open doors with a card.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-passport",
+          "target": [
+            "#editEmpPassportNumber"
+          ],
+          "title": "Passport (foreign nationals)",
+          "text": "For foreign nationals only. <b>Passport Number</b> fills in by itself from the identity number on the Personal tab, so just check it, then add the <b>Passport Country</b>, <b>Passport Expiry</b> and <b>Work Permit Expiry</b>. Leave this block empty for South African ID holders.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-reports",
+          "target": [
+            "#editEmpReportsToSearch"
+          ],
+          "title": "Reports To",
+          "text": "Their direct manager. Type a name or PIN to find them. This shows on the employee list and builds their reporting line.",
+          "placement": "right",
+          "climb": 2,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-hod",
+          "target": [
+            "#editEmpIsHOD"
+          ],
+          "title": "Head of Department",
+          "text": "Tick this if the person heads a department, then choose which department(s) they head.",
+          "placement": "right",
+          "climb": 2,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-tax",
+          "target": [
+            "#editEmpTaxNumber"
+          ],
+          "title": "Tax & Statutory",
+          "text": "<b>Tax Number</b>, <b>Tax Office</b>, <b>Tax Status</b>, <b>UIF Status</b>, and up to three tax directives with a <b>Directive %</b>. Filled in for payroll.",
+          "placement": "right",
+          "climb": 2,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-flags",
+          "target": [
+            "#editEmpLegallyRetired"
+          ],
+          "title": "Statutory flags",
+          "text": "<b>Legally Retired</b>, <b>Seasonal Worker</b>, and <b>Exclude for OID</b> (leave them out of the Compensation Fund / OID returns). Tick only what applies.",
+          "placement": "right",
+          "climb": 2,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-shift",
+          "target": [
+            "#editEmpDefaultShift"
+          ],
+          "title": "Default Shift",
+          "text": "The shift they normally work, shown with its start and end times. Shifts are set up in <b>Time &amp; Attendance &gt; Shift Rules</b>. This drives their roster and how their clockings are worked out: late arrival, early departure and overtime.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-shift-dates",
+          "target": [
+            "#editEmpShiftEffectiveDate"
+          ],
+          "title": "Effective Date Range",
+          "text": "Only needed when you <b>change</b> the Default Shift: choose the start and end dates the new shift applies to on the roster. The start can be up to 30 days in the past. If it is in the past, run the Nightly Analyzer for those dates afterwards so their attendance is recalculated.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-ot",
+          "target": [
+            "#editEmpOvertime"
+          ],
+          "title": "Overtime Eligibility",
+          "text": "How their extra hours are treated: <b>Paid Overtime</b>, <b>Unpaid Overtime</b> or <b>Time-Off in Lieu</b>.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-days",
+          "target": [
+            "#dayChk_1"
+          ],
+          "title": "Default Working Days",
+          "text": "The days this person normally works (Monday to Friday unless you change it). Days that aren't ticked are their rest days: they aren't expected at work, and time worked on a rest day counts as overtime that needs approval.",
+          "placement": "right",
+          "climb": 2,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-otrule",
+          "target": [
+            "#editEmpCustomOTRule"
+          ],
+          "title": "Custom OT Rule",
+          "text": "An overtime rule just for this person, from <b>Time &amp; Attendance &gt; Overtime Rules</b>. Leave it on <b>No Rule</b> to use the normal rules.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-period",
+          "target": [
+            "#editEmpPayrollPeriod"
+          ],
+          "title": "Payroll Period",
+          "text": "The pay period they belong to, such as weekly or monthly. Their timesheets and payroll exports follow this period.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-balances",
+          "target": [
+            "#editEmpLeaveBalancesContainer"
+          ],
+          "title": "Leave balances",
+          "text": "Their balance for each paid leave type. You can adjust a balance here.",
+          "placement": "top",
+          "climb": 0,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='financial']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-leave-history",
+          "target": [
+            "#editEmpLeaveHistoryBody"
+          ],
+          "title": "Leave history",
+          "text": "The leave they have taken.",
+          "placement": "top",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='financial']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-attributes",
+          "target": [
+            "#editEmpAttributesContainer"
+          ],
+          "title": "Custom Attributes",
+          "text": "Your company's own fields, created in <b>Custom Attributes</b>.",
+          "placement": "top",
+          "climb": 0,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='financial']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-zk",
+          "target": [
+            "#editEmpCvsZonesContainer"
+          ],
+          "title": "ZKTeco Access Levels",
+          "text": "Access levels from your ZKTeco system for this person, on top of what their department gives them.",
+          "placement": "top",
+          "climb": 0,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='financial']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-allowances",
+          "target": [
+            "#editEmpEligibleNight"
+          ],
+          "title": "Allowances",
+          "text": "Whether they qualify for the <b>Night Allowance</b> and the <b>Standby Allowance</b>.",
+          "placement": "right",
+          "climb": 2,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='financial']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-wage",
+          "target": [
+            "#editEmpWageType"
+          ],
+          "title": "Wage",
+          "text": "<b>Wage Type</b> (Hourly Rate or Fixed Salary), <b>Rate/Amount</b>, the date it's <b>Valid From</b>, and <b>Pay Method</b> (EFT, Cash or Cheque). Employee Costs uses exactly this wage type and rate.",
+          "placement": "right",
+          "climb": 2,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='financial']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-dependants",
+          "target": [
+            "#editEmpDependantsBody"
+          ],
+          "title": "Medical aid beneficiaries",
+          "text": "Dependants on their medical aid: name, relationship and date of birth.",
+          "placement": "top",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='hr']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-emergency",
+          "target": [
+            "#editEmpEmergencyBody"
+          ],
+          "title": "Emergency contacts",
+          "text": "Who to contact in an emergency.",
+          "placement": "top",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='hr']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-benefits",
+          "target": [
+            "#editEmpBenefitsBody"
+          ],
+          "title": "Fund & Benefit Memberships",
+          "text": "The funds and benefits they belong to.",
+          "placement": "top",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='hr']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-hr",
+          "target": [
+            "#editEmpInfringementsBody"
+          ],
+          "title": "Infringements & performance",
+          "text": "Infringements, warnings and performance notes recorded in <b>HR Management</b>.",
+          "placement": "top",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='hr']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-contracts",
+          "target": [
+            "#editEmpContractsBody"
+          ],
+          "title": "Employment Contracts",
+          "text": "Their employment contracts.",
+          "placement": "top",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='hr']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-chain",
+          "target": [
+            "#editEmpReportingChain"
+          ],
+          "title": "Reporting Structure",
+          "text": "Who they report to, all the way up the line.",
+          "placement": "top",
+          "climb": 0,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='hr']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-address",
+          "target": [
+            "#editEmpAddressBody"
+          ],
+          "title": "Addresses",
+          "text": "One row per type: <b>Residential</b>, <b>Postal</b> and <b>Work</b>. Use <b>Clone</b> on a row to start another type from the same address.",
+          "placement": "top",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='docs']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-bank",
+          "target": [
+            "#editEmpBankName"
+          ],
+          "title": "Banking details",
+          "text": "<b>Bank Name</b>, <b>Account Number</b>, <b>Branch Code</b> and <b>Account Type</b>, for paying them by EFT.",
+          "placement": "right",
+          "climb": 2,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='docs']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-docs",
+          "target": [
+            "#editEmpModal input[onchange*='hiddenIDDocBase64']"
+          ],
+          "title": "Attachments",
+          "text": "Upload their <b>ID or passport</b>, <b>work permit</b> and <b>bank confirmation</b> letter (a picture or PDF). Once a document is saved, <b>Attached</b> shows under it, with <b>View</b> to open it. Uploading a new file replaces the old one when you save.",
+          "placement": "top",
+          "climb": 2,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='docs']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-history",
+          "target": [
+            "#editEmpHistoryBody"
+          ],
+          "title": "Audit & History",
+          "text": "Every change made to this profile: when, what and by whom.",
+          "placement": "top",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='docs']"
+            }
+          ]
+        },
+        {
+          "id": "emg-ed-save",
+          "target": [
+            "#saveEmpBtn"
+          ],
+          "title": "Save Profile",
+          "text": "Saves your changes. This guide hasn't changed anything, so close the profile without saving if you were only looking.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "employeemaster.guide.terminate-reinstate",
+      "title": "Terminate and reinstate an employee",
+      "icon": "fa-user-slash",
+      "blurb": "End someone's employment on a chosen date, then bring a former employee back.",
+      "steps": [
+        {
+          "id": "emg-tr-open",
+          "target": [
+            "#sidebarNav a[data-permission='tna_employees']"
+          ],
+          "title": "Active Personnel",
+          "text": "Terminations start from the Active Personnel list. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Active Personnel"
+        },
+        {
+          "id": "emg-tr-terminate",
+          "target": [
+            "#empTableBody button[data-tooltip='Terminate Employee']"
+          ],
+          "title": "Terminate",
+          "text": "Click <b>Terminate</b> on any employee. Nothing happens until you click <b>Lock in System</b>, so it's safe to follow along.<br><br>To terminate several people at once, tick them in the list and use <b>Terminate</b> on the toolbar instead. It opens the same form.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Terminate on any employee",
+          "timeout": 5000
+        },
+        {
+          "id": "emg-tr-who",
+          "target": [
+            "#terminateEmpNameDisplay"
+          ],
+          "title": "Check the name",
+          "text": "Make sure this is the right person before you go any further.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "emg-tr-date",
+          "target": [
+            "#terminateEmpDate"
+          ],
+          "title": "Termination Date",
+          "text": "Their termination date. It can be today or a date still to come. On that date the profile moves to <b>Terminated Records</b>, and at midnight they are removed from your ZKTeco devices automatically.<br><br>Until then they stay active, and they appear on the <b>Pending Terminations</b> report.",
+          "placement": "right",
+          "climb": 1
+        },
+        {
+          "id": "emg-tr-reason",
+          "target": [
+            "#terminateEmpReason"
+          ],
+          "title": "Reason",
+          "text": "Why they left: Resigned, Relocated, Dismissed, Retrenched, End of Season, End of Contract or Deceased. The reason is used by the Reason filter in Terminated Records.",
+          "placement": "right",
+          "climb": 1
+        },
+        {
+          "id": "emg-tr-custom",
+          "target": [
+            "#terminateModal button[onclick*='terminateCustomReasonContainer']"
+          ],
+          "title": "Your own reason",
+          "text": "If none of the reasons fit, click <b>+ Add Custom Reason</b>. Your reason is added to the list for next time.",
+          "placement": "left"
+        },
+        {
+          "id": "emg-tr-lock",
+          "target": [
+            "#submitTerminateBtn"
+          ],
+          "title": "Lock in System",
+          "text": "Schedules the termination. This guide hasn't changed anything: click <b>Cancel</b> if you were only looking.<br><br>Next, let's see how to bring someone back.",
+          "placement": "top"
+        },
+        {
+          "id": "emg-tr-open-term",
+          "target": [
+            "#sidebarNav a[data-permission='emp_master_terminated']"
+          ],
+          "title": "Terminated Records",
+          "text": "Former employees are here. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Terminated Records",
+          "before": [
+            {
+              "call": "closeTerminateModal"
+            }
+          ]
+        },
+        {
+          "id": "emg-tr-reinstate",
+          "target": [
+            "#termTableBody button[data-tooltip='Reinstate Employee']"
+          ],
+          "title": "Reinstate",
+          "text": "Click <b>Reinstate</b> on any former employee. Again, nothing happens until you confirm.<br><br>To bring back several people, for example at the start of a season, tick them and use <b>Bulk Reinstate</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Reinstate on anyone",
+          "timeout": 5000
+        },
+        {
+          "id": "emg-tr-redate",
+          "target": [
+            "#reinstateEmpDate"
+          ],
+          "title": "Reinstatement Date",
+          "text": "The day they come back. On that date they become active in Active Personnel automatically, with their history kept, and are sent back to their clocking devices.",
+          "placement": "right",
+          "climb": 1
+        },
+        {
+          "id": "emg-tr-confirm",
+          "target": [
+            "#submitReinstateBtn"
+          ],
+          "title": "Reinstate",
+          "text": "Schedules their return. Click <b>Cancel</b> if you were only looking.<br><br>Also on each former employee's row: <b>Edit Details</b> corrects a termination date or reason, and <b>View History</b> shows every termination and reinstatement.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "employeemaster.guide.import-wizard",
+      "title": "Import employees from Excel",
+      "icon": "fa-file-import",
+      "blurb": "Fill in a template, check it with a dry run, then add or update many employees at once.",
+      "reset": [
+        {
+          "removeClass": "#dataToolsDropdownMenu",
+          "cls": "show"
+        }
+      ],
+      "steps": [
+        {
+          "id": "emg-im-open",
+          "target": [
+            "#sidebarNav a[data-permission='tna_employees']"
+          ],
+          "title": "Active Personnel",
+          "text": "The import starts from Active Personnel. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Active Personnel"
+        },
+        {
+          "id": "emg-im-template",
+          "target": [
+            "#dataToolsDropdownMenu a[onclick*='template']"
+          ],
+          "title": "Start with a template",
+          "text": "<b>Custom Blank Template</b> gives you an Excel file with the columns you tick. PIN, First Name, Last Name and Department are always included, and you can save your choice as a preset. Put one employee per row.<br><br><b>Custom Export Data</b> gives the same file already filled with your employees, which is handy for updating many people at once.",
+          "placement": "left",
+          "before": [
+            {
+              "addClass": "#dataToolsDropdownMenu",
+              "cls": "show"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "emg-im-wizard",
+          "target": [
+            "#dataToolsDropdownMenu a[onclick*='openImportWizard']"
+          ],
+          "title": "Data Import Wizard",
+          "text": "When your file is filled in, click <b>Data Import Wizard</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Data Import Wizard",
+          "before": [
+            {
+              "addClass": "#dataToolsDropdownMenu",
+              "cls": "show"
+            }
+          ]
+        },
+        {
+          "id": "emg-im-file",
+          "target": [
+            "#visibleWizardFileInput"
+          ],
+          "title": "Choose your file",
+          "text": "Choose your completed .xlsx file. The wizard opens as soon as you pick it.",
+          "placement": "bottom",
+          "climb": 1,
+          "mode": "click",
+          "hint": "Click to choose your file",
+          "timeout": 8000
+        },
+        {
+          "id": "emg-im-header",
+          "target": [
+            "#wizHeaderRow"
+          ],
+          "title": "Row containing headers",
+          "text": "Which row of your file holds the column names. Rows above it are ignored. The preview further down updates when you change it, so you can check it's right.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 120000
+        },
+        {
+          "id": "emg-im-dates",
+          "target": [
+            "#wizDateFormat"
+          ],
+          "title": "Date format",
+          "text": "How dates are written in your file. Leave it on <b>Auto-Detect</b> for normal Excel dates. Choose DD/MM/YYYY, MM/DD/YYYY or YYYY-MM-DD if dates were typed in as text.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "emg-im-mapping",
+          "target": [
+            "#mappingContainer"
+          ],
+          "title": "Column Mapping",
+          "text": "Check each column in your file is matched to the right employee field.",
+          "placement": "right",
+          "climb": 1
+        },
+        {
+          "id": "emg-im-preview",
+          "target": [
+            "#previewTbody"
+          ],
+          "title": "Raw File Preview",
+          "text": "The first rows of your file as the wizard reads them. If the columns look shifted, the header row number above is probably wrong.",
+          "placement": "top",
+          "climb": 2
+        },
+        {
+          "id": "emg-im-dryrun",
+          "target": [
+            "#wizardStep1 button[onclick*='runDryRun']"
+          ],
+          "title": "Run Validation (Dry Run)",
+          "text": "Checks every row <b>without saving anything</b>. Click it when the mapping looks right.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Run Validation"
+        },
+        {
+          "id": "emg-im-summary",
+          "target": [
+            "#dryRunSummary"
+          ],
+          "title": "Validation results",
+          "text": "How many rows will create <b>New Profiles</b>, how many will <b>Update</b> employees already on the system, and how many have <b>Errors</b> and will be skipped.",
+          "placement": "bottom",
+          "timeout": 60000
+        },
+        {
+          "id": "emg-im-rows",
+          "target": [
+            "#dryRunTbody"
+          ],
+          "title": "Row by row",
+          "text": "The result for each row, with the reason for every error. Fix those rows in your file and run the wizard again, or use <b>Back to Mapping</b> to change the mapping.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "emg-im-commit",
+          "target": [
+            "#wizardActions button[onclick*='executeImport']"
+          ],
+          "title": "Commit to Database",
+          "text": "Saves the new and updated employees. It asks you to confirm first. Nothing has been saved yet: use <b>Cancel Import</b> if you were only practising.",
+          "placement": "top"
+        }
+      ]
+    }
+  ]
+}

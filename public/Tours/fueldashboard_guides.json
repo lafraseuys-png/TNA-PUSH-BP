@@ -1,0 +1,214 @@
+{
+  "_howto": "Fuel how-to guides.",
+  "guides": [
+    {
+      "key": "fueldashboard.guide.vehicle",
+      "title": "Add a vehicle or asset",
+      "icon": "fa-truck",
+      "blurb": "Register a vehicle, tractor or machine with its reading, license and service interval.",
+      "steps": [
+        {
+          "id": "fug-v-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('vehicles'\"]"
+          ],
+          "title": "Vehicles",
+          "text": "Click <b>Vehicles</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Vehicles"
+        },
+        {
+          "id": "fug-v-add",
+          "target": [
+            "#page-vehicles button[onclick*='openAddVehicleModal']"
+          ],
+          "title": "Add Asset",
+          "text": "Click <b>Add Asset</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Add Asset"
+        },
+        {
+          "id": "fug-v-name",
+          "target": [
+            "#newVehName"
+          ],
+          "title": "Name and asset tag",
+          "text": "A name drivers recognise, and its tag or registration.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "fug-v-type",
+          "target": [
+            "#newVehType"
+          ],
+          "title": "Type and tracking",
+          "text": "What it is, and whether it's tracked in <b>kilometres</b> or <b>machine hours</b>. A sub-contractor's asset is linked to them.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fug-v-reading",
+          "target": [
+            "#newVehKM"
+          ],
+          "title": "Current reading",
+          "text": "The odometer or hour meter now. Fuel logs check the next reading against it.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fug-v-service",
+          "target": [
+            "#newVehInterval"
+          ],
+          "title": "Service and license",
+          "text": "Service interval, last service and license expiry, for the audits.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fug-v-save",
+          "target": [
+            "#addVehicleModal button[onclick*='addVehicle()']"
+          ],
+          "title": "Save",
+          "text": "Click to register it (or cancel if you're only practising).",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.depot",
+      "title": "Register a depot and its pumps",
+      "icon": "fa-oil-can",
+      "blurb": "A tank with its fuel type and size, and the pumps that dispense from it.",
+      "steps": [
+        {
+          "id": "fug-d-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('depots'\"]"
+          ],
+          "title": "Fuel Depots",
+          "text": "Click <b>Fuel Depots</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Fuel Depots"
+        },
+        {
+          "id": "fug-d-add",
+          "target": [
+            "#page-depots button[onclick*='openAddDepotModal']"
+          ],
+          "title": "Add Depot / Tank",
+          "text": "Click <b>Add Depot / Tank</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Add Depot / Tank"
+        },
+        {
+          "id": "fug-d-name",
+          "target": [
+            "#newDepotName"
+          ],
+          "title": "1. Tank details",
+          "text": "Name and location of the tank.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "fug-d-type",
+          "target": [
+            "#newDepotType"
+          ],
+          "title": "Fuel type and size",
+          "text": "What it holds and its size in litres. Tick <b>external</b> for a supplier's tank or a filling station.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fug-d-pumps",
+          "target": [
+            "#addDepotModal button[onclick*='addPumpRow']"
+          ],
+          "title": "2. Connected pumps",
+          "text": "Add each pump with its current meter reading. Fuel issued is checked against the meter.",
+          "placement": "top"
+        },
+        {
+          "id": "fug-d-save",
+          "target": [
+            "#addDepotModal button[onclick*='addDepot()']"
+          ],
+          "title": "Save Depot & Pumps",
+          "text": "Click to register it (or cancel if you're only practising).",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.price",
+      "title": "Set the fuel price",
+      "icon": "fa-tags",
+      "blurb": "Add a price per litre from a date, so costs are right.",
+      "steps": [
+        {
+          "id": "fug-p-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('management'\"]"
+          ],
+          "title": "Management",
+          "text": "Click <b>Management</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Management"
+        },
+        {
+          "id": "fug-p-tab",
+          "target": [
+            "#page-management button[onclick*=\"showMgmt('pricing'\"]"
+          ],
+          "title": "Fuel Pricing",
+          "text": "Click <b>Fuel Pricing</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Fuel Pricing"
+        },
+        {
+          "id": "fug-p-type",
+          "target": [
+            "#newPriceType"
+          ],
+          "title": "Fuel type",
+          "text": "Which fuel the price is for.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "fug-p-value",
+          "target": [
+            "#newPriceValue"
+          ],
+          "title": "Price and date",
+          "text": "The price per litre and the date it applies from. An earlier date re-costs fuel from then.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fug-p-save",
+          "target": [
+            "#page-management button[onclick*='addFuelPrice']"
+          ],
+          "title": "Save Price",
+          "text": "Adds it to the price history.",
+          "placement": "bottom"
+        }
+      ]
+    }
+  ]
+}

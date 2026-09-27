@@ -1,0 +1,806 @@
+{
+  "_howto": "Production Pay how-to guides. mode click = the user clicks the real button. optional = skipped when that part isn't on screen. Never reuse a step id.",
+  "guides": [
+    {
+      "key": "piecework.guide.farms",
+      "title": "Set up farms and units",
+      "icon": "fa-tractor",
+      "blurb": "Add your farms and their field units, with their size and GPS location.",
+      "steps": [
+        {
+          "id": "pwg-fa-open",
+          "target": [
+            "#sidebarNav [onclick*='settings']"
+          ],
+          "title": "Production Settings",
+          "text": "Farms and units live here. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Production Settings"
+        },
+        {
+          "id": "pwg-fa-tab",
+          "target": [
+            "#tab-settings-farms"
+          ],
+          "title": "Farms & Units",
+          "text": "Click <b>Farms &amp; Units</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Farms & Units"
+        },
+        {
+          "id": "pwg-fa-name",
+          "target": [
+            "#newFarmName"
+          ],
+          "title": "1. The farm",
+          "text": "Type the farm's name, for example <b>Highlands</b>.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "pwg-fa-loc",
+          "target": [
+            ".main-content button[onclick*=\"openLocationPicker('farm'\"]",
+            "#newFarmName"
+          ],
+          "title": "2. Its location",
+          "text": "The map pin button opens a map. Search for the place, click the farm on the map and set a radius in metres around it. The badge above then shows the location is set.",
+          "placement": "bottom"
+        },
+        {
+          "id": "pwg-fa-add",
+          "target": [
+            ".main-content button[onclick*='addFarm']"
+          ],
+          "title": "3. Add",
+          "text": "Adds the farm. It then appears in the list below and in the unit's farm list.",
+          "placement": "bottom"
+        },
+        {
+          "id": "pwg-un-farm",
+          "target": [
+            "#unitFarmSelect"
+          ],
+          "title": "4. A unit on the farm",
+          "text": "Choose the farm the unit belongs to.",
+          "placement": "bottom"
+        },
+        {
+          "id": "pwg-un-name",
+          "target": [
+            "#newUnitName"
+          ],
+          "title": "5. Name and size",
+          "text": "The block, orchard or field name, and its size in hectares.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "pwg-un-loc",
+          "target": [
+            ".main-content button[onclick*=\"openLocationPicker('unit'\"]",
+            "#newUnitName"
+          ],
+          "title": "6. Its location",
+          "text": "Set the unit's own spot and radius on the map, the same way as the farm.",
+          "placement": "bottom"
+        },
+        {
+          "id": "pwg-un-add",
+          "target": [
+            ".main-content button[onclick*='addUnit']"
+          ],
+          "title": "7. Add",
+          "text": "Adds the unit. Tasks are then given for these farms and units.",
+          "placement": "bottom"
+        },
+        {
+          "id": "pwg-fa-list",
+          "target": [
+            "#farmUnitListBody"
+          ],
+          "title": "Your list",
+          "text": "Edit names and sizes in place, change a boundary with the map button, or deactivate what you no longer use.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "piecework.guide.team",
+      "title": "Create a team and add its members",
+      "icon": "fa-users-cog",
+      "blurb": "Create a production team, choose how its manager is paid, and add its members.",
+      "steps": [
+        {
+          "id": "pwg-tm-open",
+          "target": [
+            "#sidebarNav [onclick*='teams']"
+          ],
+          "title": "Teams",
+          "text": "Teams live here. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Teams"
+        },
+        {
+          "id": "pwg-tm-name",
+          "target": [
+            "#newTeamName"
+          ],
+          "title": "1. Team name",
+          "text": "For example <b>Harvest Team A</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "pwg-tm-tags",
+          "target": [
+            "#newTeamAssetTagVisible"
+          ],
+          "title": "2. Asset tags (optional)",
+          "text": "Type a tag and press Enter for each one, for example the tractor or trailer the team uses.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "pwg-tm-mgr",
+          "target": [
+            "#newTeamManagerEqualShare"
+          ],
+          "title": "3. The manager's share",
+          "text": "For team work: neither ticked = the manager is paid for the full team quantity; <b>Equal Share</b> = the manager gets a worker's share; <b>Average Only</b> = the manager gets the workers' average.",
+          "placement": "left",
+          "climb": 2
+        },
+        {
+          "id": "pwg-tm-create",
+          "target": [
+            "#page-teams form button[type='submit']"
+          ],
+          "title": "4. Create Team",
+          "text": "Click <b>Create Team</b> (or skip it if you're only practising), then click <b>Next</b>.",
+          "placement": "bottom"
+        },
+        {
+          "id": "pwg-tm-card",
+          "target": [
+            "#teamsGrid > div"
+          ],
+          "title": "5. Open the team",
+          "text": "Click the team's card to set it up.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Click a team card",
+          "optional": true
+        },
+        {
+          "id": "pwg-tm-details",
+          "target": [
+            "#editTeamNameInput"
+          ],
+          "title": "Team details",
+          "text": "Rename the team, change its tags or the manager's share, then <b>Save Details</b>.",
+          "placement": "bottom",
+          "climb": 2,
+          "optional": true,
+          "timeout": 4000
+        },
+        {
+          "id": "pwg-tm-search",
+          "target": [
+            "#teamSearchInput"
+          ],
+          "title": "Add members",
+          "text": "Search by name or PIN, or filter by department. Tick people and click <b>Add Selected</b>.",
+          "placement": "top",
+          "climb": 2,
+          "optional": true
+        },
+        {
+          "id": "pwg-tm-manager",
+          "target": [
+            "#teamManagerSelect"
+          ],
+          "title": "The team's manager",
+          "text": "Choose the manager and click <b>Assign</b>. The manager is paid at the manager rate.",
+          "placement": "top",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "pwg-tm-history",
+          "target": [
+            "#btnTeamHistoryModal"
+          ],
+          "title": "Audit History",
+          "text": "Everyone who joined or left the team, and when.",
+          "placement": "top",
+          "optional": true
+        },
+        {
+          "id": "pwg-tm-status",
+          "target": [
+            "#btnToggleTeamStatus"
+          ],
+          "title": "Deactivate",
+          "text": "Deactivate a team you no longer use. Its history is kept, and you can reactivate it from Deactivated Teams.",
+          "placement": "top",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "key": "piecework.guide.activity",
+      "title": "Add an activity and its rate",
+      "icon": "fa-box-open",
+      "blurb": "Add what people are paid for, and keep its rates over time in the Pricing Ledger.",
+      "steps": [
+        {
+          "id": "pwg-ac-open",
+          "target": [
+            "#sidebarNav [onclick*='activities']"
+          ],
+          "title": "Activities & Pricing",
+          "text": "Activities live here. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Activities & Pricing"
+        },
+        {
+          "id": "pwg-ac-add",
+          "target": [
+            ".main-content button[onclick*='openActivityModal']"
+          ],
+          "title": "Add Activity",
+          "text": "Click <b>Add Activity</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Add Activity"
+        },
+        {
+          "id": "pwg-ac-name",
+          "target": [
+            "#actNameInput"
+          ],
+          "title": "Activity Name",
+          "text": "What the work is, for example <b>Apple Picking</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "pwg-ac-uom",
+          "target": [
+            "#actUomInput"
+          ],
+          "title": "Unit of Measure",
+          "text": "What it's counted in, for example <b>bins</b>, <b>crates</b> or <b>trees</b>. Quantities in Daily Production use this unit.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "pwg-ac-rate",
+          "target": [
+            "#actRateInput"
+          ],
+          "title": "Worker Rate",
+          "text": "What a worker earns per unit.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "pwg-ac-mrate",
+          "target": [
+            "#actManagerRateInput"
+          ],
+          "title": "Manager Rate (optional)",
+          "text": "What a team's manager earns per unit, if different.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "pwg-ac-save",
+          "target": [
+            "#activityModal button[onclick*='saveActivity']"
+          ],
+          "title": "Save",
+          "text": "Saves the activity with these rates from today. Click Save (or Cancel if you're only practising), then <b>Next</b>.",
+          "placement": "top"
+        },
+        {
+          "id": "pwg-ac-ledger",
+          "target": [
+            "#activitiesGrid button[onclick*='openPricingModal']"
+          ],
+          "title": "Pricing Ledger",
+          "text": "When a rate changes, don't edit the activity. Add the new rate in its <b>Pricing Ledger</b>, with the date it starts. Click it on an activity.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Click Pricing Ledger",
+          "optional": true
+        },
+        {
+          "id": "pwg-pr-rates",
+          "target": [
+            "#newPriceRate"
+          ],
+          "title": "New rates",
+          "text": "The new worker and manager rate.",
+          "placement": "bottom",
+          "climb": 2,
+          "optional": true,
+          "timeout": 4000
+        },
+        {
+          "id": "pwg-pr-date",
+          "target": [
+            "#newPriceDate"
+          ],
+          "title": "Effective Date",
+          "text": "The first day the new rate applies. Days before it keep the old rate, so past production is never re-priced.",
+          "placement": "bottom",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "pwg-pr-log",
+          "target": [
+            "#pricingModal button[onclick*='saveNewPrice']"
+          ],
+          "title": "Log Price",
+          "text": "Adds the rate to the ledger. The list below shows every rate the activity has had.",
+          "placement": "bottom",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "key": "piecework.guide.task",
+      "title": "Create a task",
+      "icon": "fa-clipboard-list",
+      "blurb": "Give work to a team or phone user: activities and targets, where, how it's paid, evidence and dates.",
+      "steps": [
+        {
+          "id": "pwg-tk-open",
+          "target": [
+            "#sidebarNav [onclick*='tasks']"
+          ],
+          "title": "Tasks",
+          "text": "Tasks live here. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Tasks"
+        },
+        {
+          "id": "pwg-tk-create",
+          "target": [
+            ".main-content button[onclick*='openTaskModal']"
+          ],
+          "title": "Create Task",
+          "text": "Click <b>Create Task</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Create Task"
+        },
+        {
+          "id": "pwg-tk-name",
+          "target": [
+            "#taskNameInput"
+          ],
+          "title": "Task Name",
+          "text": "Required. Something the team will recognise, for example <b>Morning Apple Harvest - Block 5</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "pwg-tk-tags",
+          "target": [
+            "#taskAssetTagVisible"
+          ],
+          "title": "Asset tags and vehicles",
+          "text": "Optional. Type a tag and press Enter for equipment used on this task, and pick any vehicles that work on it.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "pwg-tk-farm",
+          "target": [
+            "#taskFarmSelect"
+          ],
+          "title": "Farm and units",
+          "text": "Choose the farm (the search box above filters the list), then the units. Leave the units empty to cover the whole farm.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "pwg-tk-acts",
+          "target": [
+            "#taskModal button[onclick*='addTaskActivityRow']"
+          ],
+          "title": "Activities and targets",
+          "text": "Click <b>Add Activity</b> for each kind of work in this task, and give each one a target quantity. The target drives the task's progress bar.",
+          "placement": "left"
+        },
+        {
+          "id": "pwg-tk-evidence",
+          "target": [
+            "#taskPhotoReq"
+          ],
+          "title": "Evidence from the phone",
+          "text": "Whether a <b>photo</b> and a <b>signature</b> are optional, mandatory or switched off, and whether they're collected once at the end of the task or with every capture.",
+          "placement": "top",
+          "climb": 2
+        },
+        {
+          "id": "pwg-tk-pay",
+          "target": [
+            "#taskPaymentMethod"
+          ],
+          "title": "Payment Method",
+          "text": "<b>Pay per Individual</b>: each worker is paid for what they captured.<br><b>Pay per Team</b>: the team's total is shared equally among the members who clocked in that day, and the manager is paid by the team's manager setting.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "pwg-tk-assign",
+          "target": [
+            "#taskTeamSelect"
+          ],
+          "title": "Who does it",
+          "text": "Assign a <b>team</b>, a <b>mobile user</b> who captures for it, or both. The search boxes filter the lists.",
+          "placement": "top",
+          "climb": 2
+        },
+        {
+          "id": "pwg-tk-dates",
+          "target": [
+            "#taskStartDate"
+          ],
+          "title": "Start and estimated end",
+          "text": "The task shows on the phones and in Daily Production from the start date. The end date shows as its due date; it's marked overdue after that.",
+          "placement": "top",
+          "climb": 2
+        },
+        {
+          "id": "pwg-tk-save",
+          "target": [
+            "#btnSaveTask"
+          ],
+          "title": "Create Task",
+          "text": "Saves the task as <b>Pending</b>. Click Create Task (or Cancel if you're only practising).",
+          "placement": "top"
+        },
+        {
+          "id": "pwg-tk-flow",
+          "target": [
+            "#taskListBody"
+          ],
+          "title": "Then",
+          "text": "While it's Pending you can edit or delete it. <b>Start</b> makes it In Progress, and <b>Complete</b> closes it. Click a task any time to see what's been captured.",
+          "placement": "top",
+          "guideOnly": true,
+          "before": [
+            {
+              "call": "closeTaskModal",
+              "args": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "piecework.guide.daily",
+      "title": "Check and commit a day to payroll",
+      "icon": "fa-calendar-check",
+      "blurb": "Load a team's day, check clockings and quantities, fix what's wrong, then commit it to payroll.",
+      "steps": [
+        {
+          "id": "pwg-dy-open",
+          "target": [
+            "#sidebarNav [onclick*='daily']"
+          ],
+          "title": "Daily Production",
+          "text": "Each day is checked and committed here. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Daily Production"
+        },
+        {
+          "id": "pwg-dy-date",
+          "target": [
+            "#dailyDateFilter"
+          ],
+          "title": "1. The day",
+          "text": "Choose the day to check.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "pwg-dy-team",
+          "target": [
+            "#dailyTeamFilter"
+          ],
+          "title": "2. The team",
+          "text": "Choose the team.",
+          "placement": "bottom"
+        },
+        {
+          "id": "pwg-dy-load",
+          "target": [
+            ".main-content button[onclick*='loadDailyGrid']"
+          ],
+          "title": "3. Load Grid",
+          "text": "Click <b>Load Grid</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Load Grid"
+        },
+        {
+          "id": "pwg-dy-punches",
+          "target": [
+            "#dailyGridBody [onclick*='openTnaOverrideModal']"
+          ],
+          "title": "4. Clockings",
+          "text": "Each person's clock-in and clock-out from Time &amp; Attendance. Someone with no clockings isn't paid a share of team work that day. Click the times to correct them; this overrides their clockings.",
+          "placement": "right",
+          "optional": true,
+          "timeout": 15000
+        },
+        {
+          "id": "pwg-dy-qty",
+          "target": [
+            "#dailyGridBody .daily-qty"
+          ],
+          "title": "5. Quantities",
+          "text": "What each person captured on the phone, per activity. Type over a wrong quantity. On team-paid tasks the share is worked out for you and can't be typed over.",
+          "placement": "right",
+          "optional": true
+        },
+        {
+          "id": "pwg-dy-times",
+          "target": [
+            "#dailyGridBody [onclick*='openBulkCopyModal']"
+          ],
+          "title": "6. Times on each activity",
+          "text": "The start and end time spent on the activity. Use the copy button to give the same times to other people in one go.",
+          "placement": "right",
+          "optional": true
+        },
+        {
+          "id": "pwg-dy-adhoc",
+          "target": [
+            "#dailyGridHead [onclick*='openAdHocTaskModal']",
+            "#dailyGridBody [onclick*='openAdHocTaskModal']"
+          ],
+          "title": "7. Work that wasn't planned",
+          "text": "Add a column for an activity the team did that isn't on one of its tasks.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "pwg-dy-totals",
+          "target": [
+            "#dailyGridHead"
+          ],
+          "title": "8. Hours and pay",
+          "text": "The last columns total each person's day: normal time, approved and potential overtime, Sunday/public holiday, then piece wage, time wage and the total. They update as you type.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "pwg-dy-filters",
+          "target": [
+            "#filterPieceworkOnly"
+          ],
+          "title": "Filters",
+          "text": "Show only the people who did piecework, and sort PINs by their numbers only.",
+          "placement": "top",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "pwg-dy-save",
+          "target": [
+            ".main-content button[onclick*='saveDailyGrid(false)']"
+          ],
+          "title": "9. Save Draft",
+          "text": "Keeps your changes without making them final. You can come back and carry on.",
+          "placement": "top",
+          "optional": true
+        },
+        {
+          "id": "pwg-dy-commit",
+          "target": [
+            ".main-content button[onclick*='saveDailyGrid(true)']"
+          ],
+          "title": "10. Commit to Payroll",
+          "text": "Makes the day final: its records lock and count towards payroll. Only commit once everything is right.",
+          "placement": "top",
+          "optional": true
+        },
+        {
+          "id": "pwg-dy-fix",
+          "target": [
+            ".main-content button[onclick*='unlockDailyGrid']"
+          ],
+          "title": "If something was wrong",
+          "text": "<b>Unlock</b> reopens committed records so they can be changed. <b>Revert Edits</b> removes manual changes and puts back what the phones captured.<br><br>If the day falls in a <b>locked payroll period</b> (Employee Master &rsaquo; Payroll Periods), it can't be saved, committed, unlocked or reverted until that period is unlocked. You'll see who and which dates are affected.",
+          "placement": "top",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "key": "piecework.guide.report",
+      "title": "Run a production report",
+      "icon": "fa-chart-line",
+      "blurb": "Choose the dates, who to include and the report type, then view or export it.",
+      "steps": [
+        {
+          "id": "pwg-rp-open",
+          "target": [
+            "#sidebarNav [onclick*='reports']"
+          ],
+          "title": "Production Reports",
+          "text": "Reports live here. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Production Reports"
+        },
+        {
+          "id": "pwg-rp-dates",
+          "target": [
+            "#reportStartDate"
+          ],
+          "title": "1. Dates",
+          "text": "Choose the start and end date.",
+          "placement": "bottom",
+          "climb": 2,
+          "timeout": 4000
+        },
+        {
+          "id": "pwg-rp-who",
+          "target": [
+            "#reportDeptFilter"
+          ],
+          "title": "2. Who",
+          "text": "A department, team or task, or particular employees from the Employees list. Leave them on All for everyone.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "pwg-rp-type",
+          "target": [
+            "#reportTypeFilter"
+          ],
+          "title": "3. Report Type",
+          "text": "&bull; <b>Daily Detailed</b>: each person's production per day.<br>&bull; <b>Employee Daily Evidence</b>: the photos captured with it.<br>&bull; <b>Employee Summary</b> and <b>Activity Summary</b>: totals for the date range, per person or per activity.<br>&bull; <b>Job Costing</b> (by employee), <b>Job Costing Summary</b> (a matrix of people and jobs) and <b>Job Costing Wages</b> (hours &times; hourly rate per day; the Global Hourly Rate applies here when it's switched on).<br>&bull; <b>Global Summary</b>: everything combined.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "pwg-rp-sort",
+          "target": [
+            "#reportSortBy"
+          ],
+          "title": "4. Sort",
+          "text": "How the rows are ordered.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "pwg-rp-go",
+          "target": [
+            ".main-content button[onclick*='generateFieldReport']"
+          ],
+          "title": "5. Generate Report",
+          "text": "Click <b>Generate Report</b> to see it.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Click Generate Report"
+        },
+        {
+          "id": "pwg-rp-export",
+          "target": [
+            ".main-content button[onclick*='exportFieldReportToExcel']"
+          ],
+          "title": "6. Export to Excel",
+          "text": "Saves the report you've just generated as a spreadsheet.",
+          "placement": "bottom"
+        }
+      ]
+    },
+    {
+      "key": "piecework.guide.jobcosting",
+      "title": "Check job costing",
+      "icon": "fa-stopwatch",
+      "blurb": "Load a date range, find running and flagged jobs, and correct them.",
+      "steps": [
+        {
+          "id": "pwg-jc-open",
+          "target": [
+            "#sidebarNav [onclick*='jobcosting']"
+          ],
+          "title": "Job Costing",
+          "text": "Job costing lives here. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Job Costing"
+        },
+        {
+          "id": "pwg-jc-dates",
+          "target": [
+            "#jcStartDate"
+          ],
+          "title": "1. Dates",
+          "text": "Choose the start and end date.",
+          "placement": "bottom",
+          "climb": 2,
+          "timeout": 4000
+        },
+        {
+          "id": "pwg-jc-load",
+          "target": [
+            ".main-content button[onclick*='loadJobCostingGrid']"
+          ],
+          "title": "2. Load Data",
+          "text": "Click <b>Load Data</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Load Data"
+        },
+        {
+          "id": "pwg-jc-summary",
+          "target": [
+            "#jcSummary"
+          ],
+          "title": "3. What needs checking",
+          "text": "<b>Still Running</b> and <b>Flagged</b> are the ones to look at.<br><br>A job is <b>flagged</b> when it ran over 14 hours or has no activity chosen. A job still <b>running</b> has no clock-out yet.",
+          "placement": "bottom"
+        },
+        {
+          "id": "pwg-jc-flagged",
+          "target": [
+            "#jcFlaggedBtn"
+          ],
+          "title": "4. Flagged Only",
+          "text": "Show only the flagged jobs.",
+          "placement": "bottom"
+        },
+        {
+          "id": "pwg-jc-open-emp",
+          "target": [
+            "#jcGridBody"
+          ],
+          "title": "5. Open a person",
+          "text": "Click a person to see their jobs.",
+          "placement": "top"
+        },
+        {
+          "id": "pwg-jc-edit",
+          "target": [
+            "#jcGridBody [title='Edit unit / activity']"
+          ],
+          "title": "6. Correct a job",
+          "text": "Use <b>Edit</b> to choose the right unit or activity. A job with an activity is no longer flagged for having none.",
+          "placement": "left",
+          "optional": true
+        },
+        {
+          "id": "pwg-jc-export",
+          "target": [
+            ".main-content button[onclick*='exportJobCostingToExcel']"
+          ],
+          "title": "7. Export",
+          "text": "Save the list to Excel if you need it elsewhere.",
+          "placement": "bottom"
+        }
+      ]
+    }
+  ]
+}

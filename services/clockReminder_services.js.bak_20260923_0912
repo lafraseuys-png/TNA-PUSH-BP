@@ -1,0 +1,765 @@
+// =====================================================================
+// services/clockReminder.js
+// NEW FILE - save as: services/clockReminder.js
+// =====================================================================
+//
+// Two jobs:
+//
+//   1. EMAIL SWEEP  - a cron that fires "you have not clocked in / out"
+//                     emails 15 minutes after a scheduled shift starts
+//                     or ends. Server side, so it lands even if the
+//                     phone is off, offline or force-stopped.
+//
+//   2. /api/ess/my-schedule - the endpoint the mobile apps call so they
+//                     can pre-schedule LOCAL notifications for the same
+//                     two moments. The phone needs to know a shift
+//                     starts at 07:00 to set an alarm for 07:15;
+//                     timesheet-v2 only returns analysed history, so
+//                     nothing existing could answer that.
+//
+// The two channels are deliberately independent. If the device misses
+// its local alarm, the email still arrives.
+//
+// SCOPE: starts from Users, not Employees. A reminder is only ever
+// raised for an ACTIVE user with a LinkedEmployeeID, and email goes to
+// Users.Email only - never Employees.EmailAddress.
+// =====================================================================
+
+const express = require('express');
+const sql = require('mssql');
+const cron = require('node-cron');
+const nodemailer = require('nodemailer');
+
+const { getTenantConnection, masterPool } = require('../config/database');
+const { verifyToken } = require('../middleware/auth');
+
+const {
+    toDateStr,
+    timeOnDate,
+    toHHMM,
+    sameDate,
+    rowHasDate,
+    resolveDailyShift,
+    shiftReminderSkipReason,
+    isTerminatedOn
+} = require('../utils/shiftResolver');
+
+// ---------------------------------------------------------------------
+// AUTO-HEAL: utils/notificationPrefs.js gates this whole service on a
+// per-tenant switch. If it has not been deployed yet the service must
+// still boot and behave EXACTLY as it did before, not crash on require.
+// ---------------------------------------------------------------------
+let notifPrefs = null;
+try {
+    notifPrefs = require('../utils/notificationPrefs');
+} catch (e) {
+    console.warn('[ClockReminder] utils/notificationPrefs.js not found - running in legacy mode (reminders always on).');
+}
+
+// Returns true only when the tenant has deliberately switched reminders on.
+// A read failure returns FALSE: mailing a client who opted out is worse
+// than a silent sweep, and the warning below says exactly what happened.
+async function clockRemindersEnabled(pool, dbName) {
+    if (!notifPrefs) return true;   // legacy mode - unchanged behaviour
+    try {
+        return await notifPrefs.isNotificationEnabled(pool, 'notif_clock_reminders', dbName);
+    } catch (e) {
+        console.warn(`[ClockReminder] ${dbName}: notification prefs unreadable (${e.message}) - treating as OFF.`);
+        return false;
+    }
+}
+
+// A tenant going quiet must never be invisible. Logs the first sweep and
+// every change after, not every five minutes - one line per transition.
+const lastReminderState = new Map(); // dbName -> boolean
+
+function logReminderState(dbName, enabled) {
+    const previous = lastReminderState.get(dbName);
+    if (previous === enabled) return;
+    lastReminderState.set(dbName, enabled);
+
+    if (enabled) {
+        console.log(`[ClockReminder] ${dbName}: reminders ENABLED - sweeping.`);
+    } else {
+        console.warn(`[ClockReminder] ${dbName}: reminders OFF (Settings > Notifications) - sweep skipped.`);
+    }
+}
+
+
+// =====================================================================
+// CONFIG - tune here, not in the body of the code
+// =====================================================================
+const REMINDER_CONFIG = {
+    graceMinutes:      15,          // minutes after shift start / end
+    cronExpression:    '*/5 * * * *',
+    timezone:          'Africa/Johannesburg',
+    scheduleDaysAhead: 7,           // how far /api/ess/my-schedule looks
+    maxEmailsPerTenantPerSweep: 200 // circuit breaker on a bad roster
+};
+
+
+// =====================================================================
+// AUTO-HEAL: dedupe ledger.
+// The UNIQUE constraint is what actually guarantees one email per
+// employee per date per type, so a PM2 restart mid-sweep can never
+// double-send.
+// =====================================================================
+async function ensureReminderTable(pool) {
+    await pool.request().query(`
+        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='EssClockReminders' and xtype='U')
+        BEGIN
+            CREATE TABLE EssClockReminders (
+                ReminderID   INT IDENTITY(1,1) PRIMARY KEY,
+                EmployeeID   INT NOT NULL,
+                UserID       INT NULL,
+                RecordDate   DATE NOT NULL,
+                ReminderType NVARCHAR(20) NOT NULL,
+                SentAt       DATETIME DEFAULT GETDATE(),
+                SentTo       NVARCHAR(255) NULL,
+                Status       NVARCHAR(30) NULL,
+                Notes        NVARCHAR(255) NULL,
+                CONSTRAINT UQ_EssClockReminders UNIQUE (EmployeeID, RecordDate, ReminderType)
+            );
+        END
+
+        IF COL_LENGTH('EssClockReminders', 'Status') IS NULL
+            ALTER TABLE EssClockReminders ADD Status NVARCHAR(30) NULL;
+        IF COL_LENGTH('EssClockReminders', 'Notes') IS NULL
+            ALTER TABLE EssClockReminders ADD Notes NVARCHAR(255) NULL;
+        IF COL_LENGTH('EssClockReminders', 'UserID') IS NULL
+            ALTER TABLE EssClockReminders ADD UserID INT NULL;
+    `);
+}
+
+
+// =====================================================================
+// SMTP resolution - identical chain to routes/schedules.js line 372.
+// Tenant TenantSettings first, master SystemEmailSettings as fallback.
+// =====================================================================
+async function getSmtpConfig(tenantPool) {
+    let host, port, user, pass, from;
+
+    const keys = ['smtpHost', 'smtpPort', 'smtpUser', 'smtpPassword', 'fromEmail'];
+    const tenantConfig = {};
+
+    for (const key of keys) {
+        try {
+            const result = await tenantPool.request()
+                .input('k', sql.NVarChar, key)
+                .query('SELECT SettingValue FROM TenantSettings WITH (NOLOCK) WHERE SettingKey = @k');
+            tenantConfig[key] = result.recordset[0]?.SettingValue || '';
+        } catch (e) {
+            tenantConfig[key] = '';
+        }
+    }
+
+    host = tenantConfig.smtpHost;
+    port = parseInt(tenantConfig.smtpPort, 10);
+    user = tenantConfig.smtpUser;
+    pass = tenantConfig.smtpPassword;
+    from = tenantConfig.fromEmail;
+
+    if (!host || !user) {
+        const masterRes = await masterPool.request()
+            .query('SELECT * FROM SystemEmailSettings WHERE SettingID = 1');
+        const sys = masterRes.recordset[0];
+
+        if (sys && sys.SmtpServer) {
+            host = sys.SmtpServer;
+            port = sys.SmtpPort;
+            user = sys.SenderEmail;
+            pass = sys.SenderPassword;
+            from = sys.SenderEmail;
+        } else {
+            throw new Error('No SMTP configured for tenant or globally.');
+        }
+    }
+
+    return { host, port: port || 587, user, pass, from };
+}
+
+
+// =====================================================================
+// Load everything one tenant needs for a date, in a fixed number of
+// queries. Never one query per employee.
+// =====================================================================
+async function loadTenantDay(pool, dateStr) {
+
+    // --- Linked, active users only. This is the whole audience. ---
+    const usersRes = await pool.request().query(`
+        SELECT  u.UserID,
+                u.Email                AS UserEmail,
+                u.FirstName            AS UserFirstName,
+                e.EmployeeID,
+                e.FirstName,
+                e.LastName,
+                e.Department,
+                e.DefaultShiftID,
+                ISNULL(e.DefaultDays, '1,2,3,4,5') AS DefaultDays,
+                e.IsTerminated,
+                e.TerminationDate
+        FROM Users u WITH (NOLOCK)
+        INNER JOIN Employees e WITH (NOLOCK)
+                ON e.EmployeeID = u.LinkedEmployeeID
+        WHERE u.LinkedEmployeeID IS NOT NULL
+          AND ISNULL(u.IsActive, 1) = 1
+          AND (e.IsTerminated = 0 OR e.IsTerminated IS NULL)
+    `);
+
+    // --- SELECT * on Shifts: IgnoreAbsent and the split columns are not
+    //     guaranteed on older tenants, and naming them would throw. ---
+    const shiftsRes = await pool.request()
+        .query('SELECT * FROM Shifts WITH (NOLOCK)');
+
+    const deptsRes = await pool.request().query(`
+        SELECT DeptName, DefaultShiftID, ISNULL(DefaultDays, '1,2,3,4,5') AS DefaultDays
+        FROM Departments WITH (NOLOCK)
+    `);
+
+    const rostersRes = await pool.request()
+        .input('D', sql.NVarChar, dateStr)
+        .query(`
+            SELECT EmployeeID, ShiftID, RosterDate
+            FROM EmployeeRoster WITH (NOLOCK)
+            WHERE RosterDate = CAST(@D AS DATE)
+        `);
+
+    // --- Punches for the day. IsIgnored = duplicate suppression. ---
+    // Up to midday the NEXT day, so a night shift's clock-out after midnight is seen.
+    // NextDay is worked out in SQL, so there is no timezone guesswork in JavaScript.
+    const punchRes = await pool.request()
+        .input('D', sql.NVarChar, dateStr)
+        .query(`
+            SELECT EmployeeID, ClockType,
+                   CASE WHEN ClockTime < DATEADD(DAY, 1, CAST(@D AS DATE)) THEN 0 ELSE 1 END AS NextDay
+            FROM ClockRecords WITH (NOLOCK)
+            WHERE ClockTime >= CAST(@D AS DATE)
+              AND ClockTime <  DATEADD(HOUR, 12, DATEADD(DAY, 1, CAST(@D AS DATE)))
+              AND ISNULL(IsIgnored, 0) = 0
+        `);
+
+    // --- Leave: any row for the date means no reminder. ---
+    let leaveIds = new Set();
+    try {
+        const leaveRes = await pool.request()
+            .input('D', sql.NVarChar, dateStr)
+            .query(`
+                IF EXISTS (SELECT * FROM sysobjects WHERE name='EmployeeLeaves' and xtype='U')
+                    SELECT EmployeeID FROM EmployeeLeaves WITH (NOLOCK)
+                    WHERE LeaveDate = CAST(@D AS DATE)
+            `);
+        leaveIds = new Set((leaveRes.recordset || []).map(r => r.EmployeeID));
+    } catch (e) {
+        console.warn('[ClockReminder] EmployeeLeaves unreadable, leave exclusion skipped:', e.message);
+    }
+
+    // --- Public holidays. SELECT * because the date column name varies. ---
+    let isHoliday = false;
+    try {
+        const holRes = await pool.request()
+            .query(`
+                IF EXISTS (SELECT * FROM sysobjects WHERE name='Holidays' and xtype='U')
+                    SELECT * FROM Holidays WITH (NOLOCK)
+            `);
+        isHoliday = (holRes.recordset || []).some(h => rowHasDate(h, dateStr));
+    } catch (e) {
+        console.warn('[ClockReminder] Holidays unreadable, holiday exclusion skipped:', e.message);
+    }
+
+    // --- Punch lookup: EmployeeID -> { in: bool, out: bool } ---
+    const punches = {};
+    for (const p of punchRes.recordset) {
+        if (!punches[p.EmployeeID]) punches[p.EmployeeID] = { in: false, out: false, outNext: false };
+        // Next-morning punch: only ever used as a night shift's clock-out (any direction,
+        // like the timesheet: last punch = OUT)
+        if (p.NextDay === 1 || p.NextDay === true) { punches[p.EmployeeID].outNext = true; continue; }
+        if (String(p.ClockType).toUpperCase() === 'IN') punches[p.EmployeeID].in = true;
+        if (String(p.ClockType).toUpperCase() === 'OUT') punches[p.EmployeeID].out = true;
+    }
+
+    return {
+        users:     usersRes.recordset,
+        allShifts: shiftsRes.recordset,
+        depts:     deptsRes.recordset,
+        rosters:   rostersRes.recordset,
+        punches:   punches,
+        leaveIds:  leaveIds,
+        isHoliday: isHoliday
+    };
+}
+
+
+// =====================================================================
+// Decide what a single person is owed on a single date.
+// Pure function - no DB, no email. Used by BOTH the sweep and the
+// /api/ess/my-schedule endpoint, so the phone and the server can never
+// disagree about when a reminder is due.
+// =====================================================================
+function evaluateDay(user, dateStr, data, now) {
+
+    const out = {
+        date:      dateStr,
+        scheduled: false,
+        skip:      null,
+        shiftName: null,
+        start:     null,
+        end:       null,
+        dueIn:     null,
+        dueOut:    null,
+        hasIn:     false,
+        hasOut:    false,
+        needsIn:   false,
+        needsOut:  false
+    };
+
+    if (isTerminatedOn(user, dateStr)) { out.skip = 'TERMINATED'; return out; }
+    if (data.isHoliday)                { out.skip = 'PUBLIC_HOLIDAY'; return out; }
+    if (data.leaveIds.has(user.EmployeeID)) { out.skip = 'ON_LEAVE'; return out; }
+
+    const shift = resolveDailyShift(user, dateStr, data.rosters, data.allShifts, data.depts);
+
+    const skipReason = shiftReminderSkipReason(shift);
+    if (skipReason) { out.skip = skipReason; return out; }
+
+    const startStr = toHHMM(shift.StartTime);
+    const endStr   = toHHMM(shift.EndTime);
+
+   const startAt = timeOnDate(dateStr, startStr);
+    let endAt     = timeOnDate(dateStr, endStr);
+    if (!startAt || !endAt) { out.skip = 'NO_SHIFT_TIMES'; return out; }
+
+    // NIGHT SHIFT: a shift that ends at or before it starts (22:00-06:00, 23:17-00:00)
+    // ends on the NEXT day. Without this, "not clocked out" was due before the shift began.
+    const overnight = endAt.getTime() <= startAt.getTime();
+    if (overnight) endAt = new Date(endAt.getTime() + 24 * 60 * 60000);
+
+    const graceMs = REMINDER_CONFIG.graceMinutes * 60000;
+    const dueIn   = new Date(startAt.getTime() + graceMs);
+    const dueOut  = new Date(endAt.getTime() + graceMs);
+
+    const punch = data.punches[user.EmployeeID] || { in: false, out: false, outNext: false };
+    // A night shift's clock-out can land after midnight
+    const hasOut = punch.out || (overnight && !!punch.outNext);
+
+    out.scheduled = true;
+    out.overnight = overnight;
+    out.shiftName = shift.ShiftName || null;
+    out.start     = startStr;
+    out.end       = endStr;
+    out.dueIn     = dueIn;
+    out.dueOut    = dueOut;
+    out.hasIn     = punch.in;
+    out.hasOut    = hasOut;
+
+    // Grace has elapsed AND still no punch
+    out.needsIn  = (now >= dueIn)  && !punch.in;
+    out.needsOut = (now >= dueOut) && !hasOut;
+
+    return out;
+}
+
+
+// =====================================================================
+// EMAIL BODY
+// =====================================================================
+function buildEmailHtml(user, evaluation, type) {
+
+    const firstName = user.UserFirstName || user.FirstName || 'there';
+
+    const isLateIn = (type === 'LATE_IN');
+    const heading  = isLateIn ? 'You have not clocked in' : 'You have not clocked out';
+    const accent   = isLateIn ? '#f59e0b' : '#ef4444';
+
+    const line = isLateIn
+        ? `Our records show no clock-in for your shift, which started at <strong>${evaluation.start}</strong>.`
+        : `Our records show no clock-out for your shift, which ended at <strong>${evaluation.end}</strong>.`;
+
+    return `
+    <div style="font-family: Arial, Helvetica, sans-serif; background:#f1f5f9; padding:24px;">
+        <div style="max-width:560px; margin:0 auto; background:#ffffff; border-radius:10px; overflow:hidden; border:1px solid #e2e8f0;">
+
+            <div style="background:${accent}; padding:18px 24px;">
+                <h2 style="margin:0; color:#ffffff; font-size:18px;">${heading}</h2>
+            </div>
+
+            <div style="padding:24px; color:#334155; font-size:14px; line-height:1.6;">
+                <p style="margin:0 0 14px 0;">Hi ${firstName},</p>
+                <p style="margin:0 0 14px 0;">${line}</p>
+
+                <table style="width:100%; border-collapse:collapse; margin:18px 0; font-size:13px;">
+                    <tr>
+                        <td style="padding:8px 10px; background:#f8fafc; border:1px solid #e2e8f0; width:40%;">Date</td>
+                        <td style="padding:8px 10px; border:1px solid #e2e8f0;">${evaluation.date}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px 10px; background:#f8fafc; border:1px solid #e2e8f0;">Shift</td>
+                        <td style="padding:8px 10px; border:1px solid #e2e8f0;">${evaluation.shiftName || '-'}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px 10px; background:#f8fafc; border:1px solid #e2e8f0;">Scheduled</td>
+                        <td style="padding:8px 10px; border:1px solid #e2e8f0;">${evaluation.start} - ${evaluation.end}</td>
+                    </tr>
+                </table>
+
+                <p style="margin:0 0 14px 0;">
+                    If you are at work, please clock now. If this is an error, contact your manager
+                    so the day can be corrected on your timesheet.
+                </p>
+
+                <p style="margin:22px 0 0 0; color:#94a3b8; font-size:11px;">
+                    Automated message from the TNA Africa Time &amp; Attendance system. Do not reply.
+                </p>
+            </div>
+        </div>
+    </div>`;
+}
+
+
+// =====================================================================
+// Claim a reminder slot BEFORE sending.
+// The UNIQUE constraint means a second worker (or a restarted process)
+// loses the race and returns false instead of sending a duplicate.
+// =====================================================================
+async function claimReminder(pool, user, dateStr, type, email) {
+    try {
+        const res = await pool.request()
+            .input('EmpID', sql.Int, user.EmployeeID)
+            .input('UserID', sql.Int, user.UserID)
+            .input('D', sql.NVarChar, dateStr)
+            .input('T', sql.NVarChar(20), type)
+            .input('To', sql.NVarChar(255), email || null)
+            .query(`
+                IF NOT EXISTS (
+                    SELECT 1 FROM EssClockReminders WITH (NOLOCK)
+                    WHERE EmployeeID = @EmpID
+                      AND RecordDate = CAST(@D AS DATE)
+                      AND ReminderType = @T
+                )
+                BEGIN
+                    INSERT INTO EssClockReminders (EmployeeID, UserID, RecordDate, ReminderType, SentTo, Status)
+                    VALUES (@EmpID, @UserID, CAST(@D AS DATE), @T, @To, 'CLAIMED');
+                    SELECT 1 AS Claimed;
+                END
+                ELSE
+                BEGIN
+                    SELECT 0 AS Claimed;
+                END
+            `);
+
+        return res.recordset?.[0]?.Claimed === 1;
+    } catch (e) {
+        // UNIQUE violation = another process got there first. Not an error.
+        return false;
+    }
+}
+
+async function markReminder(pool, user, dateStr, type, status, notes) {
+    try {
+        await pool.request()
+            .input('EmpID', sql.Int, user.EmployeeID)
+            .input('D', sql.NVarChar, dateStr)
+            .input('T', sql.NVarChar(20), type)
+            .input('S', sql.NVarChar(30), status)
+            .input('N', sql.NVarChar(255), notes ? String(notes).substring(0, 250) : null)
+            .query(`
+                UPDATE EssClockReminders
+                SET Status = @S, Notes = @N, SentAt = GETDATE()
+                WHERE EmployeeID = @EmpID
+                  AND RecordDate = CAST(@D AS DATE)
+                  AND ReminderType = @T
+            `);
+    } catch (e) { /* ledger update is best effort */ }
+}
+
+
+// =====================================================================
+// ONE TENANT, ONE SWEEP
+// =====================================================================
+async function sweepTenant(dbName, dateStr, now, opts) {
+    // opts.overnightOnly: yesterday's sweep - only night shifts' "not clocked out"
+    opts = opts || {};
+
+    let pool;
+    try {
+        pool = await getTenantConnection(dbName);
+    } catch (e) {
+        return { skipped: true };
+    }
+
+        // GATE: checked before the ledger table and before any data load, so
+    // a tenant with reminders off costs one cached lookup per sweep.
+    const remindersOn = await clockRemindersEnabled(pool, dbName);
+    logReminderState(dbName, remindersOn);
+    if (!remindersOn) {
+        return { sent: 0, disabled: true };
+    }
+
+    try {
+        await ensureReminderTable(pool);
+    } catch (e) {
+        console.warn(`[ClockReminder] ${dbName}: could not ensure ledger table:`, e.message);
+        return { skipped: true };
+    }
+
+    let data;
+    try {
+        data = await loadTenantDay(pool, dateStr);
+    } catch (e) {
+        console.warn(`[ClockReminder] ${dbName}: data load failed:`, e.message);
+        return { skipped: true };
+    }
+
+    if (data.isHoliday) return { sent: 0, note: 'public holiday' };
+    if (!data.users.length) return { sent: 0 };
+
+    // Work out who is owed what BEFORE opening an SMTP connection
+    const due = [];
+   for (const user of data.users) {
+        const ev = evaluateDay(user, dateStr, data, now);
+        if (!ev.scheduled) continue;
+        if (opts.overnightOnly) {
+            // Yesterday: its clock-in reminder was handled yesterday; only a night
+            // shift can still be owed a "not clocked out" reminder after midnight
+            if (ev.overnight && ev.needsOut) due.push({ user, ev, type: 'MISSED_OUT' });
+            continue;
+        }
+        if (ev.needsIn)  due.push({ user, ev, type: 'LATE_IN' });
+        if (ev.needsOut) due.push({ user, ev, type: 'MISSED_OUT' });
+    }
+
+    if (due.length === 0) return { sent: 0 };
+
+    // CIRCUIT BREAKER: a broken roster should not mail the whole company
+    if (due.length > REMINDER_CONFIG.maxEmailsPerTenantPerSweep) {
+        console.error(
+            `[ClockReminder] ${dbName}: ABORTED - ${due.length} reminders due in one sweep ` +
+            `(cap ${REMINDER_CONFIG.maxEmailsPerTenantPerSweep}). Check the roster before re-enabling.`
+        );
+        return { sent: 0, aborted: true };
+    }
+
+    let smtp;
+    try {
+        smtp = await getSmtpConfig(pool);
+    } catch (e) {
+        console.warn(`[ClockReminder] ${dbName}: ${e.message}`);
+        return { sent: 0 };
+    }
+
+    const transporter = nodemailer.createTransport({
+        host: smtp.host,
+        port: smtp.port,
+        secure: smtp.port === 465,
+        auth: { user: smtp.user, pass: smtp.pass }
+    });
+
+    let sent = 0;
+    let skippedNoEmail = 0;
+
+    for (const item of due) {
+        const email = (item.user.UserEmail || '').trim();
+
+        // Claim first, so a crash mid-send still blocks the duplicate
+        const claimed = await claimReminder(pool, item.user, dateStr, item.type, email);
+        if (!claimed) continue;
+
+        // Users.Email only - no fallback to Employees.EmailAddress, by design
+        if (!email) {
+            skippedNoEmail++;
+            await markReminder(pool, item.user, dateStr, item.type, 'SKIPPED_NO_EMAIL',
+                `User ${item.user.UserID} has no email address on their user record`);
+            continue;
+        }
+
+        const subject = (item.type === 'LATE_IN')
+            ? `Reminder: you have not clocked in (${item.ev.start})`
+            : `Reminder: you have not clocked out (${item.ev.end})`;
+
+        try {
+            await transporter.sendMail({
+                from: `"TNA Africa Time & Attendance" <${smtp.from}>`,
+                to: email,
+                subject: subject,
+                html: buildEmailHtml(item.user, item.ev, item.type)
+            });
+
+            sent++;
+            await markReminder(pool, item.user, dateStr, item.type, 'SENT', null);
+        } catch (e) {
+            await markReminder(pool, item.user, dateStr, item.type, 'FAILED', e.message);
+            console.warn(`[ClockReminder] ${dbName}: send failed to ${email}:`, e.message);
+        }
+    }
+
+    if (sent > 0 || skippedNoEmail > 0) {
+        console.log(`[ClockReminder] ${dbName}: ${sent} sent, ${skippedNoEmail} skipped (no user email).`);
+    }
+
+    return { sent, skippedNoEmail };
+}
+
+
+// =====================================================================
+// THE CRON
+// =====================================================================
+let isReminderSweeping = false;
+
+async function runReminderSweep() {
+    if (isReminderSweeping) return;
+    isReminderSweeping = true;
+
+    try {
+        const now = new Date();
+        const dateStr = toDateStr(now);
+
+        const tenantsRes = await masterPool.request()
+            .query('SELECT DatabaseName FROM Tenants WITH (NOLOCK) WHERE ModuleTimeAttendance = 1');
+
+        const yesterday = new Date(now);
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = toDateStr(yesterday);
+
+        for (const tenant of tenantsRes.recordset) {
+            try {
+                // Last night's night shifts first (clock-out only), then today
+                await sweepTenant(tenant.DatabaseName, yesterdayStr, now, { overnightOnly: true });
+                await sweepTenant(tenant.DatabaseName, dateStr, now);
+            } catch (e) {
+                console.error(`[ClockReminder] ${tenant.DatabaseName} sweep error:`, e.message);
+            }
+        }
+    } catch (e) {
+        console.error('[ClockReminder] Global sweep failure:', e.message);
+    } finally {
+        isReminderSweeping = false;
+    }
+}
+
+
+// =====================================================================
+// ROUTER: /api/ess/my-schedule
+//
+// Returns the caller's own resolved shifts for the next N days, with
+// the punch state for each, so the app can schedule LOCAL notifications
+// at start+grace and end+grace and cancel them once a punch lands.
+// =====================================================================
+function buildRouter() {
+    const router = express.Router();
+
+    router.get('/api/ess/my-schedule', verifyToken, async (req, res) => {
+        try {
+            const dbName = req.user.tenant || req.user.dbName;
+            const pool = await getTenantConnection(dbName);
+
+            // GATE: an empty days[] means the app schedules no local alarms.
+            // "enabled" is additive - older app builds ignore it and simply
+            // see an empty schedule, which is the correct outcome anyway.
+            if (!(await clockRemindersEnabled(pool, dbName))) {
+                return res.json({
+                    linked: true,
+                    enabled: false,
+                    graceMinutes: REMINDER_CONFIG.graceMinutes,
+                    serverTime: new Date().toISOString(),
+                    days: []
+                });
+            }
+
+            const linkRes = await pool.request()
+                .input('uid', sql.Int, req.user.userId)
+                .query('SELECT LinkedEmployeeID FROM Users WITH (NOLOCK) WHERE UserID = @uid');
+
+            const empId = linkRes.recordset[0]?.LinkedEmployeeID;
+            if (!empId) {
+                // Not linked to an employee - nothing to schedule, and this
+                // is a normal state for admin-only accounts, not an error.
+                return res.json({
+                    linked: false,
+                    graceMinutes: REMINDER_CONFIG.graceMinutes,
+                    serverTime: new Date().toISOString(),
+                    days: []
+                });
+            }
+
+            const daysAhead = Math.min(
+                parseInt(req.query.days, 10) || REMINDER_CONFIG.scheduleDaysAhead,
+                31
+            );
+
+            const now = new Date();
+            const results = [];
+
+           // From YESTERDAY: a night shift that started yesterday still has its clock-out
+            // reminder ahead. Without it, the app's next sync after midnight would cancel
+            // that pending notification. Times already past are skipped by the app.
+            for (let i = -1; i < daysAhead; i++) {
+                const d = new Date(now);
+                d.setDate(now.getDate() + i);
+                const dateStr = toDateStr(d);
+
+                let data;
+                try {
+                    data = await loadTenantDay(pool, dateStr);
+                } catch (e) {
+                    continue;
+                }
+
+                const me = data.users.find(u => u.EmployeeID === empId);
+                if (!me) continue;
+
+                const ev = evaluateDay(me, dateStr, data, now);
+                if (!ev.scheduled) continue;
+
+                results.push({
+                    date:      ev.date,
+                    shiftName: ev.shiftName,
+                    start:     ev.start,
+                    end:       ev.end,
+                    dueIn:     ev.dueIn ? ev.dueIn.toISOString() : null,
+                    dueOut:    ev.dueOut ? ev.dueOut.toISOString() : null,
+                    hasIn:     ev.hasIn,
+                    hasOut:    ev.hasOut
+                });
+            }
+
+            res.json({
+                linked: true,
+                graceMinutes: REMINDER_CONFIG.graceMinutes,
+                serverTime: new Date().toISOString(),
+                days: results
+            });
+
+        } catch (err) {
+            console.error('[ClockReminder] /api/ess/my-schedule failed:', err.message);
+            res.status(500).json({ message: 'Failed to load schedule' });
+        }
+    });
+
+    return router;
+}
+
+
+// =====================================================================
+// INIT
+// =====================================================================
+function initClockReminderService(app) {
+
+    app.use('/', buildRouter());
+
+    cron.schedule(REMINDER_CONFIG.cronExpression, runReminderSweep, {
+        scheduled: true,
+        timezone: REMINDER_CONFIG.timezone
+    });
+
+    console.log(
+        `[ClockReminder] Service online. Sweeping ${REMINDER_CONFIG.cronExpression} ` +
+        `(${REMINDER_CONFIG.timezone}), ${REMINDER_CONFIG.graceMinutes} minute grace.`
+    );
+}
+
+
+module.exports = {
+    initClockReminderService,
+    runReminderSweep,
+    evaluateDay,
+    REMINDER_CONFIG
+};

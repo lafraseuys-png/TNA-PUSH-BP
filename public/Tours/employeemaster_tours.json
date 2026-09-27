@@ -1,0 +1,1305 @@
+{
+  "_howto": "Employee Master tours. steps = page tour (first visit). sections = one tour per area, starts the first time that area is opened. guides = hands-on how-to guides in the ? menu. To announce something NEW, add a step with a NEW id. Rewording keeps the id. Never reuse an id.",
+  "key": "employeemaster",
+  "title": "Employee Master tour",
+  "startDelay": 1500,
+  "blockers": [
+    ".modal-backdrop.active"
+  ],
+  "reset": [
+    {
+      "removeClass": "#profileDropdown",
+      "cls": "show"
+    },
+    {
+      "removeClass": "#tnbBar .tnb-menu",
+      "cls": "show"
+    }
+  ],
+  "whatsNewTitle": "What's new in Employee Master",
+  "whatsNewText": "We've added something new here since you last took the tour.",
+  "steps": [
+    {
+      "id": "em-welcome",
+      "title": "Welcome to Employee Master",
+      "text": "This is your employee directory: everyone's profile, departments, access to clocking devices, teams, leave setup and reporting lines.<br><br>Use <b>Next</b> and <b>Back</b>, or your arrow keys. Press <b>Esc</b> to close.",
+      "fullOnly": true
+    },
+    {
+      "id": "em-sidebar",
+      "target": [
+        "#sidebarNav"
+      ],
+      "title": "All Employee Master areas",
+      "text": "Every area of Employee Master is listed here. You only see the areas your role allows.",
+      "placement": "right"
+    },
+    {
+      "id": "em-nav-employees",
+      "target": [
+        "#sidebarNav a[data-permission='tna_employees']"
+      ],
+      "title": "Active Personnel",
+      "text": "Everyone currently employed. Create, view and edit employees, and import, export or sync them in bulk.",
+      "placement": "right"
+    },
+    {
+      "id": "em-nav-terminated",
+      "target": [
+        "#sidebarNav a[data-permission='emp_master_terminated']"
+      ],
+      "title": "Terminated Records",
+      "text": "Employees who have left. Their history is kept, and they can be reinstated.",
+      "placement": "right"
+    },
+    {
+      "id": "em-nav-departments",
+      "target": [
+        "#sidebarNav a[data-permission='emp_master_departments']"
+      ],
+      "title": "Departments",
+      "text": "Your department structure, including cost centres and company rules.",
+      "placement": "right"
+    },
+    {
+      "id": "em-nav-access-roles",
+      "target": [
+        "#sidebarNav a[data-permission='emp_master_access_roles']"
+      ],
+      "title": "Access Roles",
+      "text": "Which access zones (groups of clocking devices) each department's employees can use.",
+      "placement": "right"
+    },
+    {
+      "id": "em-nav-teams",
+      "target": [
+        "#sidebarNav a[data-permission='emp_master_teams']"
+      ],
+      "title": "Custom Teams",
+      "text": "Groups of employees across departments, such as crews or shifts.",
+      "placement": "right"
+    },
+    {
+      "id": "em-nav-leave",
+      "target": [
+        "#sidebarNav a[data-permission='emp_master_leave']"
+      ],
+      "title": "Leave Management",
+      "text": "Your leave types and employees' leave balances.",
+      "placement": "right"
+    },
+    {
+      "id": "em-nav-attributes",
+      "target": [
+        "#sidebarNav a[data-permission='emp_master_attributes']"
+      ],
+      "title": "Custom Attributes",
+      "text": "Your own extra fields and lists, such as employee types and cost centres.",
+      "placement": "right"
+    },
+    {
+      "id": "em-nav-hierarchy",
+      "target": [
+        "#sidebarNav a[data-permission='emp_master_hierarchy']"
+      ],
+      "title": "Org Hierarchy",
+      "text": "Your organogram: reporting lines, managers and levels.",
+      "placement": "right"
+    },
+    {
+      "id": "em-nav-audit",
+      "target": [
+        "#sidebarNav a[data-permission='emp_master_audit']"
+      ],
+      "title": "Audit & History",
+      "text": "Who changed which employee record, and when.",
+      "placement": "right"
+    },
+    {
+      "id": "em-nav-reports",
+      "target": [
+        "#sidebarNav a[data-permission='emp_master_reports']"
+      ],
+      "title": "Data Reports",
+      "text": "Reports and exports of your employee data.",
+      "placement": "right"
+    },
+    {
+      "id": "em-collapse",
+      "target": [
+        ".sidebar-toggle-btn"
+      ],
+      "title": "Make more room",
+      "text": "Collapse the menu to icons only, and click again to open it.",
+      "placement": "right"
+    },
+    {
+      "id": "em-title",
+      "target": [
+        "#sectionTitle"
+      ],
+      "title": "Where you are",
+      "text": "The name of the area that is open right now.",
+      "placement": "bottom"
+    },
+    {
+      "id": "em-profile",
+      "target": [
+        "#mainSidebar .profile-button"
+      ],
+      "title": "Your menu",
+      "text": "Click your name for Toggle Theme, Back to Launchpad and Logout.",
+      "placement": "right",
+      "before": [
+        {
+          "removeClass": "#profileDropdown",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "em-top-search",
+      "target": [
+        "#tnbBar .tnb-search"
+      ],
+      "title": "Search any screen",
+      "text": "Type what you're looking for, like <b>leave</b> or <b>roster</b>, to jump straight to any screen you have access to, in any module.<br><br>Point at the search bar without typing to see your most visited screens, and pin your favourites.",
+      "placement": "bottom",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "em-top-profile",
+      "target": [
+        "#tnbBar .tnb-pbtn"
+      ],
+      "title": "Your menu",
+      "text": "Click your name for your profile, other areas of the system, and logout. Let's look inside.",
+      "placement": "bottom",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "em-top-launchpad",
+      "target": [
+        "#tnbBar .tnb-menu a[href='Launchpad.html']"
+      ],
+      "title": "Launchpad",
+      "text": "Back to your home screen with all your modules.",
+      "placement": "left",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        },
+        {
+          "click": "#tnbBar .tnb-pbtn"
+        }
+      ],
+      "wait": 320
+    },
+    {
+      "id": "em-top-myprofile",
+      "target": [
+        "#tnbBar .tnb-act-profile"
+      ],
+      "title": "Profile",
+      "text": "Update your name and email address, or change your password.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "em-top-settings",
+      "target": [
+        "#tnbBar .tnb-act-settings"
+      ],
+      "title": "Settings",
+      "text": "Company-wide setup. Only shown to users allowed to change settings.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "em-top-ess",
+      "target": [
+        "#tnbBar .tnb-menu a[href='ess_dashboard.html']"
+      ],
+      "title": "ESS",
+      "text": "Your own self service: leave, claims, payslips and documents.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "em-top-phone",
+      "target": [
+        "#tnbBar .tnb-act-phone"
+      ],
+      "title": "Connect a Phone",
+      "text": "Shows a QR code that connects a company phone to your company. It contains your licence key, so only show it while setting up phones.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "em-top-app",
+      "target": [
+        "#tnbBar .tnb-act-app"
+      ],
+      "title": "Download the App",
+      "text": "Shows a QR code to download the Android app onto a phone.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "em-top-help",
+      "target": [
+        "#tnbBar .tnb-act-help"
+      ],
+      "title": "Help & Tours",
+      "text": "Opens the same help menu as the <b>?</b> button.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "em-top-theme",
+      "target": [
+        "#tnbBar .tnb-theme-row"
+      ],
+      "title": "Dark Mode",
+      "text": "Switch between dark and light. Your choice follows your login to any computer.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "em-top-logout",
+      "target": [
+        "#tnbBar .tnb-logout"
+      ],
+      "title": "Logout",
+      "text": "Always log out on a shared computer.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ],
+      "after": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "em-help-button",
+      "target": [
+        "#tnaTourHelpBtn"
+      ],
+      "title": "Help is always here",
+      "text": "Click <b>?</b> for this page tour, a tour of the area you're in, and anything new.",
+      "placement": "left",
+      "before": [
+        {
+          "removeClass": "#profileDropdown",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "em-done",
+      "title": "You're all set",
+      "text": "Each Employee Master area also has its own short tour. It starts the first time you open that area, and you can replay it any time from <b>?</b>.",
+      "fullOnly": true
+    }
+  ],
+  "sections": [
+    {
+      "key": "employeemaster.employees",
+      "title": "Active Personnel",
+      "trigger": "#page-employees.active",
+      "reset": [
+        {
+          "removeClass": "#advancedFiltersDropdownMenu",
+          "cls": "show"
+        },
+        {
+          "removeClass": "#dataToolsDropdownMenu",
+          "cls": "show"
+        },
+        {
+          "removeClass": "#hardwareDropdownMenu",
+          "cls": "show"
+        }
+      ],
+      "steps": [
+        {
+          "id": "emp-search",
+          "target": [
+            "#searchEmp"
+          ],
+          "title": "Search",
+          "text": "Find an employee by name or PIN as you type.",
+          "placement": "bottom"
+        },
+        {
+          "id": "emp-dept",
+          "target": [
+            "#empDeptFilter"
+          ],
+          "title": "Department Filter",
+          "text": "Show only one department's employees.",
+          "placement": "bottom"
+        },
+        {
+          "id": "emp-type",
+          "target": [
+            "#empTypeFilter"
+          ],
+          "title": "Employee Type",
+          "text": "Show only one type of employee, such as <b>Permanent</b> or <b>Seasonal</b>, or a type you added in Custom Attributes.",
+          "placement": "bottom"
+        },
+        {
+          "id": "emp-options",
+          "target": [
+            "#advancedFiltersDropdownMenu"
+          ],
+          "title": "Options",
+          "text": "<b>Missing photo</b> shows employees without a profile photo. <b>Pending start</b> shows employees whose start date is still in the future (the number shows how many). The PIN sorting option makes PINs like A10 and B10 sort simply as 10.",
+          "placement": "bottom",
+          "before": [
+            {
+              "addClass": "#advancedFiltersDropdownMenu",
+              "cls": "show"
+            }
+          ],
+          "after": [
+            {
+              "removeClass": "#advancedFiltersDropdownMenu",
+              "cls": "show"
+            }
+          ]
+        },
+        {
+          "id": "emp-data-tools",
+          "target": [
+            "#dataToolsDropdownMenu"
+          ],
+          "title": "Data Tools",
+          "text": "<b>Custom Blank Template</b> and <b>Custom Export Data</b> give you a spreadsheet with the columns you choose. Fill in the template and load it with the <b>Data Import Wizard</b>.<br><br><b>Bulk Upload Photos</b>: choose a folder of photos named by PIN (for example <b>1001.jpg</b>). <b>Generate Missing Logins</b> creates a locked-down login for every active employee who doesn't have one.",
+          "placement": "left",
+          "before": [
+            {
+              "addClass": "#dataToolsDropdownMenu",
+              "cls": "show"
+            }
+          ],
+          "after": [
+            {
+              "removeClass": "#dataToolsDropdownMenu",
+              "cls": "show"
+            }
+          ]
+        },
+        {
+          "id": "emp-hardware",
+          "target": [
+            "#hardwareDropdownMenu"
+          ],
+          "title": "Hardware",
+          "text": "<b>Sync Personnel</b> pulls new employees from your clocking devices, or pushes your latest employee data to them. <b>Pull History Logs</b> asks every device to upload its full punch history.<br><br><b>Push All to Hardware</b> wipes the devices and loads only active, authorised employees. Use it with care.",
+          "placement": "left",
+          "before": [
+            {
+              "addClass": "#hardwareDropdownMenu",
+              "cls": "show"
+            }
+          ],
+          "after": [
+            {
+              "removeClass": "#hardwareDropdownMenu",
+              "cls": "show"
+            }
+          ]
+        },
+        {
+          "id": "emp-sage",
+          "target": [
+            "#page-employees button[onclick*='openSageSyncModal']"
+          ],
+          "title": "Sage Sync",
+          "text": "Pull new or updated employees from Sage 300, or push your changes to Sage 300.",
+          "placement": "bottom"
+        },
+        {
+          "id": "emp-create",
+          "target": [
+            "#page-employees button[onclick*='openCreateModal']"
+          ],
+          "title": "Create Employee",
+          "text": "Opens the new employee form. It has five tabs: <b>Personal</b>, <b>Employment</b>, <b>Leave &amp; Payroll</b>, <b>HR &amp; Benefits</b> and <b>Docs &amp; History</b>.",
+          "placement": "left"
+        },
+        {
+          "id": "emp-table",
+          "target": [
+            "#page-employees table thead"
+          ],
+          "title": "The employee list",
+          "text": "Click a column heading to sort by it. Right-click the heading row to choose which columns are shown.",
+          "placement": "bottom"
+        },
+        {
+          "id": "emp-select",
+          "target": [
+            "#selectAllEmps"
+          ],
+          "title": "Change many employees at once",
+          "text": "Tick employees (or this box for the whole page) and a toolbar appears to <b>Set Manager</b>, <b>Assign HOD</b>, <b>Move Department</b> or <b>Terminate</b> them all together.",
+          "placement": "right"
+        },
+        {
+          "id": "emp-view",
+          "target": [
+            "#empTableBody button[data-tooltip='View Profile']"
+          ],
+          "title": "View",
+          "text": "Opens the employee's profile to read, without changing anything.",
+          "placement": "left",
+          "timeout": 3000
+        },
+        {
+          "id": "emp-edit",
+          "target": [
+            "#empTableBody button[data-tooltip='Edit Profile']"
+          ],
+          "title": "Edit",
+          "text": "Opens the employee's profile to make changes.",
+          "placement": "left",
+          "timeout": 3000
+        },
+        {
+          "id": "emp-terminate",
+          "target": [
+            "#empTableBody button[data-tooltip='Terminate Employee']"
+          ],
+          "title": "Terminate",
+          "text": "Ends the employee's employment. They move to <b>Terminated Records</b>, where their history is kept and they can be reinstated.",
+          "placement": "left",
+          "timeout": 3000
+        },
+        {
+          "id": "emp-paging",
+          "target": [
+            "#activeNextBtn"
+          ],
+          "title": "Pages",
+          "text": "Choose 50, 100 or 200 rows per page, and use the arrows to move between pages.",
+          "placement": "top",
+          "climb": 2
+        }
+      ]
+    },
+    {
+      "key": "employeemaster.terminated",
+      "title": "Terminated Records",
+      "trigger": "#page-terminated.active",
+      "steps": [
+        {
+          "id": "emt-search",
+          "target": [
+            "#searchTerminated"
+          ],
+          "title": "Search",
+          "text": "Find a former employee by name or PIN.",
+          "placement": "bottom"
+        },
+        {
+          "id": "emt-dept",
+          "target": [
+            "#termDeptFilter"
+          ],
+          "title": "Department",
+          "text": "Show only one department's former employees.",
+          "placement": "bottom"
+        },
+        {
+          "id": "emt-reason",
+          "target": [
+            "#termReasonFilter"
+          ],
+          "title": "Reason",
+          "text": "Show only one reason for leaving, such as Resigned, Dismissed, Retrenched, End of Season or End of Contract.",
+          "placement": "bottom"
+        },
+        {
+          "id": "emt-select",
+          "target": [
+            "#selectAllTermEmps"
+          ],
+          "title": "Reinstate several at once",
+          "text": "Tick former employees (or this box for the whole page) and use <b>Bulk Reinstate</b> to bring them all back to Active Personnel. Handy at the start of a new season.",
+          "placement": "right"
+        },
+        {
+          "id": "emt-history",
+          "target": [
+            "#termTableBody button[data-tooltip='View History']"
+          ],
+          "title": "History",
+          "text": "Every time this person was terminated and reinstated, with the dates and reasons.",
+          "placement": "left",
+          "timeout": 3000
+        },
+        {
+          "id": "emt-edit",
+          "target": [
+            "#termTableBody button[data-tooltip='Edit Details']"
+          ],
+          "title": "Edit details",
+          "text": "Correct the termination details, such as the date or reason, without reinstating the person.",
+          "placement": "left",
+          "timeout": 3000
+        },
+        {
+          "id": "emt-reinstate",
+          "target": [
+            "#termTableBody button[data-tooltip='Reinstate Employee']"
+          ],
+          "title": "Reinstate",
+          "text": "Brings the person back to Active Personnel with their history kept.",
+          "placement": "left",
+          "timeout": 3000
+        },
+        {
+          "id": "emt-paging",
+          "target": [
+            "#termNextBtn"
+          ],
+          "title": "Pages",
+          "text": "Choose how many rows per page, and use the arrows to move between pages.",
+          "placement": "top",
+          "climb": 2
+        }
+      ]
+    },
+    {
+      "key": "employeemaster.departments",
+      "title": "Departments",
+      "trigger": "#page-departments.active",
+      "reset": [
+        {
+          "call": "switchDeptTab",
+          "args": [
+            "structure"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "id": "emd-tabs",
+          "target": [
+            "#btn-tab-structure"
+          ],
+          "title": "Three tabs",
+          "text": "<b>Departments &amp; Zones</b>, <b>Company Rules</b> and <b>Cost Centres</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchDeptTab",
+              "args": [
+                "structure"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "emd-sync",
+          "target": [
+            "#syncDeptBtn"
+          ],
+          "title": "Sync Departments",
+          "text": "Pulls your departments from your ZKTeco server, so both systems use the same structure.",
+          "placement": "bottom",
+          "before": [
+            {
+              "call": "switchDeptTab",
+              "args": [
+                "structure"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "emd-create",
+          "target": [
+            "#page-departments button[onclick*='openCreateDeptModal']"
+          ],
+          "title": "Create Dept",
+          "text": "Add a new department with its code, name, parent department and head(s) of department.",
+          "placement": "left",
+          "before": [
+            {
+              "call": "switchDeptTab",
+              "args": [
+                "structure"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "emd-search",
+          "target": [
+            "#searchDept"
+          ],
+          "title": "Search",
+          "text": "Find a department by name or code.",
+          "placement": "bottom"
+        },
+        {
+          "id": "emd-status",
+          "target": [
+            "#deptStatusFilter"
+          ],
+          "title": "Status",
+          "text": "Show active departments (the default), deactivated ones, or all of them.",
+          "placement": "bottom"
+        },
+        {
+          "id": "emd-select",
+          "target": [
+            "#selectAllDepts"
+          ],
+          "title": "Change several at once",
+          "text": "Tick departments (or this box for all of them) and use <b>Assign Parent</b> to put them all under the same parent department.",
+          "placement": "right"
+        },
+        {
+          "id": "emd-edit",
+          "target": [
+            "#deptTableBody button[data-tooltip='Edit Department']"
+          ],
+          "title": "Edit",
+          "text": "Change the department's name, parent department or head(s) of department.",
+          "placement": "left",
+          "timeout": 3000
+        },
+        {
+          "id": "emd-deactivate",
+          "target": [
+            "#deptTableBody button[data-tooltip='Deactivate Department']",
+            "#deptTableBody button[data-tooltip='Reactivate Department']"
+          ],
+          "title": "Deactivate",
+          "text": "Closes a department. You choose where its active employees move to, the date and the reason. A deactivated department can be reactivated later.",
+          "placement": "left",
+          "timeout": 3000
+        },
+        {
+          "id": "emd-rules",
+          "target": [
+            "#tab-company-rules"
+          ],
+          "title": "Company Rules",
+          "text": "Operational rules or policies you assign to departments. <b>Create Rule</b> asks for a name, a description and the departments it applies to.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchDeptTab",
+              "args": [
+                "rules"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "emd-costcentres",
+          "target": [
+            "#tab-cost-centres"
+          ],
+          "title": "Cost Centres",
+          "text": "Cost centres for financial reporting. Add one with a code and name, then link employees to it on their profile.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchDeptTab",
+              "args": [
+                "costcentres"
+              ]
+            }
+          ],
+          "after": [
+            {
+              "call": "switchDeptTab",
+              "args": [
+                "structure"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "employeemaster.deptzones",
+      "title": "Access Roles",
+      "trigger": "#page-deptzones.active",
+      "steps": [
+        {
+          "id": "emz-table",
+          "target": [
+            "#page-deptzones table"
+          ],
+          "title": "Access by department",
+          "text": "Each department and the access zones its employees can use. Zones are groups of clocking devices, created in <b>Settings &gt; Access Zones</b>.",
+          "placement": "top"
+        },
+        {
+          "id": "emz-search",
+          "target": [
+            "#searchDeptZone"
+          ],
+          "title": "Search",
+          "text": "Find a department by name.",
+          "placement": "bottom"
+        },
+        {
+          "id": "emz-assign",
+          "target": [
+            "#deptZoneTableBody button[onclick*='openDeptZoneModal']"
+          ],
+          "title": "Assign Zones",
+          "text": "Choose which zones the whole department can use. Every employee in the department gets access to those devices.",
+          "placement": "left",
+          "timeout": 3000
+        },
+        {
+          "id": "emz-sync",
+          "target": [
+            "#deptZoneTableBody button[onclick*='syncDeptToDevices']"
+          ],
+          "title": "Sync Device",
+          "text": "Sends this department's authorised employees to its devices. <b>Anyone not authorised is removed from those devices</b>, so check the zones first.",
+          "placement": "left",
+          "timeout": 3000
+        }
+      ]
+    },
+    {
+      "key": "employeemaster.teams",
+      "title": "Custom Teams",
+      "trigger": "#page-teams.active",
+      "steps": [
+        {
+          "id": "emtm-create",
+          "target": [
+            "#page-teams button[onclick*='openTeamModal']"
+          ],
+          "title": "Create Team",
+          "text": "A team groups employees from any department under one team leader, such as a crew or a shift. Give it a name, choose the leader, then tick the members. You can filter by department, show only the selected members, or select everyone in the filtered list.",
+          "placement": "left"
+        },
+        {
+          "id": "emtm-search",
+          "target": [
+            "#searchTeam"
+          ],
+          "title": "Search",
+          "text": "Find a team by name.",
+          "placement": "bottom"
+        },
+        {
+          "id": "emtm-table",
+          "target": [
+            "#page-teams table"
+          ],
+          "title": "Your teams",
+          "text": "Each team, its leader and how many members it has.",
+          "placement": "top"
+        },
+        {
+          "id": "emtm-edit",
+          "target": [
+            "#teamsTableBody button[onclick*='openTeamModal']"
+          ],
+          "title": "Edit",
+          "text": "Change the team's name, leader or members.",
+          "placement": "left",
+          "timeout": 3000
+        },
+        {
+          "id": "emtm-delete",
+          "target": [
+            "#teamsTableBody button[onclick*='deleteTeam']"
+          ],
+          "title": "Delete",
+          "text": "Removes the team and takes all its members out of it. The employees' own records are not changed.",
+          "placement": "left",
+          "timeout": 3000
+        }
+      ]
+    },
+    {
+      "key": "employeemaster.leave",
+      "title": "Leave Management",
+      "trigger": "#page-leave.active",
+      "steps": [
+        {
+          "id": "eml-create",
+          "target": [
+            "#newLeaveTypeName"
+          ],
+          "title": "Add a leave type",
+          "text": "Type a name (for example Annual Leave or Sick Leave), choose <b>Paid</b> or <b>Unpaid</b>, and add it. Paid leave types appear on every employee's profile so their balances can be managed.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "eml-table",
+          "target": [
+            "#leaveTypesTableBody"
+          ],
+          "title": "Your leave types",
+          "text": "Every leave type your company uses. Use <b>Edit</b> to rename it or change whether it's paid.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "eml-pull",
+          "target": [
+            "#syncSageLeaveBtn"
+          ],
+          "title": "Pull Balances",
+          "text": "Brings employees' current leave balances in from Sage 300 and shows a report of what changed. The time of the last pull is shown next to the button.",
+          "placement": "bottom"
+        },
+        {
+          "id": "eml-push",
+          "target": [
+            "#pushSageLeaveBtn"
+          ],
+          "title": "Push Leave",
+          "text": "Sends approved leave to Sage 300. You choose how many days back to include (up to 60), and a report shows what was sent and what wasn't. The button is greyed out when leave push is switched off in <b>Settings &gt; Connectivity &gt; Sage</b>.",
+          "placement": "bottom"
+        },
+        {
+          "id": "eml-history",
+          "target": [
+            "#sageLeaveHistoryPanel",
+            "#sagePushHistoryPanel"
+          ],
+          "title": "Sync history",
+          "text": "Every pull from and push to Sage, with who ran it and the results. Use <b>Refresh</b> to see the latest.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "employeemaster.attributes",
+      "title": "Custom Attributes",
+      "trigger": "#page-attributes.active",
+      "reset": [
+        {
+          "call": "switchAttrTab",
+          "args": [
+            "fields"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "id": "ema-tabs",
+          "target": [
+            "#btn-tab-attr-fields"
+          ],
+          "title": "Two tabs",
+          "text": "<b>Employee Attributes</b> are your own extra fields. <b>Employee Types</b> are your own employment types.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchAttrTab",
+              "args": [
+                "fields"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ema-create",
+          "target": [
+            "#newAttributeName"
+          ],
+          "title": "Add a field",
+          "text": "Create a field your company needs, such as Boot Size or Tractor Licence. Choose its type: Text, Number, Date or Yes/No. It then appears on every employee's profile.",
+          "placement": "bottom",
+          "climb": 2,
+          "before": [
+            {
+              "call": "switchAttrTab",
+              "args": [
+                "fields"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ema-table",
+          "target": [
+            "#attributesTableBody"
+          ],
+          "title": "Your fields",
+          "text": "The extra fields you've created. Deleting one hides it from every employee's profile.",
+          "placement": "top",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchAttrTab",
+              "args": [
+                "fields"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ema-export",
+          "target": [
+            "#tab-attr-fields button[onclick*='exportCustomAttributes']"
+          ],
+          "title": "Fill them in bulk",
+          "text": "Export a spreadsheet of these fields (for one department or PIN if you like), fill it in, and load it back with the upload button next to it. Much quicker than editing profiles one by one.",
+          "placement": "bottom",
+          "before": [
+            {
+              "call": "switchAttrTab",
+              "args": [
+                "fields"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ema-types",
+          "target": [
+            "#tab-attr-types"
+          ],
+          "title": "Employee Types",
+          "text": "Add your own employment types, such as Contractor or Temp. They appear in the employee type lists across Employee Master. Edit or deactivate them here. Deactivating a type clears it from any employees who have it, so you can reassign them.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchAttrTab",
+              "args": [
+                "types"
+              ]
+            }
+          ],
+          "after": [
+            {
+              "call": "switchAttrTab",
+              "args": [
+                "fields"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "employeemaster.hierarchy",
+      "title": "Org Hierarchy",
+      "trigger": "#page-hierarchy.active",
+      "reset": [
+        {
+          "call": "switchHierTab",
+          "args": [
+            "chart"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "id": "emh-tabs",
+          "target": [
+            "#btn-tab-hier-chart"
+          ],
+          "title": "Four tabs",
+          "text": "<b>Org Chart</b>, <b>Manager Assignments</b>, <b>Stand-in Delegations</b> and <b>Hierarchy Levels</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchHierTab",
+              "args": [
+                "chart"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "emh-chart",
+          "target": [
+            "#companyOrgChartContainer"
+          ],
+          "title": "Org Chart",
+          "text": "Your company's structure as a chart. Use <b>Refresh Chart</b> after making changes.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchHierTab",
+              "args": [
+                "chart"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "emh-assign",
+          "target": [
+            "#tab-hier-assignments"
+          ],
+          "title": "Manager Assignments",
+          "text": "Link a system user to one or more parts of the hierarchy. That manager can then see those employees and handle their workflow approvals. Pick the user, pick the nodes, then assign.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchHierTab",
+              "args": [
+                "assignments"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "emh-delegate",
+          "target": [
+            "#tab-hier-delegations"
+          ],
+          "title": "Stand-in Delegations",
+          "text": "While a manager is away, send their approvals to a stand-in. Choose the manager, the stand-in and the start and end dates.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchHierTab",
+              "args": [
+                "delegations"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "emh-levels",
+          "target": [
+            "#tab-hier-levels"
+          ],
+          "title": "Hierarchy Levels",
+          "text": "Name the levels of your structure, for example Company, Region and Department. The diagram shows how they stack.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchHierTab",
+              "args": [
+                "levels"
+              ]
+            }
+          ],
+          "after": [
+            {
+              "call": "switchHierTab",
+              "args": [
+                "chart"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "employeemaster.reports",
+      "title": "Data Reports",
+      "trigger": "#page-reports.active",
+      "steps": [
+        {
+          "id": "emr-filters",
+          "target": [
+            "#reportStartDate"
+          ],
+          "title": "Filters",
+          "text": "Limit a report to one department and, optionally, a date range. The dates apply to start dates or termination dates.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "emr-details",
+          "target": [
+            "#page-reports button[onclick*='buildEmployeeReport'][onclick*='details']"
+          ],
+          "title": "Full Employee Details",
+          "text": "Everything about every active employee, including HR and Time &amp; Attendance fields.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "emr-photo",
+          "target": [
+            "#page-reports button[onclick*='buildEmployeeReport'][onclick*='missing-photo']"
+          ],
+          "title": "Missing Photo",
+          "text": "Active employees without a profile photo.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "emr-dupes",
+          "target": [
+            "#page-reports button[onclick*='buildEmployeeReport'][onclick*='duplicates']"
+          ],
+          "title": "Potential Duplicates",
+          "text": "Employees with the same first and last name, so you can check for double entries.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "emr-terminated",
+          "target": [
+            "#page-reports button[onclick*='buildEmployeeReport'][onclick*='terminated']"
+          ],
+          "title": "Terminated Employees",
+          "text": "Everyone who has been terminated, with their start and termination dates.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "emr-pending",
+          "target": [
+            "#page-reports button[onclick*='buildEmployeeReport'][onclick*='pending-term']"
+          ],
+          "title": "Pending Terminations",
+          "text": "Active employees with a termination date still to come.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "emr-missing",
+          "target": [
+            "#page-reports button[onclick*='buildEmployeeReport'][onclick*='missing-info']"
+          ],
+          "title": "Missing Info",
+          "text": "Active employees missing important details: ID number, start date, department or shift.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "emr-preview",
+          "target": [
+            "#empReportPreviewPanel"
+          ],
+          "title": "Preview and export",
+          "text": "The report appears here first. Search it, then <b>Export to Excel</b> or <b>Export to PDF</b>.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "employeemaster.audit",
+      "title": "Audit & History",
+      "trigger": "#page-audit.active",
+      "steps": [
+        {
+          "id": "emau-filters",
+          "target": [
+            "#searchAudit"
+          ],
+          "title": "Find a change",
+          "text": "Search by PIN, name or action, and filter by the user who made the change and a date range. <b>Clear</b> resets the filters.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "emau-table",
+          "target": [
+            "#auditTableBody"
+          ],
+          "title": "Every change to employee records",
+          "text": "Each profile created, edited, terminated or moved to another department: when, which employee, what was done, the details, and who did it.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "emau-pages",
+          "target": [
+            "#auditNextBtn"
+          ],
+          "title": "More results",
+          "text": "Use the arrows to move through the pages.",
+          "placement": "top",
+          "climb": 1
+        }
+      ]
+    },
+    {
+      "key": "employeemaster.profile-form",
+      "title": "Employee profile",
+      "trigger": "#editEmpModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "employeemaster.guide.edit-employee",
+      "skipSteps": 2,
+      "stepSuffix": "form"
+    },
+    {
+      "key": "employeemaster.create-form",
+      "title": "New employee form",
+      "trigger": "#createEmpModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "employeemaster.guide.create-employee",
+      "skipSteps": 2,
+      "stepSuffix": "form"
+    }
+  ],
+  "guides": [],
+  "guidesFile": "employeemaster_guides.json"
+}

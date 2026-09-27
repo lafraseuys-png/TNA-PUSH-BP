@@ -1,0 +1,522 @@
+{
+  "key": "systemadmin",
+  "title": "System Admin tour",
+  "startDelay": 1800,
+  "guidesFile": "godmode_guides.json",
+  "whatsNewTitle": "What's new in System Admin",
+  "whatsNewText": "We have added something new here since your last visit.",
+  "blockers": [
+    "#createTenantModal.flex",
+    "#deviceActionModal.flex",
+    "#tenantInfoModal.flex",
+    "#adminFacialLicensesModal.flex",
+    "#infoModal.flex",
+    "#faceSettingsModal.flex",
+    "#networkModal.flex",
+    "#shortcutModal.flex",
+    "#customPromptModal.flex",
+    "#termsSignatureModal.flex",
+    "#papiaSignatureModal.flex",
+    "#dynamicSystemPrompt",
+    "#dynamicSystemConfirm",
+    "#gmConfirmDialog",
+    "#tnaReleases",
+    "#obWizard.ob-open",
+    "#obHistory"
+  ],
+  "reset": [
+    {
+      "removeClass": "#gmProfileMenu",
+      "cls": "open"
+    },
+    {
+      "addClass": "#gmProfileMenu",
+      "cls": "hidden"
+    }
+  ],
+  "steps": [
+    {
+      "id": "gm.welcome",
+      "fullOnly": true,
+      "title": "Welcome to System Admin",
+      "text": "This is where TNA Africa runs the SaaS: tenants, clocking devices, costing, users and legal documents. This quick tour shows you around. You can start it again any time from the <b>?</b> button."
+    },
+    {
+      "id": "gm.menu",
+      "target": "#sidebarNav",
+      "placement": "right",
+      "title": "The menu",
+      "text": "Screens are grouped: <b>Operations</b> for daily work and <b>Settings &amp; reports</b> for set-up and billing. <b>System Admin</b> holds costing, users, audit logs, legal documents and the API."
+    },
+    {
+      "id": "gm.dashboard",
+      "target": "#page-dashboard > .grid",
+      "placement": "bottom",
+      "title": "Live overview",
+      "text": "Active tenants and online / offline devices. Click a card to open that screen. The <b>Offline</b> card pulses red when a device is offline."
+    },
+    {
+      "id": "gm.profile",
+      "target": "#gmProfileBtn",
+      "placement": "bottom",
+      "title": "Your profile",
+      "text": "Your name and role. Click it for <b>Light / Dark mode</b>, <b>What's new</b> and <b>Log out</b>."
+    },
+    {
+      "id": "gm.theme",
+      "target": "#gmProfileMenu",
+      "placement": "left",
+      "title": "Light / Dark mode and Log out",
+      "text": "Switch the theme here. Your choice is remembered on this device. <b>Log out</b> is recorded in the Audit Logs.",
+      "before": [
+        {
+          "reveal": "#gmProfileMenu"
+        },
+        {
+          "addClass": "#gmProfileMenu",
+          "cls": "open"
+        }
+      ],
+      "after": [
+        {
+          "removeClass": "#gmProfileMenu",
+          "cls": "open"
+        },
+        {
+          "addClass": "#gmProfileMenu",
+          "cls": "hidden"
+        }
+      ]
+    },
+    {
+      "id": "gm.help",
+      "target": "#tnaTourHelpBtn",
+      "placement": "top",
+      "title": "Help is always here",
+      "text": "Open <b>?</b> to replay this tour, tour the screen you are on, see <b>What's new</b>, or follow a step-by-step how-to guide."
+    }
+  ],
+  "sections": [
+    {
+      "key": "gm.tenants",
+      "title": "Tenants",
+      "trigger": "#page-tenants.active",
+      "steps": [
+        {
+          "id": "gm.tenants.deploy",
+          "target": "#obStartBtn, #page-tenants button[onclick^=\"openCreateTenantModal\"]",
+          "placement": "left",
+          "title": "New tenant",
+          "text": "Start a new client here. The onboarding wizard asks the questions step by step and works out the costs."
+        },
+        {
+          "id": "gm.tenants.onboarding",
+          "title": "New: step-by-step onboarding",
+          "text": "<b>Start onboarding</b> walks you through the client's employees, modules, extras and demo mode, shows the once-off and monthly cost, and saves as you go.",
+          "target": "#obStartBtn, #page-tenants button[onclick^=\"openCreateTenantModal\"]",
+          "placement": "bottom"
+        },
+        {
+          "id": "gm.tenants.list",
+          "target": "#tenantsContainer",
+          "placement": "top",
+          "title": "Your tenants",
+          "text": "Grouped by reseller. <b>Edit</b> changes modules and pricing, <b>Licenses</b> shows facial licences, <b>Info</b> shows employees, credits and history."
+        },
+        {
+          "id": "gm.tenants.quotes",
+          "target": "#quotesTableBody",
+          "placement": "top",
+          "title": "Pending quotes",
+          "text": "Every quote with its status, the step it reached and what is still missing. <b>Continue</b> picks up where you left off."
+        },
+        {
+          "id": "gm.tenants.quote-tabs",
+          "title": "In progress or deployed",
+          "text": "Switch between quotes still being prepared and the ones already deployed.",
+          "target": "#obQuoteTools",
+          "placement": "bottom"
+        }
+      ]
+    },
+    {
+      "key": "gm.audit-tenants",
+      "title": "Audit Tenants",
+      "trigger": "#page-audit-tenants.active",
+      "steps": [
+        {
+          "id": "gm.audit.list",
+          "target": "#auditTenantsContainer",
+          "placement": "top",
+          "title": "Live employee check",
+          "text": "Active modules and live employee numbers per tenant, against what was loaded. <b>Over Cap</b> means the tenant uses more employees than it pays for."
+        },
+        {
+          "id": "gm.audit.retro",
+          "target": "#page-audit-tenants button[onclick=\"runRetrobuild(this)\"]",
+          "placement": "left",
+          "title": "Rebuild history",
+          "text": "Rebuilds the monthly active-employee history used on each tenant's Info screen."
+        }
+      ]
+    },
+    {
+      "key": "gm.hardware",
+      "title": "Hardware",
+      "trigger": "#page-hardware.active",
+      "steps": [
+        {
+          "id": "gm.hw.search",
+          "target": "#deviceSearch",
+          "placement": "bottom",
+          "title": "Find a device",
+          "text": "Search by serial number or name."
+        },
+        {
+          "id": "gm.hw.table",
+          "target": "#hardwareTable",
+          "placement": "top",
+          "title": "Link devices to tenants",
+          "text": "Pick the tenant and press <b>Update Link</b>. Punches received while a device was unlinked are held and move in when you link it."
+        },
+        {
+          "id": "gm.hw.manage",
+          "target": "#hardwareTable button[onclick^=\"openDeviceActions\"]",
+          "placement": "left",
+          "title": "Manage a device",
+          "text": "Reboot, sync time, recover logs, face settings and the <b>Command Queue</b>, which shows what was sent to the device and its reply."
+        },
+        {
+          "id": "gm.hw.media",
+          "target": "#mediaForm",
+          "placement": "top",
+          "title": "Screen pictures",
+          "text": "Send a wallpaper or a screensaver advert to a device."
+        },
+        {
+          "id": "gm.hw.face",
+          "target": "#globalFaceSettingsForm",
+          "placement": "top",
+          "title": "Face recognition settings",
+          "text": "<b>Fetch Live</b> reads the device's current settings; change them and queue them to the device."
+        }
+      ]
+    },
+    {
+      "key": "gm.global",
+      "title": "Global Settings",
+      "trigger": "#page-global.active",
+      "steps": [
+        {
+          "id": "sa.global.branding",
+          "target": "#gmBrandingCard",
+          "placement": "bottom",
+          "title": "Your logo",
+          "text": "Upload the company logo shown at the top of the Global Admin and System Admin menu. The menu is dark in both themes, so a white or light logo on a transparent background looks best. Uploads and removals are recorded in the Audit Logs."
+        },
+        {
+          "id": "gm.global.email",
+          "target": "#emailSettingsForm",
+          "placement": "bottom",
+          "title": "System email",
+          "text": "The mail server the system sends from. Use <b>Send Test Email</b> below to check it works."
+        },
+        {
+          "id": "gm.global.sso",
+          "target": "#ssoSettingsForm",
+          "placement": "top",
+          "title": "Single Sign-On",
+          "text": "Google and Microsoft app IDs for the Login page. Leave one blank and its button is switched off."
+        },
+        {
+          "id": "gm.global.ports",
+          "target": "#hardwareConfigForm",
+          "placement": "top",
+          "title": "Device ports",
+          "text": "Extra ports the clocking devices can connect on, for sites with strict firewalls. Saving restarts the device service."
+        }
+      ]
+    },
+    {
+      "key": "gm.reports",
+      "title": "Reports",
+      "trigger": "#page-reports.active",
+      "steps": [
+        {
+          "id": "gm.reports.export",
+          "target": "#page-reports button[onclick=\"exportAllCSV('setup')\"]",
+          "climb": 1,
+          "placement": "bottom",
+          "title": "Export to Excel",
+          "text": "<b>Activation Fees</b> exports the once-off fees, <b>Monthly Charges</b> the monthly totals, for every tenant."
+        },
+        {
+          "id": "gm.reports.table",
+          "target": "#reportsTable",
+          "placement": "top",
+          "title": "Charges per tenant",
+          "text": "Once-off and monthly totals per tenant. Use the icons on a row to export or print that tenant only."
+        }
+      ]
+    },
+    {
+      "key": "gm.tenant-form",
+      "title": "Changing a live tenant",
+      "trigger": "#createTenantModal.flex",
+      "overlay": true,
+      "autoStart": "offer",
+      "steps": [
+        {
+          "id": "gm.tf.live",
+          "title": "This changes a live tenant",
+          "text": "New tenants now use <b>Start onboarding</b>. This form is only for changing a tenant that is already live.",
+          "target": "#advTenantName",
+          "placement": "bottom"
+        },
+        {
+          "id": "gm.tf.pricing",
+          "title": "Costs",
+          "text": "Costs come from Global Module Costing. Only System Admin can give a special price.",
+          "target": "#pricingTable",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "sa.tna-admin",
+      "title": "TNA Admin",
+      "trigger": "#page-tna-admin.active",
+      "steps": [
+        {
+          "id": "sa.billing",
+          "title": "Billing options for finance",
+          "text": "Choose which ways of billing per-employee modules BPs may offer in onboarding (fixed, peak, actual, average, seasonal), and the default.",
+          "target": "#obBillingCard",
+          "placement": "bottom"
+        },
+        {
+          "id": "sa.costs",
+          "target": "#globalCostingForm",
+          "placement": "right",
+          "title": "Module costing",
+          "text": "The standard cost of every module. New quotes use these; a special price for one tenant is set in its pricing table."
+        },
+        {
+          "id": "sa.notify",
+          "target": "#notificationEmails",
+          "placement": "top",
+          "title": "Alert emails",
+          "text": "These addresses get the full cost breakdown whenever a tenant is added or changed."
+        },
+        {
+          "id": "sa.dyncosts",
+          "target": "#dynamicCostForm",
+          "placement": "top",
+          "title": "Extra costs",
+          "text": "Travel, consulting and similar items you can add to any tenant's pricing."
+        },
+        {
+          "id": "sa.resellers",
+          "target": "#resellerForm",
+          "placement": "top",
+          "title": "Resellers",
+          "text": "Business partners that tenants can be assigned to. MY COMPANY is the default."
+        },
+        {
+          "id": "sa.report",
+          "target": "#page-tna-admin button[onclick=\"triggerMasterBillingReport(this)\"]",
+          "placement": "top",
+          "title": "Master billing report",
+          "text": "Emails the full tenant billing summary to the alert emails above."
+        },
+        {
+          "id": "sa.users",
+          "target": "#godModeUserForm",
+          "placement": "top",
+          "title": "System users",
+          "text": "Create Global Admin users. <b>System Settings</b> opens System Admin at login; <b>Deploy Tenants</b> shows the Deploy button on quotes."
+        },
+        {
+          "id": "sa.users.list",
+          "target": "#systemUsersBody",
+          "placement": "top",
+          "title": "Change a user's rights",
+          "text": "Tick or untick a right; it takes effect at their next login. Every change is recorded in the Audit Logs."
+        },
+        {
+          "id": "sa.users.reseller",
+          "title": "Link a BP user to a reseller",
+          "text": "Pick a reseller for a BP user and they only see that reseller's tenants and quotes. <b>All resellers</b> = sees everything. System Admin users always see everything.",
+          "target": ".ob-rs-th",
+          "placement": "bottom"
+        }
+      ]
+    },
+    {
+      "key": "sa.audit",
+      "title": "Audit Logs",
+      "trigger": "#page-audit.active",
+      "steps": [
+        {
+          "id": "sa.audit.table",
+          "target": "#auditTableBody",
+          "placement": "top",
+          "title": "Who did what",
+          "text": "Every Global Admin change: the user, the screen, what was done, when and from which IP. Logo uploads and log-outs are recorded too."
+        }
+      ]
+    },
+    {
+      "key": "sa.terms",
+      "title": "Terms & Conditions",
+      "trigger": "#page-terms.active",
+      "steps": [
+        {
+          "id": "sa.terms.edit",
+          "target": "#termsContentInput",
+          "placement": "top",
+          "title": "Write the new version",
+          "text": "Edit the wording, <b>Preview</b> it, then <b>Publish New Version</b>. You sign it off with your name and position."
+        },
+        {
+          "id": "sa.terms.history",
+          "target": "#termsHistoryTableBody",
+          "placement": "top",
+          "title": "Version history",
+          "text": "Every published version, who published it and when."
+        }
+      ]
+    },
+    {
+      "key": "sa.papia",
+      "title": "PAPIA / POPIA",
+      "trigger": "#page-papia.active",
+      "steps": [
+        {
+          "id": "sa.papia.edit",
+          "target": "#papiaContentInput",
+          "placement": "top",
+          "title": "Privacy policy",
+          "text": "Write, preview and publish the privacy policy, the same way as the Terms &amp; Conditions."
+        },
+        {
+          "id": "sa.papia.history",
+          "target": "#papiaHistoryTableBody",
+          "placement": "top",
+          "title": "Version history",
+          "text": "Every published version, who published it and when."
+        }
+      ]
+    },
+    {
+      "key": "sa.api",
+      "title": "API Integration",
+      "trigger": "#page-api-sync.active",
+      "steps": [
+        {
+          "id": "sa.api.demo",
+          "target": "#demoModeAdminCard",
+          "placement": "bottom",
+          "title": "Demo / Setup mode",
+          "text": "Lets a company set up, train and test on a <b>copy of its own data</b>. Switch it on per company and set a test mailbox; nothing done in the copy touches the live system."
+        },
+        {
+          "id": "sa.api.key",
+          "target": "#masterApiKeyDisplay",
+          "placement": "bottom",
+          "title": "Master API key",
+          "text": "Read-only access to the tenant list for other systems, such as the Support desk. A new key stops the old one working straight away."
+        },
+        {
+          "id": "sa.api.demosync",
+          "target": "#demoSyncCard",
+          "placement": "top",
+          "title": "Demo Data Sync",
+          "text": "Fills ONE demo tenant with scrubbed employees and clocks every hour. Read the warning first and <b>never</b> pick a live customer tenant."
+        }
+      ]
+    },
+    {
+      "key": "gm.onboarding",
+      "title": "Tenant onboarding",
+      "trigger": "#obWizard.ob-open",
+      "overlay": true,
+      "autoStart": "offer",
+      "steps": [
+        {
+          "id": "gm.ob.steps",
+          "title": "Eight short steps",
+          "text": "Company, employees, modules, extras, demo mode, admin login, documents and review. Click any step to jump to it.",
+          "target": "#obSteps",
+          "placement": "right"
+        },
+        {
+          "id": "gm.ob.next",
+          "title": "Every Next saves",
+          "text": "<b>Save &amp; next</b> saves this step and moves on. Only the company name is needed to start, so you can stop half way and finish later.",
+          "target": "#obNext",
+          "placement": "top"
+        },
+        {
+          "id": "gm.ob.saveclose",
+          "title": "Save and come back later",
+          "text": "Saves and closes. The quote waits under <b>Onboarding &amp; quotes</b> with the step you reached and what is still missing.",
+          "target": "#obSaveClose",
+          "placement": "top"
+        },
+        {
+          "id": "gm.ob.status",
+          "title": "Where the quote is",
+          "text": "Draft &rarr; Quote sent &rarr; Accepted &rarr; Ready to deploy &rarr; Deployed. You move it on from the <b>Review</b> step.",
+          "target": "#obStatusBar",
+          "placement": "bottom"
+        },
+        {
+          "id": "gm.ob.history",
+          "title": "Who did what",
+          "text": "Every save, status change and deploy is recorded with the user and the time.",
+          "target": "#obHistoryBtn",
+          "placement": "bottom"
+        },
+        {
+          "id": "gm.ob.statuscard",
+          "title": "Move the quote on",
+          "text": "Mark it sent, then accepted. System Admin checks it, marks it <b>Ready to deploy</b> and deploys it.",
+          "target": "#obStatusCard",
+          "placement": "top"
+        }
+      ]
+    }
+  ],
+  "guides": [
+    {
+      "key": "sa.guide.branding",
+      "title": "Upload your logo",
+      "icon": "fa-image",
+      "blurb": "Show your logo at the top of the menu",
+      "steps": [
+        {
+          "id": "sa.gb.open-global",
+          "target": "#sidebarNav button[onclick^=\"showSection('global'\"]",
+          "mode": "click",
+          "hint": "Click Global Settings",
+          "title": "Open Global Settings",
+          "text": "Click <b>Global Settings</b> in the menu."
+        },
+        {
+          "id": "sa.gb.file",
+          "target": "#gmBrandFile",
+          "timeout": 3000,
+          "title": "Choose the image",
+          "text": "PNG, JPG or WEBP up to 1 MB. The preview shows it on the menu background before you save."
+        },
+        {
+          "id": "sa.gb.save",
+          "target": "#gmBrandSaveBtn",
+          "title": "Upload it",
+          "text": "Press <b>Upload logo</b>. Every Global Admin user sees it the next time their page loads. <b>Use default</b> removes it again."
+        }
+      ]
+    }
+  ]
+}

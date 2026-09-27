@@ -1,4 +1,8 @@
 const sql = require('mssql');
+// DEMO / SETUP MODE: marks the requests that belong to a demo session (set in middleware/auth.js).
+// Everything below behaves exactly as before for every other request.
+const { AsyncLocalStorage } = require('async_hooks');
+const demoContext = new AsyncLocalStorage();
 
 // Master DB Config
 const masterConfig = {
@@ -36,6 +40,27 @@ if (process.env.DB_DOMAIN) {
 const masterPool = new sql.ConnectionPool(masterConfig);
 masterPool.on('error', err => console.error('⚠️ Master SQL Pool Error Caught:', err.message));
 
+// DEMO / SETUP MODE (AUTO-HEAL): a demo request may never change devices or company-wide settings.
+// Writes to these master tables are refused; everything else runs normally.
+const DEMO_BLOCKED_MASTER_WRITES = /\b(INSERT\s+INTO|UPDATE|DELETE\s+FROM|DELETE|MERGE(\s+INTO)?)\s+(dbo\.)?\[?(command_queue|Devices|Tenants|SystemSecuritySettings)\]?(\s|\(|$)/i;
+const realMasterRequest = masterPool.request.bind(masterPool);
+masterPool.request = function () {
+    const r = realMasterRequest.apply(null, arguments);
+    const demo = demoContext.getStore();
+    if (!demo) return r;
+    const realQuery = r.query.bind(r);
+    r.query = function (text) {
+        if (typeof text === 'string' && DEMO_BLOCKED_MASTER_WRITES.test(text)) {
+            console.log('[Demo] Blocked a master-database change from a demo request.');
+            const err = new Error('Blocked in demo / setup mode: devices and company-wide settings are not changed from a demo copy.');
+            err.code = 'TNA_DEMO_BLOCKED';
+            return Promise.reject(err);
+        }
+        return realQuery.apply(null, arguments);
+    };
+    return r;
+};
+
 const tenantPools = {};
 const tenantConnecting = {}; 
 
@@ -72,6 +97,13 @@ async function connectMaster() {
 }
 
 async function getTenantConnection(dbName) {
+    // DEMO / SETUP MODE (AUTO-HEAL): a request in a demo session gets the tenant's sandbox copy
+    // instead of its live database. Any other request, or any other database, is unchanged.
+    const demo = demoContext.getStore();
+    if (demo && dbName && demo.liveDb && demo.sandboxDb &&
+        String(dbName).trim().toLowerCase() === String(demo.liveDb).trim().toLowerCase()) {
+        dbName = demo.sandboxDb;
+    }
     if (!dbName) {
         throw new Error("getTenantConnection was called with an undefined or empty database name!");
     }
@@ -119,8 +151,18 @@ async function getTenantConnection(dbName) {
     return tenantPools[targetDb];
 }
 
+// Closes a cached tenant connection (used before a demo sandbox is deleted or refreshed)
+async function closeTenantPool(dbName) {
+    const key = String(dbName || '').trim();
+    const pool = tenantPools[key];
+    delete tenantPools[key];
+    if (pool) { try { await pool.close(); } catch (e) {} }
+}
+
 module.exports = {
     masterPool,
     connectMaster,
-    getTenantConnection
+    getTenantConnection,
+    demoContext,
+    closeTenantPool
 };

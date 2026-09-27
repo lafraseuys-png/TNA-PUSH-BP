@@ -1,0 +1,124 @@
+{
+  "_howto": "POS till screen (POS.html) tour.",
+  "key": "pos",
+  "title": "Till tour",
+  "startDelay": 2500,
+  "blockers": [
+    "#modalRoot:not(:empty)"
+  ],
+  "steps": [
+    {
+      "id": "pos-welcome",
+      "title": "Welcome to the till",
+      "text": "Sell to cash customers and on employee accounts. Everything is in reach of one hand on a touch screen.",
+      "fullOnly": true
+    },
+    {
+      "id": "pos-day",
+      "target": [
+        "#blockerBtn",
+        "#btnStartDay"
+      ],
+      "title": "Start the day",
+      "text": "Start the day with your opening cash before selling. The chip at the top shows the day that's open.",
+      "placement": "bottom"
+    },
+    {
+      "id": "pos-search",
+      "target": [
+        "#searchInput"
+      ],
+      "title": "Find or scan",
+      "text": "Scan a barcode, or type to search for an item.",
+      "placement": "bottom"
+    },
+    {
+      "id": "pos-grid",
+      "target": [
+        "#gridWrap"
+      ],
+      "title": "Item buttons",
+      "text": "Tap an item to add it. Categories take you through the buttons.",
+      "placement": "right"
+    },
+    {
+      "id": "pos-basket",
+      "target": [
+        "#basketLines"
+      ],
+      "title": "The basket",
+      "text": "What's being bought. Tap a line to change the quantity or remove it.",
+      "placement": "left"
+    },
+    {
+      "id": "pos-pay",
+      "target": [
+        "#btnPay"
+      ],
+      "title": "Pay",
+      "text": "Cash, card, or on the employee's account (with their fingerprint, face or PIN if your company uses that). The slip prints.",
+      "placement": "top"
+    },
+    {
+      "id": "pos-returns",
+      "target": [
+        "#btnReturns"
+      ],
+      "title": "Returns",
+      "text": "Cash returns by scanning the item; employee returns are found on their own sale and credited to their account.",
+      "placement": "bottom",
+      "optional": true
+    },
+    {
+      "id": "pos-mysales",
+      "target": [
+        "#btnMySales"
+      ],
+      "title": "My Sales",
+      "text": "Your sales today; reprint a slip.",
+      "placement": "bottom",
+      "optional": true
+    },
+    {
+      "id": "pos-cash",
+      "target": [
+        "#btnCashOut"
+      ],
+      "title": "Cash Out",
+      "text": "Take cash out of the drawer (for example to the safe), with a reason.",
+      "placement": "bottom",
+      "optional": true
+    },
+    {
+      "id": "pos-stock",
+      "target": [
+        "#btnStockTake"
+      ],
+      "title": "Stock Take",
+      "text": "Count the stock on the shelf.",
+      "placement": "bottom",
+      "optional": true
+    },
+    {
+      "id": "pos-end",
+      "target": [
+        "#btnEndDay"
+      ],
+      "title": "Cash-Up",
+      "text": "End the day: count the cash; differences are recorded for the manager.",
+      "placement": "bottom",
+      "optional": true
+    },
+    {
+      "id": "pos-help",
+      "target": [
+        "#tnaTourHelpBtn"
+      ],
+      "title": "Help",
+      "text": "Tap <b>?</b> for this tour any time.",
+      "placement": "left"
+    }
+  ],
+  "sections": [],
+  "guides": []
+}

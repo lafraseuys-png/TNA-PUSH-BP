@@ -1,0 +1,293 @@
+{
+  "_howto": "Asset Tagging how-to guides.",
+  "guides": [
+    {
+      "key": "assettagging.guide.asset",
+      "title": "Register an asset",
+      "icon": "fa-tag",
+      "blurb": "Add an asset with its tag, details, service schedule and who has it.",
+      "steps": [
+        {
+          "id": "atg-a-open",
+          "target": [
+            "#tab-assets"
+          ],
+          "title": "Asset Registry",
+          "text": "Click <b>Asset Registry</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Asset Registry"
+        },
+        {
+          "id": "atg-a-add",
+          "target": [
+            "#section-assets button[onclick*='openAddAssetModal']"
+          ],
+          "title": "Register Asset",
+          "text": "Click <b>Register Asset</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Register Asset"
+        },
+        {
+          "id": "atg-a-tag",
+          "target": [
+            "#regAssetTag"
+          ],
+          "title": "Tag and category",
+          "text": "The number on its tag, and its category.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "atg-a-name",
+          "target": [
+            "#regName"
+          ],
+          "title": "What it is",
+          "text": "Name, model and serial number.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "atg-a-service",
+          "target": [
+            "#regServiceInterval"
+          ],
+          "title": "Service schedule",
+          "text": "How often it needs a service, and whether it's measured in kilometres, hours or time.",
+          "placement": "bottom",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "atg-a-assign",
+          "target": [
+            "#regAssignType"
+          ],
+          "title": "Who or where",
+          "text": "Assign it to a person, a department or a place.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "atg-a-save",
+          "target": [
+            "#addAssetModal button[type='submit']"
+          ],
+          "title": "Save",
+          "text": "Registers the asset. Print its label from <b>Print Labels &amp; Tags</b>.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "assettagging.guide.stockitem",
+      "title": "Create a stock item",
+      "icon": "fa-box-open",
+      "blurb": "Add an item to your catalog with its barcodes.",
+      "steps": [
+        {
+          "id": "atg-s-open",
+          "target": [
+            "#tab-stock-items"
+          ],
+          "title": "Stock Catalog",
+          "text": "Click <b>Stock Catalog</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Stock Catalog"
+        },
+        {
+          "id": "atg-s-add",
+          "target": [
+            "#section-stock-items button[onclick*='openAddStockItemModal']"
+          ],
+          "title": "Create Stock Item",
+          "text": "Click <b>Create Stock Item</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Create Stock Item"
+        },
+        {
+          "id": "atg-s-code",
+          "target": [
+            "#newItemCode"
+          ],
+          "title": "Code and category",
+          "text": "Your item code and its stock category.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "atg-s-name",
+          "target": [
+            "#newItemName"
+          ],
+          "title": "Name",
+          "text": "What it's called on screens and slips.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "atg-s-serial",
+          "target": [
+            "#newIsSerialized"
+          ],
+          "title": "Serialised",
+          "text": "Tick for items tracked one by one by serial number (such as radios); leave off for quantities (such as cold drinks).",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "atg-s-bar",
+          "target": [
+            "#newInitialBarcodes"
+          ],
+          "title": "Barcodes",
+          "text": "One or more barcodes, so the till can scan it.",
+          "placement": "top",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "atg-s-save",
+          "target": [
+            "#saveStockItemBtn"
+          ],
+          "title": "Save",
+          "text": "Then receive stock of it with a GRV.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "assettagging.guide.grv",
+      "title": "Receive stock (GRV)",
+      "icon": "fa-truck-ramp-box",
+      "blurb": "Book stock that arrived into a warehouse.",
+      "steps": [
+        {
+          "id": "atg-g-open",
+          "target": [
+            "#tab-stock-inventory"
+          ],
+          "title": "Live Inventory & GRV",
+          "text": "Click <b>Live Inventory &amp; GRV</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Live Inventory & GRV"
+        },
+        {
+          "id": "atg-g-add",
+          "target": [
+            "#section-stock-inventory button[onclick*='openGrvModal']"
+          ],
+          "title": "Receive GRV",
+          "text": "Click <b>Receive GRV</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Receive GRV"
+        },
+        {
+          "id": "atg-g-po",
+          "target": [
+            "#grvPO"
+          ],
+          "title": "Order and warehouse",
+          "text": "The order or delivery number, and the warehouse it goes into.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "atg-g-item",
+          "target": [
+            "#grvItemSelect"
+          ],
+          "title": "Items",
+          "text": "Choose each item and its quantity, or scan each serial number, and add it to the list.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "atg-g-done",
+          "target": [
+            "#submitGrvBtn"
+          ],
+          "title": "Complete",
+          "text": "Books the stock in. <b>Save Draft</b> if you're not finished; missing items show as shortages.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "assettagging.guide.pos",
+      "title": "Set up the POS",
+      "icon": "fa-cash-register",
+      "blurb": "Get the till ready: rules, items and prices, cashiers, layout.",
+      "steps": [
+        {
+          "id": "atg-p-open",
+          "target": [
+            "#tab-pos-settings"
+          ],
+          "title": "POS Settings",
+          "text": "Click <b>POS Settings</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click POS Settings"
+        },
+        {
+          "id": "atg-p-setup",
+          "target": [
+            "#posSetTabs [data-pos-tab='setup']"
+          ],
+          "title": "1. Setup",
+          "text": "Employee account sales and limits, cash, returns and face payment.",
+          "placement": "bottom",
+          "timeout": 5000
+        },
+        {
+          "id": "atg-p-items",
+          "target": [
+            "#posSetTabs [data-pos-tab='items']"
+          ],
+          "title": "2. Items & Prices",
+          "text": "Which stock items are sold, and their prices.",
+          "placement": "bottom"
+        },
+        {
+          "id": "atg-p-users",
+          "target": [
+            "#posSetTabs [data-pos-tab='users']"
+          ],
+          "title": "3. Users & Rights",
+          "text": "Your cashiers and what each may do.",
+          "placement": "bottom"
+        },
+        {
+          "id": "atg-p-layout",
+          "target": [
+            "#posSetTabs [data-pos-tab='layout']"
+          ],
+          "title": "4. Layout",
+          "text": "Arrange the till's buttons into categories.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "atg-p-screen",
+          "target": [
+            "#tab-pos-screen"
+          ],
+          "title": "5. Open the till",
+          "text": "Open the POS screen and start the day.",
+          "placement": "right"
+        }
+      ]
+    }
+  ]
+}

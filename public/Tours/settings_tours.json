@@ -1,0 +1,1579 @@
+{
+  "_howto": "Settings tours. steps = page tour (first visit). sections = one tour per Settings area, starts the first time that area is opened (trigger = the area's page-section when active). guides = hands-on how-to guides in the ? menu (mode click = the user clicks the real button). To announce something NEW, add a step with a NEW id to the right tour. Rewording keeps the id. Never reuse an id.",
+  "key": "settings",
+  "title": "Settings tour",
+  "startDelay": 1500,
+  "blockers": [
+    ".modal-backdrop.active",
+    "#sgBack",
+    "#tgTip"
+  ],
+  "reset": [
+    {
+      "removeClass": "#profileDropdown",
+      "cls": "show"
+    },
+    {
+      "removeClass": "#tnbBar .tnb-menu",
+      "cls": "show"
+    }
+  ],
+  "whatsNewTitle": "What's new in Settings",
+  "whatsNewText": "We've added something new here since you last took the tour.",
+  "steps": [
+    {
+      "id": "st-welcome",
+      "title": "Welcome to Settings",
+      "text": "This is where your company's system is set up: your company details, who can log in and what they can do, connections to other systems, clocking devices and more.<br><br>Use <b>Next</b> and <b>Back</b>, or your arrow keys. Press <b>Esc</b> to close.",
+      "fullOnly": true
+    },
+    {
+      "id": "st-sidebar",
+      "target": [
+        "#sidebarNav"
+      ],
+      "title": "All Settings areas",
+      "text": "Every Settings area is listed here. You only see the areas your role allows.",
+      "placement": "right"
+    },
+    {
+      "id": "st-nav-profile",
+      "target": [
+        "#sidebarNav li[data-permission=\"set_profile\"] > a"
+      ],
+      "title": "Company Profile",
+      "text": "Your company's name, contact details and logo.",
+      "placement": "right"
+    },
+    {
+      "id": "st-nav-api",
+      "target": [
+        "#sidebarNav li[data-permission=\"set_api,sys_api\"] > a"
+      ],
+      "title": "Connectivity",
+      "text": "Email sending, single sign-on with Microsoft or Google, the ZKTeco API, legacy and Sage links, and mobile app security.",
+      "placement": "right"
+    },
+    {
+      "id": "st-nav-sync",
+      "target": [
+        "#sidebarNav li[data-permission=\"set_sync,sys_api\"] > a"
+      ],
+      "title": "Sync Engine",
+      "text": "Mobile app preferences, which departments are synced, and a manual sync button.",
+      "placement": "right"
+    },
+    {
+      "id": "st-nav-users",
+      "target": [
+        "#sidebarNav li[data-permission=\"set_users,sys_users\"] > a"
+      ],
+      "title": "User Access",
+      "text": "Everyone who can log in: create users, link them to employees, and set which modules and data they can see.",
+      "placement": "right"
+    },
+    {
+      "id": "st-nav-roles",
+      "target": [
+        "#sidebarNav li[data-permission=\"set_roles,sys_users\"] > a"
+      ],
+      "title": "Roles & Permissions",
+      "text": "Ready-made permission sets. Give a user a role instead of ticking every permission by hand.",
+      "placement": "right"
+    },
+    {
+      "id": "st-nav-zones",
+      "target": [
+        "#sidebarNav li[data-permission=\"set_zones,sys_hardware\"] > a"
+      ],
+      "title": "Access Zones",
+       "text": "Group your clocking devices by place, such as Main Gate or Warehouse A.",
+      "placement": "right"
+    },
+    {
+      "id": "st-nav-devices",
+      "target": [
+        "#sidebarNav li[data-permission=\"set_devices,sys_hardware\"] > a"
+      ],
+      "title": "Hardware",
+      "text": "Clocking terminals, facial recognition licences, connected phones and CSV imports.",
+      "placement": "right"
+    },
+    {
+      "id": "st-nav-errors",
+      "target": [
+        "#sidebarNav li[data-permission=\"set_errors,sys_hardware\"] > a"
+      ],
+      "title": "Mobile Errors",
+      "text": "Error reports sent in by the mobile app, so problems on phones can be found and fixed.",
+      "placement": "right"
+    },
+    {
+      "id": "st-nav-billing",
+      "target": [
+        "#sidebarNav li[data-permission=\"set_billing\"] > a"
+      ],
+      "title": "Usage & Quota",
+      "text": "How much of your licence you are using.",
+      "placement": "right"
+    },
+    {
+      "id": "st-nav-audit",
+      "target": [
+        "#sidebarNav li[data-permission=\"set_audit,sys_users\"] > a"
+      ],
+      "title": "Audit Trail",
+      "text": "A record of who changed what in the system, and when.",
+      "placement": "right"
+    },
+    {
+      "id": "st-nav-mobile-tx",
+      "target": [
+        "#sidebarNav li[data-permission=\"set_mobile_tx,sys_api\"] > a"
+      ],
+      "title": "Mobile Transactions",
+      "text": "The data phones have sent in (clockings, trips and more), so you can check what arrived.",
+      "placement": "right"
+    },
+    {
+      "id": "st-nav-tickets",
+      "target": [
+        "#sidebarNav li[data-permission=\"set_tickets\"] > a"
+      ],
+      "title": "My Tickets",
+      "text": "Your support tickets with TNA Africa and their status.",
+      "placement": "right"
+    },
+    {
+      "id": "st-nav-notifications",
+      "target": [
+        "#sidebarNav li[data-permission=\"set_notifications,set_sync,sys_api\"] > a"
+      ],
+      "title": "Notifications",
+      "text": "Automatic reminders and alerts, for example about clocking problems.",
+      "placement": "right"
+    },
+    {
+      "id": "st-collapse",
+      "target": [
+        ".sidebar-toggle-btn"
+      ],
+      "title": "Make more room",
+      "text": "Collapse the menu to icons only, and click again to open it. Your choice is remembered.",
+      "placement": "right"
+    },
+    {
+      "id": "st-title",
+      "target": [
+        "#sectionTitle"
+      ],
+      "title": "Where you are",
+      "text": "The name of the area that is open right now.",
+      "placement": "bottom"
+    },
+    {
+      "id": "st-profile",
+      "target": [
+        "[data-tour='st-profile']",
+        "#mainSidebar .profile-button"
+      ],
+      "title": "Your menu",
+      "text": "Click your name to open your menu. Let's look inside.",
+      "placement": "right",
+      "before": [
+        {
+          "removeClass": "#profileDropdown",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "st-menu-theme",
+      "target": [
+        "[data-tour='st-menu-theme']",
+        "#profileDropdown [data-theme-toggle]"
+      ],
+      "title": "Toggle Theme",
+      "text": "Switch between dark and light. Your choice follows your login to any computer.",
+      "placement": "right",
+      "before": [
+        {
+          "addClass": "#profileDropdown",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "st-menu-launchpad",
+      "target": [
+        "[data-tour='st-menu-launchpad']",
+        "#profileDropdown a[href='Launchpad.html']"
+      ],
+      "title": "Launchpad",
+      "text": "Back to your home screen with all your modules.",
+      "placement": "right",
+      "before": [
+        {
+          "addClass": "#profileDropdown",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "st-menu-help",
+      "target": [
+        "[data-tour='st-menu-help']"
+      ],
+      "title": "Help & Tours",
+      "text": "Opens the same help menu as the <b>?</b> button: tours, what's new and how-to guides.",
+      "placement": "right",
+      "before": [
+        {
+          "addClass": "#profileDropdown",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "st-menu-logout",
+      "target": [
+        "[data-tour='st-menu-logout']",
+        "#profileDropdown .logout"
+      ],
+      "title": "Logout",
+      "text": "Always log out on a shared computer.",
+      "placement": "right",
+      "before": [
+        {
+          "addClass": "#profileDropdown",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "st-top-search",
+      "target": [
+        "#tnbBar .tnb-search"
+      ],
+      "title": "Search any screen",
+      "text": "Type what you're looking for, like <b>leave</b> or <b>roster</b>, to jump straight to any screen you have access to, in any module.<br><br>Point at the search bar without typing to see your most visited screens, and pin your favourites.",
+      "placement": "bottom",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "st-top-profile",
+      "target": [
+        "#tnbBar .tnb-pbtn"
+      ],
+      "title": "Your menu",
+      "text": "Click your name for your profile, other areas of the system, and logout. Let's look inside.",
+      "placement": "bottom",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "st-top-launchpad",
+      "target": [
+        "#tnbBar .tnb-menu a[href='Launchpad.html']"
+      ],
+      "title": "Launchpad",
+      "text": "Back to your home screen with all your modules.",
+      "placement": "left",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        },
+        {
+          "click": "#tnbBar .tnb-pbtn"
+        }
+      ],
+      "wait": 320
+    },
+    {
+      "id": "st-top-myprofile",
+      "target": [
+        "#tnbBar .tnb-act-profile"
+      ],
+      "title": "Profile",
+      "text": "Update your name and email address, or change your password.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "st-top-settings",
+      "target": [
+        "#tnbBar .tnb-act-settings"
+      ],
+      "title": "Settings",
+      "text": "Company-wide setup. Only shown to users allowed to change settings.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "st-top-ess",
+      "target": [
+        "#tnbBar .tnb-menu a[href='ess_dashboard.html']"
+      ],
+      "title": "ESS",
+      "text": "Your own self service: leave, claims, payslips and documents.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "st-top-phone",
+      "target": [
+        "#tnbBar .tnb-act-phone"
+      ],
+      "title": "Connect a Phone",
+      "text": "Shows a QR code that connects a company phone to your company. It contains your licence key, so only show it while setting up phones.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "st-top-app",
+      "target": [
+        "#tnbBar .tnb-act-app"
+      ],
+      "title": "Download the App",
+      "text": "Shows a QR code to download the Android app onto a phone.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "st-top-help",
+      "target": [
+        "#tnbBar .tnb-act-help"
+      ],
+      "title": "Help & Tours",
+      "text": "Opens the same help menu as the <b>?</b> button.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "st-top-theme",
+      "target": [
+        "#tnbBar .tnb-theme-row"
+      ],
+      "title": "Dark Mode",
+      "text": "Switch between dark and light. Your choice follows your login to any computer.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "st-top-logout",
+      "target": [
+        "#tnbBar .tnb-logout"
+      ],
+      "title": "Logout",
+      "text": "Always log out on a shared computer.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ],
+      "after": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "st-help-button",
+      "target": [
+        "#tnaTourHelpBtn"
+      ],
+      "title": "Help is always here",
+      "text": "Click <b>?</b> for the page tour, a tour of the section you're in, what's new, and hands-on <b>how-to guides</b> such as creating a user.",
+      "placement": "left",
+      "before": [
+        {
+          "removeClass": "#profileDropdown",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "st-done",
+      "title": "You're all set",
+      "text": "Each Settings area also has its own short tour. It starts the first time you open that area, and you can replay it any time from <b>?</b>.",
+      "fullOnly": true
+    }
+  ],
+  "sections": [
+    {
+      "key": "settings.profile",
+      "title": "Company Profile",
+      "trigger": "#page-profile.active",
+      "reset": [
+        {
+          "call": "switchCompanyTab",
+          "args": [
+            "active"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "id": "stp-tabs",
+          "target": [
+            "#btn-tab-comp-active"
+          ],
+          "title": "Company Entities",
+          "text": "Your active company, with its contact details and logo.",
+          "placement": "bottom",
+          "before": [
+            {
+              "call": "switchCompanyTab",
+              "args": [
+                "active"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "stp-search",
+          "target": [
+            "#searchCompany"
+          ],
+          "title": "Search",
+          "text": "Find a company by name.",
+          "placement": "bottom"
+        },
+        {
+          "id": "stp-create",
+          "target": [
+            "#tab-comp-active button[onclick*='openCreateCompanyModal']"
+          ],
+          "title": "Create Company",
+          "text": "Add a new company entity.",
+          "placement": "left"
+        },
+        {
+          "id": "stp-table",
+          "target": [
+            "#companyTableBody"
+          ],
+          "title": "Your company",
+          "text": "The name, contact email, contact number and logo. Use <b>Edit</b> on the row to change them, including uploading a new logo. The new logo is used across the system.",
+          "placement": "top"
+        },
+        {
+          "id": "stp-deact",
+          "target": [
+            "#btn-tab-comp-deact"
+          ],
+          "title": "Deactivated Entities",
+          "text": "Companies that have been switched off. They are kept here for your records.",
+          "placement": "bottom",
+          "before": [
+            {
+              "call": "switchCompanyTab",
+              "args": [
+                "deactivated"
+              ]
+            }
+          ],
+          "after": [
+            {
+              "call": "switchCompanyTab",
+              "args": [
+                "active"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "settings.api",
+      "title": "Connectivity",
+      "trigger": "#page-api.active",
+      "reset": [
+        {
+          "call": "switchApiCategory",
+          "args": [
+            "email"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "id": "sta-tabs",
+          "target": [
+            "#btn-cat-email"
+          ],
+          "title": "Five tabs",
+          "text": "Connectivity is split into tabs: <b>Email Config</b>, <b>SSO Identity</b>, <b>ZKTeco API</b>, <b>Legacy Systems</b> and <b>Mobile Security</b>. Let's go through each one.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchApiCategory",
+              "args": [
+                "email"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sta-email",
+          "target": [
+            "#emailConfigContainer"
+          ],
+          "title": "Email Config",
+          "text": "Your own mail server for system emails like password resets and notifications. Leave it blank to use TNA Africa's standard email. Click <b>Edit</b> to change it, then <b>Save</b>.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchApiCategory",
+              "args": [
+                "email"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sta-email-test",
+          "target": [
+            "#cat-email button[onclick*='testTenantEmail']"
+          ],
+          "title": "Send Test Email",
+          "text": "Send a test message to check your email settings work before you rely on them.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchApiCategory",
+              "args": [
+                "email"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sta-sso",
+          "target": [
+            "#cat-sso"
+          ],
+          "title": "SSO Identity",
+          "text": "Let staff sign in with their Microsoft or Google work account instead of a separate password. Enter the Application (Client) ID from Microsoft or Google here.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchApiCategory",
+              "args": [
+                "sso"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sta-zk",
+          "target": [
+            "#cat-tna"
+          ],
+          "title": "ZKTeco API",
+          "text": "The connection to your ZKTeco server: its address (Base URL) and access token. After saving, use <b>Test API Connection</b> to check it answers.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchApiCategory",
+              "args": [
+                "tna"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sta-cvs-zones",
+          "target": [
+            "#cat-cvs button[onclick*='syncCvsZones']"
+          ],
+          "title": "CVS Access Zones",
+          "text": "Pulls the access levels from ZKTeco so you can give them to employees in Employee Master.",
+          "placement": "left",
+          "before": [
+            {
+              "call": "switchApiCategory",
+              "args": [
+                "cvs"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sta-cvs-db",
+          "target": [
+            "#cat-cvs button[onclick*='testDb']"
+          ],
+          "title": "Direct CVS Database Link",
+          "text": "An optional direct link to the CVS database. Edit the details, save, then use <b>Test Connection</b>.",
+          "placement": "left",
+          "before": [
+            {
+              "call": "switchApiCategory",
+              "args": [
+                "cvs"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sta-sage",
+          "target": [
+            "#cat-cvs button[onclick*='testSageApi']"
+          ],
+          "title": "Sage Integration",
+          "text": "Connects to Sage payroll. Set the login details, which system is the master, and what is pushed to Sage (leave, payroll costs) or pulled from it (wage advice, pay rates, leave balances). Use <b>Test Connection</b> after saving.",
+          "placement": "left",
+          "before": [
+            {
+              "call": "switchApiCategory",
+              "args": [
+                "cvs"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sta-sage-map",
+          "target": [
+            "#cat-cvs button[onclick*='loadSageLeaveMapping']"
+          ],
+          "title": "Sage Leave Type Mapping",
+          "text": "Click <b>Load from Sage</b>, then match each of your leave types to the Sage one. Suggested matches are filled in but only saved when you click <b>Save Mapping</b>.",
+          "placement": "left",
+          "before": [
+            {
+              "call": "switchApiCategory",
+              "args": [
+                "cvs"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sta-mobilesec",
+          "target": [
+            "#cat-mobilesec"
+          ],
+          "title": "Mobile Security",
+          "text": "Choose how phones may connect: <b>HTTPS only</b> (secure, recommended), HTTP only, or both.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchApiCategory",
+              "args": [
+                "mobilesec"
+              ]
+            }
+          ],
+          "after": [
+            {
+              "call": "switchApiCategory",
+              "args": [
+                "email"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "settings.sync",
+      "title": "Sync Engine",
+      "trigger": "#page-sync.active",
+      "reset": [
+        {
+          "call": "switchSyncCategory",
+          "args": [
+            "mobile"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "id": "sts-tabs",
+          "target": [
+            "#btn-sync-mobile"
+          ],
+          "title": "Three tabs",
+          "text": "<b>Mobile App Prefs</b>, <b>Hierarchy Constraints</b> and <b>Manual Sync</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchSyncCategory",
+              "args": [
+                "mobile"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sts-hide-tiles",
+          "target": [
+            "#sync-mobile"
+          ],
+          "title": "Hide Restricted Tiles",
+          "text": "When this is on, tiles an employee can't use are hidden in the mobile app instead of greyed out. It saves as soon as you switch it.",
+          "placement": "bottom",
+          "before": [
+            {
+              "call": "switchSyncCategory",
+              "args": [
+                "mobile"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sts-root-dept",
+          "target": [
+            "#sync-hierarchy"
+          ],
+          "title": "Root Department",
+          "text": "Limit syncing to one ZKTeco department code and everything under it (for example 1000). Leave it blank to sync the whole organisation.",
+          "placement": "bottom",
+          "before": [
+            {
+              "call": "switchSyncCategory",
+              "args": [
+                "hierarchy"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sts-method",
+          "target": [
+            "#sync-manual"
+          ],
+          "title": "Sync method",
+          "text": "Choose where employee data comes from: <b>Use API</b> pulls it from your ZKTeco server, <b>Use Own DB</b> keeps this system as the master.",
+          "placement": "bottom",
+          "before": [
+            {
+              "call": "switchSyncCategory",
+              "args": [
+                "manual"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sts-force",
+          "target": [
+            "#sync-manual button[onclick*='syncEmployees']"
+          ],
+          "title": "Force Master Sync",
+          "text": "Pull employees now instead of waiting for the automatic sync. Handy after adding people in ZKTeco.",
+          "placement": "left",
+          "before": [
+            {
+              "call": "switchSyncCategory",
+              "args": [
+                "manual"
+              ]
+            }
+          ],
+          "after": [
+            {
+              "call": "switchSyncCategory",
+              "args": [
+                "mobile"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "settings.users",
+      "title": "User Access",
+      "trigger": "#page-users.active",
+      "steps": [
+        {
+          "id": "stu-create",
+          "target": [
+            "#page-users button[onclick*='openCreateUserModal']"
+          ],
+          "title": "Create User",
+          "text": "Opens the form for a new login. For a step-by-step walkthrough, open <b>?</b> and choose <b>User Access &amp; creating a user</b> under How-to guides.",
+          "placement": "left"
+        },
+        {
+          "id": "stu-data-tools",
+          "target": [
+            "#userDataToolsWrap"
+          ],
+          "title": "Data Tools",
+          "text": "<b>Download Blank Template</b> gives you an Excel file with the import columns and your role list. Fill it in, then use <b>Bulk Import Users</b> to upload it (.xlsx or .csv) and create many users at once.",
+          "placement": "left"
+        },
+        {
+          "id": "stu-export",
+          "target": [
+            "#page-users button[onclick*='exportUsersReport']"
+          ],
+          "title": "Export Report",
+          "text": "Downloads the list as a spreadsheet, using your current search and filters. Handy for access audits.",
+          "placement": "left"
+        },
+        {
+          "id": "stu-search",
+          "target": [
+            "#userSearchInput"
+          ],
+          "title": "Search",
+          "text": "Find a user by name, username or email as you type.",
+          "placement": "bottom"
+        },
+        {
+          "id": "stu-filters",
+          "target": [
+            "#btnFilterHub"
+          ],
+          "title": "Filters",
+          "text": "Filter by <b>User Type</b> (system logins or users linked to an employee) and by <b>Assigned Role</b>. The number shows how many filters are on.",
+          "placement": "bottom"
+        },
+        {
+          "id": "stu-table",
+          "target": [
+            "#usersTable thead"
+          ],
+          "title": "The user list",
+          "text": "Each user's status, how they may log in (web, mobile), their role, which departments' data they can see, and their modules. Right-click this header row to show or hide columns.",
+          "placement": "bottom"
+        },
+        {
+          "id": "stu-edit",
+          "target": [
+            "#usersTable tbody button[onclick*='editUser']"
+          ],
+          "title": "Edit a user",
+          "text": "Opens the user in three tabs: <b>Profile &amp; Security</b>, <b>Data Scopes</b> (which departments' data they can see) and <b>Module Restrictions</b>.",
+          "placement": "left",
+          "timeout": 3000
+        },
+        {
+          "id": "stu-status",
+          "target": [
+            "#usersTable tbody button[onclick*='toggleUserStatus']"
+          ],
+          "title": "Deactivate or activate",
+          "text": "Deactivating stops the user logging in. You can activate them again at any time.",
+          "placement": "left",
+          "timeout": 3000
+        },
+        {
+          "id": "stu-bulk",
+          "target": [
+            "#masterUserCheck"
+          ],
+          "title": "Change many users at once",
+          "text": "Tick users (or this box for all of them) and a toolbar appears to <b>Apply Role</b>, <b>Update Modules</b> or reset them to the <b>Default Password</b>. It applies to everyone ticked, so check the count first.",
+          "placement": "right"
+        }
+      ]
+    },
+    {
+      "key": "settings.roles",
+      "title": "Roles & Permissions",
+      "trigger": "#page-roles.active",
+      "steps": [
+        {
+          "id": "str-create",
+          "target": [
+            "#page-roles button[onclick*='openRoleModal']"
+          ],
+          "title": "Create Role",
+          "text": "Give the role a code and a name, choose whether it allows <b>Web</b> and/or <b>Mobile</b> access, then tick its permissions on each tab: Time &amp; Attendance, Employee Master, Employee Costs, HR, System Config, Settings, ESS Master, Access Control, Reports and App Modules.",
+          "placement": "left"
+        },
+        {
+          "id": "str-table",
+          "target": [
+            "#rolesTable"
+          ],
+          "title": "Your roles",
+          "text": "Every role in your company. Give a role to a user in <b>User Access</b>, either on the user or for many users at once with <b>Apply Role</b>.",
+          "placement": "top"
+        },
+        {
+          "id": "str-edit",
+          "target": [
+            "#rolesTableBody button[onclick*='editRole']"
+          ],
+          "title": "Edit a role",
+          "text": "Change the role's name, access and permissions. Everyone with this role is affected, so check before you remove anything.",
+          "placement": "left",
+          "timeout": 3000
+        }
+      ]
+    },
+    {
+      "key": "settings.zones",
+      "title": "Access Zones",
+      "trigger": "#page-zones.active",
+      "steps": [
+        {
+          "id": "stz-create",
+          "target": [
+            "#newZoneName"
+          ],
+          "title": "Create a zone",
+          "text": "A zone groups clocking devices by place, for example <b>Main Gate</b> or <b>Warehouse A</b>. Type a name and click <b>Create Zone</b>.<br><br>Employees are then linked to zones in Employee Master, which decides the devices they can use.",
+          "placement": "bottom"
+        },
+        {
+          "id": "stz-table",
+          "target": [
+            "#zonesTable"
+          ],
+          "title": "Your zones",
+          "text": "Each zone and the devices connected to it. Use edit to change its devices, or the bin to delete the zone.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "settings.devices",
+      "title": "Hardware",
+      "trigger": "#page-devices.active",
+      "reset": [
+        {
+          "call": "switchHardwareCategory",
+          "args": [
+            "terminals"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "id": "sth-tabs",
+          "target": [
+            "#btn-hw-terminals"
+          ],
+          "title": "Four tabs",
+          "text": "<b>Hardware Terminals</b>, <b>Facial AI Licenses</b>, <b>Connected Mobile Devices</b> and <b>CSV Imports</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchHardwareCategory",
+              "args": [
+                "terminals"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sth-terminals",
+          "target": [
+            "#tenantDevicesTable"
+          ],
+          "title": "Your clocking devices",
+          "text": "The devices TNA Africa has assigned to your company, with their serial number, IP address and whether they are online. Rename a device and put it in your Access Zones here.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchHardwareCategory",
+              "args": [
+                "terminals"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sth-actions",
+          "target": [
+            "#tenantDevicesTable button[onclick*='openDeviceActions']"
+          ],
+          "title": "Device actions",
+          "text": "Remote actions for that device, such as unlock, reboot, enrol a face, sync the time, recover logs and sync employee biometrics. The options depend on the device type. <b>Clear Admins</b> and <b>Wipe Logs</b> can't be undone.",
+          "placement": "left",
+          "timeout": 3000,
+          "before": [
+            {
+              "call": "switchHardwareCategory",
+              "args": [
+                "terminals"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sth-licenses",
+          "target": [
+            "#hw-licenses"
+          ],
+          "title": "Facial AI Licenses",
+          "text": "Codes that switch on face recognition on a phone or tablet, even offline. Each code can be used once and then belongs to that device. The count shows how many you have used.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchHardwareCategory",
+              "args": [
+                "licenses"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sth-mobile",
+          "target": [
+            "#hw-mobile"
+          ],
+          "title": "Connected Mobile Devices",
+          "text": "Every phone and tablet that has connected to your company, with the last user and when it was last seen. Useful when a phone isn't syncing.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchHardwareCategory",
+              "args": [
+                "mobile"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sth-csv",
+          "target": [
+            "#hw-csvimport"
+          ],
+          "title": "CSV Imports",
+          "text": "When a phone can't sync, use <b>Export Unsynced Data</b> on the phone and load that file here. Clock punches and fuel transactions are imported as if the phone had synced. You see a preview first, and can download any rows that need attention.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchHardwareCategory",
+              "args": [
+                "csvimport"
+              ]
+            }
+          ],
+          "after": [
+            {
+              "call": "switchHardwareCategory",
+              "args": [
+                "terminals"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "settings.errors",
+      "title": "Mobile Errors",
+      "trigger": "#page-errors.active",
+      "steps": [
+        {
+          "id": "ste-list",
+          "target": [
+            "#page-errors table"
+          ],
+          "title": "Problems reported from phones",
+          "text": "When something goes wrong in the mobile app, the user can report it and it lands here: who reported it, what happened, the phone model, when, and whether it's been dealt with.",
+          "placement": "top"
+        },
+        {
+          "id": "ste-view",
+          "target": [
+            "#errorLogsTable button[onclick*='viewErrorDetails']"
+          ],
+          "title": "View a report",
+          "text": "Opens the full report so you can see exactly what the user saw.",
+          "placement": "left",
+          "timeout": 3000
+        },
+        {
+          "id": "ste-resolve",
+          "target": [
+            "#errorLogsTable button[onclick*='resolveErrorLog']"
+          ],
+          "title": "Mark as resolved",
+          "text": "Once the problem is sorted, mark it resolved so the list only shows what still needs attention.",
+          "placement": "left",
+          "timeout": 3000
+        },
+        {
+          "id": "ste-refresh",
+          "target": [
+            "#page-errors button[onclick*='loadErrorLogs']"
+          ],
+          "title": "Refresh",
+          "text": "Load the latest reports.",
+          "placement": "left"
+        }
+      ]
+    },
+    {
+      "key": "settings.billing",
+      "title": "Usage & Quota",
+      "trigger": "#page-billing.active",
+      "steps": [
+        {
+          "id": "stb-usage",
+          "target": [
+            "#page-billing .glass-panel"
+          ],
+          "title": "How usage is counted",
+          "text": "Your usage is counted on <b>active employees</b> and <b>active assets</b>. To keep it accurate, terminate employees who have left in Employee Master, and mark assets you no longer use as inactive.<br><br>For billing questions, contact your TNA Africa partner.",
+          "placement": "bottom"
+        }
+      ]
+    },
+    {
+      "key": "settings.audit",
+      "title": "Audit Trail",
+      "trigger": "#page-audit.active",
+      "steps": [
+        {
+          "id": "stau-filters",
+          "target": [
+            "#auditStartDate"
+          ],
+          "title": "Filter the log",
+          "text": "Choose a date range and, if you like, one user, then click <b>Filter</b>.",
+          "placement": "bottom",
+          "climb": 3
+        },
+        {
+          "id": "stau-table",
+          "target": [
+            "#page-audit table"
+          ],
+          "title": "Every change, recorded",
+          "text": "Each change made in the system: when, by whom, what they did, in which module, and the details of what changed.",
+          "placement": "top"
+        },
+        {
+          "id": "stau-pages",
+          "target": [
+            "#btnNextAuditPage"
+          ],
+          "title": "More results",
+          "text": "The log is shown a page at a time. Use <b>Prev</b> and <b>Next</b> to move through it.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "stau-export",
+          "target": [
+            "#page-audit button[onclick*='exportAuditPDF']"
+          ],
+          "title": "Export PDF",
+          "text": "Save the filtered log as a PDF, for example for an auditor.",
+          "placement": "left"
+        }
+      ]
+    },
+    {
+      "key": "settings.mobile-tx",
+      "title": "Mobile Transactions",
+      "trigger": "#page-mobile-tx.active",
+      "steps": [
+        {
+          "id": "stm-filters",
+          "target": [
+            "#mobTxStartDate"
+          ],
+          "title": "Find a sync",
+          "text": "Each time a phone syncs it sends a batch of records. Narrow the list by date range, user or device, then click <b>Filter</b>.",
+          "placement": "bottom",
+          "climb": 3
+        },
+        {
+          "id": "stm-status",
+          "target": [
+            "#mobTxStatus"
+          ],
+          "title": "Only the problems",
+          "text": "Choose <b>Contains Errors</b> to see only batches where some records failed. This is the quickest way to trace a missing clocking.",
+          "placement": "bottom"
+        },
+        {
+          "id": "stm-table",
+          "target": [
+            "#page-mobile-tx table"
+          ],
+          "title": "Sync batches",
+          "text": "When each batch arrived, who sent it from which device, and how many records succeeded or failed.",
+          "placement": "top"
+        },
+        {
+          "id": "stm-view",
+          "target": [
+            "#mobTxTableBody button[onclick*='viewMobileTx']"
+          ],
+          "title": "Look inside a batch",
+          "text": "See every record in the batch and why any of them failed.",
+          "placement": "left",
+          "timeout": 3000
+        }
+      ]
+    },
+    {
+      "key": "settings.my-tickets",
+      "title": "My Tickets",
+      "trigger": "#page-my-tickets.active",
+      "steps": [
+        {
+          "id": "stt-table",
+          "target": [
+            "#page-my-tickets table"
+          ],
+          "title": "Your open support tickets",
+          "text": "A read-only list of your active support requests with TNA Africa: the ticket number, when it was opened, the module, the problem, who is working on it and its status.",
+          "placement": "top"
+        },
+        {
+          "id": "stt-refresh",
+          "target": [
+            "#page-my-tickets button[onclick*='loadMyTickets']"
+          ],
+          "title": "Refresh",
+          "text": "Load the latest status of your tickets.",
+          "placement": "left"
+        }
+      ]
+    },
+    {
+      "key": "settings.notifications",
+      "title": "Notifications",
+      "trigger": "#page-notifications.active",
+      "steps": [
+        {
+          "id": "stn-intro",
+          "target": [
+            "#page-notifications .glass-panel"
+          ],
+          "title": "Off until you switch them on",
+          "text": "Each automatic message can be switched on or off for your company. They are all <b>off</b> by default, so nothing is sent until you turn it on. Changes save straight away.",
+          "placement": "bottom"
+        },
+        {
+          "id": "stn-clock",
+          "target": [
+            "#notifList > div:has(#notif_clock_reminders)",
+            "#notif_clock_reminders"
+          ],
+          "title": "Clock In / Out Reminders",
+          "text": "An email and phone notification to employees who haven't clocked in or out, sent 15 minutes after their shift starts or ends.",
+          "placement": "bottom",
+          "timeout": 2000
+        },
+        {
+          "id": "stn-violations",
+          "target": [
+            "#notifList > div:has(#notif_violations)",
+            "#notif_violations"
+          ],
+          "title": "Violations Alerts",
+          "text": "A daily phone notification (after 10:00) telling supervisors their team has unresolved violations, overtime or absences from the last 5 days. Only users with the Violations tile get it.",
+          "placement": "bottom",
+          "timeout": 2000
+        },
+        {
+          "id": "stn-exceptions",
+          "target": [
+            "#notifList > div:has(#notif_ess_exceptions)",
+            "#notif_ess_exceptions"
+          ],
+          "title": "Timesheet Exceptions",
+          "text": "Shows employees their own absences, missing punches and variances from the last 7 days in their ESS inbox, with a notification when a new one appears. Switching it off only hides the inbox items; the exceptions stay on the timesheet.",
+          "placement": "top",
+          "timeout": 2000
+        },
+        {
+          "id": "stn-approvals",
+          "target": [
+            "#notifList > div:has(#notif_ess_approvals)",
+            "#notif_ess_approvals"
+          ],
+          "title": "ESS Approvals",
+          "text": "Shows managers pending leave requests, profile changes and attendance exceptions in their ESS inbox, with a notification when a new one arrives. Approvals can still be done from the normal screens when it's off.",
+          "placement": "top",
+          "timeout": 2000
+        }
+      ]
+    }
+  ],
+  "guides": [
+    {
+      "key": "settings.guide.company-profile",
+      "title": "Edit your company details",
+      "icon": "fa-building",
+      "blurb": "Open your company and change its name, contact details or logo.",
+      "steps": [
+        {
+          "id": "stg-cp-open",
+          "target": [
+            "#sidebarNav li[data-permission=\"set_profile\"] > a"
+          ],
+          "title": "Company Profile",
+          "text": "Everything about your company lives here. Click this menu item to open the screen.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Company Profile"
+        },
+        {
+          "id": "stg-cp-edit",
+          "target": [
+            "#companyTableBody button[onclick*='openEditCompanyModal']"
+          ],
+          "title": "Edit your company",
+          "text": "This opens the editor where you can change the company name, contact details and logo. Click <b>Edit</b> to finish.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Edit"
+        }
+      ]
+    },
+    {
+      "key": "settings.guide.create-user",
+      "title": "User Access & creating a user",
+      "icon": "fa-user-plus",
+      "blurb": "Every control on User Access, then set up a new user step by step.",
+      "steps": [
+        {
+          "id": "stg-cu-open",
+          "target": [
+            "#sidebarNav li[data-permission=\"set_users,sys_users\"] > a"
+          ],
+          "title": "User Access",
+          "text": "This is where every person who can log into the system is managed. Click it to open the screen.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click User Access"
+        },
+        {
+          "id": "stg-cu-search",
+          "target": [
+            "#userSearchInput"
+          ],
+          "title": "Search",
+          "text": "Filters the list as you type, matching against name, username or email address. Useful once you have more than a screenful of users.",
+          "timeout": 5000
+        },
+        {
+          "id": "stg-cu-filters",
+          "target": [
+            "#btnFilterHub"
+          ],
+          "title": "Filters",
+          "text": "Opens a panel with two filters. <b>User Type</b> separates system-only logins from users linked to an employee record. <b>Assigned Role</b> narrows to one role, or to users on custom permissions with no role at all. The badge shows how many filters are active."
+        },
+        {
+          "id": "stg-cu-table",
+          "target": [
+            "#usersTable thead"
+          ],
+          "title": "The user table",
+          "text": "<b>Access</b> shows which channels the user can log into, <b>Data Scope</b> which departments their data is limited to, and <b>Modules</b> which parts of the system they see. Right-click this header row to show or hide columns."
+        },
+        {
+          "id": "stg-cu-bulk-check",
+          "target": [
+            "#masterUserCheck"
+          ],
+          "title": "Bulk selection",
+          "text": "Ticking this selects every user in the list, and each row has its own checkbox too. As soon as one is selected, a toolbar appears above the table. Let's look at it."
+        },
+        {
+          "id": "stg-cu-bulk-bar",
+          "target": [
+            "#bulkToolbar"
+          ],
+          "title": "The bulk toolbar",
+          "text": "Shown here for the guide. Normally it only appears once users are selected, and the count on the left tells you how many.<br><br><b>Apply Role</b> gives the chosen role to everyone selected, or removes it if you pick Remove Role. <b>Update Modules</b> sets which modules they can see without touching their roles. <b>Default Password</b> resets them all to the system default, which stops their current passwords working straight away.<br><br>Everything here applies to every selected user at once, so check that count first.",
+          "before": [
+            {
+              "reveal": "#bulkToolbar"
+            }
+          ]
+        },
+        {
+          "id": "stg-cu-export",
+          "target": [
+            "button[onclick*='exportUsersReport']"
+          ],
+          "title": "Export Report",
+          "text": "Downloads the current list as a spreadsheet, using whatever search and filters you have applied. Handy for access audits."
+        },
+        {
+          "id": "stg-cu-create",
+          "target": [
+            "button[onclick*='openCreateUserModal']"
+          ],
+          "title": "Create User",
+          "text": "Now the main part. Click here to open the new user form.",
+          "mode": "click",
+          "hint": "Click Create User"
+        },
+        {
+          "id": "stg-cu-username",
+          "target": [
+            "#userUsername"
+          ],
+          "title": "Username",
+          "text": "What the person types at the login screen. It must be unique in your company and shouldn't be changed later, so agree a naming convention before you start."
+        },
+        {
+          "id": "stg-cu-email",
+          "target": [
+            "#userEmail"
+          ],
+          "title": "Email address",
+          "text": "Used for password resets and system notifications. Use a real address the person checks. With a wrong email here they can't recover their own account."
+        },
+        {
+          "id": "stg-cu-name",
+          "target": [
+            "#userFirstName"
+          ],
+          "title": "First and last name",
+          "text": "The name shown in the menu, on audit records and anywhere their actions are logged. This is what other people see, not the username."
+        },
+        {
+          "id": "stg-cu-password",
+          "target": [
+            "#userPassword"
+          ],
+          "title": "Temporary password",
+          "text": "The password you give them for their first login. Share it securely and have them change it once they are in."
+        },
+        {
+          "id": "stg-cu-role",
+          "target": [
+            "#createUserRole"
+          ],
+          "title": "Base Role",
+          "text": "The most important field. A role carries a ready-made permission set, so picking one saves ticking dozens of boxes. It also pre-selects the modules on the next tab. Leave it blank only if this user really needs a one-off custom set."
+        },
+        {
+          "id": "stg-cu-link",
+          "target": [
+            "#userLinkedEmpSearch"
+          ],
+          "title": "Linked Employee Profile",
+          "text": "Links this login to an employee by name or PIN. Once linked, the user can see their own timesheet, leave and payslips in ESS. Leave it empty for admin-only logins that aren't on the payroll."
+        },
+        {
+          "id": "stg-cu-channels",
+          "target": [
+            "#userCanAccessWeb"
+          ],
+          "title": "Access channels",
+          "text": "<b>Web Dashboard</b> allows browser login. <b>Mobile App</b> allows the phone app. <b>Force Direct ESS Login</b> sends them straight into self service. Use it for staff who should only ever see their own information.",
+          "climb": 2
+        },
+        {
+          "id": "stg-cu-tab-modules",
+          "target": [
+            "button[onclick*='switchCreateUserTab'][onclick*='modules']"
+          ],
+          "title": "Web Modules tab",
+          "text": "Access channels decide whether they can log in. Modules decide what they see once they do. Click this tab.",
+          "mode": "click",
+          "hint": "Click Web Modules"
+        },
+        {
+          "id": "stg-cu-modules",
+          "target": [
+            "#userHr"
+          ],
+          "title": "Web modules",
+          "text": "Each tick adds a tile to their Launchpad. If you chose a Base Role these already match it, so only change them when one person needs something extra or something removed.",
+          "climb": 2
+        },
+        {
+          "id": "stg-cu-tab-mobile",
+          "target": [
+            "button[onclick*='switchCreateUserTab'][onclick*='mobile']"
+          ],
+          "title": "Mobile & ESS tab",
+          "text": "The last tab covers everything on the phone. Click it.",
+          "mode": "click",
+          "hint": "Click Mobile & ESS"
+        },
+        {
+          "id": "stg-cu-ess",
+          "target": [
+            "#essCanClock"
+          ],
+          "title": "ESS features",
+          "text": "What this person may do on their own record: clock in and out, log trips, request leave, submit claims. These only ever apply to themselves.",
+          "climb": 2
+        },
+        {
+          "id": "stg-cu-tiles",
+          "target": [
+            "#userTileClock"
+          ],
+          "title": "Mobile tiles",
+          "text": "The buttons on the app home screen. These are work tools rather than personal: clocking other staff, capturing piece work, logging fuel, recording violations. Supervisors need them, ordinary ESS users don't.",
+          "climb": 2
+        },
+        {
+          "id": "stg-cu-save",
+          "target": [
+            "#createUserForm button[type='submit']"
+          ],
+          "title": "Create Profile",
+          "text": "This saves the user, and they can log in straight away with the temporary password. Nothing has been created by this guide, so close the form if you were only looking."
+        }
+      ]
+    }
+  ]
+}

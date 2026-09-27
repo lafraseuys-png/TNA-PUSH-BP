@@ -1,0 +1,64 @@
+{
+  "_howto": "Guided setup for Employee Costs (Demo / Setup mode).",
+  "key": "setup.employeecosts",
+  "title": "Set up Employee Costs",
+  "intro": "Work through these in order. You're in <b>demo</b>, so nothing affects your live system until you push it.",
+  "steps": [
+    {
+      "id": "settings",
+      "title": "Settings",
+      "section": "settings",
+      "why": "Weekly overtime, what's shown, and your wage advice template.",
+      "confirm": true,
+      "confirmLabel": "These are right"
+    },
+    {
+      "id": "components",
+      "title": "Cost components",
+      "section": "components",
+      "guide": "employeecosts.guide.component",
+      "why": "The earnings, deductions and company contributions you use.",
+      "checks": [
+        {
+          "url": "/api/employee-costs/components",
+          "list": "",
+          "min": 1
+        }
+      ],
+      "todo": "At least one cost component."
+    },
+    {
+      "id": "allocation",
+      "title": "Give people their components",
+      "section": "allocation",
+      "guide": "employeecosts.guide.allocate",
+      "needs": [
+        "components"
+      ],
+      "why": "Which components each person gets, and how much.",
+      "confirm": true,
+      "confirmLabel": "People are set up"
+    },
+    {
+      "id": "payfile",
+      "title": "Payroll file layout",
+      "section": "payfiles",
+      "guide": "employeecosts.guide.payfile",
+      "why": "A profile with the columns your payroll system expects.",
+      "confirm": true,
+      "confirmLabel": "My profile is set up"
+    },
+    {
+      "id": "testrun",
+      "title": "Test run",
+      "section": "wage-calc",
+      "needs": [
+        "components",
+        "allocation"
+      ],
+      "why": "Prove it works, all in demo:<ol style=\"margin:6px 0 0 16px;padding:0;\"><li><b>Monthly Wage Calc</b>: calculate last month for a few people.</li><li><b>Payfiles</b>: generate a preview and export it.</li><li><b>Wage Advice</b> and <b>Bank Files</b>: generate previews.</li></ol>Calculations, exports and slips saved to ESS are never pushed to live.",
+      "confirm": true,
+      "confirmLabel": "It all worked"
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "maxAgeDays": 45,
+  "releases": [
+    {
+      "id": "2026-09-26.global-admin-name",
+      "date": "2026-09-26",
+      "title": "God Mode is now Global Admin",
+      "text": "Same screens, new name. The page is now <b>GlobalAdmin.html</b>; old links and bookmarks still work and open it automatically. Log in with the licence key <b>GLOBAL_ADMIN</b> (GODMODE still works for now).",
+      "who": "Global Admin (formerly God Mode) and System Admin users",
+      "pages": [
+        "godmode",
+        "systemadmin"
+      ]
+    },
+    {
+      "id": "2026-09-26.gm-onboarding",
+      "date": "2026-09-26",
+      "title": "Step-by-step tenant onboarding",
+      "text": "<b>Start onboarding</b> (Tenants) replaces the long Deploy form for new clients. It asks about employees (fixed or seasonal), modules, extras and Demo / Setup mode, shows the once-off and monthly cost, and saves at every step so you can finish later. Each quote shows its status and what is still missing, with a full history of who did what.",
+      "who": "Global Admin and System Admin users",
+      "pages": [
+        "godmode",
+        "systemadmin"
+      ],
+      "showMe": {
+        "click": "#sidebarNav button[onclick^=\"showSection('tenants'\"]",
+        "steps": [
+          "gm.tenants.onboarding",
+          "gm.tenants.quotes"
+        ]
+      }
+    },
+    {
+      "id": "2026-09-26.sa-onboarding-admin",
+      "date": "2026-09-26",
+      "title": "Billing options and BP reseller links",
+      "text": "Finance can choose which billing methods BPs may offer (fixed, peak, actual, average, seasonal) under <b>TNA Admin &rarr; Onboarding billing options</b>. In <b>System Users</b> you can link a BP user to a reseller so they only see that reseller's tenants and quotes. Only System Admin marks a quote <b>Ready to deploy</b> and deploys it.",
+      "who": "System Admin users",
+      "pages": [
+        "systemadmin"
+      ],
+      "showMe": {
+        "click": "#sidebarNav button[onclick^=\"showSection('tna-admin'\"]",
+        "steps": [
+          "sa.billing",
+          "sa.users.reseller"
+        ]
+      }
+    },
+    {
+      "id": "2026-09-26.gm-new-look",
+      "date": "2026-09-26",
+      "title": "Global Admin has a new look",
+      "text": "Global Admin and System Admin now match the Support desk: a cleaner menu grouped by area, a profile button (top right) with <b>Light / Dark mode</b> and <b>Log out</b>, and easier-to-read cards, tables and pop-ups. Everything else works exactly as before.",
+      "who": "Global Admin and System Admin users",
+      "pages": [
+        "godmode",
+        "systemadmin"
+      ],
+      "showMe": {
+        "steps": [
+          "gm.profile",
+          "gm.theme"
+        ]
+      }
+    },
+    {
+      "id": "2026-09-26.gm-branding-logo",
+      "date": "2026-09-26",
+      "title": "Upload your logo",
+      "text": "You can now upload the company logo under <b>Global Settings &rarr; Branding</b>. It shows at the top of the Global Admin and System Admin menu for every Global Admin user. Every upload and removal is recorded in the Audit Logs.",
+      "who": "System Admin users",
+      "pages": [
+        "systemadmin"
+      ],
+      "showMe": {
+        "click": "#sidebarNav button[onclick^=\"showSection('global'\"]",
+        "steps": [
+          "sa.global.branding"
+        ]
+      }
+    },
+    {
+      "id": "2026-09-26.gm-tours",
+      "date": "2026-09-26",
+      "title": "Guided tours in Global Admin",
+      "text": "The <b>?</b> button (bottom right) now works here too: replay the tour, tour the screen you are on, or follow a how-to guide such as <b>Set up a new tenant</b>.",
+      "who": "Global Admin and System Admin users",
+      "pages": [
+        "godmode",
+        "systemadmin"
+      ],
+      "showMe": {
+        "steps": [
+          "gm.help"
+        ]
+      }
+    }
+  ]
+}

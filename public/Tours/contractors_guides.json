@@ -1,0 +1,104 @@
+{
+  "_howto": "Contractors how-to guides.",
+  "guides": [
+    {
+      "key": "contractors.guide.assign",
+      "title": "Give a farmer a contract",
+      "icon": "fa-file-signature",
+      "blurb": "Assign a contract from a template, with its dates, size and product.",
+      "steps": [
+        {
+          "id": "cog-a-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('contracts'\"]"
+          ],
+          "title": "Contract Management",
+          "text": "Click <b>Contract Management</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Contract Management",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='farmers']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-a-tab",
+          "target": [
+            "#tab-c-manage"
+          ],
+          "title": "Manage Contracts",
+          "text": "Click <b>Manage Contracts</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Manage Contracts",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-a-btn",
+          "target": [
+            "#page-contracts button[onclick*='openContAssignModal']"
+          ],
+          "title": "Assign Contract",
+          "text": "Click <b>Assign Contract</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Assign Contract"
+        },
+        {
+          "id": "cog-a-who",
+          "target": [
+            "#ccAssignContractor"
+          ],
+          "title": "1. Farmer and template",
+          "text": "Choose the farmer and the contract template.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "cog-a-dates",
+          "target": [
+            "#ccValidFrom"
+          ],
+          "title": "2. Dates",
+          "text": "From and to, or tick <b>permanent</b>.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "cog-a-size",
+          "target": [
+            "#ccContractSize"
+          ],
+          "title": "3. Size and product",
+          "text": "The contract size and the tobacco type.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "cog-a-loc",
+          "target": [
+            "#ccLat"
+          ],
+          "title": "4. Field location",
+          "text": "Where the field is, if you have it.",
+          "placement": "bottom",
+          "climb": 2,
+          "optional": true
+        },
+        {
+          "id": "cog-a-save",
+          "target": [
+            "#btnAssignContContract"
+          ],
+          "title": "Assign Contract",
+          "text": "Creates the contract. It then follows your approval workflow (or is approved straight away if none applies).",
+          "placement": "top"
+        }
+      ]
+    }
+  ]
+}

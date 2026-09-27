@@ -1,0 +1,325 @@
+{
+  "_howto": "Launchpad tour. Each step needs a unique id. To announce a NEW feature to users who already did this tour, ADD a step with a NEW id - they will see only that step as What's new. Rewording a step keeps its id (no re-show). To force a changed step to show again, give it a new id. target = list of CSS selectors, first visible one wins. fullOnly = only in the full tour, never counted as new. before/after = open or close menus (addClass / removeClass / click / call).",
+  "key": "launchpad",
+  "title": "Launchpad tour",
+  "startDelay": 1500,
+  "blockers": [
+    "#profileModal.show",
+    "#papiaViewModal:not(.hidden)",
+    "#updatePanel.active",
+    "#lpQuickPanel.show",
+    "#searchSuggestions.show",
+    "#launchpadConnectQrModal"
+  ],
+  "reset": [
+    {
+      "removeClass": "#profileDropdown",
+      "cls": "show"
+    },
+    {
+      "removeClass": "#lpQuickPanel",
+      "cls": "show"
+    }
+  ],
+  "whatsNewTitle": "What's new on the Launchpad",
+  "whatsNewText": "We've added something new here since you last took the tour.",
+  "steps": [
+    {
+      "id": "lp-welcome",
+      "fullOnly": true,
+      "title": "Welcome to your Launchpad",
+      "text": "This is your home screen. From here you open every module, find any screen, and manage your profile.<br><br>This quick tour shows you around. Use <b>Next</b> and <b>Back</b>, or your arrow keys. Press <b>Esc</b> to close it any time."
+    },
+    {
+      "id": "lp-search",
+      "target": [
+        "[data-tour='lp-search']",
+        ".search-wrapper"
+      ],
+      "placement": "bottom",
+      "title": "Find any screen",
+      "text": "Type what you are looking for, like <b>leave</b>, <b>roster</b> or <b>payslip</b>, and jump straight to that screen. Only screens you have access to are shown.<br><br>Point at the search bar without typing to see your <b>most visited screens</b>. Use the pin on a card to keep up to 5 favourites there."
+    },
+    {
+      "id": "lp-modules",
+      "target": [
+        "#mainModuleGrid"
+      ],
+      "placement": "top",
+      "title": "Your modules",
+      "text": "Each tile opens a module. Tiles showing <b>Enter Module</b> are open to you.<br><br>A greyed-out tile showing <b>Access Restricted</b> means your company isn't licensed for it, or your role doesn't include it. Ask your administrator if you need access."
+    },
+    {
+      "id": "lp-tile-employee-master",
+      "target": [
+        "[data-tour='lp-tile-employee-master']",
+        "#module-empMaster"
+      ],
+      "title": "Employee Master",
+      "text": "Add and maintain employees, departments, access roles, teams, leave and your organisation hierarchy. Employee changes here are sent to your clocking devices."
+    },
+    {
+      "id": "lp-tile-time-attendance",
+      "target": [
+        "[data-tour='lp-tile-time-attendance']",
+        "#module-timeAttendance"
+      ],
+      "title": "Time & Attendance",
+      "text": "Clockings, timesheets, shifts and rosters, overtime approvals, violations, and all attendance reports."
+    },
+    {
+      "id": "lp-tile-hr",
+      "target": [
+        "[data-tour='lp-tile-hr']",
+        "#module-hr"
+      ],
+      "title": "HR Management",
+      "text": "Infringements and warnings, performance notes, contracts and onboarding, and HR workflows."
+    },
+    {
+      "id": "lp-tile-fuel",
+      "target": [
+        "[data-tour='lp-tile-fuel']",
+        "#module-fuel"
+      ],
+      "title": "Fuel Management",
+      "text": "Fuel dispensing, vehicles and drivers, depots and tank levels, trip logs, deliveries and fuel reports."
+    },
+    {
+      "id": "lp-tile-production-pay",
+      "target": [
+        "[data-tour='lp-tile-production-pay']",
+        "#module-tasks"
+      ],
+      "title": "Production Pay",
+      "text": "Assign jobs, track progress, and report on production so it can be paid out."
+    },
+    {
+      "id": "lp-tile-asset-stock",
+      "target": [
+        "[data-tour='lp-tile-asset-stock']",
+        "#module-assetTagging"
+      ],
+      "title": "Asset Tagging & Stock Control",
+      "text": "Your asset register, movements and servicing, plus stock items, warehouses, GRVs and point of sale."
+    },
+    {
+      "id": "lp-tile-employee-costs",
+      "target": [
+        "[data-tour='lp-tile-employee-costs']",
+        "#module-employeeCosts"
+      ],
+      "title": "Employee Costs",
+      "text": "Wage rates, cost components, monthly wage calculations, payfiles and bank files."
+    },
+    {
+      "id": "lp-tile-ess-master",
+      "target": [
+        "[data-tour='lp-tile-ess-master']",
+        "#module-essMaster"
+      ],
+      "title": "ESS Master",
+      "text": "Set up Employee Self Service and handle what employees send in from the app, such as leave requests and expense claims."
+    },
+    {
+      "id": "lp-tile-contractors",
+      "target": [
+        "[data-tour='lp-tile-contractors']",
+        "#module-contractors"
+      ],
+      "title": "Contractors & Distribution",
+      "text": "Manage contractors, their contracts, distribution and progress, and send SMS broadcasts."
+    },
+    {
+      "id": "lp-notifications",
+      "target": [
+        "[data-tour='lp-notifications']",
+        ".update-tab"
+      ],
+      "placement": "right",
+      "title": "Notifications",
+      "text": "The bell opens your notifications. <b>ESS Notifications</b> shows employee requests waiting for action; these stay until they are handled in ESS Master.<br><br>Below that is the <b>System Log</b>. Pin anything you want to keep, or use <b>Clear All</b>."
+    },
+    {
+      "id": "lp-profile-menu",
+      "target": [
+        "[data-tour='lp-profile']",
+        ".profile-button"
+      ],
+      "placement": "bottom",
+      "before": [
+        {
+          "removeClass": "#profileDropdown",
+          "cls": "show"
+        }
+      ],
+      "title": "Your menu",
+      "text": "Click your name to open your menu. Let's look at what's inside."
+    },
+    {
+      "id": "lp-menu-profile",
+      "target": [
+        "[data-tour='lp-menu-profile']",
+        "#profileDropdown a[onclick*='openProfileModal']"
+      ],
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#profileDropdown",
+          "cls": "show"
+        }
+      ],
+      "title": "Profile",
+      "text": "Update your name and email address, or change your password."
+    },
+    {
+      "id": "lp-menu-settings",
+      "target": [
+        "[data-tour='lp-menu-settings']",
+        "#btnSettings"
+      ],
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#profileDropdown",
+          "cls": "show"
+        }
+      ],
+      "title": "Settings",
+      "text": "Company-wide setup: company profile, users, roles and permissions, access zones, hardware, notifications and integrations. Only shown to users allowed to change settings."
+    },
+    {
+      "id": "lp-menu-access-control",
+      "target": [
+        "[data-tour='lp-menu-access-control']",
+        "#btnAccessControl"
+      ],
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#profileDropdown",
+          "cls": "show"
+        }
+      ],
+      "title": "Access Control",
+      "text": "Opens Access Control for doors and access. It's only shown when your company is licensed for it and your role allows it."
+    },
+    {
+      "id": "lp-menu-ess",
+      "target": [
+        "[data-tour='lp-menu-ess']",
+        "#profileDropdown a[href='ess_dashboard.html']"
+      ],
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#profileDropdown",
+          "cls": "show"
+        }
+      ],
+      "title": "ESS (your own self service)",
+      "text": "Your personal Employee Self Service: apply for leave, submit expense claims, and view your payslips and documents."
+    },
+    {
+      "id": "lp-menu-connect-phone",
+      "target": [
+        "[data-tour='lp-menu-connect-phone']",
+        "#btnConnectPhone"
+      ],
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#profileDropdown",
+          "cls": "show"
+        }
+      ],
+      "title": "Connect a Phone",
+      "text": "Shows a QR code that connects a company phone to your company. On the phone, open the app, tap the gear icon, then <b>Scan with Camera</b>.<br><br>The code contains your company licence key, so only show it while setting up phones."
+    },
+    {
+      "id": "lp-menu-download-app",
+      "target": [
+        "[data-tour='lp-menu-download-app']",
+        "#btnDownloadApp"
+      ],
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#profileDropdown",
+          "cls": "show"
+        }
+      ],
+      "title": "Download the App",
+      "text": "Shows a QR code to download the Android app straight onto a phone."
+    },
+    {
+      "id": "lp-menu-theme",
+      "target": [
+        "[data-tour='lp-menu-theme']",
+        "#profileDropdown .theme-toggle-item"
+      ],
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#profileDropdown",
+          "cls": "show"
+        }
+      ],
+      "title": "Dark Mode",
+      "text": "Switch between dark and light. Your choice is saved to your login, so it follows you to any computer."
+    },
+    {
+      "id": "lp-menu-logout",
+      "target": [
+        "[data-tour='lp-menu-logout']",
+        "#profileDropdown .dropdown-item.logout"
+      ],
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#profileDropdown",
+          "cls": "show"
+        }
+      ],
+      "title": "Logout",
+      "text": "Always log out on a shared computer. For safety, you are also logged out automatically after 15 minutes without activity."
+    },
+    {
+      "id": "lp-popia",
+      "target": [
+        "[data-tour='lp-popia']",
+        ".footer button"
+      ],
+      "placement": "top",
+      "before": [
+        {
+          "removeClass": "#profileDropdown",
+          "cls": "show"
+        }
+      ],
+      "title": "Privacy (POPIA)",
+      "text": "Read how your personal information is protected under the POPIA Act. You can also print it as a PDF."
+    },
+    {
+      "id": "lp-help-button",
+      "target": [
+        "#tnaTourHelpBtn"
+      ],
+      "placement": "right",
+      "before": [
+        {
+          "removeClass": "#profileDropdown",
+          "cls": "show"
+        }
+      ],
+      "title": "Help is always here",
+      "text": "Click <b>?</b> any time to replay this tour. When we add new features, a green number appears here. Choose <b>What's new</b> to see only the new parts."
+    },
+    {
+      "id": "lp-done",
+      "fullOnly": true,
+      "title": "You're all set",
+      "text": "That's the Launchpad. As we add tours to the other pages, you'll find the same <b>?</b> button there."
+    }
+  ]
+}

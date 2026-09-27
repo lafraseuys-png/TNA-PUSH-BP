@@ -1,0 +1,1128 @@
+{
+  "_howto": "HR tours. steps = page tour (first visit). sections = one tour per HR area (starts the first time that area is opened) plus pop-up form tours (overlay, offered the first time the form opens). Guides are in hr_dashboard_guides.json. To announce something NEW, add a step with a NEW id. Rewording keeps the id. Never reuse an id.",
+  "key": "hr_dashboard",
+  "title": "HR tour",
+  "startDelay": 1500,
+  "blockers": [
+    ".modal-backdrop.active",
+    "#globalLoader:not(.hidden)"
+  ],
+  "reset": [
+    {
+      "removeClass": "#profileDropdown",
+      "cls": "show"
+    },
+    {
+      "removeClass": "#tnbBar .tnb-menu",
+      "cls": "show"
+    }
+  ],
+  "whatsNewTitle": "What's new in HR",
+  "whatsNewText": "We've added something new here since you last took the tour.",
+  "steps": [
+    {
+      "id": "hr-welcome",
+      "title": "Welcome to HR Management",
+      "text": "Contracts and onboarding, disciplinary records, performance notes, HR KPIs and approval routing, all in one place.<br><br>Use <b>Next</b> and <b>Back</b>, or your arrow keys. Press <b>Esc</b> to close.",
+      "fullOnly": true
+    },
+    {
+      "id": "hr-sidebar",
+      "target": [
+        "#sidebarNav"
+      ],
+      "title": "All HR areas",
+      "text": "Every HR area is listed here.",
+      "placement": "right"
+    },
+    {
+      "id": "hr-nav-dashboard",
+      "target": [
+        "#sidebarNav a[onclick*='dashboard']"
+      ],
+      "title": "Dashboard Overview",
+      "text": "Your headline HR numbers: staff, infringements, performance notes, pending onboarding, and missing or expiring contracts. Click a card to go straight to the detail.",
+      "placement": "right"
+    },
+    {
+      "id": "hr-nav-kpi",
+      "target": [
+        "#sidebarNav a[onclick*='kpi']"
+      ],
+      "title": "Core KPIs",
+      "text": "Attendance KPIs such as the Bradford Factor, attendance and absenteeism rates, overtime, on-time arrival and leave used, per employee, department or the whole company, with printable reports.",
+      "placement": "right"
+    },
+    {
+      "id": "hr-nav-employees",
+      "target": [
+        "#sidebarNav a[onclick*='employees']"
+      ],
+      "title": "Employee Master",
+      "text": "The same Employee Master, opened inside HR so you don't have to leave this screen.",
+      "placement": "right"
+    },
+    {
+      "id": "hr-nav-infringements",
+      "target": [
+        "#sidebarNav a[onclick*='infringements']"
+      ],
+      "title": "Infringements",
+      "text": "Record and track disciplinary infringements and warnings.",
+      "placement": "right"
+    },
+    {
+      "id": "hr-nav-performance",
+      "target": [
+        "#sidebarNav a[onclick*='performance']"
+      ],
+      "title": "Performance Notes",
+      "text": "Notes on an employee's performance, good or bad, kept on their record.",
+      "placement": "right"
+    },
+    {
+      "id": "hr-nav-onboarding",
+      "target": [
+        "#sidebarNav a[onclick*='onboarding']"
+      ],
+      "title": "Contracts & Onboarding",
+      "text": "Contract templates, assigning contracts, approvals, and the contracts audit.",
+      "placement": "right"
+    },
+    {
+      "id": "hr-nav-workflows",
+      "target": [
+        "#sidebarNav a[onclick*='workflows']"
+      ],
+      "title": "Workflows",
+      "text": "The approval steps your HR processes follow, and who handles each step.",
+      "placement": "right"
+    },
+    {
+      "id": "hr-nav-hierarchies",
+      "target": [
+        "#sidebarNav a[onclick*='hierarchies']"
+      ],
+      "title": "Routing & Stand-ins",
+      "text": "Who approves for which part of the organisation, and who stands in when they're away.",
+      "placement": "right"
+    },
+    {
+      "id": "hr-nav-settings",
+      "target": [
+        "#sidebarNav a[onclick*='settings']"
+      ],
+      "title": "HR Settings",
+      "text": "General HR settings, the categories and types used in HR, and your HR rules.",
+      "placement": "right"
+    },
+    {
+      "id": "hr-collapse",
+      "target": [
+        ".sidebar-toggle-btn"
+      ],
+      "title": "Make more room",
+      "text": "Collapse the menu to icons only, and click again to open it.",
+      "placement": "right"
+    },
+    {
+      "id": "hr-title",
+      "target": [
+        "#sectionTitle"
+      ],
+      "title": "Where you are",
+      "text": "The name of the area that is open right now.",
+      "placement": "bottom"
+    },
+    {
+      "id": "hr-refresh",
+      "target": [
+        "main button[onclick*='location.reload']"
+      ],
+      "title": "Refresh Data",
+      "text": "Reloads all HR data, for example after someone else has made changes.",
+      "placement": "bottom"
+    },
+    {
+      "id": "hr-top-search",
+      "target": [
+        "#tnbBar .tnb-search"
+      ],
+      "title": "Search any screen",
+      "text": "Type what you're looking for, like <b>contract</b> or <b>leave</b>, to jump straight to any screen you have access to, in any module.<br><br>Point at the search bar without typing to see your most visited screens, and pin your favourites.",
+      "placement": "bottom",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "hr-top-profile",
+      "target": [
+        "#tnbBar .tnb-pbtn"
+      ],
+      "title": "Your menu",
+      "text": "Click your name for your profile, other areas of the system, and logout. Let's look inside.",
+      "placement": "bottom",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "hr-top-launchpad",
+      "target": [
+        "#tnbBar .tnb-menu a[href='Launchpad.html']"
+      ],
+      "title": "Launchpad",
+      "text": "Back to your home screen with all your modules.",
+      "placement": "left",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        },
+        {
+          "click": "#tnbBar .tnb-pbtn"
+        }
+      ],
+      "wait": 320
+    },
+    {
+      "id": "hr-top-myprofile",
+      "target": [
+        "#tnbBar .tnb-act-profile"
+      ],
+      "title": "Profile",
+      "text": "Update your name and email address, or change your password.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "hr-top-settings",
+      "target": [
+        "#tnbBar .tnb-act-settings"
+      ],
+      "title": "Settings",
+      "text": "Company-wide setup. Only shown to users allowed to change settings.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "hr-top-ess",
+      "target": [
+        "#tnbBar .tnb-menu a[href='ess_dashboard.html']"
+      ],
+      "title": "ESS",
+      "text": "Your own self service: leave, claims, payslips and documents.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "hr-top-phone",
+      "target": [
+        "#tnbBar .tnb-act-phone"
+      ],
+      "title": "Connect a Phone",
+      "text": "Shows a QR code that connects a company phone to your company. It contains your licence key, so only show it while setting up phones.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "hr-top-app",
+      "target": [
+        "#tnbBar .tnb-act-app"
+      ],
+      "title": "Download the App",
+      "text": "Shows a QR code to download the Android app onto a phone.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "hr-top-help",
+      "target": [
+        "#tnbBar .tnb-act-help"
+      ],
+      "title": "Help & Tours",
+      "text": "Opens the same help menu as the <b>?</b> button.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "hr-top-theme",
+      "target": [
+        "#tnbBar .tnb-theme-row"
+      ],
+      "title": "Dark Mode",
+      "text": "Switch between dark and light. Your choice follows your login to any computer.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "hr-top-logout",
+      "target": [
+        "#tnbBar .tnb-logout"
+      ],
+      "title": "Logout",
+      "text": "Always log out on a shared computer.",
+      "placement": "left",
+      "before": [
+        {
+          "addClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ],
+      "after": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "hr-profile",
+      "target": [
+        "#mainSidebar .profile-button"
+      ],
+      "title": "Your menu",
+      "text": "Click your name for Toggle Theme, Launchpad and Logout.",
+      "placement": "right",
+      "before": [
+        {
+          "removeClass": "#profileDropdown",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "hr-help-button",
+      "target": [
+        "#tnaTourHelpBtn"
+      ],
+      "title": "Help is always here",
+      "text": "Click <b>?</b> for this page tour, a tour of the area you're in, what's new, and hands-on <b>how-to guides</b>, such as writing a contract template or assigning a contract.",
+      "placement": "left",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "hr-done",
+      "title": "You're all set",
+      "text": "Each HR area also has its own short tour. It starts the first time you open that area, and you can replay it any time from <b>?</b>.",
+      "fullOnly": true
+    }
+  ],
+  "sections": [
+    {
+      "key": "hr_dashboard.dashboard",
+      "title": "Dashboard Overview",
+      "trigger": "#page-dashboard.active",
+      "steps": [
+        {
+          "id": "hrd-cards",
+          "target": [
+            "#dashTotalStaff"
+          ],
+          "title": "Your HR at a glance",
+          "text": "Live counts across HR. <b>Click any card</b> to open the list behind the number.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "hrd-staff",
+          "target": [
+            "#dashTotalStaff"
+          ],
+          "title": "Total Staff",
+          "text": "Your active employees. Opens Employee Master.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hrd-records",
+          "target": [
+            "#dashInfringements"
+          ],
+          "title": "Infringements and Performance Notes",
+          "text": "How many records there are. Each card opens its list.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hrd-pending",
+          "target": [
+            "#dashPendingOnboard"
+          ],
+          "title": "Pending Onboard",
+          "text": "Contracts waiting in <b>Awaiting Approval</b>.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hrd-missing",
+          "target": [
+            "#dashMissingContracts"
+          ],
+          "title": "Missing Signed Copies",
+          "text": "Contracts whose <b>signed copy</b> hasn't been uploaded yet. Opens the Contracts Audit filtered to <b>Missing Physical Copy</b>, where you upload them from each row.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hrd-expiring",
+          "target": [
+            "#dashExpiringContracts"
+          ],
+          "title": "Expiring Contracts",
+          "text": "Contracts ending <b>this month</b>. Opens the Contracts Audit filtered to <b>Expiring in Month</b>, where the arrows move to other months.",
+          "placement": "bottom",
+          "climb": 1
+        }
+      ]
+    },
+    {
+      "key": "hr_dashboard.kpi",
+      "title": "Core KPIs",
+      "trigger": "#page-kpi.active",
+      "reset": [
+        {
+          "removeClass": "#kpiReportsDropdown",
+          "cls": "show"
+        }
+      ],
+      "steps": [
+        {
+          "id": "hrk-dates",
+          "target": [
+            "#kpiStartDate"
+          ],
+          "title": "Period",
+          "text": "Choose the start and end date to measure.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hrk-dept",
+          "target": [
+            "#kpiDeptFilter"
+          ],
+          "title": "Department",
+          "text": "Measure one department, or leave it empty for the whole company.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hrk-emp",
+          "target": [
+            "#page-kpi button[onclick*='openKpiEmpModal']"
+          ],
+          "title": "Individual",
+          "text": "Or pick one employee. The <b>x</b> clears the choice.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hrk-calc",
+          "target": [
+            "#page-kpi button[onclick*='loadHRKPIs']"
+          ],
+          "title": "Calculate",
+          "text": "Works out the KPIs for your choice. Always click this after changing the period or filters; the cards, charts and reports use the last calculation.",
+          "placement": "bottom"
+        },
+        {
+          "id": "hrk-cards",
+          "target": [
+            "#kpiBradfordCard"
+          ],
+          "title": "The seven KPIs",
+          "text": "&bull; <b>Bradford Factor</b>: how disruptive absences are. Many short absences score higher than one long one.<br>&bull; <b>Attendance Rate</b>: hours worked out of hours scheduled.<br>&bull; <b>Absenteeism Rate</b>: scheduled time lost to unplanned absence.<br>&bull; <b>Overtime %</b>: overtime out of all hours worked.<br>&bull; <b>On-Time Arrival</b>: clock-ins at or before the shift start.<br>&bull; <b>PTO Utilized</b>: scheduled time taken as paid leave.<br>&bull; <b>Shift Coverage</b>: scheduled shifts that had someone present.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hrk-detail",
+          "target": [
+            "#kpiBradfordCard"
+          ],
+          "title": "Click a card for the detail",
+          "text": "Each card opens its formula with your actual figures, and a verdict: green (healthy), amber (watch it) or red (act now).<br><br>For example, the Bradford Factor is (absence spells &times; spells) &times; days absent: under 50 is healthy, 50 to 100 is a warning, and over 100 is critical.",
+          "placement": "bottom"
+        },
+        {
+          "id": "hrk-charts",
+          "target": [
+            "#chartWeeklyHours"
+          ],
+          "title": "Trends",
+          "text": "<b>Week-on-Week</b> and <b>Month-on-Month</b> charts show how hours and rates are moving over time.",
+          "placement": "top",
+          "climb": 2
+        },
+        {
+          "id": "hrk-reports",
+          "target": [
+            "#kpiReportsDropdown"
+          ],
+          "title": "Reports",
+          "text": "Print a report of the last calculation:<br>&bull; <b>Employee Report</b>: pick an individual first.<br>&bull; <b>Dept Report</b>: pick a department first, with its top performers, latecomers and absentees.<br>&bull; <b>Company Report</b>: department and employee rankings across the company.",
+          "placement": "left",
+          "before": [
+            {
+              "addClass": "#kpiReportsDropdown",
+              "cls": "show"
+            }
+          ],
+          "after": [
+            {
+              "removeClass": "#kpiReportsDropdown",
+              "cls": "show"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "hr_dashboard.employees",
+      "title": "Employee Master",
+      "trigger": "#page-employees.active",
+      "steps": [
+        {
+          "id": "hre-frame",
+          "target": [
+            "#empMasterIframe"
+          ],
+          "title": "Employee Master in HR",
+          "text": "The full Employee Master, opened inside HR. Everything works exactly as it does on its own page.<br><br>It has its own <b>?</b> button (bottom left of this area) for Employee Master's tours and how-to guides, such as creating an employee.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "hr_dashboard.onboarding",
+      "title": "Contracts & Onboarding",
+      "trigger": "#page-onboarding.active",
+      "reset": [
+        {
+          "call": "switchOnboardingTab",
+          "args": [
+            "audit"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "id": "hro-tabs",
+          "target": [
+            "#tab-audit"
+          ],
+          "title": "Four tabs",
+          "text": "<b>Contracts Audit</b> checks everyone's contract. <b>Assign Contract</b> gives an employee a contract. <b>Awaiting Approval</b> is where new contracts are approved. <b>Contract Templates</b> is where your contracts are written or imported.<br><br>The usual order: set up a template, assign it, approve it, then keep an eye on the audit.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchOnboardingTab",
+              "args": [
+                "audit"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hro-templates",
+          "target": [
+            "#onboarding-templates"
+          ],
+          "title": "Contract Templates",
+          "text": "Two ways to set up a contract:<br>&bull; <b>Import Contract PDF</b>: use your existing contract exactly as it is, then mark where the employee's details go.<br>&bull; <b>Create New Template</b>: write the contract here, with placeholders that fill in each employee's details.<br><br>Each template can be edited, mapped (PDFs) or deactivated. <b>?</b> &rarr; How-to guides walks you through both.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchOnboardingTab",
+              "args": [
+                "templates"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hro-assign",
+          "target": [
+            "#onboarding-assign"
+          ],
+          "title": "Assign Contract",
+          "text": "Choose the employee, the template and the dates (or <b>Permanent</b>), and optionally the wage. A contract with an end date terminates the employee automatically on that date.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchOnboardingTab",
+              "args": [
+                "assign"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hro-awaiting",
+          "target": [
+            "#onboarding-awaiting"
+          ],
+          "title": "Awaiting Approval",
+          "text": "New contracts wait here. The icons open any signatures and documents, and the printer opens the contract PDF. <b>Approve</b> lets you confirm the department, PIN and wage, then <b>Approve &amp; Activate</b>.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchOnboardingTab",
+              "args": [
+                "awaiting"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hro-audit-status",
+          "target": [
+            "#auditContractStatus"
+          ],
+          "title": "Contracts Audit",
+          "text": "Check everyone at once: who <b>has an active contract</b>, who has <b>no contract</b>, whose <b>signed paper copy is missing</b>, and whose contract is <b>expiring</b> in a month you pick with the arrows.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchOnboardingTab",
+              "args": [
+                "audit"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hro-audit-search",
+          "target": [
+            "#auditContractSearch"
+          ],
+          "title": "Narrow it down",
+          "text": "Filter by department or search by name, surname or PIN, then click <b>Filter Audit</b>. Tick the box to include terminated employees.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchOnboardingTab",
+              "args": [
+                "audit"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hro-audit-table",
+          "target": [
+            "#auditContractsTableBody"
+          ],
+          "title": "Each employee's contract",
+          "text": "The contract type, dates and whether a signed physical copy is on file. The buttons on each row print the contract, <b>upload the signed copy</b>, edit the wage details, or swap to another template.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchOnboardingTab",
+              "args": [
+                "audit"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "hr_dashboard.infringements",
+      "title": "Infringements",
+      "trigger": "#page-infringements.active",
+      "steps": [
+        {
+          "id": "hri-intro",
+          "target": [
+            "#page-infringements .glass-table"
+          ],
+          "title": "Infringement records",
+          "text": "Every disciplinary infringement recorded against an employee: the date, the rule broken and its severity. They're captured on the mobile app, with a photo, signature and location where available.",
+          "placement": "top"
+        },
+        {
+          "id": "hri-dates",
+          "target": [
+            "#infrStartDate"
+          ],
+          "title": "Date range",
+          "text": "Show records between two dates.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hri-search",
+          "target": [
+            "#infrEmpSearchInput"
+          ],
+          "title": "One employee",
+          "text": "Type a name or PIN to see one person's record, then click <b>Search</b>. <b>Clear</b> resets the filters.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hri-actions",
+          "target": [
+            "#page-infringements .glass-table"
+          ],
+          "title": "On each record",
+          "text": "&bull; <b>Evidence</b>: open the photo, signature or the location on a map.<br>&bull; <b>Download PDF</b>: the official record.<br>&bull; <b>Edit</b>: change the rule (and severity), with a reason. Every edit is kept.<br>&bull; <b>History</b>: every change made to the record, and by whom.<br>&bull; <b>Void</b>: deactivate a record that was recorded in error.",
+          "placement": "top"
+        },
+        {
+          "id": "hri-rules",
+          "target": [
+            "#sidebarNav a[onclick*='settings']"
+          ],
+          "title": "Rules and severities",
+          "text": "The rules you can record, and their severity (verbal, written, final written, dismissal), are set up in <b>HR Settings</b>.",
+          "placement": "right"
+        }
+      ]
+    },
+    {
+      "key": "hr_dashboard.performance",
+      "title": "Performance Notes",
+      "trigger": "#page-performance.active",
+      "steps": [
+        {
+          "id": "hrp-intro",
+          "target": [
+            "#page-performance .glass-table"
+          ],
+          "title": "Performance notes",
+          "text": "Notes on an employee's performance, good or bad: the date, category and subject, and any evidence.",
+          "placement": "top"
+        },
+        {
+          "id": "hrp-dates",
+          "target": [
+            "#perfStartDate"
+          ],
+          "title": "Date range",
+          "text": "Show notes between two dates.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hrp-search",
+          "target": [
+            "#perfEmpSearchInput"
+          ],
+          "title": "One employee",
+          "text": "Type a name or PIN, then click <b>Search</b>. <b>Clear</b> resets the filters.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "hrp-cats",
+          "target": [
+            "#sidebarNav a[onclick*='settings']"
+          ],
+          "title": "Categories",
+          "text": "Performance note categories are set up in <b>HR Settings &gt; Categories</b>.",
+          "placement": "right"
+        }
+      ]
+    },
+    {
+      "key": "hr_dashboard.workflows",
+      "title": "Workflows",
+      "trigger": "#page-workflows.active",
+      "reset": [
+        {
+          "call": "switchWorkflowTab",
+          "args": [
+            "active"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "id": "hrw-tabs",
+          "target": [
+            "#tab-wf-active"
+          ],
+          "title": "Workflows",
+          "text": "A workflow is a checklist of steps for onboarding, done in order. Each step is a task for someone: the new employee, their HOD, an approver from an approval hierarchy, or a specific person.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchWorkflowTab",
+              "args": [
+                "active"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hrw-create",
+          "target": [
+            "#workflow-active button[onclick='openWorkflowModal()']"
+          ],
+          "title": "Create a workflow",
+          "text": "Name it and choose how its steps are routed. Then add its steps from the workflow's card with <b>Add Step</b>.",
+          "placement": "left",
+          "before": [
+            {
+              "call": "switchWorkflowTab",
+              "args": [
+                "active"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hrw-list",
+          "target": [
+            "#workflowListContainer"
+          ],
+          "title": "Your workflows",
+          "text": "Each card shows the workflow's steps in order, with buttons to edit or delete a step, edit the workflow, or deactivate it.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchWorkflowTab",
+              "args": [
+                "active"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hrw-assign",
+          "target": [
+            "#assignWfSelect"
+          ],
+          "title": "Assign Workflow",
+          "text": "Choose a workflow and who it applies to: <b>everyone</b>, a <b>department</b>, or <b>one employee</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchWorkflowTab",
+              "args": [
+                "assign"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hrw-inactive",
+          "target": [
+            "#deactivatedWorkflowListContainer"
+          ],
+          "title": "Deactivated",
+          "text": "Workflows you've switched off. Reactivate one to use it again.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchWorkflowTab",
+              "args": [
+                "inactive"
+              ]
+            }
+          ],
+          "after": [
+            {
+              "call": "switchWorkflowTab",
+              "args": [
+                "active"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "hr_dashboard.hierarchies",
+      "title": "Routing & Stand-ins",
+      "trigger": "#page-hierarchies.active",
+      "reset": [
+        {
+          "call": "switchRoutingTab",
+          "args": [
+            "structures"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "id": "hrr-tabs",
+          "target": [
+            "#tab-route-structures"
+          ],
+          "title": "Routing & Stand-ins",
+          "text": "<b>Approval Hierarchies</b> decide who approves, level by level. <b>Stand-in Management</b> covers for managers who are away.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchRoutingTab",
+              "args": [
+                "structures"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hrr-create",
+          "target": [
+            "#routing-structures button[onclick='openHierarchyModal()']"
+          ],
+          "title": "Create a hierarchy",
+          "text": "Set up approval levels (Level 1, Level 2, and so on), each approved by a department or a specific user, plus an optional standing approver as a fallback.",
+          "placement": "left",
+          "before": [
+            {
+              "call": "switchRoutingTab",
+              "args": [
+                "structures"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hrr-list",
+          "target": [
+            "#hierarchiesTableBody"
+          ],
+          "title": "Your hierarchies",
+          "text": "Each hierarchy with its number of levels and its standing approver. Workflows set to <b>System Hierarchy</b> send their steps to these levels.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchRoutingTab",
+              "args": [
+                "structures"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hrr-standins",
+          "target": [
+            "#standInsTableBody"
+          ],
+          "title": "Stand-ins",
+          "text": "Who takes over a manager's approvals, and from when to when. When the dates pass, approvals go back to the original manager.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchRoutingTab",
+              "args": [
+                "standins"
+              ]
+            }
+          ],
+          "after": [
+            {
+              "call": "switchRoutingTab",
+              "args": [
+                "structures"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "hr_dashboard.settings",
+      "title": "HR Settings",
+      "trigger": "#page-settings.active",
+      "reset": [
+        {
+          "call": "switchSettingsTab",
+          "args": [
+            "general"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "id": "hrs-tabs",
+          "target": [
+            "#tab-settings-general"
+          ],
+          "title": "HR Settings",
+          "text": "<b>General</b> settings, the <b>Categories</b> used for infringements and performance notes, and your <b>HR Rules</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchSettingsTab",
+              "args": [
+                "general"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hrs-auto",
+          "target": [
+            "#settingAutoApproveMobile"
+          ],
+          "title": "Auto-approve mobile contracts",
+          "text": "When ticked, contracts assigned from the mobile app become active straight away instead of waiting in <b>Awaiting Approval</b>. It saves as soon as you tick or untick it.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "call": "switchSettingsTab",
+              "args": [
+                "general"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hrs-cats",
+          "target": [
+            "#categoryTableBody"
+          ],
+          "title": "Categories",
+          "text": "Groups for your rules and notes, for example <b>Safety Gear</b> or <b>Attendance</b>. Each category belongs to Infringements or Performance Notes and can be edited or switched off.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchSettingsTab",
+              "args": [
+                "categories"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hrs-rules",
+          "target": [
+            "#typesTableBody"
+          ],
+          "title": "HR Rules",
+          "text": "Each rule has a unique code, a category, a description and a severity: <b>1</b> verbal warning, <b>2</b> written warning, <b>3</b> final written warning, <b>4</b> termination/dismissal. These are what gets recorded as infringements.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchSettingsTab",
+              "args": [
+                "rules"
+              ]
+            }
+          ],
+          "after": [
+            {
+              "call": "switchSettingsTab",
+              "args": [
+                "general"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "hr_dashboard.workflow-form",
+      "title": "Workflow details",
+      "trigger": "#workflowBuilderModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "hr_dashboard.guide.workflow",
+      "skipSteps": 2,
+      "stepSuffix": "form"
+    },
+    {
+      "key": "hr_dashboard.step-form",
+      "title": "Workflow step",
+      "trigger": "#workflowStepModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "hr_dashboard.guide.workflow",
+      "skipSteps": 8,
+      "stepSuffix": "stepform"
+    },
+    {
+      "key": "hr_dashboard.hierarchy-form",
+      "title": "Approval hierarchy",
+      "trigger": "#hierarchyModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "hr_dashboard.guide.hierarchy",
+      "skipSteps": 2,
+      "stepSuffix": "form"
+    },
+    {
+      "key": "hr_dashboard.template-form",
+      "title": "Contract template editor",
+      "trigger": "#templateModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "hr_dashboard.guide.template-editor",
+      "skipSteps": 3,
+      "stepSuffix": "form"
+    },
+    {
+      "key": "hr_dashboard.mapper-form",
+      "title": "PDF field mapper",
+      "trigger": "#fieldMapperModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "hr_dashboard.guide.import-pdf",
+      "skipSteps": 3,
+      "stepSuffix": "form"
+    }
+  ],
+  "guides": [],
+  "guidesFile": "hr_dashboard_guides.json"
+}

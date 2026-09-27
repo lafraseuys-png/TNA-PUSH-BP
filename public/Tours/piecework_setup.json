@@ -1,0 +1,172 @@
+{
+  "_howto": "Guided setup for Production Pay (Demo / Setup mode). checks = what the data must show; confirm = the user confirms.",
+  "key": "setup.piecework",
+  "title": "Set up Production Pay",
+  "intro": "Work through these in order. You're in <b>demo</b>, so nothing affects your live system until you push it. Each step checks itself against what you've set up.",
+  "steps": [
+    {
+      "id": "farms",
+      "title": "Farms and field units",
+      "section": "settings",
+      "call": {
+        "fn": "switchSettingsTab",
+        "args": [
+          "farms"
+        ]
+      },
+      "guide": "piecework.guide.farms",
+      "why": "Where the work happens. Tasks are given for farms and their units, and the phones and Field Maps use their GPS locations.",
+      "checks": [
+        {
+          "url": "/api/farms",
+          "list": "",
+          "where": [
+            "IsActive"
+          ],
+          "min": 1
+        },
+        {
+          "url": "/api/units",
+          "list": "",
+          "where": [
+            "IsActive"
+          ],
+          "min": 1
+        }
+      ],
+      "todo": "At least one active farm with an active field unit."
+    },
+    {
+      "id": "global",
+      "title": "Global rules",
+      "section": "settings",
+      "call": {
+        "fn": "switchSettingsTab",
+        "args": [
+          "global"
+        ]
+      },
+      "why": "Rules for everyone: whether people can be in more than one team, overtime, whether piecework hours come off normal time, the Global Hourly Rate, and where job costing departments come from.",
+      "confirm": true,
+      "confirmLabel": "These are right"
+    },
+    {
+      "id": "activities",
+      "title": "Activities and their rates",
+      "section": "activities",
+      "call": {
+        "fn": "switchActivityTab",
+        "args": [
+          "active"
+        ]
+      },
+      "guide": "piecework.guide.activity",
+      "why": "What people are paid for, the unit it's counted in, and the rate. New rates go in the Pricing Ledger with the date they start, so past days keep their rate.",
+      "checks": [
+        {
+          "url": "/api/piecework/activities",
+          "list": "",
+          "where": [
+            "IsActive"
+          ],
+          "min": 1
+        }
+      ],
+      "todo": "At least one active activity with a rate."
+    },
+    {
+      "id": "jobcosting",
+      "title": "Job costing activities",
+      "section": "activities",
+      "call": {
+        "fn": "switchActivityTab",
+        "args": [
+          "jobcosting"
+        ]
+      },
+      "optional": true,
+      "why": "Jobs people clock time against on the mobile app, such as Irrigation or Maintenance.",
+      "checks": [
+        {
+          "url": "/api/piecework/job-costing/activities",
+          "list": "",
+          "where": [
+            "IsActive"
+          ],
+          "min": 1
+        }
+      ],
+      "todo": "At least one active job costing activity."
+    },
+    {
+      "id": "teams",
+      "title": "Production teams",
+      "section": "teams",
+      "call": {
+        "fn": "switchTeamTab",
+        "args": [
+          "active"
+        ]
+      },
+      "guide": "piecework.guide.team",
+      "needs": [
+        "activities"
+      ],
+      "why": "Who works together, who manages them, and how the manager is paid on team work.",
+      "checks": [
+        {
+          "url": "/api/piecework/teams",
+          "list": "teams",
+          "where": [
+            "IsActive"
+          ],
+          "min": 1
+        },
+        {
+          "url": "/api/piecework/teams",
+          "list": "members",
+          "min": 1
+        }
+      ],
+      "todo": "At least one active team with members."
+    },
+    {
+      "id": "payroll",
+      "title": "Payroll periods",
+      "section": "settings",
+      "call": {
+        "fn": "switchSettingsTab",
+        "args": [
+          "global"
+        ]
+      },
+      "why": "The cycles people are paid on; locked periods can't be changed in Daily Production. They're set up in Employee Master › Payroll Periods (the link is on this tab).",
+      "checks": [
+        {
+          "url": "/api/ess/payroll-periods",
+          "list": "periods",
+          "min": 1
+        },
+        {
+          "url": "/api/ess/payroll-periods",
+          "value": "unassignedEmployees",
+          "max": 0
+        }
+      ],
+      "todo": "At least one payroll period, with every active employee on one."
+    },
+    {
+      "id": "testrun",
+      "title": "Test run",
+      "section": "tasks",
+      "guide": "piecework.guide.daily",
+      "needs": [
+        "activities",
+        "teams"
+      ],
+      "why": "Prove it works, all in demo:<ol style=\"margin:6px 0 0 16px;padding:0;\"><li><b>Tasks</b>: create a task for your team (<b>Show me how</b> on the Tasks screen).</li><li><b>Daily Production</b>: load the team's day, type in quantities, check their pay, then <b>Commit to Payroll</b>.</li><li>See it on the <b>Production Dashboard</b> and in a <b>Production Report</b>.</li></ol>Tasks and production are never pushed to live.",
+      "confirm": true,
+      "confirmLabel": "It all worked"
+    }
+  ]
+}

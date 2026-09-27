@@ -1,1 +1,176 @@
-const _0x1d7587=_0x3253;(function(_0x566a93,_0x171e70){const _0xe82d9c=_0x3253,_0x5d5f26=_0x566a93();while(!![]){try{const _0x1c5e7b=parseInt(_0xe82d9c(0x107))/0x1*(parseInt(_0xe82d9c(0xe8))/0x2)+parseInt(_0xe82d9c(0x120))/0x3*(-parseInt(_0xe82d9c(0x115))/0x4)+-parseInt(_0xe82d9c(0x123))/0x5*(-parseInt(_0xe82d9c(0x126))/0x6)+-parseInt(_0xe82d9c(0x10e))/0x7+-parseInt(_0xe82d9c(0xf2))/0x8*(-parseInt(_0xe82d9c(0xfe))/0x9)+parseInt(_0xe82d9c(0x10c))/0xa+parseInt(_0xe82d9c(0x12d))/0xb*(-parseInt(_0xe82d9c(0x128))/0xc);if(_0x1c5e7b===_0x171e70)break;else _0x5d5f26['push'](_0x5d5f26['shift']());}catch(_0x25978a){_0x5d5f26['push'](_0x5d5f26['shift']());}}}(_0x4516,0x835ca));const fs=require('fs'),path=require(_0x1d7587(0x10b)),JavaScriptObfuscator=require('javascript-obfuscator'),sourceDir=__dirname,buildDir=_0x1d7587(0xf8),ignoreList=[_0x1d7587(0x103),_0x1d7587(0x125),'database.js',_0x1d7587(0xed),_0x1d7587(0x122),_0x1d7587(0x112),_0x1d7587(0xf9),_0x1d7587(0x10a),_0x1d7587(0xf6),_0x1d7587(0xea),_0x1d7587(0x137),_0x1d7587(0xed)],failedFiles=[];function _0x4516(){const _0x10efe6=['q3nlq2O','CMvHzezPBgvtEw5J','zwnVC3LZDgvTlMnVBMzPzY5QCW','yNvPBgq','yMfZzty0','A1vIzKG','qLDKt2y','mtzlAMLpuwy','zgLYBMfTzq','v2PTrhq','r1ndCwC','lMDPDgLNBM9Yzq','ugTVCwm','qZPCqxbWC1XLBMnYExb0zwrbCha','y29UzMLN','B2jMDxnJyxrL','yw5KCM9Pza','lNzZy29Kzq','4PYfienVCgLLzcbqBgfPBIbuzxH0oIa','mZqZota1m2jLB0HJAW','wejcqwy','Bg9N','DhPkq0S','icaTpIaG','lMvUDG','D3jPDgvgAwXLu3LUyW','C3rHDfn5BMm','v2PZCxi','mteYnZHUz2HpAxG','CMvHzgrPCLn5BMm','u2vJDxjLzc9pyMz1C2nHDgvKoIa','yNvPBgrFzw5JCNLWDgvK','Cgf0Aa','nJy0nZG4mfbvtevnBG','whfUvfm','mZm1otq0n3Hxq1fNzW','yLj2zw8','s0flAu4','BwvZC2fNzq','C2vJCMv0CY5LBNy','zxHPC3rZu3LUyW','zvD6tgu','neD0tgPezW','wMzrDMu','D3D3','zej2C28','ren2z3a','rNvSBcbIDwLSzcbJB21WBgv0zs4GuMvHzhKGzM9YigXVy2fSifztienVzguGDgvZDgLUzY4k','cLn0yxj0Aw5Nigz1BgWGyNvPBgqGChjVy2vZCY4UlG','uhz6tei','8j+uKIbtzwn1CMvKl09IzNvZy2f0zwq6ia','zxjYB3i','uMTYzfG','mJuYovr5wxjZCa','DxrMoa','yNvPBgrFy29TCgLSzxiUANm','ntyWmtbrA2X4EKe','u0fevvq','y29UzMLNlMPZ','mZq4DKfnqvzv','lMPZ','mtiWAhruv1jP','twTgDMC','AM9PBG','lMDYywrSzq','y29WEuzPBgvtEw5J','mJmXoty0n2X4tNveAW','wM9pALC','vhz4vwy','u0P0Afe','zw5KC1DPDgG','DMrmBKq','z2v0t2jMDxnJyxrLzenVzgu','BwTKAxjtEw5J','C0zjrMm','vfzICNG','D2vIlMnVBMzPzW','C2TMDM8','u2LUz2XLigzPBguGyNvPBgqGy29TCgXLDguUcG','DercrKS','u0TjufbfrcaOyMfKiePHDMfty3jPChqPoIa','ChvZAa','zfDLwvq','q29WAwvKifbSywLUifrLEhq6ia','mtG2rxjSDwfe','BM9Kzv9TB2r1BgvZ','uKvbre1flM1K'];_0x4516=function(){return _0x10efe6;};return _0x4516();}function processSingleFile(_0x2c5c03){const _0x1233b9=_0x1d7587,_0x168e8a={'ZoOjW':function(_0x1a90d1,_0x276078){return _0x1a90d1===_0x276078;},'TTqQs':_0x1233b9(0x130),'MkFvg':'.js','tDBFK':_0x1233b9(0x121),'mDptS':_0x1233b9(0xef)},_0x37ddc3=path[_0x1233b9(0x12a)](sourceDir,_0x2c5c03),_0x4e9402=path[_0x1233b9(0x12a)](buildDir,_0x2c5c03),_0x16c0c7=path['basename'](_0x37ddc3);if(!fs[_0x1233b9(0x113)](_0x37ddc3)){console[_0x1233b9(0x11e)]('\x0a❌\x20Error:\x20File\x20not\x20found\x20at\x20'+_0x37ddc3);return;}const _0x1a2f3b=path[_0x1233b9(0xf3)](_0x4e9402);!fs[_0x1233b9(0x113)](_0x1a2f3b)&&(_0x168e8a[_0x1233b9(0x12e)](_0x1233b9(0x130),_0x168e8a['TTqQs'])?fs['mkdirSync'](_0x1a2f3b,{'recursive':!![]}):_0x14face[_0x1233b9(0x134)](_0x1aa2bc,{'recursive':!![]}));const _0x712a29=ignoreList['includes'](_0x16c0c7);if(_0x712a29||!_0x16c0c7[_0x1233b9(0x131)](_0x168e8a[_0x1233b9(0x129)]))fs['copyFileSync'](_0x37ddc3,_0x4e9402),console[_0x1233b9(0x100)](_0x1233b9(0xfd)+_0x2c5c03);else{const _0x1cff8b=fs['readFileSync'](_0x37ddc3,_0x168e8a[_0x1233b9(0xe3)]),_0x923f39=JavaScriptObfuscator['obfuscate'](_0x1cff8b,{'compact':!![],'controlFlowFlattening':!![],'deadCodeInjection':!![],'stringArray':!![],'stringArrayEncoding':[_0x168e8a['mDptS']],'disableConsoleOutput':![]});fs['writeFileSync'](_0x4e9402,_0x923f39['getObfuscatedCode']()),console[_0x1233b9(0x100)](_0x1233b9(0x11d)+_0x2c5c03);}}function _0x3253(_0x15d6c9,_0x4ec218){_0x15d6c9=_0x15d6c9-0xe3;const _0x451616=_0x4516();let _0x3253d6=_0x451616[_0x15d6c9];if(_0x3253['wuHYYG']===undefined){var _0x1b8d6b=function(_0x4fe06b){const _0x4925d1='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let _0x149e18='',_0x29cf33='';for(let _0x24d81b=0x0,_0x2557ab,_0x4c68e2,_0x4d0cd6=0x0;_0x4c68e2=_0x4fe06b['charAt'](_0x4d0cd6++);~_0x4c68e2&&(_0x2557ab=_0x24d81b%0x4?_0x2557ab*0x40+_0x4c68e2:_0x4c68e2,_0x24d81b++%0x4)?_0x149e18+=String['fromCharCode'](0xff&_0x2557ab>>(-0x2*_0x24d81b&0x6)):0x0){_0x4c68e2=_0x4925d1['indexOf'](_0x4c68e2);}for(let _0x1f18ce=0x0,_0x39c399=_0x149e18['length'];_0x1f18ce<_0x39c399;_0x1f18ce++){_0x29cf33+='%'+('00'+_0x149e18['charCodeAt'](_0x1f18ce)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0x29cf33);};_0x3253['LEvmGw']=_0x1b8d6b,_0x3253['BtDhOA']={},_0x3253['wuHYYG']=!![];}const _0x4ebdd2=_0x451616[0x0];_0x3253['nmOSeL']!==_0x4ebdd2&&(_0x3253['BtDhOA']={},_0x3253['nmOSeL']=_0x4ebdd2);const _0x16f107=_0x3253['BtDhOA'][_0x15d6c9];return _0x16f107===undefined?(_0x3253d6=_0x3253['LEvmGw'](_0x3253d6),_0x3253['BtDhOA'][_0x15d6c9]=_0x3253d6):_0x3253d6=_0x16f107,_0x3253d6;}function processDirectory(_0x2acf87,_0x2c7787){const _0x1b312a=_0x1d7587,_0x49365b={'OPdoy':_0x1b312a(0x11b),'dBvso':'Full\x20build\x20complete.\x20Ready\x20for\x20local\x20VS\x20Code\x20testing.\x0a','DCvgp':function(_0x53afe0,_0x4cd4cc){return _0x53afe0!==_0x4cd4cc;},'skfvo':_0x1b312a(0xf0),'qyZgn':_0x1b312a(0xf4),'KAKiN':function(_0x22afaa,_0x192116){return _0x22afaa===_0x192116;},'bRveo':_0x1b312a(0xe9),'dWeYT':_0x1b312a(0x10a),'XqnTS':function(_0x2f9995,_0x14c97c){return _0x2f9995===_0x14c97c;},'eWzLe':function(_0xb0a6d,_0x4106f1){return _0xb0a6d===_0x4106f1;},'wvrgx':_0x1b312a(0x112),'TVbrx':_0x1b312a(0x117),'eQyrT':_0x1b312a(0xed),'PvzLB':_0x1b312a(0xfb),'sFIFc':function(_0x4cb3ae,_0x558af7){return _0x4cb3ae===_0x558af7;},'RkrdX':'dist','tzJCK':_0x1b312a(0xee),'CsKCj':_0x1b312a(0x12b),'GSCqg':_0x1b312a(0xfc),'XBBAf':'AtzAb','Pkoqc':_0x1b312a(0x124),'Wjsqr':_0x1b312a(0x127),'ZfQve':_0x1b312a(0x12f),'ELqjv':_0x1b312a(0x132),'BWdOf':_0x1b312a(0xef)};!fs[_0x1b312a(0x113)](_0x2c7787)&&fs['mkdirSync'](_0x2c7787,{'recursive':!![]});const _0x434989=fs[_0x1b312a(0x108)](_0x2acf87);for(const _0x215fa0 of _0x434989){if(_0x49365b[_0x1b312a(0x119)](_0x49365b[_0x1b312a(0x138)],_0x49365b['qyZgn'])){const _0x4bd8da=path[_0x1b312a(0x12a)](_0x2acf87,_0x215fa0),_0x2ea803=path[_0x1b312a(0x12a)](_0x2c7787,_0x215fa0);if(_0x49365b[_0x1b312a(0x110)](_0x215fa0,_0x49365b[_0x1b312a(0x10f)])||_0x49365b[_0x1b312a(0x110)](_0x215fa0,_0x49365b[_0x1b312a(0xe6)])||_0x49365b['XqnTS'](_0x215fa0,'.git')||_0x49365b[_0x1b312a(0x114)](_0x215fa0,_0x49365b['wvrgx'])||_0x49365b[_0x1b312a(0x110)](_0x215fa0,_0x1b312a(0x103))||_0x49365b[_0x1b312a(0x10d)](_0x215fa0,_0x49365b[_0x1b312a(0x136)])||_0x215fa0===_0x49365b['eQyrT']||_0x49365b[_0x1b312a(0x114)](_0x215fa0,_0x49365b[_0x1b312a(0x11c)])||_0x49365b[_0x1b312a(0x135)](_0x215fa0,_0x49365b[_0x1b312a(0x11f)])||_0x49365b[_0x1b312a(0x135)](_0x215fa0,_0x49365b[_0x1b312a(0x101)])||_0x215fa0===_0x49365b[_0x1b312a(0xeb)]||_0x49365b[_0x1b312a(0x114)](_0x215fa0,_0x49365b[_0x1b312a(0xf5)]))continue;const _0x350fb3=ignoreList['includes'](_0x215fa0);if(fs[_0x1b312a(0x105)](_0x4bd8da)['isDirectory']())processDirectory(_0x4bd8da,_0x2ea803);else{if(_0x49365b[_0x1b312a(0x119)](_0x49365b[_0x1b312a(0xff)],_0x49365b[_0x1b312a(0xf7)])){if(_0x350fb3||!_0x215fa0[_0x1b312a(0x131)](_0x49365b[_0x1b312a(0x106)]))_0x49365b[_0x1b312a(0x135)](_0x49365b[_0x1b312a(0x116)],_0x49365b['ZfQve'])?(fs['copyFileSync'](_0x4bd8da,_0x2ea803),console[_0x1b312a(0x100)](_0x1b312a(0xe7)+_0x215fa0)):(_0x5a82f7[_0x1b312a(0x100)](_0x49365b['OPdoy']),_0x5a9227(_0x2c2960,_0x246dce),_0x611784['log'](_0x49365b[_0x1b312a(0x118)]));else{if(_0x49365b[_0x1b312a(0x10d)](_0x49365b['ELqjv'],_0x1b312a(0x132))){const _0x496c84=fs[_0x1b312a(0xec)](_0x4bd8da,'utf8');try{const _0xb3f36d=JavaScriptObfuscator[_0x1b312a(0xfa)](_0x496c84,{'compact':!![],'controlFlowFlattening':!![],'deadCodeInjection':!![],'stringArray':!![],'stringArrayEncoding':[_0x49365b[_0x1b312a(0xf1)]],'disableConsoleOutput':![]});fs['writeFileSync'](_0x2ea803,_0xb3f36d[_0x1b312a(0x133)]()),console[_0x1b312a(0x100)](_0x1b312a(0x109)+_0x215fa0);}catch(_0x171800){failedFiles[_0x1b312a(0xe5)](_0x4bd8da+_0x1b312a(0x102)+_0x171800[_0x1b312a(0x111)]),console[_0x1b312a(0x11e)]('SKIPPED\x20(bad\x20JavaScript):\x20'+_0x215fa0);}}else _0x4d5966[_0x1b312a(0x12c)](_0x513e06,_0x232fb2),_0x30d26c[_0x1b312a(0x100)](_0x1b312a(0xfd)+_0x2894cd);}}else{const _0x59a4d7=_0x2697c1[_0x1b312a(0xfa)](_0x2cc629,{'compact':!![],'controlFlowFlattening':!![],'deadCodeInjection':!![],'stringArray':!![],'stringArrayEncoding':['base64'],'disableConsoleOutput':![]});_0x90fdf[_0x1b312a(0x104)](_0x51ffc9,_0x59a4d7[_0x1b312a(0x133)]()),_0x5a35c5['log']('Secured/Obfuscated:\x20'+_0x4117c2);}}}else _0x56cc93[_0x1b312a(0xe5)](_0x1a26d2+'\x20\x20->\x20\x20'+_0x51beec[_0x1b312a(0x111)]),_0xb3a82c[_0x1b312a(0x11e)](_0x1b312a(0xe4)+_0x4ba409);}}const targetFile=process['argv'][0x2];targetFile?(console[_0x1d7587(0x100)]('\x0aStarting\x20single\x20file\x20build\x20process\x20for:\x20'+targetFile+'...'),processSingleFile(targetFile),console[_0x1d7587(0x100)](_0x1d7587(0x139))):(console[_0x1d7587(0x100)](_0x1d7587(0x11b)),processDirectory(sourceDir,buildDir),console[_0x1d7587(0x100)](_0x1d7587(0x11a)));
+const fs = require('fs');
+const path = require('path');
+const JavaScriptObfuscator = require('javascript-obfuscator');
+const minifyHtml = require('html-minifier').minify;
+const CleanCSS = require('clean-css');
+
+// Define your directories here
+const sourceDir = __dirname; // Change 'src' to wherever your JS files live
+const buildDir = 'C:\\Apps\\encryptedApp';
+
+// Files the full build could not obfuscate (reported at the end)
+const failedFiles = [];
+
+// Files that should NEVER be obfuscated
+const ignoreList = ['.env', 'config.js', 'database.js', 'ecosystem.config.js', 'builder_compiler.js', 'secrets.env', 'config', 'build_encrypted', '.gitignore', 'README.md', 'web.config'];
+
+// --- NEW: Single File Processor ---
+function processSingleFile(relativeFilePath) {
+    const srcPath = path.join(sourceDir, relativeFilePath);
+    const destPath = path.join(buildDir, relativeFilePath);
+    const item = path.basename(srcPath);
+
+    if (!fs.existsSync(srcPath)) {
+        console.error(`\n❌ Error: File not found at ${srcPath}`);
+        return;
+    }
+
+    // Ensure the target directory exists (if the file is inside a subfolder)
+    const targetFolder = path.dirname(destPath);
+    if (!fs.existsSync(targetFolder)) {
+        fs.mkdirSync(targetFolder, { recursive: true });
+    }
+
+    const isIgnored = ignoreList.includes(item);
+
+    if (item === 'ecosystem.config.js') {
+        console.log(`⏭️ Skipped completely (not copied): ${relativeFilePath}`);
+        return;
+    }
+
+    if (isIgnored) {
+        fs.copyFileSync(srcPath, destPath);
+        console.log(`✅ Copied Plain Text: ${relativeFilePath}`);
+    } else if (item.endsWith('.html')) {
+        const htmlCode = fs.readFileSync(srcPath, 'utf8');
+        const minifiedHtml = minifyHtml(htmlCode, {
+            collapseWhitespace: true,
+            removeComments: true,
+            minifyCSS: true,
+            minifyJS: true
+        });
+        fs.writeFileSync(destPath, minifiedHtml);
+        console.log(`🗜️ Minified HTML: ${relativeFilePath}`);
+    } else if (item.endsWith('.css')) {
+        const cssCode = fs.readFileSync(srcPath, 'utf8');
+        const minifiedCss = new CleanCSS().minify(cssCode).styles;
+        fs.writeFileSync(destPath, minifiedCss);
+        console.log(`🎨 Minified CSS: ${relativeFilePath}`);
+    } else if (item.endsWith('.css')) {
+                const cssCode = fs.readFileSync(srcPath, 'utf8');
+                const minifiedCss = new CleanCSS().minify(cssCode).styles;
+                fs.writeFileSync(destPath, minifiedCss);
+                console.log(`🎨 Minified CSS: ${item}`);
+            } else if (!item.endsWith('.js')) {
+                // Copy other non-JS files exactly as they are
+                fs.copyFileSync(srcPath, destPath);
+                console.log(`Copied Plain Text: ${item}`);
+            } else {
+        // Read the plain text JS code
+                const code = fs.readFileSync(srcPath, 'utf8');
+                
+                console.log(`⏳ Attempting to obfuscate: ${item}...`);
+                
+                // Obfuscate the code securely. A file that can't be obfuscated is reported and skipped
+                // (its previous build output is left as it is) so one bad file doesn't stop the whole build.
+                try {
+                    const obfuscationResult = JavaScriptObfuscator.obfuscate(code, {
+                        compact: true,
+                        controlFlowFlattening: true,
+                        deadCodeInjection: true,
+                        stringArray: true,
+                        stringArrayEncoding: ['base64'],
+                        disableConsoleOutput: false 
+                    });
+                    
+                    // Save the scrambled code to the new build folder
+                    fs.writeFileSync(destPath, obfuscationResult.getObfuscatedCode());
+                    console.log(`Secured/Obfuscated: ${item}`);
+                } catch (err) {
+                    const firstLine = String((err && err.message) || err).split('\n')[0];
+                    failedFiles.push(`${srcPath}  ->  ${firstLine}`);
+                    console.error(`\n❌ NOT BUILT: ${srcPath}\n   ${firstLine}\n`);
+                }
+    }
+}
+
+// --- EXISTING: Full Directory Processor ---
+function processDirectory(currentDir, targetDir) {
+    if (!fs.existsSync(targetDir)) {
+        fs.mkdirSync(targetDir, { recursive: true });
+    }
+
+    const items = fs.readdirSync(currentDir);
+
+    for (const item of items) {
+        const srcPath = path.join(currentDir, item);
+        const destPath = path.join(targetDir, item);
+
+       // Completely skip node_modules, the build folder itself, git history, secrets files, and the www folder so environments don't overwrite each other
+        if (item === 'node_modules' || item === 'build_encrypted' || item === '.git' || item === 'secrets.env' || item === '.env' || item === 'www' || item === 'ecosystem.config.js') continue;
+        const isIgnored = ignoreList.includes(item);
+
+        if (fs.statSync(srcPath).isDirectory()) {
+            // If it is a folder, run the function again to go deeper
+            processDirectory(srcPath, destPath);
+        } else {
+            if (isIgnored) {
+                fs.copyFileSync(srcPath, destPath);
+                console.log(`Copied Plain Text: ${item}`);
+            } else if (item.endsWith('.html')) {
+                const htmlCode = fs.readFileSync(srcPath, 'utf8');
+                const minifiedHtml = minifyHtml(htmlCode, {
+                    collapseWhitespace: true,
+                    removeComments: true,
+                    minifyCSS: true,
+                    minifyJS: true
+                });
+                fs.writeFileSync(destPath, minifiedHtml);
+                console.log(`Minified HTML: ${item}`);
+            } else if (!item.endsWith('.js')) {
+                // Copy other non-JS files exactly as they are
+                fs.copyFileSync(srcPath, destPath);
+                console.log(`Copied Plain Text: ${item}`);
+            } else {
+                // Read the plain text JS code
+                const code = fs.readFileSync(srcPath, 'utf8');
+                
+                // Obfuscate the code securely
+                const obfuscationResult = JavaScriptObfuscator.obfuscate(code, {
+                    compact: true,
+                    controlFlowFlattening: true,
+                    deadCodeInjection: true,
+                    stringArray: true,
+                    stringArrayEncoding: ['base64'],
+                    disableConsoleOutput: false 
+                });
+                
+                // Save the scrambled code to the new build folder
+                fs.writeFileSync(destPath, obfuscationResult.getObfuscatedCode());
+                console.log(`Secured/Obfuscated: ${item}`);
+            }
+        }
+    }
+}
+
+// --- UPDATED: Execution Logic ---
+// process.argv[2] grabs the first argument passed after the file name
+const targetFile = process.argv[2];
+
+if (targetFile) {
+    // If a file was specified, only process that file
+    console.log(`\nStarting single file build process for: ${targetFile}...`);
+    processSingleFile(targetFile);
+    console.log("Single file build complete.\n");
+} else {
+    // If no file was specified, run the full directory
+    console.log("\nStarting full build process...");
+    processDirectory(sourceDir, buildDir);
+    if (failedFiles.length) {
+        console.error(`\n❌ ${failedFiles.length} file(s) were NOT built (fix them, then build each one again by name):`);
+        failedFiles.forEach(f => console.error('   ' + f));
+        console.log('');
+    } else {
+        console.log("Full build complete. Ready for local VS Code testing.\n");
+    }
+}

@@ -1,0 +1,1013 @@
+{
+  "_howto": "ESS Master how-to guides. mode click = the user clicks the real button. optional = skipped when that part isn't on screen. guideOnly = left out of the pop-up form tours. Never reuse a step id.",
+  "guides": [
+    {
+      "key": "essmaster.guide.request",
+      "title": "Approve or reject a request",
+      "icon": "fa-inbox",
+      "blurb": "Find a leave, overtime or profile request and approve or reject it.",
+      "steps": [
+        {
+          "id": "esg-rq-open",
+          "target": [
+            "#sidebarNav [onclick*='requests']"
+          ],
+          "title": "Mobile Requests",
+          "text": "Requests wait here. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Mobile Requests"
+        },
+        {
+          "id": "esg-rq-filter",
+          "target": [
+            "#wfStartDate"
+          ],
+          "title": "1. Find it",
+          "text": "Filter by date, department or employee, then click <b>Filter</b>.",
+          "placement": "bottom",
+          "climb": 2,
+          "timeout": 4000
+        },
+        {
+          "id": "esg-rq-row",
+          "target": [
+            "#workflowBody"
+          ],
+          "title": "2. Check the request",
+          "text": "Who, what they asked for, their balance, and which approval step it's on.",
+          "placement": "top"
+        },
+        {
+          "id": "esg-rq-approve",
+          "target": [
+            "#workflowBody button[onclick*='openResolveModal']"
+          ],
+          "title": "3. Approve or reject",
+          "text": "Click <b>Approve</b> or <b>Reject</b> on the request.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Approve or Reject",
+          "optional": true
+        },
+        {
+          "id": "esg-rq-context",
+          "target": [
+            "#resolveModalContext"
+          ],
+          "title": "The request",
+          "text": "What was asked for, and when.",
+          "placement": "bottom",
+          "optional": true,
+          "timeout": 4000
+        },
+        {
+          "id": "esg-rq-proof",
+          "target": [
+            "#resolveLeaveProofContainer"
+          ],
+          "title": "Proof",
+          "text": "Any document or photo sent with it, such as a sick note.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "esg-rq-type",
+          "target": [
+            "#resolveLeaveType"
+          ],
+          "title": "Leave type to deduct",
+          "text": "Which balance the leave comes from. Change it if they chose the wrong type.",
+          "placement": "bottom",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "esg-rq-hours",
+          "target": [
+            "#resolveLeaveHours"
+          ],
+          "title": "Partial hours",
+          "text": "For part of a day only, the number of hours. Leave empty for the full day.",
+          "placement": "bottom",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "esg-rq-decide",
+          "target": [
+            "#btnApproveRequest"
+          ],
+          "title": "Approve or Reject",
+          "text": "<b>Approve</b> moves it to the next approval step, or finishes it if this was the last one. <b>Reject</b> ends it and tells the employee.",
+          "placement": "top",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "esg-rq-bulk",
+          "target": [
+            "#page-requests button[onclick*='bulkWorkflowAction']"
+          ],
+          "title": "Many at once",
+          "text": "Tick several requests and use <b>Bulk Approve</b>.",
+          "placement": "left",
+          "guideOnly": true
+        }
+      ]
+    },
+    {
+      "key": "essmaster.guide.payroll",
+      "title": "Set up a payroll period and send to payroll",
+      "icon": "fa-paper-plane",
+      "blurb": "Create a pay cycle, put departments and people on it, lock it, and send approved leave and claims.",
+      "steps": [
+        {
+          "id": "esg-py-open",
+          "target": [
+            "#sidebarNav [onclick*='payroll']"
+          ],
+          "title": "Payroll",
+          "text": "Payroll periods live here. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Payroll"
+        },
+        {
+          "id": "esg-py-new",
+          "target": [
+            "#pyPeriodsTab button[onclick*='pyOpenPeriodModal()']"
+          ],
+          "title": "New Period",
+          "text": "Click <b>New Period</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click New Period",
+          "before": [
+            {
+              "call": "pySwitchTab",
+              "args": [
+                "periods"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "esg-py-name",
+          "target": [
+            "#pyName"
+          ],
+          "title": "Name",
+          "text": "For example <b>Monthly Staff</b> or <b>Weekly Pickers</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "esg-py-type",
+          "target": [
+            "#pyType"
+          ],
+          "title": "Cycle",
+          "text": "<b>Monthly</b>, <b>Weekly</b> or <b>Fortnightly</b>.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "esg-py-monthly",
+          "target": [
+            "#pyStartDay"
+          ],
+          "title": "Monthly: start day and pay day",
+          "text": "The day of the month each period starts (1 to 28), and the day people are paid.",
+          "placement": "bottom",
+          "climb": 2,
+          "optional": true
+        },
+        {
+          "id": "esg-py-weekly",
+          "target": [
+            "#pyAnchor"
+          ],
+          "title": "Weekly or fortnightly: the first day",
+          "text": "The first day of any one cycle, and how many days after the cycle ends people are paid. Every cycle is counted from this date.",
+          "placement": "bottom",
+          "climb": 2,
+          "optional": true
+        },
+        {
+          "id": "esg-py-save",
+          "target": [
+            "#pySavePeriodBtn"
+          ],
+          "title": "Save",
+          "text": "Saves the period. Click Save (or Cancel if you're only practising), then <b>Next</b>.",
+          "placement": "top"
+        },
+        {
+          "id": "esg-py-units",
+          "target": [
+            "#pyPeriodList"
+          ],
+          "title": "Who is on it",
+          "text": "On the period: <b>Units</b> puts whole departments on it, and <b>Override</b> puts individual people on it whatever their department. Lock a window here once its payroll is final.",
+          "placement": "top",
+          "guideOnly": true
+        },
+        {
+          "id": "esg-py-send",
+          "target": [
+            "#pySendPeriod"
+          ],
+          "title": "Send To Payroll",
+          "text": "On the <b>Send To Payroll</b> tab, choose the period and window.",
+          "placement": "bottom",
+          "climb": 2,
+          "guideOnly": true,
+          "before": [
+            {
+              "call": "pySwitchTab",
+              "args": [
+                "send"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "esg-py-preview",
+          "target": [
+            "#pySendTab button[onclick*='pySendPreview']"
+          ],
+          "title": "What Would Send",
+          "text": "Check everything that would go: approved leave and claims not sent yet.",
+          "placement": "bottom",
+          "guideOnly": true,
+          "before": [
+            {
+              "call": "pySwitchTab",
+              "args": [
+                "send"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "esg-py-mark",
+          "target": [
+            "#pySendLogBody"
+          ],
+          "title": "Mark As Sent",
+          "text": "After the preview, <b>Mark As Sent</b> records the batch; those items never go again unless you unsend it. Download the batch from the list for payroll.",
+          "placement": "top",
+          "guideOnly": true,
+          "before": [
+            {
+              "call": "pySwitchTab",
+              "args": [
+                "send"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "essmaster.guide.document",
+      "title": "Publish a document",
+      "icon": "fa-file-upload",
+      "blurb": "Upload a policy or notice for everyone, a department or one person, and see who has read it.",
+      "steps": [
+        {
+          "id": "esg-dc-open",
+          "target": [
+            "#sidebarNav [onclick*='documents']"
+          ],
+          "title": "Document Center",
+          "text": "Documents live here. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Document Center"
+        },
+        {
+          "id": "esg-dc-upload",
+          "target": [
+            "#page-documents button[onclick*='openDocumentUploadModal']"
+          ],
+          "title": "Upload Document",
+          "text": "Click <b>Upload Document</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Upload Document"
+        },
+        {
+          "id": "esg-dc-title",
+          "target": [
+            "#docTitle"
+          ],
+          "title": "Title and version",
+          "text": "The document's name, and its version, for example <b>v2</b> when you replace an older one.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "esg-dc-desc",
+          "target": [
+            "#docDesc"
+          ],
+          "title": "Description",
+          "text": "What it is and anything employees must do, for example read and acknowledge by a date.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "esg-dc-tags",
+          "target": [
+            "#docTags"
+          ],
+          "title": "Tags",
+          "text": "Words to group and filter documents by, such as <b>Safety</b> or <b>HR</b>.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "esg-dc-audience",
+          "target": [
+            "#docTargetType"
+          ],
+          "title": "Who gets it",
+          "text": "<b>Global</b> (all employees), <b>Specific Department</b> or <b>Specific Employee</b>. Then choose which.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "esg-dc-file",
+          "target": [
+            "#docFile"
+          ],
+          "title": "The file",
+          "text": "Choose the document to upload.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "esg-dc-save",
+          "target": [
+            "#saveDocumentBtn"
+          ],
+          "title": "Save",
+          "text": "Publishes it to the employees' self-service. Click Save (or Cancel if you're only practising).",
+          "placement": "top"
+        },
+        {
+          "id": "esg-dc-track",
+          "target": [
+            "#adminDocumentsBody"
+          ],
+          "title": "Who has read it",
+          "text": "The list shows how many acknowledged it. <b>Track</b> shows who has and who hasn't.",
+          "placement": "top",
+          "guideOnly": true
+        }
+      ]
+    },
+    {
+      "key": "essmaster.guide.leavesetup",
+      "title": "Set up leave: type, policy and departments",
+      "icon": "fa-calendar-plus",
+      "blurb": "Add a leave type, give it rules in a leave policy, and link the policy to departments.",
+      "steps": [
+        {
+          "id": "esg-ls-open",
+          "target": [
+            "#sidebarNav [onclick*='leavepolicies']"
+          ],
+          "title": "1. Leave Types",
+          "text": "Start with the leave type. Click <b>Leave Types</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Leave Types"
+        },
+        {
+          "id": "esg-ls-add",
+          "target": [
+            "#page-leavepolicies button[onclick*='openLeaveTypeModal']"
+          ],
+          "title": "Add Leave Type",
+          "text": "Click <b>Add Leave Type</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Add Leave Type"
+        },
+        {
+          "id": "esg-ls-name",
+          "target": [
+            "#ltName"
+          ],
+          "title": "Leave Name",
+          "text": "For example <b>Annual Leave</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "esg-ls-paid",
+          "target": [
+            "#ltIsPaid"
+          ],
+          "title": "Paid and active",
+          "text": "Whether it's paid leave, and whether people can use it now.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "esg-ls-proof",
+          "target": [
+            "#ltReqDays"
+          ],
+          "title": "When proof is needed",
+          "text": "Ask for an attachment (such as a doctor's note) when the request is longer than this many days (0 = never), or when it touches a Monday or Friday, a public holiday or payday.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "esg-ls-save",
+          "target": [
+            "#saveLeaveTypeBtn"
+          ],
+          "title": "Save",
+          "text": "Click Save (or Cancel if you're only practising), then <b>Next</b>.",
+          "placement": "top"
+        },
+        {
+          "id": "esg-ls-pol",
+          "target": [
+            "#sidebarNav [onclick*='leavepolicyengine']"
+          ],
+          "title": "2. Leave Policies",
+          "text": "Now the rules. Click <b>Leave Policies</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Leave Policies",
+          "before": [
+            {
+              "call": "closeLeaveTypeModal",
+              "args": []
+            }
+          ]
+        },
+        {
+          "id": "esg-ls-new",
+          "target": [
+            "#lpListView button[onclick*='openNewPolicyModal']"
+          ],
+          "title": "New Policy",
+          "text": "Click <b>New Policy</b> (or open an existing policy to add the type to it).",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click New Policy"
+        },
+        {
+          "id": "esg-ls-npname",
+          "target": [
+            "#npName"
+          ],
+          "title": "Policy Name and description",
+          "text": "For example <b>Permanent Staff</b>, and what it's for.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "esg-ls-kind",
+          "target": [
+            "#npKind"
+          ],
+          "title": "Kind",
+          "text": "<b>Custom configuration</b> or a <b>predefined pack</b>.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "esg-ls-eff",
+          "target": [
+            "#npEffFrom"
+          ],
+          "title": "Effective From",
+          "text": "The date the policy starts.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "esg-ls-copy",
+          "target": [
+            "#npCloneFrom"
+          ],
+          "title": "Start as a copy",
+          "text": "Copy another policy's rules to save time. The original isn't touched.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "esg-ls-create",
+          "target": [
+            "#saveNewPolicyBtn"
+          ],
+          "title": "Create Policy",
+          "text": "Creates the policy as a draft and opens it. Click Create Policy (or Cancel if practising), then <b>Next</b>.",
+          "placement": "top"
+        },
+        {
+          "id": "esg-ls-rules",
+          "target": [
+            "#lpRulesBody"
+          ],
+          "title": "The rules",
+          "text": "Tick <b>In Policy</b> for each leave type it covers, and set its entitlement, cycle, how it builds up, how far negative it may go, who is eligible, and when proof or HR is needed.",
+          "placement": "top",
+          "optional": true,
+          "guideOnly": true,
+          "before": [
+            {
+              "call": "closeNewPolicyModal",
+              "args": []
+            }
+          ]
+        },
+        {
+          "id": "esg-ls-publish",
+          "target": [
+            "#lpBtnPublish"
+          ],
+          "title": "Save Draft and Publish",
+          "text": "Save the draft while you work, then <b>Publish</b> to make it live from its start date.",
+          "placement": "bottom",
+          "climb": 1,
+          "optional": true,
+          "guideOnly": true
+        },
+        {
+          "id": "esg-ls-link",
+          "target": [
+            "#sidebarNav [onclick*='leavelinkage']"
+          ],
+          "title": "3. Pack Linkage",
+          "text": "Last, give the policy to departments. Click <b>Pack Linkage</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Pack Linkage",
+          "guideOnly": true
+        },
+        {
+          "id": "esg-ls-lpol",
+          "target": [
+            "#llPolicySelect"
+          ],
+          "title": "Policy and date",
+          "text": "Choose the policy and the date it applies from.",
+          "placement": "bottom",
+          "climb": 2,
+          "guideOnly": true,
+          "timeout": 4000
+        },
+        {
+          "id": "esg-ls-ldepts",
+          "target": [
+            "#llDeptBody"
+          ],
+          "title": "Departments",
+          "text": "Tick the departments. Everyone in them, including new starters, gets this policy.",
+          "placement": "top",
+          "guideOnly": true
+        },
+        {
+          "id": "esg-ls-lpreview",
+          "target": [
+            "#page-leavelinkage button[onclick*='llPreview']"
+          ],
+          "title": "Preview, then Apply",
+          "text": "<b>Preview</b> shows what changes for each person. Then <b>Apply Linkage</b>.",
+          "placement": "bottom",
+          "guideOnly": true
+        }
+      ]
+    },
+    {
+      "key": "essmaster.guide.takeon",
+      "title": "Load opening leave balances",
+      "icon": "fa-file-import",
+      "blurb": "Bring in everyone's leave balances (or leave already taken) from a spreadsheet, checked before loading.",
+      "steps": [
+        {
+          "id": "esg-to-open",
+          "target": [
+            "#sidebarNav [onclick*='leaveimport']"
+          ],
+          "title": "Leave Take-On",
+          "text": "Click <b>Leave Take-On</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Leave Take-On"
+        },
+        {
+          "id": "esg-to-template",
+          "target": [
+            "#page-leaveimport button[onclick*='liTemplate']"
+          ],
+          "title": "1. Template",
+          "text": "Download the template and fill it in: employee, leave type and value. Columns are matched by name.",
+          "placement": "left",
+          "timeout": 4000
+        },
+        {
+          "id": "esg-to-mode",
+          "target": [
+            "#liMode"
+          ],
+          "title": "2. What you're loading",
+          "text": "<b>Opening balances</b>, or <b>historic transactions</b> (leave already taken).",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "esg-to-name",
+          "target": [
+            "#liBatchName"
+          ],
+          "title": "3. Batch Name",
+          "text": "A name you'll recognise later, for example <b>Opening balances March</b>.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "esg-to-file",
+          "target": [
+            "#liFile"
+          ],
+          "title": "4. File",
+          "text": "Choose the filled-in spreadsheet.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "esg-to-check",
+          "target": [
+            "#page-leaveimport button[onclick*='liValidate']"
+          ],
+          "title": "5. Check File",
+          "text": "Click <b>Check File</b>. Nothing is loaded yet.",
+          "placement": "bottom"
+        },
+        {
+          "id": "esg-to-result",
+          "target": [
+            "#liResultPanel"
+          ],
+          "title": "6. The check",
+          "text": "Clean rows on one side, rejected rows with the reason on the other. <b>Error File</b> downloads the rejected rows to fix and load again.",
+          "placement": "top",
+          "optional": true,
+          "timeout": 8000
+        },
+        {
+          "id": "esg-to-load",
+          "target": [
+            "#liCommitBtn"
+          ],
+          "title": "7. Load Clean Rows",
+          "text": "Loads the clean rows only.",
+          "placement": "top",
+          "optional": true
+        },
+        {
+          "id": "esg-to-batches",
+          "target": [
+            "#liBatchBody"
+          ],
+          "title": "Past loads",
+          "text": "Every load, with its counts, when and by whom.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "essmaster.guide.bulkleave",
+      "title": "Book leave for many people at once",
+      "icon": "fa-users",
+      "blurb": "A shutdown or company day: check who it works for, then send one request per person.",
+      "steps": [
+        {
+          "id": "esg-bl-open",
+          "target": [
+            "#sidebarNav [onclick*='bulkleave']"
+          ],
+          "title": "Bulk Leave",
+          "text": "Click <b>Bulk Leave</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Bulk Leave"
+        },
+        {
+          "id": "esg-bl-type",
+          "target": [
+            "#blType"
+          ],
+          "title": "1. Leave type",
+          "text": "Which leave it comes from.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "esg-bl-dates",
+          "target": [
+            "#blStart"
+          ],
+          "title": "2. Dates and reason",
+          "text": "The first and last day, and the reason, for example <b>December shutdown</b>.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "esg-bl-unit",
+          "target": [
+            "#blDept"
+          ],
+          "title": "3. Who",
+          "text": "A unit or all your staff; filter the list, then tick people (or tick the top box for everyone).",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "esg-bl-check",
+          "target": [
+            "#page-bulkleave button[onclick*='blPreview']"
+          ],
+          "title": "4. Check Who Can Go",
+          "text": "Click it to see who it works for and who it doesn't.",
+          "placement": "bottom"
+        },
+        {
+          "id": "esg-bl-ok",
+          "target": [
+            "#blOkBody"
+          ],
+          "title": "5. The check",
+          "text": "For each person: the days and their balance afterwards. Anyone it doesn't work for is listed with the reason.",
+          "placement": "top",
+          "optional": true,
+          "timeout": 8000
+        },
+        {
+          "id": "esg-bl-submit",
+          "target": [
+            "#blApplyBtn"
+          ],
+          "title": "6. Submit Requests",
+          "text": "Creates one request per person. Each goes through the normal approval.",
+          "placement": "top",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "key": "essmaster.guide.routing",
+      "title": "Set who approves requests",
+      "icon": "fa-route",
+      "blurb": "Set the 1st, 2nd and 3rd approver for a department or one employee.",
+      "steps": [
+        {
+          "id": "esg-rt-open",
+          "target": [
+            "#sidebarNav [onclick*='global']"
+          ],
+          "title": "Global Settings",
+          "text": "Approval routing lives here. Click <b>Global Settings</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Global Settings"
+        },
+        {
+          "id": "esg-rt-tab",
+          "target": [
+            "#tab-global-routing"
+          ],
+          "title": "Workflow Routing",
+          "text": "Click <b>Workflow Routing</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Workflow Routing"
+        },
+        {
+          "id": "esg-rt-dept",
+          "target": [
+            "#wfDeptSearch"
+          ],
+          "title": "1. For a department",
+          "text": "Search and choose the department. The rule applies to everyone in it.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "esg-rt-emp",
+          "target": [
+            "#wfEmpSearch"
+          ],
+          "title": "Or for one person",
+          "text": "Choose an employee instead to give them their own approvers. This overrides their department's rule.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "esg-rt-levels",
+          "target": [
+            "#wfLevel1"
+          ],
+          "title": "2. The approvers",
+          "text": "The <b>1st approver</b> sees the request first. When they approve, it goes to the <b>2nd</b>, then the <b>3rd</b>. Leave a level empty to stop there.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "esg-rt-standing",
+          "target": [
+            "#wfStanding"
+          ],
+          "title": "3. Standing / Backup",
+          "text": "Who approves when the person at that level isn't set or isn't available.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "esg-rt-save",
+          "target": [
+            "#global-routing button[type='submit']",
+            "#global-routing .btn"
+          ],
+          "title": "4. Save Routing Rule",
+          "text": "Saves the rule. Requests from then on follow it.",
+          "placement": "top"
+        },
+        {
+          "id": "esg-rt-list",
+          "target": [
+            "#routingBody"
+          ],
+          "title": "Your rules",
+          "text": "Every department and personal rule, with its approvers.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "essmaster.guide.broadcast",
+      "title": "Send a message to the app",
+      "icon": "fa-bullhorn",
+      "blurb": "Send a notice to everyone, a department or one person in the mobile app and portal.",
+      "steps": [
+        {
+          "id": "esg-bc-open",
+          "target": [
+            "#sidebarNav [onclick*='broadcasts']"
+          ],
+          "title": "Global Broadcasts",
+          "text": "Click <b>Global Broadcasts</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Global Broadcasts"
+        },
+        {
+          "id": "esg-bc-title",
+          "target": [
+            "#bcTitle"
+          ],
+          "title": "1. Title",
+          "text": "A short heading, for example <b>Payday moved to Thursday</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "esg-bc-body",
+          "target": [
+            "#bcBody"
+          ],
+          "title": "2. Message",
+          "text": "What people need to know.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "esg-bc-aud",
+          "target": [
+            "#bcTargetType"
+          ],
+          "title": "3. Who gets it",
+          "text": "Everyone, a department, one person, or a custom list. Then choose which.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "esg-bc-file",
+          "target": [
+            "#bcFile"
+          ],
+          "title": "4. Attachment (optional)",
+          "text": "A file to go with it, such as a notice or a form.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "esg-bc-send",
+          "target": [
+            "#saveBroadcastBtn"
+          ],
+          "title": "5. Send Broadcast",
+          "text": "It appears straight away. Click Send (or skip it if you're only practising).",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "essmaster.guide.expense",
+      "title": "Add an expense type",
+      "icon": "fa-receipt",
+      "blurb": "Set up something people can claim for, and how the amount is worked out.",
+      "steps": [
+        {
+          "id": "esg-ex-open",
+          "target": [
+            "#sidebarNav [onclick*='expensepolicies']"
+          ],
+          "title": "Expense Policies",
+          "text": "Click <b>Expense Policies</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Expense Policies"
+        },
+        {
+          "id": "esg-ex-add",
+          "target": [
+            "#page-expensepolicies button[onclick*='openExpenseTypeModal']"
+          ],
+          "title": "Add Expense Type",
+          "text": "Click <b>Add Expense Type</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Add Expense Type"
+        },
+        {
+          "id": "esg-ex-name",
+          "target": [
+            "#etName"
+          ],
+          "title": "Expense Name and description",
+          "text": "For example <b>Travel (own vehicle)</b>, and when it can be claimed.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "esg-ex-logic",
+          "target": [
+            "#etLogic"
+          ],
+          "title": "How it's worked out",
+          "text": "<b>Simple</b>: the employee enters the amount. <b>Fixed Amount</b>: you set the payout. <b>Rate-Based</b>: a rate times what they enter, for example per kilometre.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "esg-ex-rate",
+          "target": [
+            "#etRateValue"
+          ],
+          "title": "Value / Rate",
+          "text": "The fixed amount or the rate.",
+          "placement": "bottom",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "esg-ex-receipt",
+          "target": [
+            "#etReqAtt"
+          ],
+          "title": "Receipt required",
+          "text": "Tick to require a receipt with every claim.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "esg-ex-save",
+          "target": [
+            "#saveExpenseTypeBtn"
+          ],
+          "title": "Save",
+          "text": "Click Save (or Cancel if you're only practising).",
+          "placement": "top"
+        }
+      ]
+    }
+  ]
+}

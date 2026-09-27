@@ -1,0 +1,562 @@
+{
+  "_howto": "Asset Tagging & Stock Control tours. Screens open with switchTab(); the menu links have ids tab-<screen>. POS Settings tabs are drawn by AssetPOSSettings.js and its add-ons.",
+  "key": "assettagging",
+  "title": "Asset Tagging tour",
+  "startDelay": 1800,
+  "blockers": [
+    ".modal-backdrop.active"
+  ],
+  "reset": [
+    {
+      "removeClass": "#tnbBar .tnb-menu",
+      "cls": "show"
+    }
+  ],
+  "whatsNewTitle": "What's new in Asset Tagging",
+  "whatsNewText": "We've added something new here since you last took the tour.",
+  "steps": [
+    {
+      "id": "at-welcome",
+      "title": "Welcome to Asset Tagging & Stock Control",
+      "text": "Keep track of your assets and stock, and run a point of sale for your shop or canteen, including sales on employee accounts.<br><br>Use <b>Next</b> and <b>Back</b>, or your arrow keys. Press <b>Esc</b> to close.",
+      "fullOnly": true
+    },
+    {
+      "id": "at-sidebar",
+      "target": [
+        "#sidebarNav"
+      ],
+      "title": "All screens",
+      "text": "Grouped into assets, <b>Stock &amp; Inventory</b>, <b>Point of Sale</b> and tools. For stock, set up in this order: <b>Warehouses</b>, <b>Stock Categories</b>, <b>Stock Catalog</b>, then receive stock.",
+      "placement": "right"
+    },
+    {
+      "id": "at-nav-assets",
+      "target": [
+        "#tab-assets"
+      ],
+      "title": "Asset Registry",
+      "text": "Every asset with its tag: where it is, who has it, its condition, meter reading and service schedule.",
+      "placement": "right"
+    },
+    {
+      "id": "at-nav-categories",
+      "target": [
+        "#tab-categories"
+      ],
+      "title": "Asset Categories",
+      "text": "Groups of assets, such as Laptops, Vehicles or Tools.",
+      "placement": "right"
+    },
+    {
+      "id": "at-nav-reports",
+      "target": [
+        "#tab-reports"
+      ],
+      "title": "Locator Report",
+      "text": "Where each asset is now, and which are in storage.",
+      "placement": "right"
+    },
+    {
+      "id": "at-nav-movements",
+      "target": [
+        "#tab-movements"
+      ],
+      "title": "Movement History",
+      "text": "Every move of an asset between people and places.",
+      "placement": "right"
+    },
+    {
+      "id": "at-nav-service-history",
+      "target": [
+        "#tab-service-history"
+      ],
+      "title": "Master Service History",
+      "text": "All services and repairs, with parts used.",
+      "placement": "right"
+    },
+    {
+      "id": "at-nav-stock-items",
+      "target": [
+        "#tab-stock-items"
+      ],
+      "title": "Stock Catalog",
+      "text": "Items you keep in stock, with their barcodes; serialised items are tracked one by one.",
+      "placement": "right"
+    },
+    {
+      "id": "at-nav-stock-categories",
+      "target": [
+        "#tab-stock-categories"
+      ],
+      "title": "Stock Categories",
+      "text": "Groups for your stock items.",
+      "placement": "right"
+    },
+    {
+      "id": "at-nav-warehouses",
+      "target": [
+        "#tab-warehouses"
+      ],
+      "title": "Warehouses",
+      "text": "Where stock is kept; a warehouse can also be a consumption point or a fuel store.",
+      "placement": "right"
+    },
+    {
+      "id": "at-nav-stock-inventory",
+      "target": [
+        "#tab-stock-inventory"
+      ],
+      "title": "Live Inventory & GRV",
+      "text": "How much of each item is in each warehouse. Receive stock (GRV) and transfer or consume it.",
+      "placement": "right"
+    },
+    {
+      "id": "at-nav-grv-manager",
+      "target": [
+        "#tab-grv-manager"
+      ],
+      "title": "GRV Manager",
+      "text": "Goods-received notes: drafts, completed, cancelled, and shortages still to arrive.",
+      "placement": "right"
+    },
+    {
+      "id": "at-nav-pos-settings",
+      "target": [
+        "#tab-pos-settings"
+      ],
+      "title": "POS Settings",
+      "text": "Set up your shop or canteen till: items and prices, cashiers and their rights, layout, cash, returns, face payment and installed tills.",
+      "placement": "right"
+    },
+    {
+      "id": "at-nav-pos-screen",
+      "target": [
+        "#tab-pos-screen"
+      ],
+      "title": "POS Screen",
+      "text": "Opens the till in a new tab.",
+      "placement": "right"
+    },
+    {
+      "id": "at-print",
+      "target": [
+        "#sidebarNav a[onclick*='openPrintToolModal']"
+      ],
+      "title": "Print Labels & Tags",
+      "text": "Print barcode labels for assets and stock.",
+      "placement": "right"
+    },
+    {
+      "id": "at-top-search",
+      "target": [
+        "#tnbBar .tnb-search"
+      ],
+      "title": "Search any screen",
+      "text": "Jump straight to any screen you have access to, in any module.",
+      "placement": "bottom",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "at-top-profile",
+      "target": [
+        "#tnbBar .tnb-pbtn"
+      ],
+      "title": "Your menu",
+      "text": "Your profile, other areas of the system, Dark Mode and logout.",
+      "placement": "bottom",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "at-top-help",
+      "target": [
+        "#tnbBar .tnb-act-help"
+      ],
+      "title": "Help & Tours",
+      "text": "Opens the same help menu as the <b>?</b> button.",
+      "placement": "left",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        },
+        {
+          "click": "#tnbBar .tnb-pbtn"
+        }
+      ],
+      "wait": 320
+    },
+    {
+      "id": "at-help",
+      "target": [
+        "#tnaTourHelpBtn"
+      ],
+      "title": "Help is always here",
+      "text": "Click <b>?</b> for this tour, a tour of the screen you're on, and <b>how-to guides</b>.",
+      "placement": "left",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "at-done",
+      "title": "You're all set",
+      "text": "Each screen also has its own short tour. It starts the first time you open that screen, and you can replay it any time from <b>?</b>.",
+      "fullOnly": true
+    }
+  ],
+  "sections": [
+    {
+      "key": "assettagging.assets",
+      "title": "Asset Registry",
+      "trigger": "#section-assets.active",
+      "steps": [
+        {
+          "id": "ata-add",
+          "target": [
+            "#section-assets button[onclick*='openAddAssetModal']"
+          ],
+          "title": "Register Asset",
+          "text": "Tag, category, name, model, serial number, purchase date, service interval and meter, and who or where it's assigned to.",
+          "placement": "left"
+        },
+        {
+          "id": "ata-find",
+          "target": [
+            "#assetSearch"
+          ],
+          "title": "Find an asset",
+          "text": "Search, or filter by category.",
+          "placement": "bottom"
+        },
+        {
+          "id": "ata-list",
+          "target": [
+            "#assetTableBody"
+          ],
+          "title": "Your assets",
+          "text": "Open one to move it, update its meter, log a service, or edit it.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "assettagging.categories",
+      "title": "Asset Categories",
+      "trigger": "#section-categories.active",
+      "steps": [
+        {
+          "id": "atc-add",
+          "target": [
+            "#newCategoryName"
+          ],
+          "title": "Add a category",
+          "text": "Type a name and add it. Deactivate categories you no longer use.",
+          "placement": "bottom"
+        },
+        {
+          "id": "atc-list",
+          "target": [
+            "#categoryTableBody"
+          ],
+          "title": "Your categories",
+          "text": "Active and deactivated categories.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "assettagging.stock-items",
+      "title": "Stock Catalog",
+      "trigger": "#section-stock-items.active",
+      "steps": [
+        {
+          "id": "ats-add",
+          "target": [
+            "#section-stock-items button[onclick*='openAddStockItemModal']"
+          ],
+          "title": "Create Stock Item",
+          "text": "Code, category, name and barcodes. Tick <b>serialised</b> for items tracked one by one.",
+          "placement": "left"
+        },
+        {
+          "id": "ats-excel",
+          "target": [
+            "#section-stock-items button[onclick*='stockBulkUplo']"
+          ],
+          "title": "Excel",
+          "text": "Download a blank template or the whole catalog, and upload many items at once.",
+          "placement": "bottom"
+        },
+        {
+          "id": "ats-list",
+          "target": [
+            "#stockItemTableBody"
+          ],
+          "title": "Your catalog",
+          "text": "Search or filter by category; open an item to change it or manage its barcodes.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "assettagging.stock-categories",
+      "title": "Stock Categories",
+      "trigger": "#section-stock-categories.active",
+      "steps": [
+        {
+          "id": "atsc-add",
+          "target": [
+            "#scNewName"
+          ],
+          "title": "Add a category",
+          "text": "A name (and a description if you like). New stock items can then be put in it.",
+          "placement": "bottom"
+        },
+        {
+          "id": "atsc-list",
+          "target": [
+            "#scBody"
+          ],
+          "title": "Your categories",
+          "text": "How many items each has. <b>Edit</b> renames it (its items move with it); <b>Deactivate</b> stops it being offered for new items.",
+          "placement": "top"
+        },
+        {
+          "id": "atsc-views",
+          "target": [
+            "#scViewActive"
+          ],
+          "title": "Active and deactivated",
+          "text": "Deactivated categories can be reactivated.",
+          "placement": "bottom"
+        }
+      ]
+    },
+    {
+      "key": "assettagging.warehouses",
+      "title": "Warehouses",
+      "trigger": "#section-warehouses.active",
+      "steps": [
+        {
+          "id": "atw-add",
+          "target": [
+            "#newWhsName"
+          ],
+          "title": "Add a warehouse",
+          "text": "A name, and whether it's a <b>consumption point</b> (stock sent there is used up) or a <b>fuel store</b>.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "atw-list",
+          "target": [
+            "#warehouseTableBody"
+          ],
+          "title": "Your warehouses",
+          "text": "Each warehouse and its settings.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "assettagging.inventory",
+      "title": "Live Inventory & GRV",
+      "trigger": "#section-stock-inventory.active",
+      "steps": [
+        {
+          "id": "ati-grv",
+          "target": [
+            "#section-stock-inventory button[onclick*='openGrvModal']"
+          ],
+          "title": "Receive GRV",
+          "text": "Stock that arrives: the order number, the warehouse, and the items (or each serial number). Save as a draft or complete it.",
+          "placement": "bottom"
+        },
+        {
+          "id": "ati-move",
+          "target": [
+            "#section-stock-inventory button[onclick*='openTransferStockModal']"
+          ],
+          "title": "Transfer / Consume",
+          "text": "Move stock between warehouses, or book it out as used, with a reason.",
+          "placement": "bottom"
+        },
+        {
+          "id": "ati-list",
+          "target": [
+            "#inventoryTableBody"
+          ],
+          "title": "What you have",
+          "text": "Per item and warehouse. Filter by warehouse.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "assettagging.grv",
+      "title": "GRV Manager",
+      "trigger": "#section-grv-manager.active",
+      "steps": [
+        {
+          "id": "atg-tabs",
+          "target": [
+            "#viewShortagesBtn"
+          ],
+          "title": "GRVs",
+          "text": "Drafts, completed and cancelled GRVs, and <b>shortages</b>: items ordered that haven't arrived yet.",
+          "placement": "bottom"
+        }
+      ]
+    },
+    {
+      "key": "assettagging.reports",
+      "title": "Locator Report",
+      "trigger": "#section-reports.active",
+      "steps": [
+        {
+          "id": "atl-filter",
+          "target": [
+            "#reportFilter"
+          ],
+          "title": "Where everything is",
+          "text": "Search, or show only assets that are unassigned and in storage.",
+          "placement": "bottom"
+        }
+      ]
+    },
+    {
+      "key": "assettagging.service",
+      "title": "Master Service History",
+      "trigger": "#section-service-history.active",
+      "steps": [
+        {
+          "id": "atm-filter",
+          "target": [
+            "#masterMaintSearch"
+          ],
+          "title": "Every service",
+          "text": "Search, or filter by dates. Open a record to see the parts used.",
+          "placement": "bottom"
+        }
+      ]
+    },
+    {
+      "key": "assettagging.pos",
+      "title": "POS Settings",
+      "trigger": "#section-pos-settings.active",
+      "steps": [
+        {
+          "id": "atp-tabs",
+          "target": [
+            "#posSetTabs"
+          ],
+          "title": "Everything for the till",
+          "text": "You only see the tabs your POS rights allow.",
+          "placement": "bottom"
+        },
+        {
+          "id": "atp-setup",
+          "target": [
+            "#posSetTabs [data-pos-tab='setup']"
+          ],
+          "title": "Setup",
+          "text": "Company-wide POS rules: employee account (deduction) sales and limits, cash handling, returns, and face payment.",
+          "placement": "bottom"
+        },
+        {
+          "id": "atp-items",
+          "target": [
+            "#posSetTabs [data-pos-tab='items']"
+          ],
+          "title": "Items & Prices",
+          "text": "Which stock items the till sells, and their prices (with price history).",
+          "placement": "bottom"
+        },
+        {
+          "id": "atp-users",
+          "target": [
+            "#posSetTabs [data-pos-tab='users']"
+          ],
+          "title": "Users & Rights",
+          "text": "Who may use the till and what they may do: sell, return, cash out, void, stock take, cash-up.",
+          "placement": "bottom"
+        },
+        {
+          "id": "atp-layout",
+          "target": [
+            "#posSetTabs [data-pos-tab='layout']"
+          ],
+          "title": "Layout",
+          "text": "The buttons on the till screen, grouped into categories.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "atp-tills",
+          "target": [
+            "#posSetTabs [data-pos-tab='tills']"
+          ],
+          "title": "Tills",
+          "text": "Installed tills that keep selling when the internet is down. Download a package to install one on a till PC.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "atp-reports",
+          "target": [
+            "#posSetTabs [data-pos-tab='sales']"
+          ],
+          "title": "History",
+          "text": "Sales, stock movements, employee transactions, deduction batches for payroll, stock takes, days and cash.",
+          "placement": "bottom"
+        }
+      ]
+    },
+    {
+      "key": "assettagging.asset-form",
+      "title": "Register an asset",
+      "trigger": "#addAssetModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "assettagging.guide.asset",
+      "skipSteps": 2,
+      "stepSuffix": "form"
+    },
+    {
+      "key": "assettagging.stock-form",
+      "title": "Stock item",
+      "trigger": "#addStockItemModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "assettagging.guide.stockitem",
+      "skipSteps": 2,
+      "stepSuffix": "form"
+    },
+    {
+      "key": "assettagging.grv-form",
+      "title": "Receive stock",
+      "trigger": "#grvModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "assettagging.guide.grv",
+      "skipSteps": 2,
+      "stepSuffix": "form"
+    }
+  ],
+  "guides": [],
+  "guidesFile": "assettagging_guides.json"
+}

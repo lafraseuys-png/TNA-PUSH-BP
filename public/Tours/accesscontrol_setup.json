@@ -1,0 +1,90 @@
+{
+  "_howto": "Guided setup for Access Control (Demo / Setup mode). Steps use 'click' (a menu link) because this page has its own menu.",
+  "key": "setup.accesscontrol",
+  "title": "Set up Access Control",
+  "intro": "Work through these in order. You're in <b>demo</b>: nothing is sent to your controllers, and nothing affects live until you push it.",
+  "steps": [
+    {
+      "id": "timezones",
+      "title": "Time zones",
+      "click": "#acMenu a[data-key='timezones']",
+      "why": "Weekly timetables for when doors and levels may be used. <b>24 Hours</b> is always there; add others such as office hours.",
+      "confirm": true,
+      "confirmLabel": "My time zones are in"
+    },
+    {
+      "id": "doors",
+      "title": "Doors",
+      "click": "#acMenu a[data-key='doors']",
+      "guide": "accesscontrol.guide.door",
+      "why": "A door for each lock on each controller, with its direction, unlock time and exit rule.",
+      "checks": [
+        {
+          "url": "/api/access-control/doors",
+          "list": "",
+          "min": 1
+        }
+      ],
+      "todo": "At least one door."
+    },
+    {
+      "id": "levels",
+      "title": "Access levels",
+      "click": "#acMenu a[data-key='levels']",
+      "guide": "accesscontrol.guide.level",
+      "needs": [
+        "doors"
+      ],
+      "why": "Sets of doors with a time zone, that you give to people.",
+      "checks": [
+        {
+          "url": "/api/access-control/levels",
+          "list": "",
+          "min": 1
+        }
+      ],
+      "todo": "At least one access level."
+    },
+    {
+      "id": "assign",
+      "title": "Who gets which level",
+      "click": "#acMenu a[data-key='assign']",
+      "guide": "accesscontrol.guide.assign",
+      "needs": [
+        "levels"
+      ],
+      "why": "Give departments their levels (new starters included), and individual people any extras.",
+      "confirm": true,
+      "confirmLabel": "Access is given"
+    },
+    {
+      "id": "rules",
+      "title": "Schedule rules",
+      "click": "#acMenu a[data-key='rules']",
+      "why": "For levels that only work when people are scheduled: how early before and how long after the shift, and whether leave blocks access.",
+      "confirm": true,
+      "confirmLabel": "These are right"
+    },
+    {
+      "id": "zones",
+      "title": "Zones",
+      "click": "#acMenu a[data-key='zones']",
+      "optional": true,
+      "why": "Zones and which doors lead between them, so you can see who is inside, for example for a muster list.",
+      "confirm": true,
+      "confirmLabel": "Zones are set"
+    },
+    {
+      "id": "testrun",
+      "title": "Test run",
+      "click": "#acMenu a[data-key='rules']",
+      "needs": [
+        "levels",
+        "assign"
+      ],
+      "why": "Prove it works, all in demo:<ol style=\"margin:6px 0 0 16px;padding:0;\"><li><b>Schedule Rules › Try it</b>: pick a person and check when they could get in.</li><li><b>Reports</b>: check who can open which door.</li></ol>Nothing is sent to the controllers from demo; after pushing, the controllers get the changes from live.",
+      "confirm": true,
+      "confirmLabel": "It all worked"
+    }
+  ]
+}

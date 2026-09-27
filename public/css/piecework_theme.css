@@ -1,0 +1,333 @@
+/* =====================================================================
+   piecework_theme.css - Production Pay: the same look as Employee Master and HR
+   1. SHELL: glass sidebar with logo, collapse button and profile block, title row,
+      background - the same styles as HR Management.
+   2. LIGHT / DARK MODE: Production Pay's screens were built dark-only (Tailwind
+      gray-800 / gray-900 classes). In light mode those classes are mapped to the
+      light palette HR uses, so every screen - including rows the scripts build -
+      follows the user's theme. Dark mode keeps the dark look, in HR's dark palette.
+   3. BUTTONS: neutral action buttons get HR's glass button look; coloured
+      buttons that carry meaning (red, green, emerald, orange, amber, yellow)
+      keep their colour.
+   AUTO-HEAL: colours and layout only. Remove the <link> and the page looks as before.
+   Loaded AFTER the page's own <style>, so these rules win where they overlap.
+   ===================================================================== */
+
+/* ---------- 1. BASE + BACKGROUND ---------- */
+html, body {
+    background-color: #ffffff !important;
+    color: #333333 !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+html.dark-mode, body.dark-mode { background-color: #131314 !important; color: #e2e8f0 !important; }
+
+.background-container {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0;
+    background: #e2e8f0; background-size: cover; background-position: right center; background-repeat: no-repeat;
+    pointer-events: none; transition: background-image 0.3s ease, background-color 0.3s ease, opacity 0.3s ease;
+}
+body.dark-mode .background-container {
+    display: block; opacity: 1; filter: blur(6px);
+    background-image: linear-gradient(rgba(19, 19, 20, 0.85), rgba(19, 19, 20, 0.85)), url('settings.png');
+}
+
+/* ---------- 2. SIDEBAR (same as HR) ---------- */
+.sidebar {
+    width: 260px !important;
+    background: rgba(255, 255, 255, 0.65) !important;
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+    border-radius: 20px !important; display: flex; flex-direction: column; justify-content: space-between;
+    height: calc(100vh - 40px) !important; position: fixed !important; left: 20px !important; top: 20px !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05); transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 50; overflow: visible !important;
+}
+.sidebar-header { padding: 30px 20px 15px 20px; display: flex; flex-direction: column; align-items: center; gap: 15px; text-align: center; position: relative; }
+.logo-container { width: 180px; height: auto; display: flex; align-items: center; justify-content: center; cursor: pointer; text-decoration: none; position: relative; z-index: 100; margin-bottom: 10px; }
+.logo-container img { width: 100%; max-width: 140px; height: auto; object-fit: contain; transition: transform 0.2s ease; }
+.logo-container:hover img { transform: translateY(-2px); }
+.sidebar-header-text h2 { font-size: 15px; font-weight: 700; color: #0f172a; letter-spacing: 5px; text-transform: uppercase; margin: 0; padding-left: 5px; }
+.sidebar-header-text p { font-size: 10px; color: #334155; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+.sidebar-menu { list-style: none; flex-grow: 1; padding: 0 10px; margin: 0; }
+.sidebar-menu li { margin-bottom: 5px; }
+.sidebar-item { text-decoration: none; color: #475569; font-size: 14px; padding: 12px 15px; display: flex; align-items: center; gap: 15px; border-radius: 6px; transition: all 0.2s ease; cursor: pointer; white-space: nowrap; border: 1px solid transparent; }
+.sidebar-item i { width: 20px; text-align: center; font-size: 14px; color: #1a4c7b; transition: color 0.3s ease; }
+.sidebar-item:hover { background-color: rgba(241, 245, 249, 0.7); color: #0f172a; transform: translateX(5px); }
+/* The active screen: HR's .active, and Production Pay's own showSection() marker (bg-pink-900) */
+.sidebar-item.active, .sidebar-item.bg-pink-900 {
+    background: rgba(255, 255, 255, 0.8) !important; color: #1a4c7b !important; font-weight: 700; border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); border: 1px solid rgba(26, 76, 123, 0.15);
+}
+.sidebar-item.text-gray-300 { color: #475569; }
+.theme-icon-sync { color: #1a4c7b; }
+
+.sidebar.collapsed, .sidebar.sidebar-collapsed { width: 80px !important; }
+.sidebar.sidebar-collapsed .sidebar-header-text, .sidebar.sidebar-collapsed .logo-container { opacity: 0; pointer-events: none; display: none; }
+.sidebar.sidebar-collapsed .sidebar-menu .sidebar-item span { display: none; }
+.sidebar.sidebar-collapsed .sidebar-menu .sidebar-item { justify-content: center; padding: 12px 0; }
+.sidebar.sidebar-collapsed .sidebar-menu .sidebar-item i { margin: 0; font-size: 18px; }
+
+.sidebar-toggle-btn { position: absolute; top: 95px; right: -14px; width: 28px; height: 28px; background: #0f172a; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 60; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transition: transform 0.3s ease; border: 2px solid #ffffff; }
+.sidebar-toggle-btn:hover { transform: scale(1.15); box-shadow: 0 6px 16px rgba(0,0,0,0.2); }
+.sidebar.sidebar-collapsed .sidebar-toggle-btn { transform: rotate(180deg); }
+
+.profile-button { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 5px 15px 5px 5px; border: 1px solid #cbd5e1; border-radius: 30px; background: #ffffff; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.02); transition: all 0.2s ease; }
+.profile-button:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06); transform: translateY(-1px); }
+.profile-avatar-custom { width: 32px; height: 32px; border-radius: 50%; background-color: rgba(26, 76, 123, 0.1); color: #1a4c7b; padding: 6px; display: flex; align-items: center; justify-content: center; }
+.profile-name { font-size: 13px; font-weight: 600; color: #334155; }
+.profile-dropdown-icon { font-size: 10px; color: #64748b; }
+.profile-menu-container { position: relative; padding: 15px; }
+.profile-dropdown-menu { display: flex; flex-direction: column; opacity: 0; visibility: hidden; transform: translateY(15px); transition: all 0.2s ease-out; position: absolute; bottom: 65px; left: 15px; right: 15px; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden; z-index: 200; }
+.profile-dropdown-menu.show { opacity: 1; visibility: visible; transform: translateY(0); }
+.dropdown-item { padding: 12px 20px; text-decoration: none; color: #475569; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 12px; transition: background 0.2s; cursor: pointer; }
+.dropdown-item i { color: #1a4c7b; width: 16px; text-align: center; }
+.dropdown-item:hover { background-color: #f1f5f9; color: #0f172a; }
+.dropdown-item.logout, .dropdown-item.logout i { color: #d9534f !important; }
+.dropdown-divider { height: 1px; background-color: #e2e8f0; margin: 4px 0; }
+.sidebar.sidebar-collapsed .profile-name, .sidebar.sidebar-collapsed .profile-dropdown-icon { display: none; }
+.sidebar.sidebar-collapsed .profile-button { justify-content: center; padding: 5px; }
+
+/* Dark mode: sidebar */
+body.dark-mode .sidebar { background: rgba(30, 41, 59, 0.65) !important; backdrop-filter: blur(10px) !important; border: 1px solid rgba(255, 255, 255, 0.08) !important; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important; }
+body.dark-mode .sidebar-header-text h2 { color: #f8fafc; text-shadow: 0 2px 10px rgba(255,255,255,0.1); }
+body.dark-mode .sidebar-header-text p { color: #94a3b8; }
+body.dark-mode .sidebar-item, body.dark-mode .sidebar-item.text-gray-300 { color: #94a3b8; }
+body.dark-mode .sidebar-item:hover { background-color: rgba(255, 255, 255, 0.05); color: #cbd5e1; }
+body.dark-mode .sidebar-item.active, body.dark-mode .sidebar-item.bg-pink-900 { background: rgba(255, 255, 255, 0.05) !important; color: #ffffff !important; border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
+body.dark-mode .sidebar-item i { color: #ffffff !important; }
+body.dark-mode .theme-icon-sync { color: #ffffff !important; }
+body.dark-mode .sidebar-toggle-btn { background: #f8fafc; color: #0f172a; border-color: #1e293b; }
+body.dark-mode .profile-button { background-color: rgba(30, 41, 59, 0.65); border-color: rgba(255, 255, 255, 0.1); }
+body.dark-mode .profile-avatar-custom { background-color: rgba(255,255,255,0.1); color: #cbd5e1; }
+body.dark-mode .profile-name { color: #e2e8f0; }
+body.dark-mode .profile-dropdown-menu { background-color: rgba(30, 41, 59, 0.95); border-color: rgba(255, 255, 255, 0.1); }
+body.dark-mode .dropdown-item { color: #cbd5e1; }
+body.dark-mode .dropdown-item:hover { background-color: rgba(255, 255, 255, 0.05); color: #ffffff; }
+body.dark-mode .dropdown-item i { color: #cbd5e1 !important; }
+body.dark-mode .dropdown-divider { background-color: rgba(255, 255, 255, 0.1); }
+
+/* ---------- 3. MAIN AREA + TITLE ROW (same as HR) ---------- */
+.main-content {
+    margin-left: 300px !important; padding: 40px 40px 40px 0 !important; width: auto !important; min-height: 100vh;
+    display: flex; flex-direction: column; gap: 20px; background-color: transparent !important;
+    position: relative; z-index: 10; transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sidebar.sidebar-collapsed ~ .main-content { margin-left: 120px !important; }
+.page-header-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-bottom: 15px; margin-bottom: 0 !important; border-bottom: 1px solid rgba(0,0,0,0.1) !important; width: 100%; }
+body.dark-mode .page-header-row { border-bottom: 1px solid rgba(255,255,255,0.1) !important; }
+.page-header-row h1 { font-size: 20px !important; font-weight: 600; color: #0f172a; text-transform: uppercase; letter-spacing: 1.5px; margin: 0; }
+body.dark-mode .page-header-row h1 { color: #ffffff; }
+.pw-footer { border-top: 1px solid rgba(0,0,0,0.1); padding: 16px 0; margin-top: 24px; text-align: center; font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 2px; }
+.pw-footer a, .pw-footer .pw-brand { color: #70A827; font-weight: 900; text-decoration: none; }
+body.dark-mode .pw-footer { border-top-color: #334155; color: #94a3b8; }
+
+/* ---------- 4. BUTTONS (same as HR for neutral actions) ---------- */
+.btn, .btn-secondary,
+:is(.main-content, .modal-backdrop) button:is([class*="bg-gray-"],[class*="bg-slate-"],[class*="bg-indigo-"],[class*="bg-blue-"],[class*="bg-teal-"],[class*="bg-pink-"],[class*="bg-purple-"],[class*="bg-cyan-"],[class*="bg-sky-"]) {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: 1px solid rgba(26, 76, 123, 0.15) !important;
+    color: #1a4c7b !important;
+    border-radius: 8px; cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+}
+.btn { padding: 10px 18px; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; justify-content: center; }
+:is(.main-content, .modal-backdrop) button:is([class*="bg-gray-"],[class*="bg-slate-"],[class*="bg-indigo-"],[class*="bg-blue-"],[class*="bg-teal-"],[class*="bg-pink-"],[class*="bg-purple-"],[class*="bg-cyan-"],[class*="bg-sky-"]) i { color: inherit !important; }
+.btn:hover, .btn-secondary:hover,
+:is(.main-content, .modal-backdrop) button:is([class*="bg-gray-"],[class*="bg-slate-"],[class*="bg-indigo-"],[class*="bg-blue-"],[class*="bg-teal-"],[class*="bg-pink-"],[class*="bg-purple-"],[class*="bg-cyan-"],[class*="bg-sky-"]):hover {
+    background: rgba(255, 255, 255, 1) !important; border-color: rgba(26, 76, 123, 0.3) !important; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+body.dark-mode .btn, body.dark-mode .btn-secondary,
+body.dark-mode :is(.main-content, .modal-backdrop) button:is([class*="bg-gray-"],[class*="bg-slate-"],[class*="bg-indigo-"],[class*="bg-blue-"],[class*="bg-teal-"],[class*="bg-pink-"],[class*="bg-purple-"],[class*="bg-cyan-"],[class*="bg-sky-"]) {
+    background: rgba(255, 255, 255, 0.05) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: #e2e8f0 !important; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+body.dark-mode .btn:hover, body.dark-mode .btn-secondary:hover,
+body.dark-mode :is(.main-content, .modal-backdrop) button:is([class*="bg-gray-"],[class*="bg-slate-"],[class*="bg-indigo-"],[class*="bg-blue-"],[class*="bg-teal-"],[class*="bg-pink-"],[class*="bg-purple-"],[class*="bg-cyan-"],[class*="bg-sky-"]):hover {
+    background: rgba(255, 255, 255, 0.1) !important; border-color: rgba(255, 255, 255, 0.2) !important;
+}
+button:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* ---------- 5. DARK MODE: HR's dark palette for panels, fields and pop-ups ---------- */
+body.dark-mode :is(.main-content, .modal-backdrop) .bg-gray-800 { background-color: rgba(30, 41, 59, 0.65); }
+body.dark-mode :is(.main-content, .modal-backdrop) .bg-gray-900 { background-color: rgba(15, 23, 42, 0.6); }
+body.dark-mode .modal-backdrop > .bg-gray-800, body.dark-mode .modal-backdrop > div > .bg-gray-800 { background-color: rgba(30, 41, 59, 0.97); }
+.modal-backdrop { backdrop-filter: blur(5px); z-index: 100; }
+
+/* Scrollbars */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+body.dark-mode ::-webkit-scrollbar-thumb { background: #475569; }
+
+/* ---------- 6. SMALL SCREENS ---------- */
+@media (max-width: 768px) {
+    .sidebar { position: relative !important; left: auto !important; top: auto !important; width: auto !important; height: auto !important; margin: 12px; }
+    .sidebar-toggle-btn { display: none; }
+    .main-content { margin-left: 0 !important; padding: 16px !important; }
+}
+
+/* ---------- 7. LIGHT MODE: Production Pay's dark-only colour classes -> HR's light palette ---------- */
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-gray-900 { background-color: #f8fafc; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-gray-800 { background-color: rgba(255,255,255,0.72); }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-gray-700 { background-color: #e2e8f0; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-gray-600 { background-color: #cbd5e1; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-gray-500 { background-color: #94a3b8; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-gray-800\/80 { background-color: rgba(255,255,255,0.7); }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-gray-800\/50 { background-color: rgba(255,255,255,0.55); }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-gray-800\/30 { background-color: rgba(255,255,255,0.4); }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-gray-900\/50 { background-color: rgba(248,250,252,0.7); }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-gray-900\/80 { background-color: rgba(248,250,252,0.85); }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-gray-700\/50 { background-color: rgba(226,232,240,0.7); }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-slate-900 { background-color: #f8fafc; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-slate-800 { background-color: rgba(255,255,255,0.72); }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-slate-700 { background-color: #e2e8f0; }
+body:not(.dark-mode) .modal-backdrop > .bg-gray-800, body:not(.dark-mode) .modal-backdrop > div > .bg-gray-800, body:not(.dark-mode) .modal-backdrop .bg-gray-900.rounded-lg, body:not(.dark-mode) .modal-backdrop .bg-gray-800.rounded-lg, body:not(.dark-mode) .modal-backdrop .bg-gray-800.rounded-xl { background-color: #ffffff; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-red-900\/10 { background-color: #fee2e2; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-red-900\/20 { background-color: #fee2e2; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-red-900\/30 { background-color: #fee2e2; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-red-900\/40 { background-color: #fee2e2; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-red-900\/50 { background-color: #fee2e2; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-red-900\/60 { background-color: #fee2e2; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-red-900\/80 { background-color: #fee2e2; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-red-900 { background-color: #fee2e2; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-teal-900\/10 { background-color: #ccfbf1; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-teal-900\/20 { background-color: #ccfbf1; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-teal-900\/30 { background-color: #ccfbf1; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-teal-900\/40 { background-color: #ccfbf1; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-teal-900\/50 { background-color: #ccfbf1; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-teal-900\/60 { background-color: #ccfbf1; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-teal-900\/80 { background-color: #ccfbf1; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-teal-900 { background-color: #ccfbf1; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-indigo-900\/10 { background-color: #e0e7ff; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-indigo-900\/20 { background-color: #e0e7ff; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-indigo-900\/30 { background-color: #e0e7ff; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-indigo-900\/40 { background-color: #e0e7ff; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-indigo-900\/50 { background-color: #e0e7ff; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-indigo-900\/60 { background-color: #e0e7ff; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-indigo-900\/80 { background-color: #e0e7ff; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-indigo-900 { background-color: #e0e7ff; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-amber-900\/10 { background-color: #fef3c7; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-amber-900\/20 { background-color: #fef3c7; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-amber-900\/30 { background-color: #fef3c7; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-amber-900\/40 { background-color: #fef3c7; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-amber-900\/50 { background-color: #fef3c7; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-amber-900\/60 { background-color: #fef3c7; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-amber-900\/80 { background-color: #fef3c7; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-amber-900 { background-color: #fef3c7; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-green-900\/10 { background-color: #dcfce7; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-green-900\/20 { background-color: #dcfce7; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-green-900\/30 { background-color: #dcfce7; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-green-900\/40 { background-color: #dcfce7; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-green-900\/50 { background-color: #dcfce7; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-green-900\/60 { background-color: #dcfce7; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-green-900\/80 { background-color: #dcfce7; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-green-900 { background-color: #dcfce7; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-emerald-900\/10 { background-color: #d1fae5; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-emerald-900\/20 { background-color: #d1fae5; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-emerald-900\/30 { background-color: #d1fae5; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-emerald-900\/40 { background-color: #d1fae5; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-emerald-900\/50 { background-color: #d1fae5; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-emerald-900\/60 { background-color: #d1fae5; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-emerald-900\/80 { background-color: #d1fae5; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-emerald-900 { background-color: #d1fae5; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-blue-900\/10 { background-color: #dbeafe; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-blue-900\/20 { background-color: #dbeafe; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-blue-900\/30 { background-color: #dbeafe; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-blue-900\/40 { background-color: #dbeafe; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-blue-900\/50 { background-color: #dbeafe; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-blue-900\/60 { background-color: #dbeafe; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-blue-900\/80 { background-color: #dbeafe; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-blue-900 { background-color: #dbeafe; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-purple-900\/10 { background-color: #f3e8ff; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-purple-900\/20 { background-color: #f3e8ff; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-purple-900\/30 { background-color: #f3e8ff; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-purple-900\/40 { background-color: #f3e8ff; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-purple-900\/50 { background-color: #f3e8ff; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-purple-900\/60 { background-color: #f3e8ff; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-purple-900\/80 { background-color: #f3e8ff; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-purple-900 { background-color: #f3e8ff; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-yellow-900\/10 { background-color: #fef9c3; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-yellow-900\/20 { background-color: #fef9c3; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-yellow-900\/30 { background-color: #fef9c3; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-yellow-900\/40 { background-color: #fef9c3; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-yellow-900\/50 { background-color: #fef9c3; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-yellow-900\/60 { background-color: #fef9c3; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-yellow-900\/80 { background-color: #fef9c3; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-yellow-900 { background-color: #fef9c3; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-orange-900\/10 { background-color: #ffedd5; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-orange-900\/20 { background-color: #ffedd5; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-orange-900\/30 { background-color: #ffedd5; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-orange-900\/40 { background-color: #ffedd5; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-orange-900\/50 { background-color: #ffedd5; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-orange-900\/60 { background-color: #ffedd5; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-orange-900\/80 { background-color: #ffedd5; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-orange-900 { background-color: #ffedd5; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-pink-900\/10 { background-color: #fce7f3; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-pink-900\/20 { background-color: #fce7f3; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-pink-900\/30 { background-color: #fce7f3; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-pink-900\/40 { background-color: #fce7f3; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-pink-900\/50 { background-color: #fce7f3; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-pink-900\/60 { background-color: #fce7f3; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-pink-900\/80 { background-color: #fce7f3; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-pink-900 { background-color: #fce7f3; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-cyan-900\/10 { background-color: #cffafe; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-cyan-900\/20 { background-color: #cffafe; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-cyan-900\/30 { background-color: #cffafe; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-cyan-900\/40 { background-color: #cffafe; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-cyan-900\/50 { background-color: #cffafe; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-cyan-900\/60 { background-color: #cffafe; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-cyan-900\/80 { background-color: #cffafe; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .bg-cyan-900 { background-color: #cffafe; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-gray-100 { color: #1e293b; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-gray-200 { color: #1e293b; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-gray-300 { color: #334155; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-gray-400 { color: #475569; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-gray-500 { color: #64748b; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-gray-600 { color: #94a3b8; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-white:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-white:is([class*="bg-gray-"],[class*="bg-slate-"]) { color: #0f172a; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-teal-400:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-teal-500:not([class*="bg-"]) { color: #0d9488; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-teal-300:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-teal-200:not([class*="bg-"]) { color: #0f766e; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-blue-400:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-blue-500:not([class*="bg-"]) { color: #2563eb; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-blue-300:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-blue-200:not([class*="bg-"]) { color: #1d4ed8; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-red-400:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-red-500:not([class*="bg-"]) { color: #dc2626; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-red-300:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-red-200:not([class*="bg-"]) { color: #b91c1c; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-emerald-400:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-emerald-500:not([class*="bg-"]) { color: #059669; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-emerald-300:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-emerald-200:not([class*="bg-"]) { color: #047857; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-yellow-400:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-yellow-500:not([class*="bg-"]) { color: #ca8a04; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-yellow-300:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-yellow-200:not([class*="bg-"]) { color: #a16207; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-indigo-400:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-indigo-500:not([class*="bg-"]) { color: #4f46e5; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-indigo-300:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-indigo-200:not([class*="bg-"]) { color: #4338ca; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-orange-400:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-orange-500:not([class*="bg-"]) { color: #ea580c; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-orange-300:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-orange-200:not([class*="bg-"]) { color: #c2410c; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-purple-400:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-purple-500:not([class*="bg-"]) { color: #9333ea; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-purple-300:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-purple-200:not([class*="bg-"]) { color: #7e22ce; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-green-400:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-green-500:not([class*="bg-"]) { color: #16a34a; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-green-300:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-green-200:not([class*="bg-"]) { color: #15803d; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-cyan-400:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-cyan-500:not([class*="bg-"]) { color: #0891b2; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-cyan-300:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-cyan-200:not([class*="bg-"]) { color: #0e7490; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-amber-400:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-amber-500:not([class*="bg-"]) { color: #d97706; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-amber-300:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-amber-200:not([class*="bg-"]) { color: #b45309; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-pink-400:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-pink-500:not([class*="bg-"]) { color: #db2777; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-pink-300:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-pink-200:not([class*="bg-"]) { color: #be185d; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-sky-400:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-sky-500:not([class*="bg-"]) { color: #0284c7; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-sky-300:not([class*="bg-"]), body:not(.dark-mode) :is(.main-content, .modal-backdrop) .text-sky-200:not([class*="bg-"]) { color: #0369a1; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .border-gray-600 { border-color: #cbd5e1; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .border-gray-700 { border-color: #e2e8f0; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .border-gray-800 { border-color: #e2e8f0; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .border-gray-500 { border-color: #94a3b8; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .border-gray-700\/50 { border-color: rgba(203,213,225,0.7); }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .border-slate-700 { border-color: #e2e8f0; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .divide-gray-700 > * { border-color: #e2e8f0; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .divide-gray-800 > * { border-color: #e2e8f0; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .divide-gray-600 > * { border-color: #e2e8f0; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .hover\:bg-gray-800:hover { background-color: #f1f5f9; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .hover\:bg-gray-700:hover { background-color: #e2e8f0; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .hover\:bg-gray-600:hover { background-color: #cbd5e1; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .hover\:bg-gray-500:hover { background-color: #cbd5e1; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .hover\:bg-gray-800\/50:hover { background-color: rgba(241,245,249,0.8); }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .hover\:bg-gray-700\/50:hover { background-color: rgba(226,232,240,0.8); }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .hover\:text-white:not([class*="bg-"]):hover { color: #0f172a; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) .hover\:text-gray-300:hover, body:not(.dark-mode) :is(.main-content, .modal-backdrop) .hover\:text-gray-200:hover { color: #1e293b; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) :is(input, select, textarea):is([class*="bg-gray-"],[class*="bg-slate-"]) { background-color: #ffffff; color: #333333; border-color: #cbd5e1; color-scheme: light; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) :is(input, textarea)::placeholder { color: #94a3b8; }
+body:not(.dark-mode) :is(.main-content, .modal-backdrop) select option { background-color: #ffffff; color: #333333; }

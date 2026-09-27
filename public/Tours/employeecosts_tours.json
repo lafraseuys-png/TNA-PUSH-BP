@@ -1,0 +1,443 @@
+{
+  "_howto": "Employee Costs tours. steps = page tour. sections = one tour per screen plus the component form tour. Guides in employeecosts_guides.json.",
+  "key": "employeecosts",
+  "title": "Employee Costs tour",
+  "startDelay": 1800,
+  "blockers": [
+    ".modal-backdrop.active"
+  ],
+  "reset": [
+    {
+      "removeClass": "#tnbBar .tnb-menu",
+      "cls": "show"
+    }
+  ],
+  "whatsNewTitle": "What's new in Employee Costs",
+  "whatsNewText": "We've added something new here since you last took the tour.",
+  "steps": [
+    {
+      "id": "ec-welcome",
+      "title": "Welcome to Employee Costs",
+      "text": "Turn the hours from Time &amp; Attendance into costs, wages, payroll files, wage advice slips and bank files.<br><br>Use <b>Next</b> and <b>Back</b>, or your arrow keys. Press <b>Esc</b> to close.",
+      "fullOnly": true
+    },
+    {
+      "id": "ec-sidebar",
+      "target": [
+        "#sidebarNav"
+      ],
+      "title": "All screens",
+      "text": "Set up in this order: <b>Settings</b>, <b>Cost Components</b>, then <b>Employee Allocation</b>. Then the other screens produce the files each pay run.",
+      "placement": "right"
+    },
+    {
+      "id": "ec-nav-overview",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('overview'\"]"
+      ],
+      "title": "Overview",
+      "text": "How many employees are costed, and your active earnings, deductions and company contributions.",
+      "placement": "right"
+    },
+    {
+      "id": "ec-nav-components",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('components'\"]"
+      ],
+      "title": "Cost Components",
+      "text": "The building blocks: allowances, bonuses and deductions, and company contributions such as UIF or medical aid.",
+      "placement": "right"
+    },
+    {
+      "id": "ec-nav-allocation",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('allocation'\"]"
+      ],
+      "title": "Employee Allocation",
+      "text": "Which components each employee gets, with their amounts, one by one or in bulk.",
+      "placement": "right"
+    },
+    {
+      "id": "ec-nav-wage-calc",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('wage-calc'\"]"
+      ],
+      "title": "Monthly Wage Calc",
+      "text": "Work out wages for a date range from the hours worked in Time &amp; Attendance and each person's components.",
+      "placement": "right"
+    },
+    {
+      "id": "ec-nav-payfiles",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('payfiles'\"]"
+      ],
+      "title": "Payfiles & Export",
+      "text": "The file for your payroll system, laid out the way it expects (CSV or Excel).",
+      "placement": "right"
+    },
+    {
+      "id": "ec-nav-wage-advice",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('wage-advice'\"]"
+      ],
+      "title": "Wage Advice",
+      "text": "A wage advice slip per person, as Excel or PDF, or saved to their self-service profile.",
+      "placement": "right"
+    },
+    {
+      "id": "ec-nav-bank-files",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('bank-files'\"]"
+      ],
+      "title": "Bank Files",
+      "text": "A payment file for your bank, in CSV or TXT.",
+      "placement": "right"
+    },
+    {
+      "id": "ec-nav-settings",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('settings'\"]"
+      ],
+      "title": "Settings",
+      "text": "Weekly overtime, what's shown, and your own wage advice template.",
+      "placement": "right"
+    },
+    {
+      "id": "ec-collapse",
+      "target": [
+        ".sidebar-toggle-btn"
+      ],
+      "title": "Make more room",
+      "text": "Collapse the menu to icons only, and click again to open it.",
+      "placement": "right"
+    },
+    {
+      "id": "ec-top-search",
+      "target": [
+        "#tnbBar .tnb-search"
+      ],
+      "title": "Search any screen",
+      "text": "Jump straight to any screen you have access to, in any module.",
+      "placement": "bottom",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "ec-top-profile",
+      "target": [
+        "#tnbBar .tnb-pbtn"
+      ],
+      "title": "Your menu",
+      "text": "Your profile, other areas of the system, Dark Mode and logout.",
+      "placement": "bottom",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "ec-top-help",
+      "target": [
+        "#tnbBar .tnb-act-help"
+      ],
+      "title": "Help & Tours",
+      "text": "Opens the same help menu as the <b>?</b> button.",
+      "placement": "left",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        },
+        {
+          "click": "#tnbBar .tnb-pbtn"
+        }
+      ],
+      "wait": 320
+    },
+    {
+      "id": "ec-help-button",
+      "target": [
+        "#tnaTourHelpBtn"
+      ],
+      "title": "Help is always here",
+      "text": "Click <b>?</b> for this tour, a tour of the screen you're on, and <b>how-to guides</b>.",
+      "placement": "left",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "ec-done",
+      "title": "You're all set",
+      "text": "Each screen also has its own short tour. It starts the first time you open that screen, and you can replay it any time from <b>?</b>.",
+      "fullOnly": true
+    }
+  ],
+  "sections": [
+    {
+      "key": "employeecosts.components",
+      "title": "Cost Components",
+      "trigger": "#page-components.active",
+      "steps": [
+        {
+          "id": "ecc-add",
+          "target": [
+            "#page-components button[onclick*='openComponentModal']"
+          ],
+          "title": "Add Component",
+          "text": "An earning, a deduction or a company contribution: a fixed amount, a percentage, or a figure typed in each time.",
+          "placement": "left"
+        },
+        {
+          "id": "ecc-list",
+          "target": [
+            "#componentsTableBody"
+          ],
+          "title": "Your components",
+          "text": "Edit or remove one. Removing it stops it being offered; people who have it keep their history.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "employeecosts.allocation",
+      "title": "Employee Allocation",
+      "trigger": "#page-allocation.active",
+      "steps": [
+        {
+          "id": "eca-find",
+          "target": [
+            "#empSearch"
+          ],
+          "title": "Find people",
+          "text": "Search, or filter by department.",
+          "placement": "bottom"
+        },
+        {
+          "id": "eca-list",
+          "target": [
+            "#employeeCostsTableBody"
+          ],
+          "title": "Each person's costs",
+          "text": "Click a person to set their overhead and which earnings, deductions and contributions they get, with the amounts.",
+          "placement": "top"
+        },
+        {
+          "id": "eca-bulk",
+          "target": [
+            "#page-allocation button[onclick*='openBulkEmpCostModal']"
+          ],
+          "title": "Bulk Allocate",
+          "text": "Tick people and give them the same components in one go.",
+          "placement": "left"
+        },
+        {
+          "id": "eca-export",
+          "target": [
+            "#page-allocation button[onclick*='exportCostAllocations']"
+          ],
+          "title": "Export",
+          "text": "All allocations to Excel, to check or to fill in and upload.",
+          "placement": "left"
+        }
+      ]
+    },
+    {
+      "key": "employeecosts.wagecalc",
+      "title": "Monthly Wage Calc",
+      "trigger": "#page-wage-calc.active",
+      "steps": [
+        {
+          "id": "ecw-dates",
+          "target": [
+            "#wageFromDate"
+          ],
+          "title": "Date range",
+          "text": "The period to calculate.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "ecw-add",
+          "target": [
+            "#page-wage-calc button[onclick*='openAddWageEmpModal']"
+          ],
+          "title": "Add Employees",
+          "text": "Choose who to calculate. Their hours come from Time &amp; Attendance; open a person to see their timesheet.",
+          "placement": "left"
+        },
+        {
+          "id": "ecw-table",
+          "target": [
+            "#wageCalcTableBody"
+          ],
+          "title": "The calculation",
+          "text": "Hours, rates, components and totals per person.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "employeecosts.payfiles",
+      "title": "Payfiles & Export",
+      "trigger": "#page-payfiles.active",
+      "steps": [
+        {
+          "id": "ecp-profile",
+          "target": [
+            "#pfProfileSelect"
+          ],
+          "title": "Profiles",
+          "text": "A profile is the layout your payroll system expects. <b>Config</b> sets the columns and their order.",
+          "placement": "bottom"
+        },
+        {
+          "id": "ecp-filter",
+          "target": [
+            "#pfFromDate"
+          ],
+          "title": "Who and when",
+          "text": "Dates, department and an employee group.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "ecp-gen",
+          "target": [
+            "#page-payfiles button[onclick*='generatePayfileData']"
+          ],
+          "title": "Generate Preview",
+          "text": "Check the lines first, then export as <b>CSV</b> or <b>Excel</b>.",
+          "placement": "bottom"
+        }
+      ]
+    },
+    {
+      "key": "employeecosts.wageadvice",
+      "title": "Wage Advice",
+      "trigger": "#page-wage-advice.active",
+      "steps": [
+        {
+          "id": "ecv-pick",
+          "target": [
+            "#waFromDate"
+          ],
+          "title": "Dates and people",
+          "text": "Choose the period and the employees.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "ecv-gen",
+          "target": [
+            "#page-wage-advice button[onclick*='generateWageAdviceData']"
+          ],
+          "title": "Generate Preview",
+          "text": "Hours as decimals or as time, then export to Excel or PDF.",
+          "placement": "bottom"
+        },
+        {
+          "id": "ecv-ess",
+          "target": [
+            "#page-wage-advice button[onclick*='saveWageAdviceToProfile']"
+          ],
+          "title": "Save to ESS",
+          "text": "Puts each person's slip in their self-service Payslips.",
+          "placement": "left"
+        }
+      ]
+    },
+    {
+      "key": "employeecosts.bankfiles",
+      "title": "Bank Files",
+      "trigger": "#page-bank-files.active",
+      "steps": [
+        {
+          "id": "ecb-attr",
+          "target": [
+            "#bankCustomAttrSelect"
+          ],
+          "title": "Bank details",
+          "text": "The employee field that holds the bank details, dates and people.",
+          "placement": "bottom"
+        },
+        {
+          "id": "ecb-gen",
+          "target": [
+            "#page-bank-files button[onclick*='generateBankFileData']"
+          ],
+          "title": "Generate Preview",
+          "text": "Check the amounts, then export as CSV or TXT for your bank.",
+          "placement": "bottom"
+        }
+      ]
+    },
+    {
+      "key": "employeecosts.settings",
+      "title": "Settings",
+      "trigger": "#page-settings.active",
+      "steps": [
+        {
+          "id": "ecs-ot",
+          "target": [
+            "#settingEnableWeeklyOT"
+          ],
+          "title": "Weekly overtime",
+          "text": "Work out overtime over the week instead of per day, above a number of hours.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "ecs-show",
+          "target": [
+            "#settingShowTerminatedEmployees"
+          ],
+          "title": "What's shown",
+          "text": "Whether terminated employees are listed, and what wage advice slips show.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "ecs-tpl",
+          "target": [
+            "#waTemplateUpload"
+          ],
+          "title": "Your wage advice template",
+          "text": "Download the starter template and the tag dictionary, design your own slip in Excel, and upload it.",
+          "placement": "top",
+          "climb": 2
+        },
+        {
+          "id": "ecs-save",
+          "target": [
+            "#btnSaveCostSettings"
+          ],
+          "title": "Save Settings",
+          "text": "Saves these settings.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "employeecosts.component-form",
+      "title": "Cost component",
+      "trigger": "#componentModal.active",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "employeecosts.guide.component",
+      "skipSteps": 2,
+      "stepSuffix": "form"
+    }
+  ],
+  "guides": [],
+  "guidesFile": "employeecosts_guides.json"
+}

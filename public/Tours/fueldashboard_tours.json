@@ -1,0 +1,445 @@
+{
+  "_howto": "Fuel tours. steps = page tour. sections = one tour per screen plus pop-up form tours. Guides in fueldashboard_guides.json.",
+  "key": "fueldashboard",
+  "title": "Fuel tour",
+  "startDelay": 1800,
+  "blockers": [
+    "#addVehicleModal:not(.hidden)",
+    "#addDepotModal:not(.hidden)",
+    "#refillModal:not(.hidden)"
+  ],
+  "reset": [
+    {
+      "removeClass": "#tnbBar .tnb-menu",
+      "cls": "show"
+    }
+  ],
+  "whatsNewTitle": "What's new in Fuel",
+  "whatsNewText": "We've added something new here since you last took the tour.",
+  "steps": [
+    {
+      "id": "fu-welcome",
+      "title": "Welcome to Fuel",
+      "text": "Track every litre: from delivery into your tanks, through each pump, to the vehicle and the job it was used for, with trips, deliveries, efficiency and diesel rebate reports.<br><br>Use <b>Next</b> and <b>Back</b>, or your arrow keys. Press <b>Esc</b> to close.",
+      "fullOnly": true
+    },
+    {
+      "id": "fu-sidebar",
+      "target": [
+        "#sidebarNav"
+      ],
+      "title": "All screens",
+      "text": "Set up in this order: <b>Settings</b>, <b>Management</b> (farms, activities, prices), <b>Fuel Depots</b>, <b>Vehicles</b>, then <b>Drivers</b>.",
+      "placement": "right"
+    },
+    {
+      "id": "fu-nav-stats",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('stats'\"]"
+      ],
+      "title": "Dashboard",
+      "text": "Fuel used, costs, efficiency and tank levels at a glance, with a map of where fuel was dispensed.",
+      "placement": "right"
+    },
+    {
+      "id": "fu-nav-transactions",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('transactions'\"]"
+      ],
+      "title": "Fuel Logs",
+      "text": "Every fuel issue: which vehicle, driver, pump and activity, how many litres, and the odometer or hours.",
+      "placement": "right"
+    },
+    {
+      "id": "fu-nav-fueling-data",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('fueling-data'\"]"
+      ],
+      "title": "Fueling Data",
+      "text": "The fuel logs as a table to filter, check and export.",
+      "placement": "right"
+    },
+    {
+      "id": "fu-nav-triplogs",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('triplogs'\"]"
+      ],
+      "title": "Trip Logs",
+      "text": "Trips captured on the mobile app, with distance and the activity.",
+      "placement": "right"
+    },
+    {
+      "id": "fu-nav-deliveries",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('deliveries'\"]"
+      ],
+      "title": "Deliveries",
+      "text": "Deliveries and collections made by drivers, with proof of delivery.",
+      "placement": "right"
+    },
+    {
+      "id": "fu-nav-vehicles",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('vehicles'\"]"
+      ],
+      "title": "Vehicles",
+      "text": "Your fleet and other fuelled assets, with license and service checks.",
+      "placement": "right"
+    },
+    {
+      "id": "fu-nav-drivers",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('drivers'\"]"
+      ],
+      "title": "Drivers",
+      "text": "Drivers with their license and PDP, and the user they log in as.",
+      "placement": "right"
+    },
+    {
+      "id": "fu-nav-depots",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('depots'\"]"
+      ],
+      "title": "Fuel Depots",
+      "text": "Your tanks and their pumps, levels, refills and transfers.",
+      "placement": "right"
+    },
+    {
+      "id": "fu-nav-inventory",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('inventory'\"]"
+      ],
+      "title": "Inventory",
+      "text": "Fuel stock in the warehouse: stock in, stock out and history.",
+      "placement": "right"
+    },
+    {
+      "id": "fu-nav-management",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('management'\"]"
+      ],
+      "title": "Management",
+      "text": "Farms and units, fuel activities, farming departments, trip activities, clients, sub-contractors, fuel prices and delivery setup.",
+      "placement": "right"
+    },
+    {
+      "id": "fu-nav-reports",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('reports'\"]"
+      ],
+      "title": "Intel Reports",
+      "text": "Consumption, efficiency, diesel rebate and exception reports.",
+      "placement": "right"
+    },
+    {
+      "id": "fu-nav-settings",
+      "target": [
+        "#sidebarNav [onclick*=\"showSection('settings'\"]"
+      ],
+      "title": "Settings",
+      "text": "What the mobile app must capture, how efficiency is shown, and delivery rules.",
+      "placement": "right"
+    },
+    {
+      "id": "fu-collapse",
+      "target": [
+        ".sidebar-toggle-btn"
+      ],
+      "title": "Make more room",
+      "text": "Collapse the menu to icons only, and click again to open it.",
+      "placement": "right"
+    },
+    {
+      "id": "fu-top-search",
+      "target": [
+        "#tnbBar .tnb-search"
+      ],
+      "title": "Search any screen",
+      "text": "Jump straight to any screen you have access to, in any module.",
+      "placement": "bottom",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "fu-top-profile",
+      "target": [
+        "#tnbBar .tnb-pbtn"
+      ],
+      "title": "Your menu",
+      "text": "Your profile, other areas of the system, Dark Mode and logout.",
+      "placement": "bottom",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "fu-top-help",
+      "target": [
+        "#tnbBar .tnb-act-help"
+      ],
+      "title": "Help & Tours",
+      "text": "Opens the same help menu as the <b>?</b> button.",
+      "placement": "left",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        },
+        {
+          "click": "#tnbBar .tnb-pbtn"
+        }
+      ],
+      "wait": 320
+    },
+    {
+      "id": "fu-help-button",
+      "target": [
+        "#tnaTourHelpBtn"
+      ],
+      "title": "Help is always here",
+      "text": "Click <b>?</b> for this tour, a tour of the screen you're on, and <b>how-to guides</b> such as adding a vehicle or a depot.",
+      "placement": "left",
+      "before": [
+        {
+          "removeClass": "#tnbBar .tnb-menu",
+          "cls": "show"
+        }
+      ]
+    },
+    {
+      "id": "fu-done",
+      "title": "You're all set",
+      "text": "Each screen also has its own short tour. It starts the first time you open that screen, and you can replay it any time from <b>?</b>.",
+      "fullOnly": true
+    }
+  ],
+  "sections": [
+    {
+      "key": "fueldashboard.vehicles",
+      "title": "Vehicles",
+      "trigger": "#page-vehicles.active",
+      "steps": [
+        {
+          "id": "fuv-add",
+          "target": [
+            "#page-vehicles button[onclick*='openAddVehicleModal']"
+          ],
+          "title": "Add Asset",
+          "text": "A vehicle, tractor, generator or other machine that gets fuel. Tracked in kilometres or hours.",
+          "placement": "bottom"
+        },
+        {
+          "id": "fuv-filter",
+          "target": [
+            "#vehSearch"
+          ],
+          "title": "Find an asset",
+          "text": "Search, or filter by type.",
+          "placement": "bottom"
+        },
+        {
+          "id": "fuv-audits",
+          "target": [
+            "#page-vehicles button[onclick*='generateVehicleLicenseReport']"
+          ],
+          "title": "License and Service Audits",
+          "text": "Which licenses are expiring and which assets are due for a service, exportable to Excel.",
+          "placement": "bottom"
+        },
+        {
+          "id": "fuv-list",
+          "target": [
+            "#vehicleBody"
+          ],
+          "title": "Your fleet",
+          "text": "Each asset with its tag, type, current reading and service status. Edit one to change its details.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.drivers",
+      "title": "Drivers",
+      "trigger": "#page-drivers.active",
+      "steps": [
+        {
+          "id": "fud-add",
+          "target": [
+            "#newDriverName"
+          ],
+          "title": "Add New Driver",
+          "text": "Name, ID number, license number and code, license and PDP expiry, and the <b>user</b> they log in to the mobile app as.",
+          "placement": "bottom",
+          "climb": 3
+        },
+        {
+          "id": "fud-list",
+          "target": [
+            "#driverBody"
+          ],
+          "title": "Driver Roster",
+          "text": "Every driver with their license status. Edit, deactivate or restore one.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.depots",
+      "title": "Fuel Depots",
+      "trigger": "#page-depots.active",
+      "steps": [
+        {
+          "id": "fudp-add",
+          "target": [
+            "#page-depots button[onclick*='openAddDepotModal']"
+          ],
+          "title": "Add Depot / Tank",
+          "text": "A tank with its fuel type and size, and the pumps connected to it with their meter readings.",
+          "placement": "bottom"
+        },
+        {
+          "id": "fudp-list",
+          "target": [
+            "#depotBody"
+          ],
+          "title": "Your tanks",
+          "text": "Each tank's level, pumps and meters. Record a refill, a manual dip reading, or a transfer between tanks.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.management",
+      "title": "Management",
+      "trigger": "#page-management.active",
+      "steps": [
+        {
+          "id": "fum-tabs",
+          "target": [
+            "#page-management button[onclick*=\"showMgmt('farms'\"]"
+          ],
+          "title": "Your lists",
+          "text": "Farms and units, fuel activities, farming departments, trip activities, delivery clients, sub-contractors, fuel prices and delivery setup.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fum-farms",
+          "target": [
+            "#newFarmName"
+          ],
+          "title": "Farms and field units",
+          "text": "The same farms and units as Production Pay: add them with their map location.",
+          "placement": "bottom",
+          "climb": 2,
+          "before": [
+            {
+              "click": "#page-management button[onclick*=\"showMgmt('farms'\"]"
+            }
+          ]
+        },
+        {
+          "id": "fum-activities",
+          "target": [
+            "#newActivityName"
+          ],
+          "title": "Fuel activities",
+          "text": "What fuel is used for, such as Ploughing or Spraying. Tick <b>rebate</b> for activities that qualify for the diesel rebate.",
+          "placement": "bottom",
+          "climb": 2,
+          "before": [
+            {
+              "click": "#page-management button[onclick*=\"showMgmt('activities'\"]"
+            }
+          ]
+        },
+        {
+          "id": "fum-pricing",
+          "target": [
+            "#newPriceType"
+          ],
+          "title": "Fuel Pricing",
+          "text": "The price per litre from a date. A price can be entered for an earlier date too; costs from that date use it.",
+          "placement": "bottom",
+          "climb": 2,
+          "before": [
+            {
+              "click": "#page-management button[onclick*=\"showMgmt('pricing'\"]"
+            }
+          ],
+          "after": [
+            {
+              "click": "#page-management button[onclick*=\"showMgmt('farms'\"]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.settings",
+      "title": "Settings",
+      "trigger": "#page-settings.active",
+      "steps": [
+        {
+          "id": "fus-module",
+          "target": [
+            "#settingFuelOdoMandatory"
+          ],
+          "title": "What the app must capture",
+          "text": "Whether the odometer and a photo are required when fuel is issued, whether farming departments show, and the default road type. Each switch saves straight away.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "fus-eff",
+          "target": [
+            "#settingEffKm"
+          ],
+          "title": "How efficiency is shown",
+          "text": "Kilometres per litre or litres per kilometre, and litres per hour or hours per litre.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fus-delivery",
+          "target": [
+            "#settingDeliveryPodMandatory"
+          ],
+          "title": "Deliveries",
+          "text": "What drivers must capture on a delivery (photo, proof, signatures), and when the electronic proof of delivery is emailed.",
+          "placement": "top",
+          "climb": 2
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.vehicle-form",
+      "title": "Asset",
+      "trigger": "#addVehicleModal:not(.hidden)",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "fueldashboard.guide.vehicle",
+      "skipSteps": 2,
+      "stepSuffix": "form"
+    },
+    {
+      "key": "fueldashboard.depot-form",
+      "title": "Depot",
+      "trigger": "#addDepotModal:not(.hidden)",
+      "overlay": true,
+      "autoStart": "offer",
+      "stepsFrom": "fueldashboard.guide.depot",
+      "skipSteps": 2,
+      "stepSuffix": "form"
+    }
+  ],
+  "guides": [],
+  "guidesFile": "fueldashboard_guides.json"
+}

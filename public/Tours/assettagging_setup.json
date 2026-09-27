@@ -1,0 +1,71 @@
+{
+  "_howto": "Guided setup for Asset Tagging & Stock Control (Demo / Setup mode). Steps click the menu links (switchTab).",
+  "key": "setup.assettagging",
+  "title": "Set up Asset Tagging & POS",
+  "intro": "Work through these in order. You're in <b>demo</b>: nothing is sent to devices or tills, and nothing affects live until you push it.",
+  "steps": [
+    {
+      "id": "assetcats",
+      "title": "Asset categories",
+      "click": "#tab-categories",
+      "why": "Groups for your assets.",
+      "confirm": true,
+      "confirmLabel": "Categories are in"
+    },
+    {
+      "id": "warehouses",
+      "title": "Warehouses",
+      "click": "#tab-warehouses",
+      "why": "Where stock is kept and used.",
+      "confirm": true,
+      "confirmLabel": "Warehouses are in"
+    },
+    {
+      "id": "stockcats",
+      "title": "Stock categories",
+      "click": "#tab-stock-categories",
+      "optional": true,
+      "why": "Groups for your stock items.",
+      "confirm": true,
+      "confirmLabel": "Stock categories are in"
+    },
+    {
+      "id": "catalog",
+      "title": "Stock catalog",
+      "click": "#tab-stock-items",
+      "guide": "assettagging.guide.stockitem",
+      "why": "Your items with their barcodes.",
+      "confirm": true,
+      "confirmLabel": "My items are in"
+    },
+    {
+      "id": "pos",
+      "title": "POS setup",
+      "click": "#tab-pos-settings",
+      "guide": "assettagging.guide.pos",
+      "optional": true,
+      "why": "Rules, items and prices, cashiers and layout for the till.",
+      "confirm": true,
+      "confirmLabel": "The POS is set up"
+    },
+    {
+      "id": "assets",
+      "title": "Assets",
+      "click": "#tab-assets",
+      "guide": "assettagging.guide.asset",
+      "optional": true,
+      "why": "Register your assets.",
+      "confirm": true,
+      "confirmLabel": "Assets are in"
+    },
+    {
+      "id": "testrun",
+      "title": "Test run",
+      "click": "#tab-stock-inventory",
+      "guide": "assettagging.guide.grv",
+      "why": "Prove it works, all in demo:<ol style=\"margin:6px 0 0 16px;padding:0;\"><li>Receive some stock with a GRV.</li><li>Open the POS screen, start the day and sell an item (cash, or on a test employee's account).</li><li>Check the stock went down and the sale shows in Sales History.</li></ol>Stock movements and sales are never pushed to live.",
+      "confirm": true,
+      "confirmLabel": "It all worked"
+    }
+  ]
+}

@@ -1,0 +1,254 @@
+{
+  "_howto": "Self service how-to guides.",
+  "guides": [
+    {
+      "key": "ess_dashboard.guide.leave",
+      "title": "Apply for leave",
+      "icon": "fa-plane-departure",
+      "blurb": "Choose the dates and type, add a note or proof, and send.",
+      "steps": [
+        {
+          "id": "esg-l-btn",
+          "target": [
+            "#essContentContainer button[onclick*='openEssLeaveModal']"
+          ],
+          "title": "Apply for Leave",
+          "text": "Tap <b>Apply for Leave</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Tap Apply for Leave"
+        },
+        {
+          "id": "esg-l-dates",
+          "target": [
+            "#essLeaveStart"
+          ],
+          "title": "Dates",
+          "text": "The first and last day of your leave.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "esg-l-type",
+          "target": [
+            "#essLeaveType"
+          ],
+          "title": "Type of leave",
+          "text": "Annual, sick, family responsibility and so on. The days it will use are worked out for you below.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "esg-l-notes",
+          "target": [
+            "#essLeaveNotes"
+          ],
+          "title": "A note",
+          "text": "Anything your manager should know.",
+          "placement": "top",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "esg-l-proof",
+          "target": [
+            "#essLeaveProof"
+          ],
+          "title": "Proof",
+          "text": "If this leave needs proof (such as a sick note), add a photo or file here.",
+          "placement": "top",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "esg-l-send",
+          "target": [
+            "#saveEssLeaveBtn"
+          ],
+          "title": "Send",
+          "text": "Your manager gets it to approve. You'll see it under your requests until then.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "ess_dashboard.guide.claim",
+      "title": "Submit a claim",
+      "icon": "fa-receipt",
+      "blurb": "Claim back money you spent for work, with a receipt.",
+      "steps": [
+        {
+          "id": "esg-c-btn",
+          "target": [
+            "#essContentContainer button[onclick*='openEssExpenseModal']"
+          ],
+          "title": "Submit Claim",
+          "text": "Tap <b>Submit Claim</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Tap Submit Claim"
+        },
+        {
+          "id": "esg-c-date",
+          "target": [
+            "#essExpDate"
+          ],
+          "title": "Date",
+          "text": "When you spent the money.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "esg-c-type",
+          "target": [
+            "#essExpType"
+          ],
+          "title": "Type",
+          "text": "What it was for. Some types are worked out for you, for example kilometres driven times a rate.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "esg-c-amt",
+          "target": [
+            "#essExpInputValue"
+          ],
+          "title": "Amount",
+          "text": "The amount, or the kilometres or quantity, depending on the type.",
+          "placement": "bottom",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "esg-c-proof",
+          "target": [
+            "#essExpProof"
+          ],
+          "title": "Receipt",
+          "text": "A photo of the receipt.",
+          "placement": "top",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "esg-c-send",
+          "target": [
+            "#saveEssExpBtn"
+          ],
+          "title": "Send",
+          "text": "It goes for approval, then to payroll.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "ess_dashboard.guide.details",
+      "title": "Update my details",
+      "icon": "fa-user-pen",
+      "blurb": "Change your phone number, email, address, emergency contact or bank details.",
+      "steps": [
+        {
+          "id": "esg-d-btn",
+          "target": [
+            "button[onclick*='openEssInfoModal']"
+          ],
+          "title": "Edit",
+          "text": "Tap <b>Edit</b> next to your name.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Tap Edit"
+        },
+        {
+          "id": "esg-d-contact",
+          "target": [
+            "#essCellNumber"
+          ],
+          "title": "Contact details",
+          "text": "Your cell number and personal email.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "esg-d-emergency",
+          "target": [
+            "#essEmergencyName"
+          ],
+          "title": "Emergency contact",
+          "text": "Who to call if something happens to you at work.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "esg-d-address",
+          "target": [
+            "#essStreet1"
+          ],
+          "title": "Address",
+          "text": "Where you live.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "esg-d-bank",
+          "target": [
+            "#essBankName"
+          ],
+          "title": "Bank details",
+          "text": "Where your pay goes. Add proof, such as a bank letter; payroll checks it before it's used.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "esg-d-save",
+          "target": [
+            "#essInfoForm button[type='submit']"
+          ],
+          "title": "Save",
+          "text": "Saves your changes.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "ess_dashboard.guide.documents",
+      "title": "Read company documents",
+      "icon": "fa-folder-open",
+      "blurb": "Open a policy or notice and acknowledge that you've read it.",
+      "steps": [
+        {
+          "id": "esg-o-btn",
+          "target": [
+            "button[onclick*='openEssDocumentsModal']"
+          ],
+          "title": "Company Documents",
+          "text": "Tap <b>Company Documents</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Tap Company Documents"
+        },
+        {
+          "id": "esg-o-find",
+          "target": [
+            "#empDocSearch"
+          ],
+          "title": "Find a document",
+          "text": "Search, or filter by tag.",
+          "placement": "bottom",
+          "timeout": 4000
+        },
+        {
+          "id": "esg-o-list",
+          "target": [
+            "#essDocumentsList"
+          ],
+          "title": "Open and acknowledge",
+          "text": "Open a document to read it. If it asks you to, tap <b>acknowledge</b> once you've read it; your company sees that you did.",
+          "placement": "top"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,205 @@
+{
+  "_howto": "Guided setup for ESS Master (Demo / Setup mode). Steps in the order the system needs them. checks = what the data must show; confirm = the user confirms a setting that has a sensible default.",
+  "key": "setup.essmaster",
+  "title": "Set up ESS Master",
+  "intro": "Work through these in order. You're in <b>demo</b>, so nothing affects your live system until you push it. Each step checks itself against what you've actually set up.",
+  "steps": [
+    {
+      "id": "source",
+      "title": "Where ESS gets its employees",
+      "section": "global",
+      "call": {
+        "fn": "switchGlobalTab",
+        "args": [
+          "preferences"
+        ]
+      },
+      "why": "ESS works on your employee records. Choose whether they come from this system, are synced from another system, or are uploaded. Everything else builds on this.",
+      "confirm": true,
+      "confirmLabel": "This is right"
+    },
+    {
+      "id": "payroll",
+      "title": "Payroll periods",
+      "section": "payroll",
+      "guide": "essmaster.guide.payroll",
+      "why": "The cycles people are paid on. Leave and claims are sent to payroll per period, and leave can build up per payroll cycle. Every department (or person) must be on one.",
+      "checks": [
+        {
+          "url": "/api/ess/payroll-periods",
+          "list": "periods",
+          "min": 1
+        },
+        {
+          "url": "/api/ess/payroll-periods",
+          "value": "unassignedEmployees",
+          "max": 0
+        }
+      ],
+      "todo": "At least one payroll period, and every active employee on a period (through their department or an override)."
+    },
+    {
+      "id": "leavetypes",
+      "title": "Leave types",
+      "section": "leavepolicies",
+      "guide": "essmaster.guide.leavesetup",
+      "why": "The kinds of leave people can ask for, such as Annual, Sick and Family Responsibility, and when proof is needed.",
+      "checks": [
+        {
+          "url": "/api/leaves/types",
+          "list": "",
+          "where": [
+            "IsActive"
+          ],
+          "min": 1
+        }
+      ],
+      "todo": "At least one active leave type."
+    },
+    {
+      "id": "balancesource",
+      "title": "Who owns the leave balances",
+      "section": "leavepolicyengine",
+      "why": "Either your <b>payroll system</b> keeps the balances and they're pulled from it, or <b>our leave policies</b> build them up here. It decides whether the next two steps drive balances.",
+      "confirm": true,
+      "confirmLabel": "This is right",
+      "needs": [
+        "leavetypes"
+      ]
+    },
+    {
+      "id": "policies",
+      "title": "Leave policies",
+      "section": "leavepolicyengine",
+      "guide": "essmaster.guide.leavesetup",
+      "needs": [
+        "leavetypes"
+      ],
+      "why": "The rules per leave type: entitlement, cycle, how leave builds up, how far negative it may go, and when proof or HR is needed. A policy only counts once it is <b>published</b>.",
+      "checks": [
+        {
+          "url": "/api/ess/leave-policies",
+          "list": "",
+          "where": [
+            "ActiveVersionID",
+            "ScheduledCount"
+          ],
+          "min": 1
+        }
+      ],
+      "todo": "At least one leave policy with a published version (live now or starting on a future date)."
+    },
+    {
+      "id": "linkage",
+      "title": "Link policies to departments",
+      "section": "leavelinkage",
+      "guide": "essmaster.guide.leavesetup",
+      "needs": [
+        "policies"
+      ],
+      "why": "Decides who gets which policy. Everyone in a linked department, including new starters, follows its policy.",
+      "checks": [
+        {
+          "url": "/api/ess/leave-policies/links/departments",
+          "list": "departments",
+          "where": [
+            "CurrentPolicyID",
+            "NextPolicyID"
+          ],
+          "min": 1
+        }
+      ],
+      "todo": "At least one department linked to a policy."
+    },
+    {
+      "id": "routing",
+      "title": "Who approves requests",
+      "section": "global",
+      "call": {
+        "fn": "switchGlobalTab",
+        "args": [
+          "routing"
+        ]
+      },
+      "guide": "essmaster.guide.routing",
+      "why": "The 1st, 2nd and 3rd approver (and a backup) for each department, or for one person. Without this, requests from the app have nobody to go to.",
+      "checks": [
+        {
+          "url": "/api/tna/workflow/structures",
+          "list": "",
+          "min": 1
+        }
+      ],
+      "todo": "At least one approval routing rule."
+    },
+    {
+      "id": "takeon",
+      "title": "Opening leave balances",
+      "section": "leaveimport",
+      "guide": "essmaster.guide.takeon",
+      "optional": true,
+      "needs": [
+        "policies"
+      ],
+      "why": "Bring in everyone's current balances from a spreadsheet. <b>Practise it here in demo</b>; loads are never pushed, so do the real load in live once your setup is pushed.",
+      "confirm": true,
+      "confirmLabel": "I've practised it"
+    },
+    {
+      "id": "expenses",
+      "title": "Expense types",
+      "section": "expensepolicies",
+      "guide": "essmaster.guide.expense",
+      "optional": true,
+      "why": "What people can claim for in the app, and how each amount is worked out.",
+      "checks": [
+        {
+          "url": "/api/ess/expense-types",
+          "list": "",
+          "where": [
+            "IsActive"
+          ],
+          "min": 1
+        }
+      ],
+      "todo": "At least one active expense type."
+    },
+    {
+      "id": "mailer",
+      "title": "When managers are emailed",
+      "section": "settings",
+      "why": "Instant emails, or one daily summary, plus the Do Not Disturb hours. In demo, emails go only to your test mailbox so you can see them.",
+      "confirm": true,
+      "confirmLabel": "This is right"
+    },
+    {
+      "id": "documents",
+      "title": "Documents to read and acknowledge",
+      "section": "documents",
+      "guide": "essmaster.guide.document",
+      "optional": true,
+      "why": "Policies and notices employees must read and acknowledge in the app.",
+      "checks": [
+        {
+          "url": "/api/ess/documents/admin",
+          "list": "",
+          "min": 1
+        }
+      ],
+      "todo": "At least one document."
+    },
+    {
+      "id": "testrun",
+      "title": "Test run",
+      "section": "bulkleave",
+      "guide": "essmaster.guide.bulkleave",
+      "needs": [
+        "leavetypes",
+        "routing"
+      ],
+      "why": "Prove it works end to end, all in demo:<ol style=\"margin:6px 0 0 16px;padding:0;\"><li><b>Bulk Leave</b>: book a day of leave for one test person.</li><li><b>Mobile Requests</b>: approve it. It follows the routing you set up.</li><li><b>Leave Calendar</b>: see it on the day.</li><li><b>Payroll › Send To Payroll</b>: <b>What Would Send</b> shows it.</li></ol>Test runs are never pushed to live.",
+      "confirm": true,
+      "confirmLabel": "It all worked"
+    }
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "_howto": "Guided setup for Fuel (Demo / Setup mode).",
+  "key": "setup.fueldashboard",
+  "title": "Set up Fuel",
+  "intro": "Work through these in order. You're in <b>demo</b>, so nothing affects your live system until you push it. Each step checks itself against what you've set up.",
+  "steps": [
+    {
+      "id": "settings",
+      "title": "What the app must capture",
+      "section": "settings",
+      "why": "Odometer and photo rules for fuel issues, how efficiency is shown, and delivery rules.",
+      "confirm": true,
+      "confirmLabel": "These are right"
+    },
+    {
+      "id": "farms",
+      "title": "Farms and field units",
+      "section": "management",
+      "why": "Where fuel is used. The same farms and units as Production Pay.",
+      "checks": [
+        {
+          "url": "/api/farms",
+          "list": "",
+          "where": [
+            "IsActive"
+          ],
+          "min": 1
+        }
+      ],
+      "todo": "At least one active farm.",
+      "optional": true
+    },
+    {
+      "id": "activities",
+      "title": "Fuel activities",
+      "section": "management",
+      "why": "What fuel is used for, and which activities qualify for the diesel rebate.",
+      "checks": [
+        {
+          "url": "/api/activities",
+          "list": "",
+          "min": 1
+        }
+      ],
+      "todo": "At least one fuel activity."
+    },
+    {
+      "id": "prices",
+      "title": "Fuel prices",
+      "section": "management",
+      "guide": "fueldashboard.guide.price",
+      "why": "The price per litre from a date, so every issue is costed.",
+      "checks": [
+        {
+          "url": "/api/fuel-prices",
+          "list": "",
+          "min": 1
+        }
+      ],
+      "todo": "At least one fuel price."
+    },
+    {
+      "id": "depots",
+      "title": "Depots and pumps",
+      "section": "depots",
+      "guide": "fueldashboard.guide.depot",
+      "why": "Your tanks and the pumps that dispense from them.",
+      "checks": [
+        {
+          "url": "/api/fuel-depots",
+          "list": "",
+          "min": 1
+        }
+      ],
+      "todo": "At least one depot or tank."
+    },
+    {
+      "id": "vehicles",
+      "title": "Vehicles and assets",
+      "section": "vehicles",
+      "guide": "fueldashboard.guide.vehicle",
+      "why": "Everything that gets fuel, with its current reading.",
+      "checks": [
+        {
+          "url": "/api/vehicles",
+          "list": "",
+          "min": 1
+        }
+      ],
+      "todo": "At least one vehicle or asset."
+    },
+    {
+      "id": "drivers",
+      "title": "Drivers",
+      "section": "drivers",
+      "why": "Who issues and receives fuel, linked to the user they log in to the app as.",
+      "checks": [
+        {
+          "url": "/api/drivers",
+          "list": "",
+          "min": 1
+        }
+      ],
+      "todo": "At least one driver."
+    },
+    {
+      "id": "testrun",
+      "title": "Test run",
+      "section": "transactions",
+      "needs": [
+        "depots",
+        "vehicles",
+        "prices"
+      ],
+      "why": "Prove it works, all in demo:<ol style=\"margin:6px 0 0 16px;padding:0;\"><li>Record a refill into a tank.</li><li>Issue fuel to a vehicle (on the app, or add a fuel log).</li><li>Check the tank level, the cost and the efficiency on the Dashboard.</li><li>Run a consumption report.</li></ol>Fuel logs, refills and readings are never pushed to live.",
+      "confirm": true,
+      "confirmLabel": "It all worked"
+    }
+  ]
+}

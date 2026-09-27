@@ -1,0 +1,89 @@
+{
+  "_howto": "Guided setup for Settings (Demo / Setup mode).",
+  "key": "setup.settings",
+  "title": "Set up Settings",
+  "intro": "Work through these in order. You're in <b>demo</b>: emails only go to your test mailbox, nothing is sent to devices, and nothing affects live until you push it.",
+  "steps": [
+    {
+      "id": "profile",
+      "title": "Company profile",
+      "section": "profile",
+      "why": "Your company's name, logo and details. These are kept centrally, so <b>change them in live</b>; in demo they can't be saved.",
+      "confirm": true,
+      "confirmLabel": "I'll do this in live"
+    },
+    {
+      "id": "email",
+      "title": "Email",
+      "section": "api",
+      "why": "The mail server the system sends from: approvals, reminders, payslips and reports. In demo, emails only reach your test mailbox.",
+      "confirm": true,
+      "confirmLabel": "Email is set up"
+    },
+    {
+      "id": "connections",
+      "title": "Other connections",
+      "section": "api",
+      "optional": true,
+      "why": "Single sign-on, Sage, an external T&A system or a CVS database, if you use them.",
+      "confirm": true,
+      "confirmLabel": "Connections are set up"
+    },
+    {
+      "id": "sync",
+      "title": "Sync Engine",
+      "section": "sync",
+      "why": "How the mobile app is organised and synced: top department, sync method, and hiding tiles people can't open.",
+      "confirm": true,
+      "confirmLabel": "These are right"
+    },
+    {
+      "id": "roles",
+      "title": "Roles and permissions",
+      "section": "roles",
+      "why": "What each kind of user may see and do. Set these before creating users.",
+      "confirm": true,
+      "confirmLabel": "Roles are set"
+    },
+    {
+      "id": "users",
+      "title": "Users",
+      "section": "users",
+      "needs": [
+        "roles"
+      ],
+      "why": "People who log in, with their role and which departments they see. <b>Create real user accounts in live</b>: passwords can't be copied from demo.",
+      "confirm": true,
+      "confirmLabel": "I'll create users in live"
+    },
+    {
+      "id": "zones",
+      "title": "Access zones and devices",
+      "section": "zones",
+      "optional": true,
+      "why": "Zones group your clocking devices; departments are then sent to their zones. Devices themselves are registered in live.",
+      "confirm": true,
+      "confirmLabel": "Zones are set"
+    },
+    {
+      "id": "notifications",
+      "title": "Notifications",
+      "section": "notifications",
+      "optional": true,
+      "why": "Reminders and alerts: clock-in reminders, violations and who gets them.",
+      "confirm": true,
+      "confirmLabel": "Notifications are set"
+    },
+    {
+      "id": "testrun",
+      "title": "Test run",
+      "section": "api",
+      "needs": [
+        "email"
+      ],
+      "why": "Send a <b>test email</b> from Connectivity. In demo it arrives in your test mailbox, marked [DEMO].",
+      "confirm": true,
+      "confirmLabel": "It arrived"
+    }
+  ]
+}
