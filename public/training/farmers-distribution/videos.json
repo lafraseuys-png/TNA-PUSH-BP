@@ -1,0 +1,33 @@
+{
+ "updatedAt": "2026-09-30T09:56:42.213Z",
+ "videos": [
+  {
+   "id": "vmunrqfi4x87j91",
+   "title": "Farmers and Distribution Ch1 Getting Started",
+   "description": "",
+   "chapter": "Chapter 1 · Getting started",
+   "order": 1,
+   "file": "videos/vmunrqfi4x87j91.mp4",
+   "poster": "videos/vmunrqfi4x87j91.jpg",
+   "type": "video/mp4",
+   "size": 11878527,
+   "duration": 60,
+   "uploadedAt": "2026-09-30T07:13:08.065Z",
+   "uploadedBy": "TNA Africa"
+  },
+  {
+   "id": "vmunxklk1t22mib",
+   "title": "2. Setting up",
+   "description": "",
+   "chapter": "Chapter 1 · Getting started",
+   "order": 2,
+   "file": "videos/vmunxklk1t22mib.mp4",
+   "poster": "videos/vmunxklk1t22mib.jpg",
+   "type": "video/mp4",
+   "size": 22444431,
+   "duration": 211.7,
+   "uploadedAt": "2026-09-30T09:56:42.212Z",
+   "uploadedBy": "TNA Africa"
+  }
+ ]
+}
