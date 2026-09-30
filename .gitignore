@@ -2,7 +2,7 @@ node_modules/
 secrets.env
 uploads/
 *.log
-android/
+# android/
 public/release/
 web.config
 ecosystem.config.js
