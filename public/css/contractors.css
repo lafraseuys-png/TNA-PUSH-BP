@@ -49,8 +49,10 @@ header h2 { color: #0f172a !important; }
 .page-section { display: none; width: 100%; }
 .page-section.active { 
     display: block; 
-    animation: slideFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+    animation: slideFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;   /* ⚡ backwards, not forwards: a transform kept on the page after the fade traps its pop-ups inside the page */
 }
+/* ⚡ A pop-up that lives inside the page (e.g. Assign Contract) goes over the sidebar too, not under it */
+.main-content:has(.modal-backdrop.active) { z-index: 60; }
 
 @keyframes slideFadeIn { 
     from { opacity: 0; transform: translateY(8px); } 

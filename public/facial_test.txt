@@ -1,0 +1,1 @@
+Capacitor.Plugins.Device.getId().then(r => alert('1) ID: ' + (r.identifier || r.uuid))).catch(e => alert('1) ' + e.message))

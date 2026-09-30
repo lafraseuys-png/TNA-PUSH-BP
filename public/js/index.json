@@ -1,0 +1,13 @@
+{
+  "manuals": [
+    {
+      "key": "farmers-distribution",
+      "title": "Farmers & Distribution – Web user manual",
+      "version": "1.0",
+      "module": "contractors",
+      "pages": 68,
+      "summary": "Everything on the Farmers & Distribution web screens: set-up, farmers, contracts, approvals, distribution and monitoring.",
+      "map": "farmers-distribution/map.json"
+    }
+  ]
+}
