@@ -9,3 +9,6 @@ ecosystem.config.js
 builder_compiler.js
 # www/
 tna-ess-mobile/
+# Firebase server key (push notifications) - never commit
+firebase-service-account*.json
+*firebase-adminsdk*.json

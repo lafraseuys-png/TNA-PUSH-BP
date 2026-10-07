@@ -1492,6 +1492,420 @@
           "placement": "top"
         }
       ]
+    },
+    {
+      "key": "employeemaster.guide.transfer-department",
+      "title": "Move employees to another department",
+      "icon": "fa-exchange-alt",
+      "blurb": "Two ways: one employee from their profile, or many at once with Move Department. Both ask for the date the transfer takes effect.",
+      "reset": [
+        {
+          "removeClass": "#bulkMoveModal",
+          "cls": "active"
+        }
+      ],
+      "steps": [
+        {
+          "id": "emg-tf-open",
+          "target": [
+            "#sidebarNav a[data-permission='tna_employees']"
+          ],
+          "title": "Two ways to move people",
+          "text": "There are two ways to move employees to another department, both from Active Personnel:<br><b>Way 1</b> - one employee: open their profile and change the Department.<br><b>Way 2</b> - many at once: tick them in the list and use <b>Move Department</b>.<br>Click <b>Active Personnel</b> to start with Way 1.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Active Personnel"
+        },
+        {
+          "id": "emg-tf-edit",
+          "target": [
+            "#empTableBody button[data-tooltip='Edit Profile']"
+          ],
+          "title": "Way 1: open the profile",
+          "text": "Click <b>Edit</b> on the employee you want to move. Nothing is saved until you click <b>Save Profile</b>, so it is safe to follow along.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Edit on any employee",
+          "timeout": 5000
+        },
+        {
+          "id": "emg-tf-dept",
+          "target": [
+            "#editEmpDeptDisplay"
+          ],
+          "title": "Choose the new department",
+          "text": "On the <b>Employment</b> tab, click <b>Department</b> and pick the department they are moving to.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
+            }
+          ],
+          "timeout": 5000
+        },
+        {
+          "id": "emg-tf-date",
+          "target": [
+            "#editEmpDeptEffectiveFrom"
+          ],
+          "title": "Transfer Effective Date",
+          "text": "Appears as soon as the department changes. Enter the date the move takes effect - it is required. Their leave and history count against the new department from that date.",
+          "placement": "right",
+          "climb": 1,
+          "before": [
+            {
+              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
+            }
+          ],
+          "optional": true
+        },
+        {
+          "id": "emg-tf-save",
+          "target": [
+            "#saveEmpBtn"
+          ],
+          "title": "Save Profile",
+          "text": "Saves the move. The transfer shows in <b>Audit & History</b>. If you were only practising, close the profile without saving.",
+          "placement": "top"
+        },
+        {
+          "id": "emg-tf-tick",
+          "target": [
+            "#empTableBody input[type='checkbox']"
+          ],
+          "title": "Way 2: tick the employees",
+          "text": "To move many people at once, tick the box next to each employee (or the box in the heading for everyone on the page). A blue bar appears above the list.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Tick at least one employee",
+          "before": [
+            {
+              "removeClass": "#editEmpModal",
+              "cls": "active"
+            }
+          ],
+          "timeout": 5000
+        },
+        {
+          "id": "emg-tf-bulk",
+          "target": [
+            "#contextualBulkToolbar button[onclick*='openBulkMoveModal']"
+          ],
+          "title": "Move Department",
+          "text": "Click <b>Move Department</b> on the blue bar.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Move Department",
+          "timeout": 5000
+        },
+        {
+          "id": "emg-tf-bdept",
+          "target": [
+            "#bulkMoveDept"
+          ],
+          "title": "New Department",
+          "text": "Pick the department everyone you ticked is moving to. Leave it on <b>Do Not Change</b> to keep their department (for example to change only their team).",
+          "placement": "right",
+          "timeout": 5000
+        },
+        {
+          "id": "emg-tf-bdate",
+          "target": [
+            "#bulkMoveEffectiveDate"
+          ],
+          "title": "Transfer Effective Date",
+          "text": "Required when you change the department: the date the move takes effect for all of them.",
+          "placement": "right"
+        },
+        {
+          "id": "emg-tf-bteam",
+          "target": [
+            "#bulkMoveTeam"
+          ],
+          "title": "Custom Team (optional)",
+          "text": "You can move them into a Custom Team at the same time, or remove them from their current team. Leave it on <b>Do Not Change Team</b> otherwise.",
+          "placement": "right",
+          "optional": true
+        },
+        {
+          "id": "emg-tf-bsave",
+          "target": [
+            "#submitBulkMoveBtn"
+          ],
+          "title": "Save",
+          "text": "Moves everyone you ticked in one go. If you were only practising, click <b>Cancel</b> instead.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "employeemaster.guide.data-reports",
+      "title": "Run, filter and export a report",
+      "icon": "fa-file-csv",
+      "blurb": "Pick a report, narrow it down, choose the columns and export it to Excel or PDF.",
+      "reset": [
+        {
+          "removeClass": "#emrFiltersMenu",
+          "cls": "show"
+        },
+        {
+          "removeClass": "#emrExportMenu",
+          "cls": "show"
+        }
+      ],
+      "steps": [
+        {
+          "id": "emg-rp-open",
+          "target": [
+            "#sidebarNav a[data-permission='emp_master_reports']"
+          ],
+          "title": "Data Reports",
+          "text": "Reports are under <b>Data Reports</b>. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Data Reports"
+        },
+        {
+          "id": "emg-rp-pick",
+          "target": [
+            "#emrReport"
+          ],
+          "title": "Pick a report",
+          "text": "Choose a report, e.g. <b>Full Employee Details</b> or <b>Missing Info Report</b>. It runs as soon as you pick it; the line under the bar says what it shows.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 5000
+        },
+        {
+          "id": "emg-rp-filters",
+          "target": [
+            "#emrFiltersBtn"
+          ],
+          "title": "Open the filters",
+          "text": "Click <b>Filters</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Filters"
+        },
+        {
+          "id": "emg-rp-dept",
+          "target": [
+            "#reportDeptFilter"
+          ],
+          "title": "Department",
+          "text": "Only people in this department. Leave it on <b>All Departments</b> for everyone.",
+          "placement": "right",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "emg-rp-dates",
+          "target": [
+            "#reportStartDate"
+          ],
+          "title": "Date range",
+          "text": "Optional <b>Date From</b> and <b>Date To</b>: they apply to start dates (or termination dates on the termination reports). <b>Clear Filters</b> removes them all.",
+          "placement": "right",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "emg-rp-apply",
+          "target": [
+            "#emrFiltersApply"
+          ],
+          "title": "Apply Filters",
+          "text": "Runs the report again with these filters. They show as tags next to the buttons; the x on a tag removes it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Apply Filters"
+        },
+        {
+          "id": "emg-rp-columns",
+          "target": [
+            "#emrColsBtn"
+          ],
+          "title": "Choose the columns",
+          "text": "Click <b>Columns</b> any time to tick the columns you want and drag them into your order. Each report remembers your choice.",
+          "placement": "bottom"
+        },
+        {
+          "id": "emg-rp-search",
+          "target": [
+            "#empReportPreviewHead tr.hs-row"
+          ],
+          "title": "Narrow it down",
+          "text": "Type in the box under a heading to keep only matching rows, e.g. a job title. Every word you type must be in that column.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "emg-rp-sort",
+          "target": [
+            "#empReportPreviewHead tr[data-emr]"
+          ],
+          "title": "Sort and move columns",
+          "text": "<b>Click a heading</b> to sort (A to Z, again for Z to A, a third time back). <b>Drag a heading</b> left or right to move the column.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "emg-rp-export",
+          "target": [
+            "#emrExportBtn"
+          ],
+          "title": "Export",
+          "text": "Click <b>Export</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Export"
+        },
+        {
+          "id": "emg-rp-file",
+          "target": [
+            "#emrExportMenu"
+          ],
+          "title": "Excel or PDF",
+          "text": "Pick <b>Export to Excel</b> or <b>Export to PDF</b>. The file has exactly the columns shown, in your order, and only the rows the searches leave.",
+          "placement": "left"
+        }
+      ]
+    },
+    {
+      "key": "employeemaster.guide.custom-attributes",
+      "title": "Add custom fields and fill them in bulk",
+      "icon": "fa-tags",
+      "blurb": "Create your own fields (e.g. Boot Size), then fill them for many employees at once with the import template.",
+      "reset": [
+        {
+          "removeClass": "#emaToolsMenu",
+          "cls": "show"
+        },
+        {
+          "removeClass": "#emaFiltersMenu",
+          "cls": "show"
+        },
+        {
+          "removeClass": "#emaModal",
+          "cls": "active"
+        }
+      ],
+      "steps": [
+        {
+          "id": "emg-at-open",
+          "target": [
+            "#sidebarNav a[data-permission='emp_master_attributes']"
+          ],
+          "title": "Custom Attributes",
+          "text": "Your own employee fields are under <b>Custom Attributes</b>. Click it.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Custom Attributes"
+        },
+        {
+          "id": "emg-at-add",
+          "target": [
+            "#emaAddBtn"
+          ],
+          "title": "Add a field",
+          "text": "Click <b>Add Attribute</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Add Attribute",
+          "timeout": 5000
+        },
+        {
+          "id": "emg-at-name",
+          "target": [
+            "#emaName"
+          ],
+          "title": "Name and type",
+          "text": "Give it a name (e.g. <b>Boot Size</b>) and pick the <b>Data Type</b>: Text, Number, Date or Yes / No. <b>Save</b> adds it to every employee profile. Nothing is saved until you click Save.",
+          "placement": "right",
+          "climb": 1
+        },
+        {
+          "id": "emg-at-cancel",
+          "target": [
+            "#emaModal [data-ema-close].btn"
+          ],
+          "title": "Done",
+          "text": "Save it, or click <b>Cancel</b> if you were only practising.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Click Save or Cancel",
+          "optional": true
+        },
+        {
+          "id": "emg-at-filters",
+          "target": [
+            "#emaFiltersBtn"
+          ],
+          "title": "Which employees",
+          "text": "To fill the fields in bulk, first choose who goes in the file: click <b>Filters</b> for one department or PIN, or leave it for everyone.",
+          "placement": "bottom",
+          "before": [
+            {
+              "removeClass": "#emaModal",
+              "cls": "active"
+            }
+          ]
+        },
+        {
+          "id": "emg-at-tools",
+          "target": [
+            "#emaToolsBtn"
+          ],
+          "title": "Data Tools",
+          "text": "Click <b>Data Tools</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Data Tools"
+        },
+        {
+          "id": "emg-at-template",
+          "target": [
+            "#emaToolsMenu [data-ema-tool='template']"
+          ],
+          "title": "Download Import Template",
+          "text": "An Excel file with your employees and an <b>empty column per field</b>. Fill it in (keep the PIN column as it is).",
+          "placement": "left"
+        },
+        {
+          "id": "emg-at-import",
+          "target": [
+            "#emaToolsMenu [data-ema-tool='import']"
+          ],
+          "title": "Import Excel",
+          "text": "Load the filled-in file. The values go onto each employee's profile.",
+          "placement": "left"
+        },
+        {
+          "id": "emg-at-export",
+          "target": [
+            "#emaToolsMenu [data-ema-tool='export']"
+          ],
+          "title": "Export Data",
+          "text": "Everyone's current values: check them, or change them in Excel and import the file back the same way.",
+          "placement": "left"
+        },
+        {
+          "id": "emg-at-edit",
+          "target": [
+            "#attributesTableBody"
+          ],
+          "title": "Edit or deactivate",
+          "text": "Change a field's name or type with the <b>pencil</b>; <b>Deactivate</b> hides it everywhere but keeps its values - bring it back from the <b>Deactivated</b> tab.",
+          "placement": "top",
+          "before": [
+            {
+              "removeClass": "#emaToolsMenu",
+              "cls": "show"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

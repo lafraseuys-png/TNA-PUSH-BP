@@ -5,7 +5,8 @@
   "startDelay": 1500,
   "blockers": [
     ".modal-backdrop.active",
-    "#globalLoader:not(.hidden)"
+    "#globalLoader:not(.hidden)",
+    "#tpfModal.show"
   ],
   "reset": [
     {
@@ -198,7 +199,7 @@
         "#tnbBar .tnb-act-profile"
       ],
       "title": "Profile",
-      "text": "Update your name and email address, or change your password.",
+      "text": "Your account: your name, role and when you last signed in. Update your name and email, see your employee record, or change your password on the <b>Security</b> tab. Saving any change asks for your current password, so nobody else can change your account.",
       "placement": "left",
       "before": [
         {

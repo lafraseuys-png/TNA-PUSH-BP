@@ -594,6 +594,15 @@
           "climb": 2
         },
         {
+          "id": "cos-witness-rules",
+          "target": [
+            "#settingWitnessRules"
+          ],
+          "title": "Witness Rules",
+          "text": "Switch on <b>Single-farmer clubs</b> and a club with only one farmer is witnessed by a person who types their <b>name</b> and <b>surname</b> and signs on the phone, instead of the field technician. It is required before the club can be finished. Place the <b>Club Witness</b> boxes on your club contract template (Contract Templates); until you do, this witness prints in the Field Technician (Witness) boxes. Click <b>Save Rules</b>; phones use it after their next Sync.",
+          "placement": "top"
+        },
+        {
           "id": "cos-seasons",
           "target": [
             "#seasonName"

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "78432869374",
+    "project_id": "notifications-d8a79",
+    "storage_bucket": "notifications-d8a79.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:78432869374:android:7831f7861e4b1173307eaf",
+        "android_client_info": {
+          "package_name": "com.evofarmer.android"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJrw7mZ2TRsFtc0Re3hgjcfZUVfGcvahA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

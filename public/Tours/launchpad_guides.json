@@ -1,0 +1,409 @@
+{
+  "_howto": "Launchpad how-to guides (listed under How-to guides in the ? menu, top right). mode click = the user clicks the real button. optional = skipped when that item isn't on screen (e.g. no access). Never reuse a step id.",
+  "guides": [
+    {
+      "key": "launchpad.guide.find-screen",
+      "title": "Find a screen and pin favourites",
+      "icon": "fa-magnifying-glass",
+      "blurb": "Jump straight to any screen, and keep up to 5 favourites one click away.",
+      "reset": [
+        {
+          "removeClass": "#profileDropdown",
+          "cls": "show"
+        },
+        {
+          "removeClass": "#lpBellMenu",
+          "cls": "show"
+        },
+        {
+          "removeClass": "#lpQuickPanel",
+          "cls": "lpq-hold"
+        },
+        {
+          "removeClass": "#lpQuickPanel",
+          "cls": "show"
+        }
+      ],
+      "steps": [
+        {
+          "id": "lpg-fs-search",
+          "target": [
+            "#mainSearchInput",
+            ".search-wrapper"
+          ],
+          "title": "The search bar",
+          "text": "Click in the <b>search bar</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click the search bar"
+        },
+        {
+          "id": "lpg-fs-panel",
+          "target": [
+            "#lpQuickPanel .lpq-grid"
+          ],
+          "title": "Your screens",
+          "text": "Before you type, it shows your <b>most visited</b> screens (or suggestions when you are new). Click a card to open that screen.",
+          "placement": "bottom",
+          "optional": true,
+          "timeout": 3000,
+          "before": [
+            {
+              "addClass": "#lpQuickPanel",
+              "cls": "lpq-hold"
+            },
+            {
+              "addClass": "#lpQuickPanel",
+              "cls": "show"
+            }
+          ],
+          "climb": 1
+        },
+        {
+          "id": "lpg-fs-pin",
+          "target": [
+            "#lpQuickPanel .lpq-card"
+          ],
+          "title": "Pin a favourite",
+          "text": "Point at a card and click its <b>pin</b> (top corner) to keep it here. You can pin up to <b>5</b> screens; click the pin again to unpin.",
+          "placement": "bottom",
+          "optional": true,
+          "before": [
+            {
+              "addClass": "#lpQuickPanel",
+              "cls": "lpq-hold"
+            },
+            {
+              "addClass": "#lpQuickPanel",
+              "cls": "show"
+            }
+          ]
+        },
+        {
+          "id": "lpg-fs-type",
+          "target": [
+            ".search-wrapper"
+          ],
+          "title": "Or type",
+          "text": "Type what you need, like <b>leave</b>, <b>roster</b> or <b>payslip</b>, and pick a result (or use the arrow keys and Enter). Only screens you have access to are listed.",
+          "placement": "bottom",
+          "after": [
+            {
+              "removeClass": "#lpQuickPanel",
+              "cls": "lpq-hold"
+            },
+            {
+              "removeClass": "#lpQuickPanel",
+              "cls": "show"
+            }
+          ],
+          "before": [
+            {
+              "removeClass": "#lpQuickPanel",
+              "cls": "lpq-hold"
+            },
+            {
+              "removeClass": "#lpQuickPanel",
+              "cls": "show"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "launchpad.guide.profile",
+      "title": "Update my profile or password",
+      "icon": "fa-user-pen",
+      "blurb": "Change your name or email, see your employee record, or set a new password.",
+      "reset": [
+        {
+          "removeClass": "#profileDropdown",
+          "cls": "show"
+        },
+        {
+          "removeClass": "#lpBellMenu",
+          "cls": "show"
+        },
+        {
+          "removeClass": "#lpQuickPanel",
+          "cls": "show"
+        },
+        {
+          "removeClass": "#tpfModal",
+          "cls": "show"
+        }
+      ],
+      "steps": [
+        {
+          "id": "lpg-pr-open",
+          "target": [
+            "[data-tour='lp-profile']",
+            ".profile-button"
+          ],
+          "title": "Your menu",
+          "text": "Click your <b>name</b> at the top right to open your menu.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click your name"
+        },
+        {
+          "id": "lpg-pr-item",
+          "target": [
+            "[data-tour='lp-menu-profile']"
+          ],
+          "title": "Profile",
+          "text": "Click <b>Profile</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Profile",
+          "timeout": 3000
+        },
+        {
+          "id": "lpg-pr-head",
+          "target": [
+            "#tpfModal .tpf-head"
+          ],
+          "title": "Your account",
+          "text": "Your photo (or initials), name, role and company. <b>Previous sign-in</b> shows when you last logged in before this time - if you don't recognise it, change your password.",
+          "placement": "bottom",
+          "timeout": 3000
+        },
+        {
+          "id": "lpg-pr-names",
+          "target": [
+            "#tpfModal [data-tpf-pane='details'] .tpf-grid",
+            "#profileModal .modal-form-grid"
+          ],
+          "title": "Your details",
+          "text": "Change your <b>first name</b>, <b>last name</b> or <b>email address</b> here. If your login is linked to an employee, <b>My employee record</b> below shows your PIN, department and position; HR keeps those up to date.",
+          "placement": "bottom",
+          "timeout": 3000
+        },
+        {
+          "id": "lpg-pr-sec-tab",
+          "target": [
+            "#tpfModal [data-tpf-tab='security']"
+          ],
+          "title": "Security",
+          "text": "To change your password, click <b>Security</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Security",
+          "optional": true
+        },
+        {
+          "id": "lpg-pr-pass",
+          "target": [
+            "#tpfCur"
+          ],
+          "climb": 2,
+          "title": "Current password first",
+          "text": "Type your <b>current password</b>, then the new one twice. The eye shows what you typed. (Forgotten it? Ask an administrator to reset it in Settings > Users. After 5 wrong tries it locks for 15 minutes.)",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "lpg-pr-rules",
+          "target": [
+            "#tpfRules"
+          ],
+          "title": "The rules",
+          "text": "Each rule ticks green as you type: at least 8 characters, a symbol, both passwords the same, and different from the old one. The bar shows how strong it is.",
+          "placement": "top",
+          "optional": true
+        },
+        {
+          "id": "lpg-pr-save",
+          "target": [
+            "#tpfSave",
+            "#modalSaveBtn"
+          ],
+          "title": "Save",
+          "text": "<b>Save Changes</b> lights up once you have changed something and everything is filled in correctly. When you click it you'll be asked for your <b>current password</b> to confirm it's you (when changing your password, the one on the Security tab is used). Nothing is changed until then, so <b>Cancel</b> is safe if you were only practising.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "launchpad.guide.theme",
+      "title": "Switch dark or light mode",
+      "icon": "fa-moon",
+      "blurb": "Pick the look you like; it follows you to every computer.",
+      "reset": [
+        {
+          "removeClass": "#profileDropdown",
+          "cls": "show"
+        },
+        {
+          "removeClass": "#lpBellMenu",
+          "cls": "show"
+        },
+        {
+          "removeClass": "#lpQuickPanel",
+          "cls": "show"
+        }
+      ],
+      "steps": [
+        {
+          "id": "lpg-th-open",
+          "target": [
+            "[data-tour='lp-profile']",
+            ".profile-button"
+          ],
+          "title": "Your menu",
+          "text": "Click your <b>name</b> at the top right to open your menu.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click your name"
+        },
+        {
+          "id": "lpg-th-switch",
+          "target": [
+            "[data-tour='lp-menu-theme']"
+          ],
+          "title": "Dark Mode",
+          "text": "Flip the <b>Dark Mode</b> switch. It is saved to your account, so every screen and every computer you log in on uses it.",
+          "placement": "left",
+          "timeout": 3000,
+          "after": [
+            {
+              "removeClass": "#profileDropdown",
+              "cls": "show"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "launchpad.guide.notifications",
+      "title": "See and act on notifications",
+      "icon": "fa-bell",
+      "blurb": "What the bell shows and how to handle what is waiting.",
+      "reset": [
+        {
+          "removeClass": "#profileDropdown",
+          "cls": "show"
+        },
+        {
+          "removeClass": "#lpBellMenu",
+          "cls": "show"
+        },
+        {
+          "removeClass": "#lpQuickPanel",
+          "cls": "show"
+        }
+      ],
+      "steps": [
+        {
+          "id": "lpg-nt-bell",
+          "target": [
+            "#lpBellBtn"
+          ],
+          "title": "The bell",
+          "text": "The red number is how many requests are waiting for you. Click the <b>bell</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click the bell"
+        },
+        {
+          "id": "lpg-nt-list",
+          "target": [
+            "#lpBellMenu"
+          ],
+          "title": "What is waiting",
+          "text": "One line per kind of request (leave, profile updates, attendance exceptions) with how many there are. Click a line to open <b>Mobile Requests</b> in ESS Master and approve or decline them. When nothing is waiting it says <b>You're all caught up</b>.",
+          "placement": "left",
+          "timeout": 3000,
+          "before": [
+            {
+              "addClass": "#lpBellMenu",
+              "cls": "show"
+            }
+          ]
+        },
+        {
+          "id": "lpg-nt-all",
+          "target": [
+            "#lpBellAll"
+          ],
+          "title": "View all",
+          "text": "<b>View all</b> opens the full Mobile Requests list. A request leaves the bell once it has been handled.",
+          "placement": "left",
+          "optional": true,
+          "before": [
+            {
+              "addClass": "#lpBellMenu",
+              "cls": "show"
+            }
+          ],
+          "after": [
+            {
+              "removeClass": "#lpBellMenu",
+              "cls": "show"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "launchpad.guide.phone",
+      "title": "Connect a phone or get the app",
+      "icon": "fa-mobile-screen-button",
+      "blurb": "Download the app and link a phone by scanning a QR code.",
+      "reset": [
+        {
+          "removeClass": "#profileDropdown",
+          "cls": "show"
+        },
+        {
+          "removeClass": "#lpBellMenu",
+          "cls": "show"
+        },
+        {
+          "removeClass": "#lpQuickPanel",
+          "cls": "show"
+        }
+      ],
+      "steps": [
+        {
+          "id": "lpg-ph-open",
+          "target": [
+            "[data-tour='lp-profile']",
+            ".profile-button"
+          ],
+          "title": "Your menu",
+          "text": "Click your <b>name</b> at the top right to open your menu.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click your name"
+        },
+        {
+          "id": "lpg-ph-app",
+          "target": [
+            "#btnDownloadApp"
+          ],
+          "title": "Download the App",
+          "text": "<b>Download the App</b> shows a QR code. Scan it with the phone's camera to install the app.",
+          "placement": "left",
+          "timeout": 3000
+        },
+        {
+          "id": "lpg-ph-connect",
+          "target": [
+            "#btnConnectPhone"
+          ],
+          "title": "Connect a Phone",
+          "text": "Then <b>Connect a Phone</b> shows a QR code that links the app to your company. Open the app and scan it. (Only shown if you are allowed to connect phones.)",
+          "placement": "left",
+          "optional": true,
+          "after": [
+            {
+              "removeClass": "#profileDropdown",
+              "cls": "show"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

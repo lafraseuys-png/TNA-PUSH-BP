@@ -2,6 +2,7 @@
   "_howto": "Launchpad tour. Each step needs a unique id. To announce a NEW feature to users who already did this tour, ADD a step with a NEW id - they will see only that step as What's new. Rewording a step keeps its id (no re-show). To force a changed step to show again, give it a new id. target = list of CSS selectors, first visible one wins. fullOnly = only in the full tour, never counted as new. before/after = open or close menus (addClass / removeClass / click / call).",
   "key": "launchpad",
   "title": "Launchpad tour",
+  "guidesFile": "launchpad_guides.json",
   "startDelay": 1500,
   "blockers": [
     "#profileModal.show",
@@ -9,15 +10,25 @@
     "#updatePanel.active",
     "#lpQuickPanel.show",
     "#searchSuggestions.show",
-    "#launchpadConnectQrModal"
+    "#launchpadConnectQrModal",
+    "#lpBellMenu.show",
+    "#tpfModal.show"
   ],
   "reset": [
+    {
+      "removeClass": "#lpQuickPanel",
+      "cls": "lpq-hold"
+    },
     {
       "removeClass": "#profileDropdown",
       "cls": "show"
     },
     {
       "removeClass": "#lpQuickPanel",
+      "cls": "show"
+    },
+    {
+      "removeClass": "#lpBellMenu",
       "cls": "show"
     }
   ],
@@ -131,14 +142,15 @@
       "text": "Manage contractors, their contracts, distribution and progress, and send SMS broadcasts."
     },
     {
-      "id": "lp-notifications",
+      "id": "lp-bell-top",
       "target": [
+        "#lpBellBtn",
         "[data-tour='lp-notifications']",
         ".update-tab"
       ],
-      "placement": "right",
+      "placement": "bottom",
       "title": "Notifications",
-      "text": "The bell opens your notifications. <b>ESS Notifications</b> shows employee requests waiting for action; these stay until they are handled in ESS Master.<br><br>Below that is the <b>System Log</b>. Pin anything you want to keep, or use <b>Clear All</b>."
+      "text": "The bell, top right, shows what is waiting for you, such as <b>leave requests</b> and <b>profile updates</b> from ESS. The red number is how many. Click one to open it in ESS Master; it disappears once it has been handled."
     },
     {
       "id": "lp-profile-menu",
@@ -170,7 +182,7 @@
         }
       ],
       "title": "Profile",
-      "text": "Update your name and email address, or change your password."
+      "text": "Your account: your name, role and when you last signed in. Update your name and email, see your employee record, or change your password on the <b>Security</b> tab. Saving any change asks for your current password, so nobody else can change your account."
     },
     {
       "id": "lp-menu-settings",
@@ -301,11 +313,11 @@
       "text": "Read how your personal information is protected under the POPIA Act. You can also print it as a PDF."
     },
     {
-      "id": "lp-help-button",
+      "id": "lp-help-top",
       "target": [
         "#tnaTourHelpBtn"
       ],
-      "placement": "right",
+      "placement": "bottom",
       "before": [
         {
           "removeClass": "#profileDropdown",
@@ -313,13 +325,13 @@
         }
       ],
       "title": "Help is always here",
-      "text": "Click <b>?</b> any time to replay this tour. When we add new features, a green number appears here. Choose <b>What's new</b> to see only the new parts."
+      "text": "The <b>?</b> next to your name replays this tour and lists the <b>How-to guides</b>, short walkthroughs on the real screen. When we add new features a green number appears on it; choose <b>What's new</b> to see only the new parts."
     },
     {
       "id": "lp-done",
       "fullOnly": true,
       "title": "You're all set",
-      "text": "That's the Launchpad. As we add tours to the other pages, you'll find the same <b>?</b> button there."
+      "text": "That's the Launchpad. The other pages have a <b>?</b> button too, with that page's tour and how-to guides."
     }
   ]
 }

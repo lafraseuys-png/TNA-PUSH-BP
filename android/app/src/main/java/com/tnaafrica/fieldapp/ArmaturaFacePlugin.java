@@ -300,6 +300,29 @@ public class ArmaturaFacePlugin extends Plugin {
         }
     }
 
+    // ⚡ Empties the scanner's face list in memory (initEngine never does once the engine is running, so a face removed
+    //    in the office stayed in the scanner until the app was closed). The faces stay saved on the phone - the app loads
+    //    the current ones again straight after. Not running yet = nothing to clear.
+    @PluginMethod
+    public void clearEngine(PluginCall call) {
+        JSObject ret = new JSObject();
+        if (!isEngineInitialized || !FaceRepository.getInstance().isInit()) {
+            ret.put("success", true);
+            ret.put("message", "Engine not running - nothing to clear.");
+            call.resolve(ret);
+            return;
+        }
+        try {
+            boolean ok = FaceRepository.getInstance().dbClear();
+            ret.put("success", ok);
+            ret.put("message", ok ? "Scanner face list cleared." : "The scanner did not clear its face list.");
+            call.resolve(ret);
+        } catch (Exception e) {
+            Log.e("ArmaturaFace", "Error clearing the face list", e);
+            call.reject("Exception clearing the face list: " + e.getMessage());
+        }
+    }
+
     @PluginMethod
     public void startCamera(PluginCall call) {
         if (!FaceRepository.getInstance().isInit()) {

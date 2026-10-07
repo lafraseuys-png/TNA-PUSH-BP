@@ -432,7 +432,7 @@
           "target": "#demoSyncCard",
           "placement": "top",
           "title": "Demo Data Sync",
-          "text": "Fills ONE demo tenant with scrubbed employees and clocks every hour. Read the warning first and <b>never</b> pick a live customer tenant."
+          "text": "Fills ONE demo tenant with scrubbed employees (clocks come from the normal CVS sweeper). Below the switch: <b>Demo settings</b> (schedule, departments, name style, keep my edits), <b>Site names</b> shown instead of the real CVS devices, and the <b>Run history</b>. Read the warning first and <b>never</b> pick a live customer tenant."
         }
       ]
     },

@@ -6,7 +6,8 @@
   "blockers": [
     ".modal-backdrop.active",
     "#sgBack",
-    "#tgTip"
+    "#tgTip",
+    "#tpfModal.show"
   ],
   "reset": [
     {
@@ -87,7 +88,7 @@
         "#sidebarNav li[data-permission=\"set_zones,sys_hardware\"] > a"
       ],
       "title": "Access Zones",
-       "text": "Group your clocking devices by place, such as Main Gate or Warehouse A.",
+      "text": "Group your clocking devices by place, such as Main Gate or Warehouse A.",
       "placement": "right"
     },
     {
@@ -225,7 +226,7 @@
         "[data-tour='st-menu-help']"
       ],
       "title": "Help & Tours",
-      "text": "Opens the same help menu as the <b>?</b> button: tours, what's new and how-to guides.",
+      "text": "Opens the same <b>Help &amp; guides</b> panel as the <b>?</b> at the top right: tours, what's new and how-to guides.",
       "placement": "right",
       "before": [
         {
@@ -305,7 +306,7 @@
         "#tnbBar .tnb-act-profile"
       ],
       "title": "Profile",
-      "text": "Update your name and email address, or change your password.",
+      "text": "Your account: your name, role and when you last signed in. Update your name and email, see your employee record, or change your password on the <b>Security</b> tab. Saving any change asks for your current password, so nobody else can change your account.",
       "placement": "left",
       "before": [
         {
@@ -380,7 +381,7 @@
         "#tnbBar .tnb-act-help"
       ],
       "title": "Help & Tours",
-      "text": "Opens the same help menu as the <b>?</b> button.",
+      "text": "Opens the same <b>Help &amp; guides</b> panel as the <b>?</b> at the top right.",
       "placement": "left",
       "before": [
         {
@@ -426,13 +427,14 @@
       ]
     },
     {
-      "id": "st-help-button",
+      "id": "st-help-panel",
       "target": [
+        "#emhTopBtn",
         "#tnaTourHelpBtn"
       ],
       "title": "Help is always here",
-      "text": "Click <b>?</b> for the page tour, a tour of the section you're in, what's new, and hands-on <b>how-to guides</b> such as creating a user.",
-      "placement": "left",
+      "text": "Click <b>?</b> (top right, next to your profile) to open <b>Help &amp; guides</b>: search for what you want to do, tour the area you're in or any other Settings area, see what's new, and read the <b>how-to guides</b> step by step.",
+      "placement": "bottom",
       "before": [
         {
           "removeClass": "#profileDropdown",
@@ -443,7 +445,7 @@
     {
       "id": "st-done",
       "title": "You're all set",
-      "text": "Each Settings area also has its own short tour. It starts the first time you open that area, and you can replay it any time from <b>?</b>.",
+      "text": "Each Settings area also has its own short tour. It starts the first time you open that area, and you can replay it any time from <b>?</b> at the top right, under <b>Tour an area</b>.",
       "fullOnly": true
     }
   ],
@@ -850,21 +852,12 @@
           "placement": "left"
         },
         {
-          "id": "stu-data-tools",
+          "id": "stu-data-tools-export",
           "target": [
             "#userDataToolsWrap"
           ],
           "title": "Data Tools",
-          "text": "<b>Download Blank Template</b> gives you an Excel file with the import columns and your role list. Fill it in, then use <b>Bulk Import Users</b> to upload it (.xlsx or .csv) and create many users at once.",
-          "placement": "left"
-        },
-        {
-          "id": "stu-export",
-          "target": [
-            "#page-users button[onclick*='exportUsersReport']"
-          ],
-          "title": "Export Report",
-          "text": "Downloads the list as a spreadsheet, using your current search and filters. Handy for access audits.",
+          "text": "<b>Export Report</b> is in here now: every user with their role and password status - handy for access audits. <b>Export This View</b> downloads only the users the list shows, with your columns in your order. <b>Download Blank Template</b> gives you an Excel file with the import columns and your role list. Fill it in, then use <b>Bulk Import Users</b> to upload it (.xlsx or .csv) and create many users at once.",
           "placement": "left"
         },
         {
@@ -886,12 +879,21 @@
           "placement": "bottom"
         },
         {
-          "id": "stu-table",
+          "id": "stu-columns",
+          "target": [
+            "#uaColsBtn"
+          ],
+          "title": "Columns",
+          "text": "Choose which columns to show and drag them into your order. There are extra columns too, like <b>Username</b>, <b>Linked Employee ID</b> and <b>Mobile Tiles</b>. Your layout is remembered for you on any computer.",
+          "placement": "bottom"
+        },
+        {
+          "id": "stu-table-columns",
           "target": [
             "#usersTable thead"
           ],
           "title": "The user list",
-          "text": "Each user's status, how they may log in (web, mobile), their role, which departments' data they can see, and their modules. Right-click this header row to show or hide columns.",
+          "text": "Each user's status, how they may log in (web, mobile), their role, which departments' data they can see, and their modules. Click a heading to sort, drag a heading to move it, type in the box under a heading to search that column, or right-click a heading to choose columns.",
           "placement": "bottom"
         },
         {
@@ -1294,57 +1296,53 @@
       "trigger": "#page-notifications.active",
       "steps": [
         {
-          "id": "stn-intro",
+          "id": "stn-scheduled",
           "target": [
-            "#page-notifications .glass-panel"
+            "#nsPanel"
           ],
-          "title": "Off until you switch them on",
-          "text": "Each automatic message can be switched on or off for your company. They are all <b>off</b> by default, so nothing is sent until you turn it on. Changes save straight away.",
-          "placement": "bottom"
+          "title": "Scheduled notifications",
+          "text": "This is where company notifications are set up: your own message to the phone and / or by email, on the days and times you choose, to departments, shifts or chosen employees.",
+          "placement": "top"
         },
         {
-          "id": "stn-clock",
+          "id": "stn-new",
           "target": [
-            "#notifList > div:has(#notif_clock_reminders)",
-            "#notif_clock_reminders"
+            "#nsNew"
           ],
-          "title": "Clock In / Out Reminders",
-          "text": "An email and phone notification to employees who haven't clocked in or out, sent 15 minutes after their shift starts or ends.",
+          "title": "New schedule",
+          "text": "Click <b>New schedule</b> to write a message and pick who gets it and when. Add a condition such as <b>only if not clocked in yet</b> to send clock-in reminders.",
+          "placement": "left"
+        },
+        {
+          "id": "stn-editor-tabs",
+          "target": [
+            "#nsNew"
+          ],
+          "title": "A tidier schedule editor",
+          "text": "New and Edit now open in tabs - <b>Schedule</b>, <b>Who gets it</b>, <b>Conditions</b> and <b>Message</b> - with switches instead of tick boxes. The line at the bottom sums up what will be sent before you press <b>Save</b>. See the how-to guide <b>Set up a scheduled notification</b> under <b>?</b> at the top right.",
+          "placement": "left",
+          "optional": true
+        },
+        {
+          "id": "stn-push-info",
+          "target": [
+            "#nsInfo",
+            "#nsPush"
+          ],
+          "title": "Is the phone push working?",
+          "text": "This small circle shows it at a glance: <b>green</b> = push ready, <b>amber</b> = not set up yet (phones use their own alarm), <b>red</b> = push stopped and needs attention. Click it for the details and how the timing works.",
           "placement": "bottom",
-          "timeout": 2000
+          "optional": true
         },
         {
-          "id": "stn-violations",
+          "id": "stn-list",
           "target": [
-            "#notifList > div:has(#notif_violations)",
-            "#notif_violations"
+            "#nsBody"
           ],
-          "title": "Violations Alerts",
-          "text": "A daily phone notification (after 10:00) telling supervisors their team has unresolved violations, overtime or absences from the last 5 days. Only users with the Violations tile get it.",
-          "placement": "bottom",
-          "timeout": 2000
-        },
-        {
-          "id": "stn-exceptions",
-          "target": [
-            "#notifList > div:has(#notif_ess_exceptions)",
-            "#notif_ess_exceptions"
-          ],
-          "title": "Timesheet Exceptions",
-          "text": "Shows employees their own absences, missing punches and variances from the last 7 days in their ESS inbox, with a notification when a new one appears. Switching it off only hides the inbox items; the exceptions stay on the timesheet.",
+          "title": "Your schedules",
+          "text": "Every schedule is listed here. Edit, pause or delete one at any time.",
           "placement": "top",
-          "timeout": 2000
-        },
-        {
-          "id": "stn-approvals",
-          "target": [
-            "#notifList > div:has(#notif_ess_approvals)",
-            "#notif_ess_approvals"
-          ],
-          "title": "ESS Approvals",
-          "text": "Shows managers pending leave requests, profile changes and attendance exceptions in their ESS inbox, with a notification when a new one arrives. Approvals can still be done from the normal screens when it's off.",
-          "placement": "top",
-          "timeout": 2000
+          "optional": true
         }
       ]
     }
@@ -1415,12 +1413,21 @@
           "text": "Opens a panel with two filters. <b>User Type</b> separates system-only logins from users linked to an employee record. <b>Assigned Role</b> narrows to one role, or to users on custom permissions with no role at all. The badge shows how many filters are active."
         },
         {
-          "id": "stg-cu-table",
+          "id": "stg-cu-columns",
+          "target": [
+            "#uaColsBtn"
+          ],
+          "title": "Columns",
+          "text": "Pick the columns you want and drag them into your order, including extras like <b>Username</b> and <b>Linked Employee ID</b>. It is remembered for you.",
+          "optional": true
+        },
+        {
+          "id": "stg-cu-table-columns",
           "target": [
             "#usersTable thead"
           ],
           "title": "The user table",
-          "text": "<b>Access</b> shows which channels the user can log into, <b>Data Scope</b> which departments their data is limited to, and <b>Modules</b> which parts of the system they see. Right-click this header row to show or hide columns."
+          "text": "<b>Access</b> shows which channels the user can log into, <b>Data Scope</b> which departments their data is limited to, and <b>Modules</b> which parts of the system they see. Click a heading to sort, drag it to move it, and use the box under a heading to search just that column."
         },
         {
           "id": "stg-cu-bulk-check",
@@ -1444,12 +1451,12 @@
           ]
         },
         {
-          "id": "stg-cu-export",
+          "id": "stg-cu-export-tools",
           "target": [
-            "button[onclick*='exportUsersReport']"
+            "#userDataToolsWrap"
           ],
-          "title": "Export Report",
-          "text": "Downloads the current list as a spreadsheet, using whatever search and filters you have applied. Handy for access audits."
+          "title": "Exporting",
+          "text": "Both exports are under <b>Data Tools</b>. <b>Export Report</b> gives every user with their role and password status - handy for access audits. <b>Export This View</b> gives only the users the list shows (search, filters and sort), with your columns in your order."
         },
         {
           "id": "stg-cu-create",
@@ -1572,6 +1579,125 @@
           ],
           "title": "Create Profile",
           "text": "This saves the user, and they can log in straight away with the temporary password. Nothing has been created by this guide, so close the form if you were only looking."
+        }
+      ]
+    },
+    {
+      "key": "settings.guide.scheduled-notification",
+      "title": "Set up a scheduled notification",
+      "icon": "fa-calendar-check",
+      "blurb": "Send a clock-in or any other reminder to the phone and / or by email on the days and time you choose.",
+      "steps": [
+        {
+          "id": "stg-sn-open",
+          "target": [
+            "#sidebarNav li[data-permission=\"set_notifications,set_sync,sys_api\"] > a"
+          ],
+          "title": "Notifications",
+          "text": "Scheduled notifications live here. Click this menu item to open the screen.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Notifications"
+        },
+        {
+          "id": "stg-sn-new",
+          "target": [
+            "#nsNew"
+          ],
+          "title": "New schedule",
+          "text": "This opens the schedule editor. To change one you already have, use the <b>Edit</b> button on its row instead.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click New schedule",
+          "timeout": 5000
+        },
+        {
+          "id": "stg-sn-when",
+          "target": [
+            "#nsModal [data-nspane=\"when\"]"
+          ],
+          "title": "Schedule",
+          "text": "Give it a name, tap the <b>days</b> it should go out (or use Weekdays / Every day), and set the <b>time</b>. From and Until are optional - leave them empty to keep it running. <b>Switched on</b> lets you pause it later without removing it.",
+          "placement": "right",
+          "timeout": 5000
+        },
+        {
+          "id": "stg-sn-who",
+          "target": [
+            "#nsModal [data-nstab=\"who\"]"
+          ],
+          "title": "Who gets it",
+          "text": "Next, choose who receives it.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Who gets it"
+        },
+        {
+          "id": "stg-sn-who-pick",
+          "target": [
+            "#nsModal .ns-seg"
+          ],
+          "title": "Departments, shifts or employees",
+          "text": "Switch between <b>Departments</b>, <b>Shifts</b> and <b>Employees</b> and flick on the ones you want. Anyone who matches any of them gets it. The numbers show how many you picked in each.",
+          "placement": "bottom"
+        },
+        {
+          "id": "stg-sn-cond",
+          "target": [
+            "#nsModal [data-nstab=\"cond\"]"
+          ],
+          "title": "Conditions",
+          "text": "Conditions decide who is skipped on the day.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Conditions"
+        },
+        {
+          "id": "stg-sn-cond-set",
+          "target": [
+            "#nsModal [data-nspane=\"cond\"]"
+          ],
+          "title": "Only send if / leave out",
+          "text": "For a clock-in reminder switch on <b>They have not clocked in yet today</b>. Leaving out people on leave and days off stops reminders going to people who aren't working.",
+          "placement": "right"
+        },
+        {
+          "id": "stg-sn-msg",
+          "target": [
+            "#nsModal [data-nstab=\"msg\"]"
+          ],
+          "title": "Message",
+          "text": "Last, write what they will see.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Message"
+        },
+        {
+          "id": "stg-sn-msg-write",
+          "target": [
+            "#nsModal [data-nspane=\"msg\"]"
+          ],
+          "title": "Phone and email",
+          "text": "Switch on <b>Phone notification</b>, <b>Email</b> or both, and write each message. The tags under <b>Personalise</b> (like {first_name} or {shift_start}) are filled in for every person.",
+          "placement": "right"
+        },
+        {
+          "id": "stg-sn-sum",
+          "target": [
+            "#nsSum"
+          ],
+          "title": "Check the summary",
+          "text": "This line sums up the whole schedule - days, time, who and how. Anything missing shows in orange.",
+          "placement": "top"
+        },
+        {
+          "id": "stg-sn-save",
+          "target": [
+            "#nsSave"
+          ],
+          "title": "Save",
+          "text": "Saves the schedule. Nothing has been saved by this guide, so press <b>Cancel</b> if you were only looking. After saving, use the <b>Send test to me</b> button on its row to try it on your own phone and email.",
+          "placement": "top"
         }
       ]
     }

@@ -4,7 +4,8 @@
   "title": "Employee Master tour",
   "startDelay": 1500,
   "blockers": [
-    ".modal-backdrop.active"
+    ".modal-backdrop.active",
+    "#tpfModal.show"
   ],
   "reset": [
     {
@@ -212,7 +213,7 @@
         "#tnbBar .tnb-act-profile"
       ],
       "title": "Profile",
-      "text": "Update your name and email address, or change your password.",
+      "text": "Your account: your name, role and when you last signed in. Update your name and email, see your employee record, or change your password on the <b>Security</b> tab. Saving any change asks for your current password, so nobody else can change your account.",
       "placement": "left",
       "before": [
         {
@@ -333,13 +334,14 @@
       ]
     },
     {
-      "id": "em-help-button",
+      "id": "em-help-panel",
       "target": [
+        "#emhTopBtn",
         "#tnaTourHelpBtn"
       ],
       "title": "Help is always here",
-      "text": "Click <b>?</b> for this page tour, a tour of the area you're in, and anything new.",
-      "placement": "left",
+      "text": "Click <b>?</b> (top right, next to your profile) to open <b>Help &amp; guides</b>: search for what you want to do, take this page tour or a tour of the part you are on, and read the how-to guides step by step.",
+      "placement": "bottom",
       "before": [
         {
           "removeClass": "#profileDropdown",
@@ -423,12 +425,32 @@
           ]
         },
         {
-          "id": "emp-data-tools",
+          "id": "emp-columns",
+          "target": [
+            "#emColsBtnActive"
+          ],
+          "title": "Columns",
+          "text": "Choose which columns to show and drag them into your order (or right-click a heading). Remembered for you on every computer.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "emp-headsearch",
+          "target": [
+            "#page-employees thead tr.hs-row"
+          ],
+          "title": "Search under every heading",
+          "text": "Type in a box to narrow the list on that column (all pages). <b>Click a heading</b> to sort A to Z, again for Z to A, a third time back. <b>Drag a heading</b> to move the column.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "emp-data-tools2",
           "target": [
             "#dataToolsDropdownMenu"
           ],
           "title": "Data Tools",
-          "text": "<b>Custom Blank Template</b> and <b>Custom Export Data</b> give you a spreadsheet with the columns you choose. Fill in the template and load it with the <b>Data Import Wizard</b>.<br><br><b>Bulk Upload Photos</b>: choose a folder of photos named by PIN (for example <b>1001.jpg</b>). <b>Generate Missing Logins</b> creates a locked-down login for every active employee who doesn't have one.",
+          "text": "<b>Export This View</b> exports exactly the list on screen: the people your filters and heading searches leave, with the columns you show, in your order. <b>Custom Blank Template</b> and <b>Custom Export Data</b> give you a spreadsheet with the columns you choose; fill in the template and load it with the <b>Data Import Wizard</b>. <b>Bulk Upload Photos</b>, <b>Generate Missing Logins</b> and <b>Sage Sync</b> are here too.",
           "placement": "left",
           "before": [
             {
@@ -465,13 +487,26 @@
           ]
         },
         {
-          "id": "emp-sage",
+          "id": "emp-sage2",
           "target": [
+            "#dataToolsDropdownMenu a[onclick*='openSageSyncModal']",
             "#page-employees button[onclick*='openSageSyncModal']"
           ],
           "title": "Sage Sync",
-          "text": "Pull new or updated employees from Sage 300, or push your changes to Sage 300.",
-          "placement": "bottom"
+          "text": "Now in <b>Data Tools</b>: pull new or updated employees from Sage 300, or push your changes to Sage 300.",
+          "placement": "left",
+          "before": [
+            {
+              "addClass": "#dataToolsDropdownMenu",
+              "cls": "show"
+            }
+          ],
+          "after": [
+            {
+              "removeClass": "#dataToolsDropdownMenu",
+              "cls": "show"
+            }
+          ]
         },
         {
           "id": "emp-create",
@@ -573,6 +608,36 @@
           "title": "Reason",
           "text": "Show only one reason for leaving, such as Resigned, Dismissed, Retrenched, End of Season or End of Contract.",
           "placement": "bottom"
+        },
+        {
+          "id": "emt-columns",
+          "target": [
+            "#emColsBtnTerm"
+          ],
+          "title": "Columns",
+          "text": "Choose which columns to show and drag them into your order (or right-click a heading). This list keeps its own choice.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "emt-export",
+          "target": [
+            "#emExportViewTerm"
+          ],
+          "title": "Export This View",
+          "text": "Exports exactly the list on screen: the people your filters and heading searches leave, with the columns you show, in your order.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "emt-headsearch",
+          "target": [
+            "#page-terminated thead tr.hs-row"
+          ],
+          "title": "Search under every heading",
+          "text": "Type in a box to narrow the list on that column. <b>Click a heading</b> to sort, <b>drag a heading</b> to move the column.",
+          "placement": "bottom",
+          "optional": true
         },
         {
           "id": "emt-select",
@@ -968,30 +1033,32 @@
           ]
         },
         {
-          "id": "ema-create",
+          "id": "ema-search",
           "target": [
-            "#newAttributeName"
+            "#emaSearch"
           ],
-          "title": "Add a field",
-          "text": "Create a field your company needs, such as Boot Size or Tractor Licence. Choose its type: Text, Number, Date or Yes/No. It then appears on every employee's profile.",
+          "title": "Search",
+          "text": "Find an attribute by name.",
           "placement": "bottom",
-          "climb": 2,
-          "before": [
-            {
-              "call": "switchAttrTab",
-              "args": [
-                "fields"
-              ]
-            }
-          ]
+          "optional": true
         },
         {
-          "id": "ema-table",
+          "id": "ema-add2",
+          "target": [
+            "#emaAddBtn",
+            "#newAttributeName"
+          ],
+          "title": "Add Attribute",
+          "text": "Create a field your company needs, such as Boot Size or Tractor Licence, and choose its type: Text, Number, Date or Yes/No. It then appears on every employee's profile.",
+          "placement": "bottom"
+        },
+        {
+          "id": "ema-table2",
           "target": [
             "#attributesTableBody"
           ],
           "title": "Your fields",
-          "text": "The extra fields you've created. Deleting one hides it from every employee's profile.",
+          "text": "<b>Edit</b> (pencil) changes the name or the data type. <b>Deactivate</b> hides the field from every profile, the template and the export; the values already saved are kept.",
           "placement": "top",
           "climb": 1,
           "before": [
@@ -1004,19 +1071,44 @@
           ]
         },
         {
-          "id": "ema-export",
+          "id": "ema-deact",
           "target": [
+            "[data-ema-tab='off']"
+          ],
+          "title": "Deactivated",
+          "text": "Deactivated attributes are listed here. <b>Reactivate</b> brings one back, with all its saved values.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "ema-filters",
+          "target": [
+            "#emaFiltersBtn"
+          ],
+          "title": "Filters",
+          "text": "Choose which employees go in the template and the export: one <b>department</b> and/or one <b>PIN</b>. The filters in use show as tags; the x removes one.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "ema-tools2",
+          "target": [
+            "#emaToolsMenu",
             "#tab-attr-fields button[onclick*='exportCustomAttributes']"
           ],
           "title": "Fill them in bulk",
-          "text": "Export a spreadsheet of these fields (for one department or PIN if you like), fill it in, and load it back with the upload button next to it. Much quicker than editing profiles one by one.",
-          "placement": "bottom",
+          "text": "<b>Download Import Template</b> (your employees with an empty column per field), fill it in, and load it with <b>Import Excel</b>. <b>Export Data</b> gives everyone's current values - edit and import it back the same way. <b>Export Attribute List</b> lists the fields themselves.",
+          "placement": "left",
           "before": [
             {
-              "call": "switchAttrTab",
-              "args": [
-                "fields"
-              ]
+              "addClass": "#emaToolsMenu",
+              "cls": "show"
+            }
+          ],
+          "after": [
+            {
+              "removeClass": "#emaToolsMenu",
+              "cls": "show"
             }
           ]
         },
@@ -1162,6 +1254,87 @@
       "trigger": "#page-reports.active",
       "steps": [
         {
+          "id": "emr2-report",
+          "target": [
+            "#emrReport"
+          ],
+          "title": "Pick a report",
+          "text": "Choose one of the reports here and it runs straight away. The line under the bar says what the report shows.",
+          "placement": "bottom",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "emr2-filters",
+          "target": [
+            "#emrFiltersBtn"
+          ],
+          "title": "Filters",
+          "text": "Limit the report to one <b>department</b> and, optionally, a <b>date range</b> (start or termination dates). <b>Apply Filters</b> runs it again. The filters in use show as tags next to the buttons: click the x on a tag to remove it.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "emr2-columns",
+          "target": [
+            "#emrColsBtn"
+          ],
+          "title": "Columns",
+          "text": "Choose which columns to show and drag them into your order (or right-click a heading). Each report remembers your columns, per user.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "emr2-refresh",
+          "target": [
+            "#emrRefresh"
+          ],
+          "title": "Refresh",
+          "text": "Runs the report again with the latest data.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "emr2-export",
+          "target": [
+            "#emrExportBtn"
+          ],
+          "title": "Export",
+          "text": "<b>Export to Excel</b> or <b>Export to PDF</b>. The file has exactly the columns shown, in your order, and the rows left by the searches below.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "emr2-search",
+          "target": [
+            "#empReportPreviewHead tr.hs-row"
+          ],
+          "title": "Search under every heading",
+          "text": "Type in a box to narrow the report on that column. <b>Click a heading</b> to sort it (A to Z, Z to A, then back), and <b>drag a heading</b> to move the column.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "emr2-table",
+          "target": [
+            "#empReportPreviewWrap"
+          ],
+          "title": "The report",
+          "text": "The report itself, page by page.",
+          "placement": "top",
+          "optional": true
+        },
+        {
+          "id": "emr2-footer",
+          "target": [
+            "#emrFooter"
+          ],
+          "title": "Pages",
+          "text": "How many rows the report has, <b>Rows per page</b> (remembered for you) and <b>Previous / Next</b>.",
+          "placement": "top",
+          "optional": true
+        },
+        {
           "id": "emr-filters",
           "target": [
             "#reportStartDate"
@@ -1169,7 +1342,8 @@
           "title": "Filters",
           "text": "Limit a report to one department and, optionally, a date range. The dates apply to start dates or termination dates.",
           "placement": "bottom",
-          "climb": 2
+          "climb": 2,
+          "optional": true
         },
         {
           "id": "emr-details",
@@ -1179,7 +1353,8 @@
           "title": "Full Employee Details",
           "text": "Everything about every active employee, including HR and Time &amp; Attendance fields.",
           "placement": "top",
-          "climb": 1
+          "climb": 1,
+          "optional": true
         },
         {
           "id": "emr-photo",
@@ -1189,7 +1364,8 @@
           "title": "Missing Photo",
           "text": "Active employees without a profile photo.",
           "placement": "top",
-          "climb": 1
+          "climb": 1,
+          "optional": true
         },
         {
           "id": "emr-dupes",
@@ -1199,7 +1375,8 @@
           "title": "Potential Duplicates",
           "text": "Employees with the same first and last name, so you can check for double entries.",
           "placement": "top",
-          "climb": 1
+          "climb": 1,
+          "optional": true
         },
         {
           "id": "emr-terminated",
@@ -1209,7 +1386,8 @@
           "title": "Terminated Employees",
           "text": "Everyone who has been terminated, with their start and termination dates.",
           "placement": "top",
-          "climb": 1
+          "climb": 1,
+          "optional": true
         },
         {
           "id": "emr-pending",
@@ -1219,7 +1397,8 @@
           "title": "Pending Terminations",
           "text": "Active employees with a termination date still to come.",
           "placement": "top",
-          "climb": 1
+          "climb": 1,
+          "optional": true
         },
         {
           "id": "emr-missing",
@@ -1229,7 +1408,8 @@
           "title": "Missing Info",
           "text": "Active employees missing important details: ID number, start date, department or shift.",
           "placement": "top",
-          "climb": 1
+          "climb": 1,
+          "optional": true
         },
         {
           "id": "emr-preview",
@@ -1238,7 +1418,8 @@
           ],
           "title": "Preview and export",
           "text": "The report appears here first. Search it, then <b>Export to Excel</b> or <b>Export to PDF</b>.",
-          "placement": "top"
+          "placement": "top",
+          "optional": true
         }
       ]
     },
