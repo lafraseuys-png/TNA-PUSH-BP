@@ -930,81 +930,104 @@
     },
     {
       "key": "essmaster.guide.expense",
-      "title": "Add an expense type",
+      "title": "Add a claim type",
       "icon": "fa-receipt",
-      "blurb": "Set up something people can claim for, and how the amount is worked out.",
+      "blurb": "Set up something people can claim for: how the amount is worked out, the receipt rules, approval and payroll code.",
       "steps": [
         {
-          "id": "esg-ex-open",
+          "id": "esg-ct-open",
           "target": [
-            "#sidebarNav [onclick*='expensepolicies']"
+            "#sidebarNav [onclick*='claimsregister']"
           ],
-          "title": "Expense Policies",
-          "text": "Click <b>Expense Policies</b>.",
+          "title": "Claims",
+          "text": "Click <b>Claims</b>.",
           "placement": "right",
           "mode": "click",
-          "hint": "Click Expense Policies"
+          "hint": "Click Claims"
         },
         {
-          "id": "esg-ex-add",
+          "id": "esg-ct-tab",
           "target": [
-            "#page-expensepolicies button[onclick*='openExpenseTypeModal']"
+            "#ecTabTypes"
           ],
-          "title": "Add Expense Type",
-          "text": "Click <b>Add Expense Type</b>.",
+          "title": "Claim Types",
+          "text": "The claim types live on this tab (they were on Expense Policies).",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Claim Types",
+          "timeout": 5000
+        },
+        {
+          "id": "esg-ct-new",
+          "target": [
+            "#ecNewType"
+          ],
+          "title": "New claim type",
+          "text": "Click <b>New claim type</b>.",
           "placement": "left",
           "mode": "click",
-          "hint": "Click Add Expense Type"
+          "hint": "Click New claim type",
+          "timeout": 5000
         },
         {
-          "id": "esg-ex-name",
+          "id": "esg-ct-name",
           "target": [
-            "#etName"
+            "#ectN"
           ],
-          "title": "Expense Name and description",
-          "text": "For example <b>Travel (own vehicle)</b>, and when it can be claimed.",
+          "title": "Name, description and icon",
+          "text": "For example <b>Travel - own vehicle</b>, a short description people see when they choose it, and an icon.",
           "placement": "bottom",
-          "climb": 1,
+          "climb": 2,
           "timeout": 4000
         },
         {
-          "id": "esg-ex-logic",
+          "id": "esg-ct-amount",
           "target": [
-            "#etLogic"
+            "#ectLogic"
           ],
-          "title": "How it's worked out",
-          "text": "<b>Simple</b>: the employee enters the amount. <b>Fixed Amount</b>: you set the payout. <b>Rate-Based</b>: a rate times what they enter, for example per kilometre.",
+          "title": "How the amount is worked out",
+          "text": "<b>Amount</b>: the employee enters it. <b>Quantity x rate</b>: they enter how many (km, nights...) and it is multiplied by your rate. <b>Fixed amount</b>: always the same. Switch on <b>Ask where from and to</b> for trips.",
           "placement": "bottom",
-          "climb": 1
+          "climb": 2
         },
         {
-          "id": "esg-ex-rate",
+          "id": "esg-ct-receipt",
           "target": [
-            "#etRateValue"
+            "#ectReq"
           ],
-          "title": "Value / Rate",
-          "text": "The fixed amount or the rate.",
-          "placement": "bottom",
+          "title": "Receipt rules",
+          "text": "Make the receipt photo <b>mandatory</b> (optionally only above an amount) and <b>camera only</b> so an old gallery photo cannot be used. The phone and ESS follow these rules.",
+          "placement": "top",
+          "climb": 2
+        },
+        {
+          "id": "esg-ct-approval",
+          "target": [
+            "#ectAppr"
+          ],
+          "title": "Approval",
+          "text": "<b>Full approval route</b>, or <b>Manager only</b> - the first approver's approval is final for this type.",
+          "placement": "top",
+          "climb": 2
+        },
+        {
+          "id": "esg-ct-code",
+          "target": [
+            "#ectCode"
+          ],
+          "title": "Payroll / GL code",
+          "text": "Goes into the exports and the claim PDF, so payroll can book it.",
+          "placement": "top",
           "climb": 1,
           "optional": true
         },
         {
-          "id": "esg-ex-receipt",
+          "id": "esg-ct-save",
           "target": [
-            "#etReqAtt"
-          ],
-          "title": "Receipt required",
-          "text": "Tick to require a receipt with every claim.",
-          "placement": "top",
-          "climb": 1
-        },
-        {
-          "id": "esg-ex-save",
-          "target": [
-            "#saveExpenseTypeBtn"
+            "#ectSave"
           ],
           "title": "Save",
-          "text": "Click Save (or Cancel if you're only practising).",
+          "text": "Click Save (or Cancel if you are only practising).",
           "placement": "top"
         }
       ]

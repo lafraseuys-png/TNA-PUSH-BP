@@ -147,8 +147,8 @@
     },
     {
       "id": "expenses",
-      "title": "Expense types",
-      "section": "expensepolicies",
+      "title": "Claim types",
+      "section": "claimsregister",
       "guide": "essmaster.guide.expense",
       "optional": true,
       "why": "What people can claim for in the app, and how each amount is worked out.",

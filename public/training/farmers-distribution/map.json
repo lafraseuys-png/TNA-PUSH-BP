@@ -1,673 +1,819 @@
 {
  "key": "farmers-distribution",
  "title": "Farmers & Distribution \u2013 Web user manual",
- "version": "1.0",
+ "version": "1.1",
  "module": "contractors",
- "pdf": "Farmers_and_Distribution_Web_User_Manual_v1.0.pdf",
+ "pdf": "Farmers_and_Distribution_Web_User_Manual_v1.1.pdf",
  "pages": [
   {
    "n": 1,
    "label": "Cover",
-   "hash": "24613c470e0f623585e4305babc7c6c93f5ee970",
+   "hash": "8d9abada2291906a795395464795069d8a558bd0",
    "part": 0
   },
   {
    "n": 2,
    "label": "1",
-   "hash": "4356367414171b8fc39094f6212d4c7110fb4a3c",
+   "hash": "632ef6979af1b0036051d1b7944e083b865ef5a9",
    "part": 0
   },
   {
    "n": 3,
    "label": "2",
-   "hash": "87ac50895d0913acc642327008d952843bb54415",
+   "hash": "5a8f20f43a96f8e52c9f4888ab3714c0d78fb7bf",
    "part": 0
   },
   {
    "n": 4,
    "label": "3",
-   "hash": "acef0556813324b4ed1f0790699d205cc45fc72d",
+   "hash": "0162b37f41814f380b448771e30aaf19f3dd359b",
    "part": 0
   },
   {
    "n": 5,
    "label": "4",
-   "hash": "8d8aa424b498288698f0b37521adf866d111c5b3",
-   "part": 1
+   "hash": "d34f5232a2d3455bf59be12b5210919ac9881906",
+   "part": 0
   },
   {
    "n": 6,
    "label": "5",
-   "hash": "4b8b4985c9120634da4fc3d718983e23a1e2aecd",
+   "hash": "74b180db9373861d0629f9ec2669aec7fcc5c8d3",
    "part": 1
   },
   {
    "n": 7,
    "label": "6",
-   "hash": "1cce5793c9105ee33cd239479f2142766f2830ac",
+   "hash": "7bf07c90e6216ec0bb68ba75b876b32ac60f9f25",
    "part": 1
   },
   {
    "n": 8,
    "label": "7",
-   "hash": "55c71c870d080648f42208c3c068a0a884d98b76",
+   "hash": "6a319a0345e4a542b1d36e66e90fa0be19db3b18",
    "part": 1
   },
   {
    "n": 9,
    "label": "8",
-   "hash": "ee766a3df771418ba206900dde3a39813ed305ba",
+   "hash": "2723d3f6996dcc69fcce61c28b063a630bf87d1d",
    "part": 1
   },
   {
    "n": 10,
    "label": "9",
-   "hash": "9377bbec9aca9c84e6f227a5f529a89bb98e626d",
-   "part": 2
+   "hash": "bc9c4fe115a3c3ada750d709a32d74c5124eb9b9",
+   "part": 1
   },
   {
    "n": 11,
    "label": "10",
-   "hash": "0ea9762a9d588c3e23e12654aafc3dfa798a54d1",
-   "part": 2
+   "hash": "c91667a0ca0a908d4f6304aeb50ac1a4d95ea65e",
+   "part": 1
   },
   {
    "n": 12,
    "label": "11",
-   "hash": "4457085f5c137970de3a1f8095747c3047ca8fc7",
-   "part": 2
+   "hash": "1008afd9c6af978a25bfd1758ac4346642ad5b94",
+   "part": 1
   },
   {
    "n": 13,
    "label": "12",
-   "hash": "33c84310b077481410a250a7400d45b012b27514",
-   "part": 2
+   "hash": "aa78ba3f665790b5937f397fae0644ffea62354f",
+   "part": 1
   },
   {
    "n": 14,
    "label": "13",
-   "hash": "3ea1fd2c0405a116b67548c06a9be9a097b3cca4",
+   "hash": "7e0414e746ef3567a902769df5c61c4aabfbe7ab",
    "part": 2
   },
   {
    "n": 15,
    "label": "14",
-   "hash": "99a285bd1b537e7eac44473a244a2a810efca6f7",
+   "hash": "5c94c840fff84d1cafa241ef9256a70b6fca8cc7",
    "part": 2
   },
   {
    "n": 16,
    "label": "15",
-   "hash": "82e0258e1f18e0652f9f6de3c107ef5c321e54d8",
+   "hash": "f3b09cf11fb736b5b74d22fef93bbcdbbf6ea1e8",
    "part": 2
   },
   {
    "n": 17,
    "label": "16",
-   "hash": "7d0ea5bb3b7467cd617243743b5eb37ba3e2383a",
+   "hash": "6f5c613a275a2313fcc1293e1ae0a193be076891",
    "part": 2
   },
   {
    "n": 18,
    "label": "17",
-   "hash": "229c7fb2812b33e2935edfa2d4e4904d1acc6b3a",
+   "hash": "af41d41114b8dfd1608ff8c9575bae69bc299c6e",
    "part": 2
   },
   {
    "n": 19,
    "label": "18",
-   "hash": "7b0fc72c35c0c70db47a1cae3079ffb66c31419c",
+   "hash": "72874294a9fd62dd00ed0e01cf7b1ff920a9291b",
    "part": 2
   },
   {
    "n": 20,
    "label": "19",
-   "hash": "22b171f10977f5272ee8368ae226590bacdc30c7",
+   "hash": "4f9d206479182595510591dc3a6b10a9bea79743",
    "part": 2
   },
   {
    "n": 21,
    "label": "20",
-   "hash": "61f5d9b8754cd974cedff2cfcf08b684b032bb77",
+   "hash": "57bf7c7ceed54df320cf71aa3fd5bb1d0791f744",
    "part": 2
   },
   {
    "n": 22,
    "label": "21",
-   "hash": "d91ccb42ac9bb73ccea7fb067156c7698c6f03db",
+   "hash": "32bc617173e355ccf784fa11e2655d420b79668c",
    "part": 2
   },
   {
    "n": 23,
    "label": "22",
-   "hash": "6e2476589c2ab378e71c6b5d5eb031b84b2f562e",
+   "hash": "45a9c994081005c383d7b59358dff70524136fe5",
    "part": 2
   },
   {
    "n": 24,
    "label": "23",
-   "hash": "d9c9725b30e5e2305403f846f16097b21f226356",
+   "hash": "35ab834ea9fba9fa2462712895d96be4801ee853",
    "part": 2
   },
   {
    "n": 25,
    "label": "24",
-   "hash": "fa5611a758ec0ef2572668524f0a143649654f99",
-   "part": 3
+   "hash": "973a7027259cfdc4bb258348a83c1b6d6902ca78",
+   "part": 2
   },
   {
    "n": 26,
    "label": "25",
-   "hash": "ff395180d576827dc419e5aed202b9e32e052c25",
-   "part": 3
+   "hash": "2d932df81ddc08415b507bbdee69177f81459818",
+   "part": 2
   },
   {
    "n": 27,
    "label": "26",
-   "hash": "5fc095b8e798dd53b65799c6ed1fc65c9ac98554",
-   "part": 3
+   "hash": "765489213b09fb20df0d2d29943638ea5719f861",
+   "part": 2
   },
   {
    "n": 28,
    "label": "27",
-   "hash": "6223f8decc1ccabf4fc0b019a6868a5ee1fa991f",
-   "part": 3
+   "hash": "1001bd174dbc555d441d61c6a22b9c628b692370",
+   "part": 2
   },
   {
    "n": 29,
    "label": "28",
-   "hash": "436f90bab73ee0bf7ed304349016ec6f9f10d676",
-   "part": 3
+   "hash": "e2cc1ae8a267753cf87a702c417f05458d96423c",
+   "part": 2
   },
   {
    "n": 30,
    "label": "29",
-   "hash": "efc8cd3c4bf16907df396aa3f4b6342cca4182b4",
-   "part": 3
+   "hash": "9c6ceb755c26b6c6d67a188e79a9c89b9a211069",
+   "part": 2
   },
   {
    "n": 31,
    "label": "30",
-   "hash": "9105da85b2b47c79cb7e01f9d59524d95d5ea7d2",
-   "part": 3
+   "hash": "4d18f38fd18a37d134577f1767cdd46f0e4702fa",
+   "part": 2
   },
   {
    "n": 32,
    "label": "31",
-   "hash": "36647424826e2fe7cc33e6640d646fcd644bc5d9",
-   "part": 3
+   "hash": "657e031fed07afeeb1f327b9af6c1b7899a84d29",
+   "part": 2
   },
   {
    "n": 33,
    "label": "32",
-   "hash": "3e592909b08e68cb4339ee3fc0045b6eea57b78b",
-   "part": 3
+   "hash": "847204f4f89e535d26645cd9c199e5a173a21ea6",
+   "part": 2
   },
   {
    "n": 34,
    "label": "33",
-   "hash": "40050577b8ef01f39059c277151f76757bae0bd5",
+   "hash": "1d7e56e3e23a2a3b9497bdd023a9fb301661c60f",
    "part": 3
   },
   {
    "n": 35,
    "label": "34",
-   "hash": "d1187d07a44dc31135ca76c040a8843f13d1fc7e",
-   "part": 4
+   "hash": "63e1ede0ca8ca5f841086012c8b304e127070bca",
+   "part": 3
   },
   {
    "n": 36,
    "label": "35",
-   "hash": "09c494e2d69fbdf6f824397b6f0c7f2e48cd1330",
-   "part": 4
+   "hash": "b4b177631ee5326ffbffb35dc1d217ad27960588",
+   "part": 3
   },
   {
    "n": 37,
    "label": "36",
-   "hash": "6b4d105eef9d6a214581632e661cc1fda00297fe",
-   "part": 4
+   "hash": "515940f480cfb6f5272de96f0781c3640f3a83ee",
+   "part": 3
   },
   {
    "n": 38,
    "label": "37",
-   "hash": "8525b8a06bdaea391742519d4b30127de933c09b",
-   "part": 4
+   "hash": "e99e88df6627372794b5e2b34ddf2a805e9a33a6",
+   "part": 3
   },
   {
    "n": 39,
    "label": "38",
-   "hash": "590b181b509720e161968ea9fdd64a0f2e78ae82",
-   "part": 4
+   "hash": "2f54a4add01042c223d6f59f7b7f2db712b7aa4a",
+   "part": 3
   },
   {
    "n": 40,
    "label": "39",
-   "hash": "033e5b7cd3b935265d9fe668471768a707842a06",
-   "part": 5
+   "hash": "a2623815f89f49931cff501eeb27857910b31170",
+   "part": 3
   },
   {
    "n": 41,
    "label": "40",
-   "hash": "a3a650c44d34b9655c0eae4bddeaa87ecc7979cc",
-   "part": 5
+   "hash": "aa0defea4f8f1bcb0803c9a54ae0dfae672e5c30",
+   "part": 3
   },
   {
    "n": 42,
    "label": "41",
-   "hash": "65ddd12673f48692b24293204a4b52ca440a9ba5",
-   "part": 5
+   "hash": "cd7d9245e852405502474458d01b74d1e715bcda",
+   "part": 3
   },
   {
    "n": 43,
    "label": "42",
-   "hash": "ebd98e5483c5f91a892a13cceea76c3fa1afc2de",
-   "part": 5
+   "hash": "6e6cbcb0c9700233a5571ae029da3e1552d20e8e",
+   "part": 3
   },
   {
    "n": 44,
    "label": "43",
-   "hash": "039c6909ef4b0eb6b052cb46b5339b9979b2c7a5",
-   "part": 5
+   "hash": "817ca19c1f3e3e2f4b2f1b2a54aaf66cef7a127f",
+   "part": 3
   },
   {
    "n": 45,
    "label": "44",
-   "hash": "131f0c8bfd399444b86e5f32416e1a8facdd7bde",
-   "part": 6
+   "hash": "fd4861af048eaf3e56fbee3daa326b44096d0c0e",
+   "part": 3
   },
   {
    "n": 46,
    "label": "45",
-   "hash": "0f9cbb23d01571c6ed04920f4a6367a303fe8053",
-   "part": 6
+   "hash": "336e592c1772cd30e15d93c21cade88bf53b2dd6",
+   "part": 3
   },
   {
    "n": 47,
    "label": "46",
-   "hash": "06fd2adc469c1693d94638599582d84b4f3969fc",
-   "part": 6
+   "hash": "a0e06bb8a657f331aecb9a6203cf0412423e97ef",
+   "part": 4
   },
   {
    "n": 48,
    "label": "47",
-   "hash": "4b29f69794bad7c01dbab244ce3d34b681da0b5e",
-   "part": 6
+   "hash": "2c4c9439a8e80e64027f28aa8afee211c8658345",
+   "part": 4
   },
   {
    "n": 49,
    "label": "48",
-   "hash": "2e7e0458833b042e2ad87977971d414fa16e718f",
-   "part": 6
+   "hash": "365487b49341065dd54dd0ea6664d4c156ab4725",
+   "part": 4
   },
   {
    "n": 50,
    "label": "49",
-   "hash": "4c061434951a7206661ed68b47b4f71bc63d8919",
-   "part": 6
+   "hash": "116492e274836adad20b0a7fd6ff6b65c5a18727",
+   "part": 4
   },
   {
    "n": 51,
    "label": "50",
-   "hash": "3321042b25a084385b0cea65c6fe8545b30cca3a",
-   "part": 6
+   "hash": "cdbe54e26658aca28024f74295ee140383d1622b",
+   "part": 4
   },
   {
    "n": 52,
    "label": "51",
-   "hash": "db93a01d51d63f7fd4087d32ebe39bc5dd42f63b",
-   "part": 6
+   "hash": "7e20c943248c304181780b6a8e194f60db8f875f",
+   "part": 4
   },
   {
    "n": 53,
    "label": "52",
-   "hash": "43e36cd85d2559a6e57fff5a02ad182042e3c445",
-   "part": 6
+   "hash": "80885c4dbef3f69b0bd710eb40250e33ee27d1a8",
+   "part": 4
   },
   {
    "n": 54,
    "label": "53",
-   "hash": "f19b4d2a51f579e2f38110d1109eb60dfe2e00e3",
-   "part": 6
+   "hash": "9ecb0bed900becab8a0d56c34297737ec7b644d8",
+   "part": 5
   },
   {
    "n": 55,
    "label": "54",
-   "hash": "8660414c74d9a418ebeb62cc6aeb53b2f5a4f852",
-   "part": 6
+   "hash": "7bea51b27f1eeb65dccae8cdda3e9333d6a7ef46",
+   "part": 5
   },
   {
    "n": 56,
    "label": "55",
-   "hash": "9cee42ad425732899017da00b969d18a1f29e557",
-   "part": 6
+   "hash": "119eaef97d9c711eef86a7ddb5d9fa6106887e06",
+   "part": 5
   },
   {
    "n": 57,
    "label": "56",
-   "hash": "33acb59518c902ba2d383427281042a0e2b063a1",
-   "part": 6
+   "hash": "879925ec91ebe9faac7ca4c1858a116a914abd66",
+   "part": 5
   },
   {
    "n": 58,
    "label": "57",
-   "hash": "8c11850eb1d34b49298f1ebf898a9d01f074dd48",
-   "part": 7
+   "hash": "01a9ee0b4a36c57c91e83ec907a36365dc55d791",
+   "part": 5
   },
   {
    "n": 59,
    "label": "58",
-   "hash": "dbc526e9604f0d03f6a309d3c1ea7616c0338a8b",
-   "part": 7
+   "hash": "0f6595d1da9c63efed3128c3946844e9f7133c9b",
+   "part": 5
   },
   {
    "n": 60,
    "label": "59",
-   "hash": "ed937e93d6541586679196a0fc20037d469378b9",
-   "part": 7
+   "hash": "7dcc2bbc9d2017ba3e5e6da46c061dcccc06910e",
+   "part": 6
   },
   {
    "n": 61,
    "label": "60",
-   "hash": "841510b8eb025c7f419af1adf8e7494aa9318682",
-   "part": 7
+   "hash": "8591bf66c1134363f3285f62c3aad59ae393ad92",
+   "part": 6
   },
   {
    "n": 62,
    "label": "61",
-   "hash": "3f8a6219316cd5e6d3986615806d5da078c2fa02",
-   "part": 7
+   "hash": "2393c50e81c428410bd07ec913a7ba014833b38e",
+   "part": 6
   },
   {
    "n": 63,
    "label": "62",
-   "hash": "166b0f37676fadd87da07e399b315f35301df7a2",
-   "part": 7
+   "hash": "b937d99a2dd6652642b09ec840d23794f5532ffe",
+   "part": 6
   },
   {
    "n": 64,
    "label": "63",
-   "hash": "b22b373fb0ee00ea1c0a9e71cc08aaa27ef1b50b",
-   "part": 7
+   "hash": "06e3a91314f27b7dcfb1944957716e0f24b7874c",
+   "part": 6
   },
   {
    "n": 65,
    "label": "64",
-   "hash": "614756bbcf059d11b6d85c4a46b9a1480aabee34",
-   "part": 7
+   "hash": "4308746799fbffe2c7870bcfbee7db8dc15926ed",
+   "part": 6
   },
   {
    "n": 66,
    "label": "65",
-   "hash": "4814b84d2ea3e5e74ff96009d2632ce3a31e46be",
-   "part": 8
+   "hash": "c91ebf97d65dfe7a369b45595ac79898963200c6",
+   "part": 6
   },
   {
    "n": 67,
    "label": "66",
-   "hash": "081d7c297f24794a05cbdb05ea5d9dfffd1c052b",
-   "part": 8
+   "hash": "118bf964074c1b73b0860b34c2226c0176ab6966",
+   "part": 6
   },
   {
    "n": 68,
    "label": "67",
-   "hash": "ee2ad478c43bfe3a1eb8bc14123ed53eeb21af79",
+   "hash": "3eabbbce6bf8224003d7be84ba7a86101b37edea",
+   "part": 6
+  },
+  {
+   "n": 69,
+   "label": "68",
+   "hash": "39e833de26704149150d4c2f7933770b591565de",
+   "part": 6
+  },
+  {
+   "n": 70,
+   "label": "69",
+   "hash": "2582139664113d0361099835168ceaedc9115a60",
+   "part": 6
+  },
+  {
+   "n": 71,
+   "label": "70",
+   "hash": "bd5f243952e1ed978b761fb4ae97188e96c1143f",
+   "part": 6
+  },
+  {
+   "n": 72,
+   "label": "71",
+   "hash": "2193bf7fe8eb0a0cd5257f49bad600abedbcab97",
+   "part": 6
+  },
+  {
+   "n": 73,
+   "label": "72",
+   "hash": "fa2a0a6ba835d882a9b57dca46bae178be7cb48f",
+   "part": 6
+  },
+  {
+   "n": 74,
+   "label": "73",
+   "hash": "7b140efe3b40ebf93b29946932ad75f2678cea5d",
+   "part": 7
+  },
+  {
+   "n": 75,
+   "label": "74",
+   "hash": "58983a360da0b4664178521ba67ff73722d2bbbf",
+   "part": 7
+  },
+  {
+   "n": 76,
+   "label": "75",
+   "hash": "7b7556820568647defd863142aebd6b0d4f3d2d3",
+   "part": 7
+  },
+  {
+   "n": 77,
+   "label": "76",
+   "hash": "481afa9e211c8c227268d2d226609701ca5af90a",
+   "part": 7
+  },
+  {
+   "n": 78,
+   "label": "77",
+   "hash": "143cb8875c95180932443bbde23988915d3e94c8",
+   "part": 7
+  },
+  {
+   "n": 79,
+   "label": "78",
+   "hash": "7d0648856cd1948bd3fed211f7efa4afe6a13435",
+   "part": 7
+  },
+  {
+   "n": 80,
+   "label": "79",
+   "hash": "e8d85c7a0b8459867805b8ddd74e8ed5337e6d8d",
+   "part": 7
+  },
+  {
+   "n": 81,
+   "label": "80",
+   "hash": "6364f09a5fed06081d84cc4eff0c0472e5161c01",
+   "part": 7
+  },
+  {
+   "n": 82,
+   "label": "81",
+   "hash": "37529f2d0a698814b9de4fec390f0f5bd57a8b1e",
+   "part": 7
+  },
+  {
+   "n": 83,
+   "label": "82",
+   "hash": "77503315bb14498549781c25db29c0cfa8d8fbf9",
+   "part": 7
+  },
+  {
+   "n": 84,
+   "label": "83",
+   "hash": "b8a6ee50123e7431fe5b159ab0540b9b7909acc6",
+   "part": 7
+  },
+  {
+   "n": 85,
+   "label": "84",
+   "hash": "29508ea8f73d5c0b8b5e04171fee6d00924efc11",
+   "part": 7
+  },
+  {
+   "n": 86,
+   "label": "85",
+   "hash": "cf0f6019c8237bdcc355d253f75cf15bb2f9e4aa",
+   "part": 7
+  },
+  {
+   "n": 87,
+   "label": "86",
+   "hash": "4579d61201f1abe29d5e6156c4665dd9b2c34ebf",
+   "part": 7
+  },
+  {
+   "n": 88,
+   "label": "87",
+   "hash": "6cc656ede1425a9e284303630026a8db52e3cd28",
+   "part": 8
+  },
+  {
+   "n": 89,
+   "label": "88",
+   "hash": "cd87200fb0c0ca5fafea2f67b24ce114843aad71",
+   "part": 8
+  },
+  {
+   "n": 90,
+   "label": "89",
+   "hash": "472eca60e8c05dbe7c83d414b92c9a833bbe7826",
+   "part": 8
+  },
+  {
+   "n": 91,
+   "label": "90",
+   "hash": "9262cb02ea2571f6f95473aa7c089c5e0b203af8",
    "part": 8
   }
  ],
  "parts": [
   {
-   "title": "Cover, about this manual and contents",
+   "title": "Cover, about this manual, what's new and contents",
    "from": 1,
    "sections": [],
-   "to": 4
+   "to": 5
   },
   {
    "title": "Chapter 1 \u00b7 Getting started",
-   "from": 5,
+   "from": 6,
    "sections": [
     {
      "title": "What the module does",
-     "page": 5
-    },
-    {
-     "title": "The screen",
      "page": 6
     },
     {
-     "title": "Finding a screen",
+     "title": "The screen",
      "page": 7
     },
     {
+     "title": "Finding a screen",
+     "page": 9
+    },
+    {
      "title": "Your profile menu",
-     "page": 8
+     "page": 9
     },
     {
      "title": "Controls on every screen",
-     "page": 8
-    },
-    {
-     "title": "What you can see and do",
-     "page": 9
-    }
-   ],
-   "to": 9
-  },
-  {
-   "title": "Chapter 2 \u00b7 Setting up",
-   "from": 10,
-   "sections": [
-    {
-     "title": "The order to set things up",
      "page": 10
     },
     {
-     "title": "Hierarchy levels",
-     "page": 11
-    },
-    {
-     "title": "Locations",
+     "title": "Training and help",
      "page": 12
     },
     {
-     "title": "Manager assignments",
+     "title": "What you can see and do",
+     "page": 13
+    }
+   ],
+   "to": 13
+  },
+  {
+   "title": "Chapter 2 \u00b7 Setting up",
+   "from": 14,
+   "sections": [
+    {
+     "title": "The order to set things up",
+     "page": 14
+    },
+    {
+     "title": "Hierarchy levels",
      "page": 15
     },
     {
-     "title": "Settings",
+     "title": "Locations",
      "page": 16
     },
     {
+     "title": "Manager assignments",
+     "page": 19
+    },
+    {
+     "title": "Settings",
+     "page": 20
+    },
+    {
      "title": "Approval workflow",
-     "page": 22
+     "page": 29
     }
    ],
-   "to": 24
+   "to": 33
   },
   {
    "title": "Chapter 3 \u00b7 Farmers",
-   "from": 25,
+   "from": 34,
    "sections": [
     {
      "title": "The farmer list",
-     "page": 25
+     "page": 34
     },
     {
-     "title": "Adding and changing a farmer",
-     "page": 26
-    },
-    {
-     "title": "The farmer profile",
-     "page": 29
-    },
-    {
-     "title": "Deactivating and reactivating",
-     "page": 30
-    },
-    {
-     "title": "Importing farmers from Excel",
-     "page": 30
-    },
-    {
-     "title": "Exporting farmers",
-     "page": 32
-    },
-    {
-     "title": "Chairperson & Secretary",
-     "page": 33
-    }
-   ],
-   "to": 34
-  },
-  {
-   "title": "Chapter 4 \u00b7 Contracts",
-   "from": 35,
-   "sections": [
-    {
-     "title": "The contract list",
-     "page": 35
-    },
-    {
-     "title": "Assigning a contract on the web",
+     "title": "Inputs for the running cycle",
      "page": 36
     },
     {
-     "title": "Changing and ending a contract",
+     "title": "Adding and changing a farmer",
      "page": 37
     },
     {
-     "title": "Club contracts",
-     "page": 38
+     "title": "The farmer profile",
+     "page": 39
     },
     {
-     "title": "Contract templates",
-     "page": 38
-    }
-   ],
-   "to": 39
-  },
-  {
-   "title": "Chapter 5 \u00b7 Approvals",
-   "from": 40,
-   "sections": [
-    {
-     "title": "How approval works",
+     "title": "Deactivating and reactivating",
      "page": 40
     },
     {
-     "title": "My Approvals",
+     "title": "Importing farmers from Excel",
      "page": 40
     },
     {
-     "title": "Approving",
-     "page": 41
-    },
-    {
-     "title": "Rejecting",
-     "page": 42
-    },
-    {
-     "title": "Issues and returns",
-     "page": 42
-    },
-    {
-     "title": "Subordinate Inboxes",
+     "title": "Exporting farmers",
      "page": 43
     },
     {
-     "title": "Levels that approve on the mobile app",
-     "page": 44
-    },
-    {
-     "title": "Reminder emails",
+     "title": "Chairperson & Secretary",
      "page": 44
     }
    ],
-   "to": 44
+   "to": 46
   },
   {
-   "title": "Chapter 6 \u00b7 Distribution",
-   "from": 45,
+   "title": "Chapter 4 \u00b7 Contracts",
+   "from": 47,
    "sections": [
     {
-     "title": "How stock moves",
-     "page": 45
-    },
-    {
-     "title": "Warehouses",
-     "page": 45
-    },
-    {
-     "title": "Stock items and products",
+     "title": "The contract list",
      "page": 47
     },
     {
-     "title": "Distribution cycles",
+     "title": "Assigning a contract on the web",
      "page": 49
     },
     {
-     "title": "Receiving stock (GRV)",
+     "title": "Changing and ending a contract",
+     "page": 50
+    },
+    {
+     "title": "Club contracts",
      "page": 51
     },
     {
-     "title": "Incoming Logs",
+     "title": "Contract templates",
      "page": 52
-    },
-    {
-     "title": "Live Inventory and the warehouse view",
-     "page": 54
     }
    ],
-   "to": 57
+   "to": 53
   },
   {
-   "title": "Chapter 7 \u00b7 Monitoring",
-   "from": 58,
+   "title": "Chapter 5 \u00b7 Approvals",
+   "from": 54,
    "sections": [
     {
-     "title": "Dashboard",
+     "title": "How approval works",
+     "page": 54
+    },
+    {
+     "title": "My Approvals",
+     "page": 54
+    },
+    {
+     "title": "Approving",
+     "page": 55
+    },
+    {
+     "title": "Rejecting",
+     "page": 57
+    },
+    {
+     "title": "Issues and returns",
+     "page": 57
+    },
+    {
+     "title": "Subordinate Inboxes",
      "page": 58
     },
     {
-     "title": "Progress",
+     "title": "Levels that approve on the mobile app",
+     "page": 59
+    },
+    {
+     "title": "Reminder emails",
+     "page": 59
+    }
+   ],
+   "to": 59
+  },
+  {
+   "title": "Chapter 6 \u00b7 Distribution",
+   "from": 60,
+   "sections": [
+    {
+     "title": "How stock moves",
      "page": 60
     },
     {
-     "title": "Reports",
-     "page": 61
+     "title": "Warehouses",
+     "page": 60
     },
     {
-     "title": "Internal Broadcasts",
-     "page": 63
+     "title": "Stock items and products",
+     "page": 62
     },
     {
-     "title": "Audit Log",
-     "page": 65
-    }
-   ],
-   "to": 65
-  },
-  {
-   "title": "Chapter 8 \u00b7 Reference",
-   "from": 66,
-   "sections": [
+     "title": "Distribution cycles",
+     "page": 64
+    },
     {
-     "title": "Statuses",
+     "title": "Receiving stock (GRV)",
      "page": 66
     },
     {
+     "title": "Incoming Logs",
+     "page": 68
+    },
+    {
+     "title": "Live Inventory and the warehouse view",
+     "page": 69
+    }
+   ],
+   "to": 73
+  },
+  {
+   "title": "Chapter 7 \u00b7 Monitoring",
+   "from": 74,
+   "sections": [
+    {
+     "title": "Dashboard",
+     "page": 74
+    },
+    {
+     "title": "Progress",
+     "page": 76
+    },
+    {
+     "title": "Reports",
+     "page": 79
+    },
+    {
+     "title": "Internal Broadcasts",
+     "page": 84
+    },
+    {
+     "title": "Audit Log",
+     "page": 86
+    }
+   ],
+   "to": 87
+  },
+  {
+   "title": "Chapter 8 \u00b7 Reference",
+   "from": 88,
+   "sections": [
+    {
+     "title": "Statuses",
+     "page": 88
+    },
+    {
      "title": "Rules to remember",
-     "page": 67
+     "page": 89
     },
     {
      "title": "Excel files",
-     "page": 67
+     "page": 90
     },
     {
      "title": "Words used",
-     "page": 68
+     "page": 91
     }
    ],
-   "to": 68
+   "to": 91
   }
  ]
 }

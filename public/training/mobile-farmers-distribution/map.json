@@ -1,0 +1,433 @@
+{
+ "key": "mobile-farmers-distribution",
+ "title": "Farmers & Distribution \u2013 Mobile app user manual",
+ "version": "1.0",
+ "module": "contractors",
+ "pdf": "Farmers_and_Distribution_Mobile_App_User_Manual_v1.0.pdf",
+ "pages": [
+  {
+   "n": 1,
+   "label": "Cover",
+   "hash": "f4ed28729b08debbef1e9b67a434d2bec19c8594",
+   "part": 0
+  },
+  {
+   "n": 2,
+   "label": "1",
+   "hash": "edcd1b9fd78a4b291617ce2e7578e446457433ab",
+   "part": 0
+  },
+  {
+   "n": 3,
+   "label": "2",
+   "hash": "484b1867848c674e0c2d4f5ef8209d1eb196126b",
+   "part": 0
+  },
+  {
+   "n": 4,
+   "label": "3",
+   "hash": "a0fd7985496c8a56291b41eaf92571b476382900",
+   "part": 0
+  },
+  {
+   "n": 5,
+   "label": "4",
+   "hash": "32c86c909261ed6d3b0a3712f7a5cdaad232b5ce",
+   "part": 1
+  },
+  {
+   "n": 6,
+   "label": "5",
+   "hash": "9dde3f489472faebf60461be5d9313dc9f894953",
+   "part": 1
+  },
+  {
+   "n": 7,
+   "label": "6",
+   "hash": "7a8cea28be7fe9e3b02d50960056d8de70ecffea",
+   "part": 1
+  },
+  {
+   "n": 8,
+   "label": "7",
+   "hash": "2e616199e2ca320d8a66f7a80f536878b6b01979",
+   "part": 2
+  },
+  {
+   "n": 9,
+   "label": "8",
+   "hash": "3cb6d09d09c188ecef5859bc34ad0070de3816ae",
+   "part": 2
+  },
+  {
+   "n": 10,
+   "label": "9",
+   "hash": "f8f7e3b9d2ecec828ae2dd75bc4a1520d63329fe",
+   "part": 2
+  },
+  {
+   "n": 11,
+   "label": "10",
+   "hash": "0b7a8f3010cf349c493e95e56eb4571ba7b485af",
+   "part": 2
+  },
+  {
+   "n": 12,
+   "label": "11",
+   "hash": "709485d2b3869926dd7a3321b1d569762616cc3c",
+   "part": 3
+  },
+  {
+   "n": 13,
+   "label": "12",
+   "hash": "05107b3b31f80b5763e3b869b87f89f0515ff79b",
+   "part": 3
+  },
+  {
+   "n": 14,
+   "label": "13",
+   "hash": "02b7e2fb763d88215068880444f284f5d8330517",
+   "part": 3
+  },
+  {
+   "n": 15,
+   "label": "14",
+   "hash": "ebe9c63e918c2339bd2fdfff37f551c076b7aaa9",
+   "part": 4
+  },
+  {
+   "n": 16,
+   "label": "15",
+   "hash": "7fefbdfb13412f3ab09ee4b4403560e9d6bd8aa4",
+   "part": 4
+  },
+  {
+   "n": 17,
+   "label": "16",
+   "hash": "0cd291ac10f72c8f716cbaf95ba9285d9b59bdb5",
+   "part": 4
+  },
+  {
+   "n": 18,
+   "label": "17",
+   "hash": "2b835645f3377243e34a715f8bab05fa717402b0",
+   "part": 4
+  },
+  {
+   "n": 19,
+   "label": "18",
+   "hash": "6a83ab88152a7e9f1493bdaebdd0541479d37ee3",
+   "part": 4
+  },
+  {
+   "n": 20,
+   "label": "19",
+   "hash": "bbee79ab5420142e4faaee46855b09e7e0c2b0e8",
+   "part": 5
+  },
+  {
+   "n": 21,
+   "label": "20",
+   "hash": "caa1bcbe7ec63ec1e110b5d1dc5791aefea72552",
+   "part": 5
+  },
+  {
+   "n": 22,
+   "label": "21",
+   "hash": "d0749e1c2c41750481d777e1c36772278787c400",
+   "part": 5
+  },
+  {
+   "n": 23,
+   "label": "22",
+   "hash": "e9c8e1ff195f45b2039f723284e586d9a8267b0a",
+   "part": 5
+  },
+  {
+   "n": 24,
+   "label": "23",
+   "hash": "33b9dc85489c953d94f923cc17e89a7c4285ed98",
+   "part": 5
+  },
+  {
+   "n": 25,
+   "label": "24",
+   "hash": "1ca74821fc62256a08c5ecd2bb51ead1924d2e96",
+   "part": 5
+  },
+  {
+   "n": 26,
+   "label": "25",
+   "hash": "bd94d299c976fe421e22d220fe3524a9264d8304",
+   "part": 6
+  },
+  {
+   "n": 27,
+   "label": "26",
+   "hash": "49919a2651598efa346e43f06677e306bf66fe16",
+   "part": 6
+  },
+  {
+   "n": 28,
+   "label": "27",
+   "hash": "923ad5ce6fd0891828a02238a5a4824445d41a2d",
+   "part": 6
+  },
+  {
+   "n": 29,
+   "label": "28",
+   "hash": "2cd67cf06271c5271478aa872de13acd5f2c5c33",
+   "part": 6
+  },
+  {
+   "n": 30,
+   "label": "29",
+   "hash": "3b284b252184e0a6bd4beba2383d5f26fbaad3f7",
+   "part": 7
+  },
+  {
+   "n": 31,
+   "label": "30",
+   "hash": "8498e1a54e06d98d8dfe0e00f332f9e9538bb18d",
+   "part": 7
+  },
+  {
+   "n": 32,
+   "label": "31",
+   "hash": "09bf68fd85545cb15dcbae10504c6e09630d107b",
+   "part": 7
+  },
+  {
+   "n": 33,
+   "label": "32",
+   "hash": "e3d2e95bf1ddb6b41d9cae06ced7f361d5aff8fa",
+   "part": 7
+  },
+  {
+   "n": 34,
+   "label": "33",
+   "hash": "7f31587f2831e66febbee6d47823641fe55bb0c2",
+   "part": 7
+  },
+  {
+   "n": 35,
+   "label": "34",
+   "hash": "648972593ebc4f1bd28255ce136deb41cc61481e",
+   "part": 8
+  },
+  {
+   "n": 36,
+   "label": "35",
+   "hash": "52f46d84a47daad5327f29c1bc2823c7de89d7a1",
+   "part": 8
+  },
+  {
+   "n": 37,
+   "label": "36",
+   "hash": "493715886d8a80f2f09c0853e3ac0ccc9e7ef66a",
+   "part": 8
+  },
+  {
+   "n": 38,
+   "label": "37",
+   "hash": "31964ecbf999ffde34f0fb5aa812866ef24fb5f2",
+   "part": 8
+  }
+ ],
+ "parts": [
+  {
+   "title": "Cover, about this manual, the work at a glance and contents",
+   "from": 1,
+   "sections": [],
+   "to": 4
+  },
+  {
+   "title": "Chapter 1 \u00b7 Get the app and connect the phone",
+   "from": 5,
+   "sections": [
+    {
+     "title": "What you need",
+     "page": 5
+    },
+    {
+     "title": "Install the app",
+     "page": 5
+    },
+    {
+     "title": "Connect the phone to your company",
+     "page": 6
+    }
+   ],
+   "to": 7
+  },
+  {
+   "title": "Chapter 2 \u00b7 Log in with a login QR",
+   "from": 8,
+   "sections": [
+    {
+     "title": "Make a login QR (administrator)",
+     "page": 8
+    },
+    {
+     "title": "Log in on the phone",
+     "page": 10
+    },
+    {
+     "title": "The first download",
+     "page": 10
+    },
+    {
+     "title": "Name this phone",
+     "page": 11
+    },
+    {
+     "title": "Lost card, other ways to log in",
+     "page": 11
+    }
+   ],
+   "to": 11
+  },
+  {
+   "title": "Chapter 3 \u00b7 Find your way around",
+   "from": 12,
+   "sections": [
+    {
+     "title": "The home screen",
+     "page": 12
+    },
+    {
+     "title": "The Farmers page",
+     "page": 13
+    },
+    {
+     "title": "Sync: send your work, get new data",
+     "page": 14
+    }
+   ],
+   "to": 14
+  },
+  {
+   "title": "Chapter 4 \u00b7 Set up a farmer",
+   "from": 15,
+   "sections": [
+    {
+     "title": "Find the farmer",
+     "page": 15
+    },
+    {
+     "title": "Take the profile photo",
+     "page": 16
+    },
+    {
+     "title": "Map the face",
+     "page": 17
+    },
+    {
+     "title": "The farmer signs, and you save",
+     "page": 17
+    },
+    {
+     "title": "The club's Chairperson and Secretary",
+     "page": 18
+    }
+   ],
+   "to": 19
+  },
+  {
+   "title": "Chapter 5 \u00b7 Sign the club contract",
+   "from": 20,
+   "sections": [
+    {
+     "title": "Open the club",
+     "page": 20
+    },
+    {
+     "title": "Read the contract with the club",
+     "page": 21
+    },
+    {
+     "title": "Each farmer confirms who he is and signs",
+     "page": 22
+    },
+    {
+     "title": "Sign as witness, and the biometric check",
+     "page": 24
+    },
+    {
+     "title": "Fix a mistake",
+     "page": 25
+    }
+   ],
+   "to": 25
+  },
+  {
+   "title": "Chapter 6 \u00b7 Contract final approval",
+   "from": 26,
+   "sections": [
+    {
+     "title": "Open the club",
+     "page": 26
+    },
+    {
+     "title": "The Chairperson is confirmed",
+     "page": 27
+    },
+    {
+     "title": "Sign and approve",
+     "page": 28
+    },
+    {
+     "title": "Send to the office",
+     "page": 29
+    }
+   ],
+   "to": 29
+  },
+  {
+   "title": "Chapter 7 \u00b7 Issue inputs",
+   "from": 30,
+   "sections": [
+    {
+     "title": "Open the farmer with a face scan",
+     "page": 30
+    },
+    {
+     "title": "Choose the cycle and the category",
+     "page": 31
+    },
+    {
+     "title": "Capture the issue",
+     "page": 32
+    },
+    {
+     "title": "When the farmer gets less than his full amount",
+     "page": 34
+    },
+    {
+     "title": "After the issue: send it",
+     "page": 34
+    }
+   ],
+   "to": 34
+  },
+  {
+   "title": "Chapter 8 \u00b7 Quick reference",
+   "from": 35,
+   "sections": [
+    {
+     "title": "Checklists",
+     "page": 35
+    },
+    {
+     "title": "Messages and what to do",
+     "page": 36
+    },
+    {
+     "title": "Words used",
+     "page": 37
+    }
+   ],
+   "to": 38
+  }
+ ]
+}

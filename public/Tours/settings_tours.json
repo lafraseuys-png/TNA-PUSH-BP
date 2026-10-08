@@ -959,6 +959,16 @@
           "text": "Change the role's name, access and permissions. Everyone with this role is affected, so check before you remove anything.",
           "placement": "left",
           "timeout": 3000
+        },
+        {
+          "id": "str-guides",
+          "target": [
+            "#emhTopBtn",
+            "#tnaTourHelpBtn"
+          ],
+          "title": "Step-by-step guides",
+          "text": "Open <b>?</b> &gt; How-to guides for hands-on walkthroughs: <b>Create a role</b>, <b>Give a user a role</b> and <b>Give many users a role at once</b>. Search for <i>role</i> to find them.",
+          "placement": "bottom"
         }
       ]
     },
@@ -1698,6 +1708,282 @@
           "title": "Save",
           "text": "Saves the schedule. Nothing has been saved by this guide, so press <b>Cancel</b> if you were only looking. After saving, use the <b>Send test to me</b> button on its row to try it on your own phone and email.",
           "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "settings.guide.create-role",
+      "title": "Create a role (permissions)",
+      "icon": "fa-shield-halved",
+      "blurb": "Make a role with the screens and rights a group of people needs, e.g. Line Manager or Payroll Clerk.",
+      "steps": [
+        {
+          "id": "stg-cr-open",
+          "target": [
+            "#sidebarNav li[data-permission=\"set_roles,sys_users\"] > a"
+          ],
+          "title": "Roles & Permissions",
+          "text": "Roles live here. A role is a set of permissions you give to many users at once. Click this menu item to open the screen.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Roles & Permissions"
+        },
+        {
+          "id": "stg-cr-list",
+          "target": [
+            "#rolesTable"
+          ],
+          "title": "Your roles",
+          "text": "Every role in your company. Editing a role later (the <b>Edit</b> button on its row) changes it for <b>every user who has that role</b> straight away, so check who uses it before you take anything away.",
+          "placement": "top",
+          "timeout": 5000
+        },
+        {
+          "id": "stg-cr-new",
+          "target": [
+            "#page-roles button[onclick*='openRoleModal']"
+          ],
+          "title": "Create Role",
+          "text": "Opens the role form.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Create Role"
+        },
+        {
+          "id": "stg-cr-name",
+          "target": [
+            "#editRoleCode"
+          ],
+          "title": "Code and name",
+          "text": "<b>Role Code</b> is a short unique code, e.g. <i>LINE_MGR</i>. <b>Role Name</b> is what people see in lists, e.g. <i>Line Manager</i>.",
+          "placement": "bottom",
+          "timeout": 5000
+        },
+        {
+          "id": "stg-cr-access",
+          "target": [
+            "#roleCanAccessWeb"
+          ],
+          "title": "Web and Mobile access",
+          "text": "Whether people with this role may log in on the <b>web</b> dashboard, the <b>mobile</b> app, or both.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "stg-cr-tabs",
+          "target": [
+            "#tab_tna"
+          ],
+          "title": "Permission tabs",
+          "text": "One tab per part of the system: Time &amp; Attendance, Employee Master, Employee Costs, HR, System Config, Settings, ESS Master, Access Control, Reports and App Modules. Go through each one the role needs.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "stg-cr-tab-click",
+          "target": [
+            "#tab_empmaster"
+          ],
+          "title": "Open a tab",
+          "text": "Let's look at one.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Employee Master"
+        },
+        {
+          "id": "stg-cr-all",
+          "target": [
+            "#empmaster_all"
+          ],
+          "title": "Everything on this tab",
+          "text": "Ticks every permission on this tab in one go. Handy for a full-access role; otherwise tick only what is needed below.",
+          "placement": "right",
+          "climb": 1
+        },
+        {
+          "id": "stg-cr-tree",
+          "target": [
+            "#tree_empmaster"
+          ],
+          "title": "Screens and rights",
+          "text": "Each <b>Tab:</b> line is a screen the person can open. The lines under it (<b>└─</b>) are extra rights on that screen, such as editing, exporting or importing. Leave those off for a view-only role.",
+          "placement": "left"
+        },
+        {
+          "id": "stg-cr-save",
+          "target": [
+            "#roleForm button[onclick*='submitRoleForm']"
+          ],
+          "title": "Save Role",
+          "text": "Saves the role. Nothing has been saved by this guide, so press <b>Cancel</b> if you were only looking.<br><br>Next: give the role to people - see the guides <b>Give a user a role</b> and <b>Give many users a role at once</b>.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "settings.guide.user-role",
+      "title": "Give a user a role",
+      "icon": "fa-user-shield",
+      "blurb": "Set one person's role, then choose whose data they may see with Data Scopes.",
+      "steps": [
+        {
+          "id": "stg-ur-open",
+          "target": [
+            "#sidebarNav li[data-permission=\"set_users,sys_users\"] > a"
+          ],
+          "title": "User Access",
+          "text": "Roles are given to people on User Access. Click this menu item to open the screen.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click User Access"
+        },
+        {
+          "id": "stg-ur-edit",
+          "target": [
+            "#usersTable tbody button[onclick*='editUser']"
+          ],
+          "title": "Edit a user",
+          "text": "Open the person you want to change. Use the search above the list to find them first if needed.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Edit on a user",
+          "timeout": 5000
+        },
+        {
+          "id": "stg-ur-role",
+          "target": [
+            "#editUserRole"
+          ],
+          "title": "System Role",
+          "text": "Pick the role here. Picking a role also sets this person's module ticks to match it, and <b>removes any Custom Overrides</b> they had. <i>-- Custom / No Role --</i> means no role.",
+          "placement": "bottom",
+          "timeout": 5000
+        },
+        {
+          "id": "stg-ur-scopes-tab",
+          "target": [
+            "#editModal .edit-user-tab-btn[onclick*=\"'scopes'\"]"
+          ],
+          "title": "Data Scopes",
+          "text": "A role says <b>what</b> someone can do. Data Scopes say <b>whose</b> data they can see.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Data Scopes"
+        },
+        {
+          "id": "stg-ur-scopes",
+          "target": [
+            "#eu-scopes"
+          ],
+          "title": "Whose data they see",
+          "text": "Tick the <b>departments</b> (and, if you use them, <b>geographic areas</b>) this person may see. When the <b>Data Visibility Mode</b> box shows, you can instead limit them to their <b>direct reportees</b> or their <b>full downline</b>.",
+          "placement": "top"
+        },
+        {
+          "id": "stg-ur-modules-tab",
+          "target": [
+            "#editModal .edit-user-tab-btn[onclick*=\"'modules'\"]"
+          ],
+          "title": "Module Restrictions",
+          "text": "Last, check the modules.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Module Restrictions"
+        },
+        {
+          "id": "stg-ur-modules",
+          "target": [
+            "#eu-modules"
+          ],
+          "title": "Modules",
+          "text": "These were filled in from the role you picked: the web modules, ESS features and mobile app tiles. Change them only if this one person needs something different.",
+          "placement": "top"
+        },
+        {
+          "id": "stg-ur-save",
+          "target": [
+            "#editForm button[type='submit']"
+          ],
+          "title": "Save User Profile",
+          "text": "Saves the user. Nothing has been saved by this guide, so press <b>Cancel</b> if you were only looking. To give a role to many people at once, see <b>Give many users a role at once</b>.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "settings.guide.bulk-role",
+      "title": "Give many users a role at once",
+      "icon": "fa-users-gear",
+      "blurb": "Tick users and apply (or remove) a role for all of them in one go.",
+      "steps": [
+        {
+          "id": "stg-br-open",
+          "target": [
+            "#sidebarNav li[data-permission=\"set_users,sys_users\"] > a"
+          ],
+          "title": "User Access",
+          "text": "Bulk changes are made on User Access. Click this menu item to open the screen.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click User Access"
+        },
+        {
+          "id": "stg-br-find",
+          "target": [
+            "#userSearchInput"
+          ],
+          "title": "Narrow the list",
+          "text": "Tip: search, use <b>Filters</b> or the search under a column heading first, so the list shows only the people you want to change.",
+          "placement": "bottom",
+          "timeout": 5000
+        },
+        {
+          "id": "stg-br-tick",
+          "target": [
+            "#usersTable tbody .user-row-check"
+          ],
+          "title": "Tick the users",
+          "text": "Tick each person to change, or the box in the heading row to tick everyone in the list.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Tick a user"
+        },
+        {
+          "id": "stg-br-bar",
+          "target": [
+            "#bulkToolbar"
+          ],
+          "title": "The bulk toolbar",
+          "text": "It appears as soon as someone is ticked. The number on the left is how many users the change will apply to - check it.",
+          "placement": "bottom",
+          "timeout": 3000
+        },
+        {
+          "id": "stg-br-select",
+          "target": [
+            "#bulkRoleSelect"
+          ],
+          "title": "Choose the role",
+          "text": "Pick the role to give everyone ticked. Choose <b>-- Remove Role --</b> to take their role away instead.",
+          "placement": "bottom"
+        },
+        {
+          "id": "stg-br-apply",
+          "target": [
+            "#bulkToolbar button[onclick*=\"executeBulkAction('role')\"]"
+          ],
+          "title": "Apply Role",
+          "text": "Asks you to confirm, then applies the role (or removes it) for every ticked user. This guide does not press it - nothing has been changed.",
+          "placement": "bottom"
+        },
+        {
+          "id": "stg-br-done",
+          "target": [
+            "#masterUserCheck"
+          ],
+          "title": "Untick when done",
+          "text": "Untick the users when you are finished, so the next bulk change doesn't go to the same people by accident. For one person's Data Scopes (whose data they see), use <b>Edit</b> on that user - see <b>Give a user a role</b>.",
+          "placement": "right"
         }
       ]
     }

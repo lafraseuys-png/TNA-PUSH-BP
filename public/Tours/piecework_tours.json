@@ -398,12 +398,12 @@
           ]
         },
         {
-          "id": "pws-ignoreot",
+          "id": "pws-ignoreot-2",
           "target": [
             "#globalIgnoreOT"
           ],
           "title": "Ignore overtime",
-          "text": "All clocked hours count as normal time, and the overtime columns are hidden in Daily Production.",
+          "text": "All clocked hours count as normal time, and the overtime columns are hidden in Daily Production. Employee Costs still shows the overtime hours as TNA does, but pays them at the normal rate.",
           "placement": "bottom",
           "climb": 2,
           "before": [

@@ -39,17 +39,8 @@
       "target": [
         "#sidebarNav [onclick*='dashboard']"
       ],
-      "title": "Overview",
-      "text": "The requests waiting for you. Click the number to go straight to them.",
-      "placement": "right"
-    },
-    {
-      "id": "es-nav-employees",
-      "target": [
-        "#sidebarNav [onclick*='employees']"
-      ],
-      "title": "Employee Master",
-      "text": "The full Employee Master, opened inside ESS.",
+      "title": "Dashboard",
+      "text": "Your ESS day at a glance: requests waiting, who is off, thin days, balances and claims - with charts. Click any card or chart to go straight to its screen.",
       "placement": "right"
     },
     {
@@ -94,7 +85,7 @@
         "#sidebarNav [onclick*='claimsregister']"
       ],
       "title": "Claims",
-      "text": "The <b>Claims Register</b> of every claim, and <b>Expense Policies</b> (the claim types and their rules) further down.",
+      "text": "Every claim with its receipt and payment (<b>Register</b>), and the claim types people can choose with their rules (<b>Claim Types</b>).",
       "placement": "right"
     },
     {
@@ -288,7 +279,7 @@
   "sections": [
     {
       "key": "essmaster.dashboard",
-      "title": "Overview",
+      "title": "Dashboard",
       "trigger": "#page-dashboard.active",
       "steps": [
         {
@@ -311,6 +302,46 @@
           "text": "Requests waiting (red when some are over a week old), who's off today and in the next two weeks, days when too many people are off, negative balances, open claims, and anyone on no payroll period. Click a card to open its screen.",
           "placement": "bottom",
           "timeout": 6000
+        },
+        {
+          "id": "esd-dept",
+          "target": [
+            "#eoDept"
+          ],
+          "title": "One department",
+          "text": "Show every card and chart for one department, or all the departments you may see. Your choice is remembered. <b>Refresh</b> loads the latest numbers.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "esd-offchart",
+          "target": [
+            "#eoOffChartPanel"
+          ],
+          "title": "People off - next 14 days",
+          "text": "A bar per day with how many people are off. A <b>red</b> bar means a department is too thin that day (20% or more off). Click a bar to see the departments.",
+          "placement": "top",
+          "optional": true
+        },
+        {
+          "id": "esd-reqring",
+          "target": [
+            "#eoReqPanel"
+          ],
+          "title": "Requests waiting",
+          "text": "The requests waiting for approval, by age: green from today or yesterday, amber 3 to 7 days, red over a week. Click the ring to open Mobile Requests.",
+          "placement": "left",
+          "optional": true
+        },
+        {
+          "id": "esd-balances",
+          "target": [
+            "#eoBalPanel"
+          ],
+          "title": "Balances health",
+          "text": "Negative and zero balances per leave type, next to the people with the most annual leave owing.",
+          "placement": "top",
+          "optional": true
         },
         {
           "id": "esd-off",
@@ -1005,9 +1036,71 @@
     },
     {
       "key": "essmaster.claimsregister",
-      "title": "Claims Register",
+      "title": "Claims",
       "trigger": "#page-claimsregister.active",
       "steps": [
+        {
+          "id": "ecl-tabs",
+          "target": [
+            "#ecTabs"
+          ],
+          "title": "Register and Claim Types",
+          "text": "<b>Register</b>: every claim, its receipt and its payment. <b>Claim Types</b>: what people can claim for on the phone and in ESS, and the rules for each (receipt, rate, approval, payroll code).",
+          "placement": "left",
+          "optional": true,
+          "timeout": 4000
+        },
+        {
+          "id": "ecl-search",
+          "target": [
+            "#ecQ"
+          ],
+          "title": "Search",
+          "text": "Find a claim by name, employee number, type, unit or notes as you type.",
+          "placement": "bottom",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "ecl-filters",
+          "target": [
+            "#ecFiltersBtn"
+          ],
+          "title": "Filters",
+          "text": "Status, claim type, dates (with <b>This month</b> / <b>Last month</b> quick picks), receipt, department and payroll (not sent / sent / paid). The filters on show appear as chips you can remove one by one.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "ecl-columns",
+          "target": [
+            "#ecColsBtn"
+          ],
+          "title": "Columns",
+          "text": "Pick and order the columns. Click a heading to sort, drag it to move it, and use the box under a heading to search just that column. Remembered for you.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "ecl-tools",
+          "target": [
+            "#ecToolsBtn"
+          ],
+          "title": "Data Tools",
+          "text": "<b>Export this view</b> (Excel with your columns), the <b>full register</b>, <b>PDF claim forms</b> of the ticked claims, and <b>Claims by site</b>.",
+          "placement": "left",
+          "optional": true
+        },
+        {
+          "id": "ecl-table",
+          "target": [
+            "#ecBody"
+          ],
+          "title": "Open a claim",
+          "text": "Click a claim to see it in full with its <b>receipt</b>, its approval history, and buttons for the <b>claim PDF</b>, the <b>receipt image</b> and <b>Mark paid</b>. Tick claims to do this for many at once.",
+          "placement": "top",
+          "optional": true
+        },
         {
           "id": "ecr-filters",
           "target": [
@@ -1324,22 +1417,6 @@
               ]
             }
           ]
-        }
-      ]
-    },
-    {
-      "key": "essmaster.employees",
-      "title": "Employee Master",
-      "trigger": "#page-employees.active",
-      "steps": [
-        {
-          "id": "eem-frame",
-          "target": [
-            "#essEmpMasterIframe"
-          ],
-          "title": "Employee Master in ESS",
-          "text": "The full Employee Master, opened inside ESS. It works exactly as it does on its own page, and has its own <b>?</b> (bottom left of this area) with its tours and how-to guides.",
-          "placement": "top"
         }
       ]
     },

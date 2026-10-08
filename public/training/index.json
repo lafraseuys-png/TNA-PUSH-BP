@@ -7,7 +7,16 @@
       "module": "contractors",
       "pages": 68,
       "summary": "Everything on the Farmers & Distribution web screens: set-up, farmers, contracts, approvals, distribution and monitoring.",
-      "map": "farmers-distribution/map.json"
+        "map": "farmers-distribution/map.json"
+    },
+    {
+      "key": "mobile-farmers-distribution",
+      "title": "Farmers & Distribution – Mobile app user manual",
+      "version": "1.0",
+      "module": "contractors",
+      "pages": 38,
+      "summary": "The mobile app step by step: connecting the phone and logging in with a QR code, setting up farmers, signing club contracts, final approval and issuing inputs.",
+      "map": "mobile-farmers-distribution/map.json"
     }
   ]
 }

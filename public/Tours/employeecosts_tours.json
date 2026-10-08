@@ -387,12 +387,23 @@
       "trigger": "#page-settings.active",
       "steps": [
         {
-          "id": "ecs-ot",
+          "id": "ecs-follow-tna",
+          "target": [
+            "#settingHoursFollowTNA"
+          ],
+          "title": "Hours follow TNA",
+          "text": "On: every hour here is exactly what TNA Team View shows. Piece Work settings only change the pay, not the hours.",
+          "placement": "bottom",
+          "climb": 2,
+          "optional": true
+        },
+        {
+          "id": "ecs-ot-2",
           "target": [
             "#settingEnableWeeklyOT"
           ],
           "title": "Weekly overtime",
-          "text": "Work out overtime over the week instead of per day, above a number of hours.",
+          "text": "Only used when 'Hours follow TNA' is off: moves Normal Time over the weekly limit into Overtime.",
           "placement": "bottom",
           "climb": 2
         },
