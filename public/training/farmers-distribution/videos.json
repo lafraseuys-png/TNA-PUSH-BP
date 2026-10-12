@@ -1,9 +1,9 @@
 {
- "updatedAt": "2026-09-30T09:56:42.213Z",
+ "updatedAt": "2026-10-10T15:52:00.814Z",
  "videos": [
   {
    "id": "vmunrqfi4x87j91",
-   "title": "Farmers and Distribution Ch1 Getting Started",
+   "title": "Farmers and Distribution | Getting Started",
    "description": "",
    "chapter": "Chapter 1 · Getting started",
    "order": 1,
@@ -13,13 +13,15 @@
    "size": 11878527,
    "duration": 60,
    "uploadedAt": "2026-09-30T07:13:08.065Z",
-   "uploadedBy": "TNA Africa"
+   "uploadedBy": "TNA Africa",
+   "updatedAt": "2026-10-10T15:49:22.266Z",
+   "updatedBy": "TNA Africa"
   },
   {
    "id": "vmunxklk1t22mib",
-   "title": "2. Setting up",
+   "title": "Farmers and Distribution | Setting up",
    "description": "",
-   "chapter": "Chapter 1 · Getting started",
+   "chapter": "Chapter 2 · Setting up",
    "order": 2,
    "file": "videos/vmunxklk1t22mib.mp4",
    "poster": "videos/vmunxklk1t22mib.jpg",
@@ -27,6 +29,22 @@
    "size": 22444431,
    "duration": 211.7,
    "uploadedAt": "2026-09-30T09:56:42.212Z",
+   "uploadedBy": "TNA Africa",
+   "updatedAt": "2026-10-10T15:52:00.814Z",
+   "updatedBy": "TNA Africa"
+  },
+  {
+   "id": "vmv2kljpmq0mo5g",
+   "title": "Farmers and Distribution | Farmers Master",
+   "description": "",
+   "chapter": "Chapter 3 · Farmers",
+   "order": 3,
+   "file": "videos/vmv2kljpmq0mo5g.mp4",
+   "poster": "videos/vmv2kljpmq0mo5g.jpg",
+   "type": "video/mp4",
+   "size": 31974818,
+   "duration": 274.1,
+   "uploadedAt": "2026-10-10T15:50:00.357Z",
    "uploadedBy": "TNA Africa"
   }
  ]

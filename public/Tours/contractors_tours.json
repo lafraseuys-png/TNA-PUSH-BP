@@ -205,12 +205,12 @@
       ]
     },
     {
-      "id": "co-nav-settings",
+      "id": "co-nav-settings-2",
       "target": [
         "#sidebarNav [onclick*=\"showSection('settings'\"]"
       ],
       "title": "Settings",
-      "text": "Currency, contract and distribution rules, seasons, tobacco types and your own fields.",
+      "text": "Opens every configuration for this module in one window, in setup steps: currency, location and profile fields, seasons and tobacco types, contract rules, approvals, contract fields and API connections.",
       "placement": "right",
       "before": [
         {
@@ -278,13 +278,14 @@
       "wait": 320
     },
     {
-      "id": "co-help-button",
+      "id": "co-help-button-2",
       "target": [
+        "#emhTopBtn",
         "#tnaTourHelpBtn"
       ],
       "title": "Help is always here",
-      "text": "Click <b>?</b> for this tour, a tour of the screen you're on, and <b>how-to guides</b>.",
-      "placement": "left",
+      "text": "Click <b>?</b> (top right, next to your name) to open <b>Help &amp; guides</b>: search for what you want to do, take this page tour or a tour of the screen you are on, and read the how-to guides step by step.",
+      "placement": "bottom",
       "before": [
         {
           "removeClass": "#tnbBar .tnb-menu",
@@ -574,6 +575,48 @@
       "trigger": "#page-settings.active",
       "steps": [
         {
+          "id": "cos-pop-steps",
+          "target": [
+            "#page-settings .cs-nav"
+          ],
+          "title": "Settings in steps",
+          "text": "Every setting for this module is here, grouped in the order you set things up. A <i class=\"fas fa-mobile-alt\"></i> marks a section that changes the phone app.",
+          "placement": "right",
+          "optional": true
+        },
+        {
+          "id": "cos-pop-search",
+          "target": [
+            "#cspSearch"
+          ],
+          "title": "Search settings",
+          "text": "Type a word, like <b>face</b> or <b>witness</b>, or press <b>/</b>, to jump straight to that setting.",
+          "placement": "right",
+          "optional": true,
+          "climb": 2
+        },
+        {
+          "id": "cos-pop-phone",
+          "target": [
+            "#cspPhoneOnly"
+          ],
+          "title": "Phone settings only",
+          "text": "Tick this to dim the sections that don't change the phone app.",
+          "placement": "right",
+          "optional": true,
+          "climb": 1
+        },
+        {
+          "id": "cos-pop-savebar",
+          "target": [
+            "#cspSaveBar:not([hidden])"
+          ],
+          "title": "Save changes",
+          "text": "When you change the currency or a contract rule, this bar appears. <b>Save changes</b> saves them; <b>Discard</b> puts back what was saved. The bar stays until you save or discard; if you try to close or leave first, it shakes and its buttons become <b>Save &amp; close</b> / <b>Discard &amp; close</b>.",
+          "placement": "top",
+          "optional": true
+        },
+        {
           "id": "cos-currency",
           "target": [
             "#globalCurrencySelect"
@@ -613,14 +656,14 @@
           "climb": 2
         },
         {
-          "id": "cos-products",
+          "id": "cos-products-2",
           "target": [
+            "#cspProdAddBtn",
             "#outProductCode"
           ],
           "title": "Tobacco types",
-          "text": "The products farmers grow under contract.",
-          "placement": "top",
-          "climb": 2
+          "text": "The products farmers grow under contract. Click <b>Add tobacco type</b> to add one in a pop-up; the pencil on a row opens the same pop-up to edit it, and <b>Recipe</b> opens the recipe in its own large pop-up.",
+          "placement": "bottom"
         }
       ]
     },

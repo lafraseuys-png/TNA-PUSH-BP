@@ -378,15 +378,21 @@
       "blurb": "Add a leave type, give it rules in a leave policy, and link the policy to departments.",
       "steps": [
         {
-          "id": "esg-ls-open",
+          "id": "esg-ls-open-2",
           "target": [
-            "#sidebarNav [onclick*='leavepolicies']"
+            "#lhTabs [data-lh-tab='types']"
           ],
           "title": "1. Leave Types",
-          "text": "Start with the leave type. Click <b>Leave Types</b>.",
-          "placement": "right",
+          "text": "Start with the leave type. Open <b>Leave</b> and click the <b>Leave Types</b> tab.",
+          "placement": "bottom",
           "mode": "click",
-          "hint": "Click Leave Types"
+          "hint": "Click the Leave Types tab",
+          "before": [
+            {
+              "click": "#sidebarNav [onclick*='leavehub']"
+            }
+          ],
+          "wait": 600
         },
         {
           "id": "esg-ls-add",
@@ -440,15 +446,15 @@
           "placement": "top"
         },
         {
-          "id": "esg-ls-pol",
+          "id": "esg-ls-pol-2",
           "target": [
-            "#sidebarNav [onclick*='leavepolicyengine']"
+            "#lhTabs [data-lh-tab='policies']"
           ],
           "title": "2. Leave Policies",
-          "text": "Now the rules. Click <b>Leave Policies</b>.",
-          "placement": "right",
+          "text": "Now the rules. Click the <b>Leave Policies</b> tab.",
+          "placement": "bottom",
           "mode": "click",
-          "hint": "Click Leave Policies",
+          "hint": "Click the Leave Policies tab",
           "before": [
             {
               "call": "closeLeaveTypeModal",
@@ -547,15 +553,15 @@
           "guideOnly": true
         },
         {
-          "id": "esg-ls-link",
+          "id": "esg-ls-link-2",
           "target": [
-            "#sidebarNav [onclick*='leavelinkage']"
+            "#lhTabs [data-lh-tab='linkage']"
           ],
           "title": "3. Pack Linkage",
-          "text": "Last, give the policy to departments. Click <b>Pack Linkage</b>.",
-          "placement": "right",
+          "text": "Last, give the policy to departments. Click the <b>Pack Linkage</b> tab.",
+          "placement": "bottom",
           "mode": "click",
-          "hint": "Click Pack Linkage",
+          "hint": "Click the Pack Linkage tab",
           "guideOnly": true
         },
         {
@@ -599,15 +605,21 @@
       "blurb": "Bring in everyone's leave balances (or leave already taken) from a spreadsheet, checked before loading.",
       "steps": [
         {
-          "id": "esg-to-open",
+          "id": "esg-to-open-2",
           "target": [
-            "#sidebarNav [onclick*='leaveimport']"
+            "#lhTabs [data-lh-tab='takeon']"
           ],
           "title": "Leave Take-On",
-          "text": "Click <b>Leave Take-On</b>.",
-          "placement": "right",
+          "text": "Open <b>Leave</b> and click the <b>Take-On</b> tab.",
+          "placement": "bottom",
           "mode": "click",
-          "hint": "Click Leave Take-On"
+          "hint": "Click the Take-On tab",
+          "before": [
+            {
+              "click": "#sidebarNav [onclick*='leavehub']"
+            }
+          ],
+          "wait": 600
         },
         {
           "id": "esg-to-template",
@@ -697,15 +709,21 @@
       "blurb": "A shutdown or company day: check who it works for, then send one request per person.",
       "steps": [
         {
-          "id": "esg-bl-open",
+          "id": "esg-bl-open-2",
           "target": [
-            "#sidebarNav [onclick*='bulkleave']"
+            "#lhTabs [data-lh-tab='bulk']"
           ],
           "title": "Bulk Leave",
-          "text": "Click <b>Bulk Leave</b>.",
-          "placement": "right",
+          "text": "Open <b>Leave</b> and click the <b>Bulk Leave</b> tab.",
+          "placement": "bottom",
           "mode": "click",
-          "hint": "Click Bulk Leave"
+          "hint": "Click the Bulk Leave tab",
+          "before": [
+            {
+              "click": "#sidebarNav [onclick*='leavehub']"
+            }
+          ],
+          "wait": 600
         },
         {
           "id": "esg-bl-type",
@@ -777,85 +795,79 @@
       "blurb": "Set the 1st, 2nd and 3rd approver for a department or one employee.",
       "steps": [
         {
-          "id": "esg-rt-open",
+          "id": "esg-rt-open-2",
           "target": [
-            "#sidebarNav [onclick*='global']"
+            "#shNav [data-sh='routing']"
           ],
-          "title": "Global Settings",
-          "text": "Approval routing lives here. Click <b>Global Settings</b>.",
+          "title": "Approval routing",
+          "text": "Approval routing is in <b>Settings</b>. Click <b>Approval routing</b>.",
           "placement": "right",
           "mode": "click",
-          "hint": "Click Global Settings"
+          "hint": "Click Approval routing",
+          "before": [
+            {
+              "click": "#sidebarNav [onclick*='esssettings']"
+            }
+          ],
+          "wait": 700
         },
         {
-          "id": "esg-rt-tab",
+          "id": "esg-rt-add-2",
           "target": [
-            "#tab-global-routing"
+            "#shRtAdd"
           ],
-          "title": "Workflow Routing",
-          "text": "Click <b>Workflow Routing</b>.",
-          "placement": "bottom",
+          "title": "1. Add a rule",
+          "text": "Click <b>Add rule</b>. (To change a rule, click <b>Edit</b> on its row instead.)",
+          "placement": "left",
           "mode": "click",
-          "hint": "Click Workflow Routing"
+          "hint": "Click Add rule"
         },
         {
-          "id": "esg-rt-dept",
+          "id": "esg-rt-who-2",
           "target": [
-            "#wfDeptSearch"
+            "#shRfKind"
           ],
-          "title": "1. For a department",
-          "text": "Search and choose the department. The rule applies to everyone in it.",
-          "placement": "bottom",
-          "climb": 1
+          "title": "2. Who it is for",
+          "text": "<b>A department</b>: the rule applies to everyone in it. <b>One employee</b>: their own approvers, overriding their department's rule. Then search and click the department or person.",
+          "placement": "bottom"
         },
         {
-          "id": "esg-rt-emp",
+          "id": "esg-rt-levels-2",
           "target": [
-            "#wfEmpSearch"
+            "#shRfL1"
           ],
-          "title": "Or for one person",
-          "text": "Choose an employee instead to give them their own approvers. This overrides their department's rule.",
-          "placement": "bottom",
-          "climb": 1
-        },
-        {
-          "id": "esg-rt-levels",
-          "target": [
-            "#wfLevel1"
-          ],
-          "title": "2. The approvers",
+          "title": "3. The approvers",
           "text": "The <b>1st approver</b> sees the request first. When they approve, it goes to the <b>2nd</b>, then the <b>3rd</b>. Leave a level empty to stop there.",
-          "placement": "bottom",
-          "climb": 2
+          "placement": "bottom"
         },
         {
-          "id": "esg-rt-standing",
+          "id": "esg-rt-standing-2",
           "target": [
-            "#wfStanding"
+            "#shRfSt"
           ],
-          "title": "3. Standing / Backup",
-          "text": "Who approves when the person at that level isn't set or isn't available.",
+          "title": "4. Standing / backup",
+          "text": "Can approve while set, e.g. when the approver is on leave, with optional From and To dates. Only administrators can change it.",
           "placement": "bottom",
-          "climb": 1
+          "optional": true
         },
         {
-          "id": "esg-rt-save",
+          "id": "esg-rt-save-2",
           "target": [
-            "#global-routing button[type='submit']",
-            "#global-routing .btn"
+            "#shRfSave"
           ],
-          "title": "4. Save Routing Rule",
+          "title": "5. Save rule",
           "text": "Saves the rule. Requests from then on follow it.",
           "placement": "top"
         },
         {
-          "id": "esg-rt-list",
+          "id": "esg-rt-list-2",
           "target": [
-            "#routingBody"
+            "#shRtBody"
           ],
           "title": "Your rules",
-          "text": "Every department and personal rule, with its approvers.",
-          "placement": "top"
+          "text": "Every department and employee rule with its approvers. Search, filter, edit or delete them here.",
+          "placement": "top",
+          "optional": true
         }
       ]
     },

@@ -53,12 +53,12 @@
       "placement": "right"
     },
     {
-      "id": "es-nav-leavetrans",
+      "id": "es-nav-leavehub",
       "target": [
-        "#sidebarNav [onclick*='leavetrans']"
+        "#sidebarNav [onclick*='leavehub']"
       ],
-      "title": "Leave Transactions",
-      "text": "Approved leave. Cancelling a record here gives the days back.",
+      "title": "Leave",
+      "text": "Everything leave on one screen with tabs: <b>Calendar</b>, <b>Dashboard</b>, <b>Transactions</b> and <b>Bulk Leave</b>, then the setup tabs <b>Leave Types</b>, <b>Leave Policies</b>, <b>Pack Linkage</b> and <b>Take-On</b>. You only see the tabs your role allows.",
       "placement": "right"
     },
     {
@@ -68,15 +68,6 @@
       ],
       "title": "HR Module",
       "text": "HR Management (contracts, infringements, performance), opened inside ESS.",
-      "placement": "right"
-    },
-    {
-      "id": "es-nav-leave",
-      "target": [
-        "#sidebarNav [onclick*='leavepolicies']"
-      ],
-      "title": "Setting up leave",
-      "text": "<b>Leave Types</b>, <b>Leave Policies</b> (entitlements and accrual), <b>Pack Linkage</b> (which departments get which policy), <b>Bulk Leave</b> (shutdowns and company days) and <b>Leave Take-On</b> (opening balances).",
       "placement": "right"
     },
     {
@@ -98,12 +89,12 @@
       "placement": "right"
     },
     {
-      "id": "es-nav-insight",
+      "id": "es-nav-reports",
       "target": [
-        "#sidebarNav [onclick*='leavedash']"
+        "#sidebarNav [onclick*=\"showSection('reports'\"]"
       ],
-      "title": "Leave at a glance",
-      "text": "<b>Leave Dashboard</b>, <b>Leave Calendar</b> (who's away when) and <b>Reports</b>.",
+      "title": "Reports",
+      "text": "Leave reports to view or export. The leave <b>Dashboard</b> and <b>Calendar</b> are tabs on the <b>Leave</b> screen.",
       "placement": "right"
     },
     {
@@ -143,21 +134,12 @@
       "placement": "right"
     },
     {
-      "id": "es-nav-settings",
+      "id": "es-nav-esssettings",
       "target": [
-        "#sidebarNav [onclick*='settings']"
+        "#sidebarNav [onclick*='esssettings']"
       ],
-      "title": "App Settings",
-      "text": "When managers are emailed about new leave and expense requests.",
-      "placement": "right"
-    },
-    {
-      "id": "es-nav-global",
-      "target": [
-        "#sidebarNav [onclick*='global']"
-      ],
-      "title": "Global Settings",
-      "text": "System preferences, who approves what (Workflow Routing), and payroll periods.",
+      "title": "Settings",
+      "text": "How ESS works for your company: employee source, email timing, who approves requests, payroll periods, leave balance source, coverage rules and claim types. You only see the sections your role allows.",
       "placement": "right"
     },
     {
@@ -977,6 +959,26 @@
       "trigger": "#page-leavecalendar.active",
       "steps": [
         {
+          "id": "elh-tabs",
+          "target": [
+            "#lhTabs"
+          ],
+          "title": "Leave tabs",
+          "text": "Every leave screen is a tab here: daily work on the left, <b>Setup</b> on the right. A <i class=\"fas fa-lock\"></i> means your role can view that tab but not change it.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "elh-viewonly",
+          "target": [
+            "#lhRoot[data-ro] .lh-ro"
+          ],
+          "title": "View only",
+          "text": "Your role can see this tab but not change it, so its change buttons are hidden. Edit rights are set in Settings &gt; Roles &gt; ESS Master &gt; Leave screen tabs.",
+          "placement": "left",
+          "optional": true
+        },
+        {
           "id": "elc-dept",
           "target": [
             "#lcDept"
@@ -1277,6 +1279,51 @@
           "title": "Map and list",
           "text": "Click a pin or a row to see who, where and when.",
           "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "essmaster.esssettings",
+      "title": "Settings",
+      "trigger": "#page-esssettings.active",
+      "steps": [
+        {
+          "id": "ess-set-nav",
+          "target": [
+            "#shNav"
+          ],
+          "title": "Sections",
+          "text": "Each setting has its own section. A <i class=\"fas fa-lock\"></i> means your role can view it but not change it.",
+          "placement": "right"
+        },
+        {
+          "id": "ess-set-head",
+          "target": [
+            "#shMain .sh-pane-head"
+          ],
+          "title": "What it does",
+          "text": "Every section says what it is for. Hover the <i class=\"fas fa-info-circle\"></i> for more detail.",
+          "placement": "bottom"
+        },
+        {
+          "id": "ess-set-routing-add",
+          "target": [
+            "#shRtAdd"
+          ],
+          "title": "Approval routing",
+          "text": "<b>Add rule</b> sets the approvers for a department or one employee. Use <b>Edit</b> on a row to change one.",
+          "placement": "left",
+          "optional": true
+        },
+        {
+          "id": "ess-set-savebar",
+          "target": [
+            "#shSaveBar.show"
+          ],
+          "title": "Save changes",
+          "text": "When you change something here, this bar appears. <b>Save changes</b> or <b>Discard</b>. Leaving with unsaved changes asks first.",
+          "placement": "top",
+          "optional": true
         }
       ]
     },

@@ -7,11 +7,11 @@
     {
       "id": "source",
       "title": "Where ESS gets its employees",
-      "section": "global",
+      "section": "esssettings",
       "call": {
-        "fn": "switchGlobalTab",
+        "fn": "essSettingsOpen",
         "args": [
-          "preferences"
+          "general"
         ]
       },
       "why": "ESS works on your employee records. Choose whether they come from this system, are synced from another system, or are uploaded. Everything else builds on this.",
@@ -114,9 +114,9 @@
     {
       "id": "routing",
       "title": "Who approves requests",
-      "section": "global",
+      "section": "esssettings",
       "call": {
-        "fn": "switchGlobalTab",
+        "fn": "essSettingsOpen",
         "args": [
           "routing"
         ]

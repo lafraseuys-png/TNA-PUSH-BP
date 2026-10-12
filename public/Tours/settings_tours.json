@@ -760,12 +760,12 @@
           ]
         },
         {
-          "id": "sts-hide-tiles",
+          "id": "sts-hide-tiles-2",
           "target": [
             "#sync-mobile"
           ],
-          "title": "Hide Restricted Tiles",
-          "text": "When this is on, tiles an employee can't use are hidden in the mobile app instead of greyed out. It saves as soon as you switch it.",
+          "title": "Tiles a user can't use",
+          "text": "The mobile app hides every tile and menu item an employee can't use, and a heading such as <b>Your tools</b>, <b>Contracts</b>, <b>Inputs</b> or <b>People</b> disappears when nothing is left under it. Give access in Roles &amp; Permissions under Mobile App Tiles.",
           "placement": "bottom",
           "before": [
             {
@@ -861,6 +861,15 @@
           "placement": "left"
         },
         {
+          "id": "stu-qr-bulk",
+          "target": [
+            "#userDataToolsWrap"
+          ],
+          "title": "Bulk login QR cards",
+          "text": "<b>Bulk Export Login QR PDFs</b> (in Data Tools) makes a zip with one QR card per active user with App access: their name as the heading, the login QR, and where they sit (role, Distribution areas, departments they manage, employee record) - one PDF per person named after them, in a folder per role, <b>All cards.pdf</b> to print them all at once, and <b>Summary.csv</b>. Every card is a <b>new</b> QR - their old QR and printed card stop working.",
+          "placement": "left"
+        },
+        {
           "id": "stu-search",
           "target": [
             "#userSearchInput"
@@ -933,32 +942,74 @@
       "trigger": "#page-roles.active",
       "steps": [
         {
-          "id": "str-create",
+          "id": "str3-list",
           "target": [
-            "#page-roles button[onclick*='openRoleModal']"
-          ],
-          "title": "Create Role",
-          "text": "Give the role a code and a name, choose whether it allows <b>Web</b> and/or <b>Mobile</b> access, then tick its permissions on each tab: Time &amp; Attendance, Employee Master, Employee Costs, HR, System Config, Settings, ESS Master, Access Control, Reports and App Modules.",
-          "placement": "left"
-        },
-        {
-          "id": "str-table",
-          "target": [
+            "#rv2List",
             "#rolesTable"
           ],
           "title": "Your roles",
-          "text": "Every role in your company. Give a role to a user in <b>User Access</b>, either on the user or for many users at once with <b>Apply Role</b>.",
+          "text": "Every role in your company: how many people have it and, in short, what it gives on the <b>Web</b>, the <b>Phone app</b> and in <b>Self-service</b>. An orange <b>personal</b> tag means some people on the role have their own permissions, so role screen changes don't reach them. Give a role to people in <b>User Access</b>, on the user or for many users at once with <b>Apply Role</b>.",
           "placement": "top"
         },
         {
-          "id": "str-edit",
+          "id": "str3-actions",
           "target": [
-            "#rolesTableBody button[onclick*='editRole']"
+            "#rv2Rows .rv2-acts"
           ],
-          "title": "Edit a role",
-          "text": "Change the role's name, access and permissions. Everyone with this role is affected, so check before you remove anything.",
+          "title": "People, Duplicate, Edit",
+          "text": "<b>People</b> lists everyone with the role (and who has personal permissions). <b>Duplicate</b> opens a copy as a new role. <b>Edit</b> opens the role in a pop-up with the <b>Web | Phone app | Employee self-service</b> tabs.",
           "placement": "left",
-          "timeout": 3000
+          "optional": true
+        },
+        {
+          "id": "str3-tools-2",
+          "target": [
+            "#rv2ColsBtn"
+          ],
+          "title": "Search, columns and filters",
+          "text": "Search the whole list at the top, or type under a heading to search that column. Click a heading to sort. <b>Columns</b> (or right-click a heading) chooses and orders the columns (drag), <b>Filters</b> e.g. shows roles nobody has. <b>Data Tools</b> exports the list as you see it.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "str3-new",
+          "target": [
+            "#rv2New",
+            "#page-roles button[onclick*='openRoleModal']"
+          ],
+          "title": "Create Role",
+          "text": "Opens a new, empty role in the pop-up: give it a name and a code, choose what it can do on each tab, then <b>Create role</b>.",
+          "placement": "bottom"
+        },
+        {
+          "id": "str2-tabs",
+          "target": [
+            "#rv2Tabs"
+          ],
+          "title": "Web | Phone app | Employee self-service",
+          "text": "One tab for each place people work: the <b>Web</b> dashboard, the <b>Phone app</b> (tiles, and what is inside the Contractors menu) and <b>Employee self-service</b>.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "str2-levels-2",
+          "target": [
+            "#rv2Modules"
+          ],
+          "title": "One level per module",
+          "text": "<b>None</b> = no access, <b>View</b> = see its screens, <b>Edit</b> = also change things, <b>Full</b> = also export, import and print. A module only shows the levels it has: lists of screens only (Reports, Settings, System config) are <b>None</b> or <b>All</b>. <b>screens</b> opens the full list to set one screen at a time. <b>Custom</b> means the role was set screen by screen - it stays exactly as it is until you pick a level. An orange note lists anyone on the role with personal permissions: role screen changes do not reach them until you put them back on the role.",
+          "placement": "top",
+          "optional": true
+        },
+        {
+          "id": "str3-save",
+          "target": [
+            "#rv2Save"
+          ],
+          "title": "Save",
+          "text": "Nothing changes until you press <b>Save</b> (<b>Create role</b> for a new one), and saving updates everyone with the role; the pop-up then closes and the list shows the result. <b>Cancel</b>, the <b>×</b> or <b>Esc</b> close it without saving. <b>Classic view</b> (top right) opens the old role form if you prefer it.",
+          "placement": "top",
+          "optional": true
         },
         {
           "id": "str-guides",
@@ -1729,93 +1780,117 @@
           "hint": "Click Roles & Permissions"
         },
         {
-          "id": "stg-cr-list",
+          "id": "stg-cr3-list",
           "target": [
+            "#rv2List",
             "#rolesTable"
           ],
           "title": "Your roles",
-          "text": "Every role in your company. Editing a role later (the <b>Edit</b> button on its row) changes it for <b>every user who has that role</b> straight away, so check who uses it before you take anything away.",
+          "text": "Every role in your company, with how many people have it. Changing a role later changes it for <b>every user who has that role</b> when you save, so check who uses it first (the <b>People</b> button on its row). To start from a similar role, use <b>Duplicate</b> on its row.",
           "placement": "top",
           "timeout": 5000
         },
         {
-          "id": "stg-cr-new",
+          "id": "stg-cr3-new",
           "target": [
+            "#rv2New",
             "#page-roles button[onclick*='openRoleModal']"
           ],
           "title": "Create Role",
-          "text": "Opens the role form.",
-          "placement": "left",
+          "text": "Opens a new, empty role in a pop-up.",
+          "placement": "bottom",
           "mode": "click",
           "hint": "Click Create Role"
         },
         {
-          "id": "stg-cr-name",
+          "id": "stg-cr2-name",
           "target": [
+            "#rv2Name",
             "#editRoleCode"
           ],
-          "title": "Code and name",
-          "text": "<b>Role Code</b> is a short unique code, e.g. <i>LINE_MGR</i>. <b>Role Name</b> is what people see in lists, e.g. <i>Line Manager</i>.",
+          "title": "Name and code",
+          "text": "<b>Role name</b> is what people see in lists, e.g. <i>Line Manager</i>. <b>Role code</b> (next to it) is a short unique code, e.g. <i>LINE_MGR</i>.",
           "placement": "bottom",
           "timeout": 5000
         },
         {
-          "id": "stg-cr-access",
+          "id": "stg-cr2-tabs",
           "target": [
-            "#roleCanAccessWeb"
+            "#rv2Tabs"
           ],
-          "title": "Web and Mobile access",
-          "text": "Whether people with this role may log in on the <b>web</b> dashboard, the <b>mobile</b> app, or both.",
-          "placement": "bottom",
-          "climb": 2
+          "title": "Web | Phone app | Employee self-service",
+          "text": "Set the role one place at a time: the <b>Web</b> dashboard, the <b>Phone app</b> and <b>Employee self-service</b>. Each tab has its own <b>Can log in</b> switch at the top.",
+          "placement": "bottom"
         },
         {
-          "id": "stg-cr-tabs",
+          "id": "stg-cr2-levels-2",
           "target": [
-            "#tab_tna"
+            "#rv2Modules"
           ],
-          "title": "Permission tabs",
-          "text": "One tab per part of the system: Time &amp; Attendance, Employee Master, Employee Costs, HR, System Config, Settings, ESS Master, Access Control, Reports and App Modules. Go through each one the role needs.",
-          "placement": "bottom",
-          "climb": 1
+          "title": "Pick a level per module",
+          "text": "<b>None</b> = no access, <b>View</b> = see its screens, <b>Edit</b> = also change things, <b>Full</b> = also export, import and print. A module only shows the levels it has, e.g. Reports is just <b>None</b> or <b>All</b>. Modules without screens (HR, Fuel, Stock...) are simply <b>On</b> or <b>Off</b>. <b>Custom</b> means the module is set screen by screen - it stays exactly as it is until you pick a level. A view-only setting stays view-only when the role is opened again.",
+          "placement": "top"
         },
         {
-          "id": "stg-cr-tab-click",
+          "id": "stg-cr3-screens",
           "target": [
-            "#tab_empmaster"
+            "#rv2M [data-screens=\"empmaster\"]"
           ],
-          "title": "Open a tab",
-          "text": "Let's look at one.",
-          "placement": "bottom",
-          "mode": "click",
-          "hint": "Click Employee Master"
-        },
-        {
-          "id": "stg-cr-all",
-          "target": [
-            "#empmaster_all"
-          ],
-          "title": "Everything on this tab",
-          "text": "Ticks every permission on this tab in one go. Handy for a full-access role; otherwise tick only what is needed below.",
+          "title": "Set single screens",
+          "text": "Opens the module's full list, so you can give one screen or one right on its own.",
           "placement": "right",
-          "climb": 1
+          "mode": "click",
+          "hint": "Click screens next to Employee Master"
         },
         {
-          "id": "stg-cr-tree",
+          "id": "stg-cr3-tree",
           "target": [
+            "#rv2M #tree_empmaster",
             "#tree_empmaster"
           ],
           "title": "Screens and rights",
-          "text": "Each <b>Tab:</b> line is a screen the person can open. The lines under it (<b>└─</b>) are extra rights on that screen, such as editing, exporting or importing. Leave those off for a view-only role.",
+          "text": "Each <b>Tab:</b> line is a screen the person can open. The lines under it (<b>└─</b>) are extra rights on that screen, such as editing, exporting or importing. <b>Select All</b> ticks the whole list.<br><br>Under <b>ESS Master</b> you also find <b>Leave screen tabs</b> and <b>Settings screen sections</b>: <b>View</b> shows a tab or section, <b>Edit</b> lets the role change it.",
           "placement": "left"
         },
         {
-          "id": "stg-cr-save",
+          "id": "stg-cr3-phone",
           "target": [
+            "#rv2M [data-tab=\"phone\"]"
+          ],
+          "title": "Phone app",
+          "text": "The tiles this role sees on the phone.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Phone app"
+        },
+        {
+          "id": "stg-cr2-far-menu",
+          "target": [
+            "#rv2Tiles"
+          ],
+          "title": "Tiles, and inside the Contractors menu",
+          "text": "Switch on the tiles the role needs. With <b>Contractors</b> on, choose what it sees inside that menu: Assign a contract, Club contracts, Chairperson &amp; Secretary, Manager approvals, My contracts, Inputs distribution, Contractor returns, Verify identity and Directory &amp; enrollments. Off = not shown and can't be opened. Phones pick it up at the next login. A single user can be set differently on their Edit user screen.",
+          "placement": "top"
+        },
+        {
+          "id": "stg-cr3-ess",
+          "target": [
+            "#rv2M [data-tab=\"ess\"]"
+          ],
+          "title": "Employee self-service",
+          "text": "What employees with this role can do in self-service: clock in and out, log trips, apply for leave and submit claims.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Employee self-service"
+        },
+        {
+          "id": "stg-cr3-save",
+          "target": [
+            "#rv2Save",
             "#roleForm button[onclick*='submitRoleForm']"
           ],
-          "title": "Save Role",
-          "text": "Saves the role. Nothing has been saved by this guide, so press <b>Cancel</b> if you were only looking.<br><br>Next: give the role to people - see the guides <b>Give a user a role</b> and <b>Give many users a role at once</b>.",
+          "title": "Save",
+          "text": "<b>Create role</b> saves a new role, <b>Save</b> an existing one (it lights up once something has changed); the pop-up closes and the list shows it. Nothing has been saved by this guide - press <b>Cancel</b> if you were only looking. <b>Classic view</b> (top right) opens the old role form if you prefer it.<br><br>Next: give the role to people - see the guides <b>Give a user a role</b> and <b>Give many users a role at once</b>.",
           "placement": "top"
         }
       ]

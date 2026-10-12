@@ -99,6 +99,2251 @@
           "placement": "top"
         }
       ]
+    },
+    {
+      "key": "contractors.guide.import-locations",
+      "title": "Import locations",
+      "icon": "fa-map-signs",
+      "blurb": "Load your regions, areas and clubs from an Excel or CSV file, then read what was added and what was skipped.",
+      "steps": [
+        {
+          "id": "cog-il-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('locations'\"]"
+          ],
+          "title": "Locations Master",
+          "text": "Click <b>Locations Master</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Locations Master",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='setup']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-il-template",
+          "target": [
+            "#btnAreaTemplate"
+          ],
+          "title": "1. Download the template",
+          "text": "<b>Download Template</b> gives you an Excel file with one column per Hierarchy Level, from the top down (e.g. Region, Area, Club). <b>Tobacco Type</b> and <b>Warehouse</b> columns are added when you have them, then your Location Fields.<br>Fill in one row per club and repeat the parent names on every row. Leave no gaps: a name can't sit to the right of an empty cell.",
+          "placement": "bottom",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-il-export",
+          "target": [
+            "#btnAreaExport"
+          ],
+          "title": "Changing what is already there?",
+          "text": "<b>Export Locations</b> downloads every location with the same columns as the template. Edit that file and import it back.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "cog-il-history",
+          "target": [
+            "#page-locations button[onclick*='openAreaImportHistory']"
+          ],
+          "title": "Import History",
+          "text": "Lists recent imports with who ran them and how many locations were added, changed or removed. Only the <b>latest</b> import can be undone.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "cog-il-import",
+          "target": [
+            "#btnImportAreas"
+          ],
+          "title": "2. Import Areas",
+          "text": "Click <b>Import Areas</b> and choose your filled-in file (.xlsx, .xls or .csv). The headings must match your Hierarchy Levels.<br>The guide carries on when the import options appear.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Import Areas and choose your file"
+        },
+        {
+          "id": "cog-il-merge",
+          "target": [
+            ".aim-backdrop .aim-opt[data-mode='merge']"
+          ],
+          "title": "3. Add & update (the safe choice)",
+          "text": "Adds new locations and fills in values. Nothing is renamed, moved or cleared, and a blank cell never removes a value. A location whose full path already exists is not added again.",
+          "placement": "right",
+          "timeout": 120000
+        },
+        {
+          "id": "cog-il-overwrite",
+          "target": [
+            ".aim-backdrop .aim-opt[data-mode='overwrite']"
+          ],
+          "title": "The other two options",
+          "text": "<b>Overwrite</b>: your locations become exactly this file. Any location not in the file is removed (or switched off if farmers, contracts or users are on it).<br><b>Move under new parents</b>: moves existing locations, with everything under them, to the parent named in the file.<br>Use these only when you mean it. You can undo afterwards.",
+          "placement": "right"
+        },
+        {
+          "id": "cog-il-go",
+          "target": [
+            ".aim-backdrop [data-act='go']"
+          ],
+          "title": "4. Import and read the results",
+          "text": "Pick an option, then click <b>Import</b>. The <b>Import Results</b> window shows <b>New areas created</b>, <b>Already existed</b> (skipped, never duplicated) and <b>Rows read</b>.<br>Rows that were skipped are listed in red with the reason (for example an empty cell to the left of a name). Fix them and import the same file again; rows that already went in are skipped.<br>Imported areas have no map pin yet. Wrong file? Click <b>Undo this import</b>.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "contractors.guide.import-farmers",
+      "title": "Import farmers",
+      "icon": "fa-file-import",
+      "blurb": "Load or update many farmers from Excel: match the columns, check the preview, then commit.",
+      "steps": [
+        {
+          "id": "cog-if-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('contractors'\"]"
+          ],
+          "title": "Farmers Master",
+          "text": "Click <b>Farmers Master</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Farmers Master",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='farmers']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-if-tools",
+          "target": [
+            "#page-contractors button[onclick*='contDataToolsDropdownMenu']"
+          ],
+          "title": "Data Tools",
+          "text": "Click <b>Data Tools</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Data Tools",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-if-template",
+          "target": [
+            "#contDataToolsDropdownMenu a[onclick*='downloadContractorTemplate']"
+          ],
+          "title": "1. Get the template",
+          "text": "<b>Download Blank Template</b>: First Name, Last Name, Contract Number, ID Number, Passport Number, Cell Phone, Physical Address, one drop-down column per hierarchy level, then your own profile fields.<br>One row per farmer. Photos and documents can't be imported.",
+          "placement": "left",
+          "before": [
+            {
+              "addClass": "#contDataToolsDropdownMenu",
+              "cls": "show"
+            }
+          ]
+        },
+        {
+          "id": "cog-if-history",
+          "target": [
+            "#contDataToolsDropdownMenu a[onclick*='openContImportHistoryModal']"
+          ],
+          "title": "Import History",
+          "text": "<b>View Import History</b> lists every import batch with its new and updated profiles. <b>Rollback</b> deletes the new profiles of a batch. Updates are not undone, and a rollback fails once a new farmer has a contract.",
+          "placement": "left",
+          "optional": true,
+          "before": [
+            {
+              "addClass": "#contDataToolsDropdownMenu",
+              "cls": "show"
+            }
+          ]
+        },
+        {
+          "id": "cog-if-import",
+          "target": [
+            "#contDataToolsDropdownMenu a[onclick*='openImportContractorModal']"
+          ],
+          "title": "2. Import Excel Data",
+          "text": "Click <b>Import Excel Data</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Import Excel Data",
+          "before": [
+            {
+              "addClass": "#contDataToolsDropdownMenu",
+              "cls": "show"
+            }
+          ]
+        },
+        {
+          "id": "cog-if-file",
+          "target": [
+            "#importCsvFile"
+          ],
+          "title": "3. Choose your file",
+          "text": "Click the file box and choose your Excel file (.xlsx or .xls). Keep <b>File contains a header row</b> ticked if row 1 has headings.<br>The guide carries on when the columns appear.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click the file box and choose your file",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "cog-if-map",
+          "target": [
+            "#importMappingContainer"
+          ],
+          "title": "4. Match the columns",
+          "text": "Each column in your file is matched to a field. Template headings match by themselves. <b>First Name</b> must be matched; set a column to <b>Ignore Column</b> to leave it out.<br>Existing farmers are found by Farmer ID, then Contract Number, then ID Number, and are updated instead of added.",
+          "placement": "top",
+          "timeout": 120000
+        },
+        {
+          "id": "cog-if-areas",
+          "target": [
+            "#importAutoCreateAreasWrap"
+          ],
+          "title": "Create missing areas",
+          "text": "Without this tick, a single row naming an area that doesn't exist locks the whole import. With it, those areas are created when you commit, and you see the list first. The level above must already exist.<br><b>Update existing farmers only</b> (next to it) is for a file from Export Farmer Data: nobody is added and blank cells change nothing.",
+          "placement": "top",
+          "optional": true
+        },
+        {
+          "id": "cog-if-preview",
+          "target": [
+            "#importStep2 button[onclick*='generateImportStaging']"
+          ],
+          "title": "5. Preview Staging Area",
+          "text": "Change any column match or tick an option now, then click <b>Preview Staging Area</b>. Nothing is saved yet.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Click Preview Staging Area",
+          "climb": 1
+        },
+        {
+          "id": "cog-if-commit",
+          "target": [
+            "#commitImportBtn"
+          ],
+          "title": "6. Check, then commit",
+          "text": "Every row shows <b>NEW</b>, <b>UPDATE</b> or <b>REJECTED</b> with the reason (no First Name, a Contract Number repeated in the file or with spaces or symbols). Rejected rows are listed first and are left out.<br>Leave <b>Overwrite mode</b> unticked unless this file is your full list. Otherwise, everyone not in it is deactivated.<br>Click <b>Commit Import</b> (or <b>Import Valid Rows Only</b>). The result shows new and updated profiles, with <b>Roll back now</b> or <b>Keep the import</b>.",
+          "placement": "top",
+          "timeout": 20000
+        }
+      ]
+    },
+    {
+      "key": "contractors.guide.import-stock",
+      "title": "Import warehouses & stock items",
+      "icon": "fa-boxes-stacked",
+      "blurb": "Load your warehouses, then your stock catalogue with prices, from Excel.",
+      "steps": [
+        {
+          "id": "cog-is-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('distribution'\"]"
+          ],
+          "title": "Distribution Master",
+          "text": "Click <b>Distribution Master</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Distribution Master",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='dist']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-is-whtab",
+          "target": [
+            "#tab-d-warehouses"
+          ],
+          "title": "Warehouses",
+          "text": "Click <b>Warehouses</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Warehouses",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-is-whtools",
+          "target": [
+            "#dist-tab-warehouses button[onclick*='distWhsDataToolsMenu']"
+          ],
+          "title": "Data Tools",
+          "text": "Click <b>Data Tools</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Data Tools",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-is-whimport",
+          "target": [
+            "#distWhsDataToolsMenu a[onclick*='openDistWarehouseImport']"
+          ],
+          "title": "1. Warehouses",
+          "text": "<b>Blank Import Template</b> has two columns: <b>Warehouse Name</b> (required) and <b>Linked Area</b> (optional, typed as it appears in Locations).<br>After this guide, click <b>Import Excel Data</b> and pick the file. A preview marks each row <b>NEW</b>, <b>UPDATE</b> (same name, new area), <b>NO CHANGE</b> or <b>REJECTED</b> (no name, name repeated, area not found). Click <b>Import</b> to save. Rejected rows are skipped.",
+          "placement": "left",
+          "before": [
+            {
+              "addClass": "#distWhsDataToolsMenu",
+              "cls": "show"
+            }
+          ]
+        },
+        {
+          "id": "cog-is-ittab",
+          "target": [
+            "#tab-d-items"
+          ],
+          "title": "2. Stock Items",
+          "text": "Now the stock catalogue. Click <b>Stock Items</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Stock Items",
+          "before": [
+            {
+              "removeClass": "#distWhsDataToolsMenu",
+              "cls": "show"
+            }
+          ]
+        },
+        {
+          "id": "cog-is-ittools",
+          "target": [
+            "#dist-tab-items button[onclick*='distItemsDataToolsMenu']"
+          ],
+          "title": "Data Tools",
+          "text": "Click <b>Data Tools</b>. It has <b>Blank Import Template</b> (Item Code, Item Name, Category, Unit of Measure, Cost Price, Contractor Price, Description, Status) and <b>View Import History</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Data Tools",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-is-itimport",
+          "target": [
+            "#distItemsDataToolsMenu a[onclick*='openImportDistItemModal']"
+          ],
+          "title": "Import Excel Data",
+          "text": "Click <b>Import Excel Data</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Import Excel Data",
+          "before": [
+            {
+              "addClass": "#distItemsDataToolsMenu",
+              "cls": "show"
+            }
+          ]
+        },
+        {
+          "id": "cog-is-itfile",
+          "target": [
+            "#importDistItemFile"
+          ],
+          "title": "3. Choose your file",
+          "text": "Click the file box and choose your Excel file (.xlsx or .xls). <b>Rows to ignore at top</b> stays on 1 for the template, which skips the heading row.<br>The guide carries on when the columns appear.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click the file box and choose your file",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "cog-is-itpreview",
+          "target": [
+            "#importDistItemStep2 button[onclick*='generateDistItemImportStaging']"
+          ],
+          "title": "4. Match the columns",
+          "text": "Check each column's match. <b>Item Code</b> and <b>Item Name</b> are required. Tobacco Type and Cat 1-4 Qty per ha columns fill that tobacco type's recipe.<br>Then click <b>Preview Staging Area</b>. Nothing is saved yet.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Click Preview Staging Area",
+          "climb": 1,
+          "timeout": 120000
+        },
+        {
+          "id": "cog-is-itcommit",
+          "target": [
+            "#commitDistItemBtn"
+          ],
+          "title": "5. Check, then commit",
+          "text": "Rows show <b>NEW</b>, <b>UPDATE</b> (the Item Code already exists) or <b>REJECTED</b> (no code or name, or a code repeated in the file). Leave the boxes ticked to create new units and categories, or those rows fail.<br>Click <b>Commit Import</b> (or <b>Import Valid Rows Only</b>). <b>View Import History</b> can roll back a batch's new items. Updates stay.",
+          "placement": "top",
+          "timeout": 8000
+        }
+      ]
+    },
+    {
+      "key": "contractors.guide.import-managers",
+      "title": "Import manager assignments",
+      "icon": "fa-user-tie",
+      "blurb": "Give many managers their areas at once from an Excel file.",
+      "steps": [
+        {
+          "id": "cog-im-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('hierarchy'\"]"
+          ],
+          "title": "Contractors Hierarchy",
+          "text": "Click <b>Contractors Hierarchy</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Contractors Hierarchy",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='setup']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-im-tab",
+          "target": [
+            "#tab-h-managers"
+          ],
+          "title": "Manager Assignments",
+          "text": "Click <b>Manager Assignments</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Manager Assignments",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-im-tools",
+          "target": [
+            "#cont-hier-managers button[onclick*='mgrDataToolsDropdownMenu']"
+          ],
+          "title": "Data Tools",
+          "text": "Click <b>Data Tools</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Data Tools",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-im-template",
+          "target": [
+            "#mgrDataToolsDropdownMenu a[onclick*='downloadManagerAssignTemplate']"
+          ],
+          "title": "1. Get the template",
+          "text": "<b>Download Blank Template</b>: a <b>Username</b> column plus one column per hierarchy level, all with drop-downs.<br>One row per manager and area. Repeat a username to give them several areas. Fill in only the level they manage (e.g. just the Club). The levels above it are worked out.",
+          "placement": "left",
+          "before": [
+            {
+              "addClass": "#mgrDataToolsDropdownMenu",
+              "cls": "show"
+            }
+          ]
+        },
+        {
+          "id": "cog-im-upload",
+          "target": [
+            "#mgrDataToolsDropdownMenu a[onclick*='mgrBulkFile']"
+          ],
+          "title": "2. Bulk Upload Assignments",
+          "text": "Click <b>Bulk Upload Assignments</b> and choose your filled-in file (.xlsx or .xls).<br>The guide carries on when the preview appears.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Bulk Upload Assignments and choose your file",
+          "before": [
+            {
+              "addClass": "#mgrDataToolsDropdownMenu",
+              "cls": "show"
+            }
+          ]
+        },
+        {
+          "id": "cog-im-preview",
+          "target": [
+            "#mgrBulkPreviewWrap"
+          ],
+          "title": "3. Check the preview",
+          "text": "The top line says how many pairings are ready. Problem rows come first: red <b>SKIPPED</b> rows (username or area not found) and amber <b>FLAGGED</b> rows (the name fits more than one location, so add the level above or the unique number).<br>These rows are left out and everything else can still be applied. <b>Print</b> the problem rows as a PDF to fix them.",
+          "placement": "bottom",
+          "timeout": 120000
+        },
+        {
+          "id": "cog-im-discard",
+          "target": [
+            "#mgrBulkDiscardBtn"
+          ],
+          "title": "Discard",
+          "text": "Clears the preview. Nothing has been saved yet, so nothing changes.",
+          "placement": "top"
+        },
+        {
+          "id": "cog-im-apply",
+          "target": [
+            "#mgrBulkCommitBtn"
+          ],
+          "title": "4. Apply Assignments",
+          "text": "Saves the pairings. Each manager then receives approvals, escalations and notifications for those areas and sees only the farmers in them. Nothing they already hold is removed.<br>The next screen lets you roll it back if it came out wrong.",
+          "placement": "top",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "key": "contractors.guide.add-locations",
+      "title": "Add locations & the hierarchy",
+      "icon": "fa-map-signs",
+      "blurb": "Add your hierarchy levels, a location, and a manager over it.",
+      "steps": [
+        {
+          "id": "cog-al-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('hierarchy'\"]"
+          ],
+          "title": "Farmers Hierarchy",
+          "text": "First your levels, then your locations, then the managers. Click <b>Farmers Hierarchy</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Farmers Hierarchy",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='setup']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-al-levels",
+          "target": [
+            "#tab-h-levels"
+          ],
+          "title": "Hierarchy Levels",
+          "text": "Levels are your structure from the top down, for example REGION, then AREA, then CLUB. Click <b>Hierarchy Levels</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Hierarchy Levels",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-al-addlvl",
+          "target": [
+            "#page-hierarchy button[onclick*='openContLevelModal(null)']"
+          ],
+          "title": "Add Level",
+          "text": "Click <b>Add Level</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Add Level",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-al-lvlsave",
+          "target": [
+            "#contLevelModalSaveBtn"
+          ],
+          "title": "Name it and save",
+          "text": "Type the <b>Level Name</b>, e.g. REGION. If you already have levels, pick its <b>Position</b>: <b>Top</b>, between two levels, or <b>Bottom</b>. Click <b>Save Level</b>; it is saved straight away. Start with the top level, then use <b>Add Level</b> again for each level under it.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Fill in, then click Save Level",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-al-loc",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('locations'\"]"
+          ],
+          "title": "Locations Master",
+          "text": "Now the locations. Click <b>Locations Master</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Locations Master",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='setup']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-al-addarea",
+          "target": [
+            "#page-locations button[onclick='openAreaModal()']"
+          ],
+          "title": "Add Area",
+          "text": "Click <b>Add Area</b> to add one location by hand. For many at once, use <b>Download Template</b> and then <b>Import Areas</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Add Area",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-al-areaform",
+          "target": [
+            "#areaName"
+          ],
+          "title": "Name, parent and level",
+          "text": "<b>Area Name</b>. <b>Parent Area</b>: the location it sits under (leave blank for a top location). <b>Hierarchy Level</b>: its level, e.g. CLUB. <b>Area Radius</b>: the size of its circle on the map. For a club, also pick its <b>Tobacco Type</b>.",
+          "placement": "right",
+          "climb": 2,
+          "timeout": 4000
+        },
+        {
+          "id": "cog-al-areasave",
+          "target": [
+            "#saveAreaBtn"
+          ],
+          "title": "Map and Save Area",
+          "text": "Fill in the form and drag the pin on the map to the right spot. The circle must fit inside its parent's circle, or it won't save: move the pin or make the radius smaller. Click <b>Save Area</b>.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Fill in, then click Save Area"
+        },
+        {
+          "id": "cog-al-mgrtab",
+          "target": [
+            "#tab-h-managers"
+          ],
+          "title": "Manager Assignments",
+          "text": "Back on <b>Farmers Hierarchy</b>: put a manager over a location. Click <b>Manager Assignments</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Manager Assignments",
+          "timeout": 4000,
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='setup']",
+              "cls": "open"
+            },
+            {
+              "click": "#sidebarNav [onclick*=\"showSection('hierarchy'\"]"
+            }
+          ]
+        },
+        {
+          "id": "cog-al-mgrtools",
+          "target": [
+            "#cont-hier-managers .data-tools-menu-container > button"
+          ],
+          "title": "Assign managers",
+          "text": "Managers are assigned from a spreadsheet. <b>Data Tools</b> &gt; <b>Download Blank Template</b>. Fill in one row per manager and location: the <b>Username</b> and the location under each level. Leave the deeper levels blank to give them a whole region. Then <b>Data Tools</b> &gt; <b>Bulk Upload Assignments</b>, check the preview and click <b>Apply Assignments</b>. Contracts from that location then come to that manager's <b>Inbox</b> for approval.",
+          "placement": "left",
+          "timeout": 4000
+        }
+      ]
+    },
+    {
+      "key": "contractors.guide.add-stock",
+      "title": "Add warehouses, stock items & receive stock",
+      "icon": "fa-warehouse",
+      "blurb": "Create a warehouse and a stock item, receive stock with a GRV, and see it in the inventory.",
+      "steps": [
+        {
+          "id": "cog-as-whs",
+          "target": [
+            "#tab-d-warehouses"
+          ],
+          "title": "Warehouses",
+          "text": "This is <b>Distribution Master</b> (sidebar, under Distribution). First a warehouse: click <b>Warehouses</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Warehouses",
+          "timeout": 4000,
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='dist']",
+              "cls": "open"
+            },
+            {
+              "click": "#sidebarNav [onclick*=\"showSection('distribution'\"]"
+            }
+          ]
+        },
+        {
+          "id": "cog-as-whsadd",
+          "target": [
+            "#dist-tab-warehouses button[onclick='openCreateDistWarehouse()']"
+          ],
+          "title": "Create Warehouse",
+          "text": "Click <b>Create Warehouse</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Create Warehouse",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-as-whssave",
+          "target": [
+            "#distWhsSubmitBtn"
+          ],
+          "title": "Name and area",
+          "text": "Type the <b>Warehouse Name</b> and choose the <b>Linked Geographic Area</b>. Locations under that area are covered too. Click <b>Save</b>.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Fill in, then click Save",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-as-items",
+          "target": [
+            "#tab-d-items"
+          ],
+          "title": "Stock Items",
+          "text": "Next, the inputs you hand out. Click <b>Stock Items</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Stock Items"
+        },
+        {
+          "id": "cog-as-itemadd",
+          "target": [
+            "#dist-tab-items button[onclick='openDistItemModal()']"
+          ],
+          "title": "Create Item",
+          "text": "Click <b>Create Item</b>. No units yet? Add them first with <b>Units (UoM)</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Create Item",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-as-itemsave",
+          "target": [
+            "#saveDistItemBtn"
+          ],
+          "title": "Item details",
+          "text": "Fill in <b>Item Code / SKU</b>, <b>Item Name</b> and <b>Unit (UoM)</b> (required), plus <b>Category</b> (e.g. Fertilizer), <b>Cost Price</b> and <b>Farmer Price</b>. Tick <b>Requires Batch/Lot Tracking</b> to record batch numbers when stock is received. Click <b>Save Item</b>.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Fill in, then click Save Item",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-as-grv",
+          "target": [
+            "#tab-d-grv"
+          ],
+          "title": "Receive Stock (GRV)",
+          "text": "Now book stock into the warehouse. Click <b>Receive Stock (GRV)</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Receive Stock (GRV)"
+        },
+        {
+          "id": "cog-as-grvadd",
+          "target": [
+            "#dist-tab-grv button[onclick='openDistGrvModal()']"
+          ],
+          "title": "Receive New Stock",
+          "text": "Click <b>Receive New Stock</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Receive New Stock",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-as-grvsave",
+          "target": [
+            "#submitDistGrvBtn"
+          ],
+          "title": "Items and quantities",
+          "text": "Type the <b>PO / Ref Number</b> and choose the <b>Destination Warehouse</b>. For each item: <b>Select Bulk Item</b>, type the <b>Quantity</b> (and <b>Batch/Lot No</b> if asked), click <b>Add</b>. Then click <b>Process GRV</b>; the stock is added to that warehouse.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Add the items, then click Process GRV",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-as-inv",
+          "target": [
+            "#tab-d-inventory"
+          ],
+          "title": "Where it shows",
+          "text": "Click <b>Live Inventory &amp; Transfers</b>: one tile per warehouse with its stock. Open a warehouse for its totals, each item and every movement. <b>Transfer Stock</b> moves stock between warehouses.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Live Inventory & Transfers"
+        }
+      ]
+    },
+    {
+      "key": "contractors.guide.season-products",
+      "title": "Set up a season & tobacco types",
+      "icon": "fa-seedling",
+      "blurb": "Add a growing season, use its dates for contracts, and add a tobacco type with its recipe.",
+      "steps": [
+        {
+          "id": "cog-sp-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('settings'\"]"
+          ],
+          "title": "Settings",
+          "text": "Click <b>Settings</b>. It opens as a pop-up window.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Settings",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='setup']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-sp-seasons",
+          "target": [
+            "#page-settings .cs-nav-btn[data-pane=\"seasons\"]"
+          ],
+          "title": "Seasons",
+          "text": "Under <b>Season &amp; products</b>, click <b>Seasons</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Seasons",
+          "timeout": 4000,
+          "before": [
+            {
+              "removeClass": "#page-settings .csg-group[data-csg='season']",
+              "cls": "folded"
+            }
+          ]
+        },
+        {
+          "id": "cog-sp-addseason",
+          "target": [
+            "#csPane-seasons div[style*='justify-content: flex-end'] > button"
+          ],
+          "title": "Add Season",
+          "text": "To add a season, click <b>Add Season</b> (after this guide). Only one season can be active: while one is active the button is faded - first deactivate it with the red button on its row (it is kept for the record). In the pop-up type the <b>Season Name</b>, <b>Start Date</b> and <b>End Date</b>, then click <b>Save Season</b>.",
+          "placement": "left",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-sp-usefor",
+          "target": [
+            "#cspSeasonTh"
+          ],
+          "title": "Use for contracts",
+          "text": "Switch this on in the active season's row and every new contract, on the web and on the phones, runs from the season's start date to its end date. The date boxes are hidden and running contracts get the season's end date. You are asked to confirm first. With no active season, no contract can be added.",
+          "placement": "bottom",
+          "timeout": 4000,
+          "optional": true
+        },
+        {
+          "id": "cog-sp-hist",
+          "target": [
+            ".csp-season-hist"
+          ],
+          "title": "History",
+          "text": "<b>History</b> lists every change: who, when, the old and new values, and how many contracts were updated.",
+          "placement": "left",
+          "optional": true
+        },
+        {
+          "id": "cog-sp-products",
+          "target": [
+            "#page-settings .cs-nav-btn[data-pane=\"products\"]"
+          ],
+          "title": "Tobacco Types & Recipes",
+          "text": "Click <b>Tobacco Types &amp; Recipes</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Tobacco Types & Recipes",
+          "before": [
+            {
+              "removeClass": "#page-settings .csg-group[data-csg='season']",
+              "cls": "folded"
+            }
+          ]
+        },
+        {
+          "id": "cog-sp-addprod",
+          "target": [
+            "#cspProdAddBtn"
+          ],
+          "title": "Add tobacco type",
+          "text": "Click <b>Add tobacco type</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Add tobacco type",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-sp-prodsave",
+          "target": [
+            "#cspProdAdd [data-csp-save]"
+          ],
+          "title": "Code and name",
+          "text": "Type a short <b>Tobacco Type Code</b> (e.g. VIR), the <b>Tobacco Type Name</b> (e.g. Virginia Flue-Cured) and an optional <b>Description</b>. Click <b>Add tobacco type</b>. Its recipe opens straight after. A club gets its tobacco type in Locations Master.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Fill in, then click Add tobacco type",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-sp-recipe",
+          "target": [
+            "#outProductRecipePanel",
+            "#outProductsTableBody button[onclick^='openOutRecipe']",
+            "#outProductsTableBody"
+          ],
+          "title": "The recipe",
+          "text": "The recipe is the default list of inputs for this tobacco type. Pick a <b>Stock Item</b>, a <b>Math Rule</b> (a fixed amount, or multiplied by the contract size) and the <b>Base Qty</b>, then click <b>+</b>. Later, the list button on a row (<b>Edit recipe</b>) opens the recipe again and the pencil edits the tobacco type. Each distribution cycle gets a copy of the recipe that can be changed for that cycle.",
+          "placement": "left",
+          "timeout": 4000
+        }
+      ]
+    },
+    {
+      "key": "contractors.guide.approvals",
+      "title": "Set up contract approvals",
+      "icon": "fa-user-check",
+      "blurb": "Who approves a contract, how far up it goes, and the approvers' signatures.",
+      "steps": [
+        {
+          "id": "cog-ap-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('workflow'\"]"
+          ],
+          "title": "Workflow",
+          "text": "A contract starts at the farmer's own location and goes up, location by location. At each step, the managers over that location approve it in their <b>Inbox</b> (managers are set in Farmers Hierarchy &gt; Manager Assignments). The rules are here: click <b>Workflow</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Workflow",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='setup']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-ap-sla",
+          "target": [
+            "#page-workflow .cs-nav-btn[data-pane=\"sla\"]"
+          ],
+          "title": "Approval Timers (SLAs)",
+          "text": "Click <b>Approval Timers (SLAs)</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Approval Timers (SLAs)",
+          "timeout": 4000,
+          "optional": true
+        },
+        {
+          "id": "cog-ap-rules",
+          "target": [
+            "#workflowRulesBody"
+          ],
+          "title": "One row per level",
+          "text": "These are the rules for <b>Contracts</b> (Distribution has its own). <b>Auto-Escalate (Days)</b> passes the contract up after that many days waiting. <b>Auto-Approve (Days)</b> approves it after that many days (0 = off). <b>Approve On Arrival?</b> approves it at that level straight away. <b>Approve From Mobile App?</b> lets that level's managers approve on the phone.",
+          "placement": "top",
+          "timeout": 4000,
+          "before": [
+            {
+              "call": "setWorkflowRulesType",
+              "args": [
+                "contracts"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cog-ap-final",
+          "target": [
+            "#workflowRulesBody .rule-final",
+            "#workflowRulesBody"
+          ],
+          "title": "Is Final Level?",
+          "text": "Tick <b>Is Final Level?</b> on the last level that must approve. Once approved there, the contract is fully approved and goes no higher. With none ticked, it goes up to the top. <b>Value Rule?</b>, if shown, gives clubs that meet a number rule (e.g. hectares) a different final level.",
+          "placement": "left"
+        },
+        {
+          "id": "cog-ap-save",
+          "target": [
+            "#page-workflow button[onclick='saveWorkflowRules()']"
+          ],
+          "title": "Save Rules",
+          "text": "Make your changes in the table, then click <b>Save Rules</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Make changes, then click Save Rules"
+        },
+        {
+          "id": "cog-ap-preview",
+          "target": [
+            "#page-workflow .cs-nav-btn[data-pane=\"preview\"]"
+          ],
+          "title": "Path Preview",
+          "text": "Check who a contract will go to. Click <b>Path Preview</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Path Preview",
+          "optional": true
+        },
+        {
+          "id": "cog-ap-area",
+          "target": [
+            "#workflowPreviewArea"
+          ],
+          "title": "Who approves",
+          "text": "Choose a location in <b>Select Starting Area</b> to see every step a contract from there goes through and who approves it. A red <b>No Manager Assigned</b> means nobody approves at that step: add a manager in Farmers Hierarchy &gt; Manager Assignments. This is a check only. Someone away? <b>Stand-In Approvers</b> sends their approvals to someone else between two dates.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "cog-ap-settings",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('settings'\"]"
+          ],
+          "title": "Approvers' signatures",
+          "text": "Each approver can have a saved signature. Click <b>Settings</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Settings",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='setup']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-ap-pane",
+          "target": [
+            "#page-settings .cs-nav-btn[data-pane=\"approvers\"]"
+          ],
+          "title": "Contract Approval Workflow",
+          "text": "Under <b>Contracts</b>, click <b>Contract Approval Workflow</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Contract Approval Workflow",
+          "timeout": 4000,
+          "before": [
+            {
+              "removeClass": "#page-settings .csg-group[data-csg='contracts']",
+              "cls": "folded"
+            }
+          ]
+        },
+        {
+          "id": "cog-ap-add",
+          "target": [
+            "#awAdd"
+          ],
+          "title": "Add Approver",
+          "text": "Click <b>Add Approver</b>, pick the user, then <b>Draw</b> the signature, <b>Import image</b>, or choose <b>Later</b>, and click <b>Save</b>. When that person approves a contract, their saved signature is copied onto it for the <b>Approver</b> signature boxes on your contract template. Approvers can also sign for themselves here.",
+          "placement": "left",
+          "timeout": 4000
+        }
+      ]
+    },
+    {
+      "key": "contractors.guide.template",
+      "title": "Create a contract template",
+      "icon": "fa-file-contract",
+      "blurb": "Import your contract as a PDF, place the farmer details and signature boxes on it, and choose the default contract for the phones.",
+      "steps": [
+        {
+          "id": "cog-tp-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('contracts'\"]"
+          ],
+          "title": "Contract Management",
+          "text": "Click <b>Contract Management</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Contract Management",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='farmers']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-tp-tab",
+          "target": [
+            "#tab-c-templates"
+          ],
+          "title": "Contract Templates",
+          "text": "Click <b>Contract Templates</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Contract Templates",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-tp-list",
+          "target": [
+            "#ccTemplatesTableBody"
+          ],
+          "title": "Your templates",
+          "text": "Every template with its version. <b>PDF · 5 fields</b> means it is ready; <b>PDF · Not mapped</b> means no boxes are placed yet, so it cannot be used to assign a contract. The pencil opens <b>Map Fields</b> again; the power button deactivates a template (contracts already made keep it).",
+          "placement": "top",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "cog-tp-star",
+          "target": [
+            "#ccTemplatesTableBody button[onclick*='setContTemplateDefault']"
+          ],
+          "title": "Default contract",
+          "text": "The star makes this the <b>default contract on the phones</b>: it is pre-selected when a club signs (the field technician can still pick another). Phones get the change at their next Sync.",
+          "placement": "left",
+          "optional": true
+        },
+        {
+          "id": "cog-tp-versions",
+          "target": [
+            "#ccTemplatesTableBody button[onclick*='openTemplateVersionsModal']"
+          ],
+          "title": "Version history",
+          "text": "Shows every version. When a template already used by contracts is changed, a new version is made, so signed contracts keep the layout they were signed on.",
+          "placement": "left",
+          "optional": true
+        },
+        {
+          "id": "cog-tp-import",
+          "target": [
+            "#btnImportContTemplatePdf"
+          ],
+          "title": "Import Contract PDF",
+          "text": "Click <b>Import Contract PDF</b> and choose your contract (a PDF). It is kept exactly as it is, and <b>Map Fields</b> opens on it.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Import Contract PDF and choose the file"
+        },
+        {
+          "id": "cog-tp-canvas",
+          "target": [
+            "#cMapperCanvasWrap"
+          ],
+          "title": "Draw a box",
+          "text": "Drag on the page to draw a box where a value must be printed, e.g. the farmer's name or a signature. Use the arrows on the right to go to the other pages.",
+          "placement": "right",
+          "timeout": 90000,
+          "optional": true
+        },
+        {
+          "id": "cog-tp-pick",
+          "target": [
+            "#cMapperPageInfo"
+          ],
+          "title": "Choose what goes in the box",
+          "text": "After you draw a box, <b>Map this area to</b> appears here. Choose the field (farmer details, contract dates and size, the farmer's signature and photo, approver signatures, Chairperson, Secretary, club and witness boxes) and click <b>Assign</b>. Every box is listed under <b>Mapped Fields</b>.",
+          "placement": "left",
+          "climb": 2,
+          "optional": true
+        },
+        {
+          "id": "cog-tp-save",
+          "target": [
+            "#btnSaveContFieldMap"
+          ],
+          "title": "Save Field Map",
+          "text": "Click <b>Save Field Map</b> when all boxes are placed. The template can then be chosen in <b>Assign Contract</b>, and the phones get it at their next Sync. Use the star to make it the default.",
+          "placement": "top",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "key": "contractors.guide.custom-fields",
+      "title": "Add custom fields",
+      "icon": "fa-tags",
+      "blurb": "Add your own fields to locations, farmer profiles (including document uploads) and contracts.",
+      "steps": [
+        {
+          "id": "cog-cf-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('settings'\"]"
+          ],
+          "title": "Settings",
+          "text": "Click <b>Settings</b>. It opens as a pop-up window.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Settings",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='setup']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-cf-loc",
+          "target": [
+            "#page-settings .cs-nav-btn[data-pane=\"locationfields\"]"
+          ],
+          "title": "Location Fields",
+          "text": "Click <b>Location Fields</b>: extra information kept on each location in Locations Master, e.g. a club's Biometric Number or Hectares.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Location Fields",
+          "timeout": 4000,
+          "before": [
+            {
+              "removeClass": "#page-settings .csg-group[data-csg='locations']",
+              "cls": "folded"
+            }
+          ]
+        },
+        {
+          "id": "cog-cf-locadd",
+          "target": [
+            "#cspLocAddBtn",
+            "#newLocFieldName"
+          ],
+          "title": "Add a location field",
+          "text": "<b>Add field</b> opens a pop-up: the <b>Field Name</b>, <b>Data Type</b> (Text or Number), an optional <b>Symbol</b> (e.g. $), the level it <b>Applies To</b>, <b>Mandatory</b> and <b>Unique</b> (no two locations may have the same value). On the list, the pencil edits a field and the red button deactivates it.",
+          "placement": "bottom",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-cf-prof",
+          "target": [
+            "#page-settings .cs-nav-btn[data-pane=\"fields\"]"
+          ],
+          "title": "Profile Fields & Documents",
+          "text": "Click <b>Profile Fields &amp; Documents</b>: extra fields on every farmer profile.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Profile Fields & Documents",
+          "before": [
+            {
+              "removeClass": "#page-settings .csg-group[data-csg='farmers']",
+              "cls": "folded"
+            }
+          ]
+        },
+        {
+          "id": "cog-cf-profadd",
+          "target": [
+            "#cspAttrAddBtn",
+            "#newContAttrName"
+          ],
+          "title": "Add a profile field",
+          "text": "<b>Add field</b>: give it a name and a type - Text, Number, Date, Yes / No or <b>Document Upload</b> (e.g. a tax clearance). Tick <b>Mandatory</b> if it must be filled in. It shows on the farmer profile (<b>Location &amp; Docs</b> tab) and on the phones after their next Sync. The pencil edits it; the red button deactivates it (old values are kept under <b>Deactivated</b>).",
+          "placement": "bottom",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-cf-overview",
+          "target": [
+            "#btn-cont-attr-overview"
+          ],
+          "title": "Profile overview & phone app",
+          "text": "Choose up to 3 fields to show under the farmer's name on the profile overview and in the phone app's farmer lists. Saved as soon as you choose; phones use it after their next Sync.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "cog-cf-con",
+          "target": [
+            "#page-settings .cs-nav-btn[data-pane=\"contractfields\"]"
+          ],
+          "title": "Contract Fields",
+          "text": "Click <b>Contract Fields</b>: extra details captured on each contract when it is assigned.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Contract Fields",
+          "before": [
+            {
+              "removeClass": "#page-settings .csg-group[data-csg='contracts']",
+              "cls": "folded"
+            }
+          ]
+        },
+        {
+          "id": "cog-cf-mand",
+          "target": [
+            "#contContractAttrTableBody input[aria-label='Mandatory']"
+          ],
+          "title": "Mandatory switch",
+          "text": "Switch <b>Mandatory</b> on and the field must be filled in, on the web and in the phone app. One click saves it.",
+          "placement": "left",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "cog-cf-conadd",
+          "target": [
+            "#cspCAttrAddBtn"
+          ],
+          "title": "Add a contract field",
+          "text": "Click <b>Add field</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Add field",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-cf-save",
+          "target": [
+            "#cspCAttrAdd [data-csp-save]"
+          ],
+          "title": "Name, type and Mandatory",
+          "text": "Type the <b>Attribute Name</b>, choose the <b>Data Type</b> (Text, Number or Date), tick <b>Mandatory</b> if needed, then click <b>Add field</b>. It is asked when a contract is assigned, and on the phones after their next Sync.",
+          "placement": "top",
+          "timeout": 4000
+        }
+      ]
+    },
+    {
+      "key": "contractors.guide.rules",
+      "title": "Set contract & distribution rules",
+      "icon": "fa-sliders",
+      "blurb": "Decide what the phone app may do when it issues inputs and captures contracts.",
+      "steps": [
+        {
+          "id": "cog-ru-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('settings'\"]"
+          ],
+          "title": "Settings",
+          "text": "Click <b>Settings</b>. It opens as a pop-up window.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Settings",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='setup']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-ru-pane",
+          "target": [
+            "#page-settings .cs-nav-btn[data-pane=\"rules\"]"
+          ],
+          "title": "Contract Rules",
+          "text": "Click <b>Contract Rules</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Contract Rules",
+          "timeout": 4000,
+          "before": [
+            {
+              "removeClass": "#page-settings .csg-group[data-csg='contracts']",
+              "cls": "folded"
+            }
+          ]
+        },
+        {
+          "id": "cog-ru-dist",
+          "target": [
+            "#settingDistNoContract"
+          ],
+          "title": "When inputs may be issued",
+          "text": "<b>Can Distribute without contract</b>, <b>Can distribute with contract awaiting approval</b> and <b>Can distribute if contract expired</b>. Switched off, the phone refuses inputs to that farmer - it checks the contract dates by itself, even offline.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "cog-ru-face",
+          "target": [
+            "#settingDistFaceOnly"
+          ],
+          "title": "Face scan only",
+          "text": "On (the default): the phone opens a farmer for inputs only by scanning their face. A farmer with no face enrolled must be enrolled first.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "cog-ru-partial",
+          "target": [
+            "#settingDistPartial"
+          ],
+          "title": "Partial distribution",
+          "text": "May a farmer get part of a category now and the rest later? <b>Off</b>, <b>Only when the warehouse is short</b>, or <b>Any time, with a reason</b>. What is not given stays owed. This one saves as soon as you change it.",
+          "placement": "bottom",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "cog-ru-multi",
+          "target": [
+            "#settingMultiContract"
+          ],
+          "title": "Multiple contracts",
+          "text": "On: one farmer may hold more than one current contract (e.g. Burley and Flue Cured). Off: the farmer gets no new contract until the current one (their own or their club's) expires or is retired.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "cog-ru-high",
+          "target": [
+            "#settingHighValueThreshold"
+          ],
+          "title": "High-value threshold",
+          "text": "Contracts of this size (hectares) or bigger are marked <b>HIGH VALUE</b> and always go through the approval workflow, even when an administrator captures them. 0 = off. Club contracts are never marked.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "cog-ru-month",
+          "target": [
+            "#settingClubMonthLang"
+          ],
+          "title": "Club contracts: month",
+          "text": "The language of the signing month printed on club contracts: English or Chichewa.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "cog-ru-witness",
+          "target": [
+            "#settingWitnessRules",
+            "#settingSingleClubWitness"
+          ],
+          "title": "Single-farmer club witness",
+          "text": "On: for a club with only one farmer, the phone asks a witness for their <b>name</b>, <b>surname</b> and <b>signature</b> instead of the field technician's. Place the <b>Club Witness</b> boxes on your contract template.",
+          "placement": "top"
+        },
+        {
+          "id": "cog-ru-save",
+          "target": [
+            "#cspSaveBar:not([hidden])",
+            "#page-settings .cs-nav-btn[data-pane=\"rules\"]"
+          ],
+          "title": "Save changes",
+          "text": "After you change a rule, a bar appears at the bottom of the window: click <b>Save changes</b> (or <b>Discard</b>). A dot on <b>Contract Rules</b> means changes are not saved yet. Phones use the rules after their next Sync.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "contractors.guide.add-farmer",
+      "title": "Add a farmer",
+      "icon": "fa-user-plus",
+      "blurb": "Add one farmer by hand with their club, contact details, profile fields and documents. Deactivate or reactivate a farmer.",
+      "steps": [
+        {
+          "id": "cog-af-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('contractors'\"]"
+          ],
+          "title": "Farmers Master",
+          "text": "Click <b>Farmers Master</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Farmers Master",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='farmers']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-af-row",
+          "target": [
+            "#contractorsTableBody button[onclick*='openContStatusModal']"
+          ],
+          "title": "Deactivate a farmer",
+          "text": "The eye opens a farmer's profile and contracts, the pencil edits it, and the red button <b>deactivates</b> the farmer (you give a reason). They then move to <b>Deactivated Profiles</b>, where the green button reactivates them.",
+          "placement": "left",
+          "timeout": 4000,
+          "optional": true
+        },
+        {
+          "id": "cog-af-add",
+          "target": [
+            "#page-contractors button[onclick*='openCreateContractorModal']"
+          ],
+          "title": "Add Farmer",
+          "text": "Click <b>Add Farmer</b>. (To add many at once, use <b>Data Tools &gt; Import Excel Data</b>.)",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Add Farmer",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-af-core",
+          "target": [
+            "#contFirstName"
+          ],
+          "title": "1. Core details",
+          "text": "<b>First Name</b> and <b>Surname</b> are required. Add the ID or passport number; <b>Contract Number</b> is optional. Click the round picture at the top to upload their photo.",
+          "placement": "right",
+          "climb": 2,
+          "timeout": 4000
+        },
+        {
+          "id": "cog-af-area",
+          "target": [
+            "#contAssignedArea"
+          ],
+          "title": "2. Assigned Area (club)",
+          "text": "The location the farmer belongs to, usually their club. It decides whose phones see them and who approves their contracts and inputs.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "cog-af-phone",
+          "target": [
+            "#contCellPhone"
+          ],
+          "title": "3. Cell Phone",
+          "text": "<b>Cell Phone</b> is required. Add the address and other contact details if you have them.",
+          "placement": "left",
+          "climb": 1
+        },
+        {
+          "id": "cog-af-docs",
+          "target": [
+            "#createContractorModal .cont-form-tab-btn[onclick*='docs']"
+          ],
+          "title": "Location & Docs",
+          "text": "Click <b>Location &amp; Docs</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Location & Docs"
+        },
+        {
+          "id": "cog-af-fields",
+          "target": [
+            "#contDynamicAttributes"
+          ],
+          "title": "4. Profile fields & documents",
+          "text": "Drag the pin on the map to their home. Upload the ID document, then fill in your own <b>Profile Fields</b> (set up in Settings). A red <b>*</b> means it is mandatory.",
+          "placement": "top",
+          "timeout": 3000
+        },
+        {
+          "id": "cog-af-save",
+          "target": [
+            "#saveContractorBtn"
+          ],
+          "title": "Save Farmer",
+          "text": "Click <b>Save Farmer</b>. The profile is saved straight away - it needs no approval - and reaches the phones at their next Sync, where their face is enrolled. Next, give them a contract (guide <b>Give a farmer a contract</b>): the contract is what goes to the approvers' <b>Inbox</b>.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "contractors.guide.club",
+      "title": "Set up a club & its officers",
+      "icon": "fa-user-tie",
+      "blurb": "Make people the Chairperson or Secretary of a club, and see which clubs still have none.",
+      "steps": [
+        {
+          "id": "cog-cl-open",
+          "target": [
+            "#coNavLink"
+          ],
+          "title": "Chairperson & Secretary",
+          "text": "A club is a location in Locations Master; farmers join it through <b>Assigned Area</b> on their profile. Click <b>Chairperson &amp; Secretary</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Chairperson & Secretary",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='farmers']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-cl-list",
+          "target": [
+            "#coTableBody"
+          ],
+          "title": "The officers",
+          "text": "Every club's Chairperson and Secretary, with their club and whether their photo and face are enrolled (done on the phone). The pencil opens a person, including the picture of their <b>club membership card</b>; the red button deactivates them.",
+          "placement": "top",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "cog-cl-na",
+          "target": [
+            "#cxNaTab"
+          ],
+          "title": "Not assigned clubs",
+          "text": "Clubs that still have no Chairperson or no Secretary. You can add them from that list too.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "cog-cl-add",
+          "target": [
+            "#coAddBtn"
+          ],
+          "title": "Make Chairperson / Secretary",
+          "text": "Click <b>Make Chairperson / Secretary</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Make Chairperson / Secretary"
+        },
+        {
+          "id": "cog-cl-kind",
+          "target": [
+            "#coKindSeg"
+          ],
+          "title": "Is this person also a farmer?",
+          "text": "Choose <b>Yes - a farmer</b> or <b>No - not a farmer</b>.",
+          "placement": "bottom",
+          "timeout": 4000,
+          "optional": true
+        },
+        {
+          "id": "cog-cl-who",
+          "target": [
+            "#coPersonPart",
+            "#coFarmerPart"
+          ],
+          "title": "Who and which club",
+          "text": "Not a farmer: type the <b>First name</b> and <b>Surname</b>, choose the <b>Club</b> and add a photo if you have one. A farmer: find them by name, contract no. or ID - their club and photo come from their farmer profile.",
+          "placement": "bottom",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-cl-role",
+          "target": [
+            "#coIsChair"
+          ],
+          "title": "Role",
+          "text": "Tick <b>Chairperson</b>, <b>Secretary</b> or both. A club should have one of each.",
+          "placement": "top",
+          "climb": 2
+        },
+        {
+          "id": "cog-cl-save",
+          "target": [
+            "#coSaveBtn"
+          ],
+          "title": "Save",
+          "text": "Click <b>Save</b>. On the phone, the field technician then enrols their face (and can take a picture of their club membership card). The Chairperson and Secretary approve club contracts on the phone before they go to the office.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "contractors.guide.distribute",
+      "title": "Distribute inputs & approve",
+      "icon": "fa-truck-ramp-box",
+      "blurb": "Check the inputs issued on the phones and approve them in your Inbox.",
+      "steps": [
+        {
+          "id": "cog-di-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('distribution'\"]"
+          ],
+          "title": "Distribution Master",
+          "text": "Inputs are issued on the phone app and arrive here after the phone syncs. Click <b>Distribution Master</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Distribution Master",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='dist']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-di-logs",
+          "target": [
+            "#tab-d-logs"
+          ],
+          "title": "Incoming Logs",
+          "text": "Click <b>Incoming Logs</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Incoming Logs",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-di-status",
+          "target": [
+            "#distLogStatusFilter"
+          ],
+          "title": "Find what is waiting",
+          "text": "Filter by <b>Status</b>: <b>Pending Approval</b>, <b>Missing Warehouse</b> (an item has no warehouse yet) or <b>Fully Assigned</b>. You can also filter by area and dates.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "cog-di-row",
+          "target": [
+            "#distIncomingLogsBody button[onclick*='openViewContractorModal']"
+          ],
+          "title": "Check a log",
+          "text": "Each row is one issue or return: the farmer, cycle, warehouse and number of items. <b>Inspect</b> opens the farmer to see what they received. If partial distribution is on, what was not given stays owed to them.",
+          "placement": "left",
+          "optional": true
+        },
+        {
+          "id": "cog-di-inbox",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('inbox'\"]"
+          ],
+          "title": "Inbox",
+          "text": "Approvals are done in the <b>Inbox</b>. Click <b>Inbox</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Inbox",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='farmers']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-di-mine",
+          "target": [
+            "#tab-inbox-mine"
+          ],
+          "title": "My Approvals",
+          "text": "Click <b>My Approvals</b>: what waits for you. Distributions show as <b>Dist. Issue</b> or <b>Dist. Return</b>; contracts wait here too (eye = preview, green tick = approve). <b>Subordinate Inboxes</b> shows what is waiting with the people under you.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click My Approvals",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-di-resolve",
+          "target": [
+            "#inboxTableBodyMine button[onclick*='openInboxDistAction']"
+          ],
+          "title": "Resolve",
+          "text": "Click <b>Resolve</b> on a distribution. (The red <b>✕</b> rejects it with a reason; the phone is told.)",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Resolve",
+          "timeout": 4000,
+          "optional": true
+        },
+        {
+          "id": "cog-di-whs",
+          "target": [
+            "#resolveDistWhsSelect"
+          ],
+          "title": "Warehouse",
+          "text": "Check the warehouse the stock comes from. Items whose warehouse was chosen on the phone keep it.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000,
+          "optional": true
+        },
+        {
+          "id": "cog-di-approve",
+          "target": [
+            "#btnResolveDist"
+          ],
+          "title": "Approve",
+          "text": "Click <b>Approve</b> (or <b>Assign &amp; Approve</b>). Below the Final level it says <b>Approve &amp; Pass Up</b> and goes to the next level; the stock leaves the warehouse when the Final level approves. <b>Escalate</b> sends it up without approving.",
+          "placement": "top",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "key": "contractors.guide.report",
+      "title": "Pull & export a report",
+      "icon": "fa-file-excel",
+      "blurb": "Pick a report, filter it, choose the columns and export it to Excel.",
+      "reset": [
+        {
+          "removeClass": "#rcFiltersMenu",
+          "cls": "show"
+        }
+      ],
+      "steps": [
+        {
+          "id": "cog-rp-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('reports'\"]"
+          ],
+          "title": "Reports",
+          "text": "Click <b>Reports</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Reports",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='reports']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-rp-pick",
+          "target": [
+            "#rcReport"
+          ],
+          "title": "1. Pick a report",
+          "text": "Choose a report, e.g. <b>Contracts Report</b>, <b>Distribution Report</b>, <b>Approved Distributions</b> or <b>Batch Tracking</b>. It runs as soon as you pick it, and the line under the bar says what it shows. You only see the reports your role allows.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 5000
+        },
+        {
+          "id": "cog-rp-filters",
+          "target": [
+            "#rcFiltersBtn"
+          ],
+          "title": "2. Filters",
+          "text": "Click <b>Filters</b>. Each report has its own filters.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Filters",
+          "timeout": 5000
+        },
+        {
+          "id": "cog-rp-loc",
+          "target": [
+            "#rcF_area"
+          ],
+          "title": "Location",
+          "text": "Only farmers in this location and every location under it. Leave it on <b>All locations</b> for everyone.",
+          "placement": "right",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "cog-rp-season",
+          "target": [
+            "#rcF_season",
+            "#rcF_from"
+          ],
+          "title": "Season or dates",
+          "text": "The <b>Distribution Report</b> has a <b>Season</b> box: it starts on the active season, or pick <b>All time</b>. Reports like <b>Approved Distributions</b>, <b>Batch Tracking</b> and <b>Bulk Approvals</b> have date boxes instead.",
+          "placement": "right",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "cog-rp-status",
+          "target": [
+            "#rcF_status",
+            "#rcF_progress",
+            "#rcF_sla"
+          ],
+          "title": "Status",
+          "text": "Narrow the list by status. For example, choose <b>Waiting for approval</b> on the Contracts Report, or <b>Not started</b> on the Distribution Report.",
+          "placement": "right",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "cog-rp-apply",
+          "target": [
+            "#rcFiltersApply"
+          ],
+          "title": "Apply Filters",
+          "text": "Click <b>Apply Filters</b> to run the report again. Each filter in use shows as a tag next to the buttons. Click the <b>x</b> on a tag to remove that filter. <b>Reset</b> sets all filters back to how they started.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Apply Filters"
+        },
+        {
+          "id": "cog-rp-cols",
+          "target": [
+            "#rcColsBtn"
+          ],
+          "title": "3. Columns",
+          "text": "Click <b>Columns</b> to tick the columns you want, including farmer fields and levels. Drag them into your own order. To sort, click a column heading. To search, type in the box under it. Your choices are saved for you, for each report.",
+          "placement": "bottom"
+        },
+        {
+          "id": "cog-rp-rows",
+          "target": [
+            "#rcRowsPerPage"
+          ],
+          "title": "Rows per page",
+          "text": "At the bottom of the list: show <b>25</b>, <b>50</b>, <b>100</b>, <b>200</b> or <b>All</b> rows per page, with <b>Previous</b> and <b>Next</b> buttons. Your choice is saved for you. The summary cards and the export always cover every row.",
+          "placement": "top",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "cog-rp-export",
+          "target": [
+            "#rcExportBtn"
+          ],
+          "title": "4. Export",
+          "text": "<b>Export</b> downloads an Excel file (.xlsx) of every row your filters and column searches leave, on all pages. It has the columns you see, in your order. The file starts with the report name, the filters used and the summary. You only see this button if your role can export reports.",
+          "placement": "bottom",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "key": "contractors.guide.schedule-report",
+      "title": "Schedule a report by email",
+      "icon": "fa-envelope-open-text",
+      "blurb": "Have the Contracts or Distribution report emailed to a user every day, week or month.",
+      "steps": [
+        {
+          "id": "cog-sr-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('reports'\"]"
+          ],
+          "title": "Reports",
+          "text": "Click <b>Reports</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Reports",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='reports']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-sr-mailers",
+          "target": [
+            "#rcMailersBtn"
+          ],
+          "title": "Scheduled Mailers",
+          "text": "Click <b>Scheduled Mailers</b>. You only see this button if your role can manage scheduled reports.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Scheduled Mailers",
+          "timeout": 5000
+        },
+        {
+          "id": "cog-sr-list",
+          "target": [
+            "#schedTableBody"
+          ],
+          "title": "Your schedules",
+          "text": "Every report that is emailed automatically is listed here, with its location, who gets it, and when. To stop one, click its bin button.",
+          "placement": "top",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-sr-type",
+          "target": [
+            "#schedReportType"
+          ],
+          "title": "1. Report Type",
+          "text": "Choose <b>Contracts</b> or <b>Distribution</b>. Only these two reports can be emailed.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "cog-sr-user",
+          "target": [
+            "#schedUser"
+          ],
+          "title": "2. Recipient User",
+          "text": "Choose the person who should get the report. It goes to the email address on their user profile. Each schedule goes to one person, so add another schedule for each extra person.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "cog-sr-area",
+          "target": [
+            "#schedArea"
+          ],
+          "title": "3. Area Scope",
+          "text": "After you choose the person, this list shows the locations they may see. Pick a location to send only that location and the ones under it.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "cog-sr-freq",
+          "target": [
+            "#schedFreq"
+          ],
+          "title": "4. Frequency",
+          "text": "Choose <b>Daily</b>, <b>Weekly (Mondays)</b> or <b>Monthly (1st)</b> of the month.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "cog-sr-time",
+          "target": [
+            "#schedTime"
+          ],
+          "title": "5. Time",
+          "text": "The time of day it is sent, by the server's clock.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "cog-sr-save",
+          "target": [
+            "#schedReportForm button[type='submit']"
+          ],
+          "title": "Add Schedule",
+          "text": "<b>Add Schedule</b> saves it, and it then appears in the list below. The report arrives as an Excel attachment. Emails can only be sent if your company's email settings are set up. There is no <b>Send now</b> button and no record of past sends, so ask the person to confirm the first email arrived.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "contractors.guide.progress-sla",
+      "title": "Track progress & SLA",
+      "icon": "fa-stopwatch",
+      "blurb": "See how far contracts and distribution are, who is behind, and which approvals are late.",
+      "steps": [
+        {
+          "id": "cog-ps-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('contracts'\"]"
+          ],
+          "title": "Contracts",
+          "text": "Contract progress is now on the Contracts screen. Click <b>Contracts</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Contracts",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='farmers']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-ps-tab",
+          "target": [
+            "#tab-c-progress"
+          ],
+          "title": "Progress",
+          "text": "Click <b>Progress</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Progress",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-ps-overview",
+          "target": [
+            "#cpRoot .cp-ov",
+            "#cpRoot"
+          ],
+          "title": "Rollout overview",
+          "text": "Shows how many farmers are <b>Ready (approved)</b>, <b>Waiting for approval</b>, have <b>No contract yet</b>, or are <b>Ended only</b> (their contract expired and they need a new one). The green arrows show the change in the last 7 days.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 6000
+        },
+        {
+          "id": "cog-ps-area",
+          "target": [
+            "#cpRoot tr[data-drill]"
+          ],
+          "title": "Progress by area",
+          "text": "The areas furthest behind are at the top. Click an area to see the areas inside it. Use the path at the top of the screen to go back up.",
+          "placement": "top",
+          "climb": 4,
+          "optional": true
+        },
+        {
+          "id": "cog-ps-attention",
+          "target": [
+            "#cpRoot .cp-chip[data-manager]"
+          ],
+          "title": "Needs attention",
+          "text": "Contracts waiting for approval, the longest wait first. Each button shows a manager and how many are waiting on them. Click one to see only theirs. The number of days turns <b>amber</b> after 7 days and <b>red</b> after 14. Click a row to open the contract.",
+          "placement": "top",
+          "climb": 2,
+          "optional": true
+        },
+        {
+          "id": "cog-ps-dist",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('distribution'\"]"
+          ],
+          "title": "Distribution Master",
+          "text": "Distribution progress is on the Distribution Master screen. Click <b>Distribution Master</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Distribution Master",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='dist']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-ps-dist-tab",
+          "target": [
+            "#tab-d-progress"
+          ],
+          "title": "Progress",
+          "text": "Click <b>Progress</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Progress",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-ps-managers",
+          "target": [
+            "#dpRoot [data-dp-sort='pending']",
+            "#progSeasonFilter"
+          ],
+          "title": "Who is behind",
+          "text": "First choose the season in the box at the top. Here, a farmer has <b>Started</b> once they received any inputs that season. The <b>Managers</b> table shows each manager's farmers, how many have started, and how many are still <b>To start</b>. Click <b>Most to start</b> to put the managers who are furthest behind at the top.",
+          "placement": "top",
+          "climb": 3,
+          "timeout": 6000,
+          "optional": true
+        },
+        {
+          "id": "cog-ps-rep",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('reports'\"]"
+          ],
+          "title": "Reports",
+          "text": "To check approval times, click <b>Reports</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Reports",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='reports']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-ps-sla",
+          "target": [
+            "#rcReport"
+          ],
+          "title": "SLA and late approvals",
+          "text": "Choose <b>SLA & Productivity</b> to see every approval step: who approved it, the <b>Hours taken</b> and the <b>Time allowed</b>. The first step has 48 hours from when the contract was captured, and each later step has 72 hours. Use <b>Filters</b> and set <b>SLA</b> to <b>Breached</b> to list only the late steps.<br>Choose <b>Where approvals are waiting</b> to see what is stuck right now: the level it is at, who must approve it, and how many days it has waited.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 5000
+        }
+      ]
+    },
+    {
+      "key": "contractors.guide.duplicates",
+      "title": "Find & fix duplicate farmers",
+      "icon": "fa-user-friends",
+      "blurb": "Check farmers whose faces look alike, then dismiss false matches or deactivate the extra profile.",
+      "reset": [
+        {
+          "removeClass": "#duplicateCompareModal",
+          "cls": "active"
+        }
+      ],
+      "steps": [
+        {
+          "id": "cog-dp-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('reports'\"]"
+          ],
+          "title": "Reports",
+          "text": "Click <b>Reports</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Reports",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='reports']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-dp-pick",
+          "target": [
+            "#rcReport"
+          ],
+          "title": "Duplicate Biometrics",
+          "text": "In the <b>Report</b> list, choose <b>Duplicate Biometrics</b>, then click <b>Next</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 5000
+        },
+        {
+          "id": "cog-dp-how",
+          "target": [
+            "#rcRoot .rc-kpis",
+            "#rcRoot .rc-desc"
+          ],
+          "title": "How pairs are found",
+          "text": "The mobile app's face check compares farmers' photos. It lists two farmers as a pair when their faces look alike, with a similarity score out of 100. Only pairs nobody has checked yet are shown. The cards show how many pairs there are and how many score 90 or more.",
+          "placement": "bottom",
+          "timeout": 6000
+        },
+        {
+          "id": "cog-dp-score",
+          "target": [
+            "#rcFiltersBtn"
+          ],
+          "title": "Strongest matches first",
+          "text": "Open <b>Filters</b> and set <b>Similarity</b> to <b>90 and above</b> to start with the pairs most likely to be the same person. A score is shown in red when it is 90 or more.",
+          "placement": "bottom"
+        },
+        {
+          "id": "cog-dp-compare",
+          "target": [
+            "#rcRoot button[onclick^='openDuplicateCompareModal']"
+          ],
+          "title": "Compare",
+          "text": "Click <b>Compare</b> to see both farmers side by side.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Compare",
+          "timeout": 6000,
+          "optional": true
+        },
+        {
+          "id": "cog-dp-modal",
+          "target": [
+            "#duplicateCompareModal .modal-panel"
+          ],
+          "title": "Detailed Biometric Comparison",
+          "text": "For each profile you see the photo, ID number, who captured the photo, the reporting structure, the current contract and its approvals. Check the ID numbers and photos to decide whether it is the same person. Note which profile has the contract and the history.",
+          "placement": "left",
+          "timeout": 6000,
+          "optional": true
+        },
+        {
+          "id": "cog-dp-print",
+          "target": [
+            "#btnPrintDuplicateReport"
+          ],
+          "title": "Print PDF Report",
+          "text": "<b>Print PDF Report</b> saves this comparison as a record of your check (if your role can print reports). This guide closes the viewer when you click <b>Next</b>.",
+          "placement": "top",
+          "optional": true,
+          "after": [
+            {
+              "call": "closeDuplicateCompareModal"
+            }
+          ]
+        },
+        {
+          "id": "cog-dp-ignore",
+          "target": [
+            "#rcRoot button[onclick*=\"'ignore'\"]"
+          ],
+          "title": "Not a duplicate",
+          "text": "If they are two different people, click <b>Not a duplicate</b>. The pair leaves the list and both farmers stay active. You will be asked to confirm.",
+          "placement": "left",
+          "optional": true
+        },
+        {
+          "id": "cog-dp-deactivate",
+          "target": [
+            "#rcRoot button[onclick*=\"'deactivate'\"]"
+          ],
+          "title": "Deactivate the extra profile",
+          "text": "If it is the same person registered twice, click <b>Deactivate A</b> or <b>Deactivate B</b> on the extra profile. Keep the one with the contract and history. The extra profile is not deleted: it is marked inactive, the pair leaves the list, and the action is recorded in the audit log. There is no merge, so nothing is moved from the deactivated profile. If you make a mistake, you can reactivate it under <b>Deactivated Profiles</b> on the Farmers screen.",
+          "placement": "right",
+          "optional": true
+        }
+      ]
     }
   ]
 }
