@@ -1393,6 +1393,90 @@
       ]
     },
     {
+      "key": "contractors.guide.same-person",
+      "title": "Link one farmer in several clubs",
+      "icon": "fa-people-arrows",
+      "blurb": "One person with a record in more than one club (e.g. the same TGR Number): one face for all his records, he signs each club's contract, all his clubs at inputs.",
+      "steps": [
+        {
+          "id": "cog-same-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('settings'\"]"
+          ],
+          "title": "Settings",
+          "text": "Click <b>Settings</b>. It opens as a pop-up window.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Settings",
+          "before": [
+            {
+              "addClass": "#sidebarNav .tsg[data-group='setup']",
+              "cls": "open"
+            }
+          ]
+        },
+        {
+          "id": "cog-same-pane",
+          "target": [
+            "#page-settings .cs-nav-btn[data-pane=\"fields\"]"
+          ],
+          "title": "Profile Fields & Documents",
+          "text": "Click <b>Profile Fields &amp; Documents</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Profile Fields & Documents",
+          "before": [
+            {
+              "removeClass": "#page-settings .csg-group[data-csg='farmers']",
+              "cls": "folded"
+            }
+          ]
+        },
+        {
+          "id": "cog-same-tab",
+          "target": [
+            "#btn-cont-attr-sameperson"
+          ],
+          "title": "Same person",
+          "text": "Click the <b>Same person</b> tab.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Same person",
+          "timeout": 4000,
+          "optional": true
+        },
+        {
+          "id": "cog-same-field",
+          "target": [
+            "#spSettingBox"
+          ],
+          "title": "Switch it on and choose the field",
+          "text": "Tick the box and choose the Profile Field one person's records share, e.g. <b>TGR Number</b>. Records with the same value are then one person: his face is shared, they are never flagged as duplicates of each other, and every club's contract is still approved on its own. Spaces, capitals and leading zeros are ignored (<b>TGR 0123</b> = <b>tgr123</b>); blank values and N/A never link.",
+          "placement": "bottom",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-same-list",
+          "target": [
+            "#spGroups"
+          ],
+          "title": "Linked farmers",
+          "text": "Everyone linked, with each record's club, tobacco type and face. <b>To check</b> lists what needs you: <b>different faces</b> on his records (compare the photos and keep one face for all, or keep them all) and <b>two records in one club</b> (a real duplicate - not linked until one is fixed). <b>Unlink</b> a record that was matched by mistake; <b>Link back</b> undoes it.",
+          "placement": "top",
+          "timeout": 4000
+        },
+        {
+          "id": "cog-same-phone2",
+          "target": [
+            "#spSection"
+          ],
+          "title": "On the phones",
+          "text": "After their next Sync: at <b>club signing</b> a face scan on either of his records confirms him, and he <b>signs each club's contract himself</b> (only if <b>Allow re-using his signature</b> is ticked may the phone use the one he gave in his other club). At <b>inputs</b>, scanning his face shows all his clubs and tobacco types - choose the one to issue for; each issue is recorded on that club's record. The Farmer Profile Overview shows <b>Same person as</b> under his name.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
       "key": "contractors.guide.rules",
       "title": "Set contract & distribution rules",
       "icon": "fa-sliders",
@@ -2239,7 +2323,7 @@
       "key": "contractors.guide.duplicates",
       "title": "Find & fix duplicate farmers",
       "icon": "fa-user-friends",
-      "blurb": "Check farmers whose faces look alike, then dismiss false matches or deactivate the extra profile.",
+      "blurb": "Check farmers whose faces look alike, then dismiss false matches or deactivate the extra profile. Records linked as one person in several clubs (Settings > Same person) are never flagged.",
       "reset": [
         {
           "removeClass": "#duplicateCompareModal",
