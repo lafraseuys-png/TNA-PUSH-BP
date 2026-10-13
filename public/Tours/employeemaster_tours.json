@@ -450,7 +450,7 @@
             "#dataToolsDropdownMenu"
           ],
           "title": "Data Tools",
-          "text": "<b>Export This View</b> exports exactly the list on screen: the people your filters and heading searches leave, with the columns you show, in your order. <b>Custom Blank Template</b> and <b>Custom Export Data</b> give you a spreadsheet with the columns you choose; fill in the template and load it with the <b>Data Import Wizard</b>. <b>Bulk Upload Photos</b>, <b>Generate Missing Logins</b> and <b>Sage Sync</b> are here too.",
+          "text": "<b>Export This View</b> exports exactly the list on screen: the people your filters and heading searches leave, with the columns you show, in your order. <b>Custom Blank Template</b> and <b>Custom Export Data</b> give you a spreadsheet with the columns you choose; fill in the template and load it with the <b>Data Import Wizard</b>. <b>Bulk Upload Photos</b>, <b>Generate Missing Logins</b> and <b>Payroll Sync</b> are here too.",
           "placement": "left",
           "before": [
             {
@@ -487,13 +487,13 @@
           ]
         },
         {
-          "id": "emp-sage2",
+          "id": "emp-payroll-sync",
           "target": [
             "#dataToolsDropdownMenu a[onclick*='openSageSyncModal']",
             "#page-employees button[onclick*='openSageSyncModal']"
           ],
-          "title": "Sage Sync",
-          "text": "Now in <b>Data Tools</b>: pull new or updated employees from Sage 300, or push your changes to Sage 300.",
+          "title": "Payroll Sync",
+          "text": "In <b>Data Tools</b> (it was called Sage Sync): pull new or updated employees from your payroll system, Sage or PaySpace, whichever is chosen in Settings &gt; Connectivity &gt; Legacy Systems. With Sage you can also push your changes to Sage.",
           "placement": "left",
           "before": [
             {

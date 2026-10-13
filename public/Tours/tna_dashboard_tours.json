@@ -76,6 +76,16 @@
       "placement": "right"
     },
     {
+      "id": "ta-nav-shift-wizard",
+      "target": [
+        "#navShiftWizard"
+      ],
+      "title": "Shift Setup Wizard",
+      "text": "Set up or change a shift step by step in plain language. A timeline shows the shift, its limits and grace, and you can drop test clockings on it to see exactly what would be paid as Normal time or overtime before you save.",
+      "placement": "right",
+      "optional": true
+    },
+    {
       "id": "ta-nav-roster",
       "target": [
         "#sidebarNav [onclick*=\"showSection('roster'\"]"
@@ -324,6 +334,26 @@
           "placement": "left"
         },
         {
+          "id": "tas-wizard",
+          "target": [
+            "#btnShiftWizardNew"
+          ],
+          "title": "Shift Wizard",
+          "text": "Prefer to be guided? The wizard asks how people clock, then walks you through times, breaks, early and late rules and overtime, and tests the shift on sample days before saving.",
+          "placement": "left",
+          "optional": true
+        },
+        {
+          "id": "tas-row-wizard",
+          "target": [
+            "#shiftsBody .sw-row-btn"
+          ],
+          "title": "Open a shift in the wizard",
+          "text": "The wand button opens an existing shift in the wizard so you can see and test it on the timeline. After you change a shift, you are offered to recalculate the days already calculated with the old setup.",
+          "placement": "left",
+          "optional": true
+        },
+        {
           "id": "tas-table",
           "target": [
             "#shiftsBody"
@@ -331,6 +361,80 @@
           "title": "Your shifts",
           "text": "Each shift's times, automatic break, grace periods and thresholds. Use the edit button to change one; the change applies to days calculated from then on.",
           "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "tna_dashboard.shift-wizard",
+      "title": "Shift Setup Wizard",
+      "trigger": "#page-shift-wizard.active",
+      "steps": [
+        {
+          "id": "tasw-pick",
+          "target": [
+            "#swPick"
+          ],
+          "title": "New or existing shift",
+          "text": "Start a new shift, or pick an existing one to see and change it here. Nothing is saved until you press Save.",
+          "placement": "bottom"
+        },
+        {
+          "id": "tasw-timeline",
+          "target": [
+            "#swTl"
+          ],
+          "title": "The timeline",
+          "text": "The shift, its early/late limits and grace periods, your test clockings and what would be paid. Drag the shift or its ends, the orange limit handles and the teal grace handles to change them.",
+          "placement": "bottom"
+        },
+        {
+          "id": "tasw-clockings",
+          "target": [
+            "#swTl .sw-tl-track.clocks"
+          ],
+          "title": "Test clockings",
+          "text": "Click this row to add a clocking, drag a pin to move it, double-click to remove it. The Paid row shows straight away what would be Normal time, overtime or not paid. The <b>Try</b> buttons load common days.",
+          "placement": "top",
+          "optional": true
+        },
+        {
+          "id": "tasw-steps",
+          "target": [
+            "#swRail"
+          ],
+          "title": "Step by step",
+          "text": "How people clock, name and times, breaks, arriving and leaving, overtime and special days, absence and allowances, then review. Every answer updates the timeline.",
+          "placement": "right"
+        },
+        {
+          "id": "tasw-warnings",
+          "target": [
+            "#swWarnPanel"
+          ],
+          "title": "Check before saving",
+          "text": "Things that may not work the way you expect, in plain words, plus exactly which settings will be saved.",
+          "placement": "left",
+          "optional": true
+        },
+        {
+          "id": "tasw-tester",
+          "target": [
+            "#swTester"
+          ],
+          "title": "Test a day",
+          "text": "Type clockings and pick a weekday, Saturday, Sunday or public holiday to see the hours. It follows the same rules as the nightly calculation.",
+          "placement": "left",
+          "optional": true
+        },
+        {
+          "id": "tasw-save",
+          "target": [
+            "#swSave"
+          ],
+          "title": "Save",
+          "text": "Saves the shift. When you change an existing shift, you are offered to recalculate the days already calculated with the old setup, for the departments that use it.",
+          "placement": "bottom",
+          "optional": true
         }
       ]
     },
@@ -548,6 +652,17 @@
           "text": "Ignoring overtime within a threshold, making up short time, filtering duplicate clockings, auto-ignoring geofence violations, how hours are shown, where a night shift's day ends, what a recalculation re-opens, and how public holidays and leave on premium days are treated.",
           "placement": "bottom",
           "climb": 3
+        },
+        {
+          "id": "tax-engine-options",
+          "target": [
+            "#engineOptionsBlock"
+          ],
+          "title": "Engine Options",
+          "text": "Optional calculation rules, all off by default so hours stay exactly as before: where overtime past a threshold counts from, half-hour rounding of Normal time, which column Force Sunday fills, forced rates and paid leave, the shift OT rule on Saturdays, the OT auto break, own default days, and pay rates in Employee Costs. A change applies to days calculated from then on.",
+          "placement": "top",
+          "climb": 1,
+          "optional": true
         },
         {
           "id": "tax-holidays",

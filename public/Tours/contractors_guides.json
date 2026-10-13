@@ -1466,6 +1466,17 @@
           "optional": true
         },
         {
+          "id": "cog-ru-overissue",
+          "target": [
+            "#settingDistOverIssue"
+          ],
+          "title": "Over-issue precaution",
+          "text": "On (the default): when a phone sends a Cat 1-4 issue of <b>more than the farmer is still owed</b>, the office refuses it, with partial distribution on or off. Nothing is saved and no stock moves; the phone shows it as refused. Saves as soon as you change it.",
+          "placement": "bottom",
+          "climb": 1,
+          "optional": true
+        },
+        {
           "id": "cog-ru-multi",
           "target": [
             "#settingMultiContract"

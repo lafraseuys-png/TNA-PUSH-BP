@@ -51,14 +51,25 @@
           "climb": 2
         },
         {
-          "id": "tag-sh-types",
+          "id": "tag-sh-types-2",
           "target": [
             "#isSplitShift"
           ],
           "title": "Special shifts",
-          "text": "<b>Split</b>: two segments a day. <b>Session</b>: several clock-in/out sessions. <b>Floating</b>: flexible hours. <b>Present Day</b>: snaps to the day worked. Leave them off for an ordinary shift.",
+          "text": "<b>Split</b>: two segments a day. <b>Session</b>: several clock-in/out sessions. <b>Floating</b>: flexible hours. <b>Present Day</b>: snaps to the day worked. <b>Open Shift</b>: only logs the hours between the first and last clocking - no break, late, overtime or absent rules. Leave them off for an ordinary shift. The shift's name never changes how it is calculated.",
           "placement": "bottom",
           "climb": 2
+        },
+        {
+          "id": "tag-sh-present-early",
+          "target": [
+            "#presentEarlyCountsOT"
+          ],
+          "title": "One-clock shifts: early clock-in",
+          "text": "For a <b>Present Day</b> shift: should clocking in before the start count as overtime? Choose <b>Snap to the shift start</b> and an early clock-in inside the Before Threshold is paid from the shift start. One far before the start still goes for approval.",
+          "placement": "bottom",
+          "climb": 2,
+          "optional": true
         },
         {
           "id": "tag-sh-min",
@@ -123,6 +134,28 @@
           "climb": 2
         },
         {
+          "id": "tag-sh-ignore-ot",
+          "target": [
+            "#shiftIgnoreOTWithinThreshold"
+          ],
+          "title": "Early / late time inside the thresholds",
+          "text": "Per shift: <b>Not paid</b> drops a few minutes early or late, <b>Sent for review</b> lets a manager decide, or follow the company setting. Time beyond the thresholds is always overtime for approval.",
+          "placement": "top",
+          "climb": 2,
+          "optional": true
+        },
+        {
+          "id": "tag-sh-split-thr",
+          "target": [
+            "#splitUseThresholds"
+          ],
+          "title": "Split shifts and thresholds",
+          "text": "Tick this on a split shift to use the Before / After Thresholds for each block, so a couple of minutes early or late isn't overtime.",
+          "placement": "top",
+          "climb": 2,
+          "optional": true
+        },
+        {
           "id": "tag-sh-breaks",
           "target": [
             "#lunchWindowStart"
@@ -142,6 +175,84 @@
           "title": "Save Shift",
           "text": "Saves the shift. Give it to people as their default shift in Employee Master, or on the roster.",
           "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "tna_dashboard.guide.shift-wizard",
+      "title": "Set up a shift with the wizard",
+      "icon": "fa-wand-magic-sparkles",
+      "blurb": "Plain-language steps, a drag-to-edit timeline and test days before you save.",
+      "steps": [
+        {
+          "id": "tagw-open",
+          "target": [
+            "#navShiftWizard"
+          ],
+          "title": "Shift Setup Wizard",
+          "text": "Open the wizard from the sidebar, or with <b>Shift Wizard</b> on Shift Rules.",
+          "mode": "click",
+          "placement": "right"
+        },
+        {
+          "id": "tagw-pick",
+          "target": [
+            "#swPick"
+          ],
+          "title": "New or existing",
+          "text": "Pick a shift to change it, or start a new one.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "tagw-type",
+          "target": [
+            "#swModes"
+          ],
+          "title": "How people clock",
+          "text": "Choose what happens at the clock: in and out, once a day, two blocks, several sessions, set hours any time, record hours only, or a paid day without clocking.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "tagw-drag",
+          "target": [
+            "#swTl"
+          ],
+          "title": "Shape it on the timeline",
+          "text": "Drag the shift and its handles, or answer the questions in each step. Both stay in sync.",
+          "placement": "bottom",
+          "optional": true
+        },
+        {
+          "id": "tagw-test",
+          "target": [
+            "#swTl .sw-days-try"
+          ],
+          "title": "Test it",
+          "text": "Use the <b>Try</b> buttons or add your own clockings and check the Paid row and totals.",
+          "placement": "top",
+          "optional": true
+        },
+        {
+          "id": "tagw-check",
+          "target": [
+            "#swWarnPanel"
+          ],
+          "title": "Check the warnings",
+          "text": "Read the notes before saving: they explain anything that may surprise people on payday.",
+          "placement": "left",
+          "optional": true
+        },
+        {
+          "id": "tagw-save",
+          "target": [
+            "#swSave"
+          ],
+          "title": "Save",
+          "text": "Save the shift, then assign it on the Weekly Roster or as a department default in System Settings. When you change an existing shift, recalculate the affected days when asked.",
+          "placement": "bottom",
+          "optional": true
         }
       ]
     },

@@ -25,7 +25,7 @@
       "title": "Other connections",
       "section": "api",
       "optional": true,
-      "why": "Single sign-on, Sage, an external T&A system or a CVS database, if you use them.",
+      "why": "Single sign-on, your payroll system (Sage or PaySpace), an external T&A system or a CVS database, if you use them.",
       "confirm": true,
       "confirmLabel": "Connections are set up"
     },

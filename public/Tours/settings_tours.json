@@ -548,12 +548,12 @@
       ],
       "steps": [
         {
-          "id": "sta-tabs",
+          "id": "sta-tabs-2",
           "target": [
             "#btn-cat-email"
           ],
           "title": "Five tabs",
-          "text": "Connectivity is split into tabs: <b>Email Config</b>, <b>SSO Identity</b>, <b>ZKTeco API</b>, <b>Legacy Systems</b> and <b>Mobile Security</b>. Let's go through each one.",
+          "text": "Connectivity is split into tabs: <b>Email Config</b>, <b>SSO Identity</b>, <b>ZKTeco API</b> (which also holds the CVS links), <b>Legacy Systems</b> (your payroll system: Sage or PaySpace) and <b>Mobile Security</b>. Let's go through each one.",
           "placement": "bottom",
           "climb": 1,
           "before": [
@@ -634,30 +634,47 @@
           ]
         },
         {
-          "id": "sta-cvs-zones",
+          "id": "sta-cvs-zones-2",
           "target": [
-            "#cat-cvs button[onclick*='syncCvsZones']"
+            "#cat-tna button[onclick*='syncCvsZones']"
           ],
           "title": "CVS Access Zones",
-          "text": "Pulls the access levels from ZKTeco so you can give them to employees in Employee Master.",
+          "text": "Further down the <b>ZKTeco API</b> tab (CVS is part of ZKTeco). Pulls the access levels from ZKTeco so you can give them to employees in Employee Master.",
           "placement": "left",
           "before": [
             {
               "call": "switchApiCategory",
               "args": [
-                "cvs"
+                "tna"
               ]
             }
           ]
         },
         {
-          "id": "sta-cvs-db",
+          "id": "sta-cvs-db-2",
           "target": [
-            "#cat-cvs button[onclick*='testDb']"
+            "#cat-tna button[onclick*='testDb']"
           ],
           "title": "Direct CVS Database Link",
-          "text": "An optional direct link to the CVS database. Edit the details, save, then use <b>Test Connection</b>.",
+          "text": "Also on the <b>ZKTeco API</b> tab: an optional direct link to the CVS database. Edit the details, save, then use <b>Test Connection</b>.",
           "placement": "left",
+          "before": [
+            {
+              "call": "switchApiCategory",
+              "args": [
+                "tna"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sta-payroll-provider",
+          "target": [
+            "#payrollProviderCard"
+          ],
+          "title": "Active payroll system",
+          "text": "<b>Legacy Systems</b> connects your payroll system. Choose which one your company uses: <b>Sage 300 People</b>, <b>Sage Business Cloud</b> or <b>PaySpace</b>. Employee Master &gt; Data Tools &gt; <b>Payroll Sync</b> pulls employees from the one you choose.",
+          "placement": "bottom",
           "before": [
             {
               "call": "switchApiCategory",
@@ -668,12 +685,12 @@
           ]
         },
         {
-          "id": "sta-sage",
+          "id": "sta-sage-2",
           "target": [
-            "#cat-cvs button[onclick*='testSageApi']"
+            "#lsub-sage button[onclick*='testSageApi']"
           ],
           "title": "Sage Integration",
-          "text": "Connects to Sage payroll. Set the login details, which system is the master, and what is pushed to Sage (leave, payroll costs) or pulled from it (wage advice, pay rates, leave balances). Use <b>Test Connection</b> after saving.",
+          "text": "The <b>Sage Integration</b> tab connects to Sage payroll. Set the login details, which system is the master, and what is pushed to Sage (leave, payroll costs) or pulled from it (wage advice, pay rates, leave balances). Use <b>Test Connection</b> after saving.",
           "placement": "left",
           "before": [
             {
@@ -681,13 +698,19 @@
               "args": [
                 "cvs"
               ]
+            },
+            {
+              "call": "switchLegacySub",
+              "args": [
+                "sage"
+              ]
             }
           ]
         },
         {
-          "id": "sta-sage-map",
+          "id": "sta-sage-map-2",
           "target": [
-            "#cat-cvs button[onclick*='loadSageLeaveMapping']"
+            "#lsub-sage button[onclick*='loadSageLeaveMapping']"
           ],
           "title": "Sage Leave Type Mapping",
           "text": "Click <b>Load from Sage</b>, then match each of your leave types to the Sage one. Suggested matches are filled in but only saved when you click <b>Save Mapping</b>.",
@@ -697,6 +720,58 @@
               "call": "switchApiCategory",
               "args": [
                 "cvs"
+              ]
+            },
+            {
+              "call": "switchLegacySub",
+              "args": [
+                "sage"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sta-payspace",
+          "target": [
+            "#payspaceConfigContainer"
+          ],
+          "title": "PaySpace Integration",
+          "text": "The <b>PaySpace Integration</b> tab connects to PaySpace (Deel Local Payroll). Click <b>Edit</b> and enter the Client ID and secret the company creates in PaySpace, choose <b>Test</b> or <b>Live</b>, and set the pay codes used for sending leave and hours. The secret is stored encrypted.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "switchApiCategory",
+              "args": [
+                "cvs"
+              ]
+            },
+            {
+              "call": "switchLegacySub",
+              "args": [
+                "payspace"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sta-payspace-test",
+          "target": [
+            "#lsub-payspace button[onclick*='testPayspaceApi']"
+          ],
+          "title": "Test PaySpace",
+          "text": "Checks the login works. It lists the companies the login can see; click one to fill in the <b>Company ID</b>, then <b>Save</b>.",
+          "placement": "left",
+          "before": [
+            {
+              "call": "switchApiCategory",
+              "args": [
+                "cvs"
+              ]
+            },
+            {
+              "call": "switchLegacySub",
+              "args": [
+                "payspace"
               ]
             }
           ]
