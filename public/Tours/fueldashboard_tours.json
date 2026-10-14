@@ -316,6 +316,76 @@
       ]
     },
     {
+      "key": "fueldashboard.deliveries",
+      "title": "Deliveries",
+      "trigger": "#page-deliveries.active",
+      "steps": [
+        {
+          "id": "fud-tabs",
+          "target": [
+            "#page-deliveries button[onclick*=\"showDeliveryTab('open'\"]"
+          ],
+          "title": "Deliveries",
+          "text": "Every delivery planned for your drivers, with its status. A <b>warning sign</b> next to a number means the office should look at it (short, damaged, over-delivered, failed or something missing).",
+          "placement": "bottom"
+        },
+        {
+          "id": "fud-resolve",
+          "target": [
+            "#page-deliveries button[onclick*=\"showDeliveryTab('resolve'\"]"
+          ],
+          "title": "Resolve",
+          "text": "Partial and failed stops wait here until you close them as they are, or move what is outstanding to a new stop. The number shows how many are waiting.",
+          "placement": "bottom"
+        },
+        {
+          "id": "fud-collections",
+          "target": [
+            "#page-deliveries button[onclick*=\"showDeliveryTab('returns'\"]"
+          ],
+          "title": "Collections",
+          "text": "Goods coming back from clients, planned here or captured by a driver.",
+          "placement": "bottom"
+        },
+        {
+          "id": "fud-emails",
+          "target": [
+            "#page-deliveries button[onclick*=\"showDeliveryTab('emails'\"]"
+          ],
+          "title": "ePOD Emails",
+          "text": "Every proof of delivery that was emailed, to whom, and whether it went through.",
+          "placement": "bottom"
+        },
+        {
+          "id": "fud-filters",
+          "target": [
+            "#deliveryFilterStart"
+          ],
+          "title": "Find stops",
+          "text": "Filter by date, status, client or driver, or search a number or reference. Tick <b>Exceptions only</b> to see just the stops that need attention, then click <b>Filter</b>.",
+          "placement": "bottom"
+        },
+        {
+          "id": "fud-new",
+          "target": [
+            "#page-deliveries button[onclick*='openDeliveryModal']"
+          ],
+          "title": "New Delivery",
+          "text": "Plan a delivery or a collection for a client, with its lines, and give it to a driver or leave it open to all.",
+          "placement": "bottom"
+        },
+        {
+          "id": "fud-list",
+          "target": [
+            "#deliveryListBody"
+          ],
+          "title": "Each stop",
+          "text": "The eye opens it with every photo and signature. The pen edits it while it is waiting, the arrow collects goods back, the PDF opens the ePOD and the envelope emails it again.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
       "key": "fueldashboard.management",
       "title": "Management",
       "trigger": "#page-management.active",
@@ -408,12 +478,12 @@
           "climb": 1
         },
         {
-          "id": "fus-delivery",
+          "id": "fus-delivery-2",
           "target": [
             "#settingDeliveryPodMandatory"
           ],
           "title": "Deliveries",
-          "text": "What drivers must capture on a delivery (photo, proof, signatures), and when the electronic proof of delivery is emailed.",
+          "text": "What drivers must capture on a delivery (photo, proof, signatures), when the electronic proof of delivery is emailed, whether its photos go on the PDF, and whether the office still gets a copy when a client has opted out.",
           "placement": "top",
           "climb": 2
         }

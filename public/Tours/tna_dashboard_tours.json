@@ -659,7 +659,7 @@
             "#engineOptionsBlock"
           ],
           "title": "Engine Options",
-          "text": "Optional calculation rules, all off by default so hours stay exactly as before: where overtime past a threshold counts from, half-hour rounding of Normal time, which column Force Sunday fills, forced rates and paid leave, the shift OT rule on Saturdays, the OT auto break, own default days, and pay rates in Employee Costs. A change applies to days calculated from then on.",
+          "text": "Optional calculation rules, all off by default so hours stay exactly as before: where overtime past a threshold counts from, half-hour rounding of Normal time, which column Force Sunday fills, forced rates and paid leave, the shift OT rule on Saturdays, the OT auto break, own default days, pay rates in Employee Costs, and labelling threshold-clamped days as Ignored. A change applies to days calculated from then on.",
           "placement": "top",
           "climb": 1,
           "optional": true

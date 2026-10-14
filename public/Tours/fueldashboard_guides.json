@@ -209,6 +209,210 @@
           "placement": "bottom"
         }
       ]
+    },
+    {
+      "key": "fueldashboard.guide.delivery-plan",
+      "title": "Plan a delivery or collection",
+      "icon": "fa-truck-ramp-box",
+      "blurb": "Set up a stop for a driver: the client, what goes (or comes back) and who takes it.",
+      "steps": [
+        {
+          "id": "fug-dp-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('deliveries'\"]"
+          ],
+          "title": "Deliveries",
+          "text": "Click <b>Deliveries</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Deliveries"
+        },
+        {
+          "id": "fug-dp-new",
+          "target": [
+            "#page-deliveries button[onclick*='openDeliveryModal']"
+          ],
+          "title": "New Delivery",
+          "text": "Click <b>New Delivery</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click New Delivery"
+        },
+        {
+          "id": "fug-dp-type",
+          "target": [
+            "#deliveryEditType"
+          ],
+          "title": "Delivery or collection",
+          "text": "A <b>delivery</b> takes goods to the client; a <b>collection</b> brings goods back.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "fug-dp-client",
+          "target": [
+            "#deliveryEditClient"
+          ],
+          "title": "Client and reference",
+          "text": "Pick the client and add your invoice or order number - it is printed on the ePOD.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fug-dp-driver",
+          "target": [
+            "#deliveryEditDriver"
+          ],
+          "title": "Driver and vehicle",
+          "text": "Give it to one driver, or leave <b>Anyone</b> so the first driver who opens it on the phone takes it.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fug-dp-lines",
+          "target": [
+            "#deliveryEditLines"
+          ],
+          "title": "Lines",
+          "text": "Each product (or free text), the quantity and the unit. The driver records what was actually handed over.",
+          "placement": "top",
+          "climb": 1
+        },
+        {
+          "id": "fug-dp-save",
+          "target": [
+            "#deliveryEditModal button[onclick='saveDelivery()']"
+          ],
+          "title": "Save",
+          "text": "Click <b>Save</b>. The stop appears on the driver's phone at the next sync.",
+          "placement": "top"
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.delivery-resolve",
+      "title": "Resolve a partial or failed stop",
+      "icon": "fa-scale-balanced",
+      "blurb": "Deal with what was not delivered: write it off, or send it on a new stop.",
+      "steps": [
+        {
+          "id": "fug-dr-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('deliveries'\"]"
+          ],
+          "title": "Deliveries",
+          "text": "Click <b>Deliveries</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Deliveries"
+        },
+        {
+          "id": "fug-dr-tab",
+          "target": [
+            "#page-deliveries button[onclick*=\"showDeliveryTab('resolve'\"]"
+          ],
+          "title": "Resolve",
+          "text": "Click <b>Resolve</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Resolve"
+        },
+        {
+          "id": "fug-dr-list",
+          "target": [
+            "#deliveryResolveBody"
+          ],
+          "title": "Waiting stops",
+          "text": "Each partial or failed stop with what is outstanding. Click <b>Resolve</b> on one.",
+          "placement": "top"
+        },
+        {
+          "id": "fug-dr-choose",
+          "target": [
+            "#deliveryResolveModal button[onclick*='submitResolve']"
+          ],
+          "title": "Close or move on",
+          "text": "<b>Close as is</b> writes off what is outstanding. The other button makes a new stop with only the outstanding goods. A failed stop stays marked failed either way.",
+          "placement": "top",
+          "timeout": 15000
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.delivery-return",
+      "title": "Collect goods back",
+      "icon": "fa-rotate-left",
+      "blurb": "Fetch goods back from a client after a delivery.",
+      "steps": [
+        {
+          "id": "fug-dc-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('deliveries'\"]"
+          ],
+          "title": "Deliveries",
+          "text": "Click <b>Deliveries</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Deliveries"
+        },
+        {
+          "id": "fug-dc-list",
+          "target": [
+            "#deliveryListBody"
+          ],
+          "title": "Find the delivery",
+          "text": "On a delivered stop, click the <b>arrow</b> (Collect back).",
+          "placement": "top"
+        },
+        {
+          "id": "fug-dc-lines",
+          "target": [
+            "#deliveryReturnLines"
+          ],
+          "title": "What comes back",
+          "text": "The quantities still at the client are filled in - anything already collected is left out. Change them if needed, pick a date and driver, and create the collection.",
+          "placement": "top",
+          "timeout": 15000
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.delivery-epod",
+      "title": "Send or resend an ePOD",
+      "icon": "fa-file-pdf",
+      "blurb": "Open the proof of delivery PDF, or email it again.",
+      "steps": [
+        {
+          "id": "fug-de-open",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('deliveries'\"]"
+          ],
+          "title": "Deliveries",
+          "text": "Click <b>Deliveries</b>.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Deliveries"
+        },
+        {
+          "id": "fug-de-list",
+          "target": [
+            "#deliveryListBody"
+          ],
+          "title": "Open or email",
+          "text": "On a finished stop the <b>PDF</b> icon opens the ePOD and the <b>envelope</b> emails it - to the client's saved address, or to one you type.",
+          "placement": "top"
+        },
+        {
+          "id": "fug-de-log",
+          "target": [
+            "#page-deliveries button[onclick*=\"showDeliveryTab('emails'\"]"
+          ],
+          "title": "Did it go?",
+          "text": "Click <b>ePOD Emails</b> to see every send and any that failed. Client email addresses are set under Management, Clients, <b>Contact</b>.",
+          "placement": "bottom"
+        }
+      ]
     }
   ]
 }

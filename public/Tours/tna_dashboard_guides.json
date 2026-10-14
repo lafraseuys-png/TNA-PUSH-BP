@@ -180,6 +180,7 @@
     },
     {
       "key": "tna_dashboard.guide.shift-wizard",
+      "requiresGlobal": "tnaShiftWizard",
       "title": "Set up a shift with the wizard",
       "icon": "fa-wand-magic-sparkles",
       "blurb": "Plain-language steps, a drag-to-edit timeline and test days before you save.",
