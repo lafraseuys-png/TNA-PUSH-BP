@@ -88,7 +88,7 @@
             "#autoBreak"
           ],
           "title": "Automatic breaks",
-          "text": "Minutes taken off for a break automatically, and a separate break once overtime passes a number of hours.",
+          "text": "Minutes taken off for a break automatically, and a separate break once overtime passes a number of hours. On a Session shift the break is a lunch taken off the time clocked in each day, for staff who stay clocked in over lunch (leave it 0 if they clock out for lunch).",
           "placement": "bottom",
           "climb": 2
         },
