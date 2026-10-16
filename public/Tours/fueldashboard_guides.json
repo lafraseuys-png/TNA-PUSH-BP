@@ -1,212 +1,690 @@
 {
-  "_howto": "Fuel how-to guides.",
+  "_howto": "Fuel how-to guides, one set per screen (help panel: \"?\" next to the profile, filter by Screen). Every guide starts by clicking its screen in the menu - that is how the Screen filter files it. Keys of the first 7 guides (vehicle, depot, price, delivery-*) are used by fueldashboard_tours.json (stepsFrom, skipSteps 2) and fueldashboard_setup.json - keep them and keep their first two steps (menu + open the form). Rebuilt 2026-10-16.",
   "guides": [
     {
-      "key": "fueldashboard.guide.vehicle",
-      "title": "Add a vehicle or asset",
-      "icon": "fa-truck",
-      "blurb": "Register a vehicle, tractor or machine with its reading, license and service interval.",
+      "key": "fueldashboard.guide.dashboard-read",
+      "title": "Read the dashboard",
+      "icon": "fa-chart-pie",
+      "blurb": "What every number and list on the Fuel dashboard means.",
       "steps": [
         {
-          "id": "fug-v-open",
+          "id": "fg-dashboard-read-1",
           "target": [
-            "#sidebarNav [onclick*=\"showSection('vehicles'\"]"
+            "#sidebarNav [onclick*=\"showSection('stats'\"]"
           ],
-          "title": "Vehicles",
-          "text": "Click <b>Vehicles</b>.",
+          "title": "Dashboard",
+          "text": "Open <b>Dashboard</b> in the menu on the left.",
           "placement": "right",
           "mode": "click",
-          "hint": "Click Vehicles"
+          "hint": "Click Dashboard"
         },
         {
-          "id": "fug-v-add",
+          "id": "fg-dashboard-read-2",
           "target": [
-            "#page-vehicles button[onclick*='openAddVehicleModal']"
+            "#currentMonthLabel"
           ],
-          "title": "Add Asset",
-          "text": "Click <b>Add Asset</b>.",
+          "title": "This month",
+          "text": "Everything on the dashboard is for the <b>month shown here</b>, from the 1st until now. Click <b>Refresh</b> (or <b>Sync Engine</b> at the top) to load the latest fill-ups from the phones.",
           "placement": "bottom",
-          "mode": "click",
-          "hint": "Click Add Asset"
+          "climb": 0
         },
         {
-          "id": "fug-v-name",
+          "id": "fg-dashboard-read-3",
           "target": [
-            "#newVehName"
+            "#stat-total-tx"
           ],
-          "title": "Name and asset tag",
-          "text": "A name drivers recognise, and its tag or registration.",
-          "placement": "bottom",
-          "climb": 1,
-          "timeout": 4000
-        },
-        {
-          "id": "fug-v-type",
-          "target": [
-            "#newVehType"
-          ],
-          "title": "Type and tracking",
-          "text": "What it is, and whether it's tracked in <b>kilometres</b> or <b>machine hours</b>. A sub-contractor's asset is linked to them.",
+          "title": "Fill-ups, litres and fuel in tanks",
+          "text": "<b>Fill-ups This Month</b> counts every fill-up (all vehicles and depots). <b>Litres Dispensed</b> adds up their litres. <b>Fuel In Tanks</b> is what is in your <b>own</b> tanks right now. Road (outside) depots are not counted because their level is not tracked.",
           "placement": "bottom",
           "climb": 1
         },
         {
-          "id": "fug-v-reading",
+          "id": "fg-dashboard-read-4",
           "target": [
-            "#newVehKM"
+            "#stat-vehicle-list"
           ],
-          "title": "Current reading",
-          "text": "The odometer or hour meter now. Fuel logs check the next reading against it.",
+          "title": "Asset Utilisation and Operator Efficiency",
+          "text": "<b>Asset Utilisation</b> lists the litres each vehicle used this month. <b>Operator Efficiency</b> lists the litres per driver.",
           "placement": "bottom",
           "climb": 1
         },
         {
-          "id": "fug-v-service",
+          "id": "fg-dashboard-read-5",
           "target": [
-            "#newVehInterval"
+            "#stat-activity-list"
           ],
-          "title": "Service and license",
-          "text": "Service interval, last service and license expiry, for the audits.",
+          "title": "Activity Distribution",
+          "text": "Litres per activity this month (what the fuel was used for), e.g. ploughing or transport.",
           "placement": "bottom",
           "climb": 1
         },
         {
-          "id": "fug-v-save",
+          "id": "fg-dashboard-read-6",
           "target": [
-            "#addVehicleModal button[onclick*='addVehicle()']"
+            "#stat-efficiency-list"
           ],
-          "title": "Save",
-          "text": "Click to register it (or cancel if you're only practising).",
-          "placement": "top"
+          "title": "Fleet Efficiency",
+          "text": "Each vehicle's latest efficiency: km per litre, or litres per hour for machines tracked in hours. You choose the units under <b>Settings</b>.<br><br>A number that looks impossible (e.g. <b>99999.9 km/L</b>) almost always means an odometer was typed wrong. See the guide <b>Find and fix an impossible efficiency</b>.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-dashboard-read-7",
+          "target": [
+            "#dashboard-tank-levels"
+          ],
+          "title": "Physical Depot Inventory",
+          "text": "One tile per own tank with its level and capacity. Green is fine, amber is below 40% and red is below 15%. \"No own tanks yet\" means only road depots are registered.",
+          "placement": "bottom",
+          "climb": 1
         }
       ]
     },
     {
-      "key": "fueldashboard.guide.depot",
-      "title": "Register a depot and its pumps",
-      "icon": "fa-oil-can",
-      "blurb": "A tank with its fuel type and size, and the pumps that dispense from it.",
+      "key": "fueldashboard.guide.fix-efficiency",
+      "title": "Find and fix an impossible efficiency",
+      "icon": "fa-gauge-high",
+      "blurb": "A km/L like 99999 or 0.01 means a reading was typed wrong. Find the fill-up and correct it.",
       "steps": [
         {
-          "id": "fug-d-open",
+          "id": "fg-fix-efficiency-1",
           "target": [
-            "#sidebarNav [onclick*=\"showSection('depots'\"]"
+            "#sidebarNav [onclick*=\"showSection('stats'\"]"
           ],
-          "title": "Fuel Depots",
-          "text": "Click <b>Fuel Depots</b>.",
+          "title": "Dashboard",
+          "text": "Open <b>Dashboard</b> in the menu on the left.",
           "placement": "right",
           "mode": "click",
-          "hint": "Click Fuel Depots"
+          "hint": "Click Dashboard"
         },
         {
-          "id": "fug-d-add",
+          "id": "fg-fix-efficiency-2",
           "target": [
-            "#page-depots button[onclick*='openAddDepotModal']"
+            "#stat-efficiency-list"
           ],
-          "title": "Add Depot / Tank",
-          "text": "Click <b>Add Depot / Tank</b>.",
-          "placement": "bottom",
-          "mode": "click",
-          "hint": "Click Add Depot / Tank"
-        },
-        {
-          "id": "fug-d-name",
-          "target": [
-            "#newDepotName"
-          ],
-          "title": "1. Tank details",
-          "text": "Name and location of the tank.",
-          "placement": "bottom",
-          "climb": 1,
-          "timeout": 4000
-        },
-        {
-          "id": "fug-d-type",
-          "target": [
-            "#newDepotType"
-          ],
-          "title": "Fuel type and size",
-          "text": "What it holds and its size in litres. Tick <b>external</b> for a supplier's tank or a filling station.",
+          "title": "Spot it",
+          "text": "Look for a vehicle whose efficiency is far too high or far too low. Efficiency is worked out from the <b>distance between two odometer readings</b> divided by the litres, so one wrong reading spoils it.",
           "placement": "bottom",
           "climb": 1
         },
         {
-          "id": "fug-d-pumps",
+          "id": "fg-fix-efficiency-3",
           "target": [
-            "#addDepotModal button[onclick*='addPumpRow']"
+            "#sidebarNav [onclick*=\"showSection('fueling-data'\"]"
           ],
-          "title": "2. Connected pumps",
-          "text": "Add each pump with its current meter reading. Fuel issued is checked against the meter.",
-          "placement": "top"
+          "title": "Fueling Data",
+          "text": "Open <b>Fueling Data</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Fueling Data"
         },
         {
-          "id": "fug-d-save",
+          "id": "fg-fix-efficiency-4",
           "target": [
-            "#addDepotModal button[onclick*='addDepot()']"
+            "#fdFilterVehicle"
           ],
-          "title": "Save Depot & Pumps",
-          "text": "Click to register it (or cancel if you're only practising).",
-          "placement": "top"
+          "title": "Pick the vehicle",
+          "text": "Choose the vehicle. Then click the <b>Date &amp; Time</b> heading to sort, and compare the <b>Odometer</b> column from fill-up to fill-up. The wrong one stands out (too high, too low, or an extra digit).",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-fix-efficiency-5",
+          "title": "Correct the reading",
+          "text": "Click the pencil (<b>Edit</b>) on the wrong fill-up, fix the <b>Odometer</b>, and click <b>Update Fill-up</b>. If there was no reading, leave the odometer blank.<br><br>The vehicle's current reading and its km/L are worked out again from the fill-ups, and the change is written to the audit trail with your name."
+        },
+        {
+          "id": "fg-fix-efficiency-6",
+          "title": "If the vehicle's reading itself is wrong",
+          "text": "On <b>Vehicles</b>, click the number in the <b>Reading</b> column to correct the vehicle's current odometer / hour meter (see <b>Correct a vehicle's odometer or hour reading</b>)."
         }
       ]
     },
     {
-      "key": "fueldashboard.guide.price",
-      "title": "Set the fuel price",
-      "icon": "fa-tags",
-      "blurb": "Add a price per litre from a date, so costs are right.",
+      "key": "fueldashboard.guide.logs-day",
+      "title": "Check the fill-ups for a day",
+      "icon": "fa-calendar-day",
+      "blurb": "Look through one day's fill-ups with their photos, signature and GPS.",
       "steps": [
         {
-          "id": "fug-p-open",
+          "id": "fg-logs-day-1",
           "target": [
-            "#sidebarNav [onclick*=\"showSection('management'\"]"
+            "#sidebarNav [onclick*=\"showSection('transactions'\"]"
           ],
-          "title": "Management",
-          "text": "Click <b>Management</b>.",
+          "title": "Fuel Logs",
+          "text": "Open <b>Fuel Logs</b> in the menu on the left.",
           "placement": "right",
           "mode": "click",
-          "hint": "Click Management"
+          "hint": "Click Fuel Logs"
         },
         {
-          "id": "fug-p-tab",
+          "id": "fg-logs-day-2",
           "target": [
-            "#page-management button[onclick*=\"showMgmt('pricing'\"]"
+            "#fuelDayFilter"
           ],
-          "title": "Fuel Pricing",
-          "text": "Click <b>Fuel Pricing</b>.",
-          "placement": "bottom",
-          "mode": "click",
-          "hint": "Click Fuel Pricing"
-        },
-        {
-          "id": "fug-p-type",
-          "target": [
-            "#newPriceType"
-          ],
-          "title": "Fuel type",
-          "text": "Which fuel the price is for.",
+          "title": "Choose the day",
+          "text": "With <b>Period</b> on <b>One day</b>, Fuel Logs shows one day at a time. Pick a date, or use the arrows either side to go a day back or forward.",
           "placement": "bottom",
           "climb": 1,
-          "timeout": 4000
+          "optional": true
         },
         {
-          "id": "fug-p-value",
+          "id": "fg-logs-day-3",
           "target": [
-            "#newPriceValue"
+            "#fuelPeriodMode"
           ],
-          "title": "Price and date",
-          "text": "The price per litre and the date it applies from. An earlier date re-costs fuel from then.",
+          "title": "Period",
+          "text": "To see more than one day, choose <b>This week</b>, <b>Last 7 days</b>, <b>This month</b>, <b>Last month</b> or <b>Custom range</b>. <b>From</b> and <b>To</b> boxes then replace the day picker (change a date and it becomes a custom range). The footer shows the number of fill-ups and the litres for the period.",
           "placement": "bottom",
           "climb": 1
         },
         {
-          "id": "fug-p-save",
+          "id": "fg-logs-day-4",
           "target": [
-            "#page-management button[onclick*='addFuelPrice']"
+            "#page-transactions table[data-hs] thead"
           ],
-          "title": "Save Price",
-          "text": "Adds it to the price history.",
-          "placement": "bottom"
+          "title": "The columns",
+          "text": "<b>Vehicle</b> (and the depot / pump it came from), <b>Driver</b>, <b>Used For</b> (farm, unit, activity), <b>Odometer</b>, <b>Photos</b>, <b>Signature</b>, <b>Nat. Road</b> and <b>Litres</b>.<br><br>An amber <b>Reason</b> under the odometer means the driver typed a reason for an unusual reading. Hover over it to read it.",
+          "placement": "bottom",
+          "climb": 0
+        },
+        {
+          "id": "fg-logs-day-5",
+          "title": "Photos and signature",
+          "text": "Click a small photo to open it. The viewer shows which vehicle and when, with buttons to switch between the odometer, meter-before and meter-after photos of the same fill. Use <b>Open Full Size</b> for the original. The pin opens the place on Google Maps."
+        },
+        {
+          "id": "fg-logs-day-6",
+          "title": "Search in a column",
+          "text": "Type in the small box under a column heading to show only matching rows, e.g. a vehicle name or a driver. All the words you type must match."
+        },
+        {
+          "id": "fg-logs-day-7",
+          "target": [
+            "#fuelPageDisplay"
+          ],
+          "title": "More rows",
+          "text": "A busy day spans several pages. Use <b>Previous</b> and <b>Next</b>.",
+          "placement": "top",
+          "climb": 1
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.manual-fillup",
+      "title": "Capture a fill-up by hand",
+      "icon": "fa-pen-to-square",
+      "blurb": "Enter a fill-up that was not captured on the phone, e.g. from a paper slip.",
+      "steps": [
+        {
+          "id": "fg-manual-fillup-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('transactions'\"]"
+          ],
+          "title": "Fuel Logs",
+          "text": "Open <b>Fuel Logs</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Fuel Logs"
+        },
+        {
+          "id": "fg-manual-fillup-2",
+          "target": [
+            "#page-transactions button[onclick*=\"openManualTransactionModal\"]"
+          ],
+          "title": "Manual Entry",
+          "text": "Click <b>Manual Entry</b>. Nothing is saved until you click <b>Save Fill-up</b>, so it is safe to follow along.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Manual Entry"
+        },
+        {
+          "id": "fg-manual-fillup-3",
+          "target": [
+            "#manTxDate"
+          ],
+          "title": "Date & time",
+          "text": "Required. When the fuel was dispensed. A date in the future is refused.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 5000
+        },
+        {
+          "id": "fg-manual-fillup-4",
+          "target": [
+            "#manTxVehicle"
+          ],
+          "title": "Vehicle and driver",
+          "text": "Required. The vehicle or machine that got the fuel, and the driver / user who took it.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-manual-fillup-5",
+          "target": [
+            "#manTxOdo"
+          ],
+          "title": "Odometer",
+          "text": "The odometer (or hour meter) at the fill. It is needed to work out km/L. It is required if <b>Mandatory Odometer Capture</b> is on under Settings.<br><br>With <b>Typo Checks</b> on, a reading lower than last time or a very big jump asks you to type a reason before it saves.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-manual-fillup-6",
+          "target": [
+            "#manTxDepot"
+          ],
+          "title": "Depot / pump",
+          "text": "Where the fuel came from. For your own tanks the tank level goes down by the litres. Choose a road depot for fuel bought at a filling station.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-manual-fillup-7",
+          "target": [
+            "#manTxLiters"
+          ],
+          "title": "Litres and pump meter",
+          "text": "Required: the litres dispensed. Type the <b>Pump Meter Before</b> and the <b>After</b> is worked out (before + litres), so the pump meter keeps adding up.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-manual-fillup-8",
+          "target": [
+            "#manTxFarm"
+          ],
+          "title": "Where it was used",
+          "text": "The <b>Farm</b> and <b>Activity</b> the fuel was used for. These drive the dashboard, the reports and the diesel rebate. <b>Farming Department</b> only shows when it is switched on under Settings.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-manual-fillup-9",
+          "target": [
+            "#manTxNationalRoad"
+          ],
+          "title": "National road used",
+          "text": "Tick it if the vehicle drove on a public national road. That fuel is left out of the SARS diesel rebate claim.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-manual-fillup-10",
+          "target": [
+            "#manualTxModal button[onclick*=\"submitManualTransaction\"]"
+          ],
+          "title": "Save Fill-up",
+          "text": "Click <b>Save Fill-up</b>. It appears in Fuel Logs on its date, and the vehicle's reading and efficiency are updated.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Click Save Fill-up"
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.edit-fillup",
+      "title": "Correct a fill-up",
+      "icon": "fa-pen",
+      "blurb": "Change the vehicle, driver, odometer, litres, farm or activity of a captured fill-up.",
+      "steps": [
+        {
+          "id": "fg-edit-fillup-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('transactions'\"]"
+          ],
+          "title": "Fuel Logs",
+          "text": "Open <b>Fuel Logs</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Fuel Logs"
+        },
+        {
+          "id": "fg-edit-fillup-2",
+          "target": [
+            "#fuelDayFilter"
+          ],
+          "title": "Find it",
+          "text": "Go to the day of the fill-up, or choose a <b>Period</b> (e.g. This month) to see more days at once. <b>Fueling Data</b> also searches across all days.",
+          "placement": "bottom",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "fg-edit-fillup-3",
+          "target": [
+            "#transactionBody button[onclick*=\"openEditTxModal\"]"
+          ],
+          "title": "Edit",
+          "text": "Click the pencil on the fill-up's row.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click the pencil"
+        },
+        {
+          "id": "fg-edit-fillup-4",
+          "target": [
+            "#editTxDate"
+          ],
+          "title": "Vehicle & driver",
+          "text": "Change the <b>Date &amp; Time</b>, <b>Vehicle</b>, <b>Driver</b>, <b>Odometer</b> (leave it blank if there was no reading) or <b>Litres</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 5000
+        },
+        {
+          "id": "fg-edit-fillup-5",
+          "target": [
+            "#editTxFarm"
+          ],
+          "title": "Where it was used",
+          "text": "Change the <b>Farm</b>, <b>Farm Unit</b>, <b>Activity</b> or the <b>National road used</b> tick.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-edit-fillup-6",
+          "title": "A split fill-up",
+          "text": "If the fill-up was split over two activities, a <b>Linked Split Part</b> section shows. Changing this part's litres or % also changes the other part, so the two still add up to the total."
+        },
+        {
+          "id": "fg-edit-fillup-7",
+          "target": [
+            "#editTxModal button[onclick*=\"submitEditTransaction\"]"
+          ],
+          "title": "Update Fill-up",
+          "text": "Click <b>Update Fill-up</b>. The change is written to the audit trail with your name. If you changed the odometer, the vehicle's reading and km/L are worked out again.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Click Update Fill-up"
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.split-fillup",
+      "title": "Split one fill-up over two activities",
+      "icon": "fa-code-branch",
+      "blurb": "One tank of fuel used for two jobs - divide the litres between two activities.",
+      "steps": [
+        {
+          "id": "fg-split-fillup-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('transactions'\"]"
+          ],
+          "title": "Fuel Logs",
+          "text": "Open <b>Fuel Logs</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Fuel Logs"
+        },
+        {
+          "id": "fg-split-fillup-2",
+          "target": [
+            "#transactionBody button[onclick*=\"openSplitTxModal\"]"
+          ],
+          "title": "Split",
+          "text": "Click the split button (the branch icon) on the fill-up's row.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click the split button"
+        },
+        {
+          "id": "fg-split-fillup-3",
+          "target": [
+            "#splitAct1"
+          ],
+          "title": "Part 1 (this fill)",
+          "text": "Choose the first activity, then its <b>Litres</b> or its <b>%</b>. The other box fills in by itself.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 5000
+        },
+        {
+          "id": "fg-split-fillup-4",
+          "target": [
+            "#splitAct2"
+          ],
+          "title": "Part 2 (new fill)",
+          "text": "Choose the second activity. Its litres are the rest, so the two parts always add up to the total shown at the top.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-split-fillup-5",
+          "title": "Pump meter",
+          "text": "The pump meter readings stay on Part 1. Part 2 is a new linked fill-up with the same vehicle, driver and date."
+        },
+        {
+          "id": "fg-split-fillup-6",
+          "target": [
+            "#splitTxModal button[onclick*=\"submitSplitTransaction\"]"
+          ],
+          "title": "Confirm Split",
+          "text": "Click <b>Confirm Split</b>.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Click Confirm Split"
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.void-fillup",
+      "title": "Void (delete) a wrong fill-up",
+      "icon": "fa-trash",
+      "blurb": "Remove a duplicate or wrong fill-up. The litres go back to the tank.",
+      "steps": [
+        {
+          "id": "fg-void-fillup-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('transactions'\"]"
+          ],
+          "title": "Fuel Logs",
+          "text": "Open <b>Fuel Logs</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Fuel Logs"
+        },
+        {
+          "id": "fg-void-fillup-2",
+          "target": [
+            "#transactionBody button[onclick*=\"deleteTransaction\"]"
+          ],
+          "title": "Void",
+          "text": "Click the red bin on the fill-up's row.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click the red bin"
+        },
+        {
+          "id": "fg-void-fillup-3",
+          "title": "Type the reason",
+          "text": "A box asks why. The reason is required and is kept in the audit trail with your name."
+        },
+        {
+          "id": "fg-void-fillup-4",
+          "title": "What happens",
+          "text": "The fill-up is removed. Its litres go <b>back into the tank</b>, unless a tank reading was taken after it (then the reading stands). The vehicle's odometer and km/L are worked out again from the remaining fill-ups.<br><br>If only part of it is wrong, use <b>Edit</b> instead."
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.fueling-data",
+      "title": "Search all fill-ups (Fueling Data)",
+      "icon": "fa-table",
+      "blurb": "Filter every fill-up by vehicle, activity or department, sort and search.",
+      "steps": [
+        {
+          "id": "fg-fueling-data-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('fueling-data'\"]"
+          ],
+          "title": "Fueling Data",
+          "text": "Open <b>Fueling Data</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Fueling Data"
+        },
+        {
+          "id": "fg-fueling-data-2",
+          "target": [
+            "#fdFilterVehicle"
+          ],
+          "title": "Filters",
+          "text": "Narrow the list by <b>Vehicle</b>, <b>Activity</b> and <b>Department</b>. The list changes as you choose.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-fueling-data-3",
+          "target": [
+            "#fdSearch"
+          ],
+          "title": "Search",
+          "text": "Type a driver, farm or depot name to find matching fill-ups.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-fueling-data-4",
+          "target": [
+            "#page-fueling-data table[data-hs] thead"
+          ],
+          "title": "Sort and column search",
+          "text": "Click a heading (Date, Vehicle, Driver, Odometer, Litres...) to sort by it. Click again to reverse. The boxes under the headings search in that column only.",
+          "placement": "bottom",
+          "climb": 0
+        },
+        {
+          "id": "fg-fueling-data-5",
+          "title": "Fix a fill-up from here",
+          "text": "Each row has the same buttons as Fuel Logs: the pencil to <b>Edit</b>, the branch to <b>Split</b> and the red bin to <b>Void</b>."
+        },
+        {
+          "id": "fg-fueling-data-6",
+          "target": [
+            "#page-fueling-data button[onclick*=\"openManualTransactionModal\"]"
+          ],
+          "title": "Manual Entry (Split)",
+          "text": "Opens the same <b>Manual Fuel Entry</b> form as on Fuel Logs. See <b>Capture a fill-up by hand</b>.",
+          "placement": "left",
+          "climb": 0
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.trips-day",
+      "title": "Check the trips for a day",
+      "icon": "fa-route",
+      "blurb": "See the trips drivers logged: client, destination, pallets, temperature and evidence.",
+      "steps": [
+        {
+          "id": "fg-trips-day-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('triplogs'\"]"
+          ],
+          "title": "Trip Logs",
+          "text": "Open <b>Trip Logs</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Trip Logs"
+        },
+        {
+          "id": "fg-trips-day-2",
+          "target": [
+            "#tripDayFilter"
+          ],
+          "title": "Choose the day",
+          "text": "With <b>Period</b> on <b>One day</b>: one day at a time. Pick a date or use the arrows.",
+          "placement": "bottom",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "fg-trips-day-3",
+          "target": [
+            "#tripPeriodMode"
+          ],
+          "title": "Period",
+          "text": "Choose <b>This week</b>, <b>Last 7 days</b>, <b>This month</b>, <b>Last month</b> or <b>Custom range</b> to see the trips of a longer period. <b>From</b> and <b>To</b> boxes replace the day picker.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-trips-day-4",
+          "target": [
+            "#page-triplogs table[data-hs] thead"
+          ],
+          "title": "The columns",
+          "text": "<b>Driver &amp; Vehicle</b>, <b>Client &amp; Destination</b>, the trip <b>Activity</b>, <b>Units Delivered</b> (pallets), <b>Odometer &amp; Temp</b> (load temperature), <b>Location</b> (opens the GPS point on a map) and <b>Evidence</b> (photos and signature, click to open).",
+          "placement": "bottom",
+          "climb": 0
+        },
+        {
+          "id": "fg-trips-day-5",
+          "title": "Search and pages",
+          "text": "Type in the boxes under the headings to search a column. Use <b>Previous</b> / <b>Next</b> for more rows."
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.manual-trip",
+      "title": "Capture a trip by hand",
+      "icon": "fa-pen-to-square",
+      "blurb": "Enter a trip that was not logged on the phone.",
+      "steps": [
+        {
+          "id": "fg-manual-trip-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('triplogs'\"]"
+          ],
+          "title": "Trip Logs",
+          "text": "Open <b>Trip Logs</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Trip Logs"
+        },
+        {
+          "id": "fg-manual-trip-2",
+          "target": [
+            "#page-triplogs button[onclick*=\"openManualTripModal\"]"
+          ],
+          "title": "Manual Entry",
+          "text": "Click <b>Manual Entry</b>. Nothing is saved until you click <b>Save Trip</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Manual Entry"
+        },
+        {
+          "id": "fg-manual-trip-3",
+          "target": [
+            "#manTripDate"
+          ],
+          "title": "Trip",
+          "text": "Required: <b>Date &amp; Time</b>, <b>Vehicle</b> and <b>Driver / User</b>. Then the <b>Trip Activity</b> (set up under Management &gt; Trip Activities), the <b>Client</b> and the <b>Destination</b> (stop).",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 5000
+        },
+        {
+          "id": "fg-manual-trip-4",
+          "target": [
+            "#manTripOdo"
+          ],
+          "title": "Readings",
+          "text": "The <b>Odometer</b> at the stop, the <b>Units Delivered</b> (pallets) and the load <b>Temperature</b> (Cold, Medium, Slightly High, High).",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-manual-trip-5",
+          "target": [
+            "#manualTripModal button[onclick*=\"submitManualTrip\"]"
+          ],
+          "title": "Save Trip",
+          "text": "Click <b>Save Trip</b>.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Click Save Trip"
         }
       ]
     },
@@ -214,128 +692,257 @@
       "key": "fueldashboard.guide.delivery-plan",
       "title": "Plan a delivery or collection",
       "icon": "fa-truck-ramp-box",
-      "blurb": "Set up a stop for a driver: the client, what goes (or comes back) and who takes it.",
+      "blurb": "Load a stop for the drivers: client, destination, date and what is being delivered.",
       "steps": [
         {
-          "id": "fug-dp-open",
+          "id": "fg-delivery-plan-1",
           "target": [
             "#sidebarNav [onclick*=\"showSection('deliveries'\"]"
           ],
           "title": "Deliveries",
-          "text": "Click <b>Deliveries</b>.",
+          "text": "Open <b>Deliveries</b> in the menu on the left.",
           "placement": "right",
           "mode": "click",
           "hint": "Click Deliveries"
         },
         {
-          "id": "fug-dp-new",
+          "id": "fg-delivery-plan-2",
+          "title": "Before you start",
+          "text": "You need the <b>client</b> (Management &gt; Clients) and your <b>products and units</b> (Management &gt; Deliveries). A line can also be free text."
+        },
+        {
+          "id": "fg-delivery-plan-3",
           "target": [
-            "#page-deliveries button[onclick*='openDeliveryModal']"
+            "#page-deliveries button[onclick*=\"openDeliveryModal(null)\"]"
           ],
           "title": "New Delivery",
-          "text": "Click <b>New Delivery</b>.",
-          "placement": "bottom",
+          "text": "Click <b>New Delivery</b>. Nothing is saved until <b>Save Delivery</b>.",
+          "placement": "left",
           "mode": "click",
           "hint": "Click New Delivery"
         },
         {
-          "id": "fug-dp-type",
+          "id": "fg-delivery-plan-4",
           "target": [
             "#deliveryEditType"
           ],
-          "title": "Delivery or collection",
-          "text": "A <b>delivery</b> takes goods to the client; a <b>collection</b> brings goods back.",
+          "title": "Type",
+          "text": "<b>Delivery</b>: goods go to the client. <b>Collection</b>: goods come back from the client.",
           "placement": "bottom",
           "climb": 1,
-          "timeout": 4000
+          "timeout": 5000
         },
         {
-          "id": "fug-dp-client",
+          "id": "fg-delivery-plan-5",
           "target": [
             "#deliveryEditClient"
           ],
           "title": "Client and reference",
-          "text": "Pick the client and add your invoice or order number - it is printed on the ePOD.",
+          "text": "Required: the <b>Client</b>. <b>Your Reference</b> is your invoice or order number. It prints on the ePOD.",
           "placement": "bottom",
           "climb": 1
         },
         {
-          "id": "fug-dp-driver",
+          "id": "fg-delivery-plan-6",
+          "target": [
+            "#deliveryEditDest"
+          ],
+          "title": "Where and when",
+          "text": "The <b>Destination</b> (farm, depot or address) and the <b>Planned Date</b>.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-delivery-plan-7",
           "target": [
             "#deliveryEditDriver"
           ],
           "title": "Driver and vehicle",
-          "text": "Give it to one driver, or leave <b>Anyone</b> so the first driver who opens it on the phone takes it.",
+          "text": "Optional. A delivery with <b>no driver</b> is shown to every driver, and the first one to take it \"claims\" it. Pick a driver to give it to one person.",
           "placement": "bottom",
           "climb": 1
         },
         {
-          "id": "fug-dp-lines",
+          "id": "fg-delivery-plan-8",
+          "target": [
+            "#deliveryEditNotes"
+          ],
+          "title": "Notes for the driver",
+          "text": "Anything the driver must know, e.g. \"Call before arriving\".",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-delivery-plan-9",
           "target": [
             "#deliveryEditLines"
           ],
-          "title": "Lines",
-          "text": "Each product (or free text), the quantity and the unit. The driver records what was actually handed over.",
+          "title": "What is being delivered",
+          "text": "Click <b>Add Line</b> for each item: choose the product (or free text), a description, the quantity and the unit. Leave a line empty to remove it.",
           "placement": "top",
           "climb": 1
         },
         {
-          "id": "fug-dp-save",
+          "id": "fg-delivery-plan-10",
           "target": [
-            "#deliveryEditModal button[onclick='saveDelivery()']"
+            "#deliveryEditModal button[onclick*=\"saveDelivery\"]"
           ],
-          "title": "Save",
-          "text": "Click <b>Save</b>. The stop appears on the driver's phone at the next sync.",
-          "placement": "top"
+          "title": "Save Delivery",
+          "text": "Click <b>Save Delivery</b>. It gets a number and shows on the drivers' phones as <b>Pending</b>.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Click Save Delivery"
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.delivery-find",
+      "title": "Find a delivery and see what happened",
+      "icon": "fa-magnifying-glass",
+      "blurb": "Filter deliveries, read the statuses and open a stop's details.",
+      "steps": [
+        {
+          "id": "fg-delivery-find-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('deliveries'\"]"
+          ],
+          "title": "Deliveries",
+          "text": "Open <b>Deliveries</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Deliveries"
+        },
+        {
+          "id": "fg-delivery-find-2",
+          "target": [
+            "#deliveryFilterStart"
+          ],
+          "title": "Filters",
+          "text": "Set <b>From</b> / <b>To</b>, the <b>Status</b>, <b>Client</b> or <b>Driver</b>, or search a number, reference or place. Tick <b>Exceptions only</b> to see only stops with a problem. Then click <b>Filter</b>.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-delivery-find-3",
+          "title": "Statuses",
+          "text": "<b>Pending</b>: not done yet. <b>Delivered</b>: everything delivered. <b>Partial</b>: less than planned (waits in Resolve). <b>Failed</b>: could not be done (the driver picked a reason). <b>Cancelled</b>: cancelled in the office.<br><br>The <b>Driver</b> column shows who it was given to, <b>Claimed by</b> someone, or <b>Open to all</b>."
+        },
+        {
+          "id": "fg-delivery-find-4",
+          "target": [
+            "#deliveryListBody button[onclick*=\"openDeliveryDetail\"]"
+          ],
+          "title": "Open",
+          "text": "Click the eye on a row to see the stop: lines planned and delivered, notes, photos, signatures and GPS.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click the eye"
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.delivery-change",
+      "title": "Change or cancel a delivery",
+      "icon": "fa-ban",
+      "blurb": "Edit a stop before the driver does it, or cancel it.",
+      "steps": [
+        {
+          "id": "fg-delivery-change-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('deliveries'\"]"
+          ],
+          "title": "Deliveries",
+          "text": "Open <b>Deliveries</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Deliveries"
+        },
+        {
+          "id": "fg-delivery-change-2",
+          "title": "Edit",
+          "text": "The pencil only shows while a delivery is <b>Pending</b>. Click it to change the client, date, driver or lines, then <b>Save Delivery</b>."
+        },
+        {
+          "id": "fg-delivery-change-3",
+          "title": "Cancel",
+          "text": "Click the red <b>Cancel</b> button on the row. A delivered stop cannot be cancelled. Use <b>Collect back</b> to bring goods back instead."
+        },
+        {
+          "id": "fg-delivery-change-4",
+          "target": [
+            "#deliveryListBody"
+          ],
+          "title": "Your deliveries",
+          "text": "The buttons on each row change with the status: open, edit (Pending), collect back (Delivered / Partial), ePOD and email (done stops) and cancel.",
+          "placement": "top",
+          "climb": 0
         }
       ]
     },
     {
       "key": "fueldashboard.guide.delivery-resolve",
       "title": "Resolve a partial or failed stop",
-      "icon": "fa-scale-balanced",
-      "blurb": "Deal with what was not delivered: write it off, or send it on a new stop.",
+      "icon": "fa-flag",
+      "blurb": "Decide what happens to goods that were not delivered: a follow-up stop or close it.",
       "steps": [
         {
-          "id": "fug-dr-open",
+          "id": "fg-delivery-resolve-1",
           "target": [
             "#sidebarNav [onclick*=\"showSection('deliveries'\"]"
           ],
           "title": "Deliveries",
-          "text": "Click <b>Deliveries</b>.",
+          "text": "Open <b>Deliveries</b> in the menu on the left.",
           "placement": "right",
           "mode": "click",
           "hint": "Click Deliveries"
         },
         {
-          "id": "fug-dr-tab",
+          "id": "fg-delivery-resolve-2",
           "target": [
             "#page-deliveries button[onclick*=\"showDeliveryTab('resolve'\"]"
           ],
           "title": "Resolve",
-          "text": "Click <b>Resolve</b>.",
+          "text": "Click the <b>Resolve</b> tab.",
           "placement": "bottom",
           "mode": "click",
           "hint": "Click Resolve"
         },
         {
-          "id": "fug-dr-list",
+          "id": "fg-delivery-resolve-3",
           "target": [
             "#deliveryResolveBody"
           ],
-          "title": "Waiting stops",
-          "text": "Each partial or failed stop with what is outstanding. Click <b>Resolve</b> on one.",
-          "placement": "top"
+          "title": "Waiting to be resolved",
+          "text": "Every <b>Partial</b> or <b>Failed</b> stop waits here with what was planned, delivered and is outstanding. The number on the tab is how many are waiting.",
+          "placement": "top",
+          "climb": 0
         },
         {
-          "id": "fug-dr-choose",
+          "id": "fg-delivery-resolve-4",
           "target": [
-            "#deliveryResolveModal button[onclick*='submitResolve']"
+            "#deliveryResolveBody button[onclick*=\"openResolve\"]"
           ],
-          "title": "Close or move on",
-          "text": "<b>Close as is</b> writes off what is outstanding. The other button makes a new stop with only the outstanding goods. A failed stop stays marked failed either way.",
-          "placement": "top",
-          "timeout": 15000
+          "title": "Resolve",
+          "text": "Click <b>Resolve</b> on a stop.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Resolve"
+        },
+        {
+          "id": "fg-delivery-resolve-5",
+          "target": [
+            "#deliveryResolveDate"
+          ],
+          "title": "Follow-up",
+          "text": "For a new stop: the <b>Follow-up Date</b>, a <b>Driver</b> (optional) and a <b>Note</b> (why, or what was agreed with the client).",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 5000
+        },
+        {
+          "id": "fg-delivery-resolve-6",
+          "title": "Create Follow-up or Close As Is",
+          "text": "<b>Create Follow-up</b> makes a new Pending stop for the outstanding goods. <b>Close As Is</b> accepts what happened, and nothing more is delivered."
         }
       ]
     },
@@ -343,37 +950,51 @@
       "key": "fueldashboard.guide.delivery-return",
       "title": "Collect goods back",
       "icon": "fa-rotate-left",
-      "blurb": "Fetch goods back from a client after a delivery.",
+      "blurb": "Create a collection (COL-) linked to a delivery, e.g. returns or empty crates.",
       "steps": [
         {
-          "id": "fug-dc-open",
+          "id": "fg-delivery-return-1",
           "target": [
             "#sidebarNav [onclick*=\"showSection('deliveries'\"]"
           ],
           "title": "Deliveries",
-          "text": "Click <b>Deliveries</b>.",
+          "text": "Open <b>Deliveries</b> in the menu on the left.",
           "placement": "right",
           "mode": "click",
           "hint": "Click Deliveries"
         },
         {
-          "id": "fug-dc-list",
+          "id": "fg-delivery-return-2",
           "target": [
-            "#deliveryListBody"
+            "#deliveryListBody button[onclick*=\"openReturn\"]"
           ],
-          "title": "Find the delivery",
-          "text": "On a delivered stop, click the <b>arrow</b> (Collect back).",
-          "placement": "top"
+          "title": "Collect back",
+          "text": "Click the <b>Collect back</b> button (circular arrow) on a <b>Delivered</b> or <b>Partial</b> delivery.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Collect back"
         },
         {
-          "id": "fug-dc-lines",
+          "id": "fg-delivery-return-3",
           "target": [
             "#deliveryReturnLines"
           ],
-          "title": "What comes back",
-          "text": "The quantities still at the client are filled in - anything already collected is left out. Change them if needed, pick a date and driver, and create the collection.",
+          "title": "What to collect",
+          "text": "Leave the lines as they are to collect everything that was delivered, or lower the quantities. Then the <b>Planned Date</b> and a <b>Driver</b> (optional).",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 5000
+        },
+        {
+          "id": "fg-delivery-return-4",
+          "target": [
+            "#deliveryReturnModal button[onclick*=\"submitReturn\"]"
+          ],
+          "title": "Create Collection",
+          "text": "Click <b>Create Collection</b>. It is listed on the <b>Collections</b> tab and on the drivers' phones.",
           "placement": "top",
-          "timeout": 15000
+          "mode": "click",
+          "hint": "Click Create Collection"
         }
       ]
     },
@@ -381,36 +1002,2624 @@
       "key": "fueldashboard.guide.delivery-epod",
       "title": "Send or resend an ePOD",
       "icon": "fa-file-pdf",
-      "blurb": "Open the proof of delivery PDF, or email it again.",
+      "blurb": "Open the ePOD PDF, email it to the client and check what was sent.",
       "steps": [
         {
-          "id": "fug-de-open",
+          "id": "fg-delivery-epod-1",
           "target": [
             "#sidebarNav [onclick*=\"showSection('deliveries'\"]"
           ],
           "title": "Deliveries",
-          "text": "Click <b>Deliveries</b>.",
+          "text": "Open <b>Deliveries</b> in the menu on the left.",
           "placement": "right",
           "mode": "click",
           "hint": "Click Deliveries"
         },
         {
-          "id": "fug-de-list",
-          "target": [
-            "#deliveryListBody"
-          ],
-          "title": "Open or email",
-          "text": "On a finished stop the <b>PDF</b> icon opens the ePOD and the <b>envelope</b> emails it - to the client's saved address, or to one you type.",
-          "placement": "top"
+          "id": "fg-delivery-epod-2",
+          "title": "Open the ePOD",
+          "text": "On a <b>Delivered</b>, <b>Partial</b> or <b>Failed</b> stop, click the PDF button to open the ePOD (lines, signatures and, if switched on, photos)."
         },
         {
-          "id": "fug-de-log",
+          "id": "fg-delivery-epod-3",
+          "title": "Email it",
+          "text": "Click the amber envelope to email the ePOD to the client's ePOD email (set under Management &gt; Clients &gt; Contact). With <b>Email The ePOD Automatically</b> on (Settings), it is sent by itself as soon as the stop syncs."
+        },
+        {
+          "id": "fg-delivery-epod-4",
           "target": [
             "#page-deliveries button[onclick*=\"showDeliveryTab('emails'\"]"
           ],
-          "title": "Did it go?",
-          "text": "Click <b>ePOD Emails</b> to see every send and any that failed. Client email addresses are set under Management, Clients, <b>Contact</b>.",
-          "placement": "bottom"
+          "title": "ePOD Emails",
+          "text": "Click the <b>ePOD Emails</b> tab.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click ePOD Emails"
+        },
+        {
+          "id": "fg-delivery-epod-5",
+          "target": [
+            "#deliveryEmailLogBody"
+          ],
+          "title": "What was sent",
+          "text": "Every ePOD email: when, to whom (and CC), whether it was automatic or by hand, and the <b>Result</b>. A failed one shows why, e.g. no email address on the client.",
+          "placement": "top",
+          "climb": 0
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.vehicle",
+      "title": "Add a vehicle or asset",
+      "icon": "fa-truck",
+      "blurb": "Register a vehicle, tractor or machine with its reading, licence and service interval.",
+      "steps": [
+        {
+          "id": "fg-vehicle-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('vehicles'\"]"
+          ],
+          "title": "Vehicles",
+          "text": "Open <b>Vehicles</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Vehicles"
+        },
+        {
+          "id": "fg-vehicle-2",
+          "target": [
+            "#page-vehicles button[onclick*=\"openAddVehicleModal\"]"
+          ],
+          "title": "Add Vehicle",
+          "text": "Click <b>Add Vehicle</b>. Nothing is saved until <b>Save Vehicle</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Add Vehicle"
+        },
+        {
+          "id": "fg-vehicle-3",
+          "target": [
+            "#newVehName"
+          ],
+          "title": "Name and asset tag",
+          "text": "Required: a <b>Name / Registration</b> the drivers recognise. The <b>Asset Tag (QR)</b> is optional. It is the code drivers scan on the phone to pick this vehicle.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "fg-vehicle-4",
+          "target": [
+            "#newVehType"
+          ],
+          "title": "Type and tracking",
+          "text": "What it is (Truck, Tractor, Bakkie, Generator, Heavy Machinery, or <b>Sub-Contractor Asset</b>, which asks which sub-contractor). <b>Tracking</b>: <b>Kilometres</b> for road vehicles, <b>Machine Hours</b> for tractors and machines.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-vehicle-5",
+          "target": [
+            "#newVehModel"
+          ],
+          "title": "Make & model and fleet number",
+          "text": "Optional, for your records and reports.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-vehicle-6",
+          "target": [
+            "#newVehKM"
+          ],
+          "title": "Current reading",
+          "text": "Required: the odometer or hour meter <b>now</b>. The next fill-up's reading is checked against it, and efficiency starts from it.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-vehicle-7",
+          "target": [
+            "#newVehLicExp"
+          ],
+          "title": "Licence and service",
+          "text": "<b>Licence Expiry</b> feeds the Licence Audit. <b>Last Service</b> and <b>Service Interval</b> (km or hours) work out when the next service is due.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-vehicle-8",
+          "target": [
+            "#addVehicleModal button[onclick*=\"addVehicle\"]"
+          ],
+          "title": "Save Vehicle",
+          "text": "Click <b>Save Vehicle</b>. It appears in the register and on the phones.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Click Save Vehicle"
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.vehicle-edit",
+      "title": "Find and edit a vehicle",
+      "icon": "fa-pen",
+      "blurb": "Search the register and change a vehicle's name, tag, type, service or licence date.",
+      "steps": [
+        {
+          "id": "fg-vehicle-edit-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('vehicles'\"]"
+          ],
+          "title": "Vehicles",
+          "text": "Open <b>Vehicles</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Vehicles"
+        },
+        {
+          "id": "fg-vehicle-edit-2",
+          "target": [
+            "#vehSearch"
+          ],
+          "title": "Find it",
+          "text": "Type a name or tag, or choose a <b>Vehicle Type</b>. Click a column heading to sort by it.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-vehicle-edit-3",
+          "target": [
+            "#vehicleBody"
+          ],
+          "title": "Edit on the row",
+          "text": "The name, tag, type, service and licence date are boxes you can type in straight on the row. Change what you need, then click the green <b>save</b> button on that row.<br><br>Changing <b>Tracks KM / Tracks HRS</b> saves straight away.",
+          "placement": "top",
+          "climb": 0
+        },
+        {
+          "id": "fg-vehicle-edit-4",
+          "title": "Efficiency column",
+          "text": "The latest km/L (or L/hr) of the vehicle, in the units chosen under Settings. <b>Pending...</b> means there are not yet two fill-ups with readings."
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.vehicle-reading",
+      "title": "Correct a vehicle's odometer or hour reading",
+      "icon": "fa-gauge",
+      "blurb": "Fix the vehicle's current reading when it is wrong (e.g. after a new odometer).",
+      "steps": [
+        {
+          "id": "fg-vehicle-reading-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('vehicles'\"]"
+          ],
+          "title": "Vehicles",
+          "text": "Open <b>Vehicles</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Vehicles"
+        },
+        {
+          "id": "fg-vehicle-reading-2",
+          "target": [
+            "#vehicleBody td[onclick*=\"promptEditKM\"]"
+          ],
+          "title": "Reading",
+          "text": "Click the number in the <b>Reading</b> column of the vehicle.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click the reading"
+        },
+        {
+          "id": "fg-vehicle-reading-3",
+          "title": "Type the new reading",
+          "text": "Type the correct reading and click OK. The change is audited with your name and the old and new readings. It affects efficiency, so only change it when the vehicle's reading is really wrong.<br><br>If one <b>fill-up</b> has the wrong reading, correct that fill-up instead (Fuel Logs &gt; Edit). The vehicle reading is then worked out again by itself."
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.vehicle-service",
+      "title": "Track services and mark a vehicle serviced",
+      "icon": "fa-wrench",
+      "blurb": "Set the service interval, see what is due and record a service.",
+      "steps": [
+        {
+          "id": "fg-vehicle-service-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('vehicles'\"]"
+          ],
+          "title": "Vehicles",
+          "text": "Open <b>Vehicles</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Vehicles"
+        },
+        {
+          "id": "fg-vehicle-service-2",
+          "target": [
+            "#vehicleBody"
+          ],
+          "title": "Service (Last | Interval)",
+          "text": "On each row: the reading at the <b>last service</b> and the <b>interval</b> (every so many km or hours). Under them: <b>Next at</b>, an amber <b>Due in</b> (within 10% of the interval) or a red <b>Overdue by</b>.",
+          "placement": "top",
+          "climb": 0
+        },
+        {
+          "id": "fg-vehicle-service-3",
+          "title": "Mark as serviced",
+          "text": "After a service click the <b>wrench</b> on the row. The last service becomes the current reading, and the next one is due one interval later. An interval must be filled in first."
+        },
+        {
+          "id": "fg-vehicle-service-4",
+          "target": [
+            "#page-vehicles button[onclick*=\"generateServiceAudit\"]"
+          ],
+          "title": "Service Audit",
+          "text": "Click <b>Service Audit</b> for a list of every vehicle's service status. It opens below the register, with <b>Export CSV</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Service Audit"
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.vehicle-licence",
+      "title": "Check licence expiry dates (Licence Audit)",
+      "icon": "fa-id-card",
+      "blurb": "See which vehicle licences have expired or expire soon, and export the list.",
+      "steps": [
+        {
+          "id": "fg-vehicle-licence-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('vehicles'\"]"
+          ],
+          "title": "Vehicles",
+          "text": "Open <b>Vehicles</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Vehicles"
+        },
+        {
+          "id": "fg-vehicle-licence-2",
+          "target": [
+            "#vehicleBody"
+          ],
+          "title": "Licence Expiry column",
+          "text": "Each vehicle's licence date, with <b>Valid</b>, an amber number of <b>days left</b> (30 days or less) or a red <b>Expired</b>. Change the date on the row and click save.",
+          "placement": "top",
+          "climb": 0
+        },
+        {
+          "id": "fg-vehicle-licence-3",
+          "target": [
+            "#page-vehicles button[onclick*=\"generateVehicleLicenseReport\"]"
+          ],
+          "title": "Licence Audit",
+          "text": "Click <b>Licence Audit</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Licence Audit"
+        },
+        {
+          "id": "fg-vehicle-licence-4",
+          "target": [
+            "#vehicleLicenseReport"
+          ],
+          "title": "Compliance & Service Report",
+          "text": "Every vehicle with its licence status. <b>Export CSV</b> downloads it, and the <b>X</b> closes it.",
+          "placement": "top",
+          "climb": 0,
+          "timeout": 4000
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.vehicle-retire",
+      "title": "Stop using a vehicle, or bring it back",
+      "icon": "fa-ban",
+      "blurb": "Take a sold or scrapped vehicle off the lists at month end, or restore it.",
+      "steps": [
+        {
+          "id": "fg-vehicle-retire-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('vehicles'\"]"
+          ],
+          "title": "Vehicles",
+          "text": "Open <b>Vehicles</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Vehicles"
+        },
+        {
+          "id": "fg-vehicle-retire-2",
+          "title": "Stop at month end",
+          "text": "Click the red <b>ban</b> button on the vehicle's row and confirm. It stays usable until the <b>last day of this month</b> (so this month's fill-ups and reports stay complete), then it is taken off the lists and the phones. The row shows a red <b>Ends</b> date."
+        },
+        {
+          "id": "fg-vehicle-retire-3",
+          "title": "Restore",
+          "text": "Changed your mind? Click <b>Restore</b> on that row before or after the date. Its history is never deleted."
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.driver-add",
+      "title": "Register a driver",
+      "icon": "fa-user-plus",
+      "blurb": "Add a driver with licence details and link them to their phone login.",
+      "steps": [
+        {
+          "id": "fg-driver-add-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('drivers'\"]"
+          ],
+          "title": "Drivers",
+          "text": "Open <b>Drivers</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Drivers"
+        },
+        {
+          "id": "fg-driver-add-2",
+          "target": [
+            "#page-drivers button[onclick*=\"openAddDriverModal\"]"
+          ],
+          "title": "Add New Driver",
+          "text": "Click <b>Add New Driver</b> (top right). Nothing is saved until <b>Register Driver</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Add New Driver"
+        },
+        {
+          "id": "fg-driver-add-3",
+          "target": [
+            "#newDriverName"
+          ],
+          "title": "Driver",
+          "text": "Required: the <b>Full Name</b>. The <b>ID Number</b> is optional.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 5000
+        },
+        {
+          "id": "fg-driver-add-4",
+          "target": [
+            "#newDriverLic"
+          ],
+          "title": "Licence",
+          "text": "The <b>Licence No.</b>, its <b>Code</b> (e.g. EC1, C1), the <b>Licence Expiry</b> and the <b>PDP Expiry</b> (professional driving permit). Expiry dates show as warnings on the roster.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-driver-add-5",
+          "target": [
+            "#newDriverLinkedUser"
+          ],
+          "title": "Link to Mobile User",
+          "text": "Choose the user this driver logs in to the phone app as. Then every fill-up that user captures counts as this driver in the reports.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-driver-add-6",
+          "target": [
+            "#btnAddDriver"
+          ],
+          "title": "Register Driver",
+          "text": "Click <b>Register Driver</b>. The pop-up closes and the driver appears in the Driver Roster.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Click Register Driver"
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.driver-edit",
+      "title": "Edit a driver, or deactivate one",
+      "icon": "fa-id-card",
+      "blurb": "Change details, link a phone user, or hide a driver who left.",
+      "steps": [
+        {
+          "id": "fg-driver-edit-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('drivers'\"]"
+          ],
+          "title": "Drivers",
+          "text": "Open <b>Drivers</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Drivers"
+        },
+        {
+          "id": "fg-driver-edit-2",
+          "target": [
+            "#driverBody"
+          ],
+          "title": "Driver Roster",
+          "text": "Every driver with their ID number, licence number and code, licence and PDP expiry, linked phone user and status.",
+          "placement": "top",
+          "climb": 0
+        },
+        {
+          "id": "fg-driver-edit-3",
+          "target": [
+            "#driverBody button[onclick*=\"openEditDriver\"]"
+          ],
+          "title": "Edit",
+          "text": "Click the pencil (<b>Edit</b>) on the driver row.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click the pencil"
+        },
+        {
+          "id": "fg-driver-edit-4",
+          "target": [
+            "#editDriverName"
+          ],
+          "title": "Edit Driver",
+          "text": "Change the name, ID number, licence details or the <b>linked mobile user</b>, then click <b>Save Driver</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 5000
+        },
+        {
+          "id": "fg-driver-edit-5",
+          "title": "Deactivate or restore",
+          "text": "The red <b>ban</b> on a row hides the driver from all lists and the phone app. Their history stays. <b>Restore</b> on an inactive driver brings them back."
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.depot",
+      "title": "Register a depot and its pumps",
+      "icon": "fa-oil-can",
+      "blurb": "Add a tank (or a road filling station) with its capacity and pumps.",
+      "steps": [
+        {
+          "id": "fg-depot-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('depots'\"]"
+          ],
+          "title": "Fuel Depots",
+          "text": "Open <b>Fuel Depots</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Fuel Depots"
+        },
+        {
+          "id": "fg-depot-2",
+          "target": [
+            "#page-depots button[onclick*=\"openAddDepotModal\"]"
+          ],
+          "title": "Add Depot / Tank",
+          "text": "Click <b>Add Depot / Tank</b>. Nothing is saved until <b>Save Depot &amp; Pumps</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Add Depot / Tank"
+        },
+        {
+          "id": "fg-depot-3",
+          "target": [
+            "#newDepotName"
+          ],
+          "title": "Tank details",
+          "text": "Required: the <b>Depot / Tank Name</b> and the <b>Capacity</b> in litres. Also the <b>Location</b> and the <b>Fuel Type</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "fg-depot-4",
+          "target": [
+            "#newDepotExternal"
+          ],
+          "title": "External / road depot",
+          "text": "Tick it for a public filling station. There is then no tank level or pump meter to track. Fill-ups just record where the fuel was bought.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-depot-5",
+          "target": [
+            "#newDepotMeterReset"
+          ],
+          "title": "Meter resets to zero",
+          "text": "Tick it for a meter that is set back to 0 for every fill, e.g. a jerry can. The app then starts at 0 each time and does not flag a meter gap.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-depot-6",
+          "target": [
+            "#addDepotModal button[onclick*=\"addPumpRow\"]"
+          ],
+          "title": "Add Pump",
+          "text": "Click <b>Add Pump</b> for each pump (fuelling point) on this tank: its name, the <b>QR Tag</b> drivers scan, and the <b>Starting Meter</b> reading.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Add Pump"
+        },
+        {
+          "id": "fg-depot-7",
+          "target": [
+            "#addDepotModal button[onclick*=\"addDepot()\"]"
+          ],
+          "title": "Save Depot & Pumps",
+          "text": "Click <b>Save Depot &amp; Pumps</b>. Then record the fuel in the tank with <b>Refill</b> or <b>Tank Reading</b>.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Click Save"
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.depot-refill",
+      "title": "Record fuel delivered into a tank (refill)",
+      "icon": "fa-plus",
+      "blurb": "Add a fuel supplier delivery to a tank so the level is right.",
+      "steps": [
+        {
+          "id": "fg-depot-refill-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('depots'\"]"
+          ],
+          "title": "Fuel Depots",
+          "text": "Open <b>Fuel Depots</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Fuel Depots"
+        },
+        {
+          "id": "fg-depot-refill-2",
+          "target": [
+            "#depotBody button[onclick*=\"openRefillModal\"]"
+          ],
+          "title": "Refill",
+          "text": "Click <b>Refill</b> on the tank's row.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Refill"
+        },
+        {
+          "id": "fg-depot-refill-3",
+          "target": [
+            "#refillDate"
+          ],
+          "title": "Add New Refill",
+          "text": "Required: the <b>Refill Date</b> and the <b>Litres Added</b>. The <b>PO Number / Ref</b> is your order or delivery note number.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 5000
+        },
+        {
+          "id": "fg-depot-refill-4",
+          "target": [
+            "#refillModal button[onclick*=\"submitRefill\"]"
+          ],
+          "title": "Save Refill",
+          "text": "Click <b>Save Refill</b>. The tank level goes up by the litres.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Save Refill"
+        },
+        {
+          "id": "fg-depot-refill-5",
+          "target": [
+            "#refillHistoryBody"
+          ],
+          "title": "Refill History",
+          "text": "Every refill of this tank. The red bin deletes a wrong refill and <b>takes its litres back out</b> of the tank.",
+          "placement": "top",
+          "climb": 0
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.depot-reading",
+      "title": "Enter a dip reading or correct a tank level",
+      "icon": "fa-ruler-vertical",
+      "blurb": "Set the tank to what you measured, or let the system work it out from the logs.",
+      "steps": [
+        {
+          "id": "fg-depot-reading-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('depots'\"]"
+          ],
+          "title": "Fuel Depots",
+          "text": "Open <b>Fuel Depots</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Fuel Depots"
+        },
+        {
+          "id": "fg-depot-reading-2",
+          "target": [
+            "#depotBody"
+          ],
+          "title": "Tank Level",
+          "text": "The bar shows the level the system worked out: refills in, fill-ups and transfers out. Green is fine, amber is below 40% and red is below 15% (or below zero, which means something was missed).",
+          "placement": "top",
+          "climb": 0
+        },
+        {
+          "id": "fg-depot-reading-3",
+          "target": [
+            "#depotBody button[onclick*=\"openManualLevelModal\"]"
+          ],
+          "title": "Tank Reading",
+          "text": "Click <b>Tank Reading</b> on the tank's row.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Tank Reading"
+        },
+        {
+          "id": "fg-depot-reading-4",
+          "target": [
+            "#manualLiters"
+          ],
+          "title": "Measured level",
+          "text": "The <b>Reading Date</b> and the <b>True Level</b> in litres (e.g. from a dipstick). Saving replaces the worked-out level from that moment.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 5000
+        },
+        {
+          "id": "fg-depot-reading-5",
+          "target": [
+            "#btnRebuildLevel"
+          ],
+          "title": "Work out the level from the logs",
+          "text": "Not sure? Click this to see the sum: the last reading, plus refills and transfers in, minus fill-ups and transfers out. <b>Save Worked Out Level</b> uses it. It is written to the audit trail.",
+          "placement": "top",
+          "climb": 0
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.depot-transfer",
+      "title": "Move fuel from one tank to another",
+      "icon": "fa-right-left",
+      "blurb": "Record a transfer so both tank levels stay right.",
+      "steps": [
+        {
+          "id": "fg-depot-transfer-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('depots'\"]"
+          ],
+          "title": "Fuel Depots",
+          "text": "Open <b>Fuel Depots</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Fuel Depots"
+        },
+        {
+          "id": "fg-depot-transfer-2",
+          "target": [
+            "#depotBody button[onclick*=\"openTransferModal\"]"
+          ],
+          "title": "Transfer",
+          "text": "Click <b>Transfer</b> on the tank the fuel comes <b>from</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Transfer"
+        },
+        {
+          "id": "fg-depot-transfer-3",
+          "target": [
+            "#transferTargetId"
+          ],
+          "title": "To Tank and litres",
+          "text": "Required: the <b>Transfer Date</b>, the tank it goes <b>To</b> and the <b>Litres</b>. <b>Notes</b> are optional (reason or PO).",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 5000
+        },
+        {
+          "id": "fg-depot-transfer-4",
+          "target": [
+            "#transferModal button[onclick*=\"submitTransfer\"]"
+          ],
+          "title": "Confirm Transfer",
+          "text": "Click <b>Confirm Transfer</b>. One tank goes down and the other goes up by the litres.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Click Confirm Transfer"
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.depot-pumps",
+      "title": "Manage pumps, QR tags and meter readings",
+      "icon": "fa-gas-pump",
+      "blurb": "Add or remove pumps, change their QR tag, or correct a pump meter.",
+      "steps": [
+        {
+          "id": "fg-depot-pumps-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('depots'\"]"
+          ],
+          "title": "Fuel Depots",
+          "text": "Open <b>Fuel Depots</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Fuel Depots"
+        },
+        {
+          "id": "fg-depot-pumps-2",
+          "target": [
+            "#depotBody button[onclick*=\"openManagePumpsModal\"]"
+          ],
+          "title": "Pumps",
+          "text": "Click the pump button on the depot's row.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click the pump button"
+        },
+        {
+          "id": "fg-depot-pumps-3",
+          "target": [
+            "#managePumpsBody"
+          ],
+          "title": "Pumps",
+          "text": "Each pump's <b>name</b>, <b>QR tag</b> (what drivers scan) and <b>meter reading</b>. Change them on the row and click the green save. A new meter reading asks you to confirm and is audited with your name. Road depots have no meter.",
+          "placement": "top",
+          "climb": 0,
+          "timeout": 5000
+        },
+        {
+          "id": "fg-depot-pumps-4",
+          "target": [
+            "#btnAddPumpToDepot"
+          ],
+          "title": "Add or remove",
+          "text": "<b>Add Pump</b> adds another fuelling point. The red bin removes a pump (its past fill-ups stay).",
+          "placement": "left",
+          "climb": 0
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.depot-manage",
+      "title": "Edit a depot's details, or deactivate it",
+      "icon": "fa-sliders",
+      "blurb": "Rename, move, resize or retire a depot.",
+      "steps": [
+        {
+          "id": "fg-depot-manage-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('depots'\"]"
+          ],
+          "title": "Fuel Depots",
+          "text": "Open <b>Fuel Depots</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Fuel Depots"
+        },
+        {
+          "id": "fg-depot-manage-2",
+          "target": [
+            "#depotBody button[onclick*=\"openManageDepotModal\"]"
+          ],
+          "title": "Manage depot",
+          "text": "Click the <b>Manage</b> button (sliders) on the depot's row.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Manage"
+        },
+        {
+          "id": "fg-depot-manage-3",
+          "target": [
+            "#editDepotName"
+          ],
+          "title": "Details & Capacity",
+          "text": "Change the <b>name</b>, <b>location</b>, <b>capacity</b> or the <b>meter resets to zero</b> tick, then click <b>Save Details</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 5000
+        },
+        {
+          "id": "fg-depot-manage-4",
+          "target": [
+            "#btnModalPumps"
+          ],
+          "title": "Actions",
+          "text": "The same <b>Manage Pumps</b>, <b>Refill</b>, <b>Tank Reading</b> and <b>Transfer</b> as on the row.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-depot-manage-5",
+          "target": [
+            "#btnModalDelete"
+          ],
+          "title": "Deactivate Depot",
+          "text": "Takes the depot off the lists and the phones. Its history and reports stay.",
+          "placement": "top",
+          "climb": 0
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.inventory-setup",
+      "title": "Link a warehouse to Fuel (Inventory)",
+      "icon": "fa-warehouse",
+      "blurb": "Inventory needs one warehouse assigned to the Fuel module first.",
+      "steps": [
+        {
+          "id": "fg-inventory-setup-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('inventory'\"]"
+          ],
+          "title": "Inventory",
+          "text": "Open <b>Inventory</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Inventory"
+        },
+        {
+          "id": "fg-inventory-setup-2",
+          "title": "No warehouse assigned?",
+          "text": "If the screen says <b>No Warehouse Assigned To Fuel</b>, open the <b>Assets</b> module, go to <b>Warehouses</b>, and click <b>Assign to Fuel</b> on the warehouse that belongs to Fuel. It must be a <b>Storage</b> warehouse (not Consumption), and only one can be assigned."
+        },
+        {
+          "id": "fg-inventory-setup-3",
+          "title": "Check Again",
+          "text": "Come back here and click <b>Check Again</b> (or <b>Refresh</b>). The warehouse name then shows at the top of Warehouse Inventory."
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.inventory-receive",
+      "title": "Receive stock (oil, filters, parts)",
+      "icon": "fa-truck-loading",
+      "blurb": "Book stock into the Fuel warehouse when it arrives.",
+      "steps": [
+        {
+          "id": "fg-inventory-receive-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('inventory'\"]"
+          ],
+          "title": "Inventory",
+          "text": "Open <b>Inventory</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Inventory"
+        },
+        {
+          "id": "fg-inventory-receive-2",
+          "target": [
+            "#fuelWhsPanel button[onclick*=\"openFuelReceiveModal\"]"
+          ],
+          "title": "Receive Stock",
+          "text": "Click <b>Receive Stock</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Receive Stock"
+        },
+        {
+          "id": "fg-inventory-receive-3",
+          "target": [
+            "#fuelRecvRef"
+          ],
+          "title": "Reference",
+          "text": "The <b>delivery note</b> or <b>PO number</b>. It shows in the stock history.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 5000
+        },
+        {
+          "id": "fg-inventory-receive-4",
+          "target": [
+            "#fuelRecvItem"
+          ],
+          "title": "Item",
+          "text": "Required. Only items counted by quantity are listed. Not in the list? Click <b>New Item</b> next to it (see <b>Create a new stock item</b>).",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-inventory-receive-5",
+          "target": [
+            "#fuelRecvQty"
+          ],
+          "title": "Quantity Received",
+          "text": "Required. How many came in.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-inventory-receive-6",
+          "target": [
+            "#fuelReceiveModal button[onclick*=\"submitFuelReceive\"]"
+          ],
+          "title": "Receive Stock",
+          "text": "Click <b>Receive Stock</b>. The quantity on hand goes up, and the receipt is listed on the <b>Stock In / Out History</b> tab with your name.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Click Receive Stock"
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.inventory-issue",
+      "title": "Take stock out",
+      "icon": "fa-dolly",
+      "blurb": "Book stock out when it is used or issued to someone.",
+      "steps": [
+        {
+          "id": "fg-inventory-issue-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('inventory'\"]"
+          ],
+          "title": "Inventory",
+          "text": "Open <b>Inventory</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Inventory"
+        },
+        {
+          "id": "fg-inventory-issue-2",
+          "target": [
+            "#fuelWhsPanel button[onclick*=\"openFuelIssueModal\"]"
+          ],
+          "title": "Take Stock Out",
+          "text": "Click <b>Take Stock Out</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Take Stock Out"
+        },
+        {
+          "id": "fg-inventory-issue-3",
+          "target": [
+            "#fuelIssueItem"
+          ],
+          "title": "Item and quantity",
+          "text": "Required: the <b>Item</b> and the <b>Quantity To Take Out</b>. What is available shows under the quantity. You cannot take out more than there is.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 5000
+        },
+        {
+          "id": "fg-inventory-issue-4",
+          "target": [
+            "#fuelIssueReason"
+          ],
+          "title": "Reason / Taken By",
+          "text": "Required. What it is for and who took it, e.g. \"Issued to workshop - J. Dlamini\".",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-inventory-issue-5",
+          "target": [
+            "#fuelIssueModal button[onclick*=\"submitFuelIssue\"]"
+          ],
+          "title": "Take Out",
+          "text": "Click <b>Take Out</b>. It shows on the <b>Stock In / Out History</b> tab with the reason and your name.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Click Take Out"
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.inventory-item",
+      "title": "Create a new stock item",
+      "icon": "fa-box",
+      "blurb": "Add an item (counted by quantity) to the stock list.",
+      "steps": [
+        {
+          "id": "fg-inventory-item-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('inventory'\"]"
+          ],
+          "title": "Inventory",
+          "text": "Open <b>Inventory</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Inventory"
+        },
+        {
+          "id": "fg-inventory-item-2",
+          "target": [
+            "#fuelWhsPanel button[onclick*=\"openFuelNewItemModal\"]"
+          ],
+          "title": "New Item",
+          "text": "Click <b>New Item</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click New Item"
+        },
+        {
+          "id": "fg-inventory-item-3",
+          "target": [
+            "#fuelNewItemName"
+          ],
+          "title": "Item Name",
+          "text": "Required, e.g. \"Hydraulic Oil 20L\".",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 5000
+        },
+        {
+          "id": "fg-inventory-item-4",
+          "target": [
+            "#fuelNewItemCode"
+          ],
+          "title": "Item Code",
+          "text": "Required and unique across the whole system. Click <b>Generate</b> for a code.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-inventory-item-5",
+          "target": [
+            "#fuelNewItemCategory"
+          ],
+          "title": "Category and description",
+          "text": "Optional. Pick an existing category or type a new one.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-inventory-item-6",
+          "target": [
+            "#fuelNewItemModal button[onclick*=\"submitFuelNewItem\"]"
+          ],
+          "title": "Create Item",
+          "text": "Click <b>Create Item</b>. Serialised items (with serial numbers) are created in the Assets module instead.",
+          "placement": "top",
+          "mode": "click",
+          "hint": "Click Create Item"
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.farms",
+      "title": "Add farms and field units (with map boundaries)",
+      "icon": "fa-tractor",
+      "blurb": "The farms and units fuel is used on, with a map area for the heat map and phone GPS.",
+      "steps": [
+        {
+          "id": "fg-farms-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('management'\"]"
+          ],
+          "title": "Management",
+          "text": "Open <b>Management</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Management"
+        },
+        {
+          "id": "fg-farms-2",
+          "target": [
+            "#page-management button[onclick*=\"showMgmt('farms'\"]"
+          ],
+          "title": "Farms & Units",
+          "text": "Click the <b>Farms & Units</b> tab.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Farms & Units"
+        },
+        {
+          "id": "fg-farms-3",
+          "target": [
+            "#newFarmName"
+          ],
+          "title": "Add Parent Farm",
+          "text": "Type the farm name. Click the <b>pin</b> to set its map boundary (optional but needed for the heat map), then <b>Add</b>.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-farms-4",
+          "title": "Set a map boundary",
+          "text": "In the map window: search a place, set the <b>Radius</b> in metres, <b>click the map</b> to place the boundary (drag the pin to move it) and click <b>Confirm Location</b>. The badge then changes from <b>Not Set</b> to set."
+        },
+        {
+          "id": "fg-farms-5",
+          "target": [
+            "#unitFarmSelect"
+          ],
+          "title": "Add Field Unit",
+          "text": "Choose the farm, type the unit name and its size in hectares, set the pin if you like, and click <b>Add</b>.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-farms-6",
+          "target": [
+            "#farmUnitListBody"
+          ],
+          "title": "Change them later",
+          "text": "Farms and their units are listed below. Edit a name or size on the row and click the green save. An <b>amber pin</b> means there is no map boundary yet. Click it to set one.",
+          "placement": "top",
+          "climb": 0
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.activities",
+      "title": "Add fuel activities and the diesel rebate",
+      "icon": "fa-list-check",
+      "blurb": "What fuel is used for, and which activities can claim the SARS diesel rebate.",
+      "steps": [
+        {
+          "id": "fg-activities-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('management'\"]"
+          ],
+          "title": "Management",
+          "text": "Open <b>Management</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Management"
+        },
+        {
+          "id": "fg-activities-2",
+          "target": [
+            "#page-management button[onclick*=\"showMgmt('activities'\"]"
+          ],
+          "title": "Activities",
+          "text": "Click the <b>Activities</b> tab.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Activities"
+        },
+        {
+          "id": "fg-activities-3",
+          "target": [
+            "#newActivityName"
+          ],
+          "title": "Add an activity",
+          "text": "Type the activity, e.g. \"Silage Harvesting\".",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-activities-4",
+          "target": [
+            "#newActivityRebate"
+          ],
+          "title": "Can claim the diesel rebate",
+          "text": "Tick it if fuel for this activity qualifies for the diesel rebate (on-farm primary production). Untick it for activities that do not, e.g. private or office use. The SARS logbook report uses this.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-activities-5",
+          "target": [
+            "#mgmt-activities button[onclick*=\"addActivity\"]"
+          ],
+          "title": "Add",
+          "text": "Click <b>Add</b>.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Add"
+        },
+        {
+          "id": "fg-activities-6",
+          "target": [
+            "#activityList"
+          ],
+          "title": "Change them later",
+          "text": "Rename or change the rebate tick on a line and click the green save. The red <b>ban</b> stops using an activity. Past fill-ups keep it.",
+          "placement": "top",
+          "climb": 0
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.farming-depts",
+      "title": "Add farming departments",
+      "icon": "fa-sitemap",
+      "blurb": "Optional extra grouping of fuel, e.g. by division.",
+      "steps": [
+        {
+          "id": "fg-farming-depts-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('management'\"]"
+          ],
+          "title": "Management",
+          "text": "Open <b>Management</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Management"
+        },
+        {
+          "id": "fg-farming-depts-2",
+          "target": [
+            "#page-management button[onclick*=\"showMgmt('farming-depts'\"]"
+          ],
+          "title": "Farming Depts",
+          "text": "Click the <b>Farming Depts</b> tab.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Farming Depts"
+        },
+        {
+          "id": "fg-farming-depts-3",
+          "target": [
+            "#newFarmingDeptName"
+          ],
+          "title": "Add a department",
+          "text": "Type the name, e.g. \"Avocado Division\", and click <b>Add</b>. The red ban on a line stops using it.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-farming-depts-4",
+          "title": "Switch it on",
+          "text": "The department field only shows on Manual Entry and the phone when <b>Farming Department Tracking</b> is on under <b>Settings</b>."
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.trip-activities",
+      "title": "Add trip activities",
+      "icon": "fa-route",
+      "blurb": "The trip types drivers choose when they log a trip.",
+      "steps": [
+        {
+          "id": "fg-trip-activities-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('management'\"]"
+          ],
+          "title": "Management",
+          "text": "Open <b>Management</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Management"
+        },
+        {
+          "id": "fg-trip-activities-2",
+          "target": [
+            "#page-management button[onclick*=\"showMgmt('trips'\"]"
+          ],
+          "title": "Trip Activities",
+          "text": "Click the <b>Trip Activities</b> tab.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Trip Activities"
+        },
+        {
+          "id": "fg-trip-activities-3",
+          "target": [
+            "#newTripActivityName"
+          ],
+          "title": "Add a trip activity",
+          "text": "Type it, e.g. \"Delivery Run\", and click <b>Add</b>. The red ban on a line stops using it.",
+          "placement": "bottom",
+          "climb": 1
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.clients",
+      "title": "Add delivery clients and their ePOD email",
+      "icon": "fa-building",
+      "blurb": "Clients for deliveries and trips, with who gets the ePOD and their delivery history.",
+      "steps": [
+        {
+          "id": "fg-clients-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('management'\"]"
+          ],
+          "title": "Management",
+          "text": "Open <b>Management</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Management"
+        },
+        {
+          "id": "fg-clients-2",
+          "target": [
+            "#page-management button[onclick*=\"showMgmt('clients'\"]"
+          ],
+          "title": "Clients",
+          "text": "Click the <b>Clients</b> tab.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Clients"
+        },
+        {
+          "id": "fg-clients-3",
+          "target": [
+            "#newClientName"
+          ],
+          "title": "Add a client",
+          "text": "Type the client name and click <b>Add</b>.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-clients-4",
+          "target": [
+            "#clientList"
+          ],
+          "title": "Contact and History",
+          "text": "<b>Contact</b>: the <b>Email for ePODs</b>, contact person and phone, and a tick for <b>Do not email ePODs to this client</b>. <b>History</b>: every delivery to this client with its ePOD.",
+          "placement": "top",
+          "climb": 0
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.subcontractors",
+      "title": "Add sub-contractors and their vehicles",
+      "icon": "fa-handshake",
+      "blurb": "Track fuel given to contractors' vehicles separately.",
+      "steps": [
+        {
+          "id": "fg-subcontractors-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('management'\"]"
+          ],
+          "title": "Management",
+          "text": "Open <b>Management</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Management"
+        },
+        {
+          "id": "fg-subcontractors-2",
+          "target": [
+            "#page-management button[onclick*=\"showMgmt('subcontractors'\"]"
+          ],
+          "title": "Sub-Contractors",
+          "text": "Click the <b>Sub-Contractors</b> tab.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Sub-Contractors"
+        },
+        {
+          "id": "fg-subcontractors-3",
+          "target": [
+            "#newSubContractorName"
+          ],
+          "title": "Add a sub-contractor",
+          "text": "Type the name and click <b>Add</b>.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-subcontractors-4",
+          "title": "Link their vehicles",
+          "text": "On <b>Vehicles &gt; Add Vehicle</b>, choose the type <b>Sub-Contractor Asset</b> and pick the sub-contractor. Their fuel then shows on the <b>By Sub-Contractor</b> report."
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.price",
+      "title": "Set the fuel price",
+      "icon": "fa-tags",
+      "blurb": "The price per litre from a date, so every fill-up is costed. Back-dating is allowed.",
+      "steps": [
+        {
+          "id": "fg-price-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('management'\"]"
+          ],
+          "title": "Management",
+          "text": "Open <b>Management</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Management"
+        },
+        {
+          "id": "fg-price-2",
+          "target": [
+            "#page-management button[onclick*=\"showMgmt('pricing'\"]"
+          ],
+          "title": "Fuel Pricing",
+          "text": "Click the <b>Fuel Pricing</b> tab.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Fuel Pricing"
+        },
+        {
+          "id": "fg-price-3",
+          "target": [
+            "#newPriceType"
+          ],
+          "title": "Fuel Type",
+          "text": "Diesel 50ppm, Diesel 500ppm, Petrol 95, Petrol 93 or Paraffin.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-price-4",
+          "target": [
+            "#newPriceValue"
+          ],
+          "title": "Price per Litre and Valid From",
+          "text": "The price in Rand, and the date it applies from. A fill-up is costed when it is captured, at the price valid on its date for its depot's fuel type.<br><br>A back-dated price is used for fill-ups captured later for those dates (manual entries, phones syncing late). Fill-ups already saved keep their cost.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-price-5",
+          "target": [
+            "#mgmt-pricing button[onclick*=\"addFuelPrice\"]"
+          ],
+          "title": "Save Price",
+          "text": "Click <b>Save Price</b>.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Save Price"
+        },
+        {
+          "id": "fg-price-6",
+          "target": [
+            "#fuelPriceListBody"
+          ],
+          "title": "Price History and trends",
+          "text": "Every price you entered (the bin removes a wrong one). The <b>Pricing Trends</b> chart on the right shows prices over the dates you choose.",
+          "placement": "top",
+          "climb": 0
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.delivery-setup",
+      "title": "Set up delivery products, units and fail reasons",
+      "icon": "fa-boxes-packing",
+      "blurb": "The lists the New Delivery form and the drivers pick from.",
+      "steps": [
+        {
+          "id": "fg-delivery-setup-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('management'\"]"
+          ],
+          "title": "Management",
+          "text": "Open <b>Management</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Management"
+        },
+        {
+          "id": "fg-delivery-setup-2",
+          "target": [
+            "#page-management button[onclick*=\"showMgmt('delivery'\"]"
+          ],
+          "title": "Deliveries",
+          "text": "Click the <b>Deliveries</b> tab.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Deliveries"
+        },
+        {
+          "id": "fg-delivery-setup-3",
+          "target": [
+            "#newDeliveryUomCode"
+          ],
+          "title": "Units of Measure",
+          "text": "Add units first: a short <b>code</b> (e.g. CRATE) and a <b>name</b> (Crate), then <b>Add Unit</b>.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-delivery-setup-4",
+          "target": [
+            "#newDeliveryProductName"
+          ],
+          "title": "Delivery Products",
+          "text": "The product name, an optional code and its default unit, then <b>Add</b>.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-delivery-setup-5",
+          "target": [
+            "#newDeliveryReason"
+          ],
+          "title": "Failed Delivery Reasons",
+          "text": "The reasons a driver can pick when a stop cannot be completed, e.g. \"Gate locked\". Click <b>Add</b>.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-delivery-setup-6",
+          "title": "Removing",
+          "text": "The red ban on a line stops using it. Deliveries that already use it keep it (marked inactive)."
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.report-run",
+      "title": "Run a report and export it",
+      "icon": "fa-chart-line",
+      "blurb": "Choose a report, set its filters, read the summary cards and export to Excel or PDF.",
+      "steps": [
+        {
+          "id": "fg-report-run-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('reports'\"]"
+          ],
+          "title": "Reports",
+          "text": "Open <b>Reports</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Reports"
+        },
+        {
+          "id": "fg-report-run-2",
+          "target": [
+            "#reportType"
+          ],
+          "title": "Report",
+          "text": "Choose the report (see <b>Which report do I need?</b>). It shows straight away for this month; a line under it says what the report contains.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-report-run-3",
+          "target": [
+            "#fuelRepFiltersBtn"
+          ],
+          "title": "Filters",
+          "text": "Click <b>Filters</b>. It opens the filters of the report you chose.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Filters"
+        },
+        {
+          "id": "fg-report-run-4",
+          "target": [
+            "#reportStart"
+          ],
+          "title": "Dates (and driver / vehicle)",
+          "text": "The <b>Start Date</b> and <b>End Date</b>. Some reports also ask for a <b>Driver</b> or a <b>Vehicle</b> here. The evidence and pallet reports are for one driver on one day. Click <b>Apply Filters</b>; <b>Reset</b> goes back to this month.",
+          "placement": "right",
+          "climb": 1,
+          "timeout": 3000
+        },
+        {
+          "id": "fg-report-run-5",
+          "title": "Cards and table",
+          "text": "The cards sum up what the report shows (e.g. fill-ups, litres, vehicles, drivers). Click a <b>column heading</b> to sort (again for the other way), and type in the box under a heading to search that column."
+        },
+        {
+          "id": "fg-report-run-6",
+          "target": [
+            "#fuelRepExport"
+          ],
+          "title": "Export",
+          "text": "<b>Export</b> downloads the report in Excel. The evidence reports give a <b>PDF</b> with the photos and signatures instead. <b>Refresh</b> loads it again with the latest fill-ups.",
+          "placement": "bottom",
+          "climb": 0
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.report-which",
+      "title": "Which report do I need?",
+      "icon": "fa-circle-question",
+      "blurb": "What each report shows.",
+      "steps": [
+        {
+          "id": "fg-report-which-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('reports'\"]"
+          ],
+          "title": "Reports",
+          "text": "Open <b>Reports</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Reports"
+        },
+        {
+          "id": "fg-report-which-2",
+          "target": [
+            "#reportType"
+          ],
+          "title": "Fuel reports",
+          "text": "<b>Global Transaction Report</b>: every fill-up in the dates. <b>Fuel Efficiency Report</b>: km/L or L/hr per fill-up and the average. <b>By Driver</b> / <b>By Vehicle (Detailed)</b>: every fill-up for a driver or vehicle. <b>By Activity</b> / <b>By Sub-Contractor (Summary)</b>: totals per activity or contractor.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-report-which-3",
+          "title": "Proof and finance",
+          "text": "<b>Fuel Evidence Report</b>: a PDF of one driver's fill-ups for a day with photos and signatures. <b>Accountant Fuel Sheet</b>: fill-ups for your bookkeeper with registration, depot / pump, litres, meter and odometer. <b>SARS Diesel Rebate Logbook</b>: the logbook for the diesel rebate claim."
+        },
+        {
+          "id": "fg-report-which-4",
+          "title": "Trips and fleet",
+          "text": "<b>Trip Log Report</b>: trips in the dates (one vehicle or all). <b>Trip Evidence Report</b>: a PDF of a driver's trips for a day with evidence. <b>Stop &amp; Pallet Log Sheet</b>: a driver's stops and pallets for a day. <b>Vehicle Service Report</b>: service status of the fleet."
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.report-sars",
+      "title": "Produce the SARS diesel rebate logbook",
+      "icon": "fa-file-invoice",
+      "blurb": "The logbook for your diesel rebate claim, and what makes it correct.",
+      "steps": [
+        {
+          "id": "fg-report-sars-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('reports'\"]"
+          ],
+          "title": "Reports",
+          "text": "Open <b>Reports</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Reports"
+        },
+        {
+          "id": "fg-report-sars-2",
+          "title": "What it needs",
+          "text": "The logbook is only as good as the fill-ups: an <b>odometer / hour reading</b> on each fill, the right <b>activity</b> (with <b>Can claim the diesel rebate</b> ticked under Management &gt; Activities) and the <b>National road used</b> tick for road use, which does not qualify."
+        },
+        {
+          "id": "fg-report-sars-3",
+          "target": [
+            "#reportType"
+          ],
+          "title": "Choose the report",
+          "text": "Choose <b>SARS Diesel Rebate Logbook</b>. The cards show the litres and the qualifying litres.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-report-sars-4",
+          "target": [
+            "#fuelRepFiltersBtn"
+          ],
+          "title": "Filters",
+          "text": "Click <b>Filters</b>. It opens the filters of the report you chose.",
+          "placement": "bottom",
+          "mode": "click",
+          "hint": "Click Filters"
+        },
+        {
+          "id": "fg-report-sars-5",
+          "target": [
+            "#reportStart"
+          ],
+          "title": "The claim period",
+          "text": "Set the start and end of the period you are claiming for, then click <b>Apply Filters</b>.",
+          "placement": "right",
+          "climb": 1,
+          "timeout": 3000
+        },
+        {
+          "id": "fg-report-sars-6",
+          "target": [
+            "#fuelRepExport"
+          ],
+          "title": "Export",
+          "text": "Check the report, then click <b>Export</b> for the full logbook in Excel (qualifying and non-qualifying litres) for your records or your tax practitioner.",
+          "placement": "bottom",
+          "climb": 0
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.report-schedule",
+      "title": "Email a report automatically",
+      "icon": "fa-envelope",
+      "blurb": "Have a report emailed every day, week or month.",
+      "steps": [
+        {
+          "id": "fg-report-schedule-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('reports'\"]"
+          ],
+          "title": "Reports",
+          "text": "Open <b>Reports</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Reports"
+        },
+        {
+          "id": "fg-report-schedule-2",
+          "target": [
+            "#fuelMailersBtn"
+          ],
+          "title": "Scheduled Mailers",
+          "text": "Click <b>Scheduled Mailers</b> (top right).",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click Scheduled Mailers"
+        },
+        {
+          "id": "fg-report-schedule-3",
+          "target": [
+            "#schType"
+          ],
+          "title": "Report and frequency",
+          "text": "The <b>Report</b> (Global, Driver, Vehicle or Trip Log) and how often: <b>Daily</b> (6 AM), <b>Weekly</b> (Monday) or <b>Monthly</b> (the 1st).",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 4000
+        },
+        {
+          "id": "fg-report-schedule-4",
+          "target": [
+            "#schRange"
+          ],
+          "title": "Data Range",
+          "text": "What it covers: <b>Yesterday</b>, <b>Last Week</b> or <b>Last Month</b>.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-report-schedule-5",
+          "target": [
+            "#schEmail"
+          ],
+          "title": "Email To",
+          "text": "One or more addresses, comma separated. They must be your own users, or on a domain allowed under <b>Settings &gt; Report Emails</b> (e.g. your accountants).",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "fg-report-schedule-6",
+          "target": [
+            "#btnSaveSchedule"
+          ],
+          "title": "Save and test",
+          "text": "Click <b>Save</b>. <b>Test</b> sends it right now so you can check it arrives.",
+          "placement": "left",
+          "climb": 0
+        },
+        {
+          "id": "fg-report-schedule-7",
+          "target": [
+            "#scheduleBody"
+          ],
+          "title": "Your schedules",
+          "text": "Each schedule with its <b>Next Run</b>. The pencil edits it and the bin removes it.",
+          "placement": "top",
+          "climb": 0
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.settings-fuel",
+      "title": "Choose what the phone must capture",
+      "icon": "fa-cogs",
+      "blurb": "The fuel switches: odometer, photos, typo checks, national road, departments and efficiency units.",
+      "steps": [
+        {
+          "id": "fg-settings-fuel-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('settings'\"]"
+          ],
+          "title": "Settings",
+          "text": "Open <b>Settings</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Settings"
+        },
+        {
+          "id": "fg-settings-fuel-2",
+          "title": "Switches save straight away",
+          "text": "Every switch on this screen saves as soon as you click it, for the whole company (web and phones)."
+        },
+        {
+          "id": "fg-settings-fuel-3",
+          "target": [
+            "#settingFuelOdoMandatory"
+          ],
+          "title": "Mandatory Odometer Capture",
+          "text": "On: a fill-up cannot be saved without an odometer / hour reading. Recommended, because efficiency and the SARS logbook need it.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"capture\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-fuel-4",
+          "target": [
+            "#settingFuelPhotoMandatory"
+          ],
+          "title": "Mandatory Phone Photos",
+          "text": "On: the phone requires the odometer, meter-before and meter-after photos.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"capture\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-fuel-5",
+          "target": [
+            "#settingTypoChecks"
+          ],
+          "title": "Typo Checks (Ask for a Reason)",
+          "text": "On: more litres than the tank holds, an odometer lower than last time, or a very big jump must be explained before saving. Off: nothing is asked, but the phone still refuses a lower odometer. Future dates are always refused.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"capture\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-fuel-6",
+          "target": [
+            "#settingShowNationalRoad"
+          ],
+          "title": "National road",
+          "text": "<b>Show National Road on the Phone</b>: off hides the question (saved as No). <b>Default National Road Policy</b>: on starts it ticked for new entries.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"natroad\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-fuel-7",
+          "target": [
+            "#settingShowFarmingDept"
+          ],
+          "title": "Farming Department Tracking",
+          "text": "Adds the optional department field to Manual Entry and the phone.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"depts\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-fuel-8",
+          "target": [
+            "#settingEffKm"
+          ],
+          "title": "Efficiency display",
+          "text": "Show KM vehicles as <b>km/L</b> or <b>L/km</b>, and machines as <b>L/hr</b> or <b>hrs/L</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"efficiency\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-fuel-9",
+          "target": [
+            "#settingReportDomains"
+          ],
+          "title": "Allowed Report Domains",
+          "text": "Scheduled reports can go to your own users plus these domains (comma separated). Click <b>Save</b> next to it.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"reportmail\"]"
+            }
+          ],
+          "timeout": 3000
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.settings-delivery",
+      "title": "Set the delivery and ePOD rules",
+      "icon": "fa-truck-ramp-box",
+      "blurb": "What drivers must capture at a stop, and how ePODs are emailed.",
+      "steps": [
+        {
+          "id": "fg-settings-delivery-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('settings'\"]"
+          ],
+          "title": "Settings",
+          "text": "Open <b>Settings</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Settings"
+        },
+        {
+          "id": "fg-settings-delivery-2",
+          "target": [
+            "#settingDeliveryPhotoMandatory"
+          ],
+          "title": "What the driver must capture",
+          "text": "<b>Mandatory Evidence Photo</b>, <b>POD Photo</b>, <b>Client Signature</b> and <b>Driver Signature</b>. <b>Damaged Goods Need A Photo</b> forces a note and photo for damaged lines.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"proof\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-delivery-3",
+          "target": [
+            "#settingDeliveryAllowPartial"
+          ],
+          "title": "What drivers may do",
+          "text": "<b>Allow Partial Deliveries</b>: less than planned becomes Partial and waits in Resolve. <b>Allow Unplanned Stops</b>: drivers may capture a stop that was never loaded.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"driverrules\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-delivery-4",
+          "target": [
+            "#settingDeliveryEpodAutoEmail"
+          ],
+          "title": "ePOD emails",
+          "text": "<b>Email The ePOD Automatically</b> as soon as a stop syncs. <b>ePOD For Failed Stops</b>, <b>Photos On The ePOD</b>, and an <b>Office Copy For Opted-Out Clients</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"epod\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-delivery-5",
+          "target": [
+            "#settingDeliveryVehicleMode"
+          ],
+          "title": "Vehicle, loading point and CC",
+          "text": "How the vehicle on the ePOD is chosen, the <b>Default Loading Point</b>, and an office address to <b>CC</b> on every ePOD.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"driverrules\"]"
+            }
+          ],
+          "timeout": 3000
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.settings-find",
+      "title": "Find a setting quickly",
+      "icon": "fa-magnifying-glass",
+      "blurb": "Search Settings, or show only the settings that change the phone app.",
+      "steps": [
+        {
+          "id": "fg-settings-find-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('settings'\"]"
+          ],
+          "title": "Settings",
+          "text": "Open <b>Settings</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Settings"
+        },
+        {
+          "id": "fg-settings-find-2",
+          "target": [
+            "#fspSearch"
+          ],
+          "title": "Search settings",
+          "text": "Type a word such as <b>photo</b>, <b>odometer</b> or <b>ePOD</b>, then pick a result. Settings jumps to it and the setting flashes so you can spot it. Press <b>/</b> anywhere in Settings to come back to this box.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-find-3",
+          "target": [
+            "#fspPhoneOnly"
+          ],
+          "title": "Only the phone app",
+          "text": "Tick this to dim every setting that does not change what drivers see on their phones. Untick it to see all settings again.",
+          "placement": "bottom",
+          "climb": 1,
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-find-4",
+          "title": "Changes save straight away",
+          "text": "Each switch saves the moment you click it, for the whole company, on the web and on every phone. The only Save button is next to <b>Allowed Report Domains</b>."
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.settings-proof-fillups",
+      "title": "Make every fill-up come with proof",
+      "icon": "fa-camera",
+      "blurb": "Require an odometer reading and photos before a fill-up can be saved.",
+      "steps": [
+        {
+          "id": "fg-settings-proof-fillups-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('settings'\"]"
+          ],
+          "title": "Settings",
+          "text": "Open <b>Settings</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Settings"
+        },
+        {
+          "id": "fg-settings-proof-fillups-2",
+          "target": [
+            "#settingFuelOdoMandatory"
+          ],
+          "title": "Require the odometer",
+          "text": "Switch on <b>Mandatory Odometer Capture</b>. A fill-up can then only be saved with an odometer or hour reading. Fuel efficiency and the SARS logbook both need this reading.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"capture\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-proof-fillups-3",
+          "target": [
+            "#settingFuelPhotoMandatory"
+          ],
+          "title": "Require the photos",
+          "text": "Switch on <b>Mandatory Phone Photos</b>. The phone then asks for a photo of the odometer, and of the pump meter before and after filling.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"capture\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-proof-fillups-4",
+          "title": "Checking the proof",
+          "text": "The photos show as small thumbnails on each row in <b>Fuel Logs</b>. Click one to see it full size."
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.settings-typos",
+      "title": "Catch typing mistakes on fill-ups",
+      "icon": "fa-spell-check",
+      "blurb": "Ask drivers for a reason when the litres or the odometer look wrong.",
+      "steps": [
+        {
+          "id": "fg-settings-typos-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('settings'\"]"
+          ],
+          "title": "Settings",
+          "text": "Open <b>Settings</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Settings"
+        },
+        {
+          "id": "fg-settings-typos-2",
+          "target": [
+            "#settingTypoChecks"
+          ],
+          "title": "Switch on Typo Checks",
+          "text": "Switch on <b>Typo Checks (Ask for a Reason)</b>. The phone then asks for a typed reason when the litres are more than the tank holds, the odometer is lower than last time, or the odometer jumps a lot.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"capture\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-typos-3",
+          "title": "Where the reasons show",
+          "text": "A fill-up with a reason gets an amber <b>Reason</b> badge next to its odometer in <b>Fuel Logs</b>. Hover over the badge to read what the driver typed."
+        },
+        {
+          "id": "fg-settings-typos-4",
+          "title": "If you switch it off",
+          "text": "Nothing is asked any more. The phone still refuses an odometer lower than the last one, and dates in the future are always refused."
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.settings-natroad",
+      "title": "Set up national road use for the diesel rebate",
+      "icon": "fa-road",
+      "blurb": "Decide whether drivers are asked about public road use, and what the default answer is.",
+      "steps": [
+        {
+          "id": "fg-settings-natroad-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('settings'\"]"
+          ],
+          "title": "Settings",
+          "text": "Open <b>Settings</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Settings"
+        },
+        {
+          "id": "fg-settings-natroad-2",
+          "target": [
+            "#settingShowNationalRoad"
+          ],
+          "title": "Ask the drivers",
+          "text": "Switch on <b>Show National Road on the Phone</b> if drivers should say whether the fuel was used on a public national road. Fuel used on national roads is left out of the SARS diesel rebate.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"natroad\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-natroad-3",
+          "target": [
+            "#settingDefaultNationalRoad"
+          ],
+          "title": "Choose the usual answer",
+          "text": "Switch on <b>Default National Road Policy</b> if most of your fuel is used on public roads. New fill-ups then start with <b>National Road Used</b> ticked, and drivers untick it for farm work. Leave it off if most fuel is used on the farm.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"natroad\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-natroad-4",
+          "title": "If you hide the question",
+          "text": "With <b>Show National Road on the Phone</b> off, the phone saves every fill-up as No. You can still change a fill-up later on <b>Manual Entry</b> or <b>Edit</b>."
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.settings-depts",
+      "title": "Track fuel by farming department",
+      "icon": "fa-sitemap",
+      "blurb": "Add a department field to fill-ups, for example one per division.",
+      "steps": [
+        {
+          "id": "fg-settings-depts-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('settings'\"]"
+          ],
+          "title": "Settings",
+          "text": "Open <b>Settings</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Settings"
+        },
+        {
+          "id": "fg-settings-depts-2",
+          "target": [
+            "#settingShowFarmingDept"
+          ],
+          "title": "Switch on departments",
+          "text": "Switch on <b>Farming Department Tracking</b>. <b>Manual Entry</b> and the phone fuel form then show an optional department field.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"depts\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-depts-3",
+          "title": "Add the departments",
+          "text": "Next, add your departments under <b>Management</b> &gt; <b>Farming Depts</b>. The guide <b>Add farming departments</b> walks you through it."
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.settings-efficiency",
+      "title": "Show fuel efficiency the way your managers read it",
+      "icon": "fa-gauge-high",
+      "blurb": "Choose km/L or L/km for vehicles, and L/hr or hrs/L for machines.",
+      "steps": [
+        {
+          "id": "fg-settings-efficiency-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('settings'\"]"
+          ],
+          "title": "Settings",
+          "text": "Open <b>Settings</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Settings"
+        },
+        {
+          "id": "fg-settings-efficiency-2",
+          "target": [
+            "#settingEffKm"
+          ],
+          "title": "Vehicles on kilometres",
+          "text": "Pick <b>Km / Litre</b> to show how far a vehicle goes on one litre, for example 10 km/L. Pick <b>Litres / Km</b> to show the fuel used per kilometre, for example 0.1 L/km.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"efficiency\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-efficiency-3",
+          "target": [
+            "#settingEffHrs"
+          ],
+          "title": "Machines on hours",
+          "text": "Pick <b>Litres / Hour</b> for the usual tractor figure, for example 15 L/hr. Pick <b>Hours / Litre</b> to show how long one litre lasts, for example 0.06 hrs/L.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"efficiency\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-efficiency-4",
+          "title": "Only the display changes",
+          "text": "Saved fill-ups do not change. The dashboard, the vehicle register and the reports simply show the new unit."
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.settings-accountant",
+      "title": "Email reports to your accountant or head office",
+      "icon": "fa-paper-plane",
+      "blurb": "Allow an outside email domain for scheduled reports.",
+      "steps": [
+        {
+          "id": "fg-settings-accountant-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('settings'\"]"
+          ],
+          "title": "Settings",
+          "text": "Open <b>Settings</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Settings"
+        },
+        {
+          "id": "fg-settings-accountant-2",
+          "target": [
+            "#settingReportDomains"
+          ],
+          "title": "Allow their domain",
+          "text": "Scheduled reports can always go to your own users. To send them to an outside company, type its email domain here, for example <b>accountants.co.za</b>. Separate several domains with commas, then click <b>Save</b> next to the box.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"reportmail\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-accountant-3",
+          "title": "Then schedule the report",
+          "text": "Next, set up the report under <b>Reports</b> &gt; <b>Scheduled Mailers</b>. The guide <b>Email a report automatically</b> walks you through it."
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.settings-signatures",
+      "title": "Make clients sign for every delivery",
+      "icon": "fa-file-signature",
+      "blurb": "Require signatures, and a photo of the signed delivery note.",
+      "steps": [
+        {
+          "id": "fg-settings-signatures-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('settings'\"]"
+          ],
+          "title": "Settings",
+          "text": "Open <b>Settings</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Settings"
+        },
+        {
+          "id": "fg-settings-signatures-2",
+          "target": [
+            "#settingDeliverySignatureMandatory"
+          ],
+          "title": "Client signature",
+          "text": "Switch on <b>Mandatory Client Signature</b>. The person receiving the goods must then sign on the driver's phone before the stop can be saved.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"proof\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-signatures-3",
+          "target": [
+            "#settingDeliveryDriverSignatureMandatory"
+          ],
+          "title": "Driver signature",
+          "text": "Switch on <b>Mandatory Driver Signature</b> if the driver must sign the ePOD as well.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"proof\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-signatures-4",
+          "target": [
+            "#settingDeliveryPodMandatory"
+          ],
+          "title": "Paper delivery note",
+          "text": "Switch on <b>Mandatory POD Photo</b> if your clients also sign a paper delivery note. The driver must then photograph it.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"proof\"]"
+            }
+          ],
+          "timeout": 3000
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.settings-damage",
+      "title": "Record damaged and short deliveries properly",
+      "icon": "fa-box-open",
+      "blurb": "Require photos of the goods and of damage, and decide whether drivers may deliver less than planned.",
+      "steps": [
+        {
+          "id": "fg-settings-damage-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('settings'\"]"
+          ],
+          "title": "Settings",
+          "text": "Open <b>Settings</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Settings"
+        },
+        {
+          "id": "fg-settings-damage-2",
+          "target": [
+            "#settingDeliveryPhotoMandatory"
+          ],
+          "title": "Photo of the goods",
+          "text": "Switch on <b>Mandatory Evidence Photo</b> so the driver must photograph the goods at every stop.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"proof\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-damage-3",
+          "target": [
+            "#settingDeliveryDamagedPhotoMandatory"
+          ],
+          "title": "Damaged goods",
+          "text": "Switch on <b>Damaged Goods Need A Photo</b>. A line marked Damaged then needs a note and a photo before the stop can be saved.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"proof\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-damage-4",
+          "target": [
+            "#settingDeliveryAllowPartial"
+          ],
+          "title": "Short deliveries",
+          "text": "Switch on <b>Allow Partial Deliveries</b> if drivers may hand over less than planned. The stop is then saved as Partial and waits under <b>Deliveries</b> &gt; <b>Resolve</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"driverrules\"]"
+            }
+          ],
+          "timeout": 3000
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.settings-driver-freedom",
+      "title": "Let drivers add stops and choose their truck",
+      "icon": "fa-truck",
+      "blurb": "Allow unplanned stops, and decide how the vehicle on the ePOD is chosen.",
+      "steps": [
+        {
+          "id": "fg-settings-driver-freedom-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('settings'\"]"
+          ],
+          "title": "Settings",
+          "text": "Open <b>Settings</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Settings"
+        },
+        {
+          "id": "fg-settings-driver-freedom-2",
+          "target": [
+            "#settingDeliveryAllowAdhoc"
+          ],
+          "title": "Unplanned stops",
+          "text": "Switch on <b>Allow Unplanned Stops</b> if drivers may capture a delivery or collection the office never loaded. Leave it off if every stop must be planned first.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"driverrules\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-driver-freedom-3",
+          "target": [
+            "#settingDeliveryVehicleMode"
+          ],
+          "title": "Which vehicle goes on the ePOD",
+          "text": "<b>Ask the driver once per shift</b> suits drivers who keep one truck all day. <b>Ask on every stop</b> suits drivers who swap vehicles. <b>Use the vehicle the office assigned</b> takes the vehicle from the planned delivery.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"driverrules\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-driver-freedom-4",
+          "target": [
+            "#settingDeliveryDefaultLoadingPoint"
+          ],
+          "title": "Default loading point",
+          "text": "Type where goods are usually loaded, for example the main warehouse. It is printed on ePODs that have no loading point of their own.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"driverrules\"]"
+            }
+          ],
+          "timeout": 3000
+        }
+      ]
+    },
+    {
+      "key": "fueldashboard.guide.settings-epod-email",
+      "title": "Email ePODs to clients automatically",
+      "icon": "fa-envelope-open-text",
+      "blurb": "Send the ePOD as soon as a stop syncs, copy the office, and choose what is on it.",
+      "steps": [
+        {
+          "id": "fg-settings-epod-email-1",
+          "target": [
+            "#sidebarNav [onclick*=\"showSection('settings'\"]"
+          ],
+          "title": "Settings",
+          "text": "Open <b>Settings</b> in the menu on the left.",
+          "placement": "right",
+          "mode": "click",
+          "hint": "Click Settings"
+        },
+        {
+          "id": "fg-settings-epod-email-2",
+          "target": [
+            "#settingDeliveryEpodAutoEmail"
+          ],
+          "title": "Send it automatically",
+          "text": "Switch on <b>Email The ePOD Automatically</b>. Each client then gets the PDF as soon as the driver's stop syncs. Leave it off to send ePODs by hand from <b>Deliveries</b>.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"epod\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-epod-email-3",
+          "target": [
+            "#settingDeliveryEpodCc"
+          ],
+          "title": "Copy the office",
+          "text": "Type an office address, for example <b>pod@yourcompany.co.za</b>, to get a copy of every ePOD email.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"epod\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-epod-email-4",
+          "target": [
+            "#settingDeliveryEpodCcOnOptOut"
+          ],
+          "title": "Clients who opted out",
+          "text": "Some clients are set to <b>Do not email ePODs</b>. Switch on <b>Office Copy For Opted-Out Clients</b> if the office should still get their ePODs.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"epod\"]"
+            }
+          ],
+          "timeout": 3000
+        },
+        {
+          "id": "fg-settings-epod-email-5",
+          "target": [
+            "#settingDeliveryEpodPhotos"
+          ],
+          "title": "What is on the ePOD",
+          "text": "<b>Photos On The ePOD</b> adds the delivery photos on a page after the signatures. <b>ePOD For Failed Stops</b> also makes a PDF when a stop could not be completed.",
+          "placement": "bottom",
+          "climb": 1,
+          "before": [
+            {
+              "click": ".fsp-nav-btn[data-pane=\"epod\"]"
+            }
+          ],
+          "timeout": 3000
         }
       ]
     }

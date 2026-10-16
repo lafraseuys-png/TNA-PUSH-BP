@@ -2,6 +2,42 @@
   "maxAgeDays": 45,
   "releases": [
     {
+      "id": "2026-10-16.unique-profile-fields",
+      "date": "2026-10-16",
+      "title": "Unique profile fields - no more duplicate farmers",
+      "text": "Under Settings &gt; <b>Profile Fields</b>, tick <b>Values must be unique</b> on a field such as Farmer Live Code. From then on no two farmers can share a value - a save that tries is refused and names the farmer who has it. The farmer import now finds existing farmers by that field across <i>all</i> areas (then Contract Number, then ID Number), shows <b>UPDATE</b> or <b>NEW</b> correctly for everyone, and Overwrite mode decides who is not in the file by that field. A column called STSFarmer Code is mapped to it automatically.",
+      "who": "Office users who set up profile fields or import farmers",
+      "pages": ["contractors"],
+      "showMe": {
+        "click": "#sidebarNav a[onclick^=\"showSection('contractors'\"]",
+        "steps": ["co-nav-contractors"]
+      }
+    },
+    {
+      "id": "2026-10-16.farmer-import-undo",
+      "date": "2026-10-16",
+      "title": "Undo a farmer import fully",
+      "text": "Rolling back a farmer import works again and now also reverses what <b>Overwrite mode</b> did: farmers it switched off come back on, farmers it switched on go off again, and the import's reason is removed from their profiles. Farmers changed by hand after the import are left as they are. Find it under Data Tools &gt; <b>View Import History</b>, or in the prompt right after an import.",
+      "who": "Office users who import farmers",
+      "pages": ["contractors"],
+      "showMe": {
+        "click": "#sidebarNav a[onclick^=\"showSection('contractors'\"]",
+        "steps": ["co-nav-contractors"]
+      }
+    },
+    {
+      "id": "2026-10-16.farmer-import-deactivation-reason",
+      "date": "2026-10-16",
+      "title": "Import deactivations are explained on the profile",
+      "text": "When the farmer import (Overwrite mode) switches a farmer off or back on, the profile now records when, by whom and which import file. A deactivated farmer's <b>Profile Overview</b> shows a red banner with the reason and a <b>View import batch</b> link, and the Deactivated Profiles table shows the import reason instead of <i>No reason provided</i>. Manual status changes now record who made them too.",
+      "who": "Office users who import or deactivate farmers",
+      "pages": ["contractors"],
+      "showMe": {
+        "click": "#sidebarNav a[onclick^=\"showSection('contractors'\"]",
+        "steps": ["co-nav-contractors"]
+      }
+    },
+    {
       "id": "2026-09-26.global-admin-name",
       "date": "2026-09-26",
       "title": "God Mode is now Global Admin",

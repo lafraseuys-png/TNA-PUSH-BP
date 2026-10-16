@@ -127,7 +127,7 @@
       "target": [
         "#sidebarNav [onclick*=\"showSection('reports'\"]"
       ],
-      "title": "Intel Reports",
+      "title": "Reports",
       "text": "Consumption, efficiency, diesel rebate and exception reports.",
       "placement": "right"
     },
