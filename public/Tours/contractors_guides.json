@@ -198,7 +198,7 @@
       "key": "contractors.guide.import-farmers",
       "title": "Import farmers",
       "icon": "fa-file-import",
-      "blurb": "Load or update many farmers from Excel: match the columns, check the preview, then commit.",
+      "blurb": "Load or update many farmers from Excel with the import wizard: say what you want to do, choose the file, match the columns, check, then import.",
       "steps": [
         {
           "id": "cog-if-open",
@@ -235,7 +235,7 @@
             "#contDataToolsDropdownMenu a[onclick*='downloadContractorTemplate']"
           ],
           "title": "1. Get the template",
-          "text": "<b>Download Blank Template</b>: First Name, Last Name, Contract Number, ID Number, Passport Number, Cell Phone, Physical Address, one drop-down column per hierarchy level, then your own profile fields.<br>One row per farmer. Photos and documents can't be imported.",
+          "text": "<b>Download Blank Template</b>: First Name, Last Name, Contract Number, ID Number, Passport Number, Phone Number, Physical Address, one drop-down column per hierarchy level, then your own profile fields.<br>One row per farmer. Photos and documents can't be imported.",
           "placement": "left",
           "before": [
             {
@@ -250,7 +250,7 @@
             "#contDataToolsDropdownMenu a[onclick*='openContImportHistoryModal']"
           ],
           "title": "Import History",
-          "text": "<b>View Import History</b> lists every import batch with its new and updated profiles. <b>Rollback</b> deletes the new profiles of a batch. Updates are not undone, and a rollback fails once a new farmer has a contract.",
+          "text": "<b>View Import History</b> lists every import with its new and updated farmers. <b>Rollback</b> removes the new farmers of that import and puts the updated ones back as they were (farmers changed by hand since are left alone). It fails once a new farmer has a contract.",
           "placement": "left",
           "optional": true,
           "before": [
@@ -266,7 +266,7 @@
             "#contDataToolsDropdownMenu a[onclick*='openImportContractorModal']"
           ],
           "title": "2. Import Excel Data",
-          "text": "Click <b>Import Excel Data</b>.",
+          "text": "Click <b>Import Excel Data</b>. The import wizard opens - nothing is saved until its last step.",
           "placement": "left",
           "mode": "click",
           "hint": "Click Import Excel Data",
@@ -278,59 +278,54 @@
           ]
         },
         {
+          "id": "cog-if-what",
+          "target": [
+            "#cxiw .cards"
+          ],
+          "title": "1. What do you want to do?",
+          "text": "<b>Add new farmers and update existing ones</b>: the usual choice - nobody is removed.<br><b>Update existing farmers only</b>: for a file from Export Farmer Data that you changed - nobody is added.<br><b>Replace the whole farmer list</b>: the file is your complete list; farmers not in it move to Deactivated Profiles (nothing is deleted).<br>Choose one, then click <b>Next</b>.",
+          "placement": "right",
+          "timeout": 6000
+        },
+        {
           "id": "cog-if-file",
           "target": [
-            "#importCsvFile"
+            "#cxiwDrop"
           ],
-          "title": "3. Choose your file",
-          "text": "Click the file box and choose your Excel file (.xlsx or .xls). Keep <b>File contains a header row</b> ticked if row 1 has headings.<br>The guide carries on when the columns appear.",
+          "title": "2. Choose your file",
+          "text": "Click here (or drop the file on it) and choose your Excel file. When the file has several sheets, pick the one with the farmers. Say whether row 1 holds the column names, then click <b>Next</b>.",
           "placement": "bottom",
-          "mode": "click",
-          "hint": "Click the file box and choose your file",
-          "climb": 1,
-          "timeout": 4000
+          "timeout": 120000
         },
         {
           "id": "cog-if-map",
           "target": [
-            "#importMappingContainer"
+            "#cxiwMapWrap"
           ],
-          "title": "4. Match the columns",
-          "text": "Each column in your file is matched to a field. Template headings match by themselves. <b>First Name</b> must be matched; set a column to <b>Ignore Column</b> to leave it out.<br>Existing farmers are found by Farmer ID, then Contract Number, then ID Number, and are updated instead of added.",
+          "title": "3. Match the columns",
+          "text": "Each column of your file, with example values, and the field it goes into. They are guessed from the column names - and matched the way you did it last time. Set a column to <b>Ignore</b> to leave it out. The ticks above show what is still needed (for example First Name). Then click <b>Check the file</b>.",
           "placement": "top",
           "timeout": 120000
         },
         {
-          "id": "cog-if-areas",
+          "id": "cog-if-check",
           "target": [
-            "#importAutoCreateAreasWrap"
+            "#cxiw .tiles"
           ],
-          "title": "Create missing areas",
-          "text": "Without this tick, a single row naming an area that doesn't exist locks the whole import. With it, those areas are created when you commit, and you see the list first. The level above must already exist.<br><b>Update existing farmers only</b> (next to it) is for a file from Export Farmer Data: nobody is added and blank cells change nothing.",
-          "placement": "top",
-          "optional": true
-        },
-        {
-          "id": "cog-if-preview",
-          "target": [
-            "#importStep2 button[onclick*='generateImportStaging']"
-          ],
-          "title": "5. Preview Staging Area",
-          "text": "Change any column match or tick an option now, then click <b>Preview Staging Area</b>. Nothing is saved yet.",
-          "placement": "top",
-          "mode": "click",
-          "hint": "Click Preview Staging Area",
-          "climb": 1
+          "title": "4. Check",
+          "text": "How many farmers are added, updated (and move club), and which rows are left out with the reason - <b>Download the problem rows</b> to fix them. A club that is not on the system is asked about first (<b>create it?</b>). For Replace, you see who would be deactivated. Blank cells keep what is saved. Nothing is saved yet.",
+          "placement": "bottom",
+          "timeout": 120000
         },
         {
           "id": "cog-if-commit",
           "target": [
-            "#commitImportBtn"
+            "#cxiwGo"
           ],
-          "title": "6. Check, then commit",
-          "text": "Every row shows <b>NEW</b>, <b>UPDATE</b> or <b>REJECTED</b> with the reason (no First Name, a Contract Number repeated in the file or with spaces or symbols). Rejected rows are listed first and are left out.<br>Leave <b>Overwrite mode</b> unticked unless this file is your full list. Otherwise, everyone not in it is deactivated.<br>Click <b>Commit Import</b> (or <b>Import Valid Rows Only</b>). The result shows new and updated profiles, with <b>Roll back now</b> or <b>Keep the import</b>.",
+          "title": "5. Import now",
+          "text": "A plain summary of what happens. Click <b>Import now</b>: everything is saved as one import (Replace asks you to type the number of farmers to deactivate first). Then choose <b>Keep the import</b> or <b>Roll back now</b>.",
           "placement": "top",
-          "timeout": 20000
+          "timeout": 120000
         }
       ]
     },
@@ -1684,29 +1679,31 @@
           "target": [
             "#contCellPhone"
           ],
-          "title": "3. Cell Phone",
-          "text": "<b>Cell Phone</b> is required. Add the address and other contact details if you have them.",
+          "title": "3. Phone Number",
+          "text": "<b>Phone Number</b> is required, under <b>Contact</b> next to the National ID. The 🇲🇼 +265 is filled in for you - type the rest (e.g. 991 234 567).",
           "placement": "left",
           "climb": 1
         },
         {
           "id": "cog-af-docs",
           "target": [
+            "#createContractorModal .pf-nav [data-pf-go='fields']",
             "#createContractorModal .cont-form-tab-btn[onclick*='docs']"
           ],
-          "title": "Location & Docs",
-          "text": "Click <b>Location &amp; Docs</b>.",
-          "placement": "bottom",
+          "title": "Profile fields",
+          "text": "The menu on the left jumps to each part of the form and shows how far it is filled in (✓ done, ! something needed). Click <b>Profile fields</b>.",
+          "placement": "right",
           "mode": "click",
-          "hint": "Click Location & Docs"
+          "hint": "Click Profile fields"
         },
         {
           "id": "cog-af-fields",
           "target": [
+            "#createContractorModal [data-pf-card='fields']",
             "#contDynamicAttributes"
           ],
           "title": "4. Profile fields & documents",
-          "text": "Drag the pin on the map to their home. Upload the ID document, then fill in your own <b>Profile Fields</b> (set up in Settings). A red <b>*</b> means it is mandatory.",
+          "text": "Your own <b>Profile Fields</b> (set up in Settings), grouped: codes and numbers, farm size, club roles, other. The unique code (e.g. Farmer Live Code) is at the top under Identity. In <b>Club &amp; location</b> drag the pin on the map to their home; in <b>Photo &amp; documents</b> upload the ID document. A red <b>*</b> means it is mandatory.",
           "placement": "top",
           "timeout": 3000
         },
@@ -1760,8 +1757,8 @@
           "target": [
             "#cxNaTab"
           ],
-          "title": "Not assigned clubs",
-          "text": "Clubs that still have no Chairperson or no Secretary. You can add them from that list too.",
+          "title": "Not in Club",
+          "text": "Clubs that still have no Chairperson or no Secretary. Click <b>Make</b> on a club to choose them from its farmers (one farmer can hold both roles).",
           "placement": "bottom",
           "optional": true
         },
