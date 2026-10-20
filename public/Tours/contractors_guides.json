@@ -1015,7 +1015,7 @@
         {
           "id": "cog-ap-sla",
           "target": [
-            "#page-workflow .cs-nav-btn[data-pane=\"sla\"]"
+            "#page-workflow .contract-tab-btn[data-pane=\"sla\"]"
           ],
           "title": "Approval Timers (SLAs)",
           "text": "Click <b>Approval Timers (SLAs)</b>.",
@@ -1031,12 +1031,12 @@
             "#workflowRulesBody"
           ],
           "title": "One row per level",
-          "text": "These are the rules for <b>Contracts</b> (Distribution has its own). <b>Auto-Escalate (Days)</b> passes the contract up after that many days waiting. <b>Auto-Approve (Days)</b> approves it after that many days (0 = off). <b>Approve On Arrival?</b> approves it at that level straight away. <b>Approve From Mobile App?</b> lets that level's managers approve on the phone.",
+          "text": "Every workflow is listed at the top - <b>Edit</b> opens this pop-up. These are the rules for <b>Contracts</b> (Distribution has its own). <b>Auto-Escalate (Days)</b> passes the contract up after that many days waiting. <b>Auto-Approve (Days)</b> approves it after that many days (0 = off). <b>Approve On Arrival?</b> approves it at that level straight away. <b>Approve From Mobile App?</b> lets that level's managers approve on the phone.",
           "placement": "top",
           "timeout": 4000,
           "before": [
             {
-              "call": "setWorkflowRulesType",
+              "call": "cwOpenRulesPopup",
               "args": [
                 "contracts"
               ]
@@ -1056,25 +1056,32 @@
         {
           "id": "cog-ap-save",
           "target": [
+            "#cwRulesModal button[onclick='saveWorkflowRules()']",
             "#page-workflow button[onclick='saveWorkflowRules()']"
           ],
           "title": "Save Rules",
           "text": "Make your changes in the table, then click <b>Save Rules</b>.",
-          "placement": "left",
+          "placement": "top",
           "mode": "click",
           "hint": "Make changes, then click Save Rules"
         },
         {
           "id": "cog-ap-preview",
           "target": [
-            "#page-workflow .cs-nav-btn[data-pane=\"preview\"]"
+            "#page-workflow .contract-tab-btn[data-pane=\"preview\"]"
           ],
           "title": "Path Preview",
           "text": "Check who a contract will go to. Click <b>Path Preview</b>.",
           "placement": "right",
           "mode": "click",
           "hint": "Click Path Preview",
-          "optional": true
+          "optional": true,
+          "before": [
+            {
+              "call": "cwCloseRulesPopup",
+              "args": []
+            }
+          ]
         },
         {
           "id": "cog-ap-area",
@@ -1109,11 +1116,11 @@
           "target": [
             "#page-settings .cs-nav-btn[data-pane=\"approvers\"]"
           ],
-          "title": "Contract Approval Workflow",
-          "text": "Under <b>Contracts</b>, click <b>Contract Approval Workflow</b>.",
+          "title": "Manager Signatures",
+          "text": "Under <b>Contracts</b>, click <b>Manager Signatures</b>.",
           "placement": "right",
           "mode": "click",
-          "hint": "Click Contract Approval Workflow",
+          "hint": "Click Manager Signatures",
           "timeout": 4000,
           "before": [
             {
