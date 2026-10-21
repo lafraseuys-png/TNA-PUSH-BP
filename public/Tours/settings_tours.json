@@ -553,7 +553,7 @@
             "#btn-cat-email"
           ],
           "title": "Five tabs",
-          "text": "Connectivity is split into tabs: <b>Email Config</b>, <b>SSO Identity</b>, <b>ZKTeco API</b> (which also holds the CVS links), <b>Legacy Systems</b> (your payroll system: Sage or PaySpace) and <b>Mobile Security</b>. Let's go through each one.",
+          "text": "Connectivity is split into tabs: <b>Email Config</b>, <b>Login Setup</b>, <b>ZKTeco API</b> (which also holds the CVS links), <b>Legacy Systems</b> (your payroll system: Sage or PaySpace) and <b>Mobile Security</b>. Let's go through each one.",
           "placement": "bottom",
           "climb": 1,
           "before": [
@@ -604,8 +604,8 @@
           "target": [
             "#cat-sso"
           ],
-          "title": "SSO Identity",
-          "text": "Let staff sign in with their Microsoft or Google work account instead of a separate password. Enter the Application (Client) ID from Microsoft or Google here.",
+          "title": "Login Setup",
+          "text": "How staff sign in. <b>SSO Client</b>: the Microsoft or Google Application (Client) ID, so staff can use their work account, plus optional hardening. <b>AD Integration</b>: sign-in with the Windows domain account (Active Directory).",
           "placement": "top",
           "before": [
             {

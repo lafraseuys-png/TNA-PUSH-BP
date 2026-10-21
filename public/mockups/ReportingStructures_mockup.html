@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporting Structure (Mockup) - TNA AFRICA</title>
+    <!-- MOCKUP ONLY (v3, single screen): static planning screen. Not linked from any menu, no API calls, saves nothing. Safe to delete. -->
+    <script>
+        (function () {
+            var v = null;
+            try { v = localStorage.getItem("tnaafrica_theme"); } catch (e) {}
+            if (v !== "light" && v !== "dark") v = "dark";
+            window.__TNA_THEME = v;
+            document.documentElement.classList.add(v === "dark" ? "dark-mode" : "light-mode");
+        })();
+    </script>
+    <link rel="stylesheet" href="../css/styles.css?v=1.0.11">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { darkMode: ['class', '.dark-mode'] }</script>
+    <style>
+        body { background-color: transparent; color: #333333; display: block !important; }
+        .background-container { position: fixed; inset: 0; z-index: -1; background-image: linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.15)), url('../settingswhite.png'); background-size: cover; background-position: right center; filter: blur(6px); transform: scale(1.03); opacity: 0.85; pointer-events: none; }
+        .glass-panel { background: rgba(255,255,255,0.65) !important; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.6) !important; box-shadow: 0 10px 40px rgba(0,0,0,0.05); color: #334155; }
+        html.dark-mode, body.dark-mode { background-color: #131314 !important; color: #e2e8f0 !important; }
+        body.dark-mode .background-container { background-image: linear-gradient(rgba(19,19,20,0.85), rgba(19,19,20,0.85)), url('../settings.png'); opacity: 1; }
+        body.dark-mode .glass-panel { background: rgba(30,41,59,0.65) !important; border-color: rgba(255,255,255,0.08) !important; box-shadow: 0 8px 32px rgba(0,0,0,0.2) !important; color: #e2e8f0; }
+
+        /* Sidebar: same shell as Settings.html */
+        .sidebar { width: 260px; display: flex; flex-direction: column; height: calc(100vh - 40px); position: fixed; left: 20px; top: 20px; z-index: 50; }
+        .sidebar-header { padding: 30px 20px 15px; text-align: center; }
+        .sidebar-header h2 { font-size: 20px; font-weight: 900; color: #0f172a; letter-spacing: 1px; }
+        .sidebar-header p { font-size: 10px; color: #334155; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+        .sidebar-menu { list-style: none; flex-grow: 1; padding: 0 10px; overflow-y: auto; }
+        .sidebar-menu li { margin-bottom: 5px; }
+        .sidebar-menu a { color: #475569; font-size: 14px; padding: 12px 15px; display: flex; align-items: center; gap: 15px; border-radius: 6px; white-space: nowrap; cursor: default; }
+        .sidebar-menu a i { width: 20px; text-align: center; font-size: 14px; color: #1a4c7b; }
+        .sidebar-menu a.active { background: rgba(255,255,255,0.8); color: #1a4c7b; font-weight: 700; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid rgba(26,76,123,0.15); }
+        .sidebar-menu .new-pill { margin-left: auto; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 999px; background: #10b981; color: #fff; letter-spacing: .5px; }
+        body.dark-mode .sidebar-header h2 { color: #f8fafc; }
+        body.dark-mode .sidebar-header p { color: #94a3b8; }
+        body.dark-mode .sidebar-menu a { color: #94a3b8; }
+        body.dark-mode .sidebar-menu a i { color: #fff; }
+        body.dark-mode .sidebar-menu a.active { background: rgba(255,255,255,0.05); color: #fff; border-color: rgba(255,255,255,0.1); }
+        .main-content { margin-left: 300px; padding: 20px 40px 40px 0; }
+
+        .form-control { background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 12px; color: #333; font-size: 13px; outline: none; width: 100%; }
+        .form-control:focus { border-color: #1a4c7b; box-shadow: 0 0 0 3px rgba(26,76,123,0.15); }
+        body.dark-mode .form-control { background: rgba(15,23,42,0.6); border-color: rgba(255,255,255,0.1); color: #e2e8f0; }
+        .btn-primary { background: rgba(255,255,255,0.8); border: 1px solid rgba(26,76,123,0.15); color: #1a4c7b; padding: 8px 16px; font-size: 13px; font-weight: 700; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all .2s; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        body.dark-mode .btn-primary { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #e2e8f0; }
+        .btn-solid { background: #1a4c7b; color: #fff; border: 1px solid #1a4c7b; padding: 8px 18px; font-size: 13px; font-weight: 700; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+        body.dark-mode .btn-solid { background: #0ea5e9; border-color: #0ea5e9; color: #0f172a; }
+        .btn-link { background: none; border: none; color: #64748b; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .btn-link:hover { text-decoration: underline; }
+
+        .glass-table-container { width: 100%; overflow-x: auto; background: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.6); border-radius: 8px; }
+        .glass-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+        .glass-table th { background: rgba(0,0,0,0.03); padding: 11px 14px; font-weight: 700; color: #475569; border-bottom: 1px solid rgba(0,0,0,0.1); text-transform: uppercase; font-size: 11px; letter-spacing: .5px; white-space: nowrap; }
+        .glass-table td { padding: 10px 14px; border-bottom: 1px solid rgba(0,0,0,0.05); color: #334155; vertical-align: middle; }
+        .glass-table tbody tr { cursor: pointer; transition: background .15s; }
+        .glass-table tbody tr:hover { background: rgba(255,255,255,0.65); }
+        .glass-table tbody tr.open { background: rgba(26,76,123,0.07); }
+        body.dark-mode .glass-table-container { background: rgba(28,31,35,0.3); border-color: rgba(255,255,255,0.05); }
+        body.dark-mode .glass-table th { background: rgba(0,0,0,0.3); color: #cbd5e1; border-bottom-color: rgba(255,255,255,0.08); }
+        body.dark-mode .glass-table td { color: #94a3b8; border-bottom-color: rgba(255,255,255,0.03); }
+        body.dark-mode .glass-table tbody tr:hover { background: rgba(255,255,255,0.03); }
+        body.dark-mode .glass-table tbody tr.open { background: rgba(56,189,248,0.08); }
+        .glass-table td b { color: #0f172a; }
+        body.dark-mode .glass-table td b { color: #f1f5f9; }
+
+        /* Segmented control */
+        .seg { display: inline-flex; padding: 3px; border-radius: 10px; background: rgba(100,116,139,0.12); gap: 2px; flex-wrap: wrap; }
+        .seg button { border: none; background: transparent; padding: 6px 12px; font-size: 12px; font-weight: 700; color: #64748b; border-radius: 8px; cursor: pointer; white-space: nowrap; }
+        .seg button.on { background: #fff; color: #1a4c7b; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+        body.dark-mode .seg button.on { background: rgba(255,255,255,0.1); color: #fff; }
+
+        .fchip { border: 1px solid rgba(100,116,139,0.25); background: transparent; padding: 5px 11px; font-size: 12px; font-weight: 700; color: #64748b; border-radius: 999px; cursor: pointer; white-space: nowrap; }
+        .fchip.on { background: #1a4c7b; border-color: #1a4c7b; color: #fff; }
+        .fchip .n { opacity: .7; margin-left: 4px; }
+        body.dark-mode .fchip.on { background: #0ea5e9; border-color: #0ea5e9; color: #0f172a; }
+        .fchip.warn { color: #b45309; border-color: rgba(245,158,11,0.5); }
+        .fchip.warn.on { background: #f59e0b; border-color: #f59e0b; color: #fff; }
+
+        .chip { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+        .m-dept { background: rgba(37,99,235,0.1); color: #2563eb; }
+        .m-direct { background: rgba(168,85,247,0.12); color: #9333ea; }
+        .m-line { background: rgba(16,185,129,0.12); color: #059669; }
+        .m-all { background: rgba(100,116,139,0.15); color: #475569; }
+        .c-amber { background: rgba(245,158,11,0.15); color: #b45309; }
+        body.dark-mode .m-dept { color: #60a5fa; }
+        body.dark-mode .m-direct { color: #c084fc; }
+        body.dark-mode .m-line { color: #34d399; }
+        body.dark-mode .m-all { color: #cbd5e1; }
+        body.dark-mode .c-amber { color: #fbbf24; }
+
+        .avatar { width: 30px; height: 30px; border-radius: 50%; background: rgba(26,76,123,0.1); color: #1a4c7b; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0; }
+        body.dark-mode .avatar { background: rgba(255,255,255,0.08); color: #cbd5e1; }
+        .avatar.sm { width: 24px; height: 24px; font-size: 9px; border: 2px solid rgba(255,255,255,0.9); margin-left: -6px; }
+        body.dark-mode .avatar.sm { border-color: #1e293b; }
+        .src { font-size: 11px; color: #94a3b8; }
+        .src.own { color: #1a4c7b; font-weight: 700; }
+        body.dark-mode .src.own { color: #7dd3fc; }
+
+        /* Side drawer */
+        .drawer-back { position: fixed; inset: 0; background: rgba(0,0,0,0.25); backdrop-filter: blur(2px); z-index: 80; opacity: 0; pointer-events: none; transition: opacity .2s; }
+        .drawer-back.show { opacity: 1; pointer-events: auto; }
+        .drawer { position: fixed; top: 0; right: 0; height: 100vh; width: 460px; max-width: 100vw; z-index: 90; transform: translateX(100%); transition: transform .3s cubic-bezier(0.16,1,0.3,1); display: flex; flex-direction: column; border-radius: 20px 0 0 20px; }
+        .drawer.show { transform: none; }
+        .drawer .glass-panel-solid { background: rgba(255,255,255,0.97); }
+        body.dark-mode .drawer { background: rgba(23,30,44,0.98) !important; }
+        .opt { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 10px; border: 2px solid rgba(100,116,139,0.15); cursor: pointer; }
+        .opt.on { border-color: #1a4c7b; background: rgba(26,76,123,0.05); }
+        body.dark-mode .opt.on { border-color: #38bdf8; background: rgba(56,189,248,0.06); }
+        .opt input { margin-top: 3px; }
+        .dept-pick { max-height: 210px; overflow-y: auto; border: 1px solid rgba(100,116,139,0.2); border-radius: 8px; padding: 6px 10px; }
+        .lvl-bar { height: 8px; border-radius: 4px; background: #10b981; }
+
+        .mockup-ribbon { background: repeating-linear-gradient(45deg, rgba(245,158,11,0.15), rgba(245,158,11,0.15) 10px, rgba(245,158,11,0.08) 10px, rgba(245,158,11,0.08) 20px); border: 1px dashed #f59e0b; }
+        .muted { color: #64748b; }
+        body.dark-mode .muted { color: #94a3b8; }
+        .h-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .6px; color: #64748b; }
+        body.dark-mode .h-label { color: #94a3b8; }
+
+        @media (max-width: 900px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; padding: 16px; }
+            .hide-sm { display: none; }
+        }
+    </style>
+</head>
+<body>
+<script>document.body.classList.add(window.__TNA_THEME === "dark" ? "dark-mode" : "light-mode");</script>
+<div class="background-container"></div>
+
+<aside class="sidebar glass-panel rounded-[20px]">
+    <div class="sidebar-header">
+        <h2>SETTINGS</h2>
+        <p>Tenant Configuration</p>
+    </div>
+    <ul class="sidebar-menu">
+        <li><a><i class="fa-solid fa-building"></i> <span>Company Profile</span></a></li>
+        <li><a><i class="fa-solid fa-network-wired"></i> <span>Connectivity</span></a></li>
+        <li><a><i class="fa-solid fa-rotate"></i> <span>Sync Engine</span></a></li>
+        <li><a><i class="fa-solid fa-users"></i> <span>User Access</span></a></li>
+        <li><a><i class="fa-solid fa-shield-halved"></i> <span>Roles & Permissions</span></a></li>
+        <li><a class="active"><i class="fa-solid fa-sitemap"></i> <span>Reporting Structure</span><span class="new-pill">NEW</span></a></li>
+        <li><a><i class="fa-solid fa-location-dot"></i> <span>Access Zones</span></a></li>
+        <li><a><i class="fa-solid fa-microchip"></i> <span>Hardware</span></a></li>
+        <li><a><i class="fa-solid fa-bug"></i> <span>Mobile Errors</span></a></li>
+        <li><a><i class="fa-solid fa-file-invoice-dollar"></i> <span>Usage & Quota</span></a></li>
+        <li><a><i class="fa-solid fa-clipboard-list"></i> <span>Audit Trail</span></a></li>
+        <li><a><i class="fa-solid fa-bell"></i> <span>Notifications</span></a></li>
+    </ul>
+    <div style="padding: 15px;">
+        <button class="btn-primary w-full justify-center" onclick="toggleTheme()"><i class="fa-solid fa-moon"></i> Toggle Theme</button>
+    </div>
+</aside>
+
+<main class="main-content">
+    <header class="pb-4 mb-4 flex justify-between items-center border-b border-slate-300 dark:border-gray-700">
+        <h2 class="text-xl font-bold text-slate-800 dark:text-gray-200 uppercase tracking-wide">Reporting Structure</h2>
+        <span class="text-xs muted hide-sm"><i class="fa-solid fa-clock-rotate-left"></i> Last change: Admin &middot; 14 Oct 2026 09:12</span>
+    </header>
+
+    <div class="mockup-ribbon rounded-lg px-4 py-2 mb-5 text-xs font-bold text-amber-700 dark:text-amber-300">
+        <i class="fa-solid fa-triangle-exclamation"></i> MOCKUP: sample data only. Nothing on this page reads from or saves to the database.
+    </div>
+
+    <!-- ONE company setting -->
+    <div class="glass-panel rounded-lg border-t-[3px] border-t-[#1a4c7b] p-5 mb-5">
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+            <div class="flex-1 min-w-[260px]">
+                <div class="h-label mb-1">Company default</div>
+                <div class="text-sm">Unless someone has their own setting, a manager sees <b id="defaultSentence"></b>.</div>
+                <div class="text-[11px] muted mt-1">Used by Employee Master, Time &amp; Attendance, HR and ESS. Contractors and Distributions keep their own area setup.</div>
+            </div>
+            <div class="seg" id="defaultSeg"></div>
+        </div>
+    </div>
+
+    <!-- List -->
+    <div class="glass-panel rounded-lg p-5">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <div class="seg" id="viewSeg">
+                <button class="on" data-view="people"><i class="fa-solid fa-user"></i> People</button>
+                <button data-view="depts"><i class="fa-solid fa-building"></i> Departments</button>
+            </div>
+            <div class="flex items-center gap-2 flex-1 justify-end min-w-[240px]">
+                <div class="relative w-full max-w-xs">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input class="form-control" style="padding-left: 32px" id="search" placeholder="Search name, title or department...">
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2 mb-4" id="filters"></div>
+
+        <div class="glass-table-container">
+            <table class="glass-table">
+                <thead id="thead"></thead>
+                <tbody id="tbody"></tbody>
+            </table>
+        </div>
+        <div class="flex justify-between items-center mt-3 text-xs muted">
+            <span id="pageInfo"></span>
+            <div class="flex gap-2">
+                <button class="btn-primary !py-1 !px-3" onclick="page(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="btn-primary !py-1 !px-3" onclick="page(1)"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Side drawer: edit one person / one department -->
+<div class="drawer-back" id="drawerBack" onclick="closeDrawer()"></div>
+<aside class="drawer glass-panel" id="drawer">
+    <div class="p-5 border-b border-slate-200 dark:border-gray-700 flex items-center gap-3">
+        <span class="avatar" id="dAvatar"></span>
+        <div class="flex-1 min-w-0">
+            <div class="font-bold text-base truncate" id="dName"></div>
+            <div class="text-xs muted truncate" id="dTitle"></div>
+        </div>
+        <button class="btn-link text-lg" onclick="closeDrawer()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="p-5 flex-1 overflow-y-auto" id="dBody"></div>
+    <div class="p-4 border-t border-slate-200 dark:border-gray-700 flex justify-between items-center">
+        <button class="btn-link" id="dReset">Use company default</button>
+        <button class="btn-solid" onclick="closeDrawer()"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+    </div>
+</aside>
+
+<script>
+    // ---------- Sample data (fictional, generated to feel like a large company) ----------
+    var MODES = {
+        dept:   { label: "By department",  chip: "m-dept",   icon: "fa-building",   sentence: "everyone in the departments they're assigned" },
+        direct: { label: "Direct reports", chip: "m-direct", icon: "fa-user-group", sentence: "only the people who report directly to them" },
+        line:   { label: "Reporting line", chip: "m-line",   icon: "fa-sitemap",    sentence: "everyone below them in the reporting line" },
+        all:    { label: "Everyone",       chip: "m-all",    icon: "fa-globe",      sentence: "everyone in the company" },
+    };
+    var DEPTS = [
+        { name: "Operations", parent: null, n: 46 }, { name: "Packhouse", parent: "Operations", n: 312 }, { name: "Harvesting", parent: "Operations", n: 584 },
+        { name: "Workshop", parent: "Operations", n: 38 }, { name: "Cold Storage", parent: "Operations", n: 71 },
+        { name: "Finance", parent: null, n: 9 }, { name: "Payroll", parent: "Finance", n: 6 }, { name: "Creditors", parent: "Finance", n: 4 },
+        { name: "Human Resources", parent: null, n: 12 }, { name: "IT", parent: null, n: 7 },
+        { name: "Sales", parent: null, n: 5 }, { name: "Sales Gauteng", parent: "Sales", n: 18 }, { name: "Sales Western Cape", parent: "Sales", n: 22 },
+        { name: "Executive", parent: null, n: 4 },
+    ];
+    var TOTAL = DEPTS.reduce(function (s, d) { return s + d.n; }, 0);
+    function deptWithSubs(name) { return [name].concat(DEPTS.filter(function (d) { return d.parent === name; }).map(function (d) { return d.name; })); }
+    function deptCount(names) {
+        var all = []; names.forEach(function (n) { deptWithSubs(n).forEach(function (x) { if (all.indexOf(x) < 0) all.push(x); }); });
+        return DEPTS.filter(function (d) { return all.indexOf(d.name) >= 0; }).reduce(function (s, d) { return s + d.n; }, 0);
+    }
+
+    var P = function (name, title, dept, mode, depts, direct, line, extra) {
+        return Object.assign({ name: name, title: title, dept: dept, mode: mode, depts: depts || [], direct: direct || 0, line: line || 0, own: mode !== null }, extra || {});
+    };
+    var PEOPLE = [
+        P("Thandi Mokoena", "Managing Director", "Executive", "all", [], 6, TOTAL - 1),
+        P("Johan Pretorius", "Operations Manager", "Operations", "line", [], 5, 1043),
+        P("Naledi Khumalo", "HR Manager", "Human Resources", "all", [], 4, 11),
+        P("Pieter van Wyk", "Finance Manager", "Finance", null, ["Finance"], 3, 18),
+        P("Sipho Dlamini", "Packhouse Manager", "Packhouse", null, ["Packhouse"], 9, 311),
+        P("Lerato Nkosi", "Harvest Manager", "Harvesting", null, ["Harvesting"], 12, 583),
+        P("Andile Zulu", "Packhouse Supervisor A", "Packhouse", "direct", [], 41, 41),
+        P("Busi Mahlangu", "Packhouse Supervisor B", "Packhouse", "direct", [], 38, 38),
+        P("Karabo Molefe", "Harvest Team Leader", "Harvesting", "direct", [], 27, 27, { noLink: true }),
+        P("Musa Ndlovu", "Harvest Team Leader", "Harvesting", "direct", [], 31, 31),
+        P("Zanele Sithole", "HR Officer", "Human Resources", null, ["Packhouse", "Cold Storage"], 0, 0),
+        P("Thabo Mabaso", "Payroll Clerk", "Payroll", "all", [], 0, 0),
+        P("Ruan Botha", "Workshop Foreman", "Workshop", null, ["Workshop"], 6, 37),
+        P("Precious Ntuli", "Cold Storage Supervisor", "Cold Storage", null, [], 8, 70, { noDept: true }),
+        P("Kagiso Moloi", "IT Manager", "IT", null, ["IT"], 6, 6),
+        P("Lindiwe Mthembu", "Sales Manager", "Sales", "line", [], 2, 45),
+        P("Werner Steyn", "Sales Rep Lead GP", "Sales Gauteng", null, ["Sales Gauteng"], 17, 17),
+        P("Nomsa Radebe", "Sales Rep Lead WC", "Sales Western Cape", null, ["Sales Western Cape"], 21, 21),
+        P("Bongani Cele", "Creditors Clerk", "Creditors", null, ["Creditors"], 0, 0),
+        P("Ayanda Shabalala", "Site Admin Packhouse", "Packhouse", null, ["Packhouse"], 0, 0),
+        P("Mpho Letsoalo", "Shift Supervisor Night", "Packhouse", "direct", [], 0, 0, { noReports: true }),
+        P("Hendrik Kruger", "Harvest Supervisor North", "Harvesting", null, ["Harvesting"], 22, 140),
+        P("Sibusiso Mkhize", "Harvest Supervisor South", "Harvesting", null, ["Harvesting"], 19, 160),
+    ];
+    var state = { def: "dept", view: "people", filter: "all", q: "", pg: 0, open: null };
+    var PAGE = 8;
+
+    function $(id) { return document.getElementById(id); }
+    function initials(n) { return n.split(" ").map(function (p) { return p[0]; }).join("").slice(0, 2); }
+    function modeOf(p) { return p.mode || state.def; }
+    function sees(p) {
+        var m = modeOf(p);
+        if (m === "all") return TOTAL - 1;
+        if (m === "direct") return p.direct;
+        if (m === "line") return p.line;
+        return p.depts.length ? deptCount(p.depts) : 0;
+    }
+    function whatText(p) {
+        var m = modeOf(p);
+        if (m === "all") return "Everyone in the company";
+        if (m === "direct") return p.direct ? p.direct + " people report directly to them" : "Nobody reports to them yet";
+        if (m === "line") return "Their team and everyone below (" + p.line.toLocaleString() + ")";
+        if (!p.depts.length) return "No department assigned";
+        var subs = 0; p.depts.forEach(function (d) { subs += deptWithSubs(d).length - 1; });
+        return p.depts.join(", ") + (subs ? " <span class='muted'>+ " + subs + " sub-dept" + (subs > 1 ? "s" : "") + "</span>" : "");
+    }
+    function problem(p) {
+        var m = modeOf(p);
+        if (p.noLink && (m === "direct" || m === "line")) return "Not linked to an employee";
+        if (m === "dept" && !p.depts.length) return "No department assigned";
+        if ((m === "direct" || m === "line") && sees(p) === 0) return "Nobody reports to them";
+        return null;
+    }
+    function toggleTheme() {
+        var dark = !document.body.classList.contains("dark-mode");
+        document.body.classList.toggle("dark-mode", dark);
+        document.body.classList.toggle("light-mode", !dark);
+        document.documentElement.classList.toggle("dark-mode", dark);
+        try { localStorage.setItem("tnaafrica_theme", dark ? "dark" : "light"); } catch (e) {}
+    }
+
+    // ---------- Company default ----------
+    function renderDefault() {
+        $("defaultSeg").innerHTML = ["dept", "direct", "line"].map(function (k) {
+            return '<button class="' + (state.def === k ? "on" : "") + '" onclick="setDefault(\'' + k + '\')"><i class="fa-solid ' + MODES[k].icon + '"></i> ' + MODES[k].label + "</button>";
+        }).join("");
+        $("defaultSentence").textContent = MODES[state.def].sentence;
+    }
+    function setDefault(k) { state.def = k; renderDefault(); render(); }
+
+    // ---------- View switch ----------
+    document.querySelectorAll("#viewSeg button").forEach(function (b) {
+        b.addEventListener("click", function () {
+            document.querySelectorAll("#viewSeg button").forEach(function (x) { x.classList.remove("on"); });
+            b.classList.add("on");
+            state.view = b.dataset.view; state.filter = "all"; state.pg = 0;
+            render();
+        });
+    });
+    $("search").addEventListener("input", function (e) { state.q = e.target.value.toLowerCase(); state.pg = 0; render(); });
+    function page(d) { state.pg = Math.max(0, state.pg + d); render(); }
+
+    // ---------- Main render ----------
+    function render() {
+        if (state.view === "people") renderPeople(); else renderDepts();
+    }
+
+    function renderPeople() {
+        var counts = { all: PEOPLE.length, dept: 0, direct: 0, line: 0, everyone: 0, own: 0, issues: 0 };
+        PEOPLE.forEach(function (p) {
+            var m = modeOf(p);
+            counts[m === "all" ? "everyone" : m]++;
+            if (p.own) counts.own++;
+            if (problem(p)) counts.issues++;
+        });
+        var F = [["all", "All"], ["dept", "By department"], ["direct", "Direct reports"], ["line", "Reporting line"], ["everyone", "Sees everyone"], ["own", "Own setting"], ["issues", "Needs attention"]];
+        $("filters").innerHTML = F.map(function (f) {
+            if (f[0] === "issues" && !counts.issues) return "";
+            return '<button class="fchip ' + (state.filter === f[0] ? "on " : "") + (f[0] === "issues" ? "warn" : "") + '" onclick="setFilter(\'' + f[0] + '\')">' +
+                (f[0] === "issues" ? '<i class="fa-solid fa-triangle-exclamation"></i> ' : "") + f[1] + '<span class="n">' + counts[f[0]] + "</span></button>";
+        }).join("");
+
+        var list = PEOPLE.filter(function (p) {
+            var m = modeOf(p);
+            if (state.filter === "everyone" && m !== "all") return false;
+            if (["dept", "direct", "line"].indexOf(state.filter) >= 0 && m !== state.filter) return false;
+            if (state.filter === "own" && !p.own) return false;
+            if (state.filter === "issues" && !problem(p)) return false;
+            return !state.q || (p.name + " " + p.title + " " + p.dept).toLowerCase().indexOf(state.q) >= 0;
+        });
+        $("thead").innerHTML = "<tr><th>Person</th><th>How they see people</th><th>What they see</th><th style='text-align:right'>People</th><th class='hide-sm'>Set by</th></tr>";
+        var pages = Math.max(1, Math.ceil(list.length / PAGE));
+        state.pg = Math.min(state.pg, pages - 1);
+        $("tbody").innerHTML = list.slice(state.pg * PAGE, state.pg * PAGE + PAGE).map(function (p) {
+            var m = modeOf(p), prob = problem(p), idx = PEOPLE.indexOf(p);
+            return "<tr class='" + (state.open === idx ? "open" : "") + "' onclick='openPerson(" + idx + ")'>" +
+                "<td><div class='flex items-center gap-3'><span class='avatar'>" + initials(p.name) + "</span><div><b>" + p.name + "</b><div class='text-xs muted'>" + p.title + "</div></div></div></td>" +
+                "<td><span class='chip " + MODES[m].chip + "'><i class='fa-solid " + MODES[m].icon + "'></i> " + MODES[m].label + "</span></td>" +
+                "<td>" + (prob ? "<span class='chip c-amber'><i class='fa-solid fa-triangle-exclamation'></i> " + prob + "</span>" : whatText(p)) + "</td>" +
+                "<td style='text-align:right'><b>" + sees(p).toLocaleString() + "</b></td>" +
+                "<td class='hide-sm'><span class='src " + (p.own ? "own" : "") + "'>" + (p.own ? "Own setting" : "Company default") + "</span></td></tr>";
+        }).join("") || "<tr><td colspan='5' class='text-center muted italic p-8'>Nobody matches.</td></tr>";
+        $("pageInfo").textContent = list.length ? "Showing " + (state.pg * PAGE + 1) + "-" + Math.min(list.length, (state.pg + 1) * PAGE) + " of " + list.length + " people who can see others" : "";
+    }
+    function setFilter(f) { state.filter = f; state.pg = 0; render(); }
+
+    function viewersOf(dept) {
+        return PEOPLE.filter(function (p) {
+            var m = modeOf(p);
+            if (m === "all") return true;
+            if (m !== "dept") return false;
+            return p.depts.some(function (d) { return deptWithSubs(d).indexOf(dept) >= 0; });
+        });
+    }
+    function renderDepts() {
+        var unseen = DEPTS.filter(function (d) { return !viewersOf(d.name).some(function (p) { return modeOf(p) !== "all"; }); }).length;
+        $("filters").innerHTML = '<button class="fchip ' + (state.filter === "all" ? "on" : "") + '" onclick="setFilter(\'all\')">All<span class="n">' + DEPTS.length + "</span></button>" +
+            (unseen ? '<button class="fchip warn ' + (state.filter === "issues" ? "on" : "") + '" onclick="setFilter(\'issues\')"><i class="fa-solid fa-triangle-exclamation"></i> Nobody assigned<span class="n">' + unseen + "</span></button>" : "");
+        var list = DEPTS.filter(function (d) {
+            if (state.filter === "issues" && viewersOf(d.name).some(function (p) { return modeOf(p) !== "all"; })) return false;
+            return !state.q || d.name.toLowerCase().indexOf(state.q) >= 0 || (d.parent || "").toLowerCase().indexOf(state.q) >= 0;
+        });
+        $("thead").innerHTML = "<tr><th>Department</th><th style='text-align:right'>Employees</th><th>Seen by (department access)</th><th class='hide-sm'>Also seen by</th></tr>";
+        var pages = Math.max(1, Math.ceil(list.length / PAGE));
+        state.pg = Math.min(state.pg, pages - 1);
+        $("tbody").innerHTML = list.slice(state.pg * PAGE, state.pg * PAGE + PAGE).map(function (d) {
+            var v = viewersOf(d.name), named = v.filter(function (p) { return modeOf(p) !== "all"; }), everyone = v.length - named.length;
+            var faces = named.slice(0, 4).map(function (p) { return "<span class='avatar sm' title='" + p.name + "'>" + initials(p.name) + "</span>"; }).join("");
+            var names = named.slice(0, 2).map(function (p) { return p.name.split(" ")[0]; }).join(", ") + (named.length > 2 ? " +" + (named.length - 2) : "");
+            return "<tr onclick='openDept(\"" + d.name + "\")'>" +
+                "<td>" + (d.parent ? "<span class='muted text-xs'>" + d.parent + " &rsaquo; </span>" : "") + "<b>" + d.name + "</b></td>" +
+                "<td style='text-align:right'>" + d.n.toLocaleString() + "</td>" +
+                "<td>" + (named.length ? "<div class='flex items-center gap-3'><span class='flex pl-2'>" + faces + "</span><span class='text-xs'>" + names + "</span></div>" : "<span class='chip c-amber'><i class='fa-solid fa-triangle-exclamation'></i> Nobody assigned</span>") + "</td>" +
+                "<td class='hide-sm text-xs muted'>" + everyone + " people who see everyone</td></tr>";
+        }).join("") || "<tr><td colspan='4' class='text-center muted italic p-8'>Nothing matches.</td></tr>";
+        $("pageInfo").textContent = list.length ? "Showing " + (state.pg * PAGE + 1) + "-" + Math.min(list.length, (state.pg + 1) * PAGE) + " of " + list.length + " departments" : "";
+    }
+
+    // ---------- Drawer ----------
+    function openDrawer() { $("drawer").classList.add("show"); $("drawerBack").classList.add("show"); }
+    function closeDrawer() { $("drawer").classList.remove("show"); $("drawerBack").classList.remove("show"); state.open = null; render(); }
+
+    function openPerson(idx) {
+        state.open = idx;
+        var p = PEOPLE[idx];
+        $("dAvatar").textContent = initials(p.name);
+        $("dName").textContent = p.name;
+        $("dTitle").textContent = p.title + " · " + p.dept;
+        $("dReset").style.visibility = "visible";
+        $("dReset").onclick = function () { p.mode = null; p.own = false; openPerson(idx); render(); };
+        renderPersonBody(p, idx);
+        openDrawer();
+        render();
+    }
+    function setPersonMode(idx, k) { var p = PEOPLE[idx]; p.mode = k; p.own = true; renderPersonBody(p, idx); render(); }
+    function togglePersonDept(idx, name, on) {
+        var p = PEOPLE[idx];
+        p.depts = on ? p.depts.concat([name]) : p.depts.filter(function (d) { return d !== name; });
+        if (!p.mode) { p.mode = "dept"; p.own = true; }
+        renderPersonBody(p, idx); render();
+    }
+
+    function renderPersonBody(p, idx) {
+        var m = modeOf(p);
+        var opts = ["dept", "direct", "line", "all"].map(function (k) {
+            return "<label class='opt " + (m === k ? "on" : "") + "' onclick='setPersonMode(" + idx + ",\"" + k + "\")'><input type='radio' name='pm' " + (m === k ? "checked" : "") + ">" +
+                "<div><div class='font-bold text-sm'><i class='fa-solid " + MODES[k].icon + "'></i> " + MODES[k].label + (k === state.def && !p.own ? " <span class='src'>(company default)</span>" : "") + "</div>" +
+                "<div class='text-xs muted'>Sees " + MODES[k].sentence + ".</div></div></label>";
+        }).join("");
+
+        var detail = "";
+        if (m === "dept") {
+            detail = "<div class='h-label mb-2'>Departments</div><input class='form-control mb-2' placeholder='Search departments...' oninput='filterDeptPick(this.value)'>" +
+                "<div class='dept-pick' id='deptPick'>" + DEPTS.map(function (d) {
+                    var on = p.depts.indexOf(d.name) >= 0, viaParent = d.parent && p.depts.indexOf(d.parent) >= 0;
+                    return "<label class='flex items-center gap-2 py-1 text-sm' data-name='" + d.name.toLowerCase() + "' style='padding-left:" + (d.parent ? 18 : 0) + "px'>" +
+                        "<input type='checkbox' " + (on || viaParent ? "checked" : "") + (viaParent ? " disabled" : "") + " onchange='togglePersonDept(" + idx + ",\"" + d.name + "\",this.checked)'>" +
+                        d.name + " <span class='muted text-xs ml-auto'>" + d.n + "</span>" + (viaParent ? " <span class='src'>via " + d.parent + "</span>" : "") + "</label>";
+                }).join("") + "</div><p class='text-[11px] muted mt-2'>Ticking a department includes its sub-departments, including ones added later.</p>";
+        } else if (m === "direct") {
+            detail = "<div class='h-label mb-2'>Their direct reports</div>" +
+                (p.direct ? "<div class='text-sm'><b>" + p.direct + "</b> people have <b>Reports To = " + p.name.split(" ")[0] + "</b> in Employee Master.</div>" +
+                    "<div class='flex flex-wrap gap-1 mt-2'>" + ["NM", "TK", "LD", "SB", "PM", "AJ"].slice(0, Math.min(6, p.direct)).map(function (i) { return "<span class='avatar'>" + i + "</span>"; }).join("") +
+                    (p.direct > 6 ? "<span class='avatar'>+" + (p.direct - 6) + "</span>" : "") + "</div>"
+                    : "<div class='chip c-amber'><i class='fa-solid fa-triangle-exclamation'></i> Nobody reports to them yet</div>") +
+                "<p class='text-[11px] muted mt-3'>To change who reports to them, use <b>Reports To</b> in Employee Master.</p>";
+        } else if (m === "line") {
+            var lv = [p.direct, Math.round((p.line - p.direct) * 0.12), Math.round((p.line - p.direct) * 0.88)].filter(function (x) { return x > 0; });
+            var max = Math.max.apply(null, lv.concat([1]));
+            detail = "<div class='h-label mb-2'>Their reporting line</div><div class='space-y-2'>" + lv.map(function (n, i) {
+                return "<div class='flex items-center gap-3 text-xs'><span class='w-16 muted'>Level " + (i + 1) + "</span><div class='flex-1'><div class='lvl-bar' style='width:" + Math.max(4, n / max * 100) + "%'></div></div><span class='w-12 text-right font-bold'>" + n.toLocaleString() + "</span></div>";
+            }).join("") + "</div><p class='text-[11px] muted mt-3'>Level 1 are their direct reports, level 2 report to those people, and so on. Built from <b>Reports To</b> in Employee Master.</p>";
+        } else {
+            detail = "<div class='text-sm muted'>They see every employee in the company. Usually HR, Payroll or directors.</div>";
+        }
+
+        var prob = problem(p);
+        $("dBody").innerHTML =
+            "<div class='glass-panel rounded-lg p-4 mb-5 text-center'><div class='text-3xl font-black'>" + sees(p).toLocaleString() + "</div><div class='text-xs muted'>people visible in Employee Master, T&amp;A, HR and ESS</div></div>" +
+            (prob ? "<div class='chip c-amber mb-4'><i class='fa-solid fa-triangle-exclamation'></i> " + prob + "</div>" : "") +
+            "<div class='h-label mb-2'>How does " + p.name.split(" ")[0] + " see people?</div><div class='space-y-2 mb-5'>" + opts + "</div>" + detail +
+            (p.noLink ? "<div class='mt-5 p-3 rounded-lg text-xs c-amber'><i class='fa-solid fa-link-slash'></i> This login isn't linked to an employee, so <b>Direct reports</b> and <b>Reporting line</b> can't work yet. <a class='underline cursor-pointer'>Link now</a></div>" : "");
+    }
+    function filterDeptPick(q) {
+        q = q.toLowerCase();
+        document.querySelectorAll("#deptPick label").forEach(function (l) { l.style.display = l.dataset.name.indexOf(q) >= 0 ? "" : "none"; });
+    }
+
+    function openDept(name) {
+        var d = DEPTS.find(function (x) { return x.name === name; });
+        var v = viewersOf(name), named = v.filter(function (p) { return modeOf(p) !== "all"; }), everyone = v.filter(function (p) { return modeOf(p) === "all"; });
+        $("dAvatar").innerHTML = "<i class='fa-solid fa-building'></i>";
+        $("dName").textContent = d.name;
+        $("dTitle").textContent = (d.parent ? d.parent + " › " : "") + d.n + " employees";
+        $("dReset").style.visibility = "hidden";
+        var row = function (p, tag) {
+            var idx = PEOPLE.indexOf(p);
+            return "<div class='flex items-center gap-3 py-2 border-b border-slate-200/50 dark:border-gray-700/50'><span class='avatar'>" + initials(p.name) + "</span><div class='flex-1'><div class='text-sm font-semibold'>" + p.name + "</div><div class='text-xs muted'>" + p.title + "</div></div>" +
+                (tag || "<button class='btn-link' onclick='togglePersonDept(" + idx + ",\"" + (p.depts.indexOf(name) >= 0 ? name : d.parent) + "\",false);openDept(\"" + name + "\")' title='Remove'><i class='fa-solid fa-xmark'></i></button>") + "</div>";
+        };
+        $("dBody").innerHTML =
+            "<div class='h-label mb-2'>Assigned to see this department</div>" +
+            (named.length ? named.map(function (p) { return row(p, p.depts.indexOf(name) < 0 ? "<span class='src'>via " + d.parent + "</span>" : null); }).join("") : "<div class='chip c-amber mb-2'><i class='fa-solid fa-triangle-exclamation'></i> Nobody assigned</div>") +
+            "<div class='mt-3'><select class='form-control' onchange='if(this.value!==\"\"){togglePersonDept(+this.value,\"" + name + "\",true);openDept(\"" + name + "\")}'><option value=''>+ Add a person...</option>" +
+            PEOPLE.map(function (p, i) { return named.indexOf(p) < 0 && modeOf(p) !== "all" ? "<option value='" + i + "'>" + p.name + " (" + p.title + ")</option>" : ""; }).join("") + "</select></div>" +
+            "<div class='h-label mt-6 mb-2'>Also see it because they see everyone</div>" + everyone.map(function (p) { return row(p, "<span class='chip m-all'>Everyone</span>"); }).join("") +
+            "<p class='text-[11px] muted mt-4'>Managers on <b>Direct reports</b> or <b>Reporting line</b> also see people here who report to them. That comes from Reports To, not from this list.</p>";
+        openDrawer();
+    }
+
+    renderDefault();
+    render();
+</script>
+</body>
+</html>
