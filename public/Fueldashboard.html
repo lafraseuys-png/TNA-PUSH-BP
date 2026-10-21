@@ -1043,6 +1043,13 @@
                             <label class="fuel-switch"><input type="checkbox" id="settingTypoChecks" onchange="saveFuelModuleSettings()" checked><span></span></label>
                         </div>
 
+                        <!-- 2026-10-21: a service logged in Asset Tagging updates the vehicle's Last Service KM here (the odometer, the
+                             interval and Last Service KM edited in either place always stay in step). Never saved = on. -->
+                        <div class="fuel-setting">
+                            <div><div class="t">Asset Tagging Services Update the Service Schedule</div><div class="d">If on, a vehicle service logged in Asset Tagging (web or phone) sets the vehicle's Last Service KM here, so Next Service follows. The odometer and the service interval always stay in step between Fuel and Asset Tagging.</div></div>
+                            <label class="fuel-switch"><input type="checkbox" id="settingSyncAssetServices" onchange="saveFuelModuleSettings()" checked><span></span></label>
+                        </div>
+
                         <div class="fuel-setting">
                             <div><div class="t">Default National Road Policy</div><div class="d">If on, 'National Road Used' starts ticked for new fuel entries (web and phone).</div></div>
                             <label class="fuel-switch"><input type="checkbox" id="settingDefaultNationalRoad" onchange="saveFuelModuleSettings()"><span></span></label>
@@ -2000,7 +2007,7 @@
         </div>
     </div>
 
-    <script src="Fueldashboard.js?v=20261019a"></script>
+    <script src="Fueldashboard.js?v=20261021b"></script>
     <!-- 2026-10-16: Period drop-down (one day / week / month / custom range) on Fuel Logs + Trip Logs, centred columns. AUTO-HEAL: safe to remove (one day as before). -->
     <script src="fuel_log_period.js?v=20261016a"></script>
     <!-- 2026-10-16: Reports in the Contractors layout (report drop-down, Filters, Refresh, Export, Scheduled Mailers pop-up, cards, sortable table). AUTO-HEAL: safe to remove (the old Reports screen). -->
@@ -2009,7 +2016,7 @@
     <!-- 2026-10-16 modern calendar + drop-down for every date box and select (not #page-settings). AUTO-HEAL: safe to remove. -->
     <script src="tna_modern_inputs.js?v=20261016c"></script>
     <!-- 2026-10-16 Settings opens as a pop-up window (the Contractors Settings look). UI only - same ids, onchange and saves. AUTO-HEAL: safe to remove. -->
-    <script src="fuel_settings_popup.js?v=20261016a"></script>
+    <script src="fuel_settings_popup.js?v=20261021a"></script>
     <!-- 2026-10-16: a search box under every column heading (as Employee Master / Contractors). AUTO-HEAL: safe to remove. -->
     <script src="contractors_header_search.js?v=20261006a"></script>
     <script src="fuel_header_search.js?v=20261016b"></script>
