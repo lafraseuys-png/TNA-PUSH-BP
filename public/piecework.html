@@ -13,6 +13,10 @@
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Production Pay - TNA Systems</title>
+    <!-- 2026-10-23: TNA Africa app icon (browser tab) -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=1">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1">
     <link rel="stylesheet" href="/css/styles.css?v=1.0.10">
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
@@ -2088,9 +2092,11 @@
                  <script src="production_dashboard.js"></script>
           <!-- Guided tours, how-to guides + What's new (content in /tours/piecework_tours.json). AUTO-HEAL: safe to remove. -->
           <script src="tna_tour.js" data-tour-page="piecework" data-tour-help-position="right"></script>
+          <!-- 2026-10-23: help as the side panel (same as Employee Master); the page's "?" opens it. AUTO-HEAL: safe to remove. -->
+          <script src="tna_help_panel.js?v=20261023b" data-help-module="Piecework" data-help-anchor="#tnaTourHelpBtn"></script>
           <!-- Guided setup in Demo / Setup mode (plan in /tours/piecework_setup.json). AUTO-HEAL: safe to remove. -->
           <script src="tna_setup.js" data-setup-page="piecework"></script>
           <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
-          <script src="tna_topbar.js?v=14"></script>
+          <script src="tna_topbar.js?v=28"></script>
 </body>
 </html>

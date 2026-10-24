@@ -8,6 +8,10 @@
     <script src="tna_demo.js?v=20261020a"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tenant Settings - TNA AFRICA</title>
+    <!-- 2026-10-23: TNA Africa app icon (browser tab) -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=1">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1">
    <!-- THEME BOOT: must stay INLINE and stay HERE (before any stylesheet or Tailwind) -->
     <script>
         (function () {
@@ -1871,12 +1875,32 @@
                             </div>
                         </div>
                         <p class="text-sm text-slate-600 dark:text-gray-400 mb-4">Secure 4-character shortcodes to activate the Facial Recognition engine on mobile devices offline. The Master Admin provisions these. Each code burns upon use and permanently binds to that mobile device.</p>
+                        <!-- 2026-10-23: search (code, device, model, user, target) + Status and Assigned filters. AUTO-HEAL: settings.js draws without it if missing. -->
+                        <div id="flToolbar" class="flex flex-wrap items-center gap-3 mb-4">
+                            <div class="relative" style="flex: 1 1 260px; max-width: 380px;">
+                                <i class="fas fa-search absolute text-slate-400" style="left: 12px; top: 50%; transform: translateY(-50%); font-size: 12px;"></i>
+                                <input type="text" id="flSearch" oninput="renderFacialLicenses()" placeholder="Search code, device, user or target..." autocomplete="off"
+                                    class="w-full border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-slate-700 dark:text-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#1a4c7b]" style="height: 38px; padding: 0 12px 0 34px;">
+                            </div>
+                            <div class="inline-flex rounded-lg border border-slate-300 dark:border-gray-600 overflow-hidden text-xs font-bold" role="group" aria-label="Status filter">
+                                <button type="button" data-fl-filter="status:all" onclick="setFacialLicenseFilter('status','all')" class="px-3 py-2">All <span data-fl-count="all"></span></button>
+                                <button type="button" data-fl-filter="status:available" onclick="setFacialLicenseFilter('status','available')" class="px-3 py-2 border-l border-slate-300 dark:border-gray-600">Available <span data-fl-count="available"></span></button>
+                                <button type="button" data-fl-filter="status:burned" onclick="setFacialLicenseFilter('status','burned')" class="px-3 py-2 border-l border-slate-300 dark:border-gray-600">Burned <span data-fl-count="burned"></span></button>
+                            </div>
+                            <div class="inline-flex rounded-lg border border-slate-300 dark:border-gray-600 overflow-hidden text-xs font-bold" role="group" aria-label="Assigned filter">
+                                <button type="button" data-fl-filter="assigned:all" onclick="setFacialLicenseFilter('assigned','all')" class="px-3 py-2">Any target</button>
+                                <button type="button" data-fl-filter="assigned:assigned" onclick="setFacialLicenseFilter('assigned','assigned')" class="px-3 py-2 border-l border-slate-300 dark:border-gray-600">Assigned <span data-fl-count="assigned"></span></button>
+                                <button type="button" data-fl-filter="assigned:unassigned" onclick="setFacialLicenseFilter('assigned','unassigned')" class="px-3 py-2 border-l border-slate-300 dark:border-gray-600">Not assigned <span data-fl-count="unassigned"></span></button>
+                            </div>
+                            <span id="flShown" class="text-xs text-slate-500 dark:text-gray-400 font-bold"></span>
+                        </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm border-collapse">
                                 <thead class="bg-slate-200 dark:bg-gray-700 uppercase text-xs font-bold text-slate-600 dark:text-gray-400">
                                     <tr>
                                         <th class="p-3 border-r border-slate-300 dark:border-gray-600">Shortcode</th>
                                         <th class="p-3 border-r border-slate-300 dark:border-gray-600 text-center">Status</th>
+                                        <th class="p-3 border-r border-slate-300 dark:border-gray-600">Device UUID</th>
                                         <th class="p-3 border-r border-slate-300 dark:border-gray-600">Assigned Target</th>
                                         <th class="p-3 border-r border-slate-300 dark:border-gray-600">Burned Details</th>
                                         <th class="p-3 border-r border-slate-300 dark:border-gray-600">Date Received</th>
@@ -1894,9 +1918,40 @@
                     <div id="hw-mobile" class="hw-category hidden" style="display: none;">
                         <div class="flex justify-between items-center mb-4 border-b border-slate-300 dark:border-gray-700 pb-2">
                             <h3 class="font-bold text-slate-700 dark:text-gray-300"><i class="fas fa-mobile-alt text-[#1a4c7b] dark:text-gray-300 mr-2"></i>Connected Mobile Devices (Diagnostic)</h3>
-                            <button onclick="loadConnectedMobileDevices()" class="text-slate-500 hover:text-[#1a4c7b] dark:text-gray-400 dark:hover:text-white transition" title="Refresh Devices"><i class="fas fa-sync-alt"></i></button>
+                            <div class="flex items-center gap-3">
+                                <!-- 2026-10-23: Data Tools > Export this view (the rows on screen: search + filter). AUTO-HEAL: safe to remove. -->
+                                <div class="relative" id="cmdDataToolsWrap">
+                                    <button type="button" onclick="toggleCmdDataTools(event)" class="btn-primary !py-1.5 !px-4 !text-xs shadow-sm">
+                                        <i class="fas fa-toolbox mr-1"></i> Data Tools <i class="fas fa-chevron-down ml-1 text-[9px]"></i>
+                                    </button>
+                                    <div id="cmdDataToolsMenu" class="hidden absolute right-0 mt-2 w-72 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg shadow-2xl z-[60] overflow-hidden text-left">
+                                        <button type="button" onclick="exportConnectedMobileDevices()" class="w-full text-left px-4 py-3 text-xs text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-700 transition flex items-start gap-3">
+                                            <i class="fas fa-file-excel text-green-600 dark:text-green-400 mt-0.5"></i>
+                                            <span>
+                                                <span class="block font-bold">Export this view</span>
+                                                <span class="block text-[10px] text-slate-500 dark:text-gray-400 mt-0.5 font-normal">The devices on screen now (your search and filter), as Excel</span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button onclick="loadConnectedMobileDevices()" class="text-slate-500 hover:text-[#1a4c7b] dark:text-gray-400 dark:hover:text-white transition" title="Refresh Devices"><i class="fas fa-sync-alt"></i></button>
+                            </div>
                         </div>
                         <p class="text-sm text-slate-600 dark:text-gray-400 mb-4">Diagnostic view of all physical tablets and phones that have successfully communicated with this tenant's backend, regardless of their license status.</p>
+                        <!-- 2026-10-23: search (licence code, device UUID, name, user) + licence filter. AUTO-HEAL: settings.js draws without it if missing. -->
+                        <div id="cmdToolbar" class="flex flex-wrap items-center gap-3 mb-4">
+                            <div class="relative" style="flex: 1 1 260px; max-width: 380px;">
+                                <i class="fas fa-search absolute text-slate-400" style="left: 12px; top: 50%; transform: translateY(-50%); font-size: 12px;"></i>
+                                <input type="text" id="cmdSearch" oninput="renderConnectedMobileDevices()" placeholder="Search licence, device UUID, name or user..." autocomplete="off"
+                                    class="w-full border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-slate-700 dark:text-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#1a4c7b]" style="height: 38px; padding: 0 12px 0 34px;">
+                            </div>
+                            <div id="cmdFilter" class="inline-flex rounded-lg border border-slate-300 dark:border-gray-600 overflow-hidden text-xs font-bold" role="group" aria-label="Licence filter">
+                                <button type="button" data-cmd-filter="all" onclick="setConnectedMobileFilter('all')" class="px-3 py-2">All <span data-cmd-count="all"></span></button>
+                                <button type="button" data-cmd-filter="licensed" onclick="setConnectedMobileFilter('licensed')" class="px-3 py-2 border-l border-slate-300 dark:border-gray-600">Licence assigned <span data-cmd-count="licensed"></span></button>
+                                <button type="button" data-cmd-filter="unlicensed" onclick="setConnectedMobileFilter('unlicensed')" class="px-3 py-2 border-l border-slate-300 dark:border-gray-600">No licence <span data-cmd-count="unlicensed"></span></button>
+                            </div>
+                            <span id="cmdShown" class="text-xs text-slate-500 dark:text-gray-400 font-bold"></span>
+                        </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm border-collapse">
                                <thead class="bg-slate-200 dark:bg-gray-700 uppercase text-xs font-bold text-slate-600 dark:text-gray-400">
@@ -3836,7 +3891,7 @@
   <script>window.TNA_POPUP_NAVY = true;</script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="contractors_modern_popups.js?v=20261020a"></script>
-  <script src="settings.js?v=20261020b"></script>
+  <script src="settings.js?v=20261023e"></script>
     <!-- ⚡ 2026-10-20 Hardware > Facial AI Licenses: "Data Tools" - license tracker wizard (Excel only, nothing saved). AUTO-HEAL: safe to remove. -->
     <script src="facial_license_tracker.js?v=20261020a"></script>
     <!-- ⚡ 2026-10-20 Hardware, Mobile Errors, Audit Trail, Mobile Transactions in the theme (tables, navy pills, theme buttons). Look only. AUTO-HEAL: safe to remove. -->
@@ -3869,7 +3924,7 @@
       })();
   </script>
    <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
-   <script src="tna_topbar.js?v=14"></script>
+   <script src="tna_topbar.js?v=28"></script>
     <script src="csvimport.js?v=20261020a"></script>
     <!-- Contractors screen/action permissions (role editor + overrides). Safe to remove. -->
    <script src="contractor_perms.js?v=20261009c"></script>
@@ -4043,7 +4098,7 @@
     <script src="tna_tour.js" data-tour-page="settings" data-tour-help-position="right-raised"></script>
     <!-- ⚡ Help as a side panel with a search, opened from a "?" in the top bar (shared with Employee Master). "Tour an area"
          opens any Settings area from the sidebar, then tours it. AUTO-HEAL: safe to remove - the round "?" comes back. -->
-    <script src="tna_help_panel.js?v=20261013a" data-help-module="Settings" data-help-placeholder="What do you want to do? e.g. add a user, schedule" data-help-examples="user, role, sync, notification" data-help-btn-class="btn-primary" data-help-areas="#sidebarNav"></script>
+    <script src="tna_help_panel.js?v=20261023b" data-help-module="Settings" data-help-placeholder="What do you want to do? e.g. add a user, schedule" data-help-examples="user, role, sync, notification" data-help-btn-class="btn-primary" data-help-areas="#sidebarNav"></script>
     <!-- Demo / Setup mode: Settings are live-only. In demo the page can be looked at, but the server refuses every save,
          and this notice says why. AUTO-HEAL: safe to remove. -->
     <script>

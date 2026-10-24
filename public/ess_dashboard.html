@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>My Timesheet - ESS</title>
+    <!-- 2026-10-23: TNA Africa app icon (browser tab) -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=1">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1">
     
     <!-- PWA Manifest & Mobile Meta Tags -->
     <link rel="manifest" href="/manifest.json">
@@ -670,9 +674,18 @@
         </div>
     </div>
     <!-- Lafras Test --> 
-    <script src="ess_dashboard.js"></script>
+    <script src="ess_dashboard.js?v=20261023c"></script>
     <!-- Guided tours, form tours, how-to guides + What's new for employees (content in /tours/ess_dashboard_tours.json).
          Help button raised so it never covers the bottom menu. AUTO-HEAL: safe to remove. -->
-    <script src="tna_tour.js" data-tour-page="ess_dashboard" data-tour-help-position="right-raised"></script>
+    <!-- 2026-10-23: help as the side panel (same as Employee Master); the page's "?" opens it. AUTO-HEAL: safe to remove.
+         Embedded in My Profile (?embed=1): no tour / help inside the frame - the profile window around it has its own. -->
+    <script>
+        if (!(/[?&]embed=1/.test(location.search) && window.parent !== window)) {
+            document.write('<script src="tna_tour.js" data-tour-page="ess_dashboard" data-tour-help-position="right-raised"><\/script>');
+            document.write('<script src="tna_help_panel.js?v=20261023b" data-help-module="Employee Self Service" data-help-anchor="#tnaTourHelpBtn"><\/script>');
+        }
+    </script>
+    <!-- 2026-10-23: ESS inside My Profile (only does something with ?embed=1). AUTO-HEAL: safe to remove. -->
+    <script src="ess_embed.js?v=20261023x"></script>
 </body>
 </html>

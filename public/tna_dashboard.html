@@ -8,6 +8,10 @@
     <script src="tna_demo.js?v=20261020a"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Time & Attendance Dashboard</title>
+    <!-- 2026-10-23: TNA Africa app icon (browser tab) -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=1">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1">
     <!-- THEME BOOT (same as Employee Master): must stay INLINE and stay HERE (before any stylesheet) -->
     <script>
         (function () {
@@ -657,7 +661,7 @@
                                     <option value="">All Statuses</option>
                                     <option value="Action Required">Action Required</option>
                                     <option value="No Shift Allocated">No Shift Allocated (Worked)</option>
-                                    <option value="Complete">Complete (Ready to Approve)</option>
+                                    <option value="Complete">Complete</option>
                                     <option value="Pending Overtime">Pending Overtime</option>
                                     <option value="OT Within Threshold">OT Within Threshold</option>
                                     <option value="Unauthorized OT">Unauthorized OT</option>
@@ -665,7 +669,6 @@
                                     <option value="Late Entry">Late Entry</option>
                                     <option value="Early Leave">Early Leave</option>
                                     <option value="Absent">Absent</option>
-                                    <option value="Present">Present</option>
                                     <option value="Off">Off / Rest Day</option>
                                     <option value="Approved">Approved</option>
                                     <option value="Payroll Locked">Payroll Locked</option>
@@ -4243,7 +4246,7 @@
    <script src="tna_hours.js"></script>
    <!-- Report preview column sorting (shared with Employee Master). Safe to remove: headers just stop sorting. -->
    <script src="report_sort.js"></script>
-   <script src="tna_dashboard.js?v=2.0.1"></script>
+   <script src="tna_dashboard.js?v=2.0.5"></script>
    <script src="tna_photo_push.js?v=20261019a"></script>
     <!-- Team View > Visual tab (timeline, drag punches, approvals). AUTO-HEAL: safe to remove, Traditional keeps working. -->
    <script src="tna_team_visual.js"></script>
@@ -4283,9 +4286,11 @@
    </script>
    <script src="tna_settings_ui.js"></script>
    <!-- Shared top bar: search + quick access + profile menu (same as Employee Master). Safe to remove. -->
-   <script src="tna_topbar.js?v=14"></script>
+   <script src="tna_topbar.js?v=28"></script>
    <!-- Guided tours, how-to guides + What's new (content in /tours/tna_dashboard_tours.json). AUTO-HEAL: safe to remove. -->
    <script src="tna_tour.js" data-tour-page="tna_dashboard" data-tour-help-position="right"></script>
+   <!-- 2026-10-23: help as the side panel (same as Employee Master); the page's "?" opens it. AUTO-HEAL: safe to remove. -->
+   <script src="tna_help_panel.js?v=20261023b" data-help-module="Time &amp; Attendance" data-help-anchor="#tnaTourHelpBtn"></script>
    <!-- Guided setup in Demo / Setup mode (plan in /tours/tna_dashboard_setup.json). AUTO-HEAL: safe to remove. -->
    <script src="tna_setup.js" data-setup-page="tna_dashboard"></script>
    <!-- Audit Trail: tags every change with the TNA tab, records tab opens / reports / exports, and runs the Audit Trail tab. Safe to remove. -->

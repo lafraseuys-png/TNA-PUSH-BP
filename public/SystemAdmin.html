@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>System Admin Portal</title>
+    <!-- 2026-10-23: TNA Africa app icon (browser tab) -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=1">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1">
     <link rel="stylesheet" href="/css/styles.css?v=1.0.9">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -1595,6 +1599,8 @@
 <script src="globaladmin-ui.js"></script>
 <!-- Guided tours + What's new. AUTO-HEAL: no tour file / old server = nothing auto-starts. -->
 <script src="tna_tour.js" data-tour-page="systemadmin" data-tour-help-position="right-raised"></script>
+<!-- 2026-10-23: help as the side panel (same as Employee Master); the page's "?" opens it. AUTO-HEAL: safe to remove. -->
+<script src="tna_help_panel.js?v=20261023b" data-help-module="System Admin" data-help-anchor="#tnaTourHelpBtn"></script>
 <script src="tna_releases.js" data-release-page="systemadmin"></script>
 <!-- Tenant onboarding wizard + billing options + user reseller links. AUTO-HEAL: safe to remove. -->
 <script src="onboarding.js"></script>

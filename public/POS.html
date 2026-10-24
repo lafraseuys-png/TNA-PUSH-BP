@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>POS - TNA Africa</title>
+    <!-- 2026-10-23: TNA Africa app icon (browser tab) -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=1">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1">
     <!-- Demo / Setup mode: when the browser is in demo, the till sells into the demo copy. AUTO-HEAL: safe to remove. -->
     <script src="tna_demo.js?v=20261020a"></script>
 
@@ -375,5 +379,7 @@
     <script src="pos.js?v=1.0.0"></script>
     <!-- Till tour for cashiers (content in /tours/pos_tours.json). Help button on the left so it never covers Pay. AUTO-HEAL: safe to remove. -->
     <script src="tna_tour.js" data-tour-page="pos" data-tour-help-position="left"></script>
+    <!-- 2026-10-23: help as the side panel (same as Employee Master); the page's "?" opens it. AUTO-HEAL: safe to remove. -->
+    <script src="tna_help_panel.js?v=20261023b" data-help-module="POS" data-help-anchor="#tnaTourHelpBtn"></script>
 </body>
 </html>

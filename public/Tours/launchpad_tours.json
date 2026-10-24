@@ -217,22 +217,6 @@
       "text": "Opens Access Control for doors and access. It's only shown when your company is licensed for it and your role allows it."
     },
     {
-      "id": "lp-menu-ess",
-      "target": [
-        "[data-tour='lp-menu-ess']",
-        "#profileDropdown a[href='ess_dashboard.html']"
-      ],
-      "placement": "left",
-      "before": [
-        {
-          "addClass": "#profileDropdown",
-          "cls": "show"
-        }
-      ],
-      "title": "ESS (your own self service)",
-      "text": "Your personal Employee Self Service: apply for leave, submit expense claims, and view your payslips and documents."
-    },
-    {
       "id": "lp-menu-connect-phone",
       "target": [
         "[data-tour='lp-menu-connect-phone']",

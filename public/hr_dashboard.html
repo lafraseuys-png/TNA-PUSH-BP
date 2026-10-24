@@ -6,6 +6,10 @@
     <script src="tna_loader.js?v=1"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HR Management Dashboard - TNA Africa</title>
+    <!-- 2026-10-23: TNA Africa app icon (browser tab) -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=1">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1">
     <script>
         /* Force dark ash theme immediately to prevent white flash in iframe */
         if (localStorage.getItem("tnaafrica_theme") === "dark" || !localStorage.getItem("tnaafrica_theme")) {
@@ -2572,9 +2576,11 @@
     </script>
            <script src="hr_dashboard.js?v=2.5"></script>
           <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
-          <script src="tna_topbar.js?v=14"></script>
+          <script src="tna_topbar.js?v=28"></script>
 
           <!-- Guided tours, how-to guides + What's new (content in /tours/hr_dashboard_tours.json). AUTO-HEAL: safe to remove. -->
           <script src="tna_tour.js" data-tour-page="hr_dashboard" data-tour-help-position="right-raised"></script>
+          <!-- 2026-10-23: help as the side panel (same as Employee Master); the page's "?" opens it. AUTO-HEAL: safe to remove. -->
+          <script src="tna_help_panel.js?v=20261023b" data-help-module="HR" data-help-anchor="#tnaTourHelpBtn"></script>
 </body>
 </html>

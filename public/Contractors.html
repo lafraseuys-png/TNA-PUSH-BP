@@ -8,6 +8,10 @@
     <script src="tna_demo.js?v=20261020a"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contractors & Distribution - TNA AFRICA</title>
+    <!-- 2026-10-23: TNA Africa app icon (browser tab) -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=1">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1">
     <link rel="stylesheet" href="/css/styles.css?v=1.0.6">
     <link rel="stylesheet" href="/css/contractors.css?v=20261019a">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -5024,11 +5028,11 @@
         <!-- ⚡ One look for Excel exports (the Reports style: logo, navy headings). AUTO-HEAL: safe to remove - exports go back to plain files. -->
         <script src="tna_styled_export.js?v=20261005a"></script>
         <!-- Contractors screen/action permissions guard. Must load after contractors.js. -->
-            <script src="contractor_perms.js?v=20261009c"></script>
+            <script src="contractor_perms.js?v=20261023a"></script>
         <!-- Shared resize grip for every pop-up (tna_modal_resize.js). Safe to remove. -->
        <script src="tna_modal_resize.js?v=20260918a"></script>
        <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
-        <script src="tna_topbar.js?v=14"></script>
+        <script src="tna_topbar.js?v=28"></script>
       <!-- Employee Master button & tab look (navy glass, red kept for danger). Safe to remove. -->
         <script src="tna_em_buttons.js"></script>
        <!-- One "Dates" field (drag or click from/to) for every ...DateFrom / ...DateTo pair. Safe to remove. -->
@@ -5038,7 +5042,7 @@
        <script src="contractors_seasons.js?v=20261005p"></script>
 
         <!-- ⚡ Screens use your own hierarchy level names instead of "Area" (new file). AUTO-HEAL: safe to remove. -->
-        <script src="contractors_level_words.js?v=20260930b"></script>
+        <script src="contractors_level_words.js?v=20261023a"></script>
         <!-- 2026-10-18 "Depot" instead of "Warehouse" on every screen (words only - names, data, exports and the phone stay the same). AUTO-HEAL: safe to remove. -->
         <script src="contractors_depot_words.js?v=20261018a"></script>
         <!-- Sidebar groups (Farmers & Contracts / Distribution / Reports & Messages / Setup). Safe to remove. -->
@@ -5071,6 +5075,8 @@
         <!-- ⚡ Settings menu in groups (General / Contracts / Custom Fields / Connections) that fold, like the sidebar (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_settings_groups.js?v=20261009a"></script>
     <script src="contractors_settings_popup.js?v=20261019a"></script>
+    <!-- ⚡ 2026-10-23: SMS & Broadcast opens as a pop-up window like Settings (new file). AUTO-HEAL: safe to remove. -->
+    <script src="contractors_sms_popup.js?v=20261023b"></script>
         <!-- ⚡ Club membership card of the Chairperson and Secretary (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_club_cards.js?v=20260930b"></script>
         <!-- ⚡ Clubs without a Chairperson / Secretary: Reports tab, "Not assigned clubs" tab, signing block setting (new file). AUTO-HEAL: safe to remove. -->
@@ -5086,7 +5092,7 @@
         <!-- ⚡ Reports > Bulk Approvals: every Inbox "Approve selected" run, with the review answer, for audit (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_bulk_approvals_report.js?v=20261002a"></script>
         <!-- ⚡ Reports: one screen - a report dropdown, filters, columns, sort, column search, summary, pages, export (new file). AUTO-HEAL: safe to remove (the old tabs come back). -->
-        <script src="contractors_report_center.js?v=20261022d"></script>
+        <script src="contractors_report_center.js?v=20261023d"></script>
         <!-- ⚡ Dashboard: Approved Farmers = farmers with an approved contract + the "Farmers vs Approved" card (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_dash_approval.js?v=20261006a"></script>
         <!-- ⚡ Settings > Contract Rules > Partial distribution (Off / only when the warehouse is short / any time with a reason) -->
@@ -5104,7 +5110,7 @@
         <script src="contractors_club_warehouses.js"></script>
         <script src="contractors_farmer_words.js"></script>
         <!-- ⚡ Farmers Master: your columns in your order (right-click a heading) + a filter for every level (new file). AUTO-HEAL: safe to remove. -->
-               <script src="contractors_farmer_columns.js?v=20261018d"></script>
+               <script src="contractors_farmer_columns.js?v=20261023a"></script>
         <!-- ⚡ Locations Master: move the columns into your own order (drag a heading, or right-click it) (new file). AUTO-HEAL: safe to remove. -->
        <script src="contractors_location_columns.js"></script>
         <!-- ⚡ Farmers Master: a column per running cycle - does he get inputs, and what was issued (new file). AUTO-HEAL: safe to remove. -->
@@ -5112,7 +5118,7 @@
         <!-- ⚡ Farmers Master: a search box under every column heading (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_farmer_header_search.js?v=20261018a"></script>
         <!-- ⚡ Farmers Master: Data Tools > Export Custom List (the list as filtered, the columns shown) (new file). AUTO-HEAL: safe to remove. -->
-        <script src="contractors_farmer_custom_export.js?v=20261018b"></script>
+        <script src="contractors_farmer_custom_export.js?v=20261023a"></script>
         <!-- ⚡ Farmer Profile Overview: up to 3 chosen fields under the name in place of "Ref:" + its setting (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_profile_ref_fields.js?v=20261018a"></script>
         <!-- ⚡ Same person in several clubs (Settings > Profile Fields & Documents): shared face, linked farmers list, profile line. -->
@@ -5136,7 +5142,7 @@
         <script src="tna_releases.js" data-release-page="contractors"></script>
         <!-- ⚡ Help as a side panel with a search, opened from a "?" in the top bar next to your name (same as Employee Master). The round "?"
              at the bottom right is hidden on this page. AUTO-HEAL: safe to remove - the round "?" and its menu come back. -->
-        <script src="tna_help_panel.js?v=20261013a" data-help-module="Farmers &amp; Distribution" data-help-placeholder="What do you want to do? e.g. give a contract" data-help-examples="contract, farmer, distribution, club"></script>
+        <script src="tna_help_panel.js?v=20261023b" data-help-module="Farmers &amp; Distribution" data-help-placeholder="What do you want to do? e.g. give a contract" data-help-examples="contract, farmer, distribution, club"></script>
         <!-- Guided setup in Demo / Setup mode (plan in /tours/contractors_setup.json). AUTO-HEAL: safe to remove. -->
         <script src="tna_setup.js" data-setup-page="contractors"></script>
         <!-- Dark mode fixes: Employee Master background, dark cards instead of white boxes. Loaded last. Safe to remove. -->

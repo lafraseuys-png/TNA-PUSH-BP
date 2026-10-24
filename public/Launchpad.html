@@ -6,6 +6,10 @@
     <script src="tna_loader.js?v=1"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Launchpad - TNA Systems</title>
+    <!-- 2026-10-23: TNA Africa app icon (browser tab) -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=1">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1">
      <script>
         /* Anti-Flash Engine: Execute before DOM paints. Mirrors theme.js exactly. */
         /* Deliberately does NOT seed localStorage - that caused the local/DB desync. */
@@ -1215,10 +1219,10 @@
                 <!-- Kept hidden for JS auto-heal compatibility -->
                 <div id="displayTenant" class="hidden"></div>
                 
-                <a href="#" class="dropdown-item" data-tour="lp-menu-profile" onclick="openProfileModal()"><i class="fa-solid fa-user"></i> Profile</a>
+                <a href="#" class="dropdown-item" data-tour="lp-menu-profile" onclick="openProfileModal()"><i class="fa-solid fa-user"></i> Profile <small style="margin-left: auto; padding-left: 10px; font-size: 10.5px; font-weight: 700; color: #1a4c7b; white-space: nowrap;" title="Clock in / out, leave, timesheet and payslips are in your profile"><i class="fa-solid fa-clock" style="width: auto; margin-right: 3px; color: inherit;"></i>Clock in / out</small></a>
                 <a href="Settings.html" class="dropdown-item hidden" id="btnSettings"><i class="fa-solid fa-gear"></i> Settings</a>
                 <a href="AccessControl.html" class="dropdown-item hidden" id="btnAccessControl"><i class="fa-solid fa-door-closed"></i> Access Control</a>
-               <a href="ess_dashboard.html" class="dropdown-item" data-tour="lp-menu-ess"><i class="fa-solid fa-mobile-screen-button"></i> ESS</a>
+               <!-- 2026-10-23: "ESS" removed - self service is inside My Profile now (Profile above). The ESS page itself is unchanged. -->
               <a href="#" class="dropdown-item hidden" id="btnConnectPhone" onclick="if (typeof openLaunchpadConnectQr === 'function') openLaunchpadConnectQr(event); return false;"><i class="fa-solid fa-qrcode"></i> Connect a Phone</a>
                 <a href="#" class="dropdown-item" id="btnDownloadApp" onclick="if (typeof openLaunchpadAppDownloadQr === 'function') openLaunchpadAppDownloadQr(event); return false;"><i class="fa-brands fa-android"></i> Download the App</a>
                 
@@ -2353,10 +2357,12 @@
 
     <!-- Guided page tour + What's new (steps in /tours/launchpad.json). AUTO-HEAL: safe to remove. -->
     <!-- My Profile screen (shared with the top bar on the modules). AUTO-HEAL: remove it and the old pop-up is back. -->
-    <script src="tna_profile.js?v=20261006c"></script>
+    <script src="tna_profile.js?v=20261023n"></script>
     <!-- Notifications bell + help "?" in the top bar, next to the profile. AUTO-HEAL: safe to remove. -->
-    <script src="lp_topbar_icons.js?v=20261006a"></script>
+    <script src="lp_topbar_icons.js?v=20261023a"></script>
     <script src="tna_tour.js" data-tour-page="launchpad"></script>
+    <!-- 2026-10-23: help as the side panel (same as Employee Master); the page's "?" opens it. AUTO-HEAL: safe to remove. -->
+    <script src="tna_help_panel.js?v=20261023b" data-help-module="Home" data-help-anchor="#tnaTourHelpBtn"></script>
     <!-- Support Ticket widget: white card, right module name, your name + email filled in (new file). AUTO-HEAL: safe to remove. -->
     <script src="tna_support_polish.js?v=20261009a"></script>
 
