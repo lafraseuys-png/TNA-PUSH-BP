@@ -12,3 +12,9 @@ tna-ess-mobile/
 # Firebase server key (push notifications) - never commit
 firebase-service-account*.json
 *firebase-adminsdk*.json
+
+# Stray archive of another project (empty folders only) - never commit
+routes/AlheitApp.zip
+
+# bulk contract export ZIPs (private, built on the server)
+private_exports/

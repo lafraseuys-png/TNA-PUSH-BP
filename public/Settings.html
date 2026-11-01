@@ -9,8 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tenant Settings - TNA AFRICA</title>
     <!-- 2026-10-23: TNA Africa app icon (browser tab) -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=1">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=3">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1">
    <!-- THEME BOOT: must stay INLINE and stay HERE (before any stylesheet or Tailwind) -->
     <script>
@@ -2790,6 +2790,8 @@
                             
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_overtime" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> Tab: OT Validations</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="tna_overtime_edit" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> └─ Can Approve OT</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6" title="Pre-approved overtime: log authorised overtime (approved straight away). By default anyone who can approve OT may log it; see TNA Settings > Pre-approved Overtime."><input type="checkbox" value="tna_ot_auth_edit" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> └─ Can Log Authorised OT</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6" title="Pre-approved overtime: save authorised overtime above a day, week or month cap. Off unless ticked."><input type="checkbox" value="tna_ot_cap_override" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> └─ Can Override OT Caps</label>
                             
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_logs" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> Tab: Time Logs</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="tna_logs_sync" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> └─ Can Force Device Sync</label>
@@ -3150,6 +3152,8 @@
                             
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_overtime" class="operm-chk operm-chk-tna accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: OT Validations</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="tna_overtime_edit" class="operm-chk operm-chk-tna accent-orange-500 mr-2 w-3.5 h-3.5"> └─ Can Approve OT</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6" title="Pre-approved overtime: log authorised overtime (approved straight away). By default anyone who can approve OT may log it; see TNA Settings > Pre-approved Overtime."><input type="checkbox" value="tna_ot_auth_edit" class="operm-chk operm-chk-tna accent-orange-500 mr-2 w-3.5 h-3.5"> └─ Can Log Authorised OT</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6" title="Pre-approved overtime: save authorised overtime above a day, week or month cap. Off unless ticked."><input type="checkbox" value="tna_ot_cap_override" class="operm-chk operm-chk-tna accent-orange-500 mr-2 w-3.5 h-3.5"> └─ Can Override OT Caps</label>
                             
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_logs" class="operm-chk operm-chk-tna accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Time Logs</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="tna_logs_sync" class="operm-chk operm-chk-tna accent-orange-500 mr-2 w-3.5 h-3.5"> └─ Can Force Device Sync</label>
@@ -3891,7 +3895,7 @@
   <script>window.TNA_POPUP_NAVY = true;</script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="contractors_modern_popups.js?v=20261020a"></script>
-  <script src="settings.js?v=20261023e"></script>
+  <script src="settings.js?v=20261030a"></script>
     <!-- ⚡ 2026-10-20 Hardware > Facial AI Licenses: "Data Tools" - license tracker wizard (Excel only, nothing saved). AUTO-HEAL: safe to remove. -->
     <script src="facial_license_tracker.js?v=20261020a"></script>
     <!-- ⚡ 2026-10-20 Hardware, Mobile Errors, Audit Trail, Mobile Transactions in the theme (tables, navy pills, theme buttons). Look only. AUTO-HEAL: safe to remove. -->
@@ -3924,7 +3928,7 @@
       })();
   </script>
    <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
-   <script src="tna_topbar.js?v=28"></script>
+   <script src="tna_topbar.js?v=30"></script>
     <script src="csvimport.js?v=20261020a"></script>
     <!-- Contractors screen/action permissions (role editor + overrides). Safe to remove. -->
    <script src="contractor_perms.js?v=20261009c"></script>
@@ -3952,15 +3956,18 @@
             const st = document.createElement('style');
             st.id = 'modalResizeCss';
             st.textContent = `
-                .mr-host { position: relative; }
+                /* 2026-10-26: the grip looks like the ticket system's (six dots); the browser's own corner is hidden under it */
+                .mr-host { position: relative; resize: none !important; }
                 .mr-grip {
-                    position: absolute; right: 4px; bottom: 4px; width: 18px; height: 18px;
-                    cursor: nwse-resize; z-index: 5; touch-action: none; opacity: .55;
+                    position: absolute; right: 7px; bottom: 7px; width: 18px; height: 18px; border-radius: 4px;
+                    cursor: nwse-resize; z-index: 30; touch-action: none; opacity: .6;
                     color: #64748b; display: flex; align-items: flex-end; justify-content: flex-end;
+                    transition: opacity .15s, color .15s;
                 }
-                .mr-grip:hover { opacity: 1; color: #1a4c7b; }
-                body.dark-mode .mr-grip { color: #cbd5e1; }
-                body.dark-mode .mr-grip:hover { color: #ffffff; }
+                .mr-grip svg { width: 14px; height: 14px; display: block; pointer-events: none; }
+                .mr-grip:hover, .mr-host.mr-resizing > .mr-grip { opacity: 1; color: #1a4c7b; }
+                body.dark-mode .mr-grip, html.dark-mode .mr-grip { color: #94a3b8; }
+                body.dark-mode .mr-grip:hover, html.dark-mode .mr-grip:hover, body.dark-mode .mr-host.mr-resizing > .mr-grip { color: #93c5fd; }
                 .mr-host.mr-resizing { user-select: none; transition: none !important; }
                 .mr-host.mr-resized .info-modal-body { flex: 1 1 auto; max-height: none; min-height: 0; }
                 .mr-host.mr-resized .info-modal-body > .h-64 { height: auto; flex: 1 1 auto; min-height: 16rem; }
@@ -4006,7 +4013,7 @@
             const grip = document.createElement('div');
             grip.className = 'mr-grip';
             grip.title = 'Drag to resize (double-click to reset)';
-            grip.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M13 3 L3 13 M13 7 L7 13 M13 11 L11 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>';
+            grip.innerHTML = '<svg viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="1.4"/><circle cx="7.5" cy="12" r="1.4"/><circle cx="3" cy="12" r="1.4"/><circle cx="12" cy="7.5" r="1.4"/><circle cx="7.5" cy="7.5" r="1.4"/><circle cx="12" cy="3" r="1.4"/></svg>';
             box.appendChild(grip);
 
             try {
@@ -4092,9 +4099,9 @@
     </script>
 
     <!-- Guided tours, section tours, how-to guides + What's new (content in /tours/settings_tours.json). AUTO-HEAL: safe to remove. -->
-    <script src="ad_identity.js?v=20261021c"></script>
+    <script src="ad_identity.js?v=20261030a"></script>
     <!-- ⚡ 2026-10-20 Connectivity > Login Setup as a pop-up window (SSO Client + AD Integration). AUTO-HEAL: safe to remove (the two tabs show instead). -->
-    <script src="login_setup_popup.js?v=20261020k"></script>
+    <script src="login_setup_popup.js?v=20261030a"></script>
     <script src="tna_tour.js" data-tour-page="settings" data-tour-help-position="right-raised"></script>
     <!-- ⚡ Help as a side panel with a search, opened from a "?" in the top bar (shared with Employee Master). "Tour an area"
          opens any Settings area from the sidebar, then tours it. AUTO-HEAL: safe to remove - the round "?" comes back. -->

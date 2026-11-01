@@ -9,8 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contractors & Distribution - TNA AFRICA</title>
     <!-- 2026-10-23: TNA Africa app icon (browser tab) -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=1">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=3">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1">
     <link rel="stylesheet" href="/css/styles.css?v=1.0.6">
     <link rel="stylesheet" href="/css/contractors.css?v=20261019a">
@@ -782,6 +782,10 @@
 
                             <!-- Right side: primary action, level with the search box (same as Contractors Master) -->
                             <div style="display: flex; gap: 10px;">
+                                <!-- 2026-10-31 bulk export of club contracts (ZIP + Draft Batch No.) - contract_bulk_export.js, permission con_contracts_bulk_export -->
+                                <button type="button" onclick="openContBulkExport()" class="btn btn-secondary" style="height: 38px; padding: 0 15px; white-space: nowrap;">
+                                    <i class="fas fa-file-archive mr-2"></i> Bulk export
+                                </button>
                                 <button type="button" onclick="openContAssignModal()" class="btn" style="height: 38px; padding: 0 15px; white-space: nowrap;">
                                     <i class="fas fa-plus-circle mr-2"></i> Assign Contract
                                 </button>
@@ -1414,13 +1418,15 @@
             </div>
 
             <div id="distUomModal" class="modal-backdrop" style="z-index: 170;">
-                <div class="modal-panel flex flex-col" style="width: 95%; max-width: 500px; padding: 0; background: #ffffff; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 1px solid #e5e7eb; overflow: hidden;">
+                <div class="modal-panel flex flex-col" style="width: 95%; max-width: 720px; padding: 0; background: #ffffff; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 1px solid #e5e7eb; overflow: hidden;">
                     <div class="modal-header flex justify-between items-center flex-shrink-0" style="padding: 20px 30px; background-color: #f8fafc; border-bottom: 1px solid #e2e8f0;">
                         <h3 class="font-bold" style="font-size: 20px; color: #14b8a6; margin: 0;"><i class="fas fa-balance-scale mr-2"></i> Manage Units (UoM)</h3>
                         <button type="button" onclick="closeDistUomModal()" style="background: transparent; border: none; font-size: 24px; cursor: pointer; color: #94a3b8;"><i class="fas fa-times"></i></button>
                     </div>
                     <div style="padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px;">
-                        <form id="distUomForm" style="display: grid; grid-template-columns: 1fr 2fr auto; gap: 10px; align-items: end;">
+                        <!-- ⚡ 2026-10-31 Holds / Of (optional): what one unit holds, e.g. 1 BG = 50 KG. Info + reports only. Edit mode: distUomEditId set. -->
+                        <form id="distUomForm" style="display: grid; grid-template-columns: 1fr 1.6fr 0.8fr 1fr auto; gap: 10px; align-items: end;">
+                            <input type="hidden" id="distUomEditId" value="">
                             <div>
                                 <label style="display: block; font-size: 10px; font-weight: bold; margin-bottom: 5px; color: #334155;">Unit (e.g. KG)</label>
                                 <input type="text" id="distUomName" required class="form-control w-full" style="border: 1px solid #cbd5e1; padding: 8px;">
@@ -1429,16 +1435,27 @@
                                 <label style="display: block; font-size: 10px; font-weight: bold; margin-bottom: 5px; color: #334155;">Description (e.g. Kilograms)</label>
                                 <input type="text" id="distUomDesc" class="form-control w-full" style="border: 1px solid #cbd5e1; padding: 8px;">
                             </div>
-                            <button type="submit" class="btn" style="height: 38px; background: #14b8a6 !important; border-color: #0d9488 !important; color: white;">Add</button>
+                            <div>
+                                <label style="display: block; font-size: 10px; font-weight: bold; margin-bottom: 5px; color: #334155;" title="Optional: what one unit holds, e.g. 50 for a 50 KG bag">Holds (optional)</label>
+                                <input type="number" id="distUomHolds" min="0" step="any" placeholder="e.g. 50" class="form-control w-full" style="border: 1px solid #cbd5e1; padding: 8px;">
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 10px; font-weight: bold; margin-bottom: 5px; color: #334155;" title="The unit it holds, e.g. KG">Of</label>
+                                <select id="distUomBase" class="form-control w-full" style="border: 1px solid #cbd5e1; padding: 8px;"><option value="">-</option></select>
+                            </div>
+                            <div style="display: flex; gap: 6px;">
+                                <button type="submit" id="distUomSubmit" class="btn" style="height: 38px; background: #14b8a6 !important; border-color: #0d9488 !important; color: white;">Add</button>
+                                <button type="button" id="distUomCancel" onclick="cancelDistUomEdit()" class="btn btn-secondary hidden" style="height: 38px;">Cancel</button>
+                            </div>
                         </form>
 
                         <div class="glass-table-container" style="border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; max-height: 250px; overflow-y: auto;">
                             <table class="glass-table w-full text-xs">
                                 <thead style="position: sticky; top: 0; z-index: 10; background: #f1f5f9;">
-                                    <tr><th style="color: #334155;">Unit Name</th><th style="color: #334155;">Description</th><th style="text-align: center; color: #334155;">Act</th></tr>
+                                    <tr><th style="color: #334155;">Unit Name</th><th style="color: #334155;">Description</th><th style="color: #334155;">One unit holds</th><th style="text-align: center; color: #334155;">Act</th></tr>
                                 </thead>
                                 <tbody id="distUomTableBody" style="background: white;">
-                                    <tr><td colspan="3" style="text-align: center; color: #64748b; padding: 10px;">Loading units...</td></tr>
+                                    <tr><td colspan="4" style="text-align: center; color: #64748b; padding: 10px;">Loading units...</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -4178,7 +4195,9 @@
             </div>
             <div class="efd-body">
                 <p class="efd-note">Choose what goes into the Excel file. Only the active farmers that match your current search and filters are exported.</p>
-                <div class="efd-tip"><i class="fas fa-sync-alt mr-1"></i> To update farmers in bulk: change or fill in cells in this file, keep the <b>Farmer ID</b> column, then import it with <b>Update existing farmers only</b>.</div>
+                <div class="efd-tip" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;"><span><i class="fas fa-sync-alt mr-1"></i> To update farmers in bulk: export only the columns to change, edit them, then import with <b>Update existing farmers only</b>. Only those columns change; blank cells keep the saved value.</span>
+                    <button type="button" class="btn btn-secondary" style="height:32px;padding:0 12px;font-size:12px;white-space:nowrap;" onclick="efdBulkUpdatePreset()" title="Untick everything except the columns that find and name each farmer"><i class="fas fa-filter mr-1"></i> For a bulk update</button></div>
+                <div id="efdBulkTip" class="efd-note" style="display:none;">Farmer ID, the farmer's unique code (e.g. Farmer Live Code) and the names stay in. Now tick only the columns you want to change, then Download.</div>
                 <div>
                     <div class="efd-sec-h"><span>Farmer details</span><span><a href="#" onclick="efdToggleAll('exportStandardFields', true); return false;">All</a> &middot; <a href="#" onclick="efdToggleAll('exportStandardFields', false); return false;">None</a></span></div>
                     <div class="efd-grid" id="exportStandardFields">
@@ -4501,7 +4520,11 @@
 
                     <div id="cMapperFieldList" style="flex: 1; overflow-y: auto;"></div>
 
-                    <div style="font-size: 10px; color: #64748b; line-height: 1.4;">If contracts already use this version, saving creates a new version so signed contracts keep their layout.</div>
+                    <div style="font-size: 10px; color: #64748b; line-height: 1.4;">If contracts already use this version, saving creates a new version, and asks whether the existing contracts should get the new layout too. Right-click a field for Bold and Thousands comma.</div>
+                    <!-- 2026-10-29: shown by contMapperShowUndo() when the last "apply to existing contracts" can be undone -->
+                    <button id="cMapperUndoApply" type="button" onclick="contMapperUndoApply()" style="display: none; font-size: 10px; padding: 4px 8px; border-radius: 4px; border: 1px solid #fcd34d; background: #fffbeb; color: #92400e; cursor: pointer; text-align: left;">
+                        <i class="fas fa-undo mr-1"></i> <span>Undo apply to existing contracts</span>
+                    </button>
 
                     <!-- 2026-10-15: preview the boxes on screen (saved or not) filled with sample data - nothing is saved -->
                     <button id="btnPreviewContFieldMap" type="button" onclick="previewContFieldMap('sample')" class="btn btn-secondary" style="font-weight: bold;">
@@ -5022,7 +5045,8 @@
         <!-- ⚡ Modern pop-ups (the Employee Master look): SweetAlert2 + alert / tnaAsk / tnaAskText. AUTO-HEAL: if the CDN cannot load, the browser's own pop-ups. -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="contractors_modern_popups.js?v=20261020a"></script>
-        <script src="contractors.js?v=20261019c"></script>
+        <script src="contractors.js?v=20261031a"></script>
+        <script src="report_unsubs.js?v=20261031a"></script>
         <!-- ⚡ 2026-10-18 Farmers Master: the import wizard (Data Tools > Import Excel Data). AUTO-HEAL: safe to remove - the old Import screen opens. -->
         <script src="contractors_import_wizard.js?v=20261019a"></script>
         <!-- ⚡ One look for Excel exports (the Reports style: logo, navy headings). AUTO-HEAL: safe to remove - exports go back to plain files. -->
@@ -5030,9 +5054,9 @@
         <!-- Contractors screen/action permissions guard. Must load after contractors.js. -->
             <script src="contractor_perms.js?v=20261023a"></script>
         <!-- Shared resize grip for every pop-up (tna_modal_resize.js). Safe to remove. -->
-       <script src="tna_modal_resize.js?v=20260918a"></script>
+       <script src="tna_modal_resize.js?v=20261026b"></script>
        <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
-        <script src="tna_topbar.js?v=28"></script>
+        <script src="tna_topbar.js?v=30"></script>
       <!-- Employee Master button & tab look (navy glass, red kept for danger). Safe to remove. -->
         <script src="tna_em_buttons.js"></script>
        <!-- One "Dates" field (drag or click from/to) for every ...DateFrom / ...DateTo pair. Safe to remove. -->
@@ -5060,6 +5084,8 @@
         <!-- ⚡ Distribution Master > Progress in the same look as Contracts > Progress (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_dist_progress_ui.js?v=20261003b"></script>
         <script src="distribution_product_setup.js"></script>
+        <script src="contract_bulk_export.js"></script>
+        <script src="contract_serial_settings.js"></script>
         <!-- ⚡ Reports open without freezing (new file, replaces the three slow report builders) -->
         <script src="contractors_reports_fast.js"></script>
         <!-- ⚡ Warehouse view: open a warehouse to see its totals, what was issued and to whom (new file). AUTO-HEAL: safe to remove. -->
@@ -5092,7 +5118,7 @@
         <!-- ⚡ Reports > Bulk Approvals: every Inbox "Approve selected" run, with the review answer, for audit (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_bulk_approvals_report.js?v=20261002a"></script>
         <!-- ⚡ Reports: one screen - a report dropdown, filters, columns, sort, column search, summary, pages, export (new file). AUTO-HEAL: safe to remove (the old tabs come back). -->
-        <script src="contractors_report_center.js?v=20261023d"></script>
+        <script src="contractors_report_center.js?v=20261026b"></script>
         <!-- ⚡ Dashboard: Approved Farmers = farmers with an approved contract + the "Farmers vs Approved" card (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_dash_approval.js?v=20261006a"></script>
         <!-- ⚡ Settings > Contract Rules > Partial distribution (Off / only when the warehouse is short / any time with a reason) -->
@@ -5119,6 +5145,8 @@
         <script src="contractors_farmer_header_search.js?v=20261018a"></script>
         <!-- ⚡ Farmers Master: Data Tools > Export Custom List (the list as filtered, the columns shown) (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_farmer_custom_export.js?v=20261023a"></script>
+        <!-- ⚡ 2026-10-31 Farmers Master: Data Tools > Custom Import (a file from Export Custom List back in: key = unique Profile Field, update only). AUTO-HEAL: safe to remove. -->
+        <script src="contractors_farmer_custom_import.js"></script>
         <!-- ⚡ Farmer Profile Overview: up to 3 chosen fields under the name in place of "Ref:" + its setting (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_profile_ref_fields.js?v=20261018a"></script>
         <!-- ⚡ Same person in several clubs (Settings > Profile Fields & Documents): shared face, linked farmers list, profile line. -->

@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enterprise System Login</title>
     <!-- 2026-10-23: TNA Africa app icon (browser tab) -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=1">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=3">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1">
     <style>
         /* Base Reset */
@@ -62,9 +62,9 @@
             width: 100vw; 
             height: 100vh;
             z-index: 0; 
-            /* LIGHT MODE backdrop. Dark mode is overridden further down by
-               "body.dark-mode .background-container" (login_black.png). */
-            background-image: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), url('login_white.png'); 
+            /* LIGHT MODE backdrop - the Launchpad's (background.png), 2026-10-28. Dark mode is overridden further down by
+               "body.dark-mode .background-container" (black.png). Was login_white.png / login_black.png. */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), url('background.png');
             background-size: cover; 
             background-position: right center; 
             background-repeat: no-repeat;
@@ -381,6 +381,9 @@
             filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.75));
         }
 
+        .logo-tna-img { height: 40px; width: auto; display: inline-block; vertical-align: middle; filter: drop-shadow(1px 2px 3px rgba(0, 0, 0, 0.45)); }
+        @media (max-width: 650px) { .logo-tna-img { height: 34px; } }
+
         .logo-africa {
             background: linear-gradient(to right, #15803d, #eab308, #ea580c);
             -webkit-background-clip: text;
@@ -443,7 +446,7 @@
         }
 
         body.dark-mode .background-container {
-            background-image: linear-gradient(rgba(19, 19, 20, 0.75), rgba(19, 19, 20, 0.75)), url('login_black.png'); 
+            background-image: linear-gradient(rgba(19, 19, 20, 0.75), rgba(19, 19, 20, 0.75)), url('black.png');
         }
 
         body.dark-mode .login-card {
@@ -579,12 +582,12 @@
         }
 
         // 2. Theme-aware Background Engine
-        //    Dark  -> login_black.png     Light -> login_white.png
-        //    Auto-heal: falls back down the chain if a themed file is missing,
+        //    ⚡ 2026-10-28: the SAME pictures as the Launchpad - Dark -> black.png, Light -> background.png (Launchpad.html).
+        //    Auto-heal: falls back down the chain (the old login pictures) if a file is missing,
         //    so the page never ends up with a blank backdrop.
         const themeBackgrounds = {
-            dark:  ['Background1.jpg', 'login_black.png', 'Background.jpeg', 'Background.jpg', 'Background.png', 'login_background.png'],
-            light: ['Background1.jpg', 'login_white.png', 'Background.jpeg', 'Background.jpg', 'Background.png', 'login_background.png']
+            dark:  ['black.png', 'Background1.jpg', 'login_black.png', 'Background.jpeg', 'Background.jpg', 'Background.png', 'login_background.png'],
+            light: ['background.png', 'Background1.jpg', 'login_white.png', 'Background.jpeg', 'Background.jpg', 'Background.png', 'login_background.png']
         };
         const resolvedBgCache = {};   // theme -> the url that actually loaded
 
@@ -701,7 +704,9 @@
         </div>
         <div class="partner-item">
             <span class="powered-text">powered by</span> 
-            <span class="logo-tna">tna<span class="logo-africa">africa</span></span>
+            <!-- 2026-10-31: the real logo (logo.jpg) with "tna" in white - the typed text needed a font most computers do not have. Image missing = the text as before. -->
+            <img src="logo-tna-white.png?v=1" alt="tnaafrica" class="logo-tna-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+            <span class="logo-tna" style="display:none">tna<span class="logo-africa">africa</span></span>
         </div>
         <div class="partner-item">
             <span class="powered-text">Powered by</span> 

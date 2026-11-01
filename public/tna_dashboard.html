@@ -9,8 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Time & Attendance Dashboard</title>
     <!-- 2026-10-23: TNA Africa app icon (browser tab) -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=1">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=3">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1">
     <!-- THEME BOOT (same as Employee Master): must stay INLINE and stay HERE (before any stylesheet) -->
     <script>
@@ -185,7 +185,7 @@
             <!-- AUTO-HEAL: id="sidebarNav", class="sidebar-item", onclick and data-permission are kept exactly,
                  so showSection, tab permissions, granular permissions and deep links all work unchanged. -->
             <ul class="sidebar-menu" id="sidebarNav" style="flex-grow: 1; overflow-y: auto; margin-top: 10px;">
-                <li><a data-permission="tna_employees" onclick="showSection('core-master', this)" class="sidebar-item" title="Global Master Data"><i class="fas fa-users-cog"></i> <span>Global Master Data</span></a></li>
+                <!-- 2026-10-27 Global Master Data removed from the Time & Attendance menu (its #page-core-master section stays, unused) -->
                 <li><a data-permission="tna_dashboard" onclick="showSection('high-level', this)" class="sidebar-item" title="High Level Overview"><i class="fas fa-globe-africa"></i> <span>High Level Overview</span></a></li>
                 <li><a data-permission="tna_maps" onclick="showSection('maps', this)" class="sidebar-item" title="Maps"><i class="fas fa-map-marked-alt"></i> <span>Maps</span></a></li>
                 <li><a data-permission="tna_dashboard" onclick="showSection('dashboard', this)" class="sidebar-item active" title="Dashboard"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
@@ -199,11 +199,11 @@
                 <li><a data-permission="tna_violations" onclick="showSection('violations', this)" class="sidebar-item" title="Auto-Violations"><i class="fas fa-exclamation-triangle"></i> <span>Auto-Violations</span></a></li>
                 <li><a data-permission="tna_overtime" onclick="showSection('ot-validations', this)" class="sidebar-item" title="OT Validations"><i class="fas fa-stopwatch"></i> <span>OT Validations</span></a></li>
                 <li><a data-permission="tna_logs" onclick="showSection('timelogs', this)" class="sidebar-item" title="Time Logs"><i class="fas fa-history"></i> <span>Time Logs</span></a></li>
-                <li><a data-permission="tna_reports" onclick="showSection('reports', this)" class="sidebar-item" title="Analytics & Reports"><i class="fas fa-chart-pie"></i> <span>Analytics & Reports</span></a></li>
+                <li><a data-permission="tna_reports" onclick="showSection('reports', this)" class="sidebar-item" title="Attendance Reports"><i class="fas fa-chart-pie"></i> <span>Attendance Reports</span></a></li>
                 <li><a data-permission="tna_routing" onclick="showSection('workflow-routing', this)" class="sidebar-item" title="Workflow Routing"><i class="fas fa-project-diagram"></i> <span>Workflow Routing</span></a></li>
                 <li><a data-permission="tna_ot_rules" onclick="showSection('overtime', this)" class="sidebar-item" title="Overtime Rules"><i class="fas fa-balance-scale"></i> <span>Overtime Rules</span></a></li>
                 <li><a data-permission="tna_sage_queue" onclick="showSection('sage-queue', this)" class="sidebar-item" title="Sage Push Queue"><i class="fas fa-paper-plane"></i> <span>Sage Push Queue</span></a></li>
-                <li><a data-permission="tna_settings" onclick="showSection('settings', this)" class="sidebar-item" title="System Settings"><i class="fas fa-cogs"></i> <span>System Settings</span></a></li>
+                <li><a data-permission="tna_settings" onclick="showSection('settings', this)" class="sidebar-item" title="Settings"><i class="fas fa-cogs"></i> <span>Settings</span></a></li>
                 <!-- Audit Trail: hidden until tna_audit.js confirms access (admins, or roles with "Tab: Audit Trail") -->
                 <li><a id="tnaAuditNavLink" data-permission="tna_audit" onclick="showSection('audit', this)" class="sidebar-item" title="Audit Trail" style="display: none;"><i class="fas fa-user-shield"></i> <span>Audit Trail</span></a></li>
             </ul>
@@ -1116,20 +1116,98 @@
                             </button>
                         </div>
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm">
-                           <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                    <!-- 2026-10-26: Employee Master's table look (glass-table, navy tags, btn icon buttons). Rows: loadShifts() in tna_dashboard.js -->
+                    <style>
+                        #page-shifts .sr-name { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-weight: 600; color: #1e293b; }
+                        #page-shifts .sr-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; box-shadow: 0 0 0 1px rgba(15, 23, 42, .15); }
+                        #page-shifts .sr-tag { font-size: 10px; font-weight: 700; letter-spacing: .3px; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; background: rgba(26, 76, 123, .1); color: #1a4c7b; white-space: nowrap; }
+                        #page-shifts .sr-rule { margin-top: 5px; font-size: 10px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; color: #64748b; }
+                        #page-shifts .sr-rule i { margin-right: 4px; }
+                        #page-shifts .sr-muted { color: #94a3b8; }
+                        #page-shifts .sr-strong { font-weight: 700; color: #1e293b; }
+                        #page-shifts .sr-sub { font-size: 12px; color: #64748b; line-height: 1.6; }
+                        #page-shifts .sr-actions { display: flex; gap: 6px; justify-content: flex-end; align-items: center; }
+                        #page-shifts .sr-actions .btn { padding: 6px 12px; font-size: 12px; }
+                        #page-shifts .sr-actions .btn i { margin: 0; }
+                        body.dark-mode #page-shifts .sr-name, body.dark-mode #page-shifts .sr-strong { color: #e2e8f0; }
+                        body.dark-mode #page-shifts .sr-tag { background: rgba(255, 255, 255, .05); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, .1); }
+                        body.dark-mode #page-shifts .sr-sub, body.dark-mode #page-shifts .sr-rule { color: #94a3b8; }
+                        /* 2026-10-28 plain-words rows: the type under the name, one value per cell, a "Needs a look" marker */
+                        #page-shifts .sr-type { margin-top: 3px; font-size: 12px; color: #64748b; padding-left: 18px; }
+                        #page-shifts .sr-type b { font-weight: 700; color: #475569; }
+                        #page-shifts .sr-val { font-size: 13px; color: #1e293b; line-height: 1.5; }
+                        #page-shifts .sr-val small { display: block; font-size: 11.5px; color: #64748b; white-space: nowrap; }
+                        #page-shifts .sr-warn { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 800; padding: 2px 8px; border-radius: 999px; background: #fffbeb; color: #b45309; border: 1px solid #fde68a; white-space: nowrap; cursor: help; }
+                        #page-shifts .sr-pay { display: inline-block; margin-top: 4px; font-size: 10.5px; font-weight: 800; padding: 1px 8px; border-radius: 999px; background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; white-space: nowrap; }
+                        body.dark-mode #page-shifts .sr-val { color: #e2e8f0; }
+                        body.dark-mode #page-shifts .sr-type, body.dark-mode #page-shifts .sr-val small { color: #94a3b8; }
+                        body.dark-mode #page-shifts .sr-type b { color: #cbd5e1; }
+                        body.dark-mode #page-shifts .sr-warn { background: rgba(245, 158, 11, .12); border-color: rgba(245, 158, 11, .35); color: #fcd34d; }
+                        body.dark-mode #page-shifts .sr-pay { background: rgba(234, 88, 12, .12); border-color: rgba(234, 88, 12, .35); color: #fdba74; }
+                        /* a long name wraps like text: the dot stays in front of its first line, the tag after the name */
+                        #page-shifts .sr-name { display: block; min-width: 150px; line-height: 1.5; }
+                        #page-shifts .sr-name .sr-dot { display: inline-block; margin-right: 8px; vertical-align: 1px; }
+                        #page-shifts .sr-name .sr-warn { margin-left: 6px; vertical-align: 1px; }
+                        #page-shifts .sr-count { margin-left: auto; align-self: center; margin-top: 16px; font-size: 12px; font-weight: 700; color: #64748b; white-space: nowrap; }
+                        #page-shifts .sr-chip { display: inline-flex; align-items: center; gap: 6px; background: rgba(59, 130, 246, .1); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, .3); border-radius: 999px; padding: 4px 10px; font-size: 11.5px; font-weight: 700; cursor: pointer; }
+                        #page-shifts .sr-chip i { font-size: 10px; opacity: .8; }
+                        body.dark-mode #page-shifts .sr-chip { background: rgba(59, 130, 246, .18); color: #93c5fd; }
+                    </style>
+                    <!-- 2026-10-28 search + shift type filter (renderShifts in tna_dashboard.js reads them; no bar = every row).
+                         The Farmers Master bar (Contractors.html): a labelled search box + a Filters button with its menu. -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: flex-end; gap: 15px; flex: 1; flex-wrap: wrap;">
+                            <div class="form-group" style="width: 250px;">
+                                <label for="shiftSearch" style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">Search Shifts</label>
+                                <div style="position: relative;">
+                                    <input type="search" id="shiftSearch" placeholder="Search shift name..." class="form-control" style="width: 100%; height: 38px; padding-top: 0; padding-bottom: 0; padding-right: 34px; box-sizing: border-box;" oninput="renderShifts()" autocomplete="off" spellcheck="false">
+                                    <i class="fas fa-search" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 12px; pointer-events: none;"></i>
+                                </div>
+                            </div>
+                            <div class="form-group profile-menu-container" id="shiftFiltersWrap" style="position: relative;">
+                                <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; visibility: hidden;">Filters</label>
+                                <button type="button" class="btn btn-secondary" onclick="document.getElementById('shiftFiltersMenu').classList.toggle('show');" style="height: 38px; padding: 0 15px;">
+                                    <i class="fas fa-sliders-h"></i> Filters
+                                </button>
+                                <div id="shiftFiltersMenu" class="profile-dropdown-menu" style="top: calc(100% + 8px); left: 0; bottom: auto; min-width: 250px; z-index: 105; padding: 15px; display: flex; flex-direction: column; gap: 15px;">
+                                    <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid rgba(148, 163, 184, 0.2); padding-bottom: 5px;">Filter Options</div>
+                                    <div class="form-group" style="width: 100%;">
+                                        <label for="shiftTypeFilter" style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">Shift Type</label>
+                        <select id="shiftTypeFilter" onchange="renderShifts()" class="form-control" style="width: 100%;">
+                            <option value="">All shift types</option>
+                            <option value="fixed">Clock in and out</option>
+                            <option value="once">Clock once</option>
+                            <option value="split">Two blocks</option>
+                            <option value="flexi">Set hours, any time</option>
+                            <option value="sessions">Several sessions</option>
+                            <option value="open">Record hours only</option>
+                            <option value="standby">Standby / on call</option>
+                            <option value="paid">Paid day, no clocking</option>
+                            <option value="warn">Needs a look</option>
+                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- the filter in use, as a tag (renderShifts); click it to clear -->
+                            <div id="shiftFilterChips" style="display: flex; gap: 6px; flex-wrap: wrap; align-self: center; margin-top: 16px;"></div>
+                        </div>
+                        <span class="sr-count" id="shiftFilterCount"></span>
+                    </div>
+                    <div class="glass-table-container">
+                        <table class="glass-table">
+                           <thead>
                                 <tr>
-                                    <th class="p-3">Shift Name</th>
-                                    <th class="p-3">Times</th>
-                                    <th class="p-3">Auto Break</th>
-                                    <th class="p-3">Grace Periods</th>
-                                    <th class="p-3">Thresholds</th>
-                                    <th class="p-3 text-right">Actions</th>
+                                    <th>Shift</th>
+                                    <th>Shift type</th>
+                                    <th>Times</th>
+                                    <th title="What comes off the day for lunch">Lunch break</th>
+                                    <th title="How late or early someone can be and still count as on time">Leeway</th>
+                                    <th title="How much extra time before or after the shift before it counts as overtime" style="white-space: nowrap;">Overtime after<br><span style="font-size: 10px; font-weight: 600; text-transform: none; letter-spacing: 0; color: #94a3b8;">before / after</span></th>
+                                    <th style="text-align: right;">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="shiftsBody" class="divide-y divide-gray-700">
-                                <tr><td colspan="5" class="p-4 text-center text-gray-500">Loading shifts...</td></tr>
+                            <tbody id="shiftsBody">
+                                <tr><td colspan="7" style="text-align: center; color: #64748b; padding: 20px;">Loading shifts...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -1142,70 +1220,192 @@
             </section>
 
             <section id="page-roster" class="page-section">
+                <!-- 2026-10-28 Weekly Roster in the Shift Rules / Employee Master look (navy, glass table, chips). Rows: renderRosterGrid() -->
+                <style>
+                    #page-roster .rs-head { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; padding-bottom: 12px; }
+                    #page-roster .rs-left { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+                    #page-roster .rs-right { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: flex-end; }
+                    #page-roster .rs-right .hidden { display: none !important; }
+                    #page-roster .rs-right { gap: 10px; }
+                    #page-roster .rs-dd-menu { padding: 6px 0; }
+                    #page-roster .rs-dd-h { padding: 8px 20px 6px; font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: #64748b; }
+                    #page-roster .rs-dd-menu .dropdown-item { width: 100%; text-align: left; background: transparent; border: 0; align-items: flex-start; padding: 10px 20px; }
+                    #page-roster .rs-dd-menu .dropdown-item i { margin-top: 3px; }
+                    #page-roster .rs-dd-menu .dropdown-item span { display: flex; flex-direction: column; font-weight: 600; color: inherit; }
+                    #page-roster .rs-dd-menu .dropdown-item small { font-size: 11.5px; font-weight: 400; color: #64748b; margin-top: 2px; line-height: 1.35; }
+                    #page-roster .rs-dd:not(:has(.rs-dd-menu > button:not([style*="display: none"]))) { display: none; }
+                    body.dark-mode #page-roster .rs-dd-menu .dropdown-item small, body.dark-mode #page-roster .rs-dd-h { color: #94a3b8; }
+                    #page-roster #btnSaveRosterChanges { background: #1a4c7b !important; border-color: #1a4c7b !important; color: #fff !important; height: 38px; padding: 0 16px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; }
+                    #page-roster #btnSaveRosterChanges.bg-orange-600 { background: #ea580c !important; border-color: #ea580c !important; }
+                    #page-roster #btnSaveRosterChanges i { color: #fff !important; }
+                    #page-roster .rs-tabs { display: inline-flex; gap: 2px; padding: 3px; border-radius: 8px; background: rgba(15, 23, 42, .06); }
+                    #page-roster .rs-tab { padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #475569 !important; background: transparent !important; transition: background .15s, color .15s; }
+                    #page-roster .rs-tab:hover { color: #1a4c7b !important; }
+                    #page-roster .rs-tab.bg-pink-600 { background: #1a4c7b !important; color: #fff !important; box-shadow: 0 1px 3px rgba(15, 23, 42, .2); }
+                    #page-roster .rs-week { display: inline-flex; align-items: center; border: 1px solid rgba(15, 23, 42, .12); border-radius: 8px; background: rgba(255, 255, 255, .7); overflow: hidden; }
+                    #page-roster .rs-week button { width: 34px; height: 34px; color: #1a4c7b; font-size: 12px; }
+                    #page-roster .rs-week button:hover { background: rgba(26, 76, 123, .08); }
+                    #page-roster #rosterWeekLabel { min-width: 170px; text-align: center; font-size: 13px; font-weight: 700; color: #1e293b; padding: 0 6px; border-left: 1px solid rgba(15, 23, 42, .08); border-right: 1px solid rgba(15, 23, 42, .08); line-height: 34px; }
+
+                    #page-roster .rs-bar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 15px; margin: 16px 0; }
+                    #page-roster .rs-lbl { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+                    #page-roster .rs-count { margin-left: auto; padding-bottom: 10px; font-size: 12px; font-weight: 700; color: #64748b; white-space: nowrap; }
+                    #page-roster .rs-hint { margin-top: 8px; font-size: 11px; color: #64748b; }
+                    #page-roster .rs-key { margin-left: 10px; }
+                    #page-roster .rs-key .rs-chip { padding: 1px 8px; font-size: 10.5px; }
+
+                    #page-roster .rs-table th, #page-roster .rs-table td { padding: 9px 8px; border-color: rgba(15, 23, 42, .07); vertical-align: middle; }
+                    #page-roster .rs-table thead th { background: rgba(0, 0, 0, .03); color: #475569; }
+                    #page-roster .rs-table th.rs-day { text-align: center; line-height: 1.25; }
+                    #page-roster .rs-table th.rs-day b { display: block; font-size: 11px; font-weight: 800; }
+                    #page-roster .rs-table th.rs-day span { display: block; font-size: 11px; font-weight: 600; text-transform: none; letter-spacing: 0; color: #64748b; }
+                    #page-roster .rs-table th.rs-day em { display: inline-block; margin-top: 3px; font-style: normal; font-size: 9.5px; font-weight: 800; padding: 1px 7px; border-radius: 999px; background: #1a4c7b; color: #fff; }
+                    #page-roster .rs-table th.rs-today { background: rgba(26, 76, 123, .09); border-bottom: 2px solid #1a4c7b; }
+                    #page-roster .rs-table th.rs-today span { color: #1a4c7b; }
+                    #page-roster .rs-table th.rs-total-h { text-align: center; }
+                    #page-roster .rs-table td.rs-emp { min-width: 190px; padding-left: 14px; }
+                    #page-roster .rs-emp b { display: block; font-size: 13px; font-weight: 700; color: #1e293b; }
+                    #page-roster .rs-emp span { display: block; margin-top: 2px; font-size: 11px; color: #64748b; white-space: nowrap; }
+                    #page-roster .rs-emp .rs-pin { display: inline-block; margin-right: 6px; padding: 1px 7px; border-radius: 6px; font-style: normal; font-size: 11px; font-weight: 800; background: rgba(26, 76, 123, .1); color: #1a4c7b; vertical-align: 1px; }
+                    body.dark-mode #page-roster .rs-emp .rs-pin { background: rgba(59, 130, 246, .18); color: #93c5fd; }
+                    #page-roster td.roster-cell { text-align: center; cursor: pointer; transition: background .12s; }
+                    #page-roster td.roster-cell:hover { background: rgba(26, 76, 123, .06); }
+                    #page-roster td.roster-cell.bg-orange-900\/20 { background: #fff7ed; }
+                    #page-roster td.rs-total { text-align: center; }
+                    #page-roster td.rs-total b { font-size: 13px; font-weight: 800; color: #1a4c7b; }
+
+                    #page-roster .rs-table th.rs-day, #page-roster td.roster-cell { min-width: 112px; }
+                    #page-roster .rs-chip { display: inline-flex; align-items: center; gap: 6px; max-width: 140px; padding: 3px 10px; border-radius: 10px; font-size: 11.5px; line-height: 1.25; border: 1px solid transparent; vertical-align: middle; text-align: left; }
+                    #page-roster .rs-chip b { font-weight: 700; white-space: normal; overflow-wrap: anywhere; }
+                    #page-roster .rs-table td.rs-emp, #page-roster .rs-table th.rs-emp-h { position: sticky; left: 0; z-index: 2; background: #f8fafc; box-shadow: 1px 0 0 rgba(15, 23, 42, .08); }
+                    body.dark-mode #page-roster .rs-table td.rs-emp, body.dark-mode #page-roster .rs-table th.rs-emp-h { background: #111827; box-shadow: 1px 0 0 rgba(255, 255, 255, .08); }
+                    #page-roster .rs-chip i { width: 9px; height: 9px; border-radius: 50%; flex: none; box-shadow: 0 0 0 1px rgba(15, 23, 42, .15); }
+                    #page-roster .rs-shift { background: rgba(26, 76, 123, .08); border-color: rgba(26, 76, 123, .2); color: #1e293b; }
+                    #page-roster .rs-shift.rs-auto { background: transparent; border-style: dashed; border-color: rgba(26, 76, 123, .35); color: #334155; }
+                    #page-roster .rs-off { background: #f1f5f9; border-color: #e2e8f0; color: #475569; }
+                    #page-roster .rs-rest { background: transparent; border: 1px dashed #e2e8f0; color: #94a3b8; }
+                    #page-roster .rs-leave { background: #f5f3ff; border-color: #ddd6fe; color: #6d28d9; }
+                    #page-roster .rs-hol { background: #ecfdf5; border-color: #a7f3d0; color: #047857; }
+                    #page-roster .rs-gone { background: #fffbeb; border-color: #fde68a; color: #b45309; }
+                    #page-roster .rs-gone::before { content: "\f071"; font-family: "Font Awesome 6 Free", "Font Awesome 5 Free"; font-weight: 900; font-size: 10px; }
+                    #page-roster .rs-pending { box-shadow: 0 0 0 2px rgba(249, 115, 22, .45); }
+                    #page-roster .rs-sub { display: block; margin-top: 3px; font-size: 10.5px; color: #64748b; line-height: 1.35; }
+                    #page-roster .rs-unsaved { display: block; margin-top: 3px; font-size: 9.5px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; color: #ea580c; }
+
+                    body.dark-mode #page-roster .rs-tabs { background: rgba(255, 255, 255, .06); }
+                    body.dark-mode #page-roster .rs-tab { color: #94a3b8 !important; }
+                    body.dark-mode #page-roster .rs-tab:hover { color: #e2e8f0 !important; }
+                    body.dark-mode #page-roster .rs-tab.bg-pink-600 { background: #2563a8 !important; color: #fff !important; }
+                    body.dark-mode #page-roster .rs-week { background: rgba(15, 23, 42, .5); border-color: rgba(255, 255, 255, .1); }
+                    body.dark-mode #page-roster .rs-week button { color: #93c5fd; }
+                    body.dark-mode #page-roster #rosterWeekLabel { color: #e2e8f0; border-color: rgba(255, 255, 255, .08); }
+                    body.dark-mode #page-roster .rs-table th, body.dark-mode #page-roster .rs-table td { border-color: rgba(255, 255, 255, .05); }
+                    body.dark-mode #page-roster .rs-table thead th { background: rgba(0, 0, 0, .3); color: #cbd5e1; }
+                    body.dark-mode #page-roster .rs-table th.rs-day span, body.dark-mode #page-roster .rs-emp span, body.dark-mode #page-roster .rs-sub, body.dark-mode #page-roster .rs-hint, body.dark-mode #page-roster .rs-count { color: #94a3b8; }
+                    body.dark-mode #page-roster .rs-table th.rs-today { background: rgba(37, 99, 168, .2); border-bottom-color: #60a5fa; }
+                    body.dark-mode #page-roster .rs-table th.rs-today span { color: #93c5fd; }
+                    body.dark-mode #page-roster .rs-table th.rs-day em { background: #2563a8; }
+                    body.dark-mode #page-roster .rs-emp b { color: #e2e8f0; }
+                    body.dark-mode #page-roster td.roster-cell:hover { background: rgba(255, 255, 255, .04); }
+                    body.dark-mode #page-roster td.roster-cell.bg-orange-900\/20 { background: rgba(234, 88, 12, .1); }
+                    body.dark-mode #page-roster td.rs-total b { color: #93c5fd; }
+                    body.dark-mode #page-roster .rs-shift { background: rgba(59, 130, 246, .14); border-color: rgba(59, 130, 246, .3); color: #e2e8f0; }
+                    body.dark-mode #page-roster .rs-shift.rs-auto { background: transparent; border-color: rgba(147, 197, 253, .4); color: #cbd5e1; }
+                    body.dark-mode #page-roster .rs-off { background: rgba(255, 255, 255, .06); border-color: rgba(255, 255, 255, .1); color: #cbd5e1; }
+                    body.dark-mode #page-roster .rs-rest { border-color: rgba(255, 255, 255, .12); color: #64748b; }
+                    body.dark-mode #page-roster .rs-leave { background: rgba(139, 92, 246, .14); border-color: rgba(139, 92, 246, .35); color: #c4b5fd; }
+                    body.dark-mode #page-roster .rs-hol { background: rgba(16, 185, 129, .12); border-color: rgba(16, 185, 129, .35); color: #6ee7b7; }
+                    body.dark-mode #page-roster .rs-gone { background: rgba(245, 158, 11, .12); border-color: rgba(245, 158, 11, .35); color: #fcd34d; }
+                    body.dark-mode #page-roster .rs-unsaved { color: #fdba74; }
+                </style>
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-pink-500">
-                  <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-4 border-b border-gray-700 pb-4 xl:pb-2 gap-4">
-                        <div class="flex flex-col md:flex-row items-start md:items-center gap-4 w-full xl:w-auto">
+                  <!-- 2026-10-28 one tidy header (the Shift Rules look): title, Grid / Bulk tabs and the week on the left, labelled
+                       buttons on the right. Same ids and actions as before; Cancel / Save show only when there are changes. -->
+                  <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2 rs-head">
+                        <div class="rs-left">
                             <h3 class="font-bold text-gray-300 whitespace-nowrap"><i class="fas fa-calendar-alt mr-2"></i>Weekly Roster</h3>
-                            
-                            <div class="flex bg-gray-900 rounded border border-gray-600 overflow-hidden w-full md:w-auto flex-shrink-0">
-                                <button id="btnRosterGrid" onclick="toggleRosterView('grid')" class="flex-1 md:flex-none px-4 py-1.5 text-xs font-bold bg-pink-600 text-white transition">Grid View</button>
-                                <button id="btnRosterBulk" onclick="toggleRosterView('bulk')" class="flex-1 md:flex-none px-4 py-1.5 text-xs font-bold text-gray-400 hover:text-white transition">Bulk Assignment</button>
+                            <!-- 2026-10-28 Grid / Bulk switch hidden (user: the same job as Fill roster > Bulk assign, which also has All departments and no 1-month limit). The tab and #rosterBulkView are kept for toggleRosterView(); remove style to bring it back. -->
+                            <div class="rs-tabs" role="tablist" style="display: none;">
+                                <button id="btnRosterGrid" onclick="toggleRosterView('grid')" class="rs-tab bg-pink-600">Grid view</button>
+                                <button id="btnRosterBulk" onclick="toggleRosterView('bulk')" class="rs-tab">Bulk assignment</button>
                             </div>
-
-                            <div id="rosterGridControls" class="flex items-center justify-between md:justify-center w-full md:w-auto space-x-4 bg-gray-900 px-3 py-1.5 rounded border border-gray-600">
-                                <button onclick="changeWeek(-1)" class="text-gray-400 hover:text-white p-1"><i class="fas fa-chevron-left"></i></button>
-                                <span id="rosterWeekLabel" class="text-sm font-bold text-pink-400 w-40 sm:w-48 text-center truncate">Loading...</span>
-                                <button onclick="changeWeek(1)" class="text-gray-400 hover:text-white p-1"><i class="fas fa-chevron-right"></i></button>
+                            <div id="rosterGridControls" class="rs-week">
+                                <button type="button" onclick="changeWeek(-1)" aria-label="Previous week"><i class="fas fa-chevron-left"></i></button>
+                                <span id="rosterWeekLabel">Loading...</span>
+                                <button type="button" onclick="changeWeek(1)" aria-label="Next week"><i class="fas fa-chevron-right"></i></button>
                             </div>
                         </div>
-
-                       <div class="flex flex-wrap gap-2 w-full xl:w-auto">
-                            <button onclick="openAutoPopulateModal()" title="Auto-fill the roster using employees' default shifts and working days" class="flex-1 sm:flex-none justify-center bg-teal-700 hover:bg-teal-600 text-white px-3 py-2 rounded text-xs font-bold transition flex items-center shadow border border-teal-500">
-                                <i class="fas fa-magic sm:mr-2"></i> <span class="hidden sm:inline">Auto-Populate Defaults</span>
-                            </button>
-                            <button onclick="openAdvancedBulkRosterModal()" title="Assign a specific shift to multiple employees across multiple dates at once" class="flex-1 sm:flex-none justify-center bg-pink-700 hover:bg-pink-600 text-white px-3 py-2 rounded text-xs font-bold transition flex items-center shadow border border-pink-500">
-                                <i class="fas fa-tasks sm:mr-2"></i> <span class="hidden sm:inline">Advanced Bulk Assign</span>
-                            </button>
-                            <button onclick="cancelRosterChanges()" id="btnCancelRosterChanges" title="Discard unsaved changes" class="w-full sm:w-auto justify-center bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded text-xs font-bold transition items-center shadow border border-gray-500 hidden">
-                                <i class="fas fa-times mr-2"></i> Cancel
-                            </button>
-                            <button onclick="commitRosterChanges(this)" id="btnSaveRosterChanges" title="Save your changes and recalculate attendance hours" class="w-full sm:w-auto justify-center bg-orange-600 hover:bg-orange-500 text-white px-4 py-2 rounded text-xs font-bold transition items-center shadow border border-orange-500 hidden">
-                                <i class="fas fa-save mr-2"></i> Save & Recalculate
-                            </button>
-                            <button onclick="openPatternModal()" title="Create and apply repeating shift sequences (e.g., 3 days on, 2 days off)" class="flex-1 sm:flex-none justify-center bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-2 rounded text-xs font-bold transition flex items-center shadow border border-indigo-400">
-                            <i class="fas fa-layer-group sm:mr-2"></i> <span class="hidden sm:inline">Patterns</span>
-                            </button>
-                            <button onclick="openExportRosterModal()" title="Download a blank Excel template pre-filled with your employees to build the roster offline" class="flex-1 sm:flex-none justify-center bg-green-700 hover:bg-green-600 text-white px-3 py-2 rounded text-xs font-bold transition flex items-center shadow">
-                                <i class="fas fa-file-excel sm:mr-2"></i> <span class="hidden sm:inline">Excel Template</span>
-                            </button>
-                            <button id="btnExcelUpload" onclick="document.getElementById('excelUpload').click()" title="Upload a completed Excel roster template to import shift assignments" class="flex-1 sm:flex-none justify-center bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded text-xs font-bold transition flex items-center shadow">
-                                <i class="fas fa-upload sm:mr-2"></i> <span class="hidden sm:inline">Upload Excel</span>
-                            </button>
+                        <div class="rs-right">
+                            <!-- 2026-10-28 the Employee Master way: Save / Cancel only while there are changes, the rest in two dropdowns
+                                 ("Fill roster" and "Data tools"). Same ids, icons and functions as the old buttons, so the permission
+                                 hiding (hideActions finds the icon's button) still works; a dropdown with nothing left in it hides itself. -->
+                            <button onclick="cancelRosterChanges()" id="btnCancelRosterChanges" title="Discard unsaved changes" class="btn hidden" style="height: 38px;"><i class="fas fa-times"></i> Cancel</button>
+                            <button onclick="commitRosterChanges(this)" id="btnSaveRosterChanges" title="Save your changes and recalculate attendance hours" class="btn hidden" style="height: 38px;"><i class="fas fa-save"></i> Save &amp; Recalculate</button>
+                            <div class="rs-dd" style="position: relative;">
+                                <button type="button" class="btn" onclick="rosterDropdown(this)" style="height: 38px;" title="Put shifts on the roster for many people or days at once">
+                                    <i class="fas fa-calendar-plus"></i> Fill roster <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i>
+                                </button>
+                                <div class="profile-dropdown-menu rs-dd-menu" style="top: calc(100% + 8px); right: 0; left: auto; bottom: auto; min-width: 290px; z-index: 105;">
+                                    <div class="rs-dd-h">Put shifts on the roster</div>
+                                    <button type="button" onclick="rosterDropdownClose(); openAutoPopulateModal()" class="dropdown-item"><i class="fas fa-magic"></i><span>Auto-fill<small>From each person's default shift and working days</small></span></button>
+                                    <button type="button" onclick="rosterDropdownClose(); openAdvancedBulkRosterModal()" class="dropdown-item"><i class="fas fa-tasks"></i><span>Bulk assign shifts<small>One shift to many people over many dates</small></span></button>
+                                    <button type="button" onclick="rosterDropdownClose(); openPatternModal()" class="dropdown-item"><i class="fas fa-layer-group"></i><span>Create shift pattern<small>Repeating cycles, e.g. 3 days on, 2 days off</small></span></button>
+                                </div>
+                            </div>
+                            <div class="rs-dd" style="position: relative;">
+                                <button type="button" class="btn" onclick="rosterDropdown(this)" style="height: 38px;" title="Build the roster in Excel and upload it">
+                                    <i class="fas fa-database"></i> Data Tools <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i>
+                                </button>
+                                <div class="profile-dropdown-menu rs-dd-menu" style="top: calc(100% + 8px); right: 0; left: auto; bottom: auto; min-width: 290px; z-index: 105;">
+                                    <div class="rs-dd-h">Roster in Excel</div>
+                                    <button type="button" onclick="rosterDropdownClose(); openExportRosterModal()" class="dropdown-item"><i class="fas fa-file-excel" style="color: #10b981;"></i><span>Download Excel template<small>Filled with your employees, to build the roster offline</small></span></button>
+                                    <div class="dropdown-divider"></div>
+                                    <button type="button" id="btnExcelUpload" onclick="rosterDropdownClose(); document.getElementById('excelUpload').click()" class="dropdown-item"><i class="fas fa-upload" style="color: #3b82f6;"></i><span>Upload filled-in template<small>Reads the .xlsx and puts the shifts on the roster</small></span></button>
+                                </div>
+                            </div>
                             <input type="file" id="excelUpload" accept=".xlsx" class="hidden" onchange="importRosterExcel(event)">
+                            <script>
+                                function rosterDropdownClose() { document.querySelectorAll('#page-roster .rs-dd-menu.show').forEach(m => m.classList.remove('show')); }
+                                function rosterDropdown(btn) {
+                                    const menu = btn.parentElement.querySelector('.rs-dd-menu');
+                                    const open = menu && !menu.classList.contains('show');
+                                    rosterDropdownClose();
+                                    if (open) menu.classList.add('show');
+                                }
+                                document.addEventListener('click', (e) => { if (!e.target.closest('#page-roster .rs-dd')) rosterDropdownClose(); });
+                            </script>
                         </div>
-                    </div> 
+                    </div>
 
                    <div id="rosterGridView">
-                        <div class="flex flex-col sm:flex-row items-stretch gap-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
-                            <div class="relative w-full sm:flex-1 sm:max-w-sm">
-                                <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
-                                <input type="text" id="rosterSearch" oninput="renderRosterGrid()" placeholder="Search Employee Name or PIN..." class="w-full pl-8 pr-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-pink-500 transition">
+                        <!-- 2026-10-28 the Farmers Master bar (labelled search + department + count), same ids and handlers as before -->
+                        <div class="rs-bar">
+                            <div class="form-group" style="width: 250px;">
+                                <label for="rosterSearch" class="rs-lbl">Search Employees</label>
+                                <div style="position: relative;">
+                                    <input type="search" id="rosterSearch" oninput="renderRosterGrid()" placeholder="Name or PIN..." class="form-control" style="width: 100%; height: 38px; padding-top: 0; padding-bottom: 0; padding-right: 34px; box-sizing: border-box;" autocomplete="off" spellcheck="false">
+                                    <i class="fas fa-search" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 12px; pointer-events: none;"></i>
+                                </div>
                             </div>
-                            <select id="rosterDeptFilter" onchange="handleRosterDeptChange()" class="w-full sm:w-64 bg-gray-800 border border-gray-600 rounded py-1.5 px-3 text-xs text-white focus:outline-none focus:border-pink-500 transition">
-                                <option value="">-- Select Department --</option>
-                            </select>
+                            <div class="form-group" style="width: 250px;">
+                                <label for="rosterDeptFilter" class="rs-lbl">Department</label>
+                                <select id="rosterDeptFilter" onchange="handleRosterDeptChange()" class="form-control" style="width: 100%; height: 38px;">
+                                    <option value="">-- Select Department --</option>
+                                </select>
+                            </div>
+                            <span id="rosterCount" class="rs-count"></span>
                         </div>
 
-                        <div class="overflow-x-auto rounded border border-gray-700">
-                            <table class="w-full text-left text-sm border-collapse">
-                                <thead id="rosterHead" class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                        <div class="glass-table-container rs-wrap">
+                            <table class="glass-table rs-table">
+                                <thead id="rosterHead">
                                     </thead>
-                                <tbody id="rosterBody" class="divide-y divide-gray-700 bg-gray-800">
-                                    <tr><td colspan="8" class="p-4 text-center text-gray-500">Loading roster...</td></tr>
+                                <tbody id="rosterBody">
+                                    <tr><td colspan="9" class="p-4 text-center text-gray-500">Loading roster...</td></tr>
                                 </tbody>
                             </table>
-                            <p class="text-[10px] text-gray-500 mt-2"><i class="fas fa-info-circle mr-1"></i>Click any cell to assign or clear a shift for an employee.</p>
                         </div>
+                        <p class="rs-hint"><i class="fas fa-info-circle mr-1"></i>Click any day to set or clear a shift. <span class="rs-key"><span class="rs-chip rs-shift rs-auto"><b>Auto</b></span> = their default shift, not set on the roster</span></p>
                     </div>
 
                     <div id="rosterBulkView" class="hidden mt-6 bg-gray-900 p-6 rounded border border-gray-700">
@@ -1702,7 +1902,7 @@
                 <div id="reportGeneratorContent" class="flex flex-col gap-6">
                     <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-blue-400 w-full min-w-0 max-w-full">
                         <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
-                            <h3 class="font-bold text-gray-300"><i class="fas fa-chart-pie mr-2"></i>Analytics & Reports</h3>
+                            <h3 class="font-bold text-gray-300"><i class="fas fa-chart-pie mr-2"></i>Attendance Reports</h3>
                             
                             <div class="flex items-center gap-2">
                                 <button onclick="exportReportToExcel(event)" class="bg-green-700 hover:bg-green-600 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow flex items-center h-8">
@@ -1773,7 +1973,9 @@
                 </div> <div class="bg-gray-800 rounded shadow-lg border border-gray-700 flex flex-col" style="width: 100%; max-width: calc(100vw - 300px);">
                     
                     <div class="bg-gray-900 px-4 py-3 border-b border-gray-700 flex justify-between items-center rounded-t shrink-0">
-                        <span class="text-xs font-bold text-teal-400 uppercase tracking-widest"><i class="fas fa-table mr-2"></i> Report Data View</span>
+                        <!-- 2026-10-27 theme navy instead of teal (light mode turned text-teal-400 green) -->
+                        <style>#reportDataViewTitle { color: #1a4c7b; } body.dark-mode #reportDataViewTitle { color: #93c5fd; }</style>
+                        <span id="reportDataViewTitle" class="text-xs font-bold uppercase tracking-widest"><i class="fas fa-table mr-2"></i> Report Data View</span>
                         <span class="text-[10px] text-gray-500 italic"><i class="fas fa-arrows-alt-h mr-1 text-blue-400"></i> Scroll horizontally for more dates</span>
                     </div>
                     
@@ -1926,71 +2128,37 @@
                 </div> </section>
 
            <section id="page-overtime" class="page-section pb-32">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 max-w-4xl">
-                    <div class="bg-gray-800 p-4 rounded shadow border-l-4 border-blue-500">
-                        <h4 class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-3"><i class="fas fa-user-shield mr-2"></i>Eligibility Categories</h4>
-                        <ul class="space-y-2 text-[11px]">
-                            <li class="flex justify-between"><span class="text-gray-400">Paid (Standard):</span> <span class="text-gray-200 font-bold">Cash payment at applicable rates</span></li>
-                            <li class="flex justify-between"><span class="text-gray-400">TOIL Only:</span> <span class="text-yellow-500 font-bold">Automatic conversion to Leave Balance</span></li>
-                            <li class="flex justify-between"><span class="text-gray-400">Not Eligible:</span> <span class="text-red-400 font-bold">Excluded (Threshold/Senior Manager)</span></li>
-                        </ul>
-                    </div>
-                    <div class="bg-gray-800 p-4 rounded shadow border-l-4 border-orange-500">
-                        <h4 class="text-xs font-bold text-orange-400 uppercase tracking-widest mb-3"><i class="fas fa-gavel mr-2"></i>BCEA Violation Limits</h4>
-                        <ul class="space-y-2 text-[11px]">
-                            <li class="flex justify-between"><span class="text-gray-400">Daily Max OT:</span> <span class="text-gray-200 font-bold">3 Hours</span></li>
-                            <li class="flex justify-between"><span class="text-gray-400">Weekly Max OT:</span> <span class="text-gray-200 font-bold">10 Hours</span></li>
-                            <li class="flex justify-between"><span class="text-gray-400">Absolute Daily Cap:</span> <span class="text-gray-200 font-bold">12 Total Hours</span></li>
-                        </ul>
-                    </div>
-                </div>
+                <!-- ⚡ 2026-10-26 OVERTIME RULES, EASIER TO READ: grouped into Weekends / Pay rates / Rules for shifts or people, with the
+                     settings the calculations do not use yet folded away, and the BCEA reference at the bottom. Same ids, same form,
+                     same save (saveOvertimeSettings) and the same Custom Rulesets table - only the layout and the wording changed. -->
+                <style>
+                    #page-overtime .ot-card { padding: 22px 24px; margin-bottom: 18px; }
+                    #page-overtime .ot-card > h3 { margin: 0 0 4px; }
+                    #page-overtime .ot-card > p.ot-lead { margin: 0 0 14px; }
+                    #page-overtime .ot-rate small { display: block; font-size: 11px; color: #64748b; margin-top: 5px; }
+                    #page-overtime .ot-note { display: flex; gap: 8px; align-items: flex-start; margin-top: 14px; padding: 10px 12px; border-radius: 10px; background: #eef5fc; color: #1e3a5f; font-size: 12px; line-height: 1.5; }
+                    #page-overtime .ot-note i { margin-top: 2px; }
+                    #page-overtime details.ot-more { margin-bottom: 18px; }
+                    #page-overtime details.ot-more > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 16px 24px; font-weight: 800; font-size: 14px; }
+                    #page-overtime details.ot-more > summary::-webkit-details-marker { display: none; }
+                    #page-overtime details.ot-more > summary .ot-chev { margin-left: auto; transition: transform .15s; font-size: 12px; }
+                    #page-overtime details.ot-more[open] > summary .ot-chev { transform: rotate(180deg); }
+                    #page-overtime details.ot-more > summary small { font-weight: 600; font-size: 12px; opacity: .75; }
+                    #page-overtime details.ot-more > .ot-more-body { padding: 0 24px 20px; }
+                    body.dark-mode #page-overtime .ot-note { background: rgba(147, 197, 253, .1); color: #bfdbfe; }
+                    body.dark-mode #page-overtime .ot-rate small { color: #94a3b8; }
+                </style>
 
-                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-yellow-500 max-w-4xl mb-6">
-                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
-                        <h3 class="font-bold text-gray-300"><i class="fas fa-balance-scale mr-2"></i>BCEA Overtime Rules & Thresholds</h3>
-                    </div>
-                    <p class="text-xs text-gray-400 mb-4">Configure the statutory limits and multipliers. These feed directly into the Nightly Analyzer for violation detection.</p>
-                    
-                    <form id="overtimeSettingsForm" onsubmit="saveOvertimeSettings(event)" class="space-y-6">
+                <form id="overtimeSettingsForm" onsubmit="saveOvertimeSettings(event)" class="max-w-4xl">
+                    <!-- 1. Weekends (⚡ 2026-10-27: Saturday and Sunday together; overtime rules follow these settings) -->
+                    <div class="ot-card bg-gray-800 rounded shadow-lg max-w-4xl">
+                        <h3 class="font-bold text-gray-300"><i class="fas fa-calendar-week mr-2"></i>Weekends</h3>
+                        <p class="ot-lead text-xs text-gray-400">How weekend hours are counted and paid, for everyone. Overtime rules for shifts or people follow these settings.</p>
                         <div class="bg-gray-900 rounded border border-gray-700 divide-y divide-gray-800 shadow-inner">
-                            
                             <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
                                 <div>
-                                    <h4 class="text-sm font-bold text-gray-300">Annual Earnings Threshold (ZAR)</h4>
-                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">Employees earning above this are excluded from automatic statutory overtime generation.</p>
-                                </div>
-                                <div class="flex items-center gap-2 flex-shrink-0">
-                                    <span class="text-gray-400">R</span>
-                                    <input type="number" id="otEarningsThreshold" step="0.01" required class="w-32 bg-gray-800 border border-gray-600 rounded p-1.5 text-sm text-white text-right focus:outline-none focus:border-yellow-500">
-                                </div>
-                            </div>
-
-                            <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                                <div>
-                                    <h4 class="text-sm font-bold text-gray-300">Maximum Overtime (Weekly Limit)</h4>
-                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">Flag timesheets exceeding this statutory limit (BCEA default is 10 hours).</p>
-                                </div>
-                                <div class="flex items-center gap-2 flex-shrink-0">
-                                    <input type="number" id="otWeeklyLimit" required class="w-20 bg-gray-800 border border-gray-600 rounded p-1.5 text-sm text-white text-center focus:outline-none focus:border-yellow-500">
-                                    <span class="text-xs text-gray-400 font-bold uppercase">Hours</span>
-                                </div>
-                            </div>
-
-                            <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                                <div>
-                                    <h4 class="text-sm font-bold text-gray-300">Daily Total Hours Limit</h4>
-                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">Flag if total hours (Ordinary + OT) exceed this limit in a single day (BCEA default is 12 hours).</p>
-                                </div>
-                                <div class="flex items-center gap-2 flex-shrink-0">
-                                    <input type="number" id="otDailyLimit" required class="w-20 bg-gray-800 border border-gray-600 rounded p-1.5 text-sm text-white text-center focus:outline-none focus:border-yellow-500">
-                                    <span class="text-xs text-gray-400 font-bold uppercase">Hours</span>
-                                </div>
-                            </div>
-
-                            <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-800">
-                                <div>
-                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-calendar-check text-yellow-400 mr-2"></i>Saturday = Automatic Overtime</h4>
-                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">If enabled, all hours worked on a Saturday will automatically be flagged as Overtime (1.5x) instead of Normal Time.</p>
+                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-calendar-check text-yellow-400 mr-2"></i>Saturday hours are overtime</h4>
+                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">On: every hour worked on a Saturday is overtime, paid at the overtime rate below. Off: Saturday is a normal working day.</p>
                                 </div>
                                 <div class="flex items-center gap-2 flex-shrink-0">
                                     <label class="flex items-center cursor-pointer">
@@ -1998,89 +2166,174 @@
                                     </label>
                                 </div>
                             </div>
-
-                            <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-800">
-                                <div>
-                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-calendar-check text-orange-400 mr-2"></i>Sunday = Automatic 2.0x</h4>
-                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">If enabled, all hours worked on a Sunday will automatically be flagged as 2.0x instead of Normal Time or standard 1.5x.</p>
-                                </div>
-                                <div class="flex items-center gap-2 flex-shrink-0">
-                                    <label class="flex items-center cursor-pointer">
-                                        <input type="checkbox" id="otSundayAutomatic" class="w-5 h-5 text-orange-600 bg-gray-900 border-gray-600 rounded focus:ring-orange-500">
-                                    </label>
-                                </div>
-                            </div>
-
                             <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
                                 <div>
-                                    <h4 class="text-sm font-bold text-gray-300">Statutory Grace Period</h4>
-                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">Minutes ignored before deviations are flagged as overtime (applies to both calculation methods).</p>
+                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-sun text-orange-400 mr-2"></i>Sunday hours</h4>
+                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">Every hour worked on a Sunday is paid at this rate.</p>
                                 </div>
-                                <div class="flex items-center gap-2 flex-shrink-0">
-                                    <input type="number" id="otGracePeriod" required class="w-20 bg-gray-800 border border-gray-600 rounded p-1.5 text-sm text-white text-center focus:outline-none focus:border-yellow-500">
-                                    <span class="text-xs text-gray-400 font-bold uppercase">Minutes</span>
+                                <div class="flex-shrink-0" style="width: 180px;">
+                            <div class="ot-rate">
+                                <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">Sunday rate</label>
+                                <div class="flex items-center">
+                                    <input type="number" id="otRateSunday" step="0.1" required class="w-full bg-gray-800 border border-gray-600 rounded-l p-1.5 text-sm text-white focus:outline-none focus:border-yellow-500">
+                                    <span class="bg-gray-700 border border-gray-600 border-l-0 rounded-r px-3 py-1.5 text-sm text-gray-300 font-bold">x</span>
+                                </div>
+                                <small>2.0 = double time</small>
+                            </div>
                                 </div>
                             </div>
-
-                            <div class="p-4">
-                                <h4 class="text-sm font-bold text-yellow-400 mb-3 border-b border-gray-800 pb-2">Pay Rate Multipliers</h4>
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div>
-                                        <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">Standard Overtime</label>
-                                        <div class="flex items-center">
-                                            <input type="number" id="otRateStandard" step="0.1" required class="w-full bg-gray-800 border border-gray-600 rounded-l p-1.5 text-sm text-white focus:outline-none focus:border-yellow-500">
-                                            <span class="bg-gray-700 border border-gray-600 border-l-0 rounded-r px-3 py-1.5 text-sm text-gray-300 font-bold">x</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">Sunday Work</label>
-                                        <div class="flex items-center">
-                                            <input type="number" id="otRateSunday" step="0.1" required class="w-full bg-gray-800 border border-gray-600 rounded-l p-1.5 text-sm text-white focus:outline-none focus:border-yellow-500">
-                                            <span class="bg-gray-700 border border-gray-600 border-l-0 rounded-r px-3 py-1.5 text-sm text-gray-300 font-bold">x</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">Public Holiday</label>
-                                        <div class="flex items-center">
-                                            <input type="number" id="otRateHoliday" step="0.1" required class="w-full bg-gray-800 border border-gray-600 rounded-l p-1.5 text-sm text-white focus:outline-none focus:border-yellow-500">
-                                            <span class="bg-gray-700 border border-gray-600 border-l-0 rounded-r px-3 py-1.5 text-sm text-gray-300 font-bold">x</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>  
-                        <div class="flex justify-end">
-                            <button type="submit" id="btnSaveOtSettings" class="bg-yellow-600 hover:bg-yellow-500 text-white px-6 py-2 rounded text-sm font-bold shadow transition">
-                                Save Global Defaults
-                            </button>
                         </div>
-                    </form>
-                </div>
+                    </div>
 
-                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-teal-500 max-w-4xl">
-                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
-                        <h3 class="font-bold text-gray-300"><i class="fas fa-users-cog mr-2"></i>Custom Rulesets (Per-Group/Employee)</h3>
-                        <button onclick="openCustomRuleModal()" class="bg-teal-600 hover:bg-teal-500 text-white px-4 py-1.5 rounded text-xs font-bold shadow transition">
-                            <i class="fas fa-plus mr-1"></i> Add Ruleset
+                    <!-- 2. Weekday overtime and public holidays -->
+                    <div class="ot-card bg-gray-800 rounded shadow-lg max-w-4xl">
+                        <h3 class="font-bold text-gray-300"><i class="fas fa-coins mr-2"></i>Weekday overtime &amp; public holidays</h3>
+                        <p class="ot-lead text-xs text-gray-400">How much an overtime hour, and an hour on a public holiday, pays compared with a normal hour.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="ot-rate">
+                                <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">Overtime</label>
+                                <div class="flex items-center">
+                                    <input type="number" id="otRateStandard" step="0.1" required class="w-full bg-gray-800 border border-gray-600 rounded-l p-1.5 text-sm text-white focus:outline-none focus:border-yellow-500">
+                                    <span class="bg-gray-700 border border-gray-600 border-l-0 rounded-r px-3 py-1.5 text-sm text-gray-300 font-bold">x</span>
+                                </div>
+                                <small>1.5 = time and a half</small>
+                            </div>
+                            <div class="ot-rate">
+                                <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">Public holiday</label>
+                                <div class="flex items-center">
+                                    <input type="number" id="otRateHoliday" step="0.1" required class="w-full bg-gray-800 border border-gray-600 rounded-l p-1.5 text-sm text-white focus:outline-none focus:border-yellow-500">
+                                    <span class="bg-gray-700 border border-gray-600 border-l-0 rounded-r px-3 py-1.5 text-sm text-gray-300 font-bold">x</span>
+                                </div>
+                                <small>2.0 = double time</small>
+                            </div>
+                        </div>
+                        <div class="ot-note"><i class="fas fa-info-circle"></i><span>Employee Costs uses these rates only when <b>"Employee Costs uses the rates above"</b> is switched on (Hours &amp; Calculation, Engine Options). Otherwise it pays 1.5× for overtime and 2.0× for Sundays and public holidays.</span></div>
+                    </div>
+
+                    <!-- 3. Overtime limits (⚡ 2026-10-27: was the folded "Saved but not used in calculations yet" box, now a Company-wide card).
+                         Saved, but still not read by the hours engine or pay calculations (checked 2026-10-26) - each row is tagged
+                         "Not used in calculations yet" by tna_settings_popup.js. Every input stays in the form: saveOvertimeSettings()
+                         sends all of them, so a missing one would overwrite the stored value with its fallback. -->
+                    <div class="ot-card bg-gray-800 rounded shadow-lg max-w-4xl" data-ot-limits>
+                        <h3 class="font-bold text-gray-300"><i class="fas fa-gauge-high mr-2"></i>Overtime limits</h3>
+                        <p class="ot-lead text-xs text-gray-400">The earnings threshold and the most overtime allowed. Saved for later: these do not change hours or pay yet.</p>
+                        <div>
+                            <div class="bg-gray-900 rounded border border-gray-700 divide-y divide-gray-800 shadow-inner">
+                                <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                    <div>
+                                        <h4 class="text-sm font-bold text-gray-300">Earnings limit for overtime</h4>
+                                        <p class="text-[10px] text-gray-500 mt-1 max-w-xl">People earning more than this a year would not get overtime (the BCEA earnings threshold).</p>
+                                    </div>
+                                    <div class="flex items-center gap-2 flex-shrink-0">
+                                        <span class="text-gray-400">R</span>
+                                        <input type="number" id="otEarningsThreshold" step="0.01" required class="w-32 bg-gray-800 border border-gray-600 rounded p-1.5 text-sm text-white text-right focus:outline-none focus:border-yellow-500">
+                                    </div>
+                                </div>
+                                <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                    <div>
+                                        <h4 class="text-sm font-bold text-gray-300">Most overtime in a week</h4>
+                                        <p class="text-[10px] text-gray-500 mt-1 max-w-xl">Would warn when someone works more overtime than this in a week. The law allows 10 hours.</p>
+                                    </div>
+                                    <div class="flex items-center gap-2 flex-shrink-0">
+                                        <input type="number" id="otWeeklyLimit" required class="w-20 bg-gray-800 border border-gray-600 rounded p-1.5 text-sm text-white text-center focus:outline-none focus:border-yellow-500">
+                                        <span class="text-xs text-gray-400 font-bold uppercase">Hours</span>
+                                    </div>
+                                </div>
+                                <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                    <div>
+                                        <h4 class="text-sm font-bold text-gray-300">Most hours in a day</h4>
+                                        <p class="text-[10px] text-gray-500 mt-1 max-w-xl">Would warn when normal time plus overtime is more than this in one day. The law allows 12 hours.</p>
+                                    </div>
+                                    <div class="flex items-center gap-2 flex-shrink-0">
+                                        <input type="number" id="otDailyLimit" required class="w-20 bg-gray-800 border border-gray-600 rounded p-1.5 text-sm text-white text-center focus:outline-none focus:border-yellow-500">
+                                        <span class="text-xs text-gray-400 font-bold uppercase">Hours</span>
+                                    </div>
+                                </div>
+                                <!-- ⚡ 2026-10-27 hidden: the same as Weekends > Sunday rate (2.0 = double time). Kept (hidden) so a Save keeps its stored value. -->
+                                <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4" hidden style="display: none;" data-ot-dup="sunday-double">
+                                    <div>
+                                        <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-calendar-check text-orange-400 mr-2"></i>Sunday hours at double time</h4>
+                                        <p class="text-[10px] text-gray-500 mt-1 max-w-xl">Would pay every hour worked on a Sunday at 2.0×.</p>
+                                    </div>
+                                    <div class="flex items-center gap-2 flex-shrink-0">
+                                        <label class="flex items-center cursor-pointer">
+                                            <input type="checkbox" id="otSundayAutomatic" class="w-5 h-5 text-orange-600 bg-gray-900 border-gray-600 rounded focus:ring-orange-500">
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- ⚡ 2026-10-27 hidden at the user's request: a grace period is not a BCEA limit, it is not used by the hours
+                                     engine, and each shift's own leeway already decides this. Kept (not deleted) so Save still sends its stored value. -->
+                                <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4" hidden style="display: none;" data-ot-hidden="grace-minutes">
+                                    <div>
+                                        <h4 class="text-sm font-bold text-gray-300">Minutes before overtime counts</h4>
+                                        <p class="text-[10px] text-gray-500 mt-1 max-w-xl">Would ignore this many extra minutes before they count as overtime. Today each shift's own leeway and limits decide this.</p>
+                                    </div>
+                                    <div class="flex items-center gap-2 flex-shrink-0">
+                                        <input type="number" id="otGracePeriod" class="w-20 bg-gray-800 border border-gray-600 rounded p-1.5 text-sm text-white text-center focus:outline-none focus:border-yellow-500">
+                                        <span class="text-xs text-gray-400 font-bold uppercase">Minutes</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end" style="margin-bottom: 18px;">
+                        <button type="submit" id="btnSaveOtSettings" class="bg-yellow-600 hover:bg-yellow-500 text-white px-6 py-2 rounded text-sm font-bold shadow transition">
+                            Save overtime settings
                         </button>
                     </div>
+                </form>
+
+                <!-- 4. Rules for shifts or people (Custom Rulesets - same table body, filled by renderCustomOTRules) -->
+                <div class="ot-card bg-gray-800 rounded shadow-lg border-t-4 border-teal-500 max-w-4xl">
+                    <div class="flex justify-between items-center gap-4">
+                        <h3 class="font-bold text-gray-300"><i class="fas fa-users-cog mr-2"></i>Overtime rules for shifts or people</h3>
+                        <button onclick="openCustomRuleModal()" class="bg-teal-600 hover:bg-teal-500 text-white px-4 py-1.5 rounded text-xs font-bold shadow transition">
+                            <i class="fas fa-plus mr-1"></i> Add a rule
+                        </button>
+                    </div>
+                    <p class="ot-lead text-xs text-gray-400" style="margin-top: 4px;">Give a shift or a person their own overtime rule: after how many hours a day overtime starts on session shifts. Saturdays and Sundays follow the Weekends settings above. Pick the rule on a shift, or on a person in Employee Master.</p>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs">
                             <thead class="bg-gray-900 text-gray-400 uppercase font-bold">
                                 <tr>
-                                    <th class="p-3">Ruleset Name</th>
-                                    <th class="p-3">Method</th>
-                                    <th class="p-3">Limits (D/W/Cap)</th>
-                                    <th class="p-3">Rates (1.5/2.0/PH)</th>
+                                    <th class="p-3">Rule</th>
+                                    <th class="p-3">Saturdays</th>
+                                    <th class="p-3">Overtime starts after</th>
                                     <th class="p-3 text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="customOTRulesBody" class="divide-y divide-gray-700">
-                                <tr><td colspan="5" class="p-4 text-center text-gray-500">No custom rules defined.</td></tr>
+                                <tr><td colspan="4" class="p-4 text-center text-gray-500">No overtime rules for shifts or people yet.</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
+
+                <!-- 5. Reference only (no settings): the overtime categories and the BCEA limits -->
+                <details class="ot-more bg-gray-800 rounded shadow-lg max-w-4xl">
+                    <summary class="text-gray-300"><i class="fas fa-gavel"></i>Labour law reference (BCEA) <small>for information only</small><i class="fas fa-chevron-down ot-chev"></i></summary>
+                    <div class="ot-more-body">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-gray-800 p-4 rounded shadow border-l-4 border-blue-500">
+                                <h4 class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-3"><i class="fas fa-user-shield mr-2"></i>Who gets overtime</h4>
+                                <ul class="space-y-2 text-[11px]">
+                                    <li class="flex justify-between"><span class="text-gray-400">Paid (standard):</span> <span class="text-gray-200 font-bold">Paid out at the rates above</span></li>
+                                    <li class="flex justify-between"><span class="text-gray-400">Time off only:</span> <span class="text-yellow-500 font-bold">Added to their leave balance</span></li>
+                                    <li class="flex justify-between"><span class="text-gray-400">Not eligible:</span> <span class="text-red-400 font-bold">Senior managers / above the earnings limit</span></li>
+                                </ul>
+                            </div>
+                            <div class="bg-gray-800 p-4 rounded shadow border-l-4 border-orange-500">
+                                <h4 class="text-xs font-bold text-orange-400 uppercase tracking-widest mb-3"><i class="fas fa-gavel mr-2"></i>Legal limits</h4>
+                                <ul class="space-y-2 text-[11px]">
+                                    <li class="flex justify-between"><span class="text-gray-400">Overtime in a day:</span> <span class="text-gray-200 font-bold">3 hours</span></li>
+                                    <li class="flex justify-between"><span class="text-gray-400">Overtime in a week:</span> <span class="text-gray-200 font-bold">10 hours</span></li>
+                                    <li class="flex justify-between"><span class="text-gray-400">Total hours in a day:</span> <span class="text-gray-200 font-bold">12 hours</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </details>
             </section>
 
        <section id="page-settings" class="page-section pb-32">
@@ -2093,8 +2346,8 @@
                         <div class="bg-gray-900 rounded border border-gray-700 divide-y divide-gray-800 shadow-inner">
                             <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-gray-800/50 transition">
                                 <div>
-                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-balance-scale text-yellow-400 mr-2"></i>Ignore OT Within Threshold</h4>
-                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">If enabled, when a punch is inside the shift's threshold limits, the system will ignore the potential OT and clamp the hours to the exact shift boundaries.</p>
+                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-balance-scale text-yellow-400 mr-2"></i>Ignore small overtime</h4>
+                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">When someone clocks in a little early or out a little late (inside the shift's before/after limits), it is not counted as overtime. They are paid for the shift times only. A shift can have its own setting for this.</p>
                                 </div>
                                 <div class="flex items-center gap-2 flex-shrink-0">
                                     <label class="flex items-center cursor-pointer">
@@ -2104,8 +2357,8 @@
                             </div>
                             <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-gray-800/50 transition">
                                 <div>
-                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-fill-drip text-blue-400 mr-2"></i>Replenish Normal Time (Make-Up Time)</h4>
-                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">If an employee is late or leaves early, all worked hours will first fill the Normal Time deficit before spilling into Overtime.</p>
+                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-fill-drip text-blue-400 mr-2"></i>Make up missed normal time first</h4>
+                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">If someone comes in late or leaves early, any extra time they work first makes up the missing normal hours. Only what is left over counts as overtime. Example: 30 min late, then stays 1 hour after the shift = 30 min normal time + 30 min overtime.</p>
                                 </div>
                                 <div class="flex items-center gap-2 flex-shrink-0">
                                     <label class="flex items-center cursor-pointer">
@@ -2115,8 +2368,8 @@
                             </div>
                             <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-gray-800/50 transition">
                                 <div>
-                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-filter text-yellow-400 mr-2"></i>Duplicate Punch Filter</h4>
-                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">Prevent ghost reads. Ignores subsequent punches from the same employee on the same device within this time window.</p>
+                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-filter text-yellow-400 mr-2"></i>Ignore double clockings</h4>
+                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">If someone clocks more than once on the same device within this many minutes, only the first clocking counts. This stops accidental double scans.</p>
                                 </div>
                                 <div class="flex items-center gap-2 flex-shrink-0">
                                     <input type="number" id="settingDupMins" min="0" max="60" required onchange="saveTNASettings(event)" class="w-20 bg-gray-800 border border-gray-600 rounded p-1.5 text-sm text-white text-center focus:outline-none focus:border-yellow-500">
@@ -2172,40 +2425,40 @@
                             </div>
                             <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-gray-800/50 transition">
                                 <div>
-                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-clock text-blue-400 mr-2"></i>Global Hours Display Format</h4>
-                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">Choose how calculated hours are displayed on the Timesheet and Excel Reports.</p>
+                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-clock text-blue-400 mr-2"></i>How hours are shown</h4>
+                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">How hours appear on timesheets and Excel reports: 8 and a half hours as 8.50 or as 08:30.</p>
                                 </div>
                                 <div class="flex items-center gap-3 flex-shrink-0">
                                     <label class="text-xs text-gray-300 flex items-center cursor-pointer font-bold">
                                         <input type="radio" name="hoursFormat" value="decimal" id="fmtDecimal" onchange="saveTNASettings(event)" class="mr-1 accent-blue-500" checked> Decimal (8.50)
                                     </label>
                                     <label class="text-xs text-gray-300 flex items-center cursor-pointer font-bold">
-                                        <input type="radio" name="hoursFormat" value="time" id="fmtTime" onchange="saveTNASettings(event)" class="mr-1 accent-blue-500"> Time (08:30)
+                                        <input type="radio" name="hoursFormat" value="time" id="fmtTime" onchange="saveTNASettings(event)" class="mr-1 accent-blue-500"> Hours:minutes (08:30)
                                     </label>
                                 </div>
                             </div>
                             <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-gray-800/50 transition">
                                 <div>
-                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-moon text-indigo-400 mr-2"></i>Night Shift Boundary Logic</h4>
-                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">Determine how hours are bucketed for shifts crossing midnight into weekends or holidays.</p>
+                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-moon text-indigo-400 mr-2"></i>Night shifts that cross midnight</h4>
+                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">Which day the hours belong to when a night shift runs into a weekend or public holiday. Example: Friday 22:00 to Saturday 06:00.</p>
                                 </div>
                                 <div class="flex items-center gap-2 flex-shrink-0">
-                                    <select id="settingNightShiftBoundary" onchange="saveTNASettings(event)" class="w-48 bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
-                                        <option value="start_day">Start Day (Default)</option>
-                                        <option value="split_midnight">Split at Midnight</option>
-                                        <option value="highest_rate">Highest Rate Applies</option>
+                                    <select id="settingNightShiftBoundary" onchange="saveTNASettings(event)" style="width: 16rem;" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                                        <option value="start_day">The day it started (default)</option>
+                                        <option value="split_midnight">Split at midnight</option>
+                                        <option value="highest_rate">Whichever day pays more</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-gray-800/50 transition">
                                 <div>
-                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-redo text-indigo-400 mr-2"></i>Recalculation Re-opens</h4>
-                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">When hours are recalculated automatically (new punches, roster changes), which Manager Inbox items go back to Pending. A manual "Force Overwrite All" always re-opens everything.</p>
+                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-redo text-indigo-400 mr-2"></i>After hours are recalculated</h4>
+                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">When new clockings or roster changes recalculate a day, which Manager Inbox items go back to waiting for approval. "Force Overwrite All" always sends everything back.</p>
                                 </div>
                                 <div class="flex items-center gap-2 flex-shrink-0">
-                                    <select id="settingRecalcReopen" onchange="saveTNASettings(event)" class="w-48 bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
-                                        <option value="unapproved">Only unapproved (Default)</option>
-                                        <option value="all">All, incl. approved &amp; rejected</option>
+                                    <select id="settingRecalcReopen" onchange="saveTNASettings(event)" style="width: 16rem;" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                                        <option value="unapproved">Only items not yet approved (default)</option>
+                                        <option value="all">Everything, even approved and rejected</option>
                                     </select>
                                 </div>
                             </div>
@@ -2297,77 +2550,111 @@
                                     <input type="checkbox" id="engLabelClampedIgnored" onchange="if (window.tnaSaveEngineOptions) window.tnaSaveEngineOptions()" class="w-5 h-5 text-blue-600 bg-gray-900 border-gray-600 rounded"></label>
                             </div>
                             </div>
+                            <!-- ⚡ 2026-10-26 PUBLIC HOLIDAYS & LEAVE, EASIER TO READ: plain wording, an add bar per list (Enter adds, the result
+                                 shows under it), theme-coloured lists. Same ids, same saves (saveTNASettings / addHoliday / addLeaveType). -->
                             <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-gray-800/50 transition">
                                 <div>
-                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-tree text-green-400 mr-2"></i>Public Holiday Logic (Not Worked)</h4>
-                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">If an employee is scheduled on a holiday but does not clock in.</p>
+                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-tree text-green-400 mr-2"></i>Public holiday, not worked</h4>
+                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">Someone is rostered on a public holiday but does not clock in.</p>
                                 </div>
                                 <div class="flex items-center gap-2 flex-shrink-0">
-                                    <select id="settingPphNotWorked" onchange="saveTNASettings(event)" class="w-48 bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-green-500">
-                                        <option value="shift_hours">Pay Scheduled NT Hours</option>
-                                        <option value="zero">Unpaid (Zero Hours)</option>
+                                    <select id="settingPphNotWorked" onchange="saveTNASettings(event)" style="width: 17rem;" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-green-500">
+                                        <option value="shift_hours">Pay their normal shift hours</option>
+                                        <option value="zero">Don't pay (0 hours)</option>
                                     </select>
                                 </div>
                             </div>
-                           <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-gray-800/50 transition">
+                            <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-gray-800/50 transition">
                                 <div>
-                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-hammer text-orange-400 mr-2"></i>Public Holiday Logic (Worked)</h4>
-                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">If an employee works on a Public Holiday, how are hours allocated?</p>
+                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-hammer text-orange-400 mr-2"></i>Public holiday, worked</h4>
+                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">Someone works on a public holiday. Where do the hours they work go?</p>
                                 </div>
                                 <div class="flex items-center gap-2 flex-shrink-0">
-                                    <select id="settingPphWorked" onchange="saveTNASettings(event)" class="w-64 bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-orange-500">
-                                        <option value="pph_only">Actual Hours into PPH Only</option>
-                                        <option value="nt_and_pph">Actual Hours into NT + PPH (Both)</option>
-                                        <option value="double_pph">Double Actual Hours into PPH</option>
+                                    <select id="settingPphWorked" onchange="saveTNASettings(event)" style="width: 17rem;" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-orange-500">
+                                        <option value="pph_only">Public holiday column only</option>
+                                        <option value="nt_and_pph">Normal time and public holiday column</option>
+                                        <option value="double_pph">Double hours in the public holiday column</option>
                                     </select>
                                 </div>
                             </div>
 
-                            <div class="p-4 bg-gray-900/50 border-t border-b border-gray-800 flex flex-col transition">
-                                <h4 class="text-sm font-bold text-purple-400 mb-2"><i class="fas fa-plane-departure mr-2"></i>Leave Allocation on Premium Days</h4>
-                                <p class="text-[10px] text-gray-500 mb-4 max-w-2xl">When an employee logs approved Paid Leave that falls on a weekend or public holiday, specify whether the hours should drop into standard Normal Time (NT) or inherit the premium bucket of that day.</p>
-                                
+                            <div class="p-4 flex flex-col transition">
+                                <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-plane-departure text-purple-400 mr-2"></i>Paid leave on a weekend or public holiday</h4>
+                                <p class="text-[10px] text-gray-500 mt-1 mb-3 max-w-2xl">When approved paid leave falls on one of these days, which rate does it pay?</p>
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div>
-                                        <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">Leave on Saturday</label>
+                                        <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1" for="settingLeaveSat">Saturday</label>
                                         <select id="settingLeaveSat" onchange="saveTNASettings(event)" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
-                                            <option value="nt">Pay as Normal Time (NT)</option>
-                                            <option value="premium">Pay as Overtime (1.5x)</option>
+                                            <option value="nt">Normal time</option>
+                                            <option value="premium">Overtime rate (1.5×)</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">Leave on Sunday</label>
+                                        <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1" for="settingLeaveSun">Sunday</label>
                                         <select id="settingLeaveSun" onchange="saveTNASettings(event)" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
-                                            <option value="nt">Pay as Normal Time (NT)</option>
-                                            <option value="premium">Pay as Sunday Time (2.0x)</option>
+                                            <option value="nt">Normal time</option>
+                                            <option value="premium">Sunday rate (2.0×)</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">Leave on Holiday</label>
+                                        <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1" for="settingLeavePph">Public holiday</label>
                                         <select id="settingLeavePph" onchange="saveTNASettings(event)" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
-                                            <option value="nt">Pay as Normal Time (NT)</option>
-                                            <option value="premium">Pay as Public Holiday (PPH)</option>
+                                            <option value="nt">Normal time</option>
+                                            <option value="premium">Public holiday rate</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="p-4 flex flex-col transition">
-                                <div class="flex justify-between items-center mb-3">
-                                    <div>
-                                        <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-calendar-star text-orange-400 mr-2"></i>Public Holidays</h4>
-                                        <p class="text-[10px] text-gray-500 mt-1">Holidays are automatically marked as OFF for all employees unless an explicit shift is assigned.</p>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <input type="date" id="newHolidayDate" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-orange-500">
-                                        <input type="text" id="newHolidayName" placeholder="Holiday Name" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-orange-500 w-32">
-                                        <label class="flex items-center text-[10px] text-gray-400 font-bold ml-1 mr-1" title="Give scheduled Normal Time AND Public Holiday hours if worked">
-                                            <input type="checkbox" id="newHolidayGiveNT" class="accent-orange-500 mr-1"> +NT
-                                        </label>
-                                        <button type="button" onclick="addHoliday()" class="bg-orange-600 hover:bg-orange-500 text-white px-3 py-1.5 rounded text-xs font-bold shadow transition"><i class="fas fa-plus mr-1"></i> Add</button>
-                                    </div>
+                                <style>
+                                    .lv-head { margin-bottom: 12px; }
+                                    .lv-add { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 12px; border-radius: 12px; background: #f7f9fb; border: 1px solid #e2e8f0; margin-bottom: 6px; }
+                                    .lv-add input[type="text"], .lv-add input[type="date"] { height: 38px; }
+                                    .lv-add .lv-grow { flex: 1; min-width: 180px; }
+                                    .lv-add label.lv-tick { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 700; color: #334155; cursor: pointer; white-space: nowrap; }
+                                    .lv-add button { height: 38px; padding: 0 16px !important; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; background: #1a4c7b !important; border: 1px solid #1a4c7b !important; color: #ffffff !important; border-radius: 10px !important; box-shadow: 0 2px 8px rgba(26, 76, 123, .18) !important; }
+                                    .lv-add button i { color: #ffffff !important; }
+                                    .lv-add button:hover { background: #163f66 !important; }
+                                    .lv-add input[type="date"] { min-width: 150px; color-scheme: light; }
+                                    body.dark-mode .lv-add input[type="date"] { color-scheme: dark; }
+                                    .lv-msg { min-height: 18px; font-size: 12px; font-weight: 700; margin: 2px 2px 8px; }
+                                    .lv-msg.ok { color: #15803d; } .lv-msg.bad { color: #b91c1c; }
+                                    .lv-list { border: 1px solid #e2e8f0 !important; border-radius: 12px; max-height: 260px; overflow-y: auto; background: #ffffff !important; }
+                                    .lv-list table, .lv-list tr, .lv-list td { background: transparent !important; }
+                                    .lv-list tr + tr td { border-top: 1px solid #eef2f6; }
+                                    .lv-list table td { padding: 10px 14px !important; vertical-align: middle; }
+                                    .lv-name { font-weight: 800; font-size: 13.5px; color: #1e293b; }
+                                    .lv-sub { font-size: 12px; color: #64748b; }
+                                    .lv-chip { display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 999px; font-size: 10.5px; font-weight: 800; vertical-align: middle; background: #eef2f6; color: #475569; }
+                                    .lv-chip.paid { background: #e8f5ee; color: #15803d; } .lv-chip.nt { background: #eaf1f8; color: #1a4c7b; }
+                                    .lv-off { opacity: .55; }
+                                    .lv-btn { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; border: 1px solid #cbd5e1; background: #ffffff; color: #1a4c7b; font-size: 12px; font-weight: 700; cursor: pointer; margin-left: 6px; }
+                                    .lv-btn:hover { border-color: #1a4c7b; }
+                                    body.dark-mode .lv-add { background: rgba(255, 255, 255, .03); border-color: rgba(255, 255, 255, .1); }
+                                    body.dark-mode .lv-add label.lv-tick { color: #cbd5e1; }
+                                    body.dark-mode .lv-list { border-color: rgba(255, 255, 255, .1) !important; background: rgba(255, 255, 255, .02) !important; }
+                                    body.dark-mode .lv-list tr + tr td { border-color: rgba(255, 255, 255, .07); }
+                                    body.dark-mode .lv-name { color: #e2e8f0; } body.dark-mode .lv-sub { color: #a3b1c4; }
+                                    body.dark-mode .lv-chip { background: rgba(255, 255, 255, .08); color: #cbd5e1; }
+                                    body.dark-mode .lv-chip.paid { background: rgba(34, 197, 94, .15); color: #86efac; } body.dark-mode .lv-chip.nt { background: rgba(147, 197, 253, .15); color: #93c5fd; }
+                                    body.dark-mode .lv-btn { background: transparent; border-color: rgba(255, 255, 255, .18); color: #93c5fd; }
+                                    body.dark-mode .lv-msg.ok { color: #86efac; } body.dark-mode .lv-msg.bad { color: #fca5a5; }
+                                </style>
+                                <div class="lv-head">
+                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-calendar-day text-orange-400 mr-2"></i>Public holidays</h4>
+                                    <p class="text-[10px] text-gray-500 mt-1">A public holiday is a day off for everyone, unless they have a shift that day. Adding one saves straight away.</p>
                                 </div>
-                                <div class="bg-gray-800 border border-gray-700 rounded max-h-40 overflow-y-auto">
+                                <div class="lv-add">
+                                    <input type="date" id="newHolidayDate" title="Date" placeholder="Pick a date" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-orange-500">
+                                    <input type="text" id="newHolidayName" placeholder="Holiday name, e.g. Heritage Day" onkeydown="if (event.key === 'Enter') { event.preventDefault(); addHoliday(); }" class="lv-grow bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-orange-500">
+                                    <label class="lv-tick" title="If someone works this holiday, pay their normal time as well as the public holiday hours">
+                                        <input type="checkbox" id="newHolidayGiveNT" class="accent-orange-500"> Also pay normal time if worked
+                                    </label>
+                                    <button type="button" onclick="addHoliday()" class="bg-orange-600 hover:bg-orange-500 text-white px-3 py-1.5 rounded text-xs font-bold shadow transition"><i class="fas fa-plus"></i> Add holiday</button>
+                                </div>
+                                <div class="lv-msg" id="newHolidayMsg"></div>
+                                <div class="lv-list bg-gray-800 border border-gray-700 rounded">
                                     <table class="w-full text-left text-xs">
                                         <tbody id="holidaysListBody" class="divide-y divide-gray-700">
                                             <tr><td class="p-2 text-center text-gray-500">Loading holidays...</td></tr>
@@ -2376,21 +2663,19 @@
                                 </div>
                             </div>
                             <div class="p-4 flex flex-col transition">
-                                <div class="flex justify-between items-center mb-3">
-                                    <div>
-                                        <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-bed text-purple-400 mr-2"></i>Leave Types</h4>
-                                        <p class="text-[10px] text-gray-500 mt-1">Manage approved leave categories (Annual, Sick, Unpaid, etc.) for the Violations tab.</p>
-                                        <p class="text-[10px] mt-1" style="color: #a5b4fc;"><i class="fas fa-info-circle mr-1"></i>The same list as <b>ESS Master &rsaquo; Leave Types</b>, where you also set when proof is needed. How much leave people get is set in ESS Master's Leave Policies.</p>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <input type="text" id="newLeaveName" placeholder="e.g. Sick Leave" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-purple-500 w-48">
-                                        <label class="flex items-center text-[10px] text-gray-400 font-bold ml-2 mr-2">
-                                            <input type="checkbox" id="newLeaveIsPaid" checked class="accent-purple-500 mr-1"> Paid
-                                        </label>
-                                        <button type="button" onclick="addLeaveType()" class="bg-purple-600 hover:bg-purple-500 text-white px-3 py-1.5 rounded text-xs font-bold shadow transition"><i class="fas fa-plus mr-1"></i> Add</button>
-                                    </div>
+                                <div class="lv-head">
+                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-bed text-purple-400 mr-2"></i>Leave types</h4>
+                                    <p class="text-[10px] text-gray-500 mt-1">The kinds of leave people can take. This is the same list as <b>ESS Master &rsaquo; Leave Types</b>, where you also set when proof is needed. How much leave people get is set in ESS Master's Leave Policies.</p>
                                 </div>
-                                <div class="bg-gray-800 border border-gray-700 rounded max-h-40 overflow-y-auto">
+                                <div class="lv-add">
+                                    <input type="text" id="newLeaveName" placeholder="Leave type name, e.g. Study Leave" maxlength="100" onkeydown="if (event.key === 'Enter') { event.preventDefault(); addLeaveType(); }" class="lv-grow bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                                    <label class="lv-tick" title="Paid leave is paid; unpaid leave is not">
+                                        <input type="checkbox" id="newLeaveIsPaid" checked class="accent-purple-500"> Paid leave
+                                    </label>
+                                    <button type="button" onclick="addLeaveType()" class="bg-purple-600 hover:bg-purple-500 text-white px-3 py-1.5 rounded text-xs font-bold shadow transition"><i class="fas fa-plus"></i> Add leave type</button>
+                                </div>
+                                <div class="lv-msg" id="newLeaveMsg"></div>
+                                <div class="lv-list bg-gray-800 border border-gray-700 rounded">
                                     <table class="w-full text-left text-xs">
                                         <tbody id="leaveTypesListBody" class="divide-y divide-gray-700">
                                             <tr><td class="p-2 text-center text-gray-500">Loading leave types...</td></tr>
@@ -3081,7 +3366,7 @@
                         <div id="shiftIgnoreOTWithinThresholdWrap">
                             <label class="block text-xs font-bold text-gray-400 mb-1">Early / late time inside the thresholds</label>
                             <select id="shiftIgnoreOTWithinThreshold" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none">
-                                <option value="">Use the company setting (System Settings)</option>
+                                <option value="">Use the company setting (Settings)</option>
                                 <option value="on">Not paid (dropped)</option>
                                 <option value="off">Sent for review as overtime</option>
                             </select>
@@ -3516,77 +3801,68 @@
     <div id="customRuleModal" class="modal-backdrop">
         <div class="bg-gray-800 w-[500px] rounded shadow-2xl border border-gray-600 flex flex-col max-h-[90vh]">
             <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t">
-                <h3 id="crModalTitle" class="font-bold text-lg text-teal-400">Define Custom OT Ruleset</h3>
+                <h3 id="crModalTitle" class="font-bold text-lg text-teal-400">New overtime rule</h3>
                 <button onclick="closeModal('customRuleModal')" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
             </div>
             <div class="p-6 overflow-y-auto flex-1">
+              <!-- ⚡ 2026-10-27 SIMPLER RULE POP-UP: the two settings the hours engine reads (Saturday overtime; when overtime starts
+                   each day on session shifts) in plain words. The other eight are saved but not read by any calculation, so they sit
+                   folded away under "Saved but not used yet". Same ids, same saveCustomOTRule(), same stored values. -->
               <form id="customRuleForm" onsubmit="saveCustomOTRule(event)" class="space-y-4">
                     <input type="hidden" id="crRuleId" value="">
                     <div>
-                        <label class="block text-xs font-bold text-gray-400 mb-1">Ruleset Name (e.g. Factory Staff)</label>
-                        <input type="text" id="crName" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:outline-none focus:border-teal-500">
+                        <label class="block text-xs font-bold text-gray-400 mb-1" for="crName">Rule name</label>
+                        <input type="text" id="crName" required placeholder="e.g. Factory staff" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:outline-none focus:border-teal-500">
+                        <p class="text-[11px] text-gray-500 mt-1">You pick this rule on a shift, or on a person in Employee Master.</p>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-bold text-gray-400 mb-1">Calculation Method</label>
-                            <select id="crMethod" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:outline-none">
-                                <option value="Strict">Strict (Shift-Based)</option>
-                                <option value="Flexible">Flexible (Total Hours)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-gray-400 mb-1">Grace Period (Mins)</label>
-                            <input type="number" id="crGrace" value="0" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:outline-none">
-                        </div>
+                    <!-- ⚡ 2026-10-27 Saturdays follow the company setting (Overtime Rules > Weekends). The box below shows only for an
+                         older rule whose own Saturday differs from it, so nobody's hours change until someone chooses. -->
+                    <input type="checkbox" id="crIsSaturdayOT" class="hidden" data-follow="1">
+                    <div id="crSatBox" class="hidden pt-4 border-t border-gray-700">
+                        <span class="block text-xs font-bold text-gray-400 mb-2">Saturdays</span>
+                        <p class="text-sm text-gray-300">This rule makes Saturday <b id="crSatThis"></b> for its people, while the company setting (Weekends) makes it <b id="crSatCo"></b>.</p>
+                        <button type="button" id="crSatFollow" class="mt-2 px-3 py-1.5 rounded text-xs font-bold border border-gray-600 bg-gray-900 text-gray-200 hover:bg-gray-700">Use the company setting</button>
                     </div>
 
-                    <div class="pt-4 border-t border-gray-700 mt-4">
-                        <label class="flex items-center cursor-pointer">
-                            <input type="checkbox" id="crIsSaturdayOT" checked class="accent-teal-500 w-4 h-4 mr-2">
-                            <span class="text-xs font-bold text-gray-300">Saturday is Automatic Overtime (1.5x)</span>
-                        </label>
+                    <div class="pt-4 border-t border-gray-700">
+                        <label class="block text-xs font-bold text-gray-400 mb-2" for="crNormalDailyHours">Overtime each day <span class="font-normal text-gray-500">(session shifts only)</span></label>
+                        <div class="flex items-center gap-2 text-sm text-gray-300">Overtime starts after
+                            <input type="number" id="crNormalDailyHours" step="0.25" min="0" max="24" placeholder="-" class="w-20 bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm text-center focus:outline-none"> hours a day</div>
+                        <p class="text-[11px] text-gray-500 mt-1">Hours worked in a day above this become overtime. Leave it empty to use the shift's own times.</p>
                     </div>
 
-                    <div class="border-t border-gray-700 pt-4">
-                        <label class="block text-[10px] font-bold text-cyan-400 uppercase mb-1">Normal Daily Hours (OT starts after)</label>
-                        <input type="number" id="crNormalDailyHours" step="0.25" min="0" max="24" placeholder="Leave blank if not used" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:outline-none">
-                        <p class="text-[10px] text-gray-500 mt-1">Used by Session Shifts. Hours worked in a day above this become overtime.</p>
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-3 border-t border-gray-700 pt-4">
-                        <div>
-                           <label class="block text-[10px] font-bold text-orange-400 uppercase mb-1">Daily OT Max</label>
-                            <input type="number" id="crDailyLimit" step="0.5" value="3" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:outline-none">
+                    <details class="border border-gray-700 rounded">
+                        <summary class="p-3 cursor-pointer select-none text-xs font-bold text-gray-400">Saved but not used yet <span class="font-normal text-gray-500">· 8 settings, changing them has no effect on hours or pay</span></summary>
+                        <div class="px-3 pb-3 space-y-3">
+                            <div class="grid grid-cols-2 gap-3">
+                                <div><label class="block text-[11px] text-gray-400 mb-1" for="crMethod">Method</label>
+                                    <select id="crMethod" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:outline-none"><option value="Strict">Shift times</option><option value="Flexible">Total hours</option></select></div>
+                                <div><label class="block text-[11px] text-gray-400 mb-1" for="crGrace">Grace (minutes)</label>
+                                    <input type="number" id="crGrace" value="0" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:outline-none"></div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3">
+                                <div><label class="block text-[11px] text-gray-400 mb-1" for="crDailyLimit">Most overtime a day</label>
+                                    <input type="number" id="crDailyLimit" step="0.5" value="3" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:outline-none"></div>
+                                <div><label class="block text-[11px] text-gray-400 mb-1" for="crWeeklyLimit">Most overtime a week</label>
+                                    <input type="number" id="crWeeklyLimit" step="0.5" value="10" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:outline-none"></div>
+                                <div><label class="block text-[11px] text-gray-400 mb-1" for="crTotalCap">Most hours in a day</label>
+                                    <input type="number" id="crTotalCap" step="0.5" value="12" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:outline-none"></div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3">
+                                <div><label class="block text-[11px] text-gray-400 mb-1" for="crRateStd">Overtime rate</label>
+                                    <input type="number" id="crRateStd" step="0.1" value="1.5" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:outline-none"></div>
+                                <div><label class="block text-[11px] text-gray-400 mb-1" for="crRateSun">Sunday rate</label>
+                                    <input type="number" id="crRateSun" step="0.1" value="2.0" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:outline-none"></div>
+                                <div><label class="block text-[11px] text-gray-400 mb-1" for="crRateHol">Public holiday rate</label>
+                                    <input type="number" id="crRateHol" step="0.1" value="2.0" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:outline-none"></div>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-orange-400 uppercase mb-1">Weekly OT Max</label>
-                            <input type="number" id="crWeeklyLimit" step="0.5" value="10" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-red-400 uppercase mb-1">Max Day Cap</label>
-                            <input type="number" id="crTotalCap" step="0.5" value="12" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:outline-none">
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-3 border-t border-gray-700 pt-4">
-                        <div>
-                            <label class="block text-[10px] font-bold text-yellow-500 uppercase mb-1">Std Rate</label>
-                            <input type="number" id="crRateStd" step="0.1" value="1.5" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-yellow-500 uppercase mb-1">Sun Rate</label>
-                            <input type="number" id="crRateSun" step="0.1" value="2.0" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-yellow-500 uppercase mb-1">PH Rate</label>
-                            <input type="number" id="crRateHol" step="0.1" value="2.0" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white text-sm focus:outline-none">
-                        </div>
-                    </div>
+                    </details>
 
                     <div class="flex justify-end space-x-3 pt-4 border-t border-gray-700">
                         <button type="button" onclick="closeModal('customRuleModal')" class="px-4 py-2 bg-gray-600 text-white rounded text-sm font-bold">Cancel</button>
-                        <button type="submit" class="px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white rounded text-sm font-bold shadow">Save Ruleset</button>
+                        <button type="submit" class="px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white rounded text-sm font-bold shadow">Save rule</button>
                     </div>
                 </form>
             </div>
@@ -4246,18 +4522,37 @@
    <script src="tna_hours.js"></script>
    <!-- Report preview column sorting (shared with Employee Master). Safe to remove: headers just stop sorting. -->
    <script src="report_sort.js"></script>
-   <script src="tna_dashboard.js?v=2.0.5"></script>
+   <script src="tna_dashboard.js?v=2.0.36"></script>
+   <!-- 2026-10-29 New dashboard: Manager | HR tabs, period picker, action queue (switch: TNA Settings > New dashboard, default on).
+        AUTO-HEAL: safe to remove - the old dashboard shows, unchanged. -->
+   <script src="tna_dashboard_v2.js?v=20261030a"></script>
+   <!-- 2026-10-26: Shift Rules "Step-by-step" switch (per user): Create / Edit Shift as a wizard that fills the same form.
+        Switch off or file removed = the classic Edit Shift pop-up. AUTO-HEAL: safe to remove. -->
+   <!-- 2026-10-26 company overtime policy for shifts (Settings > Overtime Rules card + live link). Before the wizard. Safe to remove. -->
+   <!-- 2026-10-26 OFF for now (user): company overtime policy card + step-by-step shift wizard. The classic shift form is used. To turn back on, restore these two lines:
+   <script src="tna_shift_ot_policy.js?v=20261026b"></script>
+   <script src="tna_shift_popup_wizard.js?v=20261026t"></script> -->
+   <!-- 2026-10-28 Shifts pop-up, step by step (the Scheduled reports look) - replaces the classic Create / Edit Shift form for
+        everyone; it fills and saves that same form ("Classic form" link inside). AUTO-HEAL: safe to remove = the classic form. -->
+   <script src="tna_shift_steps.js?v=20261028o"></script>
+   <!-- 2026-10-28 Bulk assign shifts popup (Fill roster). AUTO-HEAL: remove this line and the old Advanced Bulk Assignment popup is back -->
+   <script src="tna_bulk_assign.js?v=20261029a"></script>
+   <!-- 2026-10-28 Shift patterns popup (Fill roster > Create shift pattern). Needs tna_bulk_assign.js. AUTO-HEAL: remove this line and the old popup is back -->
+   <script src="tna_shift_patterns.js?v=20261029c"></script>
    <script src="tna_photo_push.js?v=20261019a"></script>
     <!-- Team View > Visual tab (timeline, drag punches, approvals). AUTO-HEAL: safe to remove, Traditional keeps working. -->
-   <script src="tna_team_visual.js"></script>
+   <script src="tna_tv_range.js?v=20261030g"></script>
+   <script src="tna_team_visual.js?v=20261030d"></script>
     <!-- Team View > Overview tab. Needs tna_team_visual.js. AUTO-HEAL: safe to remove, the other tabs keep working. -->
    <script src="tna_team_overview.js"></script>
    <!-- ⚡ 2026-10-13 Shift Setup Wizard + "recalculate the affected days" pop-up (window.tnaShiftWizard, window.tnaRecalcPrompt).
         Loaded only while TNA_SHIFT_WIZARD_ENABLED (top of the page) is true. Not loaded = no wizard, no pop-up, as before. -->
-   <script>if (window.TNA_SHIFT_WIZARD_ENABLED) document.write('<script src="tna_shift_wizard.js?v=1"><\/script>');</script>
+   <script>if (window.TNA_SHIFT_WIZARD_ENABLED) document.write('<script src="tna_shift_wizard.js?v=2"><\/script>');</script>
     <!-- Sage Push Queue page (AUTO-HEAL: if this file is missing, only that page is empty) -->
    <script src="tna_sage_queue.js"></script>
    <!-- System Settings: left menu, one section at a time, (i) help, Save moves with the section. Safe to remove. -->
+   <!-- Pre-approved overtime settings section: must load BEFORE tna_settings_ui.js. AUTO-HEAL: safe to remove. -->
+   <script src="tna_ot_preapproval.js?v=3"></script>
    <!-- CVS Employee Mapping (Settings section). Must load BEFORE tna_settings_ui.js. AUTO-HEAL: safe to remove. -->
    <script src="tna_cvs_mapping.js?v=2"></script>
    <!-- Compare with CVS (Time Logs). AUTO-HEAL: safe to remove; the button then does nothing. -->
@@ -4284,9 +4579,16 @@
            });
        })();
    </script>
-   <script src="tna_settings_ui.js"></script>
+   <!-- 2026-10-30 "Recalculate the affected days?" after a shift edit or a calculation setting change (switch: Settings > Hours & Calculation >
+        Recalculation > Ask to recalculate after a change, default on). Must load BEFORE tna_settings_ui.js. AUTO-HEAL: safe to remove = no pop-up, as before. -->
+   <!-- 2026-10-30 instant dark tooltips on buttons and the closed sidebar (like User Access). AUTO-HEAL: safe to remove = the browser tooltips. -->
+   <script src="tna_quick_tips.js?v=20261030c"></script>
+   <script src="tna_recalc_ask.js?v=20261030e"></script>
+   <script src="tna_settings_ui.js?v=20261030b"></script>
+   <!-- Pre-approved overtime: OT Authorisations page, roster "Authorise OT" tab and badges. Only active while switched on. AUTO-HEAL: safe to remove. -->
+   <script src="tna_ot_auth.js?v=1"></script>
    <!-- Shared top bar: search + quick access + profile menu (same as Employee Master). Safe to remove. -->
-   <script src="tna_topbar.js?v=28"></script>
+   <script src="tna_topbar.js?v=31"></script>
    <!-- Guided tours, how-to guides + What's new (content in /tours/tna_dashboard_tours.json). AUTO-HEAL: safe to remove. -->
    <script src="tna_tour.js" data-tour-page="tna_dashboard" data-tour-help-position="right"></script>
    <!-- 2026-10-23: help as the side panel (same as Employee Master); the page's "?" opens it. AUTO-HEAL: safe to remove. -->
@@ -4294,8 +4596,34 @@
    <!-- Guided setup in Demo / Setup mode (plan in /tours/tna_dashboard_setup.json). AUTO-HEAL: safe to remove. -->
    <script src="tna_setup.js" data-setup-page="tna_dashboard"></script>
    <!-- Audit Trail: tags every change with the TNA tab, records tab opens / reports / exports, and runs the Audit Trail tab. Safe to remove. -->
-   <script src="tna_audit.js"></script>
+   <script src="tna_audit.js?v=20261030b"></script>
    <!-- Keep the last department / dates / employee when switching TNA tabs (TNA Settings > Keep filters when switching tabs) -->
    <script src="tna_filter_memory.js?v=20261008a"></script>
+   <!-- 2026-10-26: resize grip (bottom-right) on every T&A pop-up, also the ones built later by JavaScript. Drag to resize,
+        double-click to reset, size remembered per pop-up. AUTO-HEAL: safe to remove (both lines). -->
+   <script src="tna_modal_resize.js?v=20261026b"></script>
+   <script src="tna_popup_resize_auto.js?v=20261026b"></script>
+   <!-- 2026-10-26: System Settings opens as a pop-up window (same look as Farmers & Distribution Settings) with Overtime Rules
+        as one of its sections; the Overtime Rules sidebar item opens it there. Load LAST (after every file that wraps
+        showSection). AUTO-HEAL: safe to remove - Settings and Overtime Rules then open as normal pages again. -->
+   <script src="tna_settings_popup.js?v=20261027d"></script>
+   <!-- 2026-10-27 Overtime Rules > Weekends: the Saturday rate shown read-only on the Saturday row (= the Overtime rate). Not a setting. AUTO-HEAL: safe to remove. -->
+   <script src="tna_sat_rate_view.js?v=20261027b"></script>
+   <!-- 2026-10-27 Overtime Rules > Overtime limits: the BCEA limits locked (companies may only be stricter), the earnings threshold
+        kept by TNA Africa for every company (/api/tna/statutory). AUTO-HEAL: safe to remove - the card as before. -->
+   <script src="tna_ot_limits.js?v=20261027d"></script>
+   <!-- 2026-10-27 Attendance Reports: tidier screen, report groups + description, the Automated Emailer as a pop-up. AUTO-HEAL: safe to remove. -->
+   <script src="tna_reports_ui.js?v=20261031a"></script>
+   <script src="report_unsubs.js?v=20261031a"></script>
+   <!-- 2026-10-27 Attendance Reports: the same layout as Farmers & Distribution > Reports (Reports card, Filters / Export drop-downs,
+        tags, Contractors table look). Moves the page's own controls only. AUTO-HEAL: safe to remove - the screen as before. -->
+   <script src="tna_reports_layout.js?v=20261027g"></script>
+   <!-- 2026-10-27 Reopen the last screen used after a refresh / browser restart (per user). AUTO-HEAL: safe to remove. -->
+   <script src="tna_last_screen.js?v=20261027a"></script>
+   <!-- Built-in public holiday calendar (Settings > Public Holidays & Leave). AUTO-HEAL: safe to remove; server without it = no change. -->
+   <script src="tna_holiday_calendar.js?v=20261026d"></script>
+   <!-- 2026-10-27 Sidebar groups (same as Contractors & Distribution): Overview, Shifts & Rosters, Daily Attendance,
+        Approvals & Overtime, Reports & Payroll, Setup. Moves the existing items only. AUTO-HEAL: safe to remove - flat menu again. -->
+   <script src="tna_sidebar_groups.js?v=20261027a"></script>
 </body>
 </html>
