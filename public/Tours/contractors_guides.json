@@ -1347,11 +1347,11 @@
           "target": [
             "#page-settings .cs-nav-btn[data-pane=\"contractfields\"]"
           ],
-          "title": "Contract Fields",
-          "text": "Click <b>Contract Fields</b>: extra details captured on each contract when it is assigned.",
+          "title": "Contract Mapping & Issue Notes",
+          "text": "Click <b>Contract Mapping &amp; Issue Notes</b>: extra details captured on each contract when it is assigned, serial numbers and the Final Issue Notes.",
           "placement": "right",
           "mode": "click",
-          "hint": "Click Contract Fields",
+          "hint": "Click Contract Mapping & Issue Notes",
           "before": [
             {
               "removeClass": "#page-settings .csg-group[data-csg='contracts']",
