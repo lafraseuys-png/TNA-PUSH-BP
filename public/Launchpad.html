@@ -1015,6 +1015,9 @@
         }
         body.dark-mode .ess-notice-title { color: #e2e8f0; }
         body.dark-mode .ess-notice-sub { color: #94a3b8; }
+        /* 2026-11-03: "Clock in / out" next to Profile - navy on light, light blue on dark (was navy on both, unreadable on dark) */
+        .lp-clockhint { color: #1a4c7b; }
+        body.dark-mode .lp-clockhint { color: #93c5fd; }
         body.dark-mode .ess-notice-count { background: rgba(255, 255, 255, 0.08); color: #cbd5e1; }
         body.dark-mode .ess-notice.tone-amber .ess-notice-icon { background: rgba(251, 146, 60, 0.16); color: #fb923c; }
         body.dark-mode .ess-notice.tone-blue  .ess-notice-icon { background: rgba(96, 165, 250, 0.16); color: #60a5fa; }
@@ -1219,7 +1222,7 @@
                 <!-- Kept hidden for JS auto-heal compatibility -->
                 <div id="displayTenant" class="hidden"></div>
                 
-                <a href="#" class="dropdown-item" data-tour="lp-menu-profile" onclick="openProfileModal()"><i class="fa-solid fa-user"></i> Profile <small style="margin-left: auto; padding-left: 10px; font-size: 10.5px; font-weight: 700; color: #1a4c7b; white-space: nowrap;" title="Clock in / out, leave, timesheet and payslips are in your profile"><i class="fa-solid fa-clock" style="width: auto; margin-right: 3px; color: inherit;"></i>Clock in / out</small></a>
+                <a href="#" class="dropdown-item" data-tour="lp-menu-profile" onclick="openProfileModal()"><i class="fa-solid fa-user"></i> Profile <small class="lp-clockhint" style="margin-left: auto; padding-left: 10px; font-size: 10.5px; font-weight: 700; white-space: nowrap;" title="Clock in / out, leave, timesheet and payslips are in your profile"><i class="fa-solid fa-clock" style="width: auto; margin-right: 3px; color: inherit;"></i>Clock in / out</small></a>
                 <a href="Settings.html" class="dropdown-item hidden" id="btnSettings"><i class="fa-solid fa-gear"></i> Settings</a>
                 <a href="AccessControl.html" class="dropdown-item hidden" id="btnAccessControl"><i class="fa-solid fa-door-closed"></i> Access Control</a>
                <!-- 2026-10-23: "ESS" removed - self service is inside My Profile now (Profile above). The ESS page itself is unchanged. -->

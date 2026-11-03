@@ -1334,7 +1334,7 @@
                 #distItemModal label.sif-l { display: block; font-size: 11px; font-weight: 700; margin-bottom: 4px; color: #334155; }
                 #distItemModal .sif-in { border: 1px solid #cbd5e1; padding: 8px; border-radius: 6px; }
                 #distItemModal .sif-note { font-size: 11px; color: #64748b; margin-top: 8px; line-height: 1.45; }
-                #distItemModal .sif-rule { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+                #distItemModal .sif-rule { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
                 #distItemModal .sif-opt { text-align: left; border: 1px solid #cbd5e1; border-radius: 10px; padding: 10px 12px; background: #fff; cursor: pointer; display: flex; gap: 10px; align-items: flex-start; }
                 #distItemModal .sif-opt i.sif-ico { color: #1a4c7b; font-size: 16px; margin-top: 2px; width: 18px; text-align: center; }
                 #distItemModal .sif-opt b { display: block; font-size: 13px; color: #1e293b; }
@@ -1447,6 +1447,7 @@
                             <div class="sif-pane" data-sif-pane="rule" role="tabpanel">
                                 <div class="sif-sec-t"><i class="fas fa-seedling"></i> How much a farmer gets <span style="font-weight: 600; text-transform: none; letter-spacing: 0; color: #64748b;">(on a cycle's Cat 1-4 lines)</span></div>
                                 <input type="checkbox" id="distItemFixedPerFarmer" style="display: none;">
+                                <input type="checkbox" id="distItemManualAtIssue" style="display: none;">
                                 <div class="sif-rule" role="radiogroup" aria-label="How much a farmer gets">
                                     <button type="button" class="sif-opt" data-sif-rule="ha" role="radio" onclick="distItemSetRule('ha')">
                                         <i class="fas fa-th-large sif-ico"></i>
@@ -1456,6 +1457,11 @@
                                     <button type="button" class="sif-opt" data-sif-rule="fixed" role="radio" onclick="distItemSetRule('fixed')">
                                         <i class="fas fa-equals sif-ico"></i>
                                         <div><b>Fixed amount</b><span>An amount you type, once per farmer per cycle, whatever his hectares.</span></div>
+                                        <div class="sif-dot"></div>
+                                    </button>
+                                    <button type="button" class="sif-opt" data-sif-rule="manual" role="radio" onclick="distItemSetRule('manual')">
+                                        <i class="fas fa-keyboard sif-ico"></i>
+                                        <div><b>Typed at issue</b><span>Nothing worked out: the technician types what was given on the phone.</span></div>
                                         <div class="sif-dot"></div>
                                     </button>
                                 </div>
@@ -5182,7 +5188,7 @@
         <!-- ⚡ Modern pop-ups (the Employee Master look): SweetAlert2 + alert / tnaAsk / tnaAskText. AUTO-HEAL: if the CDN cannot load, the browser's own pop-ups. -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="contractors_modern_popups.js?v=20261020a"></script>
-        <script src="contractors.js?v=20261102k"></script>
+        <script src="contractors.js?v=20261103b"></script>
         <script src="stock_item_rule.js?v=20261102d"></script>
         <script src="report_unsubs.js?v=20261031a"></script>
         <!-- ⚡ 2026-10-18 Farmers Master: the import wizard (Data Tools > Import Excel Data). AUTO-HEAL: safe to remove - the old Import screen opens. -->
@@ -5229,7 +5235,9 @@
         <!-- ⚡ 2026-11-02 Contract Templates as cards in Settings > Contract Mapping & Issue Notes (new file). AUTO-HEAL: safe to remove. -->
         <script src="contract_template_cards.js?v=20261102a"></script>
         <!-- ⚡ 2026-11-02 Map Fields in the Issue Note builder look (new file, the mapper logic stays in contractors.js). AUTO-HEAL: safe to remove - the old look comes back. -->
-        <script src="contract_mapper_look.js?v=20261102c"></script>
+        <script src="contract_mapper_look.js?v=20261103a"></script>
+        <!-- ⚡ 2026-11-03 Map Fields > New PDF: copy the map onto a replica PDF + move the club contracts onto it (new file). AUTO-HEAL: safe to remove. -->
+        <script src="contract_pdf_swap.js?v=20261103d"></script>
         <!-- ⚡ Reports open without freezing (new file, replaces the three slow report builders) -->
         <script src="contractors_reports_fast.js"></script>
         <!-- ⚡ Warehouse view: open a warehouse to see its totals, what was issued and to whom (new file). AUTO-HEAL: safe to remove. -->
@@ -5264,7 +5272,7 @@
         <!-- ⚡ Reports > Bulk Approvals: every Inbox "Approve selected" run, with the review answer, for audit (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_bulk_approvals_report.js?v=20261002a"></script>
         <!-- ⚡ Reports: one screen - a report dropdown, filters, columns, sort, column search, summary, pages, export (new file). AUTO-HEAL: safe to remove (the old tabs come back). -->
-        <script src="contractors_report_center.js?v=20261026b"></script>
+        <script src="contractors_report_center.js?v=20261103a"></script>
         <!-- ⚡ Dashboard: Approved Farmers = farmers with an approved contract + the "Farmers vs Approved" card (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_dash_approval.js?v=20261006a"></script>
         <!-- ⚡ Settings > Contract Rules > Partial distribution (Off / only when the warehouse is short / any time with a reason) -->

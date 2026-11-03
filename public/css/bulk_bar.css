@@ -1,0 +1,33 @@
+/* =====================================================================
+   Settings > User Access: the bulk bar (#bulkToolbar) in the Org Hierarchy bulk-bar look. 2026-11-03 (user).
+   LOOK ONLY: no markup or behaviour changes - settings.js still shows/hides it with the 'hidden' class, every button
+   keeps its onclick (role, modules, password, Email Login Details, Deactivate / Activate).
+   AUTO-HEAL: remove the <link> (or this file) and the bar looks exactly as before.
+   ===================================================================== */
+#bulkToolbar { background: #fff !important; border: 1px solid rgba(26,76,123,.2) !important; border-radius: 14px !important; box-shadow: 0 8px 24px rgba(26,76,123,.12) !important;
+    padding: 6px 6px 6px 12px !important; position: sticky; top: 8px; z-index: 20; }
+#bulkToolbar:not(.hidden) { animation: bkBarIn .18s ease-out; }
+@keyframes bkBarIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+/* "57 selected": navy count circle, grey word, no icon */
+#bulkToolbar > span:first-child { color: #475569 !important; font-size: 12.5px !important; font-weight: 700 !important; }
+#bulkToolbar > span:first-child > i { display: none; }
+#bulkCount { min-width: 26px; height: 26px; padding: 0 8px !important; border-radius: 999px !important; background: #1a4c7b !important; color: #fff !important;
+    display: inline-grid !important; place-items: center; font-size: 12px !important; font-weight: 800; margin-right: 8px !important; }
+/* actions: plain navy text buttons with a soft hover */
+#bulkToolbar .btn-primary { background: transparent !important; border: 0 !important; box-shadow: none !important; border-radius: 10px !important; color: #1a4c7b !important;
+    font-weight: 700 !important; font-size: 12.5px !important; height: 36px; padding: 0 14px !important; transform: none !important; text-decoration: none !important; }
+#bulkToolbar .btn-primary i { opacity: .85; margin-right: 6px !important; }
+#bulkToolbar .btn-primary:hover { background: rgba(26,76,123,.08) !important; }
+#bulkToolbar .btn-primary:active { background: rgba(26,76,123,.15) !important; }
+#bulkToolbar > div { gap: 4px !important; }
+/* the role picker keeps its own box; thin divider after it */
+#bulkToolbar > div > div:first-child { border-right: 1px solid #e2e8f0 !important; padding-right: 8px !important; margin-right: 4px; gap: 6px !important; }
+#bulkRoleSelect { height: 36px; border-radius: 10px !important; border: 1px solid #cbd5e1 !important; box-shadow: none !important; font-weight: 600; }
+#bulkRoleSelect:focus { border-color: #1a4c7b !important; box-shadow: 0 0 0 3px rgba(26,76,123,.12) !important; }
+
+body.dark-mode #bulkToolbar { background: #1e293b !important; border-color: rgba(96,165,250,.25) !important; box-shadow: 0 8px 24px rgba(0,0,0,.35) !important; }
+body.dark-mode #bulkToolbar > span:first-child { color: #cbd5e1 !important; }
+body.dark-mode #bulkToolbar .btn-primary { color: #93c5fd !important; }
+body.dark-mode #bulkToolbar .btn-primary:hover { background: rgba(255,255,255,.06) !important; color: #bfdbfe !important; }
+body.dark-mode #bulkToolbar > div > div:first-child { border-right-color: #334155 !important; }
+body.dark-mode #bulkRoleSelect { background: #0f172a !important; border-color: #334155 !important; color: #e2e8f0 !important; }

@@ -311,6 +311,10 @@
         body.dark-mode .profile-avatar-custom { background-color: rgba(255,255,255,0.1); color: #cbd5e1; }
         body.dark-mode .profile-name { color: #e2e8f0; }
         body.dark-mode .profile-dropdown-menu { background-color: rgba(30, 41, 59, 0.95); border-color: rgba(255, 255, 255, 0.1); }
+        /* 2026-11-03: search box at the top of a drop-down list (<select data-search>), stays put while the list scrolls */
+        .sel-search-wrap { position: sticky; top: 0; z-index: 1; padding: 6px; background: #ffffff; border-bottom: 1px solid #e2e8f0; }
+        body.dark-mode .sel-search-wrap { background: #1e293b; border-bottom-color: rgba(255, 255, 255, 0.1); }
+        .sel-search-empty { padding: 10px 14px; font-size: 12px; color: #94a3b8; font-style: italic; }
         body.dark-mode .dropdown-item { color: #cbd5e1; }
         body.dark-mode .dropdown-item:hover { background-color: rgba(255, 255, 255, 0.05); color: #ffffff; }
         body.dark-mode .dropdown-item i { color: #cbd5e1 !important; }
@@ -428,6 +432,8 @@
             background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='%23cbd5e1' d='M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 64 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192h352v256c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192z'/%3E%3C/svg%3E");
         }
     </style>
+    <!-- 2026-11-03 User Access bulk bar in the Org Hierarchy look (look only). AUTO-HEAL: safe to remove. -->
+    <link rel="stylesheet" href="/css/bulk_bar.css?v=20261103a">
 </head>
 <body class="font-sans relative">
     <script>
@@ -468,6 +474,8 @@
                 <li data-permission="set_sync,sys_api"><a onclick="showSection('sync', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-rotate"></i> <span>Sync Engine</span></a></li>
                 <li data-permission="set_users,sys_users"><a onclick="showSection('users', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-users"></i> <span>User Access</span></a></li>
                 <li data-permission="set_roles,sys_users"><a onclick="showSection('roles', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-shield-halved"></i> <span>Roles & Permissions</span></a></li>
+                <!-- 2026-11-03 Org Hierarchy sheet (js/org_sheet.js + routes/orgHierarchy.js); same permission as User Access -->
+                <li data-permission="set_users,sys_users"><a onclick="showSection('orgh', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-sitemap"></i> <span>Org Hierarchy</span></a></li>
                 <li data-permission="set_zones,sys_hardware"><a onclick="showSection('zones', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-location-dot"></i> <span>Access Zones</span></a></li>
                 <li data-permission="set_devices,sys_hardware"><a onclick="showSection('devices', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-microchip"></i> <span>Hardware</span></a></li>
                 <li data-permission="set_errors,sys_hardware"><a onclick="showSection('errors', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-bug"></i> <span>Mobile Errors</span></a></li>
@@ -1494,6 +1502,14 @@
                                 <i class="fas fa-key mr-1"></i> Default Password
                             </button>
 
+                            <!-- 2026-11-03 Bulk Deactivate / Activate: each shows only when a ticked user can be changed that way -->
+                            <button id="bulkDeactivateBtn" onclick="executeBulkAction('deactivate')" class="btn-primary !py-1.5 !px-3 !text-xs shadow-sm !m-0">
+                                <i class="fas fa-ban mr-1"></i> Deactivate
+                            </button>
+                            <button id="bulkActivateBtn" onclick="executeBulkAction('activate')" class="hidden btn-primary !py-1.5 !px-3 !text-xs shadow-sm !m-0">
+                                <i class="fas fa-check mr-1"></i> Activate
+                            </button>
+
                              <!-- Clear Overrides button removed from the bulk toolbar by request.
                                  The 'clearOverrides' action type is still fully wired in
                                  executeBulkAction() and in PUT /api/users/bulk, so re-adding a
@@ -1722,7 +1738,7 @@
                             
                             <label class="text-xs font-bold text-slate-700 dark:text-gray-400 ml-4">User:</label>
                             <div class="w-48">
-                                <select id="auditUserFilter" class="form-control !p-1.5 !text-xs">
+                                <select id="auditUserFilter" data-search class="form-control !p-1.5 !text-xs">
                                     <option value="">All Users</option>
                                 </select>
                             </div>
@@ -1756,6 +1772,9 @@
                     </div>
                 </div>
             </section>
+
+            <!-- 2026-11-03 Org Hierarchy sheet: drawn by js/org_sheet.js -->
+            <section id="page-orgh" class="page-section"></section>
 
             <section id="page-roles" class="page-section">
                 <div class="glass-panel p-6 rounded-lg border-t-[3px] border-t-[#1a4c7b] mb-6">
@@ -3825,10 +3844,52 @@
                 menu.style.marginTop = '5px';
                 menu.style.zIndex = '105';
                 wrapper.appendChild(menu);
-                
+
+                // 2026-11-03: <select data-search> gets a search box at the top of its list (e.g. Audit Trail > User).
+                // Selects without it are built exactly as before (options straight into the menu).
+                let list = menu, searchBox = null, emptyNote = null;
+                const filterOptions = () => {
+                    if (!searchBox) return;
+                    const q = searchBox.value.trim().toLowerCase();
+                    let shown = 0;
+                    Array.from(list.children).forEach(a => {
+                        if (a === emptyNote) return;
+                        const hit = !q || a.textContent.toLowerCase().includes(q);
+                        a.style.display = hit ? '' : 'none';
+                        if (hit) shown++;
+                    });
+                    emptyNote.style.display = shown ? 'none' : '';
+                };
+                if (select.hasAttribute('data-search')) {
+                    const searchWrap = document.createElement('div');
+                    searchWrap.className = 'sel-search-wrap';
+                    searchBox = document.createElement('input');
+                    searchBox.type = 'text';
+                    searchBox.placeholder = 'Search...';
+                    searchBox.autocomplete = 'off';
+                    searchBox.className = 'form-control !py-1.5 !text-xs';
+                    searchWrap.appendChild(searchBox);
+                    menu.appendChild(searchWrap);
+                    list = document.createElement('div');
+                    menu.appendChild(list);
+                    emptyNote = document.createElement('div');
+                    emptyNote.className = 'sel-search-empty';
+                    emptyNote.textContent = 'No match';
+                    searchBox.addEventListener('input', filterOptions);
+                    searchBox.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            const first = Array.from(list.children).find(a => a !== emptyNote && a.style.display !== 'none');
+                            if (first) first.click();
+                        } else if (e.key === 'Escape') {
+                            menu.classList.remove('show');
+                        }
+                    });
+                }
+
                 // 4. Engine to build/rebuild the menu based on actual <option> tags
                 function buildOptions() {
-                    menu.innerHTML = ''; 
+                    list.innerHTML = '';
                     Array.from(select.options).forEach(opt => {
                         const a = document.createElement('a');
                         a.href = '#';
@@ -3855,8 +3916,9 @@
                             
                             menu.classList.remove('show');
                         });
-                        menu.appendChild(a);
+                        list.appendChild(a);
                     });
+                    if (emptyNote) { list.appendChild(emptyNote); filterOptions(); }
                 }
                 
                 buildOptions(); 
@@ -3881,8 +3943,15 @@
                     
                     document.querySelectorAll('.profile-menu-container').forEach(el => el.style.zIndex = '1');
                     wrapper.style.zIndex = '110';
-                    
+
                     menu.classList.toggle('show');
+                    // Opening a searchable list: start with an empty search and put the cursor in it
+                    if (searchBox && menu.classList.contains('show')) {
+                        searchBox.value = '';
+                        filterOptions();
+                        menu.scrollTop = 0;
+                        setTimeout(() => searchBox.focus(), 50);
+                    }
                 });
             });
         });
@@ -3933,6 +4002,8 @@
     <!-- Contractors screen/action permissions (role editor + overrides). Safe to remove. -->
    <script src="contractor_perms.js?v=20261009c"></script>
    <script src="roles_v2.js?v=20261021a"></script>
+   <!-- 2026-11-03 Org Hierarchy sheet. AUTO-HEAL: without the file the menu item opens an empty section, nothing else changes. -->
+   <script src="org_sheet.js?v=20261103f"></script>
         <!-- ================================================================
          RESIZABLE MODALS - bottom-right diagonal grip (inline)
          Drag to resize, double-click the grip to reset. Size is remembered
