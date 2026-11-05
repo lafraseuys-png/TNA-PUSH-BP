@@ -46,7 +46,7 @@ body.dark-mode :where(.main-content, .modal-backdrop) :is(
 /* Pop-up panels: SOLID dark (not see-through glass), however their white was written.
    The three :not(#...) parts only raise this rule's priority above the general "light box" rule. */
 body.dark-mode .modal-backdrop > :is(.modal-panel, .info-modal-content):not(#contractPreviewContent):not(#contractPreviewContent *):not(#_x) {
-    background: #1e293b !important;
+    background: #1a212c !important;   /* 2026-11-04: the page's slate (was #1e293b) - every pop-up matches the screens */
     background-image: none !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6) !important;

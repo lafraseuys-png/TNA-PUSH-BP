@@ -281,30 +281,9 @@
         [data-contractor-form="create"] .cont-head-sub { color: #f59e0b; }
         [data-contractor-form="edit"] .cont-head-sub { color: #3b82f6; }
 
-        /* ⚡ The top bar (search + profile) stays at the top while the page scrolls - this module only for now.
-           The page scrolls inside .main-content (40px padding on top): the bar sticks under that padding, and a strip of
-           the same frosted background covers the padding above it, so nothing shows through when scrolling.
-           AUTO-HEAL: CSS only; remove this block and the bar scrolls away as before. */
-        /* At the top of the page the bar is see-through, exactly as before (the page background is a blurred photo, so
-           no colour can match it). Once the page is scrolled (.tna-scrolled, set by the small script at the end of
-           the page) it turns to frosted glass, so the list sliding under it is blurred and the search / profile stay readable. */
-        .main-content > .page-header-row {
-            position: sticky !important; top: 0; z-index: 100;
-            transition: background-color .2s ease, box-shadow .2s ease;
-        }
-        .main-content > .page-header-row::before {
-            content: ''; position: absolute; left: 0; right: 0; bottom: 100%; height: 41px; pointer-events: none;
-        }
-        .main-content > .page-header-row.tna-scrolled,
-        .main-content > .page-header-row.tna-scrolled::before {
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%);
-        }
-        .main-content > .page-header-row.tna-scrolled { box-shadow: 0 10px 24px -14px rgba(15, 23, 42, 0.35); }
-        /* the divider line under the bar stays on the page: while scrolled the bar carries no line */
-        .main-content > .page-header-row.tna-scrolled, body.dark-mode .main-content > .page-header-row.tna-scrolled { border-bottom-color: transparent !important; }
-        body.dark-mode .main-content > .page-header-row.tna-scrolled,
-        body.dark-mode .main-content > .page-header-row.tna-scrolled::before { background: rgba(15, 23, 42, 0.55); }
+        /* ⚡ 2026-11-04: the top bar (search + profile) staying at the top is now done by the shared js/tna_topbar.js
+           (stickBar) on every screen. This page's own copy was removed: it used "top: 0" and watched .main-content, but
+           on this page the BODY scrolls, so the bar slid up 40px before stopping and never turned frosted. */
     </style>
 </head>
 <body>
@@ -331,12 +310,14 @@
                 <li><a onclick="showSection('dashboard', 'Dashboard', this)" class="active" title="Dashboard"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
                   <li><a onclick="showSection('contractors', 'Farmers Master', this)" title="Farmers Master"><i class="fas fa-hard-hat" style="color: #f59e0b;"></i> <span>Farmers Master</span></a></li>
                 <li><a onclick="showSection('contracts', 'Contract Management', this)" title="Contract Management"><i class="fas fa-file-signature" style="color: #8b5cf6;"></i> <span>Contracts</span></a></li>
-                <li><a onclick="showSection('inbox', 'Inbox', this)" title="Inbox"><i class="fas fa-inbox" style="color: #10b981;"></i> <span>Inbox</span></a></li>
+                <li><a onclick="showSection('inbox', 'Approval Inbox', this)" title="Approval Inbox"><i class="fas fa-inbox" style="color: #10b981;"></i> <span>Approval Inbox</span></a></li>
+                <!-- ⚡ 2026-11-04 Approvals > Distribution Final Approvals: opens Distribution Master on its Final Distributions Approval tab. Hidden until contractors_final_dist.js finds a full administrator. -->
+                <li id="navFinalDist" style="display: none;"><a data-screen="finalapp" onclick="if (window.openFinalDistApprovals) window.openFinalDistApprovals(this)" title="Distribution Final Approvals"><i class="fas fa-clipboard-check" style="color: #1a4c7b;"></i> <span>Distribution Final Approvals</span></a></li>
                 <li><a onclick="showSection('distribution', 'Distribution Master', this)" title="Distribution Master"><i class="fas fa-route" style="color: #3b82f6;"></i> <span>Distribution Master</span></a></li>
                 <li><a onclick="showSection('progress', 'Progress', this)" title="Progress"><i class="fas fa-tasks" style="color: #a855f7;"></i> <span>Progress</span></a></li>
                 <li><a onclick="showSection('reports', 'Reports', this)" title="Reports"><i class="fas fa-file-csv" style="color: #14b8a6;"></i> <span>Reports</span></a></li>
                 <li><a onclick="showSection('sms', 'SMS & Broadcast', this)" title="SMS & Broadcast"><i class="fas fa-comment-sms" style="color: #f43f5e;"></i> <span>SMS & Broadcast</span></a></li>
-                 <li><a onclick="showSection('hierarchy', 'Contractors Hierarchy', this)" title="Contractors Hierarchy"><i class="fas fa-sitemap" style="color: #eab308;"></i> <span>Contractors Hierarchy</span></a></li>
+                 <li><a onclick="showSection('hierarchy', 'Assignments & Transfers', this)" title="Assignments & Transfers"><i class="fas fa-sitemap" style="color: #eab308;"></i> <span>Assignments &amp; Transfers</span></a></li>
                 <li><a onclick="showSection('locations', 'Locations Master', this)" title="Locations Master"><i class="fas fa-map-signs" style="color: #14b8a6;"></i> <span>Locations Master</span></a></li>
                 <li><a onclick="showSection('workflow', 'Workflow', this)" title="Workflow"><i class="fas fa-project-diagram" style="color: #ec4899;"></i> <span>Workflow</span></a></li>
                 <li><a onclick="showSection('audit', 'Audit Log', this)" title="Audit Log"><i class="fas fa-history" style="color: #ef4444;"></i> <span>Audit Log</span></a></li>
@@ -5006,74 +4987,91 @@
         </div>
     </div>
 
+    <!-- ⚡ 2026-11-04 Transaction Evidence in the navy theme: actions at the top, status (a rejected log says it does not count),
+         facts, items with a total, photos and signatures as cards (click to enlarge, "No photo" when missing).
+         The same element ids as before - viewDistLogEvidence / printDistLogEvidence fill it (styles: contractors.js dlhCss). -->
     <div id="distLogEvidenceModal" class="modal-backdrop" style="z-index: 170;">
-        <div class="modal-panel flex flex-col" style="width: 95%; max-width: 900px; max-height: 90vh; padding: 0; background: #ffffff; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 1px solid #e5e7eb; overflow: hidden;">
-            <div class="modal-header flex justify-between items-center flex-shrink-0" style="padding: 20px 30px; background-color: #f8fafc; border-bottom: 1px solid #e2e8f0;">
-                <h3 class="font-bold" style="font-size: 18px; color: #ec4899; margin: 0;"><i class="fas fa-camera-retro mr-2"></i> Transaction Evidence</h3>
-                <button type="button" onclick="document.getElementById('distLogEvidenceModal').classList.remove('active')" style="background: transparent; border: none; font-size: 24px; cursor: pointer; color: #94a3b8;"><i class="fas fa-times"></i></button>
+        <div class="modal-panel ev-panel">
+            <div class="ev-head">
+                <h3><i class="fas fa-camera-retro"></i> Transaction Evidence</h3>
+                <div class="ev-actions">
+                    <button type="button" id="btnEvidencePrint" onclick="printDistLogEvidence()" class="ev-print"><i class="fas fa-print"></i> Print Evidence</button>
+                    <button type="button" class="ev-x" title="Close" onclick="document.getElementById('distLogEvidenceModal').classList.remove('active')"><i class="fas fa-times"></i></button>
+                </div>
             </div>
-            
-            <div class="flex-1 overflow-y-auto" style="padding: 30px; display: flex; flex-direction: column; gap: 20px;">
-                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px;" id="distLogEvidenceDetails"></div>
-                
-                <div class="glass-table-container">
-                    <table class="glass-table w-full text-xs" style="margin: 0;">
+
+            <div class="ev-body">
+                <div id="evStatus" class="ev-status" style="display: none;"></div>
+
+                <div>
+                    <h4 class="ev-sec"><i class="fas fa-info-circle"></i> Details</h4>
+                    <div class="ev-facts" id="distLogEvidenceDetails"></div>
+                </div>
+
+                <div>
+                    <h4 class="ev-sec"><i class="fas fa-boxes"></i> Items</h4>
+                    <table class="ev-tbl">
                         <thead>
                             <tr>
                                 <th>Item Name</th>
-                                <th style="text-align: center;">Qty</th>
+                                <th class="c">Qty</th>
                                 <th>Source Whs</th>
-                                <th style="text-align: right;">Total Cost</th>
+                                <th class="r">Total Cost</th>
                             </tr>
                         </thead>
-                        <tbody id="distLogEvidenceItemsBody" style="background: white;"></tbody>
+                        <tbody id="distLogEvidenceItemsBody"></tbody>
+                        <tfoot id="distLogEvidenceItemsFoot"></tfoot>
                     </table>
                 </div>
 
-                <div class="grid grid-cols-3 gap-4">
-                    <div>
-                        <h4 class="text-[10px] font-bold text-gray-500 uppercase mb-2">Items Photo</h4>
-                        <img id="evPhotoItems" class="w-full h-48 object-cover rounded-lg border border-gray-300" src="" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='; this.style.backgroundColor='#f1f5f9';">
-                    </div>
-                    <div>
-                        <h4 class="text-[10px] font-bold text-gray-500 uppercase mb-2">Contractor Photo</h4>
-                        <img id="evPhotoCont" class="w-full h-48 object-cover rounded-lg border border-gray-300" src="" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='; this.style.backgroundColor='#f1f5f9';">
-                    </div>
-                    <div>
-                        <h4 class="text-[10px] font-bold text-gray-500 uppercase mb-2">Extra Photo</h4>
-                        <img id="evPhotoExtra" class="w-full h-48 object-cover rounded-lg border border-gray-300" src="" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='; this.style.backgroundColor='#f1f5f9';">
+                <div>
+                    <h4 class="ev-sec"><i class="fas fa-camera"></i> Photos</h4>
+                    <div class="ev-photos">
+                        <div class="ev-card">
+                            <img id="evPhotoItems" class="ev-ph" alt="" onclick="distLogZoom(this)"><div class="ev-none"><i class="fas fa-image"></i> No photo</div>
+                            <div class="cap">Items Photo</div>
+                        </div>
+                        <div class="ev-card">
+                            <img id="evPhotoCont" class="ev-ph" alt="" onclick="distLogZoom(this)"><div class="ev-none"><i class="fas fa-image"></i> No photo</div>
+                            <div class="cap">Contractor Photo</div>
+                        </div>
+                        <div class="ev-card">
+                            <img id="evPhotoExtra" class="ev-ph" alt="" onclick="distLogZoom(this)"><div class="ev-none"><i class="fas fa-image"></i> No photo</div>
+                            <div class="cap">Extra Photo</div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4 mt-4">
-                    <div class="text-center">
-                        <img id="evSigCont" class="h-20 mx-auto" src="">
-                        <div class="text-[10px] font-bold text-gray-500 border-t border-gray-300 pt-1 mt-1">Contractor Signature</div>
-                    </div>
-                    <div class="text-center">
-                        <img id="evSigUser" class="h-20 mx-auto" src="">
-                        <div class="text-[10px] font-bold text-gray-500 border-t border-gray-300 pt-1 mt-1">Field Technician Signature</div>
+                <div>
+                    <h4 class="ev-sec"><i class="fas fa-signature"></i> Signatures</h4>
+                    <div class="ev-signs">
+                        <div class="ev-card">
+                            <img id="evSigCont" class="ev-sig" alt="" onclick="distLogZoom(this)"><div class="ev-none sm"><i class="fas fa-signature"></i> No signature</div>
+                            <div class="cap">Contractor Signature <span id="evSigContName"></span></div>
+                        </div>
+                        <div class="ev-card">
+                            <img id="evSigUser" class="ev-sig" alt="" onclick="distLogZoom(this)"><div class="ev-none sm"><i class="fas fa-signature"></i> No signature</div>
+                            <div class="cap">Field Technician Signature <span id="evSigUserName"></span></div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- ⚡ 2026-10-13 SIGN-OFFS: witness + depot manager (filled by viewDistLogEvidence; hidden for older logs without them) -->
-                <div id="evSignoffs" class="grid grid-cols-2 gap-4 mt-4" style="display: none;">
-                    <div class="text-center">
-                        <img id="evWitnessPhoto" class="w-full h-32 object-cover rounded-lg border border-gray-300" src="" onerror="this.style.display='none'">
-                        <img id="evWitnessSig" class="h-20 mx-auto mt-2" src="" onerror="this.style.display='none'">
-                        <div class="text-[10px] font-bold text-gray-500 border-t border-gray-300 pt-1 mt-1">Witness: <span id="evWitnessName"></span></div>
-                    </div>
-                    <div class="text-center">
-                        <img id="evDepotPhoto" class="w-full h-32 object-cover rounded-lg border border-gray-300" src="" onerror="this.style.display='none'">
-                        <img id="evDepotSig" class="h-20 mx-auto mt-2" src="" onerror="this.style.display='none'">
-                        <div class="text-[10px] font-bold text-gray-500 border-t border-gray-300 pt-1 mt-1">Depot Manager: <span id="evDepotName"></span></div>
+                <div id="evSignoffs" style="display: none;">
+                    <h4 class="ev-sec"><i class="fas fa-user-check"></i> Sign-offs</h4>
+                    <div class="ev-signs">
+                        <div class="ev-card">
+                            <img id="evWitnessPhoto" class="ev-so-ph" alt="" onclick="distLogZoom(this)"><div class="ev-none"><i class="fas fa-image"></i> No photo</div>
+                            <img id="evWitnessSig" class="ev-sig" alt="" onclick="distLogZoom(this)"><div class="ev-none sm"><i class="fas fa-signature"></i> No signature</div>
+                            <div class="cap">Witness <span id="evWitnessName"></span></div>
+                        </div>
+                        <div class="ev-card">
+                            <img id="evDepotPhoto" class="ev-so-ph" alt="" onclick="distLogZoom(this)"><div class="ev-none"><i class="fas fa-image"></i> No photo</div>
+                            <img id="evDepotSig" class="ev-sig" alt="" onclick="distLogZoom(this)"><div class="ev-none sm"><i class="fas fa-signature"></i> No signature</div>
+                            <div class="cap">Depot Manager <span id="evDepotName"></span></div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="modal-footer flex justify-end items-center flex-shrink-0" style="padding: 16px 30px; background-color: #f8fafc; border-top: 1px solid #e2e8f0; gap: 12px;">
-                <button type="button" id="btnEvidencePrint" onclick="printDistLogEvidence()" class="btn btn-secondary" style="font-weight: bold; color: #3b82f6 !important; border-color: rgba(59, 130, 246, 0.3) !important;"><i class="fas fa-print mr-1"></i> Print Evidence</button>
-                <button type="button" onclick="document.getElementById('distLogEvidenceModal').classList.remove('active')" class="btn btn-secondary" style="font-weight: bold; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);">Close</button>
             </div>
         </div>
     </div>
@@ -5188,7 +5186,7 @@
         <!-- ⚡ Modern pop-ups (the Employee Master look): SweetAlert2 + alert / tnaAsk / tnaAskText. AUTO-HEAL: if the CDN cannot load, the browser's own pop-ups. -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="contractors_modern_popups.js?v=20261020a"></script>
-        <script src="contractors.js?v=20261103b"></script>
+        <script src="contractors.js?v=20261104t"></script>
         <script src="stock_item_rule.js?v=20261102d"></script>
         <script src="report_unsubs.js?v=20261031a"></script>
         <!-- ⚡ 2026-10-18 Farmers Master: the import wizard (Data Tools > Import Excel Data). AUTO-HEAL: safe to remove - the old Import screen opens. -->
@@ -5196,13 +5194,13 @@
         <!-- ⚡ One look for Excel exports (the Reports style: logo, navy headings). AUTO-HEAL: safe to remove - exports go back to plain files. -->
         <script src="tna_styled_export.js?v=20261005a"></script>
         <!-- Contractors screen/action permissions guard. Must load after contractors.js. -->
-            <script src="contractor_perms.js?v=20261023a"></script>
+            <script src="contractor_perms.js?v=20261104c"></script>
         <!-- Shared resize grip for every pop-up (tna_modal_resize.js). Safe to remove. -->
        <script src="tna_modal_resize.js?v=20261026b"></script>
        <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
-        <script src="tna_topbar.js?v=30"></script>
+        <script src="tna_topbar.js?v=38"></script>
       <!-- Employee Master button & tab look (navy glass, red kept for danger). Safe to remove. -->
-        <script src="tna_em_buttons.js"></script>
+        <script src="tna_em_buttons.js?v=20261104a"></script>
        <!-- One "Dates" field (drag or click from/to) for every ...DateFrom / ...DateTo pair. Safe to remove. -->
         <script src="tna_date_range.js"></script>
        <!-- Settings screen: left menu, one section at a time, (i) help, Seasons pop-up. Safe to remove. -->
@@ -5214,7 +5212,7 @@
         <!-- 2026-10-18 "Depot" instead of "Warehouse" on every screen (words only - names, data, exports and the phone stay the same). AUTO-HEAL: safe to remove. -->
         <script src="contractors_depot_words.js?v=20261018a"></script>
         <!-- Sidebar groups (Farmers & Contracts / Distribution / Reports & Messages / Setup). Safe to remove. -->
-        <script src="contractors_sidebar_groups.js"></script>
+        <script src="contractors_sidebar_groups.js?v=20261104b"></script>
        <!-- Workflow screen: left menu, one section at a time, (i) help, Stand-In pop-up. Safe to remove. -->
         <script src="contractors_workflow_ui.js?v=20261019d"></script>
         <!-- ⚡ Workflow: step 0 "Chairperson & Secretary (phone)" - automatic approval + biometric check settings (new file). AUTO-HEAL: safe to remove. -->
@@ -5249,30 +5247,43 @@
         <script src="contractors_header_search.js?v=20261003a"></script>
         <script src="contractors_inbox_bulk.js?v=20261005p"></script>
         <!-- Guided tours, how-to guides + What's new (content in /tours/contractors_tours.json). AUTO-HEAL: safe to remove. -->
-        <script src="contractors_club_officers.js?v=20261018a"></script>
+        <script src="contractors_club_officers.js?v=20261104c"></script>
         <!-- ⚡ Settings menu in groups (General / Contracts / Custom Fields / Connections) that fold, like the sidebar (new file). AUTO-HEAL: safe to remove. -->
-        <script src="contractors_settings_groups.js?v=20261009a"></script>
-    <script src="contractors_settings_popup.js?v=20261019a"></script>
+        <!-- ⚡ 2026-11-04 Hierarchy Levels move into Settings > Locations (new file, before the Settings groups). AUTO-HEAL: safe to remove. -->
+        <script src="contractors_levels_settings.js?v=20261104a"></script>
+        <!-- ⚡ 2026-11-04 Farmer Transfer tab: paste farmer codes, their clubs go to a new FT (new file). AUTO-HEAL: safe to remove. -->
+        <script src="contractors_ft_transfer.js?v=20261104m"></script>
+        <!-- ⚡ 2026-11-04 Depot Assignment tab: which depot(s) each Field Tech works from (new file, after the transfer file it reuses). AUTO-HEAL: safe to remove. -->
+        <script src="contractors_depot_assign.js?v=20261104c"></script>
+        <!-- ⚡ 2026-11-04 Workflow screen moves into Settings > 6 Workflow Approval (Workflow Routing, Stand-In Approvers); its
+             sidebar link goes (new file, before the Settings groups). AUTO-HEAL: safe to remove - the Workflow screen comes back. -->
+        <script src="contractors_workflow_settings.js?v=20261104b"></script>
+        <script src="contractors_settings_groups.js?v=20261104b"></script>
+    <script src="contractors_settings_popup.js?v=20261104e"></script>
     <script src="contractors_products_hub.js?v=20261102g"></script>
     <script src="contractors_calc_test.js?v=20261102a"></script>
     <!-- ⚡ 2026-10-23: SMS & Broadcast opens as a pop-up window like Settings (new file). AUTO-HEAL: safe to remove. -->
-    <script src="contractors_sms_popup.js?v=20261023b"></script>
+    <script src="contractors_sms_popup.js?v=20261104c"></script>
         <!-- ⚡ Club membership card of the Chairperson and Secretary (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_club_cards.js?v=20260930b"></script>
         <!-- ⚡ Clubs without a Chairperson / Secretary: Reports tab, "Not assigned clubs" tab, signing block setting (new file). AUTO-HEAL: safe to remove. -->
-        <script src="contractors_club_exceptions.js?v=20261019a"></script>
+        <script src="contractors_club_exceptions.js?v=20261104a"></script>
         <!-- ⚡ Chairperson & Secretary: choose the columns and their order (Columns button, right-click or drag a heading) (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_officer_columns.js?v=20261018a"></script>
         <!-- ⚡ Contracts: choose the columns and their order, farmer columns, click a heading to sort (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_contract_columns.js?v=20261006s"></script>
         <!-- ⚡ Distribution Master > Incoming Logs: Filters button, columns, farmer columns, sort, column search, pages (Settings > General), export (new file). AUTO-HEAL: safe to remove. -->
-        <script src="contractors_distlog_columns.js?v=20261006s"></script>
+        <!-- ⚡ 2026-11-04 One date range picker (Team View style) - used by Incoming Logs. AUTO-HEAL: safe to remove (the Dates field in Filters comes back). -->
+        <script src="cx_range_picker.js?v=20261104b"></script>
+        <script src="contractors_distlog_columns.js?v=20261104a"></script>
         <!-- ⚡ Approve from mobile app (Workflow) + Reject in the Inbox (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_manager_approvals.js?v=20261005p"></script>
         <!-- ⚡ Reports > Bulk Approvals: every Inbox "Approve selected" run, with the review answer, for audit (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_bulk_approvals_report.js?v=20261002a"></script>
         <!-- ⚡ Reports: one screen - a report dropdown, filters, columns, sort, column search, summary, pages, export (new file). AUTO-HEAL: safe to remove (the old tabs come back). -->
-        <script src="contractors_report_center.js?v=20261103a"></script>
+        <script src="contractors_report_center.js?v=20261104t"></script>
+        <!-- ⚡ 2026-11-04 Distribution Master > Final Distributions Approval: upload the client file, compare per farmer, approve final figures (full admins). AUTO-HEAL: safe to remove. -->
+        <script src="contractors_final_dist.js?v=20261104h"></script>
         <!-- ⚡ Dashboard: Approved Farmers = farmers with an approved contract + the "Farmers vs Approved" card (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_dash_approval.js?v=20261006a"></script>
         <!-- ⚡ Settings > Contract Rules > Partial distribution (Off / only when the warehouse is short / any time with a reason) -->
@@ -5318,6 +5329,8 @@
         <!-- ⚡ 2026-10-18 Add / Edit Farmer: one organised form with a side menu + changes summary on Save. AUTO-HEAL: safe to remove - the old tabbed form shows. -->
         <script src="contractors_profile_form.js?v=20261019c"></script>
         <script src="contractors_navy_badges.js?v=20261019b"></script>
+        <!-- ⚡ 2026-11-04 The Action column of every list stays on screen at the right edge, on a white band (new file, always on). AUTO-HEAL: safe to remove. -->
+        <script src="contractors_sticky_actions.js?v=20261104a"></script>
 
         <script src="tna_tour.js" data-tour-page="contractors" data-tour-help-position="right-raised"></script>
         <!-- ⚡ Farmers & Distribution: "What's new" notes from releases.json (pages: "contractors"). AUTO-HEAL: safe to remove. -->
@@ -5328,21 +5341,7 @@
         <!-- Guided setup in Demo / Setup mode (plan in /tours/contractors_setup.json). AUTO-HEAL: safe to remove. -->
         <script src="tna_setup.js" data-setup-page="contractors"></script>
         <!-- Dark mode fixes: Employee Master background, dark cards instead of white boxes. Loaded last. Safe to remove. -->
-        <link rel="stylesheet" href="/css/contractors_dark.css">
-        <!-- ⚡ Sticky top bar: frosted only once the page is scrolled (see the style in <head>). Safe to remove. -->
-        <script>
-            (function () {
-                var main = document.querySelector('.main-content');
-                if (!main) return;
-                var row = null, on = null;
-                function mark() {
-                    if (!row || !row.isConnected) row = main.querySelector(':scope > .page-header-row');
-                    var now = main.scrollTop > 4;
-                    if (row && now !== on) { on = now; row.classList.toggle('tna-scrolled', now); }   // only when it changes
-                }
-                main.addEventListener('scroll', mark, { passive: true });
-                mark();
-            })();
-        </script>
+        <link rel="stylesheet" href="/css/contractors_dark.css?v=20261104a">
+        <!-- ⚡ Sticky top bar: now done by js/tna_topbar.js on every screen (this page's own copy removed 2026-11-04). -->
 </body>
 </html>
