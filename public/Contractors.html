@@ -3487,11 +3487,11 @@
                                     <i class="fas fa-database"></i> Data Tools <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i>
                                 </button>
                                 <div id="areaDataToolsMenu" class="profile-dropdown-menu" style="top: calc(100% + 8px); right: 0; left: auto; bottom: auto; min-width: 230px; z-index: 105;">
-                                    <a href="#" id="btnAreaTemplate" onclick="document.getElementById('areaDataToolsMenu').classList.remove('show'); downloadAreaTemplate(); return false;" class="dropdown-item" title="Download a blank Excel template built from your Hierarchy Levels"><i class="fas fa-file-download" style="color: #94a3b8;"></i> Download Blank Template</a>
+                                    <a href="#" id="btnAreaTemplate" style="display: none;" data-hidden-by="location-setup-2026-11-05" onclick="document.getElementById('areaDataToolsMenu').classList.remove('show'); downloadAreaTemplate(); return false;" class="dropdown-item" title="Download a blank Excel template built from your Hierarchy Levels"><i class="fas fa-file-download" style="color: #94a3b8;"></i> Download Blank Template</a>
                                     <a href="#" id="btnAreaExport" onclick="document.getElementById('areaDataToolsMenu').classList.remove('show'); exportAreasList(); return false;" class="dropdown-item" title="Download every location with its details, tobacco type and warehouse - the same columns as the template"><i class="fas fa-file-export" style="color: #10b981;"></i> Export Location Data</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a href="#" id="btnImportAreas" onclick="document.getElementById('areaDataToolsMenu').classList.remove('show'); triggerAreaImport(); return false;" class="dropdown-item" title="Import a completed template"><i class="fas fa-upload" style="color: #3b82f6;"></i> Import Excel Data</a>
-                                    <a href="#" onclick="document.getElementById('areaDataToolsMenu').classList.remove('show'); openAreaImportHistory(); return false;" class="dropdown-item" title="See recent Locations imports and undo the latest one"><i class="fas fa-history" style="color: #64748b;"></i> View Import History</a>
+                                    <div class="dropdown-divider" style="display: none;"></div>
+                                    <a href="#" id="btnImportAreas" style="display: none;" data-hidden-by="location-setup-2026-11-05" onclick="document.getElementById('areaDataToolsMenu').classList.remove('show'); triggerAreaImport(); return false;" class="dropdown-item" title="Import a completed template"><i class="fas fa-upload" style="color: #3b82f6;"></i> Import Excel Data</a>
+                                    <a href="#" style="display: none;" data-hidden-by="location-setup-2026-11-05" onclick="document.getElementById('areaDataToolsMenu').classList.remove('show'); openAreaImportHistory(); return false;" class="dropdown-item" title="See recent Locations imports and undo the latest one"><i class="fas fa-history" style="color: #64748b;"></i> View Import History</a>
                                 </div>
                             </div>
                             <button type="button" onclick="openAreaModal()" class="btn">
@@ -4102,7 +4102,7 @@
 
                     <!-- Historical Logs -->
                     <div class="profile-card" style="grid-column: span 2;">
-                        <h4 class="profile-card-title"><i class="fas fa-clipboard-check" style="color: #ec4899;"></i> Historical Distribution Logs</h4>
+                        <h4 class="profile-card-title"><i class="fas fa-clipboard-check" style="color: #ec4899;"></i> Distribution transactions</h4>
                         <div id="viewContDistLogsList" style="display: flex; flex-direction: column; gap: 10px;">
                             <p class="text-xs text-gray-500 italic">Loading logs...</p>
                         </div>
@@ -5186,7 +5186,7 @@
         <!-- ⚡ Modern pop-ups (the Employee Master look): SweetAlert2 + alert / tnaAsk / tnaAskText. AUTO-HEAL: if the CDN cannot load, the browser's own pop-ups. -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="contractors_modern_popups.js?v=20261020a"></script>
-        <script src="contractors.js?v=20261104t"></script>
+        <script src="contractors.js?v=20261105b"></script>
         <script src="stock_item_rule.js?v=20261102d"></script>
         <script src="report_unsubs.js?v=20261031a"></script>
         <!-- ⚡ 2026-10-18 Farmers Master: the import wizard (Data Tools > Import Excel Data). AUTO-HEAL: safe to remove - the old Import screen opens. -->
@@ -5198,7 +5198,7 @@
         <!-- Shared resize grip for every pop-up (tna_modal_resize.js). Safe to remove. -->
        <script src="tna_modal_resize.js?v=20261026b"></script>
        <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
-        <script src="tna_topbar.js?v=38"></script>
+        <script src="tna_topbar.js?v=39"></script>
       <!-- Employee Master button & tab look (navy glass, red kept for danger). Safe to remove. -->
         <script src="tna_em_buttons.js?v=20261104a"></script>
        <!-- One "Dates" field (drag or click from/to) for every ...DateFrom / ...DateTo pair. Safe to remove. -->
@@ -5208,7 +5208,7 @@
        <script src="contractors_seasons.js?v=20261005p"></script>
 
         <!-- ⚡ Screens use your own hierarchy level names instead of "Area" (new file). AUTO-HEAL: safe to remove. -->
-        <script src="contractors_level_words.js?v=20261023a"></script>
+        <script src="contractors_level_words.js?v=20261105a"></script>
         <!-- 2026-10-18 "Depot" instead of "Warehouse" on every screen (words only - names, data, exports and the phone stay the same). AUTO-HEAL: safe to remove. -->
         <script src="contractors_depot_words.js?v=20261018a"></script>
         <!-- Sidebar groups (Farmers & Contracts / Distribution / Reports & Messages / Setup). Safe to remove. -->
@@ -5229,7 +5229,7 @@
         <script src="contract_bulk_export.js?v=20261102c"></script>
         <script src="contract_serial_settings.js?v=20261102b"></script>
         <!-- ⚡ 2026-11-02 Final Issue Notes: Settings > Contract Fields > Issue Notes (templates + builder). AUTO-HEAL: safe to remove. -->
-        <script src="issue_note_builder.js?v=20261102g"></script>
+        <script src="issue_note_builder.js?v=20261105b"></script>
         <!-- ⚡ 2026-11-02 Contract Templates as cards in Settings > Contract Mapping & Issue Notes (new file). AUTO-HEAL: safe to remove. -->
         <script src="contract_template_cards.js?v=20261102a"></script>
         <!-- ⚡ 2026-11-02 Map Fields in the Issue Note builder look (new file, the mapper logic stays in contractors.js). AUTO-HEAL: safe to remove - the old look comes back. -->
@@ -5252,7 +5252,7 @@
         <!-- ⚡ 2026-11-04 Hierarchy Levels move into Settings > Locations (new file, before the Settings groups). AUTO-HEAL: safe to remove. -->
         <script src="contractors_levels_settings.js?v=20261104a"></script>
         <!-- ⚡ 2026-11-04 Farmer Transfer tab: paste farmer codes, their clubs go to a new FT (new file). AUTO-HEAL: safe to remove. -->
-        <script src="contractors_ft_transfer.js?v=20261104m"></script>
+        <script src="contractors_ft_transfer.js?v=20261105a"></script>
         <!-- ⚡ 2026-11-04 Depot Assignment tab: which depot(s) each Field Tech works from (new file, after the transfer file it reuses). AUTO-HEAL: safe to remove. -->
         <script src="contractors_depot_assign.js?v=20261104c"></script>
         <!-- ⚡ 2026-11-04 Workflow screen moves into Settings > 6 Workflow Approval (Workflow Routing, Stand-In Approvers); its
@@ -5275,15 +5275,15 @@
         <!-- ⚡ Distribution Master > Incoming Logs: Filters button, columns, farmer columns, sort, column search, pages (Settings > General), export (new file). AUTO-HEAL: safe to remove. -->
         <!-- ⚡ 2026-11-04 One date range picker (Team View style) - used by Incoming Logs. AUTO-HEAL: safe to remove (the Dates field in Filters comes back). -->
         <script src="cx_range_picker.js?v=20261104b"></script>
-        <script src="contractors_distlog_columns.js?v=20261104a"></script>
+        <script src="contractors_distlog_columns.js?v=20261105a"></script>
         <!-- ⚡ Approve from mobile app (Workflow) + Reject in the Inbox (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_manager_approvals.js?v=20261005p"></script>
         <!-- ⚡ Reports > Bulk Approvals: every Inbox "Approve selected" run, with the review answer, for audit (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_bulk_approvals_report.js?v=20261002a"></script>
         <!-- ⚡ Reports: one screen - a report dropdown, filters, columns, sort, column search, summary, pages, export (new file). AUTO-HEAL: safe to remove (the old tabs come back). -->
-        <script src="contractors_report_center.js?v=20261104t"></script>
+        <script src="contractors_report_center.js?v=20261105e"></script>
         <!-- ⚡ 2026-11-04 Distribution Master > Final Distributions Approval: upload the client file, compare per farmer, approve final figures (full admins). AUTO-HEAL: safe to remove. -->
-        <script src="contractors_final_dist.js?v=20261104h"></script>
+        <script src="contractors_final_dist.js?v=20261105j"></script>
         <!-- ⚡ Dashboard: Approved Farmers = farmers with an approved contract + the "Farmers vs Approved" card (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_dash_approval.js?v=20261006a"></script>
         <!-- ⚡ Settings > Contract Rules > Partial distribution (Off / only when the warehouse is short / any time with a reason) -->
@@ -5301,11 +5301,13 @@
         <script src="contractors_club_warehouses.js"></script>
         <script src="contractors_farmer_words.js"></script>
         <!-- ⚡ Farmers Master: your columns in your order (right-click a heading) + a filter for every level (new file). AUTO-HEAL: safe to remove. -->
-               <script src="contractors_farmer_columns.js?v=20261023a"></script>
+               <script src="contractors_farmer_columns.js?v=20261105a"></script>
         <!-- ⚡ Locations Master: move the columns into your own order (drag a heading, or right-click it) (new file). AUTO-HEAL: safe to remove. -->
        <script src="contractors_location_columns.js"></script>
         <!-- ⚡ Farmers Master: a column per running cycle - does he get inputs, and what was issued (new file). AUTO-HEAL: safe to remove. -->
-       <script src="contractors_cycle_inputs.js?v=20261102b"></script>
+       <script src="contractors_cycle_inputs.js?v=20261105a"></script>
+       <!-- ⚡ 2026-11-05 Farmers Master on-screen filters (Profile / Inputs per cycle / Contract / Tobacco type rows, like the Distribution Report); the Filters pop-up button is hidden. AUTO-HEAL: safe to remove - the Filters button comes back. -->
+       <script src="contractors_farmer_tiles.js?v=20261105e"></script>
         <!-- ⚡ Farmers Master: a search box under every column heading (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_farmer_header_search.js?v=20261018a"></script>
         <!-- ⚡ Farmers Master: Data Tools > Export Custom List (the list as filtered, the columns shown) (new file). AUTO-HEAL: safe to remove. -->
@@ -5323,14 +5325,20 @@
         <!-- ⚡ 2026-10-18 Numbers on the left in every table (counts, quantities, amounts); Action columns stay right. AUTO-HEAL: safe to remove. -->
         <script src="contractors_numbers_left.js?v=20261018b"></script>
         <script src="contractors_hierarchy_levels.js?v=20261019b"></script>
-        <script src="contractors_manager_assign.js?v=20261019d"></script>
+        <script src="contractors_manager_assign.js?v=20261105b"></script>
+        <script src="contractors_manager_bulk.js?v=20261105i"></script>
+        <script src="contractors_location_setup.js?v=20261105c"></script>
         <!-- ⚡ 2026-10-18 Farmer Profile Overview: header, tabs, season timeline, print. AUTO-HEAL: safe to remove - the old overview shows. -->
-        <script src="contractors_profile_overview.js?v=20261018e"></script>
+        <script src="contractors_profile_overview.js?v=20261105a"></script>
         <!-- ⚡ 2026-10-18 Add / Edit Farmer: one organised form with a side menu + changes summary on Save. AUTO-HEAL: safe to remove - the old tabbed form shows. -->
         <script src="contractors_profile_form.js?v=20261019c"></script>
         <script src="contractors_navy_badges.js?v=20261019b"></script>
         <!-- ⚡ 2026-11-04 The Action column of every list stays on screen at the right edge, on a white band (new file, always on). AUTO-HEAL: safe to remove. -->
         <script src="contractors_sticky_actions.js?v=20261104a"></script>
+        <!-- ⚡ 2026-11-05 Work tabs: drag a sidebar screen, an inner tab or a report (grip beside the Reports dropdown) above the card to pin it as a tab; saved per user. Always on. AUTO-HEAL: safe to remove. -->
+        <!-- ⚡ 2026-11-05 Screen speed: screens show at once + loading bar + placeholder rows; saving buttons show a spinner and ignore a 2nd click. Two switches in Settings > General (on when nothing saved). AUTO-HEAL: safe to remove. -->
+        <script src="contractors_progressive.js?v=20261105b"></script>
+        <script src="contractors_work_tabs.js?v=20261105d"></script>
 
         <script src="tna_tour.js" data-tour-page="contractors" data-tour-help-position="right-raised"></script>
         <!-- ⚡ Farmers & Distribution: "What's new" notes from releases.json (pages: "contractors"). AUTO-HEAL: safe to remove. -->
