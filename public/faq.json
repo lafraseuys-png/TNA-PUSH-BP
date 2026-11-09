@@ -1,0 +1,1393 @@
+{
+ "version": "2026-11-09",
+ "checked": "2026-11-09 against the QC code (4 checks + top bar); 1 removed (wizard is switched off)",
+ "topics": [
+  [
+   "All",
+   "apps"
+  ],
+  [
+   "Getting started",
+   "rocket_launch"
+  ],
+  [
+   "Employee Master",
+   "badge"
+  ],
+  [
+   "Time & Attendance",
+   "schedule"
+  ],
+  [
+   "Leave & ESS",
+   "beach_access"
+  ],
+  [
+   "HR Management",
+   "work"
+  ],
+  [
+   "Employee Costs",
+   "account_balance_wallet"
+  ],
+  [
+   "Fuel & Deliveries",
+   "local_gas_station"
+  ],
+  [
+   "Production Pay",
+   "agriculture"
+  ],
+  [
+   "Assets, Stock & POS",
+   "inventory_2"
+  ],
+  [
+   "Farmers & Distribution",
+   "eco"
+  ],
+  [
+   "Access Control",
+   "door_front"
+  ],
+  [
+   "Mobile app",
+   "smartphone"
+  ],
+  [
+   "Account & access",
+   "manage_accounts"
+  ]
+ ],
+ "tnasubs": [
+  [
+   "Clocking",
+   "fingerprint"
+  ],
+  [
+   "Overtime",
+   "more_time"
+  ],
+  [
+   "Leave",
+   "event_busy"
+  ],
+  [
+   "Shifts",
+   "view_timeline"
+  ],
+  [
+   "Weekly rostering",
+   "calendar_month"
+  ],
+  [
+   "T&A settings",
+   "tune"
+  ],
+  [
+   "Reports",
+   "bar_chart"
+  ]
+ ],
+ "syn": {
+  "ot": [
+   "overtime"
+  ],
+  "overtime": [
+   "ot"
+  ],
+  "punch": [
+   "clock"
+  ],
+  "punches": [
+   "clock"
+  ],
+  "clock": [
+   "punch"
+  ],
+  "clocking": [
+   "punch"
+  ],
+  "ph": [
+   "public holiday"
+  ],
+  "holiday": [
+   "ph"
+  ],
+  "roster": [
+   "rostering"
+  ],
+  "recalc": [
+   "recalculat"
+  ],
+  "approver": [
+   "approv"
+  ],
+  "timesheet": [
+   "attendance"
+  ]
+ },
+ "stop": {
+  "how": 1,
+  "do": 1,
+  "i": 1,
+  "the": 1,
+  "a": 1,
+  "an": 1,
+  "to": 1,
+  "my": 1,
+  "is": 1,
+  "what": 1,
+  "why": 1,
+  "can": 1,
+  "does": 1,
+  "of": 1,
+  "for": 1,
+  "in": 1,
+  "on": 1,
+  "it": 1,
+  "and": 1,
+  "or": 1,
+  "where": 1,
+  "when": 1,
+  "who": 1,
+  "are": 1,
+  "with": 1,
+  "me": 1
+ },
+ "faq": [
+  {
+   "k": "find-screen",
+   "t": "Getting started",
+   "q": "How do I find a screen quickly?",
+   "a": "Click the search box at the top, or press Ctrl K anywhere. Type what you need, such as leave, roster or payslip, or a person's name, PIN or ID number, a farmer, a contract number or an asset tag. Pick a result, or use the arrow keys and Enter. Only what you have access to is listed."
+  },
+  {
+   "k": "pin",
+   "t": "Getting started",
+   "q": "How do I keep my favourite screens one click away?",
+   "a": "Star them. In the search list, point at a screen and click its star. Starred screens stay at the top of the list. You can star up to 5 screens; click the star again to remove it. For any other screen, use Bookmarks in the inbox."
+  },
+  {
+   "k": "bell",
+   "t": "Getting started",
+   "q": "What does the dot on the inbox mean?",
+   "a": "Something new is waiting for you: approvals such as overtime, missing punches, leave and farmer contracts, requests from the phone app, What's new, or a reminder that is due. Click the inbox icon at the top right to see them. Unread shows what you have not looked at yet; Approvals shows everything waiting for your decision until it is handled."
+  },
+  {
+   "k": "theme",
+   "t": "Getting started",
+   "q": "How do I switch between dark and light mode?",
+   "a": "Click the moon or sun in the box at the top right. Your choice follows you to every computer you log in on."
+  },
+  {
+   "k": "switch-module",
+   "t": "Getting started",
+   "q": "How do I jump to another module?",
+   "a": "Use the module tiles at the bottom of the menu (the modules you use most), or click the dashed All modules button to see every module you can open. The gear next to them opens this module's settings."
+  },
+  {
+   "k": "add-emp",
+   "t": "Employee Master",
+   "q": "How do I add a new employee?",
+   "a": "On Active Personnel, click Create Employee and fill in the tabs. The fields marked * must be filled in: Display PIN / ID, First Name, Last Name and ID/Passport No (Personal tab), Department and Group Start Date (Employment tab) and Default Shift. The rest can be added later. Then click Create Employee at the bottom. A PIN that is already on the system cannot be used again."
+  },
+  {
+   "k": "terminate",
+   "t": "Employee Master",
+   "q": "How do I terminate an employee?",
+   "a": "On Active Personnel, click the Terminate Employee button (the red icon) on the person's row. Choose the Termination Date and the Reason for Termination, then click Lock in System. On that date the profile moves to Terminated Records. To terminate several people together, tick them and click Terminate on the bar that appears."
+  },
+  {
+   "k": "reinstate",
+   "t": "Employee Master",
+   "q": "How do I bring back a former employee?",
+   "a": "Open Terminated Records and click the Reinstate Employee button (the green undo icon) on the person's row. Choose the Reinstatement Date and click Reinstate. To bring back several people, for example at the start of a season, tick them, click Bulk Reinstate, choose the date and click Reinstate All."
+  },
+  {
+   "k": "move-dept",
+   "t": "Employee Master",
+   "q": "How do I move someone to another department?",
+   "a": "Edit their profile, choose the new department on the Employment tab, enter the Transfer Effective Date and click Save Profile. For many people, tick them on Active Personnel and click Move Department on the blue bar. Choose the New Department, enter the Transfer Effective Date and click Apply Changes."
+  },
+  {
+   "k": "import-emp",
+   "t": "Employee Master",
+   "q": "How do I add or update many employees at once?",
+   "a": "Download a Custom Blank Template, fill it in, then open the Data Import Wizard. Check the header row and column matching, and run the validation (a dry run that saves nothing) before importing."
+  },
+  {
+   "k": "custom-fields",
+   "t": "Employee Master",
+   "q": "Can I add my own fields, like boot size?",
+   "a": "Yes. Create the field under Custom Attributes, then fill it in for many employees at once with the import template."
+  },
+  {
+   "k": "in-out",
+   "t": "Time & Attendance",
+   "s": "Clocking",
+   "q": "Which clocking counts as IN and which as OUT?",
+   "a": "Clockings are read in time order, whichever button was pressed on the device. The first clocking of the day is the IN and the last is the OUT.",
+   "steps": [],
+   "tips": [
+    "If the shift has Use First-In, Last-Out ticked, the clockings in between (for example going out for lunch) are ignored, and the day is worked out from the first and last clocking only.",
+    "If it is not ticked, the clockings are paired in order (IN, OUT, IN, OUT). Only the time inside each pair counts, so time out for lunch is not paid. An odd number of clockings shows as Missing Punch.",
+    "Every clocking stays visible in [[see-punches|Time Logs]].",
+    "If someone clocks more than once on the same device within a set number of minutes (1 minute by default), only the first one counts. Set it under Time & Attendance Settings › Hours & Calculation › [[settings-double|Ignore double clockings]]."
+   ]
+  },
+  {
+   "k": "fix-punch",
+   "t": "Time & Attendance",
+   "s": "Clocking",
+   "q": "How do I fix a missed or wrong clock-in or clock-out?",
+   "a": "Fix it on the Team View timeline: move the clock time, save, then [[approve-day|approve the day]].",
+   "steps": [
+    "Open Team View and click Visual.",
+    "Choose the day. To see only the people who need attention, pick Missing Punch in the Status box, or click one of the numbers at the top (such as not approved).",
+    "On the person’s row, drag the white handle to the right time, or double-click it and type the exact time.",
+    "The change waits in the bar at the top. Click Save changes.",
+    "Check the hours, then click [[approve-day|Approve on the row]]."
+   ],
+   "tips": [
+    "Saving adds the new clocking and ignores the old one; the original clocking is never deleted.",
+    "To give several people the same correction, tick their rows first. A drag on one ticked row is applied to all of them, either as the same time or the same move (+/- minutes), as set in Options › Ticked rows get.",
+    "A day with a missing clocking cannot be approved until it is fixed."
+   ],
+   "kw": "missing punch edit time correct"
+  },
+  {
+   "k": "approve-day",
+   "t": "Time & Attendance",
+   "s": "Clocking",
+   "q": "What does approving a day do?",
+   "a": "Approving marks a person’s day as checked. It can no longer be edited, and [[recalc|recalculations]] leave it as it is.",
+   "steps": [
+    "Open Team View and choose the day.",
+    "Fix any missing clockings and decide the overtime first.",
+    "Click Approve on the person’s row. To approve several people at once, tick their rows and click Approve times."
+   ],
+   "tips": [
+    "A day with a missing clocking, undecided overtime or unsaved changes cannot be approved.",
+    "In Visual, saving an overtime decision also approves the day (the button then reads Save & approve).",
+    "To change an approved day, click Approved on the row to unlock it first. For several ticked rows, click Unlock.",
+    "Normal recalculations leave approved days alone. Only Force Overwrite All (on Auto-Violations) resets approvals.",
+    "[[settings-payroll|Payroll Locked]] is different: the whole payroll period is locked, and only unlocking the period opens those days again."
+   ]
+  },
+  {
+   "k": "see-punches",
+   "t": "Time & Attendance",
+   "s": "Clocking",
+   "q": "Where can I see every clocking someone made?",
+   "a": "Time Logs lists every clocking with its time, type, device and who captured it.",
+   "steps": [
+    "Open Time Logs.",
+    "Choose the start and end date, and a department or search for the person by name or PIN.",
+    "Click Filter. Use Export Excel to download the list."
+   ],
+   "tips": [
+    "On Actual Attendance you can also click an employee’s row to see their exact clockings for that week."
+   ],
+   "kw": "clockings punches log"
+  },
+  {
+   "k": "pull-punches",
+   "t": "Time & Attendance",
+   "s": "Clocking",
+   "q": "A clocking is missing from the device. How do I bring it in?",
+   "a": "Fetch the clockings from the devices again, then [[recalc|recalculate]] the days.",
+   "steps": [
+    "Open [[see-punches|Time Logs]] and click Sync Recent (or Sync Last 30 Days for a longer period).",
+    "Where ZKTeco CVS is used, click Compare with CVS to check a date range against CVS and pull in clockings that are missing.",
+    "On Actual Attendance, use Pull Device Clocks or Pull CVS Clocks for the week, then click Run Analyzer to [[recalc|recalculate]] the week."
+   ],
+   "tips": [
+    "If the clocking never reached any device, capture the correct time in Team View instead (see How do I fix a missed or wrong clock-in or clock-out?)."
+   ],
+   "kw": "sync device cvs missing"
+  },
+  {
+   "k": "geofence-ignored",
+   "t": "Time & Attendance",
+   "s": "Clocking",
+   "q": "Why was a clocking from the mobile app ignored?",
+   "a": "It was probably made outside the person’s [[settings-geofence|approved location]] (geofence).",
+   "steps": [
+    "Open Team View (Traditional) for that day and click Punches on the person’s row. (Or open Actual Attendance and click their row.) The ignored clocking is crossed out.",
+    "If it should count, untick Ignore next to it and click Save & Recalculate.",
+    "Then [[approve-day|approve the day]]."
+   ],
+   "tips": [
+    "If Auto-Ignore [[settings-geofence|Geofence]] Violations is switched on (Time & Attendance Settings › Geofencing), clockings outside the person’s geofence radius are ignored by the nightly calculation. A clocking you restore by hand is not ignored again.",
+    "Approved places are set under Time & Attendance Settings › Geofencing. A person uses their own [[settings-geofence|geofences]], otherwise their department’s, otherwise every approved location."
+   ],
+   "kw": "geofence location gps"
+  },
+  {
+   "k": "colours",
+   "t": "Time & Attendance",
+   "s": "Clocking",
+   "q": "What do the colours on the Team View timeline mean?",
+   "a": "The top bar is the shift; the bar below it is what actually happened that day.",
+   "steps": [],
+   "tips": [
+    "Green: normal time. Striped yellow: overtime still to approve. Solid yellow: approved overtime. Faded grey: declined overtime. Red: late or left early. Amber: time [[soft-ot|inside the threshold]], which is not overtime. Grey stripes: the break. Purple: leave.",
+    "Hover over any part to see its exact times.",
+    "On the Overview, a red outline marks a missing clocking and striped yellow marks overtime still to approve. Click any day to open it in Visual."
+   ],
+   "kw": "colors"
+  },
+  {
+   "k": "late-early",
+   "t": "Time & Attendance",
+   "s": "Clocking",
+   "q": "Someone was late or left early. What can I do?",
+   "a": "Click the red late or early part on the timeline and choose how to treat it.",
+   "steps": [
+    "Open Team View › Visual and choose the day.",
+    "Click the red part of the person’s bar.",
+    "Choose a leave type and click Add partial leave to cover it with [[leave-partial|partial leave]]. Or, if they worked extra time, click Replenish NT from time worked outside the shift to make up the normal time.",
+    "Save changes, then [[approve-day|approve the day]]."
+   ],
+   "tips": [
+    "If you leave it, the time stays unpaid and no leave is deducted.",
+    "With [[late-then-stay|Make up missed normal time first]] switched on, extra time worked automatically makes up missing normal hours first. Example: 30 minutes late, then 1 hour after the shift = 30 minutes normal time + 30 minutes overtime."
+   ],
+   "kw": "late early"
+  },
+  {
+   "k": "break-day",
+   "t": "Time & Attendance",
+   "s": "Clocking",
+   "q": "How do I change someone’s break for one day?",
+   "a": "Drag the grey break on their Team View timeline.",
+   "steps": [
+    "Open Team View › Visual and choose the day.",
+    "Drag the break to move it, or drag its ends to make it longer or shorter.",
+    "To add another break, click the green normal time.",
+    "Save changes."
+   ],
+   "tips": [
+    "This changes that day only; the shift’s break setup stays the same."
+   ]
+  },
+  {
+   "k": "shift-day",
+   "t": "Time & Attendance",
+   "s": "Clocking",
+   "q": "Can I change someone’s shift times for one day only?",
+   "a": "Yes. Drag either end of the shift bar on their Team View timeline.",
+   "steps": [
+    "Open Team View › Visual and choose the day.",
+    "Drag the start or end of the top (shift) bar. Or click the shift to type the times or pick a different shift.",
+    "Save changes."
+   ],
+   "tips": [
+    "Only that person’s day changes. The shift itself, and everyone else on it, stay the same."
+   ]
+  },
+  {
+   "k": "violations",
+   "t": "Time & Attendance",
+   "s": "Clocking",
+   "q": "What is Auto-Violations?",
+   "a": "Auto-Violations lists days that break a rule, such as a missing clocking, arriving late, leaving early, being absent, overtime past the shift’s threshold that is not approved (Unauthorized OT), a break or lunch taken too long, work on a rest day, or a clocking outside the approved location.",
+   "steps": [
+    "Open Auto-Violations.",
+    "Choose the dates and department and click Analyze.",
+    "Act on each row, or tick several and use Bulk Action. Use Export to download the list."
+   ],
+   "tips": [
+    "Unauthorized OT means time past the shift’s [[thresholds|threshold]] that still needs approval. The weekly and daily limits in [[ot-rules|Overtime Rules]] are not checked yet."
+   ],
+   "kw": "violation"
+  },
+  {
+   "k": "team-statuses",
+   "t": "Time & Attendance",
+   "s": "Clocking",
+   "q": "What do the statuses in Team View mean?",
+   "a": "Each day gets a status that tells you what still needs attention before it can be approved.",
+   "steps": [],
+   "tips": [
+    "Missing Punch, Late Entry, Early Leave and Absent need checking.",
+    "Pending Overtime is overtime still to approve. Unauthorized OT is time past the shift’s [[thresholds|threshold]] that still needs approval. OT Within [[thresholds|Threshold]] is time [[soft-ot|inside the threshold]] (not overtime).",
+    "No Shift Allocated (Worked) means the person clocked but had no shift that day. Off / Rest Day is a day off.",
+    "Action Required shows every day that still needs something done.",
+    "Complete means nothing needs fixing. Approved and [[settings-payroll|Payroll Locked]] mean the day is done. A locked day can only change after the payroll period is unlocked."
+   ]
+  },
+  {
+   "k": "ot-pending",
+   "t": "Time & Attendance",
+   "s": "Overtime",
+   "q": "Why is my overtime still showing as Pending?",
+   "a": "Overtime always needs a manager’s approval before it is paid.",
+   "steps": [
+    "Your manager opens Team View, decides on the overtime and approves the day.",
+    "The approved overtime then moves into the Appr. OT column."
+   ],
+   "tips": [
+    "Time inside the shift’s [[thresholds|threshold]] is not overtime. It shows for review (Soft OT) unless your company has switched on Ignore overtime in Threshold, which drops it.",
+    "Work on a rest day is overtime and also needs approval."
+   ]
+  },
+  {
+   "k": "ot-approve",
+   "t": "Time & Attendance",
+   "s": "Overtime",
+   "q": "How do I approve or decline overtime?",
+   "a": "In Team View › Visual, click the yellow overtime and choose Approve OT or Decline OT.",
+   "steps": [
+    "Open Team View and click Visual, then choose the day.",
+    "Click overtime to decide at the top to see only the people with overtime.",
+    "Click the yellow overtime on a row and choose Approve OT or Decline OT.",
+    "Click Save & approve. An overtime decision also [[approve-day|approves the day]]."
+   ],
+   "tips": [
+    "Overtime before the shift and after the shift are decided separately; only the approved part is paid.",
+    "For many days at once, use OT Validations: filter by dates, department and status, tick the rows, then click Bulk Approve / Reject.",
+    "If your company routes overtime through approvers, it also waits in the [[manager-inbox|Manager Inbox]]."
+   ]
+  },
+  {
+   "k": "soft-ot",
+   "t": "Time & Attendance",
+   "s": "Overtime",
+   "q": "What is “Soft OT” or time inside the threshold?",
+   "a": "It is time before or after the shift that falls inside the shift’s [[thresholds|thresholds]] (60 minutes each side unless the shift says otherwise). It is not counted as overtime.",
+   "steps": [],
+   "tips": [
+    "It shows in amber on the Team View timeline. You can still click it and choose Give as OT.",
+    "On [[ot-approve|OT Validations]], tick Show “Soft OT” (Within Threshold Limits) to list it; its status is Review (Soft OT).",
+    "If your company switches on Ignore overtime in Threshold (Time & Attendance Settings › Hours & Calculation), this time is dropped and only the shift times are paid. With it off (the default), it is sent for review."
+   ],
+   "kw": "threshold"
+  },
+  {
+   "k": "ot-calc",
+   "t": "Time & Attendance",
+   "s": "Overtime",
+   "q": "How is overtime worked out when someone stays late?",
+   "a": "Time past the end of the shift becomes overtime once it goes beyond the shift’s after-[[thresholds|threshold]].",
+   "steps": [],
+   "tips": [
+    "Overtime then counts from the shift end. Example: shift ends 17:00, [[thresholds|threshold]] 30 minutes, out at 17:45 = 45 minutes overtime.",
+    "Out at 17:20 is still inside the threshold, so it is [[soft-ot|Soft OT]], not overtime.",
+    "Time beyond the [[thresholds|thresholds]] always goes for approval."
+   ]
+  },
+  {
+   "k": "late-then-stay",
+   "t": "Time & Attendance",
+   "s": "Overtime",
+   "q": "Someone came in late and stayed late. Is that overtime?",
+   "a": "It depends on Make up missed normal time first. With it off (the default), the late minutes stay unpaid and time after the shift can be overtime. With it on, the extra time first makes up the missing normal hours.",
+   "steps": [],
+   "tips": [
+    "Example with it on: 30 minutes late, then 1 hour after the shift = 30 minutes normal time + 30 minutes overtime.",
+    "The setting is under Time & Attendance Settings › Hours & Calculation.",
+    "For one person’s day only, click the red late part in Team View › Visual and choose Replenish NT from time worked outside the shift."
+   ]
+  },
+  {
+   "k": "weekend-ot",
+   "t": "Time & Attendance",
+   "s": "Overtime",
+   "q": "Is weekend and public holiday work overtime?",
+   "a": "It depends on your [[ot-rules|Overtime Rules]] and the public holiday settings.",
+   "steps": [],
+   "tips": [
+    "Saturday hours are overtime can be switched on so every Saturday hour is overtime (on by default). Sunday hours are paid at the Sunday rate (2.0 by default). Both are in [[ot-rules|Overtime Rules]] › Weekends.",
+    "For work on a public holiday, choose under Time & Attendance Settings › [[add-holiday|Public Holidays & Leave]] › Public holiday, worked: Public holiday column only, Normal time and public holiday column, or Double hours in the public holiday column.",
+    "Work on a rest day is treated as overtime and needs approval."
+   ]
+  },
+  {
+   "k": "ot-rules",
+   "t": "Time & Attendance",
+   "s": "Overtime",
+   "q": "Where do I set overtime limits and rates?",
+   "a": "In Overtime Rules, inside Time & Attendance Settings. Here you set the weekend rules and the overtime rates.",
+   "steps": [
+    "Open Time & Attendance Settings (the gear at the bottom of the menu) and choose Overtime Rules.",
+    "Under Weekends, choose whether Saturday hours are overtime and set the Sunday rate.",
+    "Under Weekday overtime & public holidays, set the Overtime and Public holiday rates.",
+    "Click Save changes in the bar that comes up."
+   ],
+   "tips": [
+    "These apply to everyone. For a shift or a group with its own rule, such as security guards, click Add a rule under Overtime rules for shifts or people, then pick the rule on the shift or on the person in Employee Master. A rule decides Saturdays and after how many hours a day overtime starts on session shifts.",
+    "The Overtime limits (Earnings limit for overtime, Most overtime in a week, Most hours in a day) are saved but not used in calculations yet.",
+    "Unless set otherwise, Employee Costs pays a fixed 1.5× for overtime and 2.0× for Sundays and public holidays."
+   ]
+  },
+  {
+   "k": "ot-violation",
+   "t": "Time & Attendance",
+   "s": "Overtime",
+   "q": "Why was someone flagged for too much overtime?",
+   "a": "Nobody is flagged for going over an overtime limit yet. The weekly and daily limits in [[ot-rules|Overtime Rules]] are saved but not used in calculations. A day marked Unauthorized OT means time past the shift’s [[thresholds|threshold]] that has not been approved yet.",
+   "steps": [],
+   "tips": [
+    "The day appears in [[violations|Auto-Violations]] and in Team View so a manager can approve or decline the overtime.",
+    "To approve it, see [[ot-approve|How do I approve or decline overtime?]]"
+   ]
+  },
+  {
+   "k": "normal-round",
+   "t": "Time & Attendance",
+   "s": "Overtime",
+   "q": "Why does Normal time show 8:00 when they clocked in at 08:02?",
+   "a": "On a day with overtime, Normal time that is 1 or 2 minutes off a half hour is rounded to the half hour, and those minutes move to or from overtime.",
+   "steps": [],
+   "tips": [
+    "Example: in at 08:02 gives Normal 8:00 and OT 0:43. Without the rounding it would be Normal 7:58 and OT 0:45.",
+    "This rounding (Round Normal Time to the Half Hour) is on by default. The switch is not shown on the settings screen at the moment."
+   ]
+  },
+  {
+   "k": "manager-inbox",
+   "t": "Time & Attendance",
+   "s": "Overtime",
+   "q": "What is the Manager Inbox?",
+   "a": "It lists the overtime and exceptions waiting for your approval, with the approval level each one is on.",
+   "steps": [
+    "Open Manager Inbox.",
+    "Filter by dates, department or employee.",
+    "Approve or reject each item, or tick several and use Bulk Approve."
+   ],
+   "tips": [
+    "Who approves at each level is set in [[settings-routing|Workflow Routing]]."
+   ],
+   "kw": "approvals approve"
+  },
+  {
+   "k": "ot-preapproved",
+   "t": "Time & Attendance",
+   "s": "Overtime",
+   "q": "Can overtime be authorised before it is worked?",
+   "a": "Yes, if your company has switched on Use pre-approved overtime under Time & Attendance Settings › Pre-approved Overtime.",
+   "steps": [
+    "Managers log the authorised hours on the OT Authorisations page, or with Authorise OT on the Weekly Roster.",
+    "Days with authorised overtime show a small OT badge on the roster."
+   ],
+   "tips": [
+    "The rules (who it applies to, who approves, limits and cut-off times) are set under Time & Attendance Settings › Pre-approved Overtime.",
+    "Authorised overtime is approved straight away. Overtime worked above it is decided on Team View."
+   ]
+  },
+  {
+   "k": "leave-timesheet",
+   "t": "Time & Attendance",
+   "s": "Leave",
+   "q": "How does approved leave show on the timesheet?",
+   "a": "Approved leave appears in the Leave column of Team View for that day.",
+   "steps": [],
+   "tips": [
+    "Leave itself is applied for and approved in ESS (mobile app or ESS dashboard).",
+    "A day with approved leave does not need clockings."
+   ]
+  },
+  {
+   "k": "leave-partial",
+   "t": "Time & Attendance",
+   "s": "Leave",
+   "q": "Can I cover someone’s late arrival with leave?",
+   "a": "Yes. Cover the late or early time with partial leave on the Team View timeline.",
+   "steps": [
+    "Open Team View › Visual and choose the day.",
+    "Click the red late or early part of the person’s bar.",
+    "Choose to cover it with partial leave, then save and [[approve-day|approve the day]]."
+   ],
+   "tips": [
+    "If you leave it, the time stays unpaid and no leave is deducted."
+   ]
+  },
+  {
+   "k": "leave-weekend",
+   "t": "Time & Attendance",
+   "s": "Leave",
+   "q": "How is paid leave on a weekend or public holiday paid?",
+   "a": "It depends on the setting for that kind of day.",
+   "steps": [],
+   "tips": [
+    "Saturday: normal time or the overtime rate (1.5×). Sunday: normal time or the Sunday rate (2.0×). Public holiday: normal time or the public holiday rate.",
+    "Set under Time & Attendance Settings › [[add-holiday|Public Holidays & Leave]] › Paid leave on a weekend or public holiday."
+   ]
+  },
+  {
+   "k": "ph-notworked",
+   "t": "Time & Attendance",
+   "s": "Leave",
+   "q": "What happens on a public holiday someone does not work?",
+   "a": "A public holiday is a day off for everyone, unless they have a shift that day.",
+   "steps": [],
+   "tips": [
+    "If someone is rostered on a public holiday but does not clock in, your company chooses whether they are paid their normal shift hours or nothing (Settings › [[add-holiday|Public Holidays & Leave]]).",
+    "Tick Also pay normal time if worked on a holiday to pay normal time as well when someone does work it."
+   ]
+  },
+  {
+   "k": "add-holiday",
+   "t": "Time & Attendance",
+   "s": "Leave",
+   "q": "How do I add a public holiday?",
+   "a": "Add it under Time & Attendance Settings › Public Holidays & Leave.",
+   "steps": [
+    "Open Time & Attendance Settings (the gear) and choose Public Holidays & Leave.",
+    "Enter the date and name.",
+    "Tick Also pay normal time if worked if that applies, then click Add holiday."
+   ],
+   "tips": [
+    "A holiday saves straight away; there is no separate Save.",
+    "If Use the built-in public holiday calendar is switched on, the holidays fill in by themselves. Use + Add a once-off holiday for extra days, such as a company shutdown day."
+   ]
+  },
+  {
+   "k": "leave-types",
+   "t": "Time & Attendance",
+   "s": "Leave",
+   "q": "Where are leave types set up?",
+   "a": "Under Time & Attendance Settings › [[add-holiday|Public Holidays & Leave]] › Leave types.",
+   "steps": [],
+   "tips": [
+    "This is the same list as ESS Master › Leave Types, where you also set when proof is needed.",
+    "How much leave people get is set in ESS Master’s Leave Policies."
+   ]
+  },
+  {
+   "k": "leave-sage",
+   "t": "Time & Attendance",
+   "s": "Leave",
+   "q": "How does approved leave get to Sage?",
+   "a": "It waits in the Sage Push Queue until payroll pushes it or ignores it.",
+   "steps": [
+    "Open Sage Push Queue.",
+    "Choose the status (Pending, Failed, Pushed or Ignored) and the leave dates, then click Load.",
+    "Tick the rows and click Push Selected, or Ignore Selected for leave that should not go to Sage."
+   ],
+   "tips": [
+    "Approved, logged and cancelled leave all arrive in the queue.",
+    "A failed row shows its error in Note / Error. Fix the cause, then use Re-queue Selected."
+   ],
+   "kw": "payroll"
+  },
+  {
+   "k": "leave-shift",
+   "t": "Time & Attendance",
+   "s": "Leave",
+   "q": "Can a shift give paid time off?",
+   "a": "Yes. A shift can be linked to a leave type for paid time off.",
+   "steps": [
+    "Open Shift Rules and create or edit the shift.",
+    "Under How people clock, click More types and choose Paid day, no clocking.",
+    "Pick the leave type in Leave type this day books.",
+    "Click Save shift (Create shift for a new one)."
+   ],
+   "tips": [
+    "Putting someone on this shift books that paid leave for the day and marks it On Leave."
+   ]
+  },
+  {
+   "k": "create-shift",
+   "t": "Time & Attendance",
+   "s": "Shifts",
+   "q": "How do I create a shift?",
+   "a": "Click Create Shift on Shift Rules. A pop-up takes you through the shift one step at a time.",
+   "steps": [
+    "Open Shift Rules and click Create Shift. Preset shifts, next to it, gives you ready-made shifts to start from.",
+    "How people clock: pick the one that fits, for example Clock in and out.",
+    "Name & colour: enter a name, for example Day 07:00-16:00, and pick a colour. The colour shows on rosters and timesheets.",
+    "Times: enter when the shift starts and ends. Ends the next day (night shift) is ticked for you when the end is before the start. See [[night-shift|night shifts]].",
+    "Lunch & breaks, Leeway & overtime and If they don’t clock: set the lunch taken off, the [[grace|grace periods]], the [[thresholds|thresholds]] and what happens on a day without clockings.",
+    "Overtime setup: pick an overtime rule, forced rates or a night shift allowance if needed.",
+    "Check & save: read any warnings, then click Create shift."
+   ],
+   "tips": [
+    "Give the shift to people as their [[who-gets-shift|default shift]] in Employee Master, as a department default, or on the roster.",
+    "The name only matters if it contains OFF DAY or DAY OFF: the system then treats the shift as a day off."
+   ]
+  },
+  {
+   "k": "shift-types",
+   "t": "Time & Attendance",
+   "s": "Shifts",
+   "q": "What kind of shift do I need?",
+   "a": "Most people need Clock in and out. Pick another type in the first step of the shift pop-up (How people clock) only when the work pattern needs it.",
+   "steps": [],
+   "tips": [
+    "Clock once: one clocking pays the shift. Two blocks: two fixed blocks a day with an unpaid gap. Set hours, any time: a number of hours worked whenever they like.",
+    "Under More types: Several sessions (every clock-in to clock-out is paid and added up), Record hours only (first to last clocking, with no late, absent, break or overtime rules), Standby / on call, and Paid day, no clocking (books paid leave for the day).",
+    "Clock once is the [[snap|Present Day]] shift in the classic form."
+   ]
+  },
+  {
+   "k": "snap",
+   "t": "Time & Attendance",
+   "s": "Shifts",
+   "q": "Why did a clock-in move to the shift start time?",
+   "a": "On a Clock once shift (called Present Day Shift in the classic form), a clock-in is moved to the shift start. With only one clocking, the day is paid from the shift start to the shift end.",
+   "steps": [],
+   "tips": [
+    "A clock-in before the start keeps its real time, and the extra time can become overtime for approval. With two or more clockings the clock-out keeps its real time. A single clocking after the shift end is used as the end.",
+    "If Clocking in before the shift starts is set to Snap to the shift start when inside the Before Threshold, an early clock-in inside the Before [[thresholds|Threshold]] is paid from the shift start. One further before the start still goes for approval.",
+    "On other shifts, Snap to the shift time inside the leeway moves a clocking inside the [[grace|grace period]] to the shift time, for example 07:04 to 07:00."
+   ],
+   "kw": "present day"
+  },
+  {
+   "k": "grace",
+   "t": "Time & Attendance",
+   "s": "Shifts",
+   "q": "What do grace periods do?",
+   "a": "They set how many minutes late in or early out still count as on time.",
+   "steps": [],
+   "tips": [
+    "In the shift pop-up they are under Leeway & overtime: Late in and Early out (minutes).",
+    "Switch on Snap to the shift time inside the leeway to record a clocking inside the grace period at the shift time, for example 07:04 as 07:00.",
+    "Split shifts have no grace periods. On a Clock once shift only Early out is used."
+   ]
+  },
+  {
+   "k": "thresholds",
+   "t": "Time & Attendance",
+   "s": "Shifts",
+   "q": "What are thresholds?",
+   "a": "The minutes around the shift’s start and end that decide what counts as early arrival or overtime.",
+   "steps": [],
+   "tips": [
+    "Set them in the shift pop-up under Leeway & overtime: Before the shift and After the shift (minutes).",
+    "Time [[soft-ot|inside the thresholds]] is handled per shift under Early or late time inside these windows: Use the company setting, Not paid (dropped), or Sent for review as overtime.",
+    "Time beyond the thresholds is always overtime for approval.",
+    "On a split shift, switch on Use the overtime thresholds around each block (under Times) so a few minutes early or late on each block is not overtime."
+   ]
+  },
+  {
+   "k": "auto-break",
+   "t": "Time & Attendance",
+   "s": "Shifts",
+   "q": "How do automatic breaks work?",
+   "a": "The shift takes a set number of minutes off for lunch automatically. This only happens when the shift uses First in, last out.",
+   "steps": [],
+   "tips": [
+    "Set it in the shift pop-up under Lunch & breaks: Lunch taken off (minutes).",
+    "With Add up every in and out, no set lunch comes off because the time clocked out is not paid. You can then set a lunch window (Lunch from, Lunch until, Longest lunch) and Short breaks a day with the Longest short break. Going over is a break violation.",
+    "On a Several sessions shift the lunch is taken off the time clocked in each day, for staff who stay clocked in over lunch. Leave it at 0 if they clock out for lunch.",
+    "Under Overtime setup, Take a break off long overtime takes a second break once overtime passes a number of hours. It is only used when the overtime break is switched on for your company; the pop-up tells you if it is off."
+   ]
+  },
+  {
+   "k": "night-shift",
+   "t": "Time & Attendance",
+   "s": "Shifts",
+   "q": "How do I set up a night shift?",
+   "a": "Tick Ends the next day (night shift) so the shift can end after midnight. It is ticked for you when the end time is before the start time.",
+   "steps": [
+    "Click Create Shift on Shift Rules, or open an existing shift.",
+    "Under Times, enter the start and end time. Check that Ends the next day (night shift) is ticked.",
+    "Under Overtime setup, choose a Night shift allowance (Fixed Amount or Percentage) if one is paid.",
+    "Click Create shift (or Save shift for an existing one)."
+   ],
+   "tips": [
+    "Which day the hours belong to when a night shift runs into a weekend or public holiday is set under Settings › Hours & Calculation › Night shifts that cross midnight: The day it started (default), Split at midnight, or Whichever day pays more."
+   ]
+  },
+  {
+   "k": "shift-change",
+   "t": "Time & Attendance",
+   "s": "Shifts",
+   "q": "I changed a shift. What happens to days already calculated?",
+   "a": "The change applies to days calculated from then on. Straight after you save, a pop-up offers to [[recalc|recalculate]] the days already calculated with the old setup.",
+   "steps": [],
+   "tips": [
+    "The pop-up ticks the departments and past days that really use the shift. Click Recalculate to run it, or Not now to keep a reminder.",
+    "A shift nobody has used in the last 31 days does not ask.",
+    "To [[recalc|recalculate]] later, use Settings › [[settings-bulk|Bulk Analyzer]] for the date range and department."
+   ]
+  },
+  {
+   "k": "who-gets-shift",
+   "t": "Time & Attendance",
+   "s": "Shifts",
+   "q": "How do people get their shift?",
+   "a": "From the roster first, then their own default shift, then their department’s default shift.",
+   "steps": [],
+   "tips": [
+    "A personal default shift is the Default Shift under Time & Attendance Configuration when you edit the person in Employee Master. It overrides the department default.",
+    "Department defaults are set under [[settings-dept|Settings › Departments]]."
+   ]
+  },
+  {
+   "k": "min-hours",
+   "t": "Time & Attendance",
+   "s": "Shifts",
+   "q": "Can a shift pay a minimum number of hours or a set rate?",
+   "a": "Yes. A shift can pay at least a number of hours, or pay every hour at the overtime or Sunday rate.",
+   "steps": [],
+   "tips": [
+    "In the shift pop-up, Pay at least a minimum number of hours is under If they don’t clock. Pay every hour as overtime and Pay every hour at the Sunday rate are under Overtime setup.",
+    "By default, forced rates also apply to paid leave on that day."
+   ]
+  },
+  {
+   "k": "roster-build",
+   "t": "Time & Attendance",
+   "s": "Weekly rostering",
+   "q": "How do I build a week’s roster?",
+   "a": "Start from everyone’s defaults, adjust the days that differ, then save.",
+   "steps": [
+    "Open Weekly Roster and stay on Grid view.",
+    "Choose the department and use the arrows to go to the week.",
+    "To start from defaults, click Fill roster › Auto-fill. It puts each person’s [[who-gets-shift|default shift]] and working days on the roster for the dates you pick, and saves straight away.",
+    "Click any day to set or clear that person’s shift.",
+    "Click [[recalc|Save & Recalculate]]."
+   ],
+   "tips": [
+    "Day changes wait until you save them; Cancel throws them away.",
+    "[[recalc|Save & Recalculate]] recalculates attendance for the past days you changed.",
+    "A day marked Auto shows the person’s default shift that is not set on the roster yet."
+   ]
+  },
+  {
+   "k": "roster-pattern",
+   "t": "Time & Attendance",
+   "s": "Weekly rostering",
+   "q": "How do I roster a rotating pattern, like 4 on 4 off?",
+   "a": "Use Fill roster › Create shift pattern on the Weekly Roster.",
+   "steps": [
+    "Open Weekly Roster and click Fill roster › Create shift pattern.",
+    "On Build pattern, give the pattern a name, add the steps in order (a shift, a day off or their default shift) and click Save pattern.",
+    "On Apply to people, pick the people, the start date and how long (Until a date or Number of cycles), and whether to Skip Sundays or Skip public holidays.",
+    "Click Put on the roster, check the days, then click [[recalc|Save & Recalculate]]."
+   ],
+   "tips": [
+    "A skipped day becomes a day off and the pattern carries on the next day."
+   ]
+  },
+  {
+   "k": "roster-bulk",
+   "t": "Time & Attendance",
+   "s": "Weekly rostering",
+   "q": "How do I give many people one shift over a date range?",
+   "a": "Use Fill roster › Bulk assign shifts on the Weekly Roster.",
+   "steps": [
+    "Open Weekly Roster and click Fill roster › Bulk assign shifts.",
+    "Under Who, pick the people. Under Which days, click the dates. Under Which shift, pick the shift, Their default shift or Day off.",
+    "Click Check & apply, read the check, then click Apply."
+   ],
+   "tips": [
+    "It saves straight away and recalculates any past days you picked. You can go up to 31 days back."
+   ]
+  },
+  {
+   "k": "roster-excel",
+   "t": "Time & Attendance",
+   "s": "Weekly rostering",
+   "q": "Can I load a roster from Excel?",
+   "a": "Yes. Download the roster template from Data Tools, fill it in and upload it.",
+   "steps": [
+    "Open Weekly Roster and click Data Tools › Download Excel template.",
+    "Pick the dates (up to 90 days), departments and employees, then click Generate Excel.",
+    "Fill in the shifts on the Roster sheet.",
+    "Click Data Tools › Upload filled-in template and choose the file. The shifts are saved straight away."
+   ],
+   "tips": [
+    "To log leave for a day, type Leave: and the leave type name in the cell, for example Leave: Annual Leave."
+   ]
+  },
+  {
+   "k": "roster-daysoff",
+   "t": "Time & Attendance",
+   "s": "Weekly rostering",
+   "q": "Why is someone working on a day that is not ticked on their own default shift?",
+   "a": "By default, unticked days fall back to the department’s shift.",
+   "steps": [],
+   "tips": [
+    "To show those days as days off on the roster, use Fill roster › Auto-fill with Clear shifts on non-working days ticked."
+   ]
+  },
+  {
+   "k": "roster-ot-auth",
+   "t": "Time & Attendance",
+   "s": "Weekly rostering",
+   "q": "How do I authorise overtime from the roster?",
+   "a": "Click the person’s day and use the Authorise OT tab, or Authorise OT on the toolbar for many people.",
+   "steps": [],
+   "tips": [
+    "This is available when [[ot-preapproved|Pre-approved Overtime]] is switched on in Time & Attendance Settings.",
+    "Days with authorised overtime show a small OT badge."
+   ],
+   "kw": "pre-approved"
+  },
+  {
+   "k": "recalc",
+   "t": "Time & Attendance",
+   "s": "T&A settings",
+   "q": "What does recalculating do?",
+   "a": "Recalculating works a day’s hours out again from the clockings, the shift on the roster and your company’s rules, so the timesheet shows the latest figures.",
+   "steps": [],
+   "tips": [
+    "The system works out every day’s hours automatically each night. Recalculating does the same thing straight away, for the days you choose.",
+    "It happens on its own when you save changes in Team View, or click Save & Recalculate on the Weekly Roster (past days you changed).",
+    "Run it yourself when clockings arrive late or a rule changes: Run Analyzer on Actual Attendance for the week on screen, or the [[settings-bulk|Bulk Analyzer]] for up to 35 days.",
+    "After you edit a shift, or a setting that changes how hours are worked out, a pop-up offers to recalculate only the people and days it affects. Nothing runs unless you click Recalculate. The pop-up can be switched off under Settings › Hours & Calculation › Recalculation › Ask to recalculate after a change.",
+    "Approved and [[settings-payroll|payroll-locked]] days stay as they are. Only [[settings-bulk|Force Overwrite All]] in the Bulk Analyzer, or Also redo approved days in the pop-up, redoes approved days, and it sends their approvals back.",
+    "Which [[manager-inbox|Manager Inbox]] items go back to waiting after a recalculation depends on the [[settings-reapprove|After hours are recalculated]] setting.",
+    "Corrections made in Team View are saved as clockings, so every recalculation keeps them."
+   ],
+   "kw": "recalc"
+  },
+  {
+   "k": "settings-open",
+   "t": "Time & Attendance",
+   "s": "T&A settings",
+   "q": "Where are the Time & Attendance settings?",
+   "a": "Behind the gear at the bottom of the Time & Attendance menu.",
+   "steps": [],
+   "tips": [
+    "They are grouped as Hours & overtime (Hours & Calculation, [[ot-rules|Overtime Rules]], [[ot-preapproved|Pre-approved Overtime]]), Holidays & leave (Public Holidays & Leave), Organisation (Departments, Geofencing, Payroll Periods), and Integrations & tools (CVS Employee Mapping, [[settings-bulk|Bulk Analyzer]]).",
+    "Overtime Rules only shows if you have access to it.",
+    "Use Search settings at the top of the side panel to find a setting by name."
+   ]
+  },
+  {
+   "k": "settings-geofence",
+   "t": "Time & Attendance",
+   "s": "T&A settings",
+   "q": "How do I set up an approved clocking location (geofence)?",
+   "a": "Add it under Settings › Geofencing.",
+   "steps": [
+    "Open Time & Attendance Settings and choose Geofencing.",
+    "Click on the map to set the point.",
+    "Enter the Location Name and the Radius in metres.",
+    "Click Save Location."
+   ],
+   "tips": [
+    "The radius starts at 50 metres and cannot be less than 10.",
+    "Give geofences to departments under [[settings-dept|Settings › Departments]].",
+    "Auto-Ignore Geofence Violations, on the same screen, makes the system ignore clockings made outside the person’s geofence. You can restore them in Team View."
+   ]
+  },
+  {
+   "k": "settings-dept",
+   "t": "Time & Attendance",
+   "s": "T&A settings",
+   "q": "How do I set a department’s default shift and payroll cycle?",
+   "a": "Under Settings › Departments.",
+   "steps": [
+    "Open Time & Attendance Settings and choose Departments.",
+    "Tick the departments.",
+    "Under Bulk Assign, choose the shift, payroll cycle, [[settings-geofence|geofences]] and working days (M to S).",
+    "Click Apply to Selected."
+   ],
+   "tips": [
+    "Staff without their own default shift follow their department’s shift and working days."
+   ]
+  },
+  {
+   "k": "settings-payroll",
+   "t": "Time & Attendance",
+   "s": "T&A settings",
+   "q": "How do I set up and lock payroll periods?",
+   "a": "Under Settings › Payroll Periods.",
+   "steps": [
+    "Open Time & Attendance Settings and choose Payroll Periods.",
+    "Click Add Period Type and define the cycle: monthly, weekly or fortnightly, on a fixed date or a relative day such as the last Friday.",
+    "Click Save Cycle Rule.",
+    "To lock a period, choose the cycle rule and the date range, then click Lock Period."
+   ],
+   "tips": [
+    "Locked days show as Payroll Locked in Team View and cannot be changed until the period is unlocked.",
+    "These are the same payroll periods as Employee Master › Payroll Periods."
+   ],
+   "kw": "lock locked"
+  },
+  {
+   "k": "settings-bulk",
+   "t": "Time & Attendance",
+   "s": "T&A settings",
+   "q": "How do I recalculate attendance after changing a rule?",
+   "a": "Run the Bulk Analyzer for the date range.",
+   "steps": [
+    "Open Time & Attendance Settings and choose Bulk Analyzer.",
+    "Choose the start and end date (up to 35 days) and the department, or all departments.",
+    "Click Run Bulk Analyzer and stay on the page until it finishes."
+   ],
+   "tips": [
+    "Force Overwrite All [[recalc|recalculates]] days already calculated and wipes existing approvals. Use it only when you mean to redo approvals."
+   ],
+   "kw": "force overwrite"
+  },
+  {
+   "k": "settings-reapprove",
+   "t": "Time & Attendance",
+   "s": "T&A settings",
+   "q": "Why did approved items go back to waiting after a recalculation?",
+   "a": "It depends on the After hours are [[recalc|recalculated]] setting.",
+   "steps": [],
+   "tips": [
+    "By default, only items not yet approved go back to waiting. If your company chose Everything, approved and rejected items go back too.",
+    "[[settings-bulk|Force Overwrite All]] always sends everything back."
+   ]
+  },
+  {
+   "k": "settings-display",
+   "t": "Time & Attendance",
+   "s": "T&A settings",
+   "q": "How do I show hours as 08:30 instead of 8.50?",
+   "a": "Change How hours are shown under Settings › Hours & Calculation.",
+   "steps": [],
+   "tips": [
+    "Choose Decimal (8.50) or Hours:minutes (08:30). It applies to timesheets and Excel reports."
+   ]
+  },
+  {
+   "k": "settings-routing",
+   "t": "Time & Attendance",
+   "s": "T&A settings",
+   "q": "How do I set who approves overtime and exceptions?",
+   "a": "Set approval chains on Workflow Routing. Overtime and exceptions in the Manager Inbox, leave requests and claims follow the chain.",
+   "steps": [
+    "Open Workflow Routing (Approval Chains tab).",
+    "Under 1. Who does this rule apply to?, choose a department, or one employee (an employee rule replaces their department’s rule).",
+    "Under 2. Approvers, in order, choose the 1st Approver, and a 2nd and 3rd if needed. Leave those empty for a one-step approval.",
+    "Optionally choose a Backup approver with From and To dates. Only an Administrator can change this.",
+    "Click Save Routing Rule."
+   ],
+   "tips": [
+    "Requests go to the 1st approver, then the 2nd, then the 3rd.",
+    "To cover someone who is away, use the [[stand-in|Stand-in Approvers]] tab."
+   ]
+  },
+  {
+   "k": "settings-double",
+   "t": "Time & Attendance",
+   "s": "T&A settings",
+   "q": "How do I stop accidental double scans counting?",
+   "a": "Set Ignore double clockings under Settings › Hours & Calculation.",
+   "steps": [],
+   "tips": [
+    "If someone clocks more than once on the same device within the number of minutes you set, only the first clocking counts."
+   ]
+  },
+  {
+   "k": "report-run",
+   "t": "Time & Attendance",
+   "s": "Reports",
+   "q": "How do I run an attendance report?",
+   "a": "Pick the report on Attendance Reports, set the dates and department, and click Generate.",
+   "steps": [
+    "Open Attendance Reports.",
+    "Choose the report under Report.",
+    "Set the Date range and the Department. Optionally pick one Employee or several Employees.",
+    "Click Generate.",
+    "Click Export and choose Excel or PDF."
+   ],
+   "tips": []
+  },
+  {
+   "k": "report-which",
+   "t": "Time & Attendance",
+   "s": "Reports",
+   "q": "Which report should I use?",
+   "a": "Pick the report by the question you are answering.",
+   "steps": [],
+   "tips": [
+    "Who is at work today: Daily Muster Roll (Present). Hours per person per week: Weekly Attendance Summary.",
+    "One person in detail: Employee Detailed Attendance. Overtime and premium hours: Overtime & Premium Hours Report.",
+    "Absence: Absenteeism Report. Leave taken: Approved Leave Report. Rule breaks: Active Violations, Break Violations and [[settings-geofence|Geofence]] Violations reports.",
+    "Approval progress: Team View Status Report. Phones that have not synced: Mobile User Sync Report."
+   ]
+  },
+  {
+   "k": "report-email",
+   "t": "Time & Attendance",
+   "s": "Reports",
+   "q": "How do I get a report emailed automatically?",
+   "a": "Set it up under Scheduled Mailers on Attendance Reports.",
+   "steps": [
+    "Open Attendance Reports and click Scheduled Mailers, or Export › Email on a schedule for the report on screen.",
+    "1. Report: choose the report.",
+    "2. Who gets it: choose Email addresses and type them, or Access role and pick a role.",
+    "3. Departments: tick All departments, or pick the departments.",
+    "4. When: choose Daily, Weekly or Monthly, the days and the time.",
+    "5. Which data: daily sends yesterday and weekly the previous 7 days. For monthly, choose the start and end day.",
+    "Click Save Schedule."
+   ],
+   "tips": [
+    "When you send to an access role, each person only receives the departments and people their own access allows.",
+    "Your schedules are listed under Scheduled reports in the same window. Click one to change it, or pause it, send it now or delete it."
+   ]
+  },
+  {
+   "k": "report-raw",
+   "t": "Time & Attendance",
+   "s": "Reports",
+   "q": "How do I export raw clockings?",
+   "a": "Use Export Excel on [[see-punches|Time Logs]], or Export Raw on Actual Attendance.",
+   "steps": [],
+   "tips": [
+    "[[see-punches|Time Logs]] exports every clocking with its device and who captured it, for the dates and department you filtered."
+   ]
+  },
+  {
+   "k": "apply-leave",
+   "t": "Leave & ESS",
+   "q": "How do I apply for leave?",
+   "a": "In the mobile app or on the ESS dashboard, tap Apply for Leave (next to Submit Claim, above your hours). Choose the Start Date, End Date and Leave Type, add a note or proof if needed, and tap Submit Request. In the web Me menu it is My work › Leave › Request leave. It stays pending until your approver decides; pending requests are never rejected automatically."
+  },
+  {
+   "k": "approve-req",
+   "t": "Leave & ESS",
+   "q": "How do I approve or reject a request?",
+   "a": "In ESS Master, open Mobile Requests, filter if needed and click Approve or Reject. Approve moves it to the next approval step, or finishes it if this was the last one. Reject ends it and tells the employee."
+  },
+  {
+   "k": "who-approves",
+   "t": "Leave & ESS",
+   "q": "Who approves my requests?",
+   "a": "Your company sets a 1st, 2nd and 3rd approver per department or per person in ESS Master › Settings › Approval routing. A standing approver can approve while the usual approver is away."
+  },
+  {
+   "k": "bulk-leave",
+   "t": "Leave & ESS",
+   "q": "How do I book a shutdown for everyone?",
+   "a": "In ESS Master, open Leave › Bulk Leave, choose the leave type, dates and reason, pick the people and click Check Who Can Go. Submit Requests creates one request per person, each through normal approval."
+  },
+  {
+   "k": "opening-bal",
+   "t": "Leave & ESS",
+   "q": "How do I load opening leave balances?",
+   "a": "In ESS Master, open Leave › Take-On, fill in the template and click Check File. Clean rows load with Load Clean Rows; rejected rows can be downloaded, fixed and loaded again."
+  },
+  {
+   "k": "leave-payroll",
+   "t": "Leave & ESS",
+   "q": "When does approved leave reach payroll?",
+   "a": "Approved leave is sent to payroll per pay period. An administrator opens ESS Master › Payroll › Send To Payroll, picks the period, checks What Would Send and clicks Mark As Sent. The batch can then be downloaded from the Send Log as a file for payroll. Leave that was already sent is never sent twice. So your leave may only show on your payslip after the next pay run."
+  },
+  {
+   "k": "claim",
+   "t": "Leave & ESS",
+   "q": "How do I claim back money I spent for work?",
+   "a": "Tap Submit Claim, choose the date and type, enter the amount (some types are worked out for you, such as kilometres times a rate) and add a photo of the receipt. It goes for approval, then to payroll."
+  },
+  {
+   "k": "bank",
+   "t": "Leave & ESS",
+   "q": "How do I update my bank details?",
+   "a": "On the ESS dashboard, tap Edit next to your name, change your bank details and tap Submit Updates. Add proof, such as a photo of your bank card or a recent bank statement. In the web Me menu you can also use My information › Bank & tax and click Send to HR for approval. HR checks and approves the change before it is used."
+  },
+  {
+   "k": "documents",
+   "t": "Leave & ESS",
+   "q": "How do I acknowledge a company document?",
+   "a": "Tap Company Documents, then tap Read to open the document. When you have read it, tap Sign & Accept (Sign in the mobile app) and confirm. Your company can see who has signed and when."
+  },
+  {
+   "k": "hr-contract",
+   "t": "HR Management",
+   "q": "How do I give an employee a contract?",
+   "a": "In HR Management, open Contracts & Onboard and the Assign Contract tab. Choose the employee and the contract template, and set Valid From and Valid To (the employee is terminated automatically on Valid To) or tick Set as Permanent Contract. The contract then waits for approval under Awaiting Approval."
+  },
+  {
+   "k": "stand-in",
+   "t": "HR Management",
+   "q": "How do I cover for a manager who is away?",
+   "a": "Open Routing & Stand-ins, click Stand-in Management and assign a stand-in for the manager who is away."
+  },
+  {
+   "k": "infringe",
+   "t": "HR Management",
+   "q": "How are infringement rules set up?",
+   "a": "In HR Management, open HR Settings. On the Categories tab, click Add Category. Then on the HR Rules tab, click Add Rule and give each rule a code, category, description and severity (from verbal warning up to dismissal). Infringements are recorded against these rules."
+  },
+  {
+   "k": "kpi",
+   "t": "HR Management",
+   "q": "How do I get attendance KPIs?",
+   "a": "In HR Management, open Core KPIs. Set the Start Date and End Date, pick a department or employee if you want, and click Calculate. Then use Reports to print an Employee Report, Dept Report or Company Report."
+  },
+  {
+   "k": "wage-source",
+   "t": "Employee Costs",
+   "q": "Where do wage type and rate come from?",
+   "a": "From each employee's setup in Employee Master. To change them, change them there. The Wage Type and Wage Rate boxes in the Employee Costs pop-up are not saved, and bulk allocation and uploads never overwrite them."
+  },
+  {
+   "k": "components",
+   "t": "Employee Costs",
+   "q": "How do I give many people the same components?",
+   "a": "Open Employee Allocation, pick a department or search, tick the people and click Bulk Allocate. To set one person's own components, click the edit (pencil) button on their row."
+  },
+  {
+   "k": "payfile",
+   "t": "Employee Costs",
+   "q": "How do I make a payroll file?",
+   "a": "Open Payfiles & Export and choose your Export Profile (set one up with Config). Set the From Date and To Date, and the departments if needed. Click Generate Preview to check every line, then click CSV or Excel to export."
+  },
+  {
+   "k": "cost-hours",
+   "t": "Employee Costs",
+   "q": "Why do the hours match Team View?",
+   "a": "Employee Costs reads its hours from Team View, worked out the same way. With Hours Follow TNA Team View switched on in Employee Costs › Settings (it is on by default), Normal Time, Overtime, Sunday and public holiday hours match Team View exactly. If you switch it off and use the weekly overtime threshold, some Normal Time can move to Overtime, so the split can differ."
+  },
+  {
+   "k": "kml",
+   "t": "Fuel & Deliveries",
+   "q": "A vehicle shows an impossible km/L, like 99999. Why?",
+   "a": "An odometer reading was typed wrong. Open Fueling Data, pick the vehicle, sort by date and compare the odometer from fill-up to fill-up, then edit the wrong fill-up."
+  },
+  {
+   "k": "manual-fill",
+   "t": "Fuel & Deliveries",
+   "q": "How do I capture a fill-up from a paper slip?",
+   "a": "Open Fuel Logs and click Manual Entry. Enter the date (future dates are refused), vehicle and driver, odometer, depot, litres, and the farm and activity. Tick National road used if it drove on a national road; that fuel is left out of the diesel rebate claim."
+  },
+  {
+   "k": "void-fill",
+   "t": "Fuel & Deliveries",
+   "q": "How do I delete a wrong fill-up?",
+   "a": "In Fuel Logs, click the red bin on the fill-up and type the reason, which is kept in the audit trail. The litres go back into the tank unless a tank reading was taken after it."
+  },
+  {
+   "k": "failed-stop",
+   "t": "Fuel & Deliveries",
+   "q": "What happens to a partial or failed delivery?",
+   "a": "It waits on Deliveries › Resolve. Create Follow-up makes a new pending stop for the outstanding goods; Close As Is accepts what happened."
+  },
+  {
+   "k": "commit-day",
+   "t": "Production Pay",
+   "q": "How do I send a team’s day to payroll?",
+   "a": "Open Daily Production, choose the date and team and click Load Grid. Check clockings and quantities (a worker with no clockings that day gets no share of the team's work), fix what is wrong, then click Commit to Payroll. Save Draft keeps your changes without sending them."
+  },
+  {
+   "k": "rate-change",
+   "t": "Production Pay",
+   "q": "How do I change an activity’s rate?",
+   "a": "Do not edit the activity. Click Pricing Ledger on the activity, enter the new Worker Rate and Manager Rate and the Effective Date it starts, then click Log Price. Earlier work keeps its old rate."
+  },
+  {
+   "k": "asset",
+   "t": "Assets, Stock & POS",
+   "q": "How do I register an asset?",
+   "a": "Open Asset Registry and click Register Asset. Enter the Asset Tag (Barcode), Category and Asset Name / Description, the Service Triggers (months and/or a KM or Hours interval) and, under Initial Assignment, the employee or department it goes to (or leave it in storage). Then print its label with Print Labels & Tags."
+  },
+  {
+   "k": "grv",
+   "t": "Assets, Stock & POS",
+   "q": "How do I book in stock that arrived?",
+   "a": "Open Live Inventory & GRV and click Receive GRV. Enter the PO / Reference Number and choose Receive Into Warehouse. Pick each item, type the quantity (or the serial numbers for serialised items) and click Add to List. Click Complete & Receive when you are done, or Save as Draft if you are not finished; drafts wait in GRV Manager › Drafts. Stock used before it was received shows in GRV Manager › Shortages (Pending GRV), with a GRV Now button."
+  },
+  {
+   "k": "pos-setup",
+   "t": "Assets, Stock & POS",
+   "q": "How do I get the POS ready?",
+   "a": "Open POS Settings. Set the rules on the Setup tab, the items and their prices on Items & Prices, the cashiers and what they may do on Users & Rights, and the tiles on the till screen on POS Layout. Your tills are on the Tills tab."
+  },
+  {
+   "k": "add-farmer",
+   "t": "Farmers & Distribution",
+   "q": "How do I add a farmer?",
+   "a": "In Farmers Master, click Add Farmer. First name, surname and phone number are required; add the ID or passport number and the assigned area (club), which decides whose phones see the farmer and who approves their contracts. It is saved straight away and reaches the phones at their next sync."
+  },
+  {
+   "k": "import-farmers",
+   "t": "Farmers & Distribution",
+   "q": "How do I add or update many farmers?",
+   "a": "In Farmers Master, open Data Tools › Import Excel Data. The wizard asks what you want to do, matches your columns and checks the file, showing who will be added or updated before anything is saved. Data Tools › View Import History can roll an import back."
+  },
+  {
+   "k": "not-on-list",
+   "t": "Farmers & Distribution",
+   "q": "What happens to farmers who are not on my updated list?",
+   "a": "With Add new farmers and update existing ones (or Update existing farmers only), nobody is removed. Replace the whole farmer list moves farmers who are not in the file to Deactivated Profiles. Nothing is deleted and their history is kept, but they no longer show on the phones. Deactivated farmers who are in the file are switched back on."
+  },
+  {
+   "k": "contract-approval",
+   "t": "Farmers & Distribution",
+   "q": "How does a contract get approved?",
+   "a": "It starts at the farmer's location and goes up level by level; the managers over each location approve it in their Approval Inbox. The level ticked as the final level completes it. Path Preview, under Settings › Workflow Routing, shows who will approve."
+  },
+  {
+   "k": "give-contract",
+   "t": "Farmers & Distribution",
+   "q": "How do I give a farmer a contract?",
+   "a": "Open Contracts and, on Manage Contracts, click Assign Contract. Choose the farmer and the template, the Valid To date (or tick Set as Permanent Contract), the Contract Size and the Product (the tobacco type). Valid From is today's date. It then follows your approval workflow."
+  },
+  {
+   "k": "same-person",
+   "t": "Farmers & Distribution",
+   "q": "One farmer is in several clubs. How do I link them?",
+   "a": "In Settings › Profile Fields & Documents, open Same person in several clubs, switch it on and choose the shared Profile Field, such as TGR Number. His records then share one face and are never flagged as duplicates of each other."
+  },
+  {
+   "k": "scan-inputs",
+   "t": "Farmers & Distribution",
+   "q": "Why must I scan the farmer to open his inputs?",
+   "a": "Inputs open only through the scan button next to the search box, so inputs go to the right person. A farmer with no face enrolled must be enrolled on his profile first. Your company can switch this off in Settings › Contract Rules (Farmers are opened for inputs by face scan only)."
+  },
+  {
+   "k": "door-access",
+   "t": "Access Control",
+   "q": "How do I give people door access?",
+   "a": "Open Assignments. The easiest way is to give each department its access levels, and new starters in that department get them too. You can also add people to a level with dates, or set one person’s levels."
+  },
+  {
+   "k": "door-setup",
+   "t": "Access Control",
+   "q": "How do I set up a door?",
+   "a": "Open Doors & Readers and click Set up lock on the controller's lock (or Edit on a door). Give it a Door name and set its Direction, Unlock time (seconds) and exit rule."
+  },
+  {
+   "k": "connect-phone",
+   "t": "Mobile app",
+   "q": "How do I connect my phone?",
+   "a": "On the web, click your name at the top right and choose Connect a Phone. On the phone, open the TNA app, tap the gear icon, then the scan button and Scan with Camera, and scan the code. The code closes by itself after 2 minutes. Then log in on the phone."
+  },
+  {
+   "k": "get-app",
+   "t": "Mobile app",
+   "q": "Where do I get the app?",
+   "a": "Click your name at the top right and choose Download the App. Scan the code with your phone's camera (or click Download), open the file and, if asked, allow Install unknown apps. It is for Android phones only. Then use Connect a Phone to link the app to your company."
+  },
+  {
+   "k": "reminder",
+   "t": "Mobile app",
+   "q": "Why didn’t I get a clock reminder?",
+   "a": "Clock reminders are set up by your company as Scheduled notifications in Company Settings › Notifications. Each one goes only to the departments, shifts or people it is aimed at, and can be set to go only if you have not clocked in yet, or to skip leave and days off. Check that notifications are allowed for the TNA app in your phone's settings, and sync the app so it has the latest schedules."
+  },
+  {
+   "k": "offline",
+   "t": "Mobile app",
+   "q": "Can I clock in without signal?",
+   "a": "Yes. The clocking is saved on the phone and sent at the next sync once you have signal again. The app syncs by itself (every 30 minutes unless your phone is set differently), or tap Sync to send it straight away."
+  },
+  {
+   "k": "password",
+   "t": "Account & access",
+   "q": "How do I change my password?",
+   "a": "Click your name at the top right, choose My Profile and open the Security tab. Enter your current password, then the new one twice (at least 8 characters with at least one symbol). If you logged in with a temporary password, you will be asked to choose your own first."
+  },
+  {
+   "k": "cant-see",
+   "t": "Account & access",
+   "q": "Why can’t I see some employees or screens?",
+   "a": "What you see depends on your role and on the departments or locations assigned to you. Ask your system administrator if something you need is missing."
+  },
+  {
+   "k": "settings-where",
+   "t": "Account & access",
+   "q": "Where are the settings?",
+   "a": "Settings for a module are behind the gear at the bottom of its menu. Company-wide settings are under your name › Company Settings."
+  },
+  {
+   "k": "logged-out",
+   "t": "Account & access",
+   "q": "Why was I logged out?",
+   "a": "For security, you are logged out after a period without activity. Log in again to carry on."
+  }
+ ]
+}

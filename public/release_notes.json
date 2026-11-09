@@ -1,0 +1,6 @@
+[
+  { "id": "2026-11-09-inbox", "date": "2026-11-09", "title": "Your new Inbox", "text": "The inbox icon at the top right collects everything waiting for you: approvals, leave and phone requests, What's new and your own reminders and bookmarks." },
+  { "id": "2026-11-09-dock", "date": "2026-11-09", "title": "Settings has a new home", "text": "Use the gear at the bottom of the menu. The tiles next to it jump to the modules you use most; the dashed button shows all your modules." },
+  { "id": "2026-11-09-search", "date": "2026-11-09", "title": "Search finds people and records", "text": "Press Ctrl K or click the search box: screens, quick actions, employees (name, PIN or ID number), farmers, contracts and assets." },
+  { "id": "2026-11-09-roles", "date": "2026-11-09", "title": "Roles give everyone the same access", "text": "Saving a role now gives everyone with that role exactly what it shows. You see who changes before it saves, and you can undo it." }
+]
