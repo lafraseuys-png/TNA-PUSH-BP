@@ -544,6 +544,8 @@
         (function () {
             var v = null;
             try { v = localStorage.getItem('tnaafrica_theme'); } catch (e) {}
+            // 2026-11-06: a logout that wiped storage keeps the theme in a cookie (theme.js) - use it, not the dark default
+            if (v !== 'light' && v !== 'dark') { try { var m = document.cookie.match(/(?:^|; )tnaafrica_theme=([^;]*)/); if (m) v = decodeURIComponent(m[1]); } catch (e) {} }
             if (v !== 'light' && v !== 'dark') v = 'dark';
             window.__TNA_THEME = v;
             document.documentElement.classList.remove('dark-mode');
@@ -985,7 +987,7 @@
         </div>
     </div>
 
-   <script src="theme.js?v=1.0.0"></script>
-    <script src="login.js"></script>
+   <script src="theme.js?v=20261106a"></script>
+    <script src="login.js?v=20261106a"></script>
 </body>
 </html>

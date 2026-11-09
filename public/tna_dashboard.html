@@ -2315,23 +2315,32 @@
                     <summary class="text-gray-300"><i class="fas fa-gavel"></i>Labour law reference (BCEA) <small>for information only</small><i class="fas fa-chevron-down ot-chev"></i></summary>
                     <div class="ot-more-body">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- 2026-11-06 corrected (user: "this reference is inaccurate"): BCEA s9, s10, s16, s18, s6 + the earnings
+                                 threshold of 1 May 2026. Text only - nothing here is read by the hours engine or pay. -->
                             <div class="bg-gray-800 p-4 rounded shadow border-l-4 border-blue-500">
-                                <h4 class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-3"><i class="fas fa-user-shield mr-2"></i>Who gets overtime</h4>
+                                <h4 class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-3"><i class="fas fa-user-shield mr-2"></i>Who gets overtime and how it is paid</h4>
                                 <ul class="space-y-2 text-[11px]">
-                                    <li class="flex justify-between"><span class="text-gray-400">Paid (standard):</span> <span class="text-gray-200 font-bold">Paid out at the rates above</span></li>
-                                    <li class="flex justify-between"><span class="text-gray-400">Time off only:</span> <span class="text-yellow-500 font-bold">Added to their leave balance</span></li>
-                                    <li class="flex justify-between"><span class="text-gray-400">Not eligible:</span> <span class="text-red-400 font-bold">Senior managers / above the earnings limit</span></li>
+                                    <li class="flex justify-between gap-4"><span class="text-gray-400 shrink-0 whitespace-nowrap">Covered:</span> <span class="text-gray-200 font-bold text-right">Employees earning up to the earnings threshold (R269,600.90 a year from 1 May 2026)</span></li>
+                                    <li class="flex justify-between gap-4"><span class="text-gray-400 shrink-0 whitespace-nowrap">Not covered:</span> <span class="text-gray-200 font-bold text-right">Senior managers, travelling sales staff who set their own hours, people working under 24 hours a month, and anyone above the threshold (their contract decides)</span></li>
+                                    <li class="flex justify-between gap-4"><span class="text-gray-400 shrink-0 whitespace-nowrap">Overtime pay:</span> <span class="text-gray-200 font-bold text-right">At least 1.5 × the normal wage</span></li>
+                                    <li class="flex justify-between gap-4"><span class="text-gray-400 shrink-0 whitespace-nowrap">Time off instead:</span> <span class="text-gray-200 font-bold text-right">Only if agreed: at least 90 min paid time off per overtime hour (or normal pay + 30 min off). Given within 1 month, up to 12 months by written agreement</span></li>
+                                    <li class="flex justify-between gap-4"><span class="text-gray-400 shrink-0 whitespace-nowrap">Sunday work:</span> <span class="text-gray-200 font-bold text-right">2 × the wage (1.5 × if they normally work Sundays)</span></li>
+                                    <li class="flex justify-between gap-4"><span class="text-gray-400 shrink-0 whitespace-nowrap">Public holiday worked:</span> <span class="text-gray-200 font-bold text-right">At least 2 × the normal day's wage</span></li>
                                 </ul>
                             </div>
                             <div class="bg-gray-800 p-4 rounded shadow border-l-4 border-orange-500">
                                 <h4 class="text-xs font-bold text-orange-400 uppercase tracking-widest mb-3"><i class="fas fa-gavel mr-2"></i>Legal limits</h4>
                                 <ul class="space-y-2 text-[11px]">
-                                    <li class="flex justify-between"><span class="text-gray-400">Overtime in a day:</span> <span class="text-gray-200 font-bold">3 hours</span></li>
-                                    <li class="flex justify-between"><span class="text-gray-400">Overtime in a week:</span> <span class="text-gray-200 font-bold">10 hours</span></li>
-                                    <li class="flex justify-between"><span class="text-gray-400">Total hours in a day:</span> <span class="text-gray-200 font-bold">12 hours</span></li>
+                                    <li class="flex justify-between gap-4"><span class="text-gray-400 shrink-0 whitespace-nowrap">Normal hours in a week:</span> <span class="text-gray-200 font-bold text-right">45 hours</span></li>
+                                    <li class="flex justify-between gap-4"><span class="text-gray-400 shrink-0 whitespace-nowrap">Normal hours in a day:</span> <span class="text-gray-200 font-bold text-right">9 hours (5 days a week or fewer), 8 hours (more than 5 days)</span></li>
+                                    <li class="flex justify-between gap-4"><span class="text-gray-400 shrink-0 whitespace-nowrap">Overtime in a day:</span> <span class="text-gray-200 font-bold text-right">3 hours</span></li>
+                                    <li class="flex justify-between gap-4"><span class="text-gray-400 shrink-0 whitespace-nowrap">Overtime in a week:</span> <span class="text-gray-200 font-bold text-right">10 hours (up to 15 for 2 months a year by collective agreement)</span></li>
+                                    <li class="flex justify-between gap-4"><span class="text-gray-400 shrink-0 whitespace-nowrap">Total in a day, with overtime:</span> <span class="text-gray-200 font-bold text-right">12 hours</span></li>
+                                    <li class="flex justify-between gap-4"><span class="text-gray-400 shrink-0 whitespace-nowrap">Overtime itself:</span> <span class="text-gray-200 font-bold text-right">Only by agreement with the employee</span></li>
                                 </ul>
                             </div>
                         </div>
+                        <p class="text-[11px] text-gray-400 mt-3">South Africa, Basic Conditions of Employment Act (sections 6, 9, 10, 16, 18). The earnings threshold changes most years - check the latest gazette. A bargaining council or sectoral determination can set different rules for your industry.</p>
                     </div>
                 </details>
             </section>
@@ -2346,7 +2355,7 @@
                         <div class="bg-gray-900 rounded border border-gray-700 divide-y divide-gray-800 shadow-inner">
                             <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-gray-800/50 transition">
                                 <div>
-                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-balance-scale text-yellow-400 mr-2"></i>Ignore small overtime</h4>
+                                    <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-balance-scale text-yellow-400 mr-2"></i>Ignore overtime in Threshold</h4>
                                     <p class="text-[10px] text-gray-500 mt-1 max-w-xl">When someone clocks in a little early or out a little late (inside the shift's before/after limits), it is not counted as overtime. They are paid for the shift times only. A shift can have its own setting for this.</p>
                                 </div>
                                 <div class="flex items-center gap-2 flex-shrink-0">
@@ -4517,7 +4526,7 @@
     </script>
    <!-- Added cache-buster to force the browser to load the new JS -->
    <!-- Shared theme engine (same as Employee Master). Safe to remove: the page falls back to its own toggle. -->
-   <script src="theme.js"></script>
+   <script src="theme.js?v=20261106a"></script>
    <!-- Shared Team View hours rule (also used by Employee Costs). Required by Team View (traditional). -->
    <script src="tna_hours.js"></script>
    <!-- Report preview column sorting (shared with Employee Master). Safe to remove: headers just stop sorting. -->
@@ -4525,7 +4534,7 @@
    <script src="tna_dashboard.js?v=2.0.37"></script>
    <!-- 2026-10-29 New dashboard: Manager | HR tabs, period picker, action queue (switch: TNA Settings > New dashboard, default on).
         AUTO-HEAL: safe to remove - the old dashboard shows, unchanged. -->
-   <script src="tna_dashboard_v2.js?v=20261030a"></script>
+   <script src="tna_dashboard_v2.js?v=20261106a"></script>
    <!-- 2026-10-26: Shift Rules "Step-by-step" switch (per user): Create / Edit Shift as a wizard that fills the same form.
         Switch off or file removed = the classic Edit Shift pop-up. AUTO-HEAL: safe to remove. -->
    <!-- 2026-10-26 company overtime policy for shifts (Settings > Overtime Rules card + live link). Before the wizard. Safe to remove. -->
@@ -4552,7 +4561,7 @@
    <script src="tna_sage_queue.js"></script>
    <!-- System Settings: left menu, one section at a time, (i) help, Save moves with the section. Safe to remove. -->
    <!-- Pre-approved overtime settings section: must load BEFORE tna_settings_ui.js. AUTO-HEAL: safe to remove. -->
-   <script src="tna_ot_preapproval.js?v=3"></script>
+   <script src="tna_ot_preapproval.js?v=20261106b"></script>
    <!-- CVS Employee Mapping (Settings section). Must load BEFORE tna_settings_ui.js. AUTO-HEAL: safe to remove. -->
    <script src="tna_cvs_mapping.js?v=2"></script>
    <!-- Compare with CVS (Time Logs). AUTO-HEAL: safe to remove; the button then does nothing. -->
@@ -4584,11 +4593,11 @@
    <!-- 2026-10-30 instant dark tooltips on buttons and the closed sidebar (like User Access). AUTO-HEAL: safe to remove = the browser tooltips. -->
    <script src="tna_quick_tips.js?v=20261030c"></script>
    <script src="tna_recalc_ask.js?v=20261030e"></script>
-   <script src="tna_settings_ui.js?v=20261030b"></script>
+   <script src="tna_settings_ui.js?v=20261106c"></script>
    <!-- Pre-approved overtime: OT Authorisations page, roster "Authorise OT" tab and badges. Only active while switched on. AUTO-HEAL: safe to remove. -->
    <script src="tna_ot_auth.js?v=1"></script>
    <!-- Shared top bar: search + quick access + profile menu (same as Employee Master). Safe to remove. -->
-   <script src="tna_topbar.js?v=39"></script>
+   <script src="tna_topbar.js?v=41"></script>
    <!-- Guided tours, how-to guides + What's new (content in /tours/tna_dashboard_tours.json). AUTO-HEAL: safe to remove. -->
    <script src="tna_tour.js" data-tour-page="tna_dashboard" data-tour-help-position="right"></script>
    <!-- 2026-10-23: help as the side panel (same as Employee Master); the page's "?" opens it. AUTO-HEAL: safe to remove. -->
@@ -4606,7 +4615,7 @@
    <!-- 2026-10-26: System Settings opens as a pop-up window (same look as Farmers & Distribution Settings) with Overtime Rules
         as one of its sections; the Overtime Rules sidebar item opens it there. Load LAST (after every file that wraps
         showSection). AUTO-HEAL: safe to remove - Settings and Overtime Rules then open as normal pages again. -->
-   <script src="tna_settings_popup.js?v=20261027d"></script>
+   <script src="tna_settings_popup.js?v=20261106i"></script>
    <!-- 2026-10-27 Overtime Rules > Weekends: the Saturday rate shown read-only on the Saturday row (= the Overtime rate). Not a setting. AUTO-HEAL: safe to remove. -->
    <script src="tna_sat_rate_view.js?v=20261027b"></script>
    <!-- 2026-10-27 Overtime Rules > Overtime limits: the BCEA limits locked (companies may only be stricter), the earnings threshold
