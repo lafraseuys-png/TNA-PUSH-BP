@@ -1095,12 +1095,13 @@
                                 <thead>
                                     <tr>
                                         <th>Warehouse Name</th>
+                                        <th>Branch Code</th>
                                         <th>Linked Area</th>
                                         <th style="text-align: right;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody id="distWarehousesTableBody">
-                                    <tr><td colspan="3" style="text-align: center; color: #64748b;">Loading warehouses...</td></tr>
+                                    <tr><td colspan="4" style="text-align: center; color: #64748b;">Loading warehouses...</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -1121,6 +1122,12 @@
                                 <div class="form-group" style="margin-bottom: 0;">
                                     <label style="font-size: 10px; font-weight: bold;">Warehouse Name *</label>
                                     <input type="text" id="newDistWhsName" required class="form-control" placeholder="e.g. Area 1 Main Depot">
+                                </div>
+                                <!-- 2026-11-10 Branch Code: shown next to Depot Name on Reports > Finance Issues (TOIS). AUTO-HEAL: safe to remove. -->
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label style="font-size: 10px; font-weight: bold;">Branch Code</label>
+                                    <input type="text" id="newDistWhsBranch" maxlength="50" class="form-control" placeholder="e.g. 102" autocomplete="off">
+                                    <p style="font-size: 10px; color: #64748b; margin-top: 4px;">Goes in the Branch Code column of the Finance Issues (TOIS) report for issues from this depot.</p>
                                 </div>
                                 <div class="form-group" style="margin-bottom: 0;">
                                     <label style="font-size: 10px; font-weight: bold;">Linked Geographic Area</label>
@@ -1150,7 +1157,7 @@
                             <p style="font-size: 10px; color: #64748b; margin: 0;">Nothing is saved until you click Import. Rejected rows are skipped; fix them in the file and import again.</p>
                             <div class="glass-table-container">
                                 <table class="glass-table w-full text-xs">
-                                    <thead><tr><th>Row</th><th>Action</th><th>Warehouse Name</th><th>Linked Area</th><th>Notes</th></tr></thead>
+                                    <thead><tr><th>Row</th><th>Action</th><th>Warehouse Name</th><th>Branch Code</th><th>Linked Area</th><th>Notes</th></tr></thead>
                                     <tbody id="distWhsImportBody"></tbody>
                                 </table>
                             </div>
@@ -3462,22 +3469,37 @@
                                 </div>
                             </div>
 
-                            <div class="form-group" style="width: 200px; margin: 0;">
-                                <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">Filter by Level</label>
-                                <select id="areaLevelFilter" onchange="resetAreaPageAndRender()" class="form-control" style="width: 100%;">
-                                    <option value="">All Levels</option>
-                                </select>
+                            <!-- ⚡ 2026-11-10 (user): Level + Depot in ONE Filters drop-down (the modern one Farmers Master uses). Both selects keep their ids
+                                 and onchange (they still filter at once); Clear all = the old Clear button (also clears the search). AUTO-HEAL: the list code is unchanged. -->
+                            <div class="form-group profile-menu-container" style="position: relative; margin: 0;">
+                                <button type="button" class="btn btn-secondary" id="areaFiltersBtn" onclick="document.getElementById('areaFiltersDropdownMenu').classList.toggle('show');" style="height: 38px; padding: 0 15px;">
+                                    <i class="fas fa-sliders-h"></i> Filters <span id="areaFiltersBadge" style="display: none; margin-left: 6px; background: #1a4c7b; color: #fff; border-radius: 999px; font-size: 10px; font-weight: 800; padding: 1px 7px;">0</span>
+                                </button>
+                                <div id="areaFiltersDropdownMenu" class="profile-dropdown-menu" style="top: calc(100% + 8px); left: 0; bottom: auto; min-width: 260px; z-index: 105; padding: 15px; display: flex; flex-direction: column; gap: 12px;">
+                                    <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid rgba(148, 163, 184, 0.2); padding-bottom: 8px;">Filter Options</div>
+                                    <div class="form-group" style="width: 100%; margin: 0;">
+                                        <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">Level</label>
+                                        <select id="areaLevelFilter" onchange="resetAreaPageAndRender(); areaFiltersBadge();" class="form-control" style="width: 100%;">
+                                            <option value="">All Levels</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" style="width: 100%; margin: 0;">
+                                        <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">Depot</label>
+                                        <select id="areaWarehouseFilter" onchange="resetAreaPageAndRender(); areaFiltersBadge();" class="form-control" style="width: 100%;">
+                                            <option value="">All Warehouses</option>
+                                        </select>
+                                    </div>
+                                    <button type="button" onclick="clearAreaFilters(); areaFiltersBadge(); document.getElementById('areaFiltersDropdownMenu').classList.remove('show');" class="btn btn-secondary" style="height: 34px; justify-content: center;"><i class="fas fa-undo"></i> Clear all</button>
+                                </div>
                             </div>
-
-                            <!-- ⚡ Filter by the warehouse shown in the Warehouse column (options filled by contractors.js). AUTO-HEAL: safe to remove. -->
-                            <div class="form-group" style="width: 200px; margin: 0;">
-                                <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">Filter by Warehouse</label>
-                                <select id="areaWarehouseFilter" onchange="resetAreaPageAndRender()" class="form-control" style="width: 100%;">
-                                    <option value="">All Warehouses</option>
-                                </select>
-                            </div>
-
-                            <button type="button" onclick="clearAreaFilters()" class="btn btn-secondary" style="height: 38px;"><i class="fas fa-undo"></i> Clear</button>
+                            <script>
+                                // how many of the two filters are set - on the Filters button
+                                function areaFiltersBadge() {
+                                    var n = ['areaLevelFilter', 'areaWarehouseFilter'].filter(function (id) { var e = document.getElementById(id); return e && e.value; }).length;
+                                    var b = document.getElementById('areaFiltersBadge'); if (!b) return;
+                                    b.textContent = n; b.style.display = n ? 'inline-block' : 'none';
+                                }
+                            </script>
                         </div>
 
                         <div style="display: flex; gap: 10px; align-items: flex-end;">
@@ -5186,7 +5208,7 @@
         <!-- ⚡ Modern pop-ups (the Employee Master look): SweetAlert2 + alert / tnaAsk / tnaAskText. AUTO-HEAL: if the CDN cannot load, the browser's own pop-ups. -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="contractors_modern_popups.js?v=20261020a"></script>
-        <script src="contractors.js?v=20261106a"></script>
+        <script src="contractors.js?v=20261110a"></script>
         <script src="stock_item_rule.js?v=20261102d"></script>
         <script src="report_unsubs.js?v=20261031a"></script>
         <!-- ⚡ 2026-10-18 Farmers Master: the import wizard (Data Tools > Import Excel Data). AUTO-HEAL: safe to remove - the old Import screen opens. -->
@@ -5198,7 +5220,7 @@
         <!-- Shared resize grip for every pop-up (tna_modal_resize.js). Safe to remove. -->
        <script src="tna_modal_resize.js?v=20261026b"></script>
        <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
-        <script src="tna_topbar.js?v=58"></script>
+        <script src="tna_topbar.js?v=69"></script>
       <!-- Employee Master button & tab look (navy glass, red kept for danger). Safe to remove. -->
         <script src="tna_em_buttons.js?v=20261104a"></script>
        <!-- One "Dates" field (drag or click from/to) for every ...DateFrom / ...DateTo pair. Safe to remove. -->
@@ -5208,7 +5230,7 @@
        <script src="contractors_seasons.js?v=20261005p"></script>
 
         <!-- ⚡ Screens use your own hierarchy level names instead of "Area" (new file). AUTO-HEAL: safe to remove. -->
-        <script src="contractors_level_words.js?v=20261105a"></script>
+        <script src="contractors_level_words.js?v=20261110a"></script>
         <!-- 2026-10-18 "Depot" instead of "Warehouse" on every screen (words only - names, data, exports and the phone stay the same). AUTO-HEAL: safe to remove. -->
         <script src="contractors_depot_words.js?v=20261018a"></script>
         <!-- Sidebar groups (Farmers & Contracts / Distribution / Reports & Messages / Setup). Safe to remove. -->
@@ -5259,7 +5281,8 @@
              sidebar link goes (new file, before the Settings groups). AUTO-HEAL: safe to remove - the Workflow screen comes back. -->
         <script src="contractors_workflow_settings.js?v=20261104b"></script>
         <script src="contractors_settings_groups.js?v=20261106a"></script>
-    <script src="contractors_settings_popup.js?v=20261106b"></script>
+    <!-- 2026-11-10 (user): the pop-up is back, with each section's own tabs at the top inside it (TABS_ON_TOP in the file). -->
+    <script src="contractors_settings_popup.js?v=20261110c"></script>
     <script src="contractors_products_hub.js?v=20261102g"></script>
     <script src="contractors_calc_test.js?v=20261102a"></script>
     <!-- ⚡ 2026-10-23: SMS & Broadcast opens as a pop-up window like Settings (new file). AUTO-HEAL: safe to remove. -->
@@ -5281,13 +5304,16 @@
         <!-- ⚡ Reports > Bulk Approvals: every Inbox "Approve selected" run, with the review answer, for audit (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_bulk_approvals_report.js?v=20261002a"></script>
         <!-- ⚡ Reports: one screen - a report dropdown, filters, columns, sort, column search, summary, pages, export (new file). AUTO-HEAL: safe to remove (the old tabs come back). -->
-        <script src="contractors_report_center.js?v=20261106a"></script>
+        <script src="contractors_report_center.js?v=20261110a"></script>
         <!-- ⚡ 2026-11-04 Distribution Master > Final Distributions Approval: upload the client file, compare per farmer, approve final figures (full admins). AUTO-HEAL: safe to remove. -->
-        <script src="contractors_final_dist.js?v=20261106e"></script>
+        <script src="contractors_final_dist.js?v=20261110g"></script>
         <!-- ⚡ 2026-11-06 (user) icon buttons show their name at once on hover, the same dark pop-up as Time & Attendance (remove this line = the browser's own late grey tooltip, as before) -->
         <script src="tna_quick_tips.js?v=20261030c"></script>
         <!-- ⚡ Dashboard: Approved Farmers = farmers with an approved contract + the "Farmers vs Approved" card (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_dash_approval.js?v=20261006a"></script>
+        <!-- 2026-11-10 Dashboard in the T&A look: Overview | Map | Approvals (the old dashboard). Switch: Settings > General.
+             Server: logic_contractor_dashboard.js. AUTO-HEAL: safe to remove - the old dashboard shows as before. -->
+        <script src="contractors_dashboard_v2.js?v=20261110k"></script>
         <!-- ⚡ Settings > Contract Rules > Partial distribution (Off / only when the warehouse is short / any time with a reason) -->
         <script src="contractors_partial_distribution.js?v=20261004a"></script>
         <!-- ⚡ Settings > Contract Rules > Inputs summary on the phone (club screen card, value on/off) -->
@@ -5327,13 +5353,19 @@
         <!-- ⚡ 2026-10-18 Numbers on the left in every table (counts, quantities, amounts); Action columns stay right. AUTO-HEAL: safe to remove. -->
         <script src="contractors_numbers_left.js?v=20261018b"></script>
         <script src="contractors_hierarchy_levels.js?v=20261019b"></script>
-        <script src="contractors_manager_assign.js?v=20261105b"></script>
+        <script src="contractors_manager_assign.js?v=20261110a"></script>
         <script src="contractors_manager_bulk.js?v=20261105i"></script>
         <script src="contractors_location_setup.js?v=20261105c"></script>
         <!-- ⚡ 2026-10-18 Farmer Profile Overview: header, tabs, season timeline, print. AUTO-HEAL: safe to remove - the old overview shows. -->
         <script src="contractors_profile_overview.js?v=20261105a"></script>
         <!-- ⚡ 2026-11-09 Evidence sent in later: Profile > Transactions "Evidence documents" + "Sent in later" in View Evidence. AUTO-HEAL: safe to remove. -->
         <script src="contractors_late_evidence.js?v=20261109a"></script>
+        <!-- ⚡ 2026-11-10 "Search ..." labels move inside their search boxes (saves space). AUTO-HEAL: safe to remove - labels show again. -->
+        <script src="contractors_search_inline.js?v=20261110a"></script>
+        <!-- ⚡ 2026-11-10 no screen title / description at the top of a screen (the lit sidebar item shows it). AUTO-HEAL: safe to remove. -->
+        <script src="contractors_no_titles.js?v=20261110c"></script>
+        <!-- ⚡ 2026-11-10 every list: headings stay at the top while scrolling (own scroll area, browser-pinned, solid colours). AUTO-HEAL: safe to remove. -->
+        <script src="contractors_sticky_heads.js?v=20261110g"></script>
         <!-- ⚡ 2026-10-18 Add / Edit Farmer: one organised form with a side menu + changes summary on Save. AUTO-HEAL: safe to remove - the old tabbed form shows. -->
         <script src="contractors_profile_form.js?v=20261019c"></script>
         <script src="contractors_navy_badges.js?v=20261019b"></script>

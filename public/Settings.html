@@ -312,8 +312,15 @@
         body.dark-mode .profile-name { color: #e2e8f0; }
         body.dark-mode .profile-dropdown-menu { background-color: rgba(30, 41, 59, 0.95); border-color: rgba(255, 255, 255, 0.1); }
         /* 2026-11-03: search box at the top of a drop-down list (<select data-search>), stays put while the list scrolls */
+        /* 2026-11-10 search box icon: left, soft grey, as on the Audit Trail (user) */
+        .srch-ico { color: #64748b !important; font-size: 12px !important; }
+        body.dark-mode .srch-ico { color: #94a3b8 !important; }
         .sel-search-wrap { position: sticky; top: 0; z-index: 1; padding: 6px; background: #ffffff; border-bottom: 1px solid #e2e8f0; }
         body.dark-mode .sel-search-wrap { background: #1e293b; border-bottom-color: rgba(255, 255, 255, 0.1); }
+        /* 2026-11-10 the search inside every list: the same grey icon on the left as the other search boxes */
+        .sel-search-wrap::before { content: "\f002"; font-family: "Font Awesome 6 Free" !important; font-weight: 900; position: absolute; left: 17px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 11px; pointer-events: none; }
+        body.dark-mode .sel-search-wrap::before { color: #94a3b8; }
+        .sel-search-wrap input { padding-left: 30px !important; }
         .sel-search-empty { padding: 10px 14px; font-size: 12px; color: #94a3b8; font-style: italic; }
         body.dark-mode .dropdown-item { color: #cbd5e1; }
         body.dark-mode .dropdown-item:hover { background-color: rgba(255, 255, 255, 0.05); color: #ffffff; }
@@ -521,8 +528,14 @@
             
             <section id="page-profile" class="page-section active">
                 <div class="glass-panel p-6 rounded-lg border-t-[3px] border-t-[#1a4c7b] mb-6">
-                    <!-- Dynamic Tab Header -->
-                    <div class="flex border-b border-slate-300 dark:border-gray-700 mb-5 gap-5">
+                    <!-- ⚡ 2026-11-10 (user: "only company entities and then a filter to see deactivated ones"): one heading + a Show
+                         filter in the toolbar instead of two tabs. Both lists, their loading and switchCompanyTab() are unchanged - the old
+                         tab buttons are only hidden (anything that still calls them keeps working). -->
+                    <div class="flex items-center gap-2 mb-4 border-b border-slate-300 dark:border-gray-700 pb-2">
+                        <h3 class="font-bold text-slate-700 dark:text-gray-300"><i class="fa-solid fa-building text-[#1a4c7b] dark:text-gray-300 mr-2"></i>Company Entities</h3>
+                    </div>
+                    <!-- Dynamic Tab Header (hidden since 2026-11-10, kept for switchCompanyTab) -->
+                    <div class="flex border-b border-slate-300 dark:border-gray-700 mb-5 gap-5" style="display: none;">
                         <button onclick="switchCompanyTab('active')" id="btn-tab-comp-active" class="bg-transparent border-none border-b-2 border-blue-600 dark:border-sky-400 text-blue-600 dark:text-sky-400 font-bold py-2 px-2 cursor-pointer transition-all"><i class="fa-solid fa-building mr-1.5"></i> Company Entities</button>
                         <button onclick="switchCompanyTab('deactivated')" id="btn-tab-comp-deact" class="bg-transparent border-none border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-gray-300 font-bold py-2 px-2 cursor-pointer transition-all"><i class="fa-solid fa-ban mr-1.5"></i> Deactivated Entities</button>
                     </div>
@@ -531,9 +544,15 @@
                     <div id="tab-comp-active">
                         <!-- Toolbar -->
                         <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; margin-bottom: 20px;">
-                            <div class="w-72">
-                                <label class="block text-xs font-bold text-slate-600 dark:text-gray-400 mb-1">Search Companies</label>
-                                <input type="text" id="searchCompany" placeholder="Search by name..." class="form-control">
+                            <div style="display: flex; align-items: flex-end; gap: 14px;">
+                                <div class="w-72">
+                                    <label class="block text-xs font-bold text-slate-600 dark:text-gray-400 mb-1">Search Companies</label>
+                                    <div class="relative"><div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none"><i class="fas fa-search srch-ico"></i></div><input type="text" id="searchCompany" placeholder="Search by name..." class="form-control" style="padding-left:34px"></div>
+                                </div>
+                                <div class="w-44">
+                                    <label class="block text-xs font-bold text-slate-600 dark:text-gray-400 mb-1" for="compShowA">Show</label>
+                                    <select id="compShowA" class="form-control comp-show" onchange="compShow(this.value)"><option value="active" selected>Active</option><option value="deactivated">Deactivated</option></select>
+                                </div>
                             </div>
                             <button onclick="openCreateCompanyModal()" class="btn-primary">
                                 <i class="fas fa-plus"></i> Create Company
@@ -565,9 +584,15 @@
                     <div id="tab-comp-deactivated" style="display: none; animation: slideFadeIn 0.3s ease forwards;">
                         <!-- Toolbar -->
                         <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; margin-bottom: 20px;">
-                            <div class="w-72">
-                                <label class="block text-xs font-bold text-slate-600 dark:text-gray-400 mb-1">Search Deactivated</label>
-                                <input type="text" id="searchDeactCompany" placeholder="Search by name..." class="form-control">
+                            <div style="display: flex; align-items: flex-end; gap: 14px;">
+                                <div class="w-72">
+                                    <label class="block text-xs font-bold text-slate-600 dark:text-gray-400 mb-1">Search Companies</label>
+                                    <div class="relative"><div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none"><i class="fas fa-search srch-ico"></i></div><input type="text" id="searchDeactCompany" placeholder="Search by name..." class="form-control" style="padding-left:34px"></div>
+                                </div>
+                                <div class="w-44">
+                                    <label class="block text-xs font-bold text-slate-600 dark:text-gray-400 mb-1" for="compShowD">Show</label>
+                                    <select id="compShowD" class="form-control comp-show" onchange="compShow(this.value)"><option value="active">Active</option><option value="deactivated" selected>Deactivated</option></select>
+                                </div>
                             </div>
                         </div>
 
@@ -1425,12 +1450,12 @@
                     </div>
 
                   <!-- Search & Filter Toolbar -->
-                    <div class="flex flex-col md:flex-row gap-4 mb-5 w-full bg-white/40 dark:bg-gray-900/40 p-3 rounded-xl border border-slate-200 dark:border-gray-700 shadow-sm items-center justify-between">
+                    <div class="flex flex-col md:flex-row gap-3 mb-4 w-full items-center md:justify-start">
                         <!-- Shortened Search Bar -->
                         <div class="w-full md:w-80 relative flex-shrink-0">
-                            <input type="text" id="userSearchInput" onkeyup="applyUserFilters()" placeholder="Search by name, username, or email..." class="form-control !pr-10 !border-transparent shadow-sm">
-                            <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none">
-                                <i class="fas fa-search text-slate-400 dark:text-gray-500 text-sm"></i>
+                            <input type="text" id="userSearchInput" onkeyup="applyUserFilters()" placeholder="Search by name, username, or email..." class="form-control" style="padding-left:34px">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none"><!-- 2026-11-10 icon on the left, grey (the Audit Trail search look) -->
+                                <i class="fas fa-search srch-ico"></i>
                             </div>
                         </div>
                         
@@ -3611,7 +3636,15 @@
             document.getElementById('editCompanyModal').classList.remove('active');
         }
 
+        // ⚡ 2026-11-10 Company Entities "Show" filter (Active / Deactivated) - the two selects stay in step, the old tab switch does the rest
+        function compShow(v) {
+            const tab = v === 'deactivated' ? 'deactivated' : 'active';
+            switchCompanyTab(tab);
+        }
+
         function switchCompanyTab(tab) {
+            // 2026-11-10 the Show filter follows (the page turns each select into a text box beside it - that box shows the label)
+            document.querySelectorAll('select.comp-show').forEach(s => { s.value = tab === 'active' ? 'active' : 'deactivated'; const box = s.nextElementSibling; if (box && box.tagName === 'INPUT' && s.selectedIndex >= 0) box.value = s.options[s.selectedIndex].text; });
             document.getElementById('tab-comp-active').style.display = 'none';
             document.getElementById('tab-comp-deactivated').style.display = 'none';
             
@@ -3860,7 +3893,8 @@
                     });
                     emptyNote.style.display = shown ? 'none' : '';
                 };
-                if (select.hasAttribute('data-search')) {
+                // 2026-11-10 (user: 'there should always be a search bar inside the dropdown'): every list gets the search box; <select data-nosearch> opts out
+                if (!select.hasAttribute('data-nosearch')) {
                     const searchWrap = document.createElement('div');
                     searchWrap.className = 'sel-search-wrap';
                     searchBox = document.createElement('input');
@@ -3964,7 +3998,7 @@
   <script>window.TNA_POPUP_NAVY = true;</script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="contractors_modern_popups.js?v=20261020a"></script>
-  <script src="settings.js?v=20261030a"></script>
+  <script src="settings.js?v=20261110a"></script>
     <!-- ⚡ 2026-10-20 Hardware > Facial AI Licenses: "Data Tools" - license tracker wizard (Excel only, nothing saved). AUTO-HEAL: safe to remove. -->
     <script src="facial_license_tracker.js?v=20261020a"></script>
     <!-- ⚡ 2026-10-20 Hardware, Mobile Errors, Audit Trail, Mobile Transactions in the theme (tables, navy pills, theme buttons). Look only. AUTO-HEAL: safe to remove. -->
@@ -3997,15 +4031,15 @@
       })();
   </script>
    <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
-   <script src="tna_topbar.js?v=58"></script>
+   <script src="tna_topbar.js?v=69"></script>
     <script src="csvimport.js?v=20261020a"></script>
     <!-- Contractors screen/action permissions (role editor + overrides). Safe to remove. -->
    <script src="contractor_perms.js?v=20261106b"></script>
-   <script src="roles_v2.js?v=20261109a"></script>
+   <script src="roles_v2.js?v=20261110b"></script>
    <!-- 2026-11-09 Audit Trail: every module in one list (js/company_audit.js + /api/audit/all) -->
-   <script src="company_audit.js?v=20261109a"></script>
+   <script src="company_audit.js?v=20261110c"></script>
    <!-- 2026-11-03 Org Hierarchy sheet. AUTO-HEAL: without the file the menu item opens an empty section, nothing else changes. -->
-   <script src="org_sheet.js?v=20261103f"></script>
+   <script src="org_sheet.js?v=20261110e"></script>
         <!-- ================================================================
          RESIZABLE MODALS - bottom-right diagonal grip (inline)
          Drag to resize, double-click the grip to reset. Size is remembered
@@ -4179,6 +4213,10 @@
     <!-- ⚡ Help as a side panel with a search, opened from a "?" in the top bar (shared with Employee Master). "Tour an area"
          opens any Settings area from the sidebar, then tours it. AUTO-HEAL: safe to remove - the round "?" comes back. -->
     <script src="tna_help_panel.js?v=20261109b" data-help-module="Settings" data-help-placeholder="What do you want to do? e.g. add a user, schedule" data-help-examples="user, role, sync, notification" data-help-btn-class="btn-primary" data-help-areas="#sidebarNav"></script>
+    <!-- ⚡ 2026-11-10 (user): the Farmers & Distribution list look in Company Settings too - the Action column pinned on the right with its
+         white band + shadow, and the headings pinned at the top while scrolling. Both are shared, generic files. AUTO-HEAL: safe to remove. -->
+    <script src="contractors_sticky_actions.js?v=20261104a"></script>
+    <script src="contractors_sticky_heads.js?v=20261110g"></script>
     <!-- Demo / Setup mode: Settings are live-only. In demo the page can be looked at, but the server refuses every save,
          and this notice says why. AUTO-HEAL: safe to remove. -->
     <script>

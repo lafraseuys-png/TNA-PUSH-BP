@@ -865,9 +865,155 @@
       "trigger": "#shiftModal.active",
       "overlay": true,
       "autoStart": "offer",
-      "stepsFrom": "tna_dashboard.guide.shift",
-      "skipSteps": 2,
-      "stepSuffix": "form"
+      "steps": [
+        {
+          "id": "tag-sh-name:form",
+          "target": [
+            "#shiftName"
+          ],
+          "title": "Name and colour",
+          "text": "For example <b>Day 07:00-16:00</b>. The colour shows on the roster.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "tag-sh-times:form",
+          "target": [
+            "#startTime"
+          ],
+          "title": "Start and end",
+          "text": "The expected times. Tick <b>Next Day</b> for a night shift that ends after midnight.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "tag-sh-types-2:form",
+          "target": [
+            "#isSplitShift"
+          ],
+          "title": "Special shifts",
+          "text": "<b>Split</b>: two segments a day. <b>Session</b>: several clock-in/out sessions. <b>Floating</b>: flexible hours. <b>Present Day</b>: snaps to the day worked. <b>Open Shift</b>: only logs the hours between the first and last clocking - no break, late, overtime or absent rules. Leave them off for an ordinary shift. The shift's name never changes how it is calculated.",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "tag-sh-present-early:form",
+          "target": [
+            "#presentEarlyCountsOT"
+          ],
+          "title": "One-clock shifts: early clock-in",
+          "text": "For a <b>Present Day</b> shift: should clocking in before the start count as overtime? Choose <b>Snap to the shift start</b> and an early clock-in inside the Before Threshold is paid from the shift start. One far before the start still goes for approval.",
+          "placement": "bottom",
+          "climb": 2,
+          "optional": true
+        },
+        {
+          "id": "tag-sh-min:form",
+          "target": [
+            "#forceMinimumHours"
+          ],
+          "title": "Minimum hours and forced rates",
+          "text": "Pay at least a number of hours, or force the day's hours to the overtime or Sunday rate.",
+          "placement": "bottom",
+          "climb": 2,
+          "optional": true
+        },
+        {
+          "id": "tag-sh-break:form",
+          "target": [
+            "#autoBreak"
+          ],
+          "title": "Automatic breaks",
+          "text": "Minutes taken off for a break automatically, and a separate break once overtime passes a number of hours. On a Session shift the break is a lunch taken off the time clocked in each day, for staff who stay clocked in over lunch (leave it 0 if they clock out for lunch).",
+          "placement": "bottom",
+          "climb": 2
+        },
+        {
+          "id": "tag-sh-ot:form",
+          "target": [
+            "#shiftCustomOTRule"
+          ],
+          "title": "Overtime rule and linked leave",
+          "text": "Use a custom overtime ruleset for this shift, or link it to a leave type for paid time off.",
+          "placement": "bottom",
+          "climb": 1
+        },
+        {
+          "id": "tag-sh-allow:form",
+          "target": [
+            "#nightShiftAllowanceType"
+          ],
+          "title": "Allowances",
+          "text": "A night shift allowance (fixed or percentage), or make it a standby shift with its own allowance.",
+          "placement": "bottom",
+          "climb": 1,
+          "optional": true
+        },
+        {
+          "id": "tag-sh-grace:form",
+          "target": [
+            "#graceLateIn"
+          ],
+          "title": "Grace periods",
+          "text": "How many minutes late in or early out are still on time. Tick auto-round to snap clockings within the grace period to the shift times.",
+          "placement": "top",
+          "climb": 2
+        },
+        {
+          "id": "tag-sh-thr:form",
+          "target": [
+            "#beforeThreshold"
+          ],
+          "title": "Thresholds",
+          "text": "The minutes around the shift's start and end the engine uses when deciding what counts as early arrival or overtime.",
+          "placement": "top",
+          "climb": 2
+        },
+        {
+          "id": "tag-sh-ignore-ot:form",
+          "target": [
+            "#shiftIgnoreOTWithinThreshold"
+          ],
+          "title": "Early / late time inside the thresholds",
+          "text": "Per shift: <b>Not paid</b> drops a few minutes early or late, <b>Sent for review</b> lets a manager decide, or follow the company setting. Time beyond the thresholds is always overtime for approval.",
+          "placement": "top",
+          "climb": 2,
+          "optional": true
+        },
+        {
+          "id": "tag-sh-split-thr:form",
+          "target": [
+            "#splitUseThresholds"
+          ],
+          "title": "Split shifts and thresholds",
+          "text": "Tick this on a split shift to use the Before / After Thresholds for each block, so a couple of minutes early or late isn't overtime.",
+          "placement": "top",
+          "climb": 2,
+          "optional": true
+        },
+        {
+          "id": "tag-sh-breaks:form",
+          "target": [
+            "#lunchWindowStart"
+          ],
+          "title": "Break tracking",
+          "text": "A lunch window with a maximum length, and how many short breaks are allowed and for how long. Going over is a break violation.",
+          "placement": "top",
+          "climb": 2,
+          "optional": true
+        },
+        {
+          "id": "tag-sh-save:form",
+          "target": [
+            "#shiftModal button[type='submit']",
+            "#shiftModal button:not([onclick])"
+          ],
+          "title": "Save Shift",
+          "text": "Saves the shift. Give it to people as their default shift in Employee Master, or on the roster.",
+          "placement": "top"
+        }
+      ],
+      "_note": "The classic shift form (Shifts pop-up > Classic form). Its steps were copied from the Create a shift guide on 2026-11-10, when that guide moved to the step-by-step Shifts pop-up."
     }
   ],
   "guides": [],

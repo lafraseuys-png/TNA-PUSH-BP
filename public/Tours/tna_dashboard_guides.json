@@ -30,151 +30,121 @@
           "hint": "Click Create Shift"
         },
         {
-          "id": "tag-sh-name",
+          "id": "tag-sh2-clock",
           "target": [
-            "#shiftName"
+            "#tssMain .tss-opts"
           ],
-          "title": "Name and colour",
-          "text": "For example <b>Day 07:00-16:00</b>. The colour shows on the roster.",
+          "title": "1. How people clock",
+          "timeout": 4000,
           "placement": "bottom",
-          "climb": 1,
-          "timeout": 4000
+          "text": "Pick how this team clocks: <b>Clock in and out</b>, <b>Clock once</b>, <b>Two blocks</b> or <b>Set hours, any time</b>. <b>More types</b> has sessions, record hours only, standby and a paid day. The next steps only ask what matters for the type you pick."
         },
         {
-          "id": "tag-sh-times",
-          "target": [
-            "#startTime"
+          "id": "tag-sh2-name",
+          "before": [
+            {
+              "click": "#tssNav [data-act='go'][data-v='name']"
+            }
           ],
-          "title": "Start and end",
-          "text": "The expected times. Tick <b>Next Day</b> for a night shift that ends after midnight.",
+          "target": [
+            "#tssMain .tss-card"
+          ],
+          "title": "2. Name & colour",
           "placement": "bottom",
-          "climb": 2
+          "text": "The name people see on rosters and timesheets, for example <b>Day 07:00-16:00</b>, and its colour."
         },
         {
-          "id": "tag-sh-types-2",
-          "target": [
-            "#isSplitShift"
+          "id": "tag-sh2-times",
+          "before": [
+            {
+              "click": "#tssNav [data-act='go'][data-v='times']"
+            }
           ],
-          "title": "Special shifts",
-          "text": "<b>Split</b>: two segments a day. <b>Session</b>: several clock-in/out sessions. <b>Floating</b>: flexible hours. <b>Present Day</b>: snaps to the day worked. <b>Open Shift</b>: only logs the hours between the first and last clocking - no break, late, overtime or absent rules. Leave them off for an ordinary shift. The shift's name never changes how it is calculated.",
+          "target": [
+            "#tssMain .tss-card"
+          ],
+          "title": "3. Times",
           "placement": "bottom",
-          "climb": 2
+          "text": "When the shift starts and ends. An end before the start is a night shift that ends the next day. The bar shows the day at a glance."
         },
         {
-          "id": "tag-sh-present-early",
-          "target": [
-            "#presentEarlyCountsOT"
+          "id": "tag-sh2-breaks",
+          "before": [
+            {
+              "click": "#tssNav [data-act='go'][data-v='breaks']"
+            }
           ],
-          "title": "One-clock shifts: early clock-in",
-          "text": "For a <b>Present Day</b> shift: should clocking in before the start count as overtime? Choose <b>Snap to the shift start</b> and an early clock-in inside the Before Threshold is paid from the shift start. One far before the start still goes for approval.",
-          "placement": "bottom",
-          "climb": 2,
-          "optional": true
+          "target": [
+            "#tssMain"
+          ],
+          "title": "4. Lunch & breaks",
+          "placement": "left",
+          "text": "<b>First in, last out</b> takes a set lunch off the day, or <b>Add up every in and out</b> pays only the time clocked in. Add a lunch window and short-break limits to flag long breaks."
         },
         {
-          "id": "tag-sh-min",
-          "target": [
-            "#forceMinimumHours"
+          "id": "tag-sh2-leeway",
+          "before": [
+            {
+              "click": "#tssNav [data-act='go'][data-v='leeway']"
+            }
           ],
-          "title": "Minimum hours and forced rates",
-          "text": "Pay at least a number of hours, or force the day's hours to the overtime or Sunday rate.",
-          "placement": "bottom",
-          "climb": 2,
-          "optional": true
+          "target": [
+            "#tssMain"
+          ],
+          "title": "5. Leeway & overtime",
+          "placement": "left",
+          "text": "How many minutes late in or early out still count as on time, and how long before or after the shift extra time becomes overtime."
         },
         {
-          "id": "tag-sh-break",
-          "target": [
-            "#autoBreak"
+          "id": "tag-sh2-absent",
+          "before": [
+            {
+              "click": "#tssNav [data-act='go'][data-v='absent']"
+            }
           ],
-          "title": "Automatic breaks",
-          "text": "Minutes taken off for a break automatically, and a separate break once overtime passes a number of hours. On a Session shift the break is a lunch taken off the time clocked in each day, for staff who stay clocked in over lunch (leave it 0 if they clock out for lunch).",
-          "placement": "bottom",
-          "climb": 2
+          "target": [
+            "#tssMain"
+          ],
+          "title": "6. If they don't clock",
+          "placement": "left",
+          "text": "A work day without clockings is marked absent, or completed with 0 hours (e.g. contract workers). You can also pay a minimum number of hours."
         },
         {
-          "id": "tag-sh-ot",
-          "target": [
-            "#shiftCustomOTRule"
+          "id": "tag-sh2-extras",
+          "before": [
+            {
+              "click": "#tssNav [data-act='go'][data-v='extras']"
+            }
           ],
-          "title": "Overtime rule and linked leave",
-          "text": "Use a custom overtime ruleset for this shift, or link it to a leave type for paid time off.",
-          "placement": "bottom",
-          "climb": 1
+          "target": [
+            "#tssMain"
+          ],
+          "title": "7. Overtime setup",
+          "placement": "left",
+          "text": "The company overtime rules are shown for reference. Give this shift its own overtime ruleset, a night shift allowance or an overtime break if it needs one."
         },
         {
-          "id": "tag-sh-allow",
-          "target": [
-            "#nightShiftAllowanceType"
+          "id": "tag-sh2-check",
+          "before": [
+            {
+              "click": "#tssNav [data-act='go'][data-v='check']"
+            }
           ],
-          "title": "Allowances",
-          "text": "A night shift allowance (fixed or percentage), or make it a standby shift with its own allowance.",
-          "placement": "bottom",
-          "climb": 1,
-          "optional": true
+          "target": [
+            "#tssMain"
+          ],
+          "title": "8. Check & save",
+          "placement": "left",
+          "text": "Anything that may not work the way you expect, in plain words, with a one-click fix."
         },
         {
-          "id": "tag-sh-grace",
+          "id": "tag-sh2-save",
           "target": [
-            "#graceLateIn"
+            "#tssFoot [data-act='save']"
           ],
-          "title": "Grace periods",
-          "text": "How many minutes late in or early out are still on time. Tick auto-round to snap clockings within the grace period to the shift times.",
+          "title": "Create shift",
           "placement": "top",
-          "climb": 2
-        },
-        {
-          "id": "tag-sh-thr",
-          "target": [
-            "#beforeThreshold"
-          ],
-          "title": "Thresholds",
-          "text": "The minutes around the shift's start and end the engine uses when deciding what counts as early arrival or overtime.",
-          "placement": "top",
-          "climb": 2
-        },
-        {
-          "id": "tag-sh-ignore-ot",
-          "target": [
-            "#shiftIgnoreOTWithinThreshold"
-          ],
-          "title": "Early / late time inside the thresholds",
-          "text": "Per shift: <b>Not paid</b> drops a few minutes early or late, <b>Sent for review</b> lets a manager decide, or follow the company setting. Time beyond the thresholds is always overtime for approval.",
-          "placement": "top",
-          "climb": 2,
-          "optional": true
-        },
-        {
-          "id": "tag-sh-split-thr",
-          "target": [
-            "#splitUseThresholds"
-          ],
-          "title": "Split shifts and thresholds",
-          "text": "Tick this on a split shift to use the Before / After Thresholds for each block, so a couple of minutes early or late isn't overtime.",
-          "placement": "top",
-          "climb": 2,
-          "optional": true
-        },
-        {
-          "id": "tag-sh-breaks",
-          "target": [
-            "#lunchWindowStart"
-          ],
-          "title": "Break tracking",
-          "text": "A lunch window with a maximum length, and how many short breaks are allowed and for how long. Going over is a break violation.",
-          "placement": "top",
-          "climb": 2,
-          "optional": true
-        },
-        {
-          "id": "tag-sh-save",
-          "target": [
-            "#shiftModal button[type='submit']",
-            "#shiftModal button:not([onclick])"
-          ],
-          "title": "Save Shift",
-          "text": "Saves the shift. Give it to people as their default shift in Employee Master, or on the roster.",
-          "placement": "top"
+          "text": "Fill in each step on the left, then click <b>Create shift</b>. Give it to people as their default shift in Employee Master, or put it on the roster. <b>Classic form</b> (bottom left) shows every field on one page."
         }
       ]
     },
@@ -287,11 +257,12 @@
         {
           "id": "tag-ro-auto",
           "target": [
-            "#page-roster button[onclick*='openAutoPopulateModal']"
+            "#page-roster .rs-dd:has(button[onclick*='openAutoPopulateModal']) > button",
+            "#page-roster .rs-dd > button"
           ],
           "title": "2. Start from the defaults",
-          "text": "<b>Auto-Populate Defaults</b> fills the week from each person's default shift and working days.",
-          "placement": "bottom"
+          "placement": "bottom",
+          "text": "Open <b>Fill roster</b> and pick <b>Auto-fill</b>: it fills the week from each person's default shift and working days. <b>Bulk assign shifts</b> puts one shift on many people, and <b>Create shift pattern</b> repeats rotating shifts for weeks ahead."
         },
         {
           "id": "tag-ro-grid",
@@ -303,22 +274,12 @@
           "placement": "top"
         },
         {
-          "id": "tag-ro-pattern",
-          "target": [
-            "#page-roster button[onclick*='openPatternModal']"
-          ],
-          "title": "Rotating patterns",
-          "text": "For rotating shifts, use <b>Patterns</b> to repeat them for weeks ahead.",
-          "placement": "bottom",
-          "optional": true
-        },
-        {
           "id": "tag-ro-save",
           "target": [
             "#btnSaveRosterChanges"
           ],
           "title": "4. Save & Recalculate",
-          "text": "Saves the week and recalculates those days.",
+          "text": "Appears once you change something: saves the week and recalculates those days.",
           "placement": "bottom",
           "optional": true
         }
@@ -383,13 +344,11 @@
           "climb": 2
         },
         {
-          "id": "tag-ot-save",
-          "target": [
-            "#btnSaveOtSettings"
-          ],
-          "title": "5. Save Global Defaults",
-          "text": "Applies to everyone without their own ruleset.",
-          "placement": "top"
+          "id": "tag-ot-savebar",
+          "target": [],
+          "title": "5. Save",
+          "guideOnly": true,
+          "text": "Change something and an <b>Unsaved changes</b> bar comes up at the bottom of this window: click <b>Save</b> there. The rules apply to everyone without their own ruleset."
         },
         {
           "id": "tag-ot-custom",
@@ -435,12 +394,12 @@
         {
           "id": "tag-tv-day",
           "target": [
+            "#tvvRangeHost",
             "#tvvDate"
           ],
-          "title": "1. The day",
-          "text": "Choose the day to check. Click <b>OT to approve</b> or <b>not approved</b> at the top to see only those people.",
+          "title": "1. The days",
+          "text": "Choose the day, or a few days, to check. Click a count at the top, such as <b>not approved</b>, to see only those people.",
           "placement": "bottom",
-          "climb": 1,
           "timeout": 4000
         },
         {
