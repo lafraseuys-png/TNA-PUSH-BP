@@ -784,10 +784,11 @@
         {
           "id": "pwg-jc-edit",
           "target": [
+            "#jcGridBody [onclick*='openJcEditModal']",
             "#jcGridBody [title='Edit unit / activity']"
           ],
           "title": "6. Correct a job",
-          "text": "Use <b>Edit</b> to choose the right unit or activity. A job with an activity is no longer flagged for having none.",
+          "text": "Use <b>Edit</b> to fix the clock-in and clock-out times, or choose the right unit or activity. Changed times also move the matching attendance clockings. Jobs closed by the automatic clock-out show <b>Auto clock-out</b>; fix their time here.",
           "placement": "left",
           "optional": true
         },

@@ -67,7 +67,7 @@
     <!-- Auto-heal: v2 look (same as the Support desk). Fonts fall back to system fonts if blocked;
          if godmode-theme.css is missing the page keeps the old look. -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;700&display=swap">
-    <link rel="stylesheet" href="/css/globaladmin-theme.css">
+    <link rel="stylesheet" href="/css/globaladmin-theme.css?v=20261111f">
 </head>
 <body class="font-sans flex h-screen overflow-hidden bg-gray-900 gm-v2 theme-galaxy" data-sysadmin="1">
     <script>
@@ -219,24 +219,26 @@
             <!-- TAB 2: TENANTS -->
             <section id="page-tenants" class="page-section">
                 
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                    <div>
-                        <h2 class="text-2xl font-bold text-white"><i class="fas fa-building mr-2 text-emerald-500"></i>Tenant Management</h2>
-                        <p class="text-sm text-gray-400">Deploy and manage client SaaS environments.</p>
-                    </div>
-                    <button onclick="openCreateTenantModal()" class="w-full sm:w-auto justify-center bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 sm:py-2 px-6 rounded shadow-lg transition flex items-center"><i class="fas fa-plus mr-2"></i> Deploy New Tenant</button>
-                </div>
-
-        <div class="section">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-semibold">Manage Existing Tenants</h2>
+        <!-- 2026-11-11 TENANTS LIST v2: one toolbar (search > filters, actions on the right) + one table drawn by
+             globaladmin.js loadTenants(). Same IDs and functions as before (openCreateTenantModal, tenantsContainer). -->
+        <div class="section tn-card" id="tnCard">
+            <div class="tn-tb">
+                <div class="tn-search"><i class="fas fa-search"></i><input type="text" id="tnSearch" placeholder="Search tenant, database or licence key" autocomplete="off" oninput="tnDraw && tnDraw()"></div>
+                <div class="tn-dd" id="tnDdRes"><button type="button" class="tn-dd-btn" onclick="tnToggleDd('tnDdRes')"><span class="tn-lab">Reseller</span> <b id="tnResLab">All</b> <i class="fas fa-chevron-down"></i></button>
+                    <div class="tn-dd-pop"><div class="tn-search"><i class="fas fa-search"></i><input type="text" placeholder="Search resellers" oninput="tnFilterOpts(this)"></div><div class="tn-opts" id="tnResOpts"></div></div></div>
+                <div class="tn-dd" id="tnDdDocs"><button type="button" class="tn-dd-btn" onclick="tnToggleDd('tnDdDocs')"><span class="tn-lab">Documents</span> <b id="tnDocLab">All</b> <i class="fas fa-chevron-down"></i></button>
+                    <div class="tn-dd-pop"><div class="tn-search"><i class="fas fa-search"></i><input type="text" placeholder="Search" oninput="tnFilterOpts(this)"></div><div class="tn-opts" id="tnDocOpts"></div></div></div>
+                <span class="tn-count" id="tnCount"></span>
+                <span class="tn-sp"></span>
+                <button type="button" class="tn-btn" id="tnPaidBtn" hidden onclick="markSelectedPaid()"><i class="fas fa-check-double"></i> Mark paid <b id="tnPaidN"></b></button>
+                <button type="button" onclick="openCreateTenantModal()" class="tn-btn tn-pri"><i class="fas fa-plus"></i> Deploy New Tenant</button>
             </div>
-            <div id="tenantsContainer" class="space-y-8">
-                <!-- Grouped tables will be dynamically injected here -->
+            <div id="tenantsContainer" class="tn-scroll">
+                <!-- Tenants table is drawn here by globaladmin.js -->
             </div>
         </div>
 
-        <div class="section mt-6" style="border-color: #3b82f6;">
+        <div class="section mt-6 tn-quotes">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
                 <h2 class="text-xl sm:text-2xl font-semibold"><i class="fas fa-file-invoice text-blue-500 mr-2"></i>Pending Quotes (Soft Adds)</h2>
                 <button onclick="loadQuotes()" class="w-full sm:w-auto justify-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 sm:py-1 px-3 rounded shadow transition text-sm flex items-center"><i class="fas fa-sync-alt mr-2"></i> Refresh Quotes</button>
@@ -317,25 +319,22 @@
         <!-- TAB 3: HARDWARE -->
         <section id="page-hardware" class="page-section">
         
-        <div class="section">
-            <h2 class="text-2xl font-semibold mb-4">Hardware & Device Allocation</h2>
-            <p class="text-sm text-gray-400 mb-4">Link detected biometric devices to specific client tenants.</p>
-            
-            <input type="text" id="deviceSearch" onkeyup="filterHardware()" placeholder="Search by Serial Number or Name..." class="w-full p-2 mb-4 border rounded bg-gray-900 text-white border-gray-600">
-
-            <table id="hardwareTable" class="w-full border-collapse">
-                <thead>
-                    <tr class="bg-gray-700">
-                        <th class="p-2 border">Serial Number</th>
-                        <th class="p-2 border">Name</th>
-                        <th class="p-2 border">Status</th>
-                        <th class="p-2 border">Assigned Tenant</th>
-                        <th class="p-2 border">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    </tbody>
-            </table>
+        <!-- 2026-11-11 HARDWARE v2: same look as the Tenants list + IP address column (globaladmin.js hwDraw()) -->
+        <div class="section tn-card">
+            <div class="tn-tb">
+                <div class="tn-search"><i class="fas fa-search"></i><input type="text" id="deviceSearch" placeholder="Search serial, name, IP address or tenant" autocomplete="off" oninput="hwDraw && hwDraw()"></div>
+                <div class="tn-dd" id="hwDdTen"><button type="button" class="tn-dd-btn" onclick="tnToggleDd('hwDdTen')"><span class="tn-lab">Tenant</span> <b id="hwTenLab">All</b> <i class="fas fa-chevron-down"></i></button>
+                    <div class="tn-dd-pop"><div class="tn-search"><i class="fas fa-search"></i><input type="text" placeholder="Search tenants" oninput="tnFilterOpts(this)"></div><div class="tn-opts" id="hwTenOpts"></div></div></div>
+                <div class="tn-dd" id="hwDdSt"><button type="button" class="tn-dd-btn" onclick="tnToggleDd('hwDdSt')"><span class="tn-lab">Status</span> <b id="hwStLab">All</b> <i class="fas fa-chevron-down"></i></button>
+                    <div class="tn-dd-pop"><div class="tn-search"><i class="fas fa-search"></i><input type="text" placeholder="Search" oninput="tnFilterOpts(this)"></div><div class="tn-opts" id="hwStOpts"></div></div></div>
+                <span class="tn-count" id="hwCount"></span>
+            </div>
+            <div class="tn-scroll">
+                <table id="hardwareTable" class="tn-table hw-table">
+                    <thead><tr><th>Device</th><th>IP address</th><th>Status</th><th>Tenant</th><th class="tn-c-act">Actions</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
 
       <div class="section" style="border-color: #6366f1;">
@@ -772,18 +771,22 @@
 
         <!-- SECRET TAB: AUDIT TENANTS -->
         <section id="page-audit-tenants" class="page-section">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                <div>
-                    <h2 class="text-2xl font-bold text-white"><i class="fas fa-clipboard-list mr-2 text-cyan-500"></i>Tenant Module Audit</h2>
-                    <p class="text-sm text-gray-400">Review activated modules and live employee consumption per tenant.</p>
+            <!-- 2026-11-11 AUDIT TENANTS v2: same look as the Tenants list (toolbar + one table, globaladmin.js taDraw()) -->
+            <div class="section tn-card">
+                <div class="tn-tb">
+                    <div class="tn-search"><i class="fas fa-search"></i><input type="text" id="taSearch" placeholder="Search tenant or database" autocomplete="off" oninput="taDraw && taDraw()"></div>
+                    <div class="tn-dd" id="taDdRes"><button type="button" class="tn-dd-btn" onclick="tnToggleDd('taDdRes')"><span class="tn-lab">Reseller</span> <b id="taResLab">All</b> <i class="fas fa-chevron-down"></i></button>
+                        <div class="tn-dd-pop"><div class="tn-search"><i class="fas fa-search"></i><input type="text" placeholder="Search resellers" oninput="tnFilterOpts(this)"></div><div class="tn-opts" id="taResOpts"></div></div></div>
+                    <div class="tn-dd" id="taDdCap"><button type="button" class="tn-dd-btn" onclick="tnToggleDd('taDdCap')"><span class="tn-lab">Cap status</span> <b id="taCapLab">All</b> <i class="fas fa-chevron-down"></i></button>
+                        <div class="tn-dd-pop"><div class="tn-search"><i class="fas fa-search"></i><input type="text" placeholder="Search" oninput="tnFilterOpts(this)"></div><div class="tn-opts" id="taCapOpts"></div></div></div>
+                    <span class="tn-count" id="taCount"></span>
+                    <span class="tn-sp"></span>
+                    <button type="button" onclick="runRetrobuild(this)" class="tn-btn"><i class="fas fa-magic"></i> Retro-Build History</button>
+                    <button type="button" onclick="loadAuditTenants()" class="tn-btn tn-pri"><i class="fas fa-sync-alt"></i> Refresh Live Data</button>
                 </div>
-                <div class="flex gap-2 w-full sm:w-auto flex-col sm:flex-row">
-                    <button onclick="runRetrobuild(this)" class="w-full sm:w-auto justify-center bg-purple-700 hover:bg-purple-600 text-white font-bold py-3 sm:py-2 px-4 rounded shadow transition flex items-center"><i class="fas fa-magic mr-2"></i> Retro-Build History</button>
-                    <button onclick="loadAuditTenants()" class="w-full sm:w-auto justify-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 sm:py-2 px-4 rounded shadow transition flex items-center"><i class="fas fa-sync-alt mr-2"></i> Refresh Live Data</button>
+                <div id="auditTenantsContainer" class="tn-scroll">
+                    <!-- Audit table is drawn here by globaladmin.js -->
                 </div>
-            </div>
-            <div id="auditTenantsContainer" class="space-y-8">
-                <!-- Grouped tables dynamically injected here -->
             </div>
         </section>
 
@@ -1121,11 +1124,13 @@
         </div> </main>
     
     <div id="deviceActionModal" class="fixed inset-0 z-[100] hidden bg-black/80 backdrop-blur-sm items-center justify-center">
-        <div class="bg-gray-800 border border-gray-600 rounded-lg shadow-2xl p-6 w-full max-w-lg relative text-white">
-            <button onclick="closeDeviceActions()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition"><i class="fas fa-times text-xl"></i></button>
-            <h3 class="text-xl font-bold text-teal-400 mb-1">Device Management</h3>
-            <p id="modalDeviceName" class="text-sm text-gray-400 mb-6"></p>
-            <div class="grid grid-cols-3 gap-3" id="modalActionGrid"></div>
+        <!-- 2026-11-11 DEVICE CONTROLS v2: wider, grouped, one accent (same buttons and functions as before) -->
+        <div class="dc-box relative">
+            <div class="dc-head">
+                <div><h3 class="dc-title">Device controls</h3><p id="modalDeviceName" class="dc-sub"></p></div>
+                <button type="button" onclick="closeDeviceActions()" class="dc-x" title="Close"><i class="fas fa-xmark"></i></button>
+            </div>
+            <div id="modalActionGrid" class="dc-body"></div>
         </div>
     </div>
 
@@ -1591,7 +1596,10 @@
             setInterval(function () { tick(true); }, 30000);
         })();
     </script>
-    <script src="globaladmin.js"></script>
+    <script src="globaladmin.js?v=20261111f"></script>
+    <script src="godmode_dashboard.js?v=20261111c"></script>
+    <script src="godmode_topbar.js?v=20261111c"></script>
+    <script src="godmode_settings.js?v=20261111c"></script>
     <script src="ad_identity.js?v=20261030a"></script>
     <!-- Demo / Setup mode per company. AUTO-HEAL: safe to remove. -->
     <script src="demo_admin.js"></script>
@@ -1603,4 +1611,4 @@
 <script src="tna_help_panel.js?v=20261109b" data-help-module="System Admin" data-help-anchor="#tnaTourHelpBtn"></script>
 <script src="tna_releases.js" data-release-page="systemadmin"></script>
 <!-- Tenant onboarding wizard + billing options + user reseller links. AUTO-HEAL: safe to remove. -->
-<script src="onboarding.js"></script>
+<script src="onboarding.js?v=20261111a"></script>

@@ -50,10 +50,10 @@
     },
     {
       "id": "gm.dashboard",
-      "target": "#page-dashboard > .grid",
+      "target": "#gd .gd-hero",
       "placement": "bottom",
-      "title": "Live overview",
-      "text": "Active tenants and online / offline devices. Click a card to open that screen. The <b>Offline</b> card pulses red when a device is offline."
+      "title": "Dashboard",
+      "text": "Pick a period at the top (with a compare). <b>Needs attention</b> lists expired licences, missing documents, offline devices and quotes ready to deploy - click one to go there. The tabs show <b>Licences</b>, <b>Devices</b> and <b>Onboarding</b> in detail."
     },
     {
       "id": "gm.profile",
@@ -205,7 +205,7 @@
     {
       "key": "gm.global",
       "title": "Global Settings",
-      "trigger": "#page-global.active",
+      "trigger": "#gmsOverlay.show",
       "steps": [
         {
           "id": "gm.global.email",

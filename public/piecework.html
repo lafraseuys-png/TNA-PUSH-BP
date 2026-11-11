@@ -439,6 +439,21 @@
                                 </div>
                             </div>
 
+                            <!-- 2026-11-11 Automatic clock-out of forgotten jobs (ON for every company unless switched off) -->
+                            <div class="flex items-center justify-between border-t border-gray-800 pt-4 mt-2 gap-4">
+                                <div>
+                                    <div class="font-bold text-gray-200">Auto Clock-Out Forgotten Jobs</div>
+                                    <div class="text-xs text-gray-500 mt-1">Anyone still clocked into a job at this time is clocked out at this time. Night-shift employees are skipped. Attendance clockings are not changed. Fix the time on the Job Costing screen.</div>
+                                </div>
+                                <div class="flex items-center gap-3 flex-shrink-0">
+                                    <input type="time" id="globalJcAutoTime" value="23:00" class="bg-gray-900 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-teal-500 w-28">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="globalJcAutoOn" class="sr-only peer" checked>
+                                        <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-500"></div>
+                                    </label>
+                                </div>
+                            </div>
+
                             <button onclick="saveGlobalSettings()" class="mt-4 bg-teal-700 hover:bg-teal-600 text-white px-6 py-2 rounded text-sm font-bold uppercase tracking-widest shadow w-full transition">
                                 <i class="fas fa-save mr-2"></i> Save Global Settings
                             </button>
@@ -2087,7 +2102,7 @@
 
           <!-- Theme switch, background and sidebar menu - same as Employee Master and HR. Safe to remove. -->
           <script src="piecework_shell.js"></script>
-          <script src="piecework.js?v=20260916a"></script>
+          <script src="piecework.js?v=20261111a"></script>
           <!-- Production Dashboard (the first screen). AUTO-HEAL: safe to remove. -->
                  <script src="production_dashboard.js"></script>
           <!-- Guided tours, how-to guides + What's new (content in /tours/piecework_tours.json). AUTO-HEAL: safe to remove. -->

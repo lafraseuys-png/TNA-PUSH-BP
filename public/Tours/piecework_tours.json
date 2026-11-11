@@ -837,7 +837,7 @@
             "#jcGridBody"
           ],
           "title": "Jobs per person",
-          "text": "Click a person to open their jobs: the unit, the activity, when it started and ended, how long, and who captured it. Use <b>Edit</b> to correct the unit or activity on a job.",
+          "text": "Click a person to open their jobs: the unit, the activity, when it started and ended, how long, and who captured it. Use <b>Edit</b> to correct the clock-in and clock-out times, the unit or the activity on a job.",
           "placement": "top"
         },
         {
