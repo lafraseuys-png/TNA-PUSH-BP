@@ -108,6 +108,39 @@
 
         /* Sidebar Collapse Animations & Mobile Layout */
         #mainSidebar { transition: height 0.3s ease-in-out; z-index: 40; }
+        /* 2026-11-12 menu group titles: a thin line instead of the words when the menu is folded to icons */
+        .sidebar.collapsed #sidebarNav .pw-nav-h, .sidebar.sidebar-collapsed #sidebarNav .pw-nav-h { font-size: 0 !important; padding: 8px 18px 4px !important; }
+        .sidebar.collapsed #sidebarNav .pw-nav-h::after, .sidebar.sidebar-collapsed #sidebarNav .pw-nav-h::after { content: ''; display: block; border-top: 1px solid rgba(148, 163, 184, .35); }
+        body.dark-mode #sidebarNav .pw-nav-h { color: #64748b !important; }
+        /* 2026-11-12 "Piecework Without Clocking In" choice (Settings > Production Rules) */
+        .pw-nc-seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+        .pw-nc-seg button { all: unset; box-sizing: border-box; display: flex; flex-direction: column; gap: 3px; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 10px; background: #ffffff; color: #334155; cursor: pointer; text-align: left; font-family: inherit; }
+        .pw-nc-seg button b { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 700; color: #0f172a; }
+        .pw-nc-seg button b i { color: #1a4c7b; font-size: 12px; }
+        .pw-nc-seg button small { font-size: 11.5px; line-height: 1.4; color: #64748b; }
+        .pw-nc-seg button:hover, .pw-nc-seg button:focus-visible { border-color: rgba(26, 76, 123, .45); outline: none; }
+        .pw-nc-seg button.on { border-color: #1a4c7b !important; background: rgba(26, 76, 123, .07) !important; box-shadow: 0 0 0 2px rgba(26, 76, 123, .22) !important; }
+        .pw-nc-seg button b::after { content: ""; margin-left: auto; width: 15px; height: 15px; box-sizing: border-box; border-radius: 50%; border: 2px solid #cbd5e1; flex: none; }
+        .pw-nc-seg button.on b::after { border: 5px solid #1a4c7b; }
+        body.dark-mode .pw-nc-seg button b::after { border-color: rgba(255, 255, 255, .25); } body.dark-mode .pw-nc-seg button.on b::after { border-color: #93c5fd; }
+        body.dark-mode .pw-nc-seg button { background: rgba(255, 255, 255, .04); border-color: rgba(255, 255, 255, .12); color: #cbd5e1; }
+        body.dark-mode .pw-nc-seg button b { color: #f1f5f9; } body.dark-mode .pw-nc-seg button b i { color: #93c5fd; } body.dark-mode .pw-nc-seg button small { color: #94a3b8; }
+        body.dark-mode .pw-nc-seg button.on { border-color: #93c5fd !important; background: rgba(147, 197, 253, .1) !important; box-shadow: 0 0 0 2px rgba(147, 197, 253, .2) !important; }
+        @media (max-width: 700px) { .pw-nc-seg { grid-template-columns: 1fr; } }
+        .pw-nc-seg.pw-nc-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        @media (max-width: 1100px) { .pw-nc-seg.pw-nc-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        @media (max-width: 700px) { .pw-nc-seg.pw-nc-4 { grid-template-columns: 1fr; } }
+        /* inside the Settings pop-up its own button rule is very strong - the cards keep their look */
+        #page-settings.pps-open .pps-content :is(#ppsRules, #ppsJc) .pw-nc-seg > button.pw-card { display: flex !important; flex-direction: column !important; align-items: stretch !important; gap: 3px !important; padding: 10px 12px !important; height: auto !important; border-radius: 10px !important; background: #ffffff !important; border: 1px solid #cbd5e1 !important; color: #334155 !important; box-shadow: none !important; text-align: left !important; font-weight: 400 !important; }
+        #page-settings.pps-open .pps-content :is(#ppsRules, #ppsJc) .pw-nc-seg > button.pw-card:hover { border-color: rgba(26, 76, 123, .45) !important; }
+        #page-settings.pps-open .pps-content :is(#ppsRules, #ppsJc) .pw-nc-seg > button.pw-card.on { border-color: #1a4c7b !important; background: rgba(26, 76, 123, .07) !important; box-shadow: 0 0 0 2px rgba(26, 76, 123, .22) !important; }
+        body.dark-mode #page-settings.pps-open .pps-content :is(#ppsRules, #ppsJc) .pw-nc-seg > button.pw-card { background: rgba(255, 255, 255, .04) !important; border-color: rgba(255, 255, 255, .12) !important; color: #cbd5e1 !important; }
+        body.dark-mode #page-settings.pps-open .pps-content :is(#ppsRules, #ppsJc) .pw-nc-seg > button.pw-card.on { border-color: #93c5fd !important; background: rgba(147, 197, 253, .1) !important; box-shadow: 0 0 0 2px rgba(147, 197, 253, .2) !important; }
+        /* custom departments: import preview */
+        .pw-dept-plan { margin-bottom: 12px; padding: 10px 12px; border-radius: 8px; background: #eaf1f8; color: #1a4c7b; font-size: 12.5px; line-height: 1.5; }
+        .pw-dept-plan b { font-weight: 700; } .pw-dept-plan .pw-dept-btns { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+        .pw-dept-plan ul { margin: 4px 0 0; padding-left: 18px; list-style: disc; max-height: 120px; overflow: auto; }
+        body.dark-mode .pw-dept-plan { background: rgba(147, 197, 253, .1); color: #bfdbfe; }
         
         @media (max-width: 768px) {
             /* Unlock the body so it scrolls natively as a standard webpage */
@@ -158,13 +191,24 @@
 
             <!-- Screens: showSection() is unchanged; .sidebar-btn keeps it marking the active screen -->
             <ul class="sidebar-menu" id="sidebarNav" style="flex-grow: 1; overflow-y: auto; margin-top: 10px;">
+                <!-- 2026-11-12 (user: "lets categorize the side panel"; tick boxes: Piecework / Job Costing / Setup / Reports, plain
+                     titles like Fuel's, no switch). Same links, same onclicks - only the order and the titles are new.
+                     The titles (li.pw-nav-h, no link) shrink to a thin line when the menu is folded to icons. -->
                 <li><a onclick="showSection('dashboard', this)" class="sidebar-item sidebar-btn bg-pink-900 text-white" title="Production Dashboard"><i class="fas fa-tasks"></i> <span>Production Dashboard</span></a></li>
                 <li><a onclick="showSection('maps', this)" class="sidebar-item sidebar-btn" title="Field Maps"><i class="fas fa-map-marked-alt"></i> <span>Field Maps</span></a></li>
-                <li><a onclick="showSection('teams', this)" class="sidebar-item sidebar-btn" title="Teams"><i class="fas fa-users-cog"></i> <span>Teams</span></a></li>
-                <li><a onclick="showSection('activities', this)" class="sidebar-item sidebar-btn" title="Activities & Pricing"><i class="fas fa-box-open"></i> <span>Activities &amp; Pricing</span></a></li>
+
+                <li class="pw-nav-h" role="presentation" style="padding: 10px 15px 5px; font-size: 10px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Piecework</li>
                 <li><a onclick="showSection('tasks', this)" class="sidebar-item sidebar-btn" title="Tasks"><i class="fas fa-clipboard-list"></i> <span>Tasks</span></a></li>
                 <li><a onclick="showSection('daily', this)" class="sidebar-item sidebar-btn" title="Daily Production"><i class="fas fa-calendar-day"></i> <span>Daily Production</span></a></li>
-                <li><a onclick="showSection('jobcosting', this)" class="sidebar-item sidebar-btn" title="Job Costing"><i class="fas fa-stopwatch"></i> <span>Job Costing</span></a></li>
+
+                <li class="pw-nav-h" role="presentation" style="padding: 10px 15px 5px; font-size: 10px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Job Costing</li>
+                <li><a onclick="showSection('jobcosting', this)" class="sidebar-item sidebar-btn" title="Job Costing Timesheet"><i class="fas fa-stopwatch"></i> <span>Job Costing Timesheet</span></a></li>
+
+                <li class="pw-nav-h" role="presentation" style="padding: 10px 15px 5px; font-size: 10px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Setup</li>
+                <li><a onclick="showSection('teams', this)" class="sidebar-item sidebar-btn" title="Teams"><i class="fas fa-users-cog"></i> <span>Teams</span></a></li>
+                <li><a onclick="showSection('activities', this)" class="sidebar-item sidebar-btn" title="Activities & Pricing"><i class="fas fa-box-open"></i> <span>Activities &amp; Pricing</span></a></li>
+
+                <li class="pw-nav-h" role="presentation" style="padding: 10px 15px 5px; font-size: 10px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Reports</li>
                 <li><a onclick="showSection('reports', this)" class="sidebar-item sidebar-btn" title="Production Reports"><i class="fas fa-chart-line"></i> <span>Production Reports</span></a></li>
                 <li><a onclick="showSection('settings', this)" class="sidebar-item sidebar-btn" title="Production Settings"><i class="fas fa-cogs"></i> <span>Production Settings</span></a></li>
             </ul>
@@ -388,6 +432,21 @@
                                 </label>
                             </div>
 
+                            <!-- 2026-11-12 Piecework without clocking in - a choice (user: 3 choices, other companies stay as they were).
+                                 The hidden #globalPwNoClockMode is what is saved (the Settings pop-up watches fields whose id starts with "global"). -->
+                            <div class="pw-nc-row border-b border-gray-800 pb-4">
+                                <div>
+                                    <div class="font-bold text-gray-200">Piecework Without Clocking In</div>
+                                    <div class="text-xs text-gray-500 mt-1">What Daily Production does with a team member who did not clock in that day. Managers are counted as before.</div>
+                                </div>
+                                <input type="hidden" id="globalPwNoClockMode" value="own">
+                                <div class="pw-nc-seg" role="radiogroup" aria-label="Piecework without clocking in">
+                                    <button type="button" class="pw-card" data-v="hide" role="radio" aria-checked="false"><b><i class="fas fa-eye-slash"></i>Hide them</b><small>Not shown, no piecework and no share of team work.</small></button>
+                                    <button type="button" class="pw-card" data-v="own" role="radio" aria-checked="true"><b><i class="fas fa-user"></i>Own captures only</b><small>Shown only with a capture under their name. If nobody in the team clocked in, everyone shares team work. (The rule until now.)</small></button>
+                                    <button type="button" class="pw-card" data-v="team" role="radio" aria-checked="false"><b><i class="fas fa-users"></i>Everyone in the team</b><small>Shown and share team work. No hours, so paid for piecework only.</small></button>
+                                </div>
+                            </div>
+
                             <!-- Global Minimum Wage Toggle -->
                             <div class="flex items-center justify-between">
                                 <div>
@@ -412,21 +471,40 @@
                                 </div>
                             </div>
 
-                            <div class="flex items-center justify-between border-t border-gray-800 pt-4 mt-2">
+                            <!-- 2026-11-12 (user: "can we also do this for the job costing department source") the same cards as
+                                 Piecework Without Clocking In. The select stays (hidden) and is what is loaded / saved; data-no-dd keeps the
+                                 Settings pop-up from turning it into a drop-down. -->
+                            <div class="pw-nc-row border-t border-gray-800 pt-4 mt-2">
                                 <div>
                                     <div class="font-bold text-gray-200">Job Costing Department Source</div>
-                                    <div class="text-xs text-gray-500 mt-1">Select where the mobile app pulls departments from when clocking into a job.</div>
+                                    <div class="text-xs text-gray-500 mt-1">Where the phone app gets its departments from when someone clocks into a job.</div>
                                 </div>
-                                <select id="globalJobCostingSource" onchange="toggleCustomDeptUI()" class="bg-gray-900 border border-gray-600 rounded p-2 text-white focus:outline-none focus:border-teal-500 w-48">
+                                <select id="globalJobCostingSource" onchange="toggleCustomDeptUI()" data-no-dd="1" hidden aria-hidden="true" tabindex="-1">
                                     <option value="TNA">TNA Departments</option>
                                     <option value="FARMS">Piecework Farms & Units</option>
                                     <option value="FUEL">Agri / Farming Depts</option>
                                     <option value="CUSTOM">Custom PW Depts</option>
                                 </select>
+                                <div class="pw-nc-seg pw-nc-4" role="radiogroup" aria-label="Job costing department source">
+                                    <button type="button" class="pw-card" data-src="TNA" role="radio" aria-checked="false"><b><i class="fas fa-sitemap"></i>TNA departments</b><small>The company departments from Time &amp; Attendance and Employee Master.</small></button>
+                                    <button type="button" class="pw-card" data-src="FARMS" role="radio" aria-checked="false"><b><i class="fas fa-tractor"></i>Farms &amp; units</b><small>Each farm and unit from these settings, e.g. "Jarod's Farm - Chicken Coops".</small></button>
+                                    <button type="button" class="pw-card" data-src="FUEL" role="radio" aria-checked="false"><b><i class="fas fa-seedling"></i>Agri / farming departments</b><small>The farming departments set up in the Fuel module.</small></button>
+                                    <button type="button" class="pw-card" data-src="CUSTOM" role="radio" aria-checked="false"><b><i class="fas fa-list-ul"></i>Custom list</b><small>Your own list, managed below: add, import from Excel, export.</small></button>
+                                </div>
                             </div>
 
                             <div id="customDeptManager" class="hidden mt-4 bg-gray-800 p-4 rounded border border-gray-700">
-                                <h4 class="text-xs font-bold text-teal-400 uppercase tracking-widest mb-3">Manage Custom Departments</h4>
+                                <div class="pw-dept-head flex items-center justify-between gap-3 mb-3 flex-wrap">
+                                    <h4 class="text-xs font-bold text-teal-400 uppercase tracking-widest m-0">Manage Custom Departments</h4>
+                                    <!-- 2026-11-12 bulk import / export / template (user) -->
+                                    <div class="pw-dept-tools flex gap-2 flex-wrap">
+                                        <button type="button" onclick="pwDeptImportPick()" class="bg-gray-900 border border-gray-600 text-gray-200 px-3 py-1.5 rounded text-xs font-bold"><i class="fas fa-file-import mr-1"></i> Import</button>
+                                        <button type="button" onclick="pwDeptExport()" class="bg-gray-900 border border-gray-600 text-gray-200 px-3 py-1.5 rounded text-xs font-bold"><i class="fas fa-file-export mr-1"></i> Export</button>
+                                        <button type="button" onclick="pwDeptTemplate()" class="bg-gray-900 border border-gray-600 text-gray-200 px-3 py-1.5 rounded text-xs font-bold"><i class="fas fa-file-excel mr-1"></i> Template</button>
+                                        <input type="file" id="pwDeptFile" accept=".xlsx,.xls,.csv" hidden onchange="pwDeptImportFile(this)">
+                                    </div>
+                                </div>
+                                <div id="pwDeptPlan" class="pw-dept-plan hidden"></div>
                                 <div class="flex gap-2 mb-4">
                                     <input type="text" id="newCustomDeptName" placeholder="e.g. Harvest Team A, Block 5 Pruning" class="flex-1 bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
                                     <button onclick="addCustomDept()" class="bg-teal-600 hover:bg-teal-500 text-white px-4 py-2 rounded text-xs font-bold shadow transition">Add</button>
@@ -754,6 +832,10 @@
                             <button onclick="loadDailyGrid()" class="justify-center bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded font-bold shadow transition text-xs flex items-center whitespace-nowrap">
                                 <i class="fas fa-sync-alt mr-2"></i> Load Grid
                             </button>
+                            <!-- 2026-11-12 one button for a task for this team and day (was a "New Task" button on every row) -->
+                            <button type="button" id="dailyNewTaskBtn" onclick="openAdHocTaskModal()" title="Create a task for this team and day (work that is not on one of its tasks yet)" class="justify-center bg-indigo-700 hover:bg-indigo-600 text-white px-4 py-2 rounded font-bold shadow transition text-xs flex items-center whitespace-nowrap">
+                                <i class="fas fa-plus mr-2"></i> New task
+                            </button>
                             <button onclick="exportDailyGridToExcel()" class="justify-center bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded font-bold shadow transition text-xs flex items-center whitespace-nowrap">
                                 <i class="fas fa-file-excel mr-2"></i> Export Excel
                             </button>
@@ -807,7 +889,7 @@
         <div id="page-jobcosting" class="page-section hidden flex flex-col h-[85vh]">
             <div class="bg-gray-800 p-6 rounded-lg shadow-lg border-t-4 border-blue-400 flex flex-col h-full">
                 <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-4 flex-shrink-0">
-                    <h3 class="font-bold text-gray-300"><i class="fas fa-stopwatch mr-2 text-blue-400"></i>Job Costing (Production Departments)</h3>
+                    <h3 class="font-bold text-gray-300"><i class="fas fa-stopwatch mr-2 text-blue-400"></i>Job Costing Timesheet</h3>
                     
                     <div class="flex items-center gap-3">
                         <div>
@@ -856,7 +938,8 @@
                             <tr>
                                <th class="p-3">Unit</th>
                                 <th class="p-3">Activity</th>
-                                <th class="p-3">Time</th>
+                                <th class="p-3">Clock in</th>
+                                <th class="p-3">Clock out</th>
                                 <th class="p-3 text-right">Duration</th>
                                   <th class="p-3 text-right">User</th>
                                 <th class="p-3 text-center">Action</th>
@@ -1497,6 +1580,10 @@
                     <div>
                         <label class="block text-xs font-bold text-gray-400 mb-1">Estimated End Date</label>
                         <input type="date" id="taskEndDate" required class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-orange-500">
+                        <!-- 2026-11-12 (user: some tasks have no end date / deadline) ticked = ongoing, saved without an end date -->
+                        <label class="task-noend flex items-center gap-2 mt-2 text-xs font-bold text-gray-400 cursor-pointer select-none">
+                            <input type="checkbox" id="taskNoEndDate" onchange="pwTaskNoEndToggle()"> No end date (ongoing)
+                        </label>
                     </div>
                 </div>
 
@@ -2102,8 +2189,51 @@
 
           <!-- Theme switch, background and sidebar menu - same as Employee Master and HR. Safe to remove. -->
           <script src="piecework_shell.js"></script>
-          <script src="piecework.js?v=20261111a"></script>
+          <!-- 2026-11-12 the app's own pop-up (navy card, as on Employee Master / Settings) for the Job Costing "Time not changed"
+               warning. KEEP_NATIVE: the page's other alert() boxes stay as they are. AUTO-HEAL: no CDN -> the browser's box -->
+          <script>window.TNA_POPUP_NAVY = true; window.TNA_POPUP_KEEP_NATIVE = true;</script>
+          <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+          <script src="contractors_modern_popups.js?v=20261112a"></script>
+          <script src="piecework.js?v=20261112x"></script>
+          <!-- 2026-11-12 Job Costing screen in the current theme (toolbar, totals strip, calm list). Look only.
+               AUTO-HEAL: remove this line and the old screen is back -->
+          <script src="piecework_jc_look.js?v=20261112d"></script>
+          <!-- 2026-11-12 Production Reports in the current theme: one toolbar (Report type, dates, Filters pop-up), calm navy results.
+               Look only. AUTO-HEAL: remove this line and the old screen is back -->
+          <script src="piecework_reports_look.js?v=20261112d"></script>
+          <!-- 2026-11-12 Daily Production in the current theme: one toolbar + Data Tools menu, calm navy grid, TNA pop-up restyled.
+               Look only. AUTO-HEAL: remove this line and the old screen is back -->
+          <script src="piecework_daily_look.js?v=20261112h"></script>
+          <!-- 2026-11-12 Activities & Pricing in the current theme: two tabs (Piecework | Job Costing), one toolbar, a calm list.
+               Look only. AUTO-HEAL: remove this line and the old screen is back -->
+          <script src="piecework_activities_look.js?v=20261112d"></script>
+          <!-- 2026-11-12 Teams in the current theme: one toolbar (search, Active | Deactivated, Data Tools, + New Team pop-up), a list.
+               Look only. AUTO-HEAL: remove this line and the old card screen is back -->
+          <script src="piecework_teams_look.js?v=20261112d"></script>
+          <script src="piecework_team_people.js?v=20261112i"></script>
+          <!-- 2026-11-12 Tasks in the current theme: one toolbar, a clearer list, the Create / Edit Task pop-up with side steps and a live summary,
+               our own confirm for Start / Complete / Delete. Look only. AUTO-HEAL: remove this line and the old screen is back -->
+          <script src="piecework_tasks_look.js?v=20261112e"></script>
+          <!-- 2026-11-12 hover names show at once in the dark tip, as on Time & Attendance (buttons with a title).
+               AUTO-HEAL: remove this line and the browser's own grey tips show again -->
+          <script src="tna_quick_tips.js?v=20261030c"></script>
+          <!-- 2026-11-12 Production Settings opens as a pop-up window (T&A look) with the new Farms & Units screen and the Import units wizard.
+               AUTO-HEAL: remove this line and Settings opens as the old page -->
+          <!-- 2026-11-12 Farms & Units as a sheet (search, filters, Data Tools, Save with a summary) and the outline drawn with dots on the
+               satellite map. AUTO-HEAL: remove these two lines and the pop-up shows the farm list + units layout with the old pin + radius map -->
+          <script src="piecework_farm_map.js?v=20261112f"></script>
+          <!-- 2026-11-12 Field Maps in the theme, satellite photos, your farms and units drawn on it with a filter. Look + extra layer only.
+               AUTO-HEAL: remove this line and Field Maps is the old screen -->
+          <script src="piecework_maps_look.js?v=20261112j"></script>
+          <!-- 2026-11-12 Field Maps: Teams and Tasks as two drop-downs (instead of the Filter Map Data pop-up). Look only.
+               AUTO-HEAL: remove this line and the Select Teams & Tasks button + pop-up are back -->
+          <script src="piecework_map_filters.js?v=20261112b"></script>
+          <script src="piecework_farm_sheet.js?v=20261112c"></script>
+          <script src="piecework_settings_popup.js?v=20261112d"></script>
           <!-- Production Dashboard (the first screen). AUTO-HEAL: safe to remove. -->
+                 <!-- 2026-11-12 Production Dashboard in the Farmers & Distribution look (period, compare, Today card, chart, lists).
+                      Must come BEFORE production_dashboard.js. AUTO-HEAL: remove this line and the old dashboard is back -->
+                 <script src="production_dashboard_v2.js?v=20261112b"></script>
                  <script src="production_dashboard.js"></script>
           <!-- Guided tours, how-to guides + What's new (content in /tours/piecework_tours.json). AUTO-HEAL: safe to remove. -->
           <script src="tna_tour.js?v=20261109a" data-tour-page="piecework" data-tour-help-position="right"></script>
@@ -2112,6 +2242,6 @@
           <!-- Guided setup in Demo / Setup mode (plan in /tours/piecework_setup.json). AUTO-HEAL: safe to remove. -->
           <script src="tna_setup.js" data-setup-page="piecework"></script>
           <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
-          <script src="tna_topbar.js?v=69"></script>
+          <script src="tna_topbar.js?v=70"></script>
 </body>
 </html>

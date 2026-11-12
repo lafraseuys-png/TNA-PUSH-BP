@@ -5,105 +5,94 @@
       "key": "piecework.guide.farms",
       "title": "Set up farms and units",
       "icon": "fa-tractor",
-      "blurb": "Add your farms and their field units, with their size and GPS location.",
+      "blurb": "Add your farms and their units, with their size and GPS location.",
       "steps": [
         {
-          "id": "pwg-fa-open",
+          "id": "pwg2-fa-open",
           "target": [
+            "#tndDock .tnd-gear",
             "#sidebarNav [onclick*='settings']"
           ],
           "title": "Production Settings",
-          "text": "Farms and units live here. Click it.",
+          "text": "Farms and units live in Settings: the gear at the bottom of the menu. Click it.",
           "placement": "right",
           "mode": "click",
-          "hint": "Click Production Settings"
+          "hint": "Click the Settings gear"
         },
         {
-          "id": "pwg-fa-tab",
+          "id": "pwg3-fa-new",
           "target": [
-            "#tab-settings-farms"
+            "#pfsAddFarm",
+            "#ppsFarmNewBtn"
           ],
-          "title": "Farms & Units",
-          "text": "Click <b>Farms &amp; Units</b>.",
-          "placement": "bottom",
+          "title": "1. New farm",
+          "text": "Click <b>+ Farm</b>.",
+          "placement": "left",
           "mode": "click",
-          "hint": "Click Farms & Units"
+          "hint": "Click + Farm",
+          "before": [
+            {
+              "call": "pwSettingsGo",
+              "args": [
+                "farms"
+              ]
+            }
+          ]
         },
         {
-          "id": "pwg-fa-name",
+          "id": "pwg3-fa-name",
           "target": [
-            "#newFarmName"
+            "#pfsBody tr.farm input.pfs-cell",
+            "#ppsFarmNew"
           ],
-          "title": "1. The farm",
-          "text": "Type the farm's name, for example <b>Highlands</b>.",
+          "title": "2. Its name",
+          "text": "Type the farm's name, for example <b>Highlands</b>. Then click <b>Next</b>.",
           "placement": "bottom",
           "climb": 1
         },
         {
-          "id": "pwg-fa-loc",
+          "id": "pwg3-un-name",
           "target": [
-            ".main-content button[onclick*=\"openLocationPicker('farm'\"]",
-            "#newFarmName"
+            "#pfsBody input[data-blank]",
+            "#ppsUnitName"
           ],
-          "title": "2. Its location",
-          "text": "The map pin button opens a map. Search for the place, click the farm on the map and set a radius in metres around it. The badge above then shows the location is set.",
-          "placement": "bottom"
+          "title": "3. Its units",
+          "text": "On the empty line under the farm, type a block, orchard or field name, its hectares, and press <b>Enter</b>. The cursor stays there for the next one. You can also paste several rows from Excel.",
+          "placement": "top",
+          "climb": 1,
+          "optional": true
         },
         {
-          "id": "pwg-fa-add",
+          "id": "pwg3-loc",
           "target": [
-            ".main-content button[onclick*='addFarm']"
+            "#pfsBody .pfs-loc",
+            "#ppsFarmLoc"
           ],
-          "title": "3. Add",
-          "text": "Adds the farm. It then appears in the list below and in the unit's farm list.",
-          "placement": "bottom"
+          "title": "4. Draw it on the map",
+          "text": "<b>Draw on map</b> opens the satellite photos. Search the place, click dot by dot around the edge, pick its colour, then <b>Done</b>.",
+          "placement": "left",
+          "optional": true
         },
         {
-          "id": "pwg-un-farm",
+          "id": "pwg3-save",
           "target": [
-            "#unitFarmSelect"
+            "#pfsSave"
           ],
-          "title": "4. A unit on the farm",
-          "text": "Choose the farm the unit belongs to.",
-          "placement": "bottom"
-        },
-        {
-          "id": "pwg-un-name",
-          "target": [
-            "#newUnitName"
-          ],
-          "title": "5. Name and size",
-          "text": "The block, orchard or field name, and its size in hectares.",
+          "title": "5. Save",
+          "text": "The bar across the top shows what you changed. <b>Save</b> shows a summary first, then saves.",
           "placement": "bottom",
-          "climb": 1
+          "optional": true
         },
         {
-          "id": "pwg-un-loc",
+          "id": "pwg3-import",
           "target": [
-            ".main-content button[onclick*=\"openLocationPicker('unit'\"]",
-            "#newUnitName"
+            "#pfsTools",
+            "#ppsImportBtn"
           ],
-          "title": "6. Its location",
-          "text": "Set the unit's own spot and radius on the map, the same way as the farm.",
-          "placement": "bottom"
-        },
-        {
-          "id": "pwg-un-add",
-          "target": [
-            ".main-content button[onclick*='addUnit']"
-          ],
-          "title": "7. Add",
-          "text": "Adds the unit. Tasks are then given for these farms and units.",
-          "placement": "bottom"
-        },
-        {
-          "id": "pwg-fa-list",
-          "target": [
-            "#farmUnitListBody"
-          ],
-          "title": "Your list",
-          "text": "Edit names and sizes in place, change a boundary with the map button, or deactivate what you no longer use.",
-          "placement": "top"
+          "title": "Many at once",
+          "text": "<b>Data Tools &rsaquo; Import from Excel</b> takes three columns (Farm, Unit, Hectares): check the list, it goes into the sheet, then Save.",
+          "placement": "bottom",
+          "optional": true
         }
       ]
     },
@@ -130,104 +119,154 @@
             "#newTeamName"
           ],
           "title": "1. Team name",
-          "text": "For example <b>Harvest Team A</b>.",
+          "text": "Click <b>+ New Team</b> (opened for you here). For example <b>Harvest Team A</b>.",
           "placement": "bottom",
-          "climb": 1,
-          "timeout": 4000
+          "timeout": 4000,
+          "before": [
+            {
+              "call": "ptlNewTeam"
+            }
+          ]
         },
         {
           "id": "pwg-tm-tags",
           "target": [
             "#newTeamAssetTagVisible"
           ],
-          "title": "2. Asset tags (optional)",
-          "text": "Type a tag and press Enter for each one, for example the tractor or trailer the team uses.",
+          "title": "2. Vehicle (optional)",
+          "text": "Type the vehicle and press Enter, for example the tractor or trailer the team uses. Add more than one if needed.",
           "placement": "bottom",
-          "climb": 2
+          "before": [
+            {
+              "call": "ptlNewTeam"
+            }
+          ]
         },
         {
           "id": "pwg-tm-mgr",
           "target": [
+            "#ptlNew .ptl-pays",
             "#newTeamManagerEqualShare"
           ],
           "title": "3. The manager's share",
-          "text": "For team work: neither ticked = the manager is paid for the full team quantity; <b>Equal Share</b> = the manager gets a worker's share; <b>Average Only</b> = the manager gets the workers' average.",
-          "placement": "left",
-          "climb": 2
+          "text": "For team work:<br>&bull; <b>Normal</b>: the manager is paid for the team's full quantity; the workers share it.<br>&bull; <b>Equal share</b>: the manager gets an equal share, like a worker.<br>&bull; <b>Average only</b>: the manager gets the workers' average share.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "ptlNewTeam"
+            }
+          ]
         },
         {
           "id": "pwg-tm-create",
           "target": [
+            "#ptlNewSave",
             "#page-teams form button[type='submit']"
           ],
-          "title": "4. Create Team",
-          "text": "Click <b>Create Team</b> (or skip it if you're only practising), then click <b>Next</b>.",
-          "placement": "bottom"
+          "title": "4. Save",
+          "text": "Click <b>Save</b> (or skip it if you're only practising), then click <b>Next</b>.",
+          "placement": "bottom",
+          "before": [
+            {
+              "call": "ptlNewTeam"
+            }
+          ]
         },
         {
           "id": "pwg-tm-card",
           "target": [
+            "#teamsGrid tbody tr[data-team]",
             "#teamsGrid > div"
           ],
           "title": "5. Open the team",
-          "text": "Click the team's card to set it up.",
+          "text": "Click the team's row to set it up.",
           "placement": "top",
           "mode": "click",
-          "hint": "Click a team card",
-          "optional": true
+          "hint": "Click a team",
+          "optional": true,
+          "before": [
+            {
+              "call": "ptlCloseNew"
+            }
+          ]
         },
         {
           "id": "pwg-tm-details",
           "target": [
             "#editTeamNameInput"
           ],
-          "title": "Team details",
-          "text": "Rename the team, change its tags or the manager's share, then <b>Save Details</b>.",
+          "title": "Settings tab",
+          "text": "Rename the team, change its vehicle or the manager pay. <b>Save changes</b> shows at the top as soon as you change something.",
           "placement": "bottom",
-          "climb": 2,
           "optional": true,
-          "timeout": 4000
+          "timeout": 4000,
+          "before": [
+            {
+              "call": "ptlTeamTab",
+              "args": [
+                "set"
+              ]
+            }
+          ]
         },
         {
           "id": "pwg-tm-search",
           "target": [
             "#teamSearchInput"
           ],
-          "title": "Add members",
-          "text": "Search by name or PIN, or filter by department. Tick people and click <b>Add Selected</b>.",
+          "title": "Add people",
+          "text": "The <b>Add people</b> tab: search by name or PIN, or filter by department. Tick people and click <b>Add Selected</b>.",
           "placement": "top",
           "climb": 2,
-          "optional": true
+          "optional": true,
+          "before": [
+            {
+              "call": "ptlTeamTab",
+              "args": [
+                "add"
+              ]
+            }
+          ]
         },
         {
           "id": "pwg-tm-manager",
           "target": [
+            "#currentTeamMembersList .ptm-star",
             "#teamManagerSelect"
           ],
           "title": "The team's manager",
-          "text": "Choose the manager and click <b>Assign</b>. The manager is paid at the manager rate.",
-          "placement": "top",
-          "climb": 1,
-          "optional": true
+          "text": "On the <b>Members</b> tab, click the star next to a person to make them the team manager (click it again to undo). The manager is paid at the manager rate.",
+          "placement": "left",
+          "optional": true,
+          "before": [
+            {
+              "call": "ptlTeamTab",
+              "args": [
+                "mem"
+              ]
+            }
+          ]
         },
         {
           "id": "pwg-tm-history",
           "target": [
+            "#ptmMoreBtn",
             "#btnTeamHistoryModal"
           ],
-          "title": "Audit History",
-          "text": "Everyone who joined or left the team, and when.",
-          "placement": "top",
+          "title": "Team history",
+          "text": "Under <b>&middot;&middot;&middot;</b>: <b>Team history</b> shows everyone who joined or left the team (and who was made manager), and when.",
+          "placement": "bottom",
           "optional": true
         },
         {
           "id": "pwg-tm-status",
           "target": [
+            "#ptmMoreBtn",
             "#btnToggleTeamStatus"
           ],
           "title": "Deactivate",
-          "text": "Deactivate a team you no longer use. Its history is kept, and you can reactivate it from Deactivated Teams.",
-          "placement": "top",
+          "text": "Also under <b>&middot;&middot;&middot;</b>: deactivate a team you no longer use. Its history is kept, and you can reactivate it from <b>Deactivated</b>.",
+          "placement": "bottom",
           "optional": true
         }
       ]
@@ -258,7 +297,15 @@
           "text": "Click <b>Add Activity</b>.",
           "placement": "bottom",
           "mode": "click",
-          "hint": "Click Add Activity"
+          "hint": "Click Add Activity",
+          "before": [
+            {
+              "call": "switchActivityTab",
+              "args": [
+                "active"
+              ]
+            }
+          ]
         },
         {
           "id": "pwg-ac-name",
@@ -307,8 +354,8 @@
             "#activityModal button[onclick*='saveActivity']"
           ],
           "title": "Save",
-          "text": "Saves the activity with these rates from today. Click Save (or Cancel if you're only practising), then <b>Next</b>.",
-          "placement": "top"
+          "text": "Saves the activity with these rates from today. Click <b>Save</b> at the top (or close the window if you're only practising), then <b>Next</b>.",
+          "placement": "bottom"
         },
         {
           "id": "pwg-ac-ledger",
@@ -377,6 +424,7 @@
         {
           "id": "pwg-tk-create",
           "target": [
+            "#ptkNew",
             ".main-content button[onclick*='openTaskModal']"
           ],
           "title": "Create Task",
@@ -390,89 +438,154 @@
           "target": [
             "#taskNameInput"
           ],
-          "title": "Task Name",
-          "text": "Required. Something the team will recognise, for example <b>Morning Apple Harvest - Block 5</b>.",
+          "title": "1. Task & place",
+          "text": "The steps are on the left; the summary under them shows what will be created. First the name: something the team will recognise, for example <b>Morning Apple Harvest - Block 5</b>.",
           "placement": "bottom",
-          "climb": 1,
-          "timeout": 4000
+          "timeout": 4000,
+          "before": [
+            {
+              "call": "ptkTaskStep",
+              "args": [
+                1
+              ]
+            }
+          ]
         },
         {
           "id": "pwg-tk-tags",
           "target": [
+            "#taskTagsContainer",
             "#taskAssetTagVisible"
           ],
           "title": "Asset tags and vehicles",
           "text": "Optional. Type a tag and press Enter for equipment used on this task, and pick any vehicles that work on it.",
           "placement": "bottom",
-          "climb": 2
+          "before": [
+            {
+              "call": "ptkTaskStep",
+              "args": [
+                1
+              ]
+            }
+          ]
         },
         {
           "id": "pwg-tk-farm",
           "target": [
+            "#taskModal .ptk-pane[data-step='1'] .ptk-g",
             "#taskFarmSelect"
           ],
           "title": "Farm and units",
-          "text": "Choose the farm (the search box above filters the list), then the units. Leave the units empty to cover the whole farm.",
+          "text": "Choose the farm (type in the list to search), then the units. Leave the units empty to cover the whole farm.",
           "placement": "bottom",
-          "climb": 2
+          "before": [
+            {
+              "call": "ptkTaskStep",
+              "args": [
+                1
+              ]
+            }
+          ]
         },
         {
           "id": "pwg-tk-acts",
           "target": [
+            "#taskModal .ptk-acts-h button",
             "#taskModal button[onclick*='addTaskActivityRow']"
           ],
-          "title": "Activities and targets",
-          "text": "Click <b>Add Activity</b> for each kind of work in this task, and give each one a target quantity. The target drives the task's progress bar.",
-          "placement": "left"
-        },
-        {
-          "id": "pwg-tk-evidence",
-          "target": [
-            "#taskPhotoReq"
-          ],
-          "title": "Evidence from the phone",
-          "text": "Whether a <b>photo</b> and a <b>signature</b> are optional, mandatory or switched off, and whether they're collected once at the end of the task or with every capture.",
-          "placement": "top",
-          "climb": 2
+          "title": "2. Activities & targets",
+          "text": "Click <b>Add activity</b> for each kind of work in this task, and give each one a target. The target drives the task's progress bar.",
+          "placement": "left",
+          "before": [
+            {
+              "call": "ptkTaskStep",
+              "args": [
+                2
+              ]
+            }
+          ]
         },
         {
           "id": "pwg-tk-pay",
           "target": [
+            "#taskModal .ptk-pane[data-step='3'] .ptk-cards",
             "#taskPaymentMethod"
           ],
-          "title": "Payment Method",
-          "text": "<b>Pay per Individual</b>: each worker is paid for what they captured.<br><b>Pay per Team</b>: the team's total is shared equally among the members who clocked in that day, and the manager is paid by the team's manager setting.",
+          "title": "3. People & pay",
+          "text": "<b>Per person</b>: each worker is paid for what they captured.<br><b>As a team</b>: the team's total is shared equally among the members who clocked in that day, and the manager is paid by the team's manager setting.",
           "placement": "top",
-          "climb": 1
+          "before": [
+            {
+              "call": "ptkTaskStep",
+              "args": [
+                3
+              ]
+            }
+          ]
         },
         {
           "id": "pwg-tk-assign",
           "target": [
+            "#taskModal .ptk-pane[data-step='3'] .ptk-g",
             "#taskTeamSelect"
           ],
           "title": "Who does it",
-          "text": "Assign a <b>team</b>, a <b>mobile user</b> who captures for it, or both. The search boxes filter the lists.",
+          "text": "Assign a <b>team</b>, a <b>phone user</b> who captures for it, or both. Type in a list to search it.",
           "placement": "top",
-          "climb": 2
+          "before": [
+            {
+              "call": "ptkTaskStep",
+              "args": [
+                3
+              ]
+            }
+          ]
         },
         {
           "id": "pwg-tk-dates",
           "target": [
             "#taskStartDate"
           ],
-          "title": "Start and estimated end",
-          "text": "The task shows on the phones and in Daily Production from the start date. The end date shows as its due date; it's marked overdue after that.",
+          "title": "4. Dates",
+          "text": "The task shows on the phones and in Daily Production from the start date. The finish date is its due date; it is marked overdue after that. The quick buttons fill in the finish date.",
           "placement": "top",
-          "climb": 2
+          "climb": 1,
+          "before": [
+            {
+              "call": "ptkTaskStep",
+              "args": [
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pwg-tk-evidence",
+          "target": [
+            "#taskModal .ptk-pane[data-step='5'] .ptk-ev",
+            "#taskPhotoReq"
+          ],
+          "title": "5. Phone evidence",
+          "text": "Whether a <b>photo</b> and a <b>signature</b> are optional, mandatory or switched off, and whether they are collected once at the end of the task or with every capture.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "ptkTaskStep",
+              "args": [
+                5
+              ]
+            }
+          ]
         },
         {
           "id": "pwg-tk-save",
           "target": [
+            "#ptkSave",
             "#btnSaveTask"
           ],
           "title": "Create Task",
-          "text": "Saves the task as <b>Pending</b>. Click Create Task (or Cancel if you're only practising).",
-          "placement": "top"
+          "text": "Saves the task as <b>Pending</b>. It stays grey until the name, farm, an activity and the dates are in (the summary says what is still needed). Click <b>Create task</b>, or close the pop-up if you're only practising.",
+          "placement": "bottom"
         },
         {
           "id": "pwg-tk-flow",
@@ -546,7 +659,7 @@
             "#dailyGridBody [onclick*='openTnaOverrideModal']"
           ],
           "title": "4. Clockings",
-          "text": "Each person's clock-in and clock-out from Time &amp; Attendance. Someone with no clockings isn't paid a share of team work that day. Click the times to correct them; this overrides their clockings.",
+          "text": "Each person's clock-in and clock-out from Time &amp; Attendance and the hours at work. Under them: where those hours went (time on tasks, normal time, overtime). Someone with no clockings isn't paid a share of team work that day. Click the times to correct them.",
           "placement": "right",
           "optional": true,
           "timeout": 15000
@@ -557,28 +670,17 @@
             "#dailyGridBody .daily-qty"
           ],
           "title": "5. Quantities",
-          "text": "What each person captured on the phone, per activity. Type over a wrong quantity. On team-paid tasks the share is worked out for you and can't be typed over.",
-          "placement": "right",
-          "optional": true
-        },
-        {
-          "id": "pwg-dy-times",
-          "target": [
-            "#dailyGridBody [onclick*='openBulkCopyModal']"
-          ],
-          "title": "6. Times on each activity",
-          "text": "The start and end time spent on the activity. Use the copy button to give the same times to other people in one go.",
+          "text": "One column per task activity: what each person captured on the phone. Type a quantity in, or over a wrong one. On team-paid tasks the share is worked out for you and can't be typed over.",
           "placement": "right",
           "optional": true
         },
         {
           "id": "pwg-dy-adhoc",
           "target": [
-            "#dailyGridHead [onclick*='openAdHocTaskModal']",
-            "#dailyGridBody [onclick*='openAdHocTaskModal']"
+            "#dailyNewTaskBtn"
           ],
-          "title": "7. Work that wasn't planned",
-          "text": "Add a column for an activity the team did that isn't on one of its tasks.",
+          "title": "6. Work that wasn't planned",
+          "text": "<b>New task</b> creates a task for this team and day, for work the team did that isn't on one of its tasks yet. It then shows as a column here.",
           "placement": "bottom",
           "optional": true
         },
@@ -587,8 +689,8 @@
           "target": [
             "#dailyGridHead"
           ],
-          "title": "8. Hours and pay",
-          "text": "The last columns total each person's day: normal time, approved and potential overtime, Sunday/public holiday, then piece wage, time wage and the total. They update as you type.",
+          "title": "7. Hours and pay",
+          "text": "The last columns total each person's day: normal time, approved and potential overtime, Sunday/public holiday, then piece wage, time wage and the total. Once someone has a quantity, their time on that task is paid by quantity instead of normal time. They update as you type.",
           "placement": "bottom",
           "optional": true
         },
@@ -625,11 +727,13 @@
         },
         {
           "id": "pwg-dy-fix",
+          "before": [{ "addClass": "#rdlTools", "cls": "open" }],
+          "after": [{ "removeClass": "#rdlTools", "cls": "open" }],
           "target": [
             ".main-content button[onclick*='unlockDailyGrid']"
           ],
           "title": "If something was wrong",
-          "text": "<b>Unlock</b> reopens committed records so they can be changed. <b>Revert Edits</b> removes manual changes and puts back what the phones captured.<br><br>If the day falls in a <b>locked payroll period</b> (Employee Master &rsaquo; Payroll Periods), it can't be saved, committed, unlocked or reverted until that period is unlocked. You'll see who and which dates are affected.",
+          "text": "In <b>Data Tools</b>: <b>Unlock committed</b> reopens committed records so they can be changed. <b>Revert Edits</b> removes manual changes and puts back what the phones captured.<br><br>If the day falls in a <b>locked payroll period</b> (Employee Master &rsaquo; Payroll Periods), it can't be saved, committed, unlocked or reverted until that period is unlocked. You'll see who and which dates are affected.",
           "placement": "top",
           "optional": true
         }
@@ -666,16 +770,17 @@
         {
           "id": "pwg-rp-who",
           "target": [
+            "#rplFiltersBtn",
             "#reportDeptFilter"
           ],
           "title": "2. Who",
-          "text": "A department, team or task, or particular employees from the Employees list. Leave them on All for everyone.",
-          "placement": "bottom",
-          "climb": 2
+          "text": "Click <b>Filters</b> for a department, team or task, or particular employees from the Employees list. Leave them on All for everyone.",
+          "placement": "bottom"
         },
         {
           "id": "pwg-rp-type",
           "target": [
+            "#rplTypeDd",
             "#reportTypeFilter"
           ],
           "title": "3. Report Type",
@@ -686,12 +791,12 @@
         {
           "id": "pwg-rp-sort",
           "target": [
+            "#rplFiltersBtn",
             "#reportSortBy"
           ],
           "title": "4. Sort",
-          "text": "How the rows are ordered.",
-          "placement": "bottom",
-          "climb": 1
+          "text": "<b>Sort by</b> in Filters sets how the rows are ordered.",
+          "placement": "bottom"
         },
         {
           "id": "pwg-rp-go",
@@ -709,8 +814,8 @@
           "target": [
             ".main-content button[onclick*='exportFieldReportToExcel']"
           ],
-          "title": "6. Export to Excel",
-          "text": "Saves the report you've just generated as a spreadsheet.",
+          "title": "6. Export",
+          "text": "<b>Export</b> saves the report you've just generated as an Excel spreadsheet.",
           "placement": "bottom"
         }
       ]
@@ -726,11 +831,11 @@
           "target": [
             "#sidebarNav [onclick*='jobcosting']"
           ],
-          "title": "Job Costing",
-          "text": "Job costing lives here. Click it.",
+          "title": "Job Costing Timesheet",
+          "text": "The Job Costing Timesheet lives here. Click it.",
           "placement": "right",
           "mode": "click",
-          "hint": "Click Job Costing"
+          "hint": "Click Job Costing Timesheet"
         },
         {
           "id": "pwg-jc-dates",
@@ -788,7 +893,7 @@
             "#jcGridBody [title='Edit unit / activity']"
           ],
           "title": "6. Correct a job",
-          "text": "Use <b>Edit</b> to fix the clock-in and clock-out times, or choose the right unit or activity. Changed times also move the matching attendance clockings. Jobs closed by the automatic clock-out show <b>Auto clock-out</b>; fix their time here.",
+          "text": "To fix a time, type it straight into the clock-in or clock-out box in the <b>Time</b> column and press Enter. Use <b>Edit</b> for another day, or to choose the right unit or activity. Changed times also move the matching attendance clockings. Jobs closed by the automatic clock-out show <b>Auto clock-out</b>; fix their time here.",
           "placement": "left",
           "optional": true
         },

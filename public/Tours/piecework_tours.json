@@ -53,24 +53,6 @@
       "placement": "right"
     },
     {
-      "id": "pw-nav-teams",
-      "target": [
-        "#sidebarNav [onclick*='teams']"
-      ],
-      "title": "Teams",
-      "text": "Your production teams, their members and their manager. These are separate from Employee Master's Custom Teams.",
-      "placement": "right"
-    },
-    {
-      "id": "pw-nav-activities",
-      "target": [
-        "#sidebarNav [onclick*='activities']"
-      ],
-      "title": "Activities & Pricing",
-      "text": "What people are paid for (for example picking, per bin) and the rate for each, with a dated price history.",
-      "placement": "right"
-    },
-    {
       "id": "pw-nav-tasks",
       "target": [
         "#sidebarNav [onclick*='tasks']"
@@ -93,8 +75,26 @@
       "target": [
         "#sidebarNav [onclick*='jobcosting']"
       ],
-      "title": "Job Costing",
+      "title": "Job Costing Timesheet",
       "text": "Time people clocked against jobs on the mobile app, with running and flagged jobs.",
+      "placement": "right"
+    },
+    {
+      "id": "pw-nav-teams",
+      "target": [
+        "#sidebarNav [onclick*='teams']"
+      ],
+      "title": "Teams",
+      "text": "Your production teams, their members and their manager. These are separate from Employee Master's Custom Teams.",
+      "placement": "right"
+    },
+    {
+      "id": "pw-nav-activities",
+      "target": [
+        "#sidebarNav [onclick*='activities']"
+      ],
+      "title": "Activities & Pricing",
+      "text": "What people are paid for (for example picking, per bin) and the rate for each, with a dated price history.",
       "placement": "right"
     },
     {
@@ -109,11 +109,12 @@
     {
       "id": "pw-nav-settings",
       "target": [
+        "#tndDock .tnd-gear",
         "#sidebarNav [onclick*='settings']"
       ],
       "title": "Production Settings",
-      "text": "Farms and units with their GPS boundaries, and the rules that apply to everyone.",
-      "placement": "right"
+      "text": "The gear opens Settings: farms and units with their GPS boundaries, and the rules that apply to everyone.",
+      "placement": "top"
     },
     {
       "id": "pw-collapse",
@@ -247,46 +248,57 @@
       "trigger": "#page-dashboard:not(.hidden)",
       "steps": [
         {
-          "id": "pwd-date",
+          "id": "pwd2-period",
           "target": [
+            "#pd2Per",
             "#pdDate"
           ],
-          "title": "Which day",
-          "text": "Pick a day, or step back and forward with the arrows. <b>Today</b> jumps back to today.",
-          "placement": "bottom",
-          "climb": 1,
-          "timeout": 6000
-        },
-        {
-          "id": "pwd-cards",
-          "target": [
-            "#pdCards"
-          ],
-          "title": "The day in five numbers",
-          "text": "People who captured production and how many entries, the piece value at worker rates, open and overdue tasks, team-days not yet committed to payroll, and job costing jobs running or flagged. Click a card to open its screen.",
+          "title": "Which period",
+          "text": "Pick a period on the left or click a start and an end day on the calendar. The arrows step a whole period back or forward. The chip next to it chooses what to compare with.",
           "placement": "bottom"
         },
         {
-          "id": "pwd-teams",
+          "id": "pwd2-today",
           "target": [
+            "#pd2Hero",
+            "#pdCards"
+          ],
+          "title": "Today",
+          "text": "People who captured today and the piece value at worker rates. <b>Your to-do</b>: team-days still to commit to payroll, overdue tasks, and job costing to check. Click any of them to open its screen.",
+          "placement": "bottom"
+        },
+        {
+          "id": "pwd2-kpis",
+          "target": [
+            "#pd2Kpis"
+          ],
+          "title": "This period",
+          "text": "Piece value, people, entries, job costing hours and tasks completed, each with the change against the compare period. Click one to show it on the chart below.",
+          "placement": "bottom"
+        },
+        {
+          "id": "pwd2-chart",
+          "target": [
+            "#pd2Trend"
+          ],
+          "title": "Per day",
+          "text": "The chosen figure day by day: this period in navy, the compare period dashed in grey before it.",
+          "placement": "top"
+        },
+        {
+          "id": "pwd2-teams",
+          "target": [
+            "#pd2Teams",
             "#pdTeamsPanel"
           ],
-          "title": "Production per team",
-          "text": "Each team's people, entries and value, and whether the day is <b>Committed</b> to payroll. <b>Open</b> takes you to that team's Daily Production grid for the day.",
+          "title": "Per team",
+          "text": "Each team in the period: people, entries, piece value and whether it is committed to payroll. <b>Open</b> takes you to that team in Daily Production.",
           "placement": "top"
         },
         {
-          "id": "pwd-tasks",
+          "id": "pwd2-unc",
           "target": [
-            "#pdTasksPanel"
-          ],
-          "title": "Open tasks",
-          "text": "Tasks that have started and aren't completed, soonest due first, with how far along they are. Overdue ones are marked.",
-          "placement": "top"
-        },
-        {
-          "id": "pwd-uncommitted",
-          "target": [
+            "#pd2Unc",
             "#pdUncommittedPanel"
           ],
           "title": "Waiting to be committed",
@@ -301,7 +313,7 @@
       "trigger": "#page-settings:not(.hidden)",
       "reset": [
         {
-          "call": "switchSettingsTab",
+          "call": "pwSettingsGo",
           "args": [
             "farms"
           ]
@@ -309,17 +321,16 @@
       ],
       "steps": [
         {
-          "id": "pws-tabs",
+          "id": "pws2-menu",
           "target": [
-            "#tab-settings-farms"
+            "#page-settings .pps-nav"
           ],
-          "title": "Two tabs",
-          "text": "<b>Farms &amp; Units</b>: where the work happens. <b>Global Production</b>: rules that apply to everyone.",
-          "placement": "bottom",
-          "climb": 1,
+          "title": "Four sections",
+          "text": "<b>Farms &amp; Units</b>: where the work happens. <b>Production Rules</b> and <b>Job Costing</b>: rules that apply to everyone. <b>Payroll Periods</b>: periods and locking. <b>Search settings</b> finds a setting by name.",
+          "placement": "right",
           "before": [
             {
-              "call": "switchSettingsTab",
+              "call": "pwSettingsGo",
               "args": [
                 "farms"
               ]
@@ -327,52 +338,17 @@
           ]
         },
         {
-          "id": "pws-farm",
+          "id": "pws3-sheet",
           "target": [
-            "#newFarmName"
-          ],
-          "title": "Add a farm",
-          "text": "Type the farm's name, set its location with the map pin button, then <b>Add</b>. The location lets the phones and Field Maps know where each farm is.",
-          "placement": "bottom",
-          "climb": 2,
-          "before": [
-            {
-              "call": "switchSettingsTab",
-              "args": [
-                "farms"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "pws-unit",
-          "target": [
-            "#unitFarmSelect"
-          ],
-          "title": "Add a field unit",
-          "text": "Units are the blocks, orchards or fields on a farm. Choose the farm, name the unit, add its size in hectares and its location, then <b>Add</b>.",
-          "placement": "bottom",
-          "climb": 2,
-          "before": [
-            {
-              "call": "switchSettingsTab",
-              "args": [
-                "farms"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "pws-list",
-          "target": [
-            "#farmUnitListBody"
+            "#pfsBody",
+            "#ppsFarmList"
           ],
           "title": "Your farms and units",
-          "text": "Edit a name or size in place, change a map boundary, or deactivate a farm or unit. Tick <b>Show Inactive</b> to see deactivated ones.",
+          "text": "One sheet: each farm is a heading row with its units under it. Type over a name or the hectares, or paste rows straight from Excel. The arrow opens and closes a farm.",
           "placement": "top",
           "before": [
             {
-              "call": "switchSettingsTab",
+              "call": "pwSettingsGo",
               "args": [
                 "farms"
               ]
@@ -380,135 +356,216 @@
           ]
         },
         {
-          "id": "pws-multiteam",
+          "id": "pws3-tools",
+          "target": [
+            "#pfsBar",
+            "#ppsFarmSearch"
+          ],
+          "title": "Find, filter, Excel",
+          "text": "<b>Search</b> finds a farm or unit. <b>Filters</b>: active, inactive, with or without a location. <b>Data Tools</b>: export to Excel, import from Excel (new ones are added, hectares updated), or a blank template.",
+          "placement": "bottom",
+          "before": [
+            {
+              "call": "pwSettingsGo",
+              "args": [
+                "farms"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pws3-addfarm",
+          "target": [
+            "#pfsAddFarm",
+            "#ppsFarmNewBtn"
+          ],
+          "title": "Add a farm",
+          "text": "<b>+ Farm</b> puts a new farm at the top of the sheet with the cursor in its name.",
+          "placement": "left",
+          "before": [
+            {
+              "call": "pwSettingsGo",
+              "args": [
+                "farms"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pws3-addunit",
+          "target": [
+            "#pfsBody input[data-blank]",
+            "#ppsUnitName"
+          ],
+          "title": "Add units",
+          "text": "The empty line under each farm adds a unit: type the name and hectares and press Enter, and the cursor stays there for the next one. Pasting several lines adds them all.",
+          "placement": "top",
+          "climb": 1,
+          "before": [
+            {
+              "call": "pwSettingsGo",
+              "args": [
+                "farms"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pws3-loc",
+          "target": [
+            "#pfsBody .pfs-loc",
+            "#ppsFarmLoc"
+          ],
+          "title": "Draw it on the satellite map",
+          "text": "Opens the satellite map: click dot by dot around the edge, drag a dot to move it, then <b>Done</b>. Give it its own colour. Field Maps shows it, and the phones get its centre and size.",
+          "placement": "left",
+          "before": [
+            {
+              "call": "pwSettingsGo",
+              "args": [
+                "farms"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pws3-save",
+          "target": [
+            "#pfsSave",
+            "#pfsBar"
+          ],
+          "title": "Saving",
+          "text": "Nothing is saved while you type. As soon as something changed, a bar across the top says how many rows; <b>Save</b> first shows what will change, then saves it.",
+          "placement": "bottom",
+          "before": [
+            {
+              "call": "pwSettingsGo",
+              "args": [
+                "farms"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pws2-multiteam",
           "target": [
             "#globalAllowMultiTeam"
           ],
           "title": "Employees in more than one team",
-          "text": "When ticked, adding someone to a team keeps them in their other teams. Otherwise they move.",
-          "placement": "bottom",
+          "text": "When on, adding someone to a team keeps them in their other teams. Otherwise they move.",
+          "placement": "left",
           "climb": 2,
           "before": [
             {
-              "call": "switchSettingsTab",
+              "call": "pwSettingsGo",
               "args": [
-                "global"
+                "rules"
               ]
             }
           ]
         },
         {
-          "id": "pws-ignoreot-2",
+          "id": "pws2-ignoreot",
           "target": [
             "#globalIgnoreOT"
           ],
           "title": "Ignore overtime",
-          "text": "All clocked hours count as normal time, and the overtime columns are hidden in Daily Production. Employee Costs still shows the overtime hours as TNA does, but pays them at the normal rate.",
-          "placement": "bottom",
+          "text": "All clocked hours count as normal time, and the overtime columns are hidden in Daily Production. Employee Costs still shows the overtime hours as TNA records them.",
+          "placement": "left",
           "climb": 2,
           "before": [
             {
-              "call": "switchSettingsTab",
+              "call": "pwSettingsGo",
               "args": [
-                "global"
+                "rules"
               ]
             }
           ]
         },
         {
-          "id": "pws-deduct",
+          "id": "pws2-deduct",
           "target": [
             "#globalDeductPWHrs"
           ],
           "title": "Deduct piecework hours",
-          "text": "When ticked, hours spent on piecework come off normal time. When not ticked, people earn their full normal time as well as their piecework pay.",
-          "placement": "bottom",
+          "text": "When on, hours spent on piecework come off normal time. When off, people earn their full normal time as well as their piecework pay.",
+          "placement": "left",
           "climb": 2,
           "before": [
             {
-              "call": "switchSettingsTab",
+              "call": "pwSettingsGo",
               "args": [
-                "global"
+                "rules"
               ]
             }
           ]
         },
         {
-          "id": "pws-wage",
+          "id": "pws2-wage",
           "target": [
             "#globalUseWage"
           ],
           "title": "Global Hourly Rate",
-          "text": "When ticked, this rate replaces <b>every</b> employee's own hourly rate in Production Pay, from the date you choose: in Daily Production and the wage reports. Their Employee Master rates are not changed.",
-          "placement": "bottom",
+          "text": "When on, this rate replaces <b>every</b> employee's own hourly rate in Production Pay, from the date you choose: in Daily Production and the wage reports.",
+          "placement": "left",
           "climb": 2,
           "before": [
             {
-              "call": "switchSettingsTab",
+              "call": "pwSettingsGo",
               "args": [
-                "global"
+                "rules"
               ]
             }
           ]
         },
         {
-          "id": "pws-jcsource",
+          "id": "pws2-save",
           "target": [
-            "#globalJobCostingSource"
+            "#page-settings .pps-nav-btn[data-pane=\"rules\"]"
           ],
-          "title": "Job costing departments",
-          "text": "Where the mobile app's job list comes from when someone clocks into a job: your T&amp;A departments, your farms and units, farming departments, or your own custom list (managed just below).",
-          "placement": "top",
-          "climb": 1,
+          "title": "Saving the rules",
+          "text": "Nothing in Production Rules or Job Costing applies until you save. As soon as you change something, an <b>Unsaved changes</b> bar shows at the bottom with <b>Save</b> and <b>Discard</b>.",
+          "placement": "right",
           "before": [
             {
-              "call": "switchSettingsTab",
+              "call": "pwSettingsGo",
               "args": [
-                "global"
+                "rules"
               ]
             }
           ]
         },
         {
-          "id": "pws-save",
+          "id": "pws2-jcsource",
           "target": [
-            ".main-content button[onclick*='saveGlobalSettings']"
+            "#ppsJc"
           ],
-          "title": "Save Global Settings",
-          "text": "Nothing on this tab applies until you save it.",
+          "title": "Job costing",
+          "text": "Where the mobile app's job list comes from when someone clocks into a job: your T&amp;A departments, your farms and units, farming departments, or your own custom list. Below it: the time at which a forgotten job is clocked out by itself.",
           "placement": "top",
           "before": [
             {
-              "call": "switchSettingsTab",
+              "call": "pwSettingsGo",
               "args": [
-                "global"
+                "jc"
               ]
             }
           ]
         },
         {
-          "id": "pws-payroll",
+          "id": "pws2-payroll",
           "target": [
-            "#page-settings a[href*='view=payroll']"
+            "#ppsPayroll a[href*=\"view=payroll\"]",
+            "#ppsPayroll"
           ],
           "title": "Payroll periods",
-          "text": "Payroll periods and locking are now set up in <b>Employee Master &rsaquo; Payroll Periods</b>. It's the same list, and a locked period can no longer be changed in Daily Production.",
-          "placement": "top",
-          "climb": 1,
-          "optional": true,
+          "text": "Payroll periods and locking are set up in <b>Employee Master &rsaquo; Payroll Periods</b>. It's the same list, and a locked period can no longer be changed.",
+          "placement": "bottom",
           "before": [
             {
-              "call": "switchSettingsTab",
+              "call": "pwSettingsGo",
               "args": [
-                "global"
-              ]
-            }
-          ],
-          "after": [
-            {
-              "call": "switchSettingsTab",
-              "args": [
-                "farms"
+                "payroll"
               ]
             }
           ]
@@ -521,6 +578,9 @@
       "trigger": "#page-teams:not(.hidden)",
       "reset": [
         {
+          "call": "ptlCloseNew"
+        },
+        {
           "call": "switchTeamTab",
           "args": [
             "active"
@@ -531,12 +591,12 @@
         {
           "id": "pwt-tabs",
           "target": [
+            "#ptlBar .ptl-seg",
             "#tab-teams-active"
           ],
           "title": "Teams",
-          "text": "Your active teams, and those you've deactivated.",
+          "text": "Your active teams, and those you've deactivated. Search finds a team by its name, manager or members.",
           "placement": "bottom",
-          "climb": 1,
           "before": [
             {
               "call": "switchTeamTab",
@@ -549,22 +609,32 @@
         {
           "id": "pwt-create",
           "target": [
+            "#ptlNewBtn",
             "#newTeamName"
           ],
           "title": "Create a team",
-          "text": "Name the team, add any asset tags (for example the tractor or trailer it uses), and choose how the manager is paid on team work. Then <b>Create Team</b>.",
-          "placement": "bottom",
-          "climb": 2
+          "text": "Click <b>+ New Team</b>: name the team, add its vehicle (for example the tractor or trailer it uses), choose the manager pay, then <b>Save</b>.",
+          "placement": "bottom"
         },
         {
           "id": "pwt-manager",
           "target": [
+            "#ptlNew .ptl-pays",
             "#newTeamManagerEqualShare"
           ],
           "title": "How the manager is paid on team work",
-          "text": "When a team is paid as a team, the quantity is shared among the workers who clocked in:<br>&bull; <b>Neither ticked</b>: the manager is paid for the team's full quantity.<br>&bull; <b>Manager Equal Share</b>: the manager gets an equal share, like a worker.<br>&bull; <b>Manager Average Only</b>: the manager gets the workers' average share.",
-          "placement": "left",
-          "climb": 2
+          "text": "When a team is paid as a team, the quantity is shared among the workers who clocked in:<br>&bull; <b>Normal</b>: the manager is paid for the team's full quantity; the workers share it.<br>&bull; <b>Equal share</b>: the manager gets an equal share, like a worker.<br>&bull; <b>Average only</b>: the manager gets the workers' average share.",
+          "placement": "bottom",
+          "before": [
+            {
+              "call": "ptlNewTeam"
+            }
+          ],
+          "after": [
+            {
+              "call": "ptlCloseNew"
+            }
+          ]
         },
         {
           "id": "pwt-grid",
@@ -572,21 +642,28 @@
             "#teamsGrid"
           ],
           "title": "Your teams",
-          "text": "Each card shows the team's manager and members. Click a card to add or remove members, choose the manager, rename it, see its history, or deactivate it.",
-          "placement": "top"
+          "text": "One row per team: its manager, members and manager pay. Click a row to add or remove people, choose the manager (the star) or change its settings.",
+          "placement": "top",
+          "before": [
+            {
+              "call": "ptlCloseNew"
+            }
+          ]
         },
         {
           "id": "pwt-import",
           "target": [
+            "#ptlTools",
             ".main-content button[onclick*='openTeamImportModal']"
           ],
-          "title": "Import Teams",
-          "text": "Create teams and assign people in bulk from a spreadsheet.",
+          "title": "Data Tools",
+          "text": "<b>Import Teams</b> (names, vehicles, manager pay) and <b>Import Members</b> (Team + PIN) are separate files, each with its own template here. The exports use the same columns, so you can change one and import it again.",
           "placement": "bottom"
         },
         {
           "id": "pwt-transfer",
           "target": [
+            "#ptlTransfer",
             ".main-content button[onclick*='openTransferModal']"
           ],
           "title": "Transfer Employee",
@@ -609,32 +686,14 @@
       ],
       "steps": [
         {
-          "id": "pwa-add",
-          "target": [
-            ".main-content button[onclick*='openActivityModal']"
-          ],
-          "title": "Add Activity",
-          "text": "What people are paid for, the unit it's counted in (for example <b>bins</b> or <b>trees</b>), and the rate per unit for workers and for managers.",
-          "placement": "bottom"
-        },
-        {
-          "id": "pwa-jc",
-          "target": [
-            ".main-content button[onclick*='openJcActivityModal']"
-          ],
-          "title": "Job Costing Activity",
-          "text": "A job for the Job Costing clock on the mobile app, such as <b>Irrigation</b> or <b>Maintenance</b>. Time is recorded against it; it has no unit or rate.",
-          "placement": "bottom"
-        },
-        {
           "id": "pwa-tabs",
           "target": [
+            "#palTabs",
             "#tab-activities-active"
           ],
-          "title": "Three lists",
-          "text": "<b>Active</b> piecework activities, <b>Deactivated</b> ones, and your <b>Job Costing Activities</b>.",
+          "title": "Two lists",
+          "text": "<b>Piecework Activities</b> are paid per unit. <b>Job Costing Activities</b> only record time. On each, <b>Active | Deactivated</b> switches between the activities in use and the ones switched off.",
           "placement": "bottom",
-          "climb": 1,
           "before": [
             {
               "call": "switchActivityTab",
@@ -643,6 +702,32 @@
               ]
             }
           ]
+        },
+        {
+          "id": "pwa-add",
+          "target": [
+            ".main-content button[onclick*='openActivityModal']"
+          ],
+          "title": "Add Activity",
+          "text": "What people are paid for, the unit it's counted in (for example <b>bins</b> or <b>trees</b>), and the rate per unit for workers and for managers.",
+          "placement": "bottom",
+          "before": [
+            {
+              "call": "switchActivityTab",
+              "args": [
+                "active"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pwa-tools",
+          "target": [
+            "#palBar .pal-tools > .pal-btn"
+          ],
+          "title": "Data Tools",
+          "text": "Download the <b>import template</b>, <b>import</b> many activities at once from Excel (names that are already there are skipped), or <b>export</b> them all to Excel. It works on the tab you are on.",
+          "placement": "bottom"
         },
         {
           "id": "pwa-grid",
@@ -657,6 +742,23 @@
               "call": "switchActivityTab",
               "args": [
                 "active"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pwa-jc",
+          "target": [
+            ".main-content button[onclick*='openJcActivityModal']"
+          ],
+          "title": "Job Costing Activities",
+          "text": "On this tab, <b>Add Activity</b> adds a job for the Job Costing clock on the mobile app, such as <b>Irrigation</b> or <b>Maintenance</b>. Time is recorded against it; it has no unit or rate.",
+          "placement": "bottom",
+          "before": [
+            {
+              "call": "switchActivityTab",
+              "args": [
+                "jobcosting"
               ]
             }
           ]
@@ -679,6 +781,7 @@
         {
           "id": "pwk-create",
           "target": [
+            "#ptkNew",
             ".main-content button[onclick*='openTaskModal']"
           ],
           "title": "Create Task",
@@ -688,12 +791,12 @@
         {
           "id": "pwk-tabs",
           "target": [
+            "#ptkBar .ptk-seg",
             "#tab-tasks-active"
           ],
           "title": "Active and completed",
-          "text": "<b>Active Tasks</b> are pending or in progress. <b>Completed Tasks</b> are finished.",
+          "text": "<b>Active</b> tasks are pending or in progress. <b>Completed</b> tasks are finished. The search finds a task by its name, farm, unit, activity, tag or team.",
           "placement": "bottom",
-          "climb": 1,
           "before": [
             {
               "call": "switchTaskTab",
@@ -709,7 +812,7 @@
             "#taskListBody"
           ],
           "title": "Each task",
-          "text": "Where it is, the activities, who it's assigned to, <b>Individual</b> or <b>Team</b> pay, its dates, and a progress bar of what's been captured against the target. Click a task to see its details and everything captured for it.",
+          "text": "What and where, who it is for, <b>Individual</b> or <b>Team</b> pay, the dates (with how many days overdue), and a progress bar of what has been captured against the target. Click a task to see its details and everything captured for it.",
           "placement": "top"
         },
         {
@@ -759,21 +862,25 @@
         },
         {
           "id": "pwy-import",
+          "before": [{ "addClass": "#rdlTools", "cls": "open" }],
+          "after": [{ "removeClass": "#rdlTools", "cls": "open" }],
           "target": [
             ".main-content button[onclick*='openImportDataModal']"
           ],
           "title": "Import Data and Import History",
-          "text": "<b>Import Data</b> brings in production from an Excel sheet: you match its columns, it's validated, then imported. <b>Import History</b> lists past imports, and one can be rolled back if nothing in it has been committed.",
-          "placement": "bottom"
+          "text": "In <b>Data Tools</b>: <b>Import Data</b> brings in production from an Excel sheet: you match its columns, it's validated, then imported. <b>Import History</b> lists past imports, and one can be rolled back if nothing in it has been committed.",
+          "placement": "left"
         },
         {
           "id": "pwy-export",
+          "before": [{ "addClass": "#rdlTools", "cls": "open" }],
+          "after": [{ "removeClass": "#rdlTools", "cls": "open" }],
           "target": [
             ".main-content button[onclick*='exportDailyGridToExcel']"
           ],
           "title": "Export Excel",
-          "text": "The grid on screen, as a spreadsheet.",
-          "placement": "bottom"
+          "text": "In <b>Data Tools</b>: the grid on screen, as a spreadsheet.",
+          "placement": "left"
         },
         {
           "id": "pwy-grid",
@@ -781,7 +888,7 @@
             "#dailyGridHead"
           ],
           "title": "The grid",
-          "text": "One row per team member. Their shift and clockings from Time &amp; Attendance, a column per task activity with their quantities and times, then their hours and wages: normal, approved and potential overtime, Sunday/public holiday, piece wage and the total.",
+          "text": "One row per team member. Their shift and clockings from Time &amp; Attendance, a column per task activity with their quantities and times, then their hours and wages: normal, approved and potential overtime, Sunday/public holiday, piece wage and the total. Time on a task is paid by quantity, so it comes off normal time.",
           "placement": "bottom",
           "optional": true
         },
@@ -799,7 +906,7 @@
     },
     {
       "key": "piecework.jobcosting",
-      "title": "Job Costing",
+      "title": "Job Costing Timesheet",
       "trigger": "#page-jobcosting:not(.hidden)",
       "steps": [
         {
@@ -837,7 +944,7 @@
             "#jcGridBody"
           ],
           "title": "Jobs per person",
-          "text": "Click a person to open their jobs: the unit, the activity, when it started and ended, how long, and who captured it. Use <b>Edit</b> to correct the clock-in and clock-out times, the unit or the activity on a job.",
+          "text": "Click a person to open their jobs: the unit, the activity, when it started and ended, how long, and who captured it. To correct a time, type it into the clock-in or clock-out box and press Enter. Use <b>Edit</b> for another day, the unit or the activity on a job.",
           "placement": "top"
         },
         {
@@ -869,16 +976,17 @@
         {
           "id": "pwr-filters",
           "target": [
+            "#rplFiltersBtn",
             "#reportTeamFilter"
           ],
           "title": "Narrow it down",
-          "text": "Filter by department, team, task, or pick particular employees. Leave them on All for everyone.",
-          "placement": "bottom",
-          "climb": 1
+          "text": "<b>Filters</b> holds the department, team, task and employee choices, and how the rows are sorted. The number on the button shows how many filters are on. Leave them on All for everyone.",
+          "placement": "bottom"
         },
         {
           "id": "pwr-type",
           "target": [
+            "#rplTypeDd",
             "#reportTypeFilter"
           ],
           "title": "Report Type",
@@ -889,12 +997,12 @@
         {
           "id": "pwr-sort",
           "target": [
+            "#rplFiltersBtn",
             "#reportSortBy"
           ],
           "title": "Sort",
-          "text": "Order by name, PIN or quantity. Tick <b>Ignore Letters in PIN Sort</b> to sort PINs by their numbers only.",
-          "placement": "bottom",
-          "climb": 1
+          "text": "<b>Sort by</b> in Filters orders the rows by name, PIN or quantity. Tick <b>Ignore letters in PIN sort</b> to sort PINs by their numbers only.",
+          "placement": "bottom"
         },
         {
           "id": "pwr-go",
@@ -902,7 +1010,7 @@
             ".main-content button[onclick*='generateFieldReport']"
           ],
           "title": "Generate Report",
-          "text": "Shows the report on screen. <b>Export to Excel</b> at the top saves it as a spreadsheet.",
+          "text": "Shows the report on screen. <b>Export</b> next to it saves it as an Excel spreadsheet.",
           "placement": "top"
         }
       ]
@@ -925,10 +1033,11 @@
         {
           "id": "pwm-filter",
           "target": [
+            ".pwmf-wrap",
             ".main-content button[onclick*='openMapFilterModal']"
           ],
           "title": "Teams and tasks",
-          "text": "Choose which teams and tasks to show. The number shows how many you've picked.",
+          "text": "<b>Teams</b> and <b>Tasks</b>: tick the ones to show (nothing ticked shows them all). The map plots again when you close the list. The number shows how many you've ticked.",
           "placement": "bottom"
         },
         {
