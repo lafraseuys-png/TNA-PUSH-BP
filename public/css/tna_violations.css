@@ -1,0 +1,169 @@
+/* =====================================================================
+   EMPLOYEE VIOLATIONS (sidebar "Employee Violations", was "Auto-Violations")
+   File: public/css/tna_violations.css - linked in the head of tna_dashboard.html
+   ---------------------------------------------------------------------
+   15 Nov 2026: the screen and its "Resolve Violation" pop-up in the T&A look
+   (always on, no switch). Same pieces as the sibling screens: title + white
+   theme buttons in the header (Weekly Roster / Weekly Timesheet), a labelled
+   toolbar with a two-box date range and a navy primary button (Reports),
+   a glass table with light headings that stay at the top while the list
+   scrolls (Team View). Navy only: one chip style for every violation type.
+   Markup: #page-violations and #unifiedActionModal in tna_dashboard.html.
+   Rows: renderViolationsTable() in js/tna_dashboard.js.
+   No !important here: the new markup carries no Tailwind bg-* classes, so
+   the theme's button rules never reach the navy buttons.
+   NOTE: Tailwind's .hidden lives in a cascade layer and loses to any rule
+   here that sets display - such boxes get their own .hidden rule below.
+   ===================================================================== */
+
+/* ---------- Header: title on the left, the two Recalculate buttons on the right ---------- */
+/* 15 Nov 2026: each button = icon + plain name + a short grey note under the name ("Keeps approvals" / "Wipes approvals"),
+   so people can tell them apart without hovering. The note sits inside the button so the permission hiding hides both. */
+#page-violations .vio-head { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; padding-bottom: 12px; }
+#page-violations .vio-acts { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: flex-end; }
+#page-violations .vio-acts .btn { min-height: 50px; padding: 7px 20px 7px 16px; gap: 12px; white-space: nowrap; text-align: left; justify-content: flex-start; }
+#page-violations .vio-acts .btn > i { width: 16px; font-size: 15px; text-align: center; }
+#page-violations .vio-bt { display: flex; flex-direction: column; gap: 3px; line-height: 1.15; }
+#page-violations .vio-bt b, #page-violations .vio-bt small { display: block; }
+#page-violations .vio-bt b { font-size: 13px; font-weight: 700; }
+#page-violations .vio-bt small { font-size: 11px; font-weight: 500; color: #64748b; }
+#page-violations .vio-bar .btn { height: 38px; padding: 0 16px; white-space: nowrap; }
+/* while a job runs its spinner shows on the button: keep it readable (the theme fades disabled buttons to 0.3) */
+#page-violations .vio-acts .btn:disabled, #page-violations .vio-bar .btn:disabled { opacity: .75; cursor: progress; }
+
+/* ---------- Toolbar: search > date range > department > Show, then count + Bulk Action + Export ---------- */
+#page-violations .vio-bar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px 15px; margin: 16px 0; }
+#page-violations .vio-fld { margin-bottom: 0; }
+#page-violations .vio-lbl { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+#page-violations .vio-fld .form-control { height: 38px; padding-top: 0; padding-bottom: 0; box-sizing: border-box; }
+#page-violations .vio-fld-search { width: 230px; }
+#page-violations .vio-fld-search .form-control { width: 100%; }
+#page-violations #vioDeptFilter { width: 200px; }
+/* search icon on the LEFT in soft grey (user's search-box rule, 10 Nov) */
+#page-violations .vio-search { position: relative; }
+#page-violations .vio-search .form-control { padding-left: 34px; }
+#page-violations .vio-search i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 12px; pointer-events: none; }
+/* the Reports date range: two boxes with a dash */
+#page-violations .vio-range { display: flex; align-items: center; gap: 6px; }
+#page-violations .vio-range .form-control { width: 132px; padding-left: 12px; }
+#page-violations .vio-to { color: #94a3b8; font-weight: 700; }
+/* Show (was "Analyze") = the screen's main button, navy like Reports' Generate */
+#page-violations .vio-go { height: 38px; display: inline-flex; align-items: center; gap: 8px; padding: 0 18px; border-radius: 8px; border: 1px solid #1a4c7b;
+    background: #1a4c7b; color: #ffffff; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; box-shadow: 0 4px 12px rgba(26, 76, 123, .2); transition: background-color .2s ease; }
+#page-violations .vio-go:hover { background: #15406a; border-color: #15406a; }
+#page-violations .vio-go:disabled { opacity: .75; cursor: progress; }
+#page-violations .vio-bar-r { margin-left: auto; display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px; }
+#page-violations .vio-count { align-self: center; font-size: 12px; font-weight: 700; color: #64748b; white-space: nowrap; padding-top: 16px; }
+#page-violations .vio-count:empty { display: none; }
+
+/* ---------- Table: own scroll box, headings stay at the top ---------- */
+/* Headings are SOLID so rows never show through, and the line under them is a shadow because collapsed table borders
+   do not travel with a sticky heading (same as Team View's .tv-scroll). */
+#page-violations .vio-scroll { max-height: 72vh; overflow: auto; position: relative; }
+#page-violations .vio-table th { position: sticky; top: 0; z-index: 3; background-color: #f8fafc; padding: 11px 12px; border-bottom: 0; box-shadow: inset 0 -1px 0 rgba(148, 163, 184, .35); white-space: nowrap; }
+#page-violations .vio-table td { padding: 10px 12px; vertical-align: middle; }
+#page-violations .vio-table .vio-ck { width: 44px; text-align: center; }
+#page-violations .vio-table input[type="checkbox"] { width: 16px; height: 16px; accent-color: #1a4c7b; cursor: pointer; vertical-align: middle; }
+#page-violations .vio-table .vio-r { text-align: right; }
+
+#page-violations .vio-d { white-space: nowrap; }
+#page-violations .vio-d b { display: block; font-size: 13px; font-weight: 700; color: #1e293b; font-variant-numeric: tabular-nums; }
+#page-violations .vio-d span { display: block; margin-top: 2px; font-size: 11px; color: #64748b; }
+#page-violations .vio-emp { min-width: 180px; }
+#page-violations .vio-emp b { display: block; font-size: 13px; font-weight: 700; color: #1e293b; white-space: nowrap; }
+#page-violations .vio-emp span { display: block; margin-top: 2px; font-size: 11px; color: #64748b; white-space: nowrap; }
+/* the Roster's PIN pill */
+#page-violations .vio-pin { display: inline-block; margin-right: 6px; padding: 1px 7px; border-radius: 6px; font-style: normal; font-size: 11px; font-weight: 800; background: rgba(26, 76, 123, .1); color: #1a4c7b; vertical-align: 1px; }
+#page-violations .vio-shift { font-size: 12.5px; color: #475569; font-variant-numeric: tabular-nums; white-space: nowrap; }
+/* one navy chip for every violation type (no colour coding) */
+#page-violations .vio-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; border: 1px solid rgba(26, 76, 123, .22);
+    background: rgba(26, 76, 123, .07); color: #1a4c7b; font-size: 10.5px; font-weight: 800; letter-spacing: .4px; text-transform: uppercase; white-space: nowrap; }
+#page-violations .vio-var { font-size: 12.5px; color: #475569; min-width: 140px; }
+#page-violations .vio-doc { display: inline-flex; align-items: center; gap: 5px; margin-top: 4px; padding: 0; border: 0; background: none; color: #1a4c7b; font-size: 11.5px; font-weight: 700; cursor: pointer; }
+#page-violations .vio-doc:hover { text-decoration: underline; }
+#page-violations .vio-act.btn { height: 32px; padding: 0 14px; font-size: 12px; }
+#page-violations .vio-lock { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #64748b; white-space: nowrap; }
+#page-violations td.vio-empty { padding: 28px 16px; text-align: center; color: #64748b; }
+#page-violations td.vio-empty i { display: block; margin-bottom: 8px; font-size: 22px; color: #1a4c7b; }
+#page-violations td.vio-empty.vio-err, #page-violations td.vio-empty.vio-err i { color: #b91c1c; }
+
+/* ---------- The "Resolve Violation" pop-up (#unifiedActionModal, also opened from Team View and the Inbox) ---------- */
+#unifiedActionModal .vra-box { position: relative; width: min(460px, calc(100vw - 32px)); max-height: 90vh; display: flex; flex-direction: column; overflow: hidden;
+    background: #ffffff; color: #0f172a; border: 1px solid #e2e8f0; border-radius: 20px; box-shadow: 0 30px 70px rgba(15, 23, 42, .25); }
+#unifiedActionModal .vra-hd { display: flex; align-items: flex-start; gap: 12px; padding: 20px 22px 14px; border-bottom: 1px solid #f1f5f9; }
+#unifiedActionModal .vra-hd h3 { margin: 0; font-size: 18px; font-weight: 800; color: #1a4c7b; line-height: 1.25; }
+#unifiedActionModal #unifiedModalContext { margin: 3px 0 0; font-size: 12.5px; font-weight: 600; color: #64748b; }
+#unifiedActionModal #unifiedModalContext:empty { display: none; }
+#unifiedActionModal .vra-x { margin-left: auto; flex-shrink: 0; width: 34px; height: 34px; display: inline-grid; place-items: center; border: 0; border-radius: 10px; background: #f1f5f9; color: #64748b; cursor: pointer; }
+#unifiedActionModal .vra-x:hover { background: #e2e8f0; color: #0f172a; }
+#unifiedActionModal .vra-sb { flex: 1 1 auto; min-height: 0; overflow: auto; padding: 16px 22px 4px; }
+#unifiedActionModal .vra-opts { display: flex; flex-direction: column; gap: 8px; }
+#unifiedActionModal .vra-opt { display: flex; align-items: flex-start; gap: 12px; margin: 0; padding: 12px 14px; border: 1px solid #e2e8f0; border-radius: 12px; cursor: pointer; transition: border-color .15s ease, background-color .15s ease; }
+#unifiedActionModal .vra-opt:hover { border-color: rgba(26, 76, 123, .35); }
+#unifiedActionModal .vra-opt:has(> input:checked) { border-color: rgba(26, 76, 123, .5); background: rgba(26, 76, 123, .05); }
+#unifiedActionModal .vra-opt > input[type="radio"] { flex-shrink: 0; width: 16px; height: 16px; margin: 2px 0 0; accent-color: #1a4c7b; cursor: pointer; }
+#unifiedActionModal .vra-txt { flex: 1; min-width: 0; }
+#unifiedActionModal .vra-t { display: block; font-size: 13.5px; font-weight: 800; color: #0f172a; }
+#unifiedActionModal .vra-s { display: block; margin-top: 2px; font-size: 11.5px; line-height: 1.4; color: #64748b; }
+/* the fields under a choice (shown by toggleUnifiedOptions) */
+#unifiedActionModal .vra-more { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #e2e8f0; }
+#unifiedActionModal .vra-more.hidden { display: none; }
+#unifiedActionModal .vra-row { display: flex; gap: 8px; }
+#unifiedActionModal .vra-row > * { flex: 1 1 0; min-width: 0; }
+#unifiedActionModal .vra-f { display: flex; flex-direction: column; gap: 3px; }
+#unifiedActionModal .vra-mini { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #64748b; }
+#unifiedActionModal .vra-more .form-control { width: 100%; height: 38px; padding: 0 12px; box-sizing: border-box; }
+#unifiedActionModal .vra-chk { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #475569; }
+#unifiedActionModal .vra-chk input { width: 15px; height: 15px; accent-color: #1a4c7b; }
+#unifiedActionModal .vra-ft { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 22px 20px; }
+#unifiedActionModal .vra-btn { height: 38px; padding: 0 16px; border: 1px solid #e2e8f0; border-radius: 10px; background: #ffffff; color: #475569; font-size: 13px; font-weight: 700; cursor: pointer; }
+#unifiedActionModal .vra-btn:hover { background: #f8fafc; color: #0f172a; }
+#unifiedActionModal .vra-go { height: 38px; display: inline-flex; align-items: center; gap: 8px; padding: 0 18px; border: 0; border-radius: 10px; background: #1a4c7b; color: #ffffff;
+    font-size: 13px; font-weight: 800; cursor: pointer; box-shadow: 0 6px 14px rgba(26, 76, 123, .22); }
+#unifiedActionModal .vra-go:hover { background: #15406a; }
+#unifiedActionModal .vra-go:disabled { opacity: .75; cursor: progress; }
+
+/* ---------- Dark mode ---------- */
+:is(html, body).dark-mode #page-violations .vio-search i, :is(html, body).dark-mode #page-violations .vio-count,
+:is(html, body).dark-mode #page-violations .vio-bt small { color: #94a3b8; }
+:is(html, body).dark-mode #page-violations .vio-to { color: #64748b; }
+:is(html, body).dark-mode #page-violations .vio-go { background: #1e5a94; border-color: #2b6aa6; }
+:is(html, body).dark-mode #page-violations .vio-go:hover { background: #2563a8; }
+:is(html, body).dark-mode #page-violations .vio-table th { background-color: #1e293b; box-shadow: inset 0 -1px 0 rgba(255, 255, 255, .08); }
+:is(html, body).dark-mode #page-violations .vio-scroll { color-scheme: dark; }
+:is(html, body).dark-mode #page-violations .vio-table input[type="checkbox"] { accent-color: #3b82f6; }
+:is(html, body).dark-mode #page-violations .vio-d b, :is(html, body).dark-mode #page-violations .vio-emp b { color: #e2e8f0; }
+:is(html, body).dark-mode #page-violations .vio-d span, :is(html, body).dark-mode #page-violations .vio-emp span,
+:is(html, body).dark-mode #page-violations .vio-shift, :is(html, body).dark-mode #page-violations .vio-var,
+:is(html, body).dark-mode #page-violations .vio-lock, :is(html, body).dark-mode #page-violations td.vio-empty { color: #94a3b8; }
+:is(html, body).dark-mode #page-violations .vio-pin { background: rgba(59, 130, 246, .18); color: #93c5fd; }
+:is(html, body).dark-mode #page-violations .vio-chip { background: rgba(59, 130, 246, .14); border-color: rgba(59, 130, 246, .3); color: #bfdbfe; }
+:is(html, body).dark-mode #page-violations .vio-doc, :is(html, body).dark-mode #page-violations td.vio-empty i { color: #93c5fd; }
+:is(html, body).dark-mode #page-violations td.vio-empty.vio-err, :is(html, body).dark-mode #page-violations td.vio-empty.vio-err i { color: #fca5a5; }
+
+:is(html, body).dark-mode #unifiedActionModal .vra-box { background: #1e293b; color: #e2e8f0; border-color: #334155; box-shadow: 0 30px 70px rgba(0, 0, 0, .5); }
+:is(html, body).dark-mode #unifiedActionModal .vra-hd { border-bottom-color: #334155; }
+:is(html, body).dark-mode #unifiedActionModal .vra-hd h3 { color: #93c5fd; }
+:is(html, body).dark-mode #unifiedActionModal #unifiedModalContext, :is(html, body).dark-mode #unifiedActionModal .vra-s,
+:is(html, body).dark-mode #unifiedActionModal .vra-mini, :is(html, body).dark-mode #unifiedActionModal .vra-chk { color: #94a3b8; }
+:is(html, body).dark-mode #unifiedActionModal .vra-x { background: #0f172a; color: #94a3b8; }
+:is(html, body).dark-mode #unifiedActionModal .vra-x:hover { background: #273449; color: #f1f5f9; }
+:is(html, body).dark-mode #unifiedActionModal .vra-opt { border-color: #334155; }
+:is(html, body).dark-mode #unifiedActionModal .vra-opt:hover { border-color: rgba(147, 197, 253, .4); }
+:is(html, body).dark-mode #unifiedActionModal .vra-opt:has(> input:checked) { border-color: rgba(147, 197, 253, .55); background: rgba(147, 197, 253, .08); }
+:is(html, body).dark-mode #unifiedActionModal .vra-opt > input[type="radio"], :is(html, body).dark-mode #unifiedActionModal .vra-chk input { accent-color: #3b82f6; }
+:is(html, body).dark-mode #unifiedActionModal .vra-t { color: #f1f5f9; }
+:is(html, body).dark-mode #unifiedActionModal .vra-more { border-top-color: #334155; }
+:is(html, body).dark-mode #unifiedActionModal .vra-btn { background: #0f172a; border-color: #334155; color: #cbd5e1; }
+:is(html, body).dark-mode #unifiedActionModal .vra-btn:hover { background: #273449; color: #f1f5f9; }
+:is(html, body).dark-mode #unifiedActionModal .vra-go { background: #1e5a94; }
+:is(html, body).dark-mode #unifiedActionModal .vra-go:hover { background: #2563a8; }
+
+/* ---------- Phones ---------- */
+@media (max-width: 640px) {
+    #page-violations .vio-fld-search, #page-violations #vioDeptFilter { width: 100%; }
+    #page-violations .vio-fld { flex: 1 1 100%; }
+    #page-violations .vio-range .form-control { width: auto; flex: 1 1 0; min-width: 0; }
+    #page-violations .vio-bar-r { margin-left: 0; }
+    #page-violations .vio-acts { justify-content: flex-start; }
+}

@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <!-- Accurate loading screen: must stay the FIRST script on the page. Safe to remove. -->
     <script src="tna_loader.js?v=1"></script>
+    <!-- 2026-11-13 the login session for this page (code repetition review step 1): right after the loader, before the other scripts -->
+    <script src="tna_session.js?v=20261113b"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Launchpad | tnaafrica</title>
     <!-- 2026-10-23: TNA Africa app icon (browser tab) -->
@@ -1446,7 +1448,7 @@
     </script>
 
     <script src="theme.js?v=20261106a"></script>
-    <script src="launchpad.js?v=20261009a"></script>
+    <script src="launchpad.js?v=20261113a"></script>
     <script src="logo_scale.js?v=20261102d"></script>
 
     <!-- UI Interaction Scripts (Injected AFTER launchpad.js to Auto-Heal interactions) -->
@@ -1558,8 +1560,8 @@
                 ['roster',           'Weekly Roster',       'fa-clipboard-list',     'tna_roster',     'roster schedule week'],
                 ['workflow',         'Manager Inbox',       'fa-inbox',              'tna_inbox',      'inbox approvals exceptions workflow'],
                 ['team-view',        'Team View',           'fa-users-cog',          'tna_team_view',  'team status'],
-                ['attendance',       'Actual Attendance',   'fa-user-check',         'tna_attendance', 'attendance present clockings'],
-                ['violations',       'Auto-Violations',     'fa-exclamation-triangle','tna_violations','violations late absent missing punch'],
+                ['attendance',       'Weekly Timesheet',    'fa-user-check',         'tna_attendance', 'attendance actual present clockings timesheet'],
+                ['violations',       'Employee Violations', 'fa-exclamation-triangle','tna_violations','violations late absent missing punch auto-violations'],
                 ['ot-validations',   'OT Validations',      'fa-stopwatch',          'tna_overtime',   'overtime validations approve'],
                 ['timelogs',         'Time Logs',           'fa-history',            'tna_logs',       'time logs punches clock records'],
                 ['reports',          'Analytics & Reports', 'fa-chart-pie',          'tna_reports',    'reports analytics'],
@@ -2369,8 +2371,8 @@
     <script src="tna_tour.js?v=20261109a" data-tour-page="launchpad"></script>
     <!-- 2026-10-23: help as the side panel (same as Employee Master); the page's "?" opens it. AUTO-HEAL: safe to remove. -->
     <script src="tna_help_panel.js?v=20261109b" data-help-module="Home" data-help-anchor="#tnaTourHelpBtn"></script>
-    <!-- Support Ticket widget: white card, right module name, your name + email filled in (new file). AUTO-HEAL: safe to remove. -->
-    <script src="tna_support_polish.js?v=20261009a"></script>
+    <!-- Support Ticket popup: right module name, new look (2026-11-15), your name/email + My tickets pass. AUTO-HEAL: safe to remove. -->
+    <script src="tna_support_polish.js?v=20261115a"></script>
 
 </body>
 </html>

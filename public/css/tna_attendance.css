@@ -1,0 +1,150 @@
+/* =====================================================================
+   WEEKLY TIMESHEET (sidebar "Weekly Timesheet", section #page-attendance)
+   File: public/css/tna_attendance.css - linked in the head of tna_dashboard.html
+   ---------------------------------------------------------------------
+   15 Nov 2026: the screen in the Weekly Roster look (always on, no switch).
+   The rules are the Roster's own (#page-roster .rs-* in tna_dashboard.html),
+   copied here with the same class names so both weekly grids look the same:
+   week stepper beside the title, two drop-down menus on the right, labelled
+   search + department bar with a count, glass table with the PIN pill, the
+   "Today" tag and Roster chips. Rows are drawn by renderAttendanceGrid()
+   in js/tna_dashboard.js.
+   Dark mode follows the Roster: body.dark-mode.
+   ===================================================================== */
+
+/* ---------- Header: title + week on the left, menus on the right ---------- */
+#page-attendance .rs-head { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; padding-bottom: 12px; }
+#page-attendance .rs-left { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+#page-attendance .rs-right { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: flex-end; }
+
+#page-attendance .rs-week { display: inline-flex; align-items: center; border: 1px solid rgba(15, 23, 42, .12); border-radius: 8px; background: rgba(255, 255, 255, .7); overflow: hidden; }
+#page-attendance .rs-week button { width: 34px; height: 34px; color: #1a4c7b; font-size: 12px; }
+#page-attendance .rs-week button:hover { background: rgba(26, 76, 123, .08); }
+#page-attendance #attendanceWeekLabel { min-width: 170px; text-align: center; font-size: 13px; font-weight: 700; color: #1e293b; padding: 0 6px; border-left: 1px solid rgba(15, 23, 42, .08); border-right: 1px solid rgba(15, 23, 42, .08); line-height: 34px; }
+
+/* Recalculate / Data Tools menus (the Roster's "Fill roster" / "Data Tools") */
+#page-attendance .rs-dd { position: relative; }
+#page-attendance .rs-dd > .btn { height: 38px; }
+/* while a job runs its spinner shows on the menu button: keep it readable (the theme fades disabled buttons to 0.3) */
+#page-attendance .rs-dd > .btn:disabled { opacity: .75; }
+#page-attendance .rs-caret { font-size: 10px; margin-left: 4px; }
+#page-attendance .rs-dd-menu { top: calc(100% + 8px); right: 0; left: auto; bottom: auto; min-width: 300px; z-index: 105; padding: 6px 0; }
+#page-attendance .rs-dd-h { padding: 8px 20px 6px; font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: #64748b; }
+#page-attendance .rs-dd-menu .dropdown-item { width: 100%; text-align: left; background: transparent; border: 0; align-items: flex-start; padding: 10px 20px; }
+#page-attendance .rs-dd-menu .dropdown-item:hover { background-color: #f1f5f9; }
+#page-attendance .rs-dd-menu .dropdown-item i { margin-top: 3px; }
+#page-attendance .rs-dd-menu .dropdown-item span { display: flex; flex-direction: column; font-weight: 600; color: inherit; }
+#page-attendance .rs-dd-menu .dropdown-item small { font-size: 11.5px; font-weight: 400; color: #64748b; margin-top: 2px; line-height: 1.35; }
+/* class "hidden" really hides a menu item (.dropdown-item's display would beat Tailwind's layered .hidden); see the Pull clocks note in the html */
+#page-attendance .rs-dd-menu .hidden { display: none; }
+/* the "Pull missing clocks" heading only while one of its buttons shows; a menu with nothing left in it (permissions) hides itself */
+#page-attendance .rs-dd-h.rs-pull-h:not(:has(~ button:not(.hidden):not([style*="display: none"]))) { display: none; }
+#page-attendance .rs-dd:not(:has(.rs-dd-menu > button:not(.hidden):not([style*="display: none"]))) { display: none; }
+
+/* ---------- Search + department bar (the Roster's .rs-bar) ---------- */
+#page-attendance .rs-bar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 15px; margin: 16px 0; }
+#page-attendance .rs-fld { width: 250px; margin-bottom: 0; }
+#page-attendance .rs-lbl { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+#page-attendance .rs-fld .form-control { width: 100%; height: 38px; padding-top: 0; padding-bottom: 0; box-sizing: border-box; }
+/* search icon on the LEFT in soft grey (user's search-box rule, 10 Nov) */
+#page-attendance .rs-search { position: relative; }
+#page-attendance .rs-search .form-control { padding-left: 34px; }
+#page-attendance .rs-search i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 12px; pointer-events: none; }
+#page-attendance .rs-count { margin-left: auto; padding-bottom: 10px; font-size: 12px; font-weight: 700; color: #64748b; white-space: nowrap; }
+#page-attendance .rs-hint { margin-top: 8px; font-size: 11px; color: #64748b; }
+
+/* ---------- Table ---------- */
+#page-attendance .rs-table th, #page-attendance .rs-table td { padding: 9px 8px; border-color: rgba(15, 23, 42, .07); vertical-align: middle; }
+/* faint line between the columns, as on the Roster (its cells carry border-r) */
+#page-attendance .rs-table th:not(:last-child), #page-attendance .rs-table td:not(:last-child) { border-right: 1px solid rgba(15, 23, 42, .07); }
+#page-attendance .rs-table thead th { background: rgba(0, 0, 0, .03); color: #475569; }
+#page-attendance .rs-table th.rs-day { text-align: center; line-height: 1.25; min-width: 104px; }
+#page-attendance .rs-table th.rs-day b { display: block; font-size: 11px; font-weight: 800; }
+#page-attendance .rs-table th.rs-day span { display: block; font-size: 11px; font-weight: 600; text-transform: none; letter-spacing: 0; color: #64748b; }
+#page-attendance .rs-table th.rs-day em { display: inline-block; margin-top: 3px; font-style: normal; font-size: 9.5px; font-weight: 800; padding: 1px 7px; border-radius: 999px; background: #1a4c7b; color: #fff; }
+#page-attendance .rs-table th.rs-day em.rs-hol-tag { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 0 6px; }
+#page-attendance .rs-table th.rs-today { background: rgba(26, 76, 123, .09); border-bottom: 2px solid #1a4c7b; }
+#page-attendance .rs-table th.rs-today span { color: #1a4c7b; }
+#page-attendance .rs-table th.rs-total-h { text-align: center; }
+
+/* Employee heading: both sorts kept (PIN with the 123 numbers-only switch, and Name) */
+#page-attendance .rs-sorts { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+#page-attendance .rs-sorts .rs-sort-lbl { margin-right: 6px; }
+#page-attendance .rs-sort { padding: 2px 5px; border-radius: 5px; font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; background: transparent; }
+#page-attendance .rs-sort:hover { color: #1a4c7b; background: rgba(26, 76, 123, .08); }
+#page-attendance .rs-sort i { margin-left: 3px; color: #cbd5e1; }
+#page-attendance .rs-sort.rs-on { color: #1a4c7b; }
+#page-attendance .rs-sort.rs-on i { color: #1a4c7b; }
+#page-attendance .rs-num { font-size: 9px; font-weight: 700; letter-spacing: 0; padding: 0 5px; line-height: 16px; border-radius: 4px; border: 1px solid rgba(15, 23, 42, .18); color: #64748b; background: transparent; }
+#page-attendance .rs-num:hover { border-color: #1a4c7b; color: #1a4c7b; }
+#page-attendance .rs-num.rs-on { background: #1a4c7b; border-color: #1a4c7b; color: #fff; }
+#page-attendance .rs-sorts .rs-dot { color: #cbd5e1; }
+
+#page-attendance .rs-table td.rs-emp { min-width: 190px; max-width: 260px; padding-left: 14px; }
+#page-attendance .rs-emp b { display: block; font-size: 13px; font-weight: 700; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#page-attendance .rs-emp span { display: block; margin-top: 2px; font-size: 11px; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#page-attendance .rs-emp .rs-pin { display: inline-block; margin-right: 6px; padding: 1px 7px; border-radius: 6px; font-style: normal; font-size: 11px; font-weight: 800; background: rgba(26, 76, 123, .1); color: #1a4c7b; vertical-align: 1px; }
+#page-attendance .rs-table td.rs-emp, #page-attendance .rs-table th.rs-emp-h { position: sticky; left: 0; z-index: 2; background: #f8fafc; box-shadow: 1px 0 0 rgba(15, 23, 42, .08); }
+
+/* a row opens the clockings pop-up (openDrillDown) */
+#page-attendance .rs-table tbody tr.rs-row { cursor: pointer; }
+#page-attendance .rs-table tbody tr.rs-row:hover td { background-color: rgba(26, 76, 123, .05); }
+#page-attendance .rs-table tbody tr.rs-row:hover td.rs-emp { background-color: #eef3f8; }
+
+#page-attendance td.rs-cell { text-align: center; }
+#page-attendance td.rs-cell.rs-today-col { background-color: rgba(26, 76, 123, .045); }
+#page-attendance td.rs-cell.rs-hol-col { background-color: rgba(16, 185, 129, .045); }
+#page-attendance .rs-hrs { font-size: 13px; font-weight: 700; color: #1e293b; font-variant-numeric: tabular-nums; }
+#page-attendance .rs-dash { color: #cbd5e1; }
+#page-attendance td.rs-total { text-align: center; }
+#page-attendance td.rs-total b { font-size: 13px; font-weight: 800; color: #1a4c7b; font-variant-numeric: tabular-nums; }
+#page-attendance td.rs-empty { padding: 18px; text-align: center; color: #64748b; }
+#page-attendance td.rs-empty.rs-err { color: #b91c1c; }
+
+/* Roster chips */
+#page-attendance .rs-chip { display: inline-flex; align-items: center; gap: 6px; max-width: 140px; padding: 3px 10px; border-radius: 10px; font-size: 11.5px; line-height: 1.25; border: 1px solid transparent; vertical-align: middle; text-align: left; }
+#page-attendance .rs-chip b { font-weight: 700; white-space: nowrap; }
+#page-attendance .rs-present { background: rgba(26, 76, 123, .08); border-color: rgba(26, 76, 123, .2); color: #1e293b; }
+#page-attendance .rs-off { background: #f1f5f9; border-color: #e2e8f0; color: #475569; }
+#page-attendance .rs-leave { background: #f5f3ff; border-color: #ddd6fe; color: #6d28d9; }
+#page-attendance .rs-hol { background: #ecfdf5; border-color: #a7f3d0; color: #047857; }
+#page-attendance .rs-miss { background: #fffbeb; border-color: #fde68a; color: #b45309; }
+#page-attendance .rs-absent { background: #fef2f2; border-color: #fecaca; color: #b91c1c; }
+
+/* ---------- Dark mode ---------- */
+body.dark-mode #page-attendance .rs-week { background: rgba(15, 23, 42, .5); border-color: rgba(255, 255, 255, .1); }
+body.dark-mode #page-attendance .rs-week button { color: #93c5fd; }
+body.dark-mode #page-attendance #attendanceWeekLabel { color: #e2e8f0; border-color: rgba(255, 255, 255, .08); }
+body.dark-mode #page-attendance .rs-dd-menu .dropdown-item:hover { background-color: rgba(255, 255, 255, .05); }
+body.dark-mode #page-attendance .rs-dd-menu .dropdown-item small, body.dark-mode #page-attendance .rs-dd-h { color: #94a3b8; }
+body.dark-mode #page-attendance .rs-search i { color: #94a3b8; }
+body.dark-mode #page-attendance .rs-table th, body.dark-mode #page-attendance .rs-table td { border-color: rgba(255, 255, 255, .05); }
+body.dark-mode #page-attendance .rs-table thead th { background: rgba(0, 0, 0, .3); color: #cbd5e1; }
+body.dark-mode #page-attendance .rs-table th.rs-day span, body.dark-mode #page-attendance .rs-emp span, body.dark-mode #page-attendance .rs-hint, body.dark-mode #page-attendance .rs-count, body.dark-mode #page-attendance td.rs-empty { color: #94a3b8; }
+body.dark-mode #page-attendance td.rs-empty.rs-err { color: #fca5a5; }
+body.dark-mode #page-attendance .rs-table th.rs-today { background: rgba(37, 99, 168, .2); border-bottom-color: #60a5fa; }
+body.dark-mode #page-attendance .rs-table th.rs-today span { color: #93c5fd; }
+body.dark-mode #page-attendance .rs-table th.rs-day em { background: #2563a8; }
+body.dark-mode #page-attendance .rs-table th.rs-day em.rs-hol-tag { background: rgba(16, 185, 129, .12); border-color: rgba(16, 185, 129, .35); color: #6ee7b7; }
+body.dark-mode #page-attendance .rs-sort:hover { color: #e2e8f0; background: rgba(255, 255, 255, .06); }
+body.dark-mode #page-attendance .rs-sort i, body.dark-mode #page-attendance .rs-sorts .rs-dot { color: #475569; }
+body.dark-mode #page-attendance .rs-sort.rs-on, body.dark-mode #page-attendance .rs-sort.rs-on i { color: #93c5fd; }
+body.dark-mode #page-attendance .rs-num { border-color: rgba(255, 255, 255, .15); color: #94a3b8; }
+body.dark-mode #page-attendance .rs-num:hover { border-color: #93c5fd; color: #93c5fd; }
+body.dark-mode #page-attendance .rs-num.rs-on { background: #2563a8; border-color: #2563a8; color: #fff; }
+body.dark-mode #page-attendance .rs-emp b { color: #e2e8f0; }
+body.dark-mode #page-attendance .rs-emp .rs-pin { background: rgba(59, 130, 246, .18); color: #93c5fd; }
+body.dark-mode #page-attendance .rs-table td.rs-emp, body.dark-mode #page-attendance .rs-table th.rs-emp-h { background: #111827; box-shadow: 1px 0 0 rgba(255, 255, 255, .08); }
+body.dark-mode #page-attendance .rs-table tbody tr.rs-row:hover td { background-color: rgba(255, 255, 255, .04); }
+body.dark-mode #page-attendance .rs-table tbody tr.rs-row:hover td.rs-emp { background-color: #172033; }
+body.dark-mode #page-attendance td.rs-cell.rs-today-col { background-color: rgba(37, 99, 168, .1); }
+body.dark-mode #page-attendance td.rs-cell.rs-hol-col { background-color: rgba(16, 185, 129, .06); }
+body.dark-mode #page-attendance .rs-hrs { color: #e2e8f0; }
+body.dark-mode #page-attendance .rs-dash { color: #475569; }
+body.dark-mode #page-attendance td.rs-total b { color: #93c5fd; }
+body.dark-mode #page-attendance .rs-present { background: rgba(59, 130, 246, .14); border-color: rgba(59, 130, 246, .3); color: #e2e8f0; }
+body.dark-mode #page-attendance .rs-off { background: rgba(255, 255, 255, .06); border-color: rgba(255, 255, 255, .1); color: #cbd5e1; }
+body.dark-mode #page-attendance .rs-leave { background: rgba(139, 92, 246, .14); border-color: rgba(139, 92, 246, .35); color: #c4b5fd; }
+body.dark-mode #page-attendance .rs-hol { background: rgba(16, 185, 129, .12); border-color: rgba(16, 185, 129, .35); color: #6ee7b7; }
+body.dark-mode #page-attendance .rs-miss { background: rgba(245, 158, 11, .12); border-color: rgba(245, 158, 11, .35); color: #fcd34d; }
+body.dark-mode #page-attendance .rs-absent { background: rgba(239, 68, 68, .12); border-color: rgba(239, 68, 68, .35); color: #fca5a5; }

@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <!-- Accurate loading screen: must stay the FIRST script on the page. Safe to remove. -->
     <script src="tna_loader.js?v=1"></script>
+    <!-- 2026-11-13 the login session for this page (code repetition review step 1): right after the loader, before the other scripts -->
+    <script src="tna_session.js?v=20261113b"></script>
     <!-- Demo / Setup mode: must load early so every call from this page goes to the demo copy when in demo. AUTO-HEAL: safe to remove. -->
     <script src="tna_demo.js?v=20261020a"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -2823,12 +2825,12 @@
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_team_view" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> Tab: Team View</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="tna_team_view_edit" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> └─ Can Modify Entries</label>
 
-                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_attendance" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> Tab: Actual Attendance</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_attendance" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> Tab: Weekly Timesheet</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="tna_attendance_edit" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> └─ Can Analyze / Hardware Sync</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="tna_attendance_export" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> └─ Can Export Excel</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="tna_attendance_import" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> └─ Can Import Excel</label>
                             
-                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_violations" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> Tab: Auto-Violations</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_violations" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> Tab: Employee Violations</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="tna_violations_edit" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> └─ Can Resolve Violations</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="tna_violations_export" class="perm-chk-tna accent-green-500 mr-2 w-3.5 h-3.5"> └─ Can Export Data</label>
                             
@@ -3185,12 +3187,12 @@
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_team_view" class="operm-chk operm-chk-tna accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Team View</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="tna_team_view_edit" class="operm-chk operm-chk-tna accent-orange-500 mr-2 w-3.5 h-3.5"> └─ Can Modify Entries</label>
 
-                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_attendance" class="operm-chk operm-chk-tna accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Actual Attendance</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_attendance" class="operm-chk operm-chk-tna accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Weekly Timesheet</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="tna_attendance_edit" class="operm-chk operm-chk-tna accent-orange-500 mr-2 w-3.5 h-3.5"> └─ Can Analyze / Hardware Sync</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="tna_attendance_export" class="operm-chk operm-chk-tna accent-orange-500 mr-2 w-3.5 h-3.5"> └─ Can Export Excel</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="tna_attendance_import" class="operm-chk operm-chk-tna accent-orange-500 mr-2 w-3.5 h-3.5"> └─ Can Import Excel</label>
                             
-                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_violations" class="operm-chk operm-chk-tna accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Auto-Violations</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="tna_violations" class="operm-chk operm-chk-tna accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Employee Violations</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="tna_violations_edit" class="operm-chk operm-chk-tna accent-orange-500 mr-2 w-3.5 h-3.5"> └─ Can Resolve Violations</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="tna_violations_export" class="operm-chk operm-chk-tna accent-orange-500 mr-2 w-3.5 h-3.5"> └─ Can Export Data</label>
                             
@@ -3998,7 +4000,7 @@
   <script>window.TNA_POPUP_NAVY = true;</script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="contractors_modern_popups.js?v=20261020a"></script>
-  <script src="settings.js?v=20261110a"></script>
+  <script src="settings.js?v=20261115a"></script>
     <!-- ⚡ 2026-10-20 Hardware > Facial AI Licenses: "Data Tools" - license tracker wizard (Excel only, nothing saved). AUTO-HEAL: safe to remove. -->
     <script src="facial_license_tracker.js?v=20261020a"></script>
     <!-- ⚡ 2026-10-20 Hardware, Mobile Errors, Audit Trail, Mobile Transactions in the theme (tables, navy pills, theme buttons). Look only. AUTO-HEAL: safe to remove. -->
@@ -4023,11 +4025,11 @@
   <script src="ua_qr_bulk.js?v=20261009d"></script>
   <script src="hw_queue.js?v=20261020a"></script>
   <!-- Compare clocks with CVS (Connectivity > ZKTeco API). AUTO-HEAL: safe to remove. -->
-  <script src="cvs_range_sync.js?v=20261021a"></script>
+  <script src="cvs_range_sync.js?v=20261115a"></script>
   <script>
       (function () {
           var box = document.getElementById('cvsRangeSyncSettings');
-          if (box && window.CvsRangeSync) window.CvsRangeSync.mount(box, { source: 'Settings', mappingUrl: '/tna_dashboard.html#cvs-mapping' });
+          if (box && window.CvsRangeSync) window.CvsRangeSync.mount(box, { source: 'Settings' });
       })();
   </script>
    <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->

@@ -55,12 +55,12 @@
     },
     {
       "id": "defaults",
-      "title": "Department defaults",
+      "title": "Department work patterns",
       "section": "settings",
       "needs": [
         "shifts"
       ],
-      "why": "Each department's default shift, payroll period and geofences, so new people start on the right ones.",
+      "why": "Each department's default shift and working days (plus payroll cycle and geofences), so new people start on the right ones.",
       "confirm": true,
       "confirmLabel": "Departments are set"
     },
@@ -117,7 +117,7 @@
         "shifts",
         "roster"
       ],
-      "why": "Prove it works, all in demo:<ol style=\"margin:6px 0 0 16px;padding:0;\"><li><b>Settings › Bulk Analyzer</b>: recalculate last week for one department.</li><li><b>Actual Attendance</b>: check the worked hours and overtime.</li><li><b>OT Validations</b> and <b>Auto-Violations</b>: approve or dismiss something.</li><li><b>Team View › Visual</b>: move a clock time, save, and approve the day.</li><li><b>Reports</b>: run a weekly attendance summary.</li></ol>Attendance and approvals are never pushed to live.",
+      "why": "Prove it works, all in demo:<ol style=\"margin:6px 0 0 16px;padding:0;\"><li><b>Settings › Bulk Analyzer</b>: recalculate last week for one department.</li><li><b>Weekly Timesheet</b>: check the worked hours and overtime.</li><li><b>OT Validations</b> and <b>Auto-Violations</b>: approve or dismiss something.</li><li><b>Team View › Visual</b>: move a clock time, save, and approve the day.</li><li><b>Reports</b>: run a weekly attendance summary.</li></ol>Attendance and approvals are never pushed to live.",
       "confirm": true,
       "confirmLabel": "It all worked"
     }

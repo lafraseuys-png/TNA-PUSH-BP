@@ -3,13 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "bin": {
-    "main-server": "./server.js",
-    "tna-server": "./tna_server.js",
-    "asset-server": "./asset_server.js",
-    "hr-server": "./hr_server.js",
-    "android-server": "./andriod_server.js",
-    "sync-server": "./sync_server.js",
-    "zk-server": "./zk_server.js"
+    "main-server": "./server.js"
   },
   "scripts": {
     "start": "node server.js",

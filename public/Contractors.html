@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <!-- Accurate loading screen: must stay the FIRST script on the page. Safe to remove. -->
     <script src="tna_loader.js?v=1"></script>
+    <!-- 2026-11-13 the login session for this page (code repetition review step 1): right after the loader, before the other scripts -->
+    <script src="tna_session.js?v=20261113b"></script>
     <!-- Demo / Setup mode: must load early so every call from this page goes to the demo copy when in demo. AUTO-HEAL: safe to remove. -->
     <script src="tna_demo.js?v=20261020a"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -5208,7 +5210,7 @@
         <!-- ⚡ Modern pop-ups (the Employee Master look): SweetAlert2 + alert / tnaAsk / tnaAskText. AUTO-HEAL: if the CDN cannot load, the browser's own pop-ups. -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="contractors_modern_popups.js?v=20261020a"></script>
-        <script src="contractors.js?v=20261110a"></script>
+        <script src="contractors.js?v=20261115e"></script>
         <script src="stock_item_rule.js?v=20261102d"></script>
         <script src="report_unsubs.js?v=20261031a"></script>
         <!-- ⚡ 2026-10-18 Farmers Master: the import wizard (Data Tools > Import Excel Data). AUTO-HEAL: safe to remove - the old Import screen opens. -->
@@ -5227,10 +5229,10 @@
         <script src="tna_date_range.js"></script>
        <!-- Settings screen: left menu, one section at a time, (i) help, Seasons pop-up. Safe to remove. -->
          <script src="contractors_settings_ui.js?v=20261102c"></script>
-       <script src="contractors_seasons.js?v=20261005p"></script>
+       <script src="contractors_seasons.js?v=20261115a"></script>
 
         <!-- ⚡ Screens use your own hierarchy level names instead of "Area" (new file). AUTO-HEAL: safe to remove. -->
-        <script src="contractors_level_words.js?v=20261110a"></script>
+        <script src="contractors_level_words.js?v=20261115a"></script>
         <!-- 2026-10-18 "Depot" instead of "Warehouse" on every screen (words only - names, data, exports and the phone stay the same). AUTO-HEAL: safe to remove. -->
         <script src="contractors_depot_words.js?v=20261018a"></script>
         <!-- Sidebar groups (Farmers & Contracts / Distribution / Reports & Messages / Setup). Safe to remove. -->
@@ -5246,14 +5248,14 @@
         <!-- ⚡ Progress moves into its modules: Contracts > Progress and Distribution Master > Progress; Settings > General > rollout target (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_progress_tabs.js?v=20261009a"></script>
         <!-- ⚡ Distribution Master > Progress in the same look as Contracts > Progress (new file). AUTO-HEAL: safe to remove. -->
-        <script src="contractors_dist_progress_ui.js?v=20261003b"></script>
+        <script src="contractors_dist_progress_ui.js?v=20261115c"></script>
         <script src="distribution_product_setup.js?v=20261102d"></script>
-        <script src="contract_bulk_export.js?v=20261102c"></script>
-        <script src="contract_serial_settings.js?v=20261109a"></script>
+        <script src="contract_bulk_export.js?v=20261115a"></script>
+        <script src="contract_serial_settings.js?v=20261115a"></script>
         <!-- ⚡ 2026-11-02 Final Issue Notes: Settings > Contract Fields > Issue Notes (templates + builder). AUTO-HEAL: safe to remove. -->
-        <script src="issue_note_builder.js?v=20261109a"></script>
+        <script src="issue_note_builder.js?v=20261115a"></script>
         <!-- ⚡ 2026-11-02 Contract Templates as cards in Settings > Contract Mapping & Issue Notes (new file). AUTO-HEAL: safe to remove. -->
-        <script src="contract_template_cards.js?v=20261102a"></script>
+        <script src="contract_template_cards.js?v=20261115a"></script>
         <!-- ⚡ 2026-11-02 Map Fields in the Issue Note builder look (new file, the mapper logic stays in contractors.js). AUTO-HEAL: safe to remove - the old look comes back. -->
         <script src="contract_mapper_look.js?v=20261103a"></script>
         <!-- ⚡ 2026-11-03 Map Fields > New PDF: copy the map onto a replica PDF + move the club contracts onto it (new file). AUTO-HEAL: safe to remove. -->
@@ -5304,16 +5306,16 @@
         <!-- ⚡ Reports > Bulk Approvals: every Inbox "Approve selected" run, with the review answer, for audit (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_bulk_approvals_report.js?v=20261002a"></script>
         <!-- ⚡ Reports: one screen - a report dropdown, filters, columns, sort, column search, summary, pages, export (new file). AUTO-HEAL: safe to remove (the old tabs come back). -->
-        <script src="contractors_report_center.js?v=20261111c"></script>
+        <script src="contractors_report_center.js?v=20261115d"></script>
         <!-- ⚡ 2026-11-04 Distribution Master > Final Distributions Approval: upload the client file, compare per farmer, approve final figures (full admins). AUTO-HEAL: safe to remove. -->
-        <script src="contractors_final_dist.js?v=20261111e"></script>
+        <script src="contractors_final_dist.js?v=20261115d"></script>
         <!-- ⚡ 2026-11-06 (user) icon buttons show their name at once on hover, the same dark pop-up as Time & Attendance (remove this line = the browser's own late grey tooltip, as before) -->
         <script src="tna_quick_tips.js?v=20261030c"></script>
         <!-- ⚡ Dashboard: Approved Farmers = farmers with an approved contract + the "Farmers vs Approved" card (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_dash_approval.js?v=20261006a"></script>
         <!-- 2026-11-10 Dashboard in the T&A look: Overview | Map | Approvals (the old dashboard). Switch: Settings > General.
              Server: logic_contractor_dashboard.js. AUTO-HEAL: safe to remove - the old dashboard shows as before. -->
-        <script src="contractors_dashboard_v2.js?v=20261110k"></script>
+        <script src="contractors_dashboard_v2.js?v=20261115a"></script>
         <!-- ⚡ Settings > Contract Rules > Partial distribution (Off / only when the warehouse is short / any time with a reason) -->
         <script src="contractors_partial_distribution.js?v=20261004a"></script>
         <!-- ⚡ Settings > Contract Rules > Inputs summary on the phone (club screen card, value on/off) -->
@@ -5329,7 +5331,7 @@
         <script src="contractors_club_warehouses.js"></script>
         <script src="contractors_farmer_words.js"></script>
         <!-- ⚡ Farmers Master: your columns in your order (right-click a heading) + a filter for every level (new file). AUTO-HEAL: safe to remove. -->
-               <script src="contractors_farmer_columns.js?v=20261105a"></script>
+               <script src="contractors_farmer_columns.js?v=20261115c"></script>
         <!-- ⚡ Locations Master: move the columns into your own order (drag a heading, or right-click it) (new file). AUTO-HEAL: safe to remove. -->
        <script src="contractors_location_columns.js"></script>
         <!-- ⚡ Farmers Master: a column per running cycle - does he get inputs, and what was issued (new file). AUTO-HEAL: safe to remove. -->
@@ -5357,7 +5359,7 @@
         <script src="contractors_manager_bulk.js?v=20261105i"></script>
         <script src="contractors_location_setup.js?v=20261105c"></script>
         <!-- ⚡ 2026-10-18 Farmer Profile Overview: header, tabs, season timeline, print. AUTO-HEAL: safe to remove - the old overview shows. -->
-        <script src="contractors_profile_overview.js?v=20261105a"></script>
+        <script src="contractors_profile_overview.js?v=20261115a"></script>
         <!-- ⚡ 2026-11-09 Evidence sent in later: Profile > Transactions "Evidence documents" + "Sent in later" in View Evidence. AUTO-HEAL: safe to remove. -->
         <script src="contractors_late_evidence.js?v=20261109a"></script>
         <!-- ⚡ 2026-11-10 "Search ..." labels move inside their search boxes (saves space). AUTO-HEAL: safe to remove - labels show again. -->

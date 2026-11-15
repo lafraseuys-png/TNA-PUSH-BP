@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <!-- Accurate loading screen: must stay the FIRST script on the page. Safe to remove. -->
     <script src="tna_loader.js?v=1"></script>
+    <!-- 2026-11-13 the login session for this page (code repetition review step 1): right after the loader, before the other scripts -->
+    <script src="tna_session.js?v=20261113b"></script>
     <!-- Demo / Setup mode: must load early so every call from this page goes to the demo copy when in demo. AUTO-HEAL: safe to remove. -->
     <!-- 2026-10-31: was included twice - harmless in QC, but the obfuscated production copy throws "already been declared" on the second load -->
     <script src="tna_demo.js?v=20261020a"></script>
@@ -3278,7 +3280,7 @@
             } catch(e) {}
         });
     </script>
-    <script src="ess_master.js?v=20261023b"></script>
+    <script src="ess_master.js?v=20261115a"></script>
     <!-- ESS Master Overview (the first screen). AUTO-HEAL: safe to remove - the old Pending Requests card comes back. -->
     <script src="ess_overview.js?v=20261007a"></script>
     <!-- ⚡ Claims: Register (search, Filters, Columns, Data Tools, detail + receipt, PDF, Mark paid, charts) and Claim Types

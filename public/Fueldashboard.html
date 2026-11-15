@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <!-- Accurate loading screen: must stay the FIRST script on the page. Safe to remove. -->
     <script src="tna_loader.js?v=1"></script>
+    <!-- 2026-11-13 the login session for this page (code repetition review step 1): right after the loader, before the other scripts -->
+    <script src="tna_session.js?v=20261113b"></script>
     <!-- Demo / Setup mode: must load early so every call from this page goes to the demo copy when in demo. AUTO-HEAL: safe to remove. -->
     <script src="tna_demo.js?v=20261020a"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -2007,7 +2009,7 @@
         </div>
     </div>
 
-    <script src="Fueldashboard.js?v=20261031a"></script>
+    <script src="Fueldashboard.js?v=20261113a"></script>
     <script src="report_unsubs.js?v=20261031a"></script>
     <!-- 2026-10-16: Period drop-down (one day / week / month / custom range) on Fuel Logs + Trip Logs, centred columns. AUTO-HEAL: safe to remove (one day as before). -->
     <script src="fuel_log_period.js?v=20261016a"></script>

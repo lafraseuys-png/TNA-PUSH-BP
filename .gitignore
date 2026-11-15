@@ -18,3 +18,6 @@ routes/AlheitApp.zip
 
 # bulk contract export ZIPs (private, built on the server)
 private_exports/
+
+# Personal run notes with tokens / admin logins - never commit (code repetition review step 0, 2026-11-13)
+Node runner.txt

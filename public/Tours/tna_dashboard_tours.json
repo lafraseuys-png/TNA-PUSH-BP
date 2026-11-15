@@ -126,7 +126,7 @@
       "target": [
         "#sidebarNav [onclick*=\"showSection('attendance'\"]"
       ],
-      "title": "Actual Attendance",
+      "title": "Weekly Timesheet",
       "text": "The worked hours per person and day, as calculated from the clockings and the shift.",
       "placement": "right"
     },
@@ -696,20 +696,19 @@
         {
           "id": "tax-payroll",
           "target": [
-            "#lockPeriodSelect"
+            "#payrollCard"
           ],
           "title": "Payroll periods",
-          "text": "The same payroll periods as <b>Employee Master › Payroll Periods</b>, where you can also assign them to departments and people.",
-          "placement": "top",
-          "climb": 2
+          "text": "Your cycles on the left; the chosen cycle's periods on the right, each with its own <b>Lock</b> button. A lock only covers people whose department or profile is on that cycle. Same periods as <b>Employee Master › Payroll Periods</b>.",
+          "placement": "top"
         },
         {
           "id": "tax-defaults",
           "target": [
             "#deptDefaultsBody"
           ],
-          "title": "Department defaults",
-          "text": "The default shift, payroll period and geofences per department. Tick departments and apply them in bulk.",
+          "title": "Department work patterns",
+          "text": "Each department's default shift and working days: the Weekly Roster's <b>Auto</b> days. Payroll cycle and geofences are in each row's … menu. Tick departments to change many at once, then click <b>Save changes</b> at the top.",
           "placement": "top"
         },
         {

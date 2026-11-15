@@ -271,7 +271,7 @@
     "A day with a missing clocking, undecided overtime or unsaved changes cannot be approved.",
     "In Visual, saving an overtime decision also approves the day (the button then reads Save & approve).",
     "To change an approved day, click Approved on the row to unlock it first. For several ticked rows, click Unlock.",
-    "Normal recalculations leave approved days alone. Only Force Overwrite All (on Auto-Violations) resets approvals.",
+    "Normal recalculations leave approved days alone. Only Recalculate & reset (on Employee Violations) or Force Overwrite All (in the Bulk Analyzer) resets approvals.",
     "[[settings-payroll|Payroll Locked]] is different: the whole payroll period is locked, and only unlocking the period opens those days again."
    ]
   },
@@ -287,7 +287,7 @@
     "Click Filter. Use Export Excel to download the list."
    ],
    "tips": [
-    "On Actual Attendance you can also click an employee’s row to see their exact clockings for that week."
+    "On Weekly Timesheet you can also click an employee’s row to see their exact clockings for that week."
    ],
    "kw": "clockings punches log"
   },
@@ -300,7 +300,7 @@
    "steps": [
     "Open [[see-punches|Time Logs]] and click Sync Recent (or Sync Last 30 Days for a longer period).",
     "Where ZKTeco CVS is used, click Compare with CVS to check a date range against CVS and pull in clockings that are missing.",
-    "On Actual Attendance, use Pull Device Clocks or Pull CVS Clocks for the week, then click Run Analyzer to [[recalc|recalculate]] the week."
+    "On Weekly Timesheet, use Pull Device Clocks or Pull CVS Clocks for the week, then click Run Analyzer to [[recalc|recalculate]] the week."
    ],
    "tips": [
     "If the clocking never reached any device, capture the correct time in Team View instead (see How do I fix a missed or wrong clock-in or clock-out?)."
@@ -314,7 +314,7 @@
    "q": "Why was a clocking from the mobile app ignored?",
    "a": "It was probably made outside the person’s [[settings-geofence|approved location]] (geofence).",
    "steps": [
-    "Open Team View (Traditional) for that day and click Punches on the person’s row. (Or open Actual Attendance and click their row.) The ignored clocking is crossed out.",
+    "Open Team View (Traditional) for that day and click Punches on the person’s row. (Or open Weekly Timesheet and click their row.) The ignored clocking is crossed out.",
     "If it should count, untick Ignore next to it and click Save & Recalculate.",
     "Then [[approve-day|approve the day]]."
    ],
@@ -391,15 +391,16 @@
    "k": "violations",
    "t": "Time & Attendance",
    "s": "Clocking",
-   "q": "What is Auto-Violations?",
-   "a": "Auto-Violations lists days that break a rule, such as a missing clocking, arriving late, leaving early, being absent, overtime past the shift’s threshold that is not approved (Unauthorized OT), a break or lunch taken too long, work on a rest day, or a clocking outside the approved location.",
+   "q": "What is Employee Violations (was Auto-Violations)?",
+   "a": "Employee Violations lists days that break a rule, such as a missing clocking, arriving late, leaving early, being absent, overtime past the shift’s threshold that is not approved (Unauthorized OT), a break or lunch taken too long, work on a rest day, or a clocking outside the approved location.",
    "steps": [
-    "Open Auto-Violations.",
-    "Choose the dates and department and click Analyze.",
+    "Open Employee Violations.",
+    "Choose the dates and department and click Show.",
     "Act on each row, or tick several and use Bulk Action. Use Export to download the list."
    ],
    "tips": [
-    "Unauthorized OT means time past the shift’s [[thresholds|threshold]] that still needs approval. The weekly and daily limits in [[ot-rules|Overtime Rules]] are not checked yet."
+    "Unauthorized OT means time past the shift’s [[thresholds|threshold]] that still needs approval. The weekly and daily limits in [[ot-rules|Overtime Rules]] are not checked yet.",
+    "Show only lists what is already worked out. Recalculate runs the shift rules again for the dates and department picked and keeps approved days; Recalculate & reset does the same but wipes HR resolutions and overtime approvals."
    ],
    "kw": "violation"
   },
@@ -500,7 +501,7 @@
    "steps": [],
    "tips": [
     "Saturday hours are overtime can be switched on so every Saturday hour is overtime (on by default). Sunday hours are paid at the Sunday rate (2.0 by default). Both are in [[ot-rules|Overtime Rules]] › Weekends.",
-    "For work on a public holiday, choose under Time & Attendance Settings › [[add-holiday|Public Holidays & Leave]] › Public holiday, worked: Public holiday column only, Normal time and public holiday column, or Double hours in the public holiday column.",
+    "For work on a public holiday, choose under Time & Attendance Settings › [[add-holiday|Public Holidays]] › Public holiday, worked: Public holiday column only, Normal time and public holiday column, or Double hours in the public holiday column.",
     "Work on a rest day is treated as overtime and needs approval."
    ]
   },
@@ -530,7 +531,7 @@
    "a": "Nobody is flagged for going over an overtime limit yet. The weekly and daily limits in [[ot-rules|Overtime Rules]] are saved but not used in calculations. A day marked Unauthorized OT means time past the shift’s [[thresholds|threshold]] that has not been approved yet.",
    "steps": [],
    "tips": [
-    "The day appears in [[violations|Auto-Violations]] and in Team View so a manager can approve or decline the overtime.",
+    "The day appears in [[violations|Employee Violations]] and in Team View so a manager can approve or decline the overtime.",
     "To approve it, see [[ot-approve|How do I approve or decline overtime?]]"
    ]
   },
@@ -613,7 +614,7 @@
    "steps": [],
    "tips": [
     "Saturday: normal time or the overtime rate (1.5×). Sunday: normal time or the Sunday rate (2.0×). Public holiday: normal time or the public holiday rate.",
-    "Set under Time & Attendance Settings › [[add-holiday|Public Holidays & Leave]] › Paid leave on a weekend or public holiday."
+    "Set under Time & Attendance Settings › [[leave-types|Leave]] › Paid leave on a weekend or public holiday."
    ]
   },
   {
@@ -624,7 +625,7 @@
    "a": "A public holiday is a day off for everyone, unless they have a shift that day.",
    "steps": [],
    "tips": [
-    "If someone is rostered on a public holiday but does not clock in, your company chooses whether they are paid their normal shift hours or nothing (Settings › [[add-holiday|Public Holidays & Leave]]).",
+    "If someone is rostered on a public holiday but does not clock in, your company chooses whether they are paid their normal shift hours or nothing (Settings › [[add-holiday|Public Holidays]]).",
     "Tick Also pay normal time if worked on a holiday to pay normal time as well when someone does work it."
    ]
   },
@@ -633,9 +634,9 @@
    "t": "Time & Attendance",
    "s": "Leave",
    "q": "How do I add a public holiday?",
-   "a": "Add it under Time & Attendance Settings › Public Holidays & Leave.",
+   "a": "Add it under Time & Attendance Settings › Public Holidays.",
    "steps": [
-    "Open Time & Attendance Settings (the gear) and choose Public Holidays & Leave.",
+    "Open Time & Attendance Settings (the gear) and choose Public Holidays.",
     "Enter the date and name.",
     "Tick Also pay normal time if worked if that applies, then click Add holiday."
    ],
@@ -649,11 +650,12 @@
    "t": "Time & Attendance",
    "s": "Leave",
    "q": "Where are leave types set up?",
-   "a": "Under Time & Attendance Settings › [[add-holiday|Public Holidays & Leave]] › Leave types.",
+   "a": "Under Time & Attendance Settings › Leave › Leave types.",
    "steps": [],
    "tips": [
     "This is the same list as ESS Master › Leave Types, where you also set when proof is needed.",
-    "How much leave people get is set in ESS Master’s Leave Policies."
+    "How much leave people get is set in ESS Master’s Leave Policies.",
+    "A From Sage tag (for example From Sage · ANN) shows the Sage leave code the type is linked to. Leave and balances pulled from Sage with that code land on that type."
    ]
   },
   {
@@ -930,7 +932,7 @@
    "tips": [
     "The system works out every day’s hours automatically each night. Recalculating does the same thing straight away, for the days you choose.",
     "It happens on its own when you save changes in Team View, or click Save & Recalculate on the Weekly Roster (past days you changed).",
-    "Run it yourself when clockings arrive late or a rule changes: Run Analyzer on Actual Attendance for the week on screen, or the [[settings-bulk|Bulk Analyzer]] for up to 35 days.",
+    "Run it yourself when clockings arrive late or a rule changes: Run Analyzer on Weekly Timesheet for the week on screen, or the [[settings-bulk|Bulk Analyzer]] for up to 35 days.",
     "After you edit a shift, or a setting that changes how hours are worked out, a pop-up offers to recalculate only the people and days it affects. Nothing runs unless you click Recalculate. The pop-up can be switched off under Settings › Hours & Calculation › Recalculation › Ask to recalculate after a change.",
     "Approved and [[settings-payroll|payroll-locked]] days stay as they are. Only [[settings-bulk|Force Overwrite All]] in the Bulk Analyzer, or Also redo approved days in the pop-up, redoes approved days, and it sends their approvals back.",
     "Which [[manager-inbox|Manager Inbox]] items go back to waiting after a recalculation depends on the [[settings-reapprove|After hours are recalculated]] setting.",
@@ -946,7 +948,7 @@
    "a": "Behind the gear at the bottom of the Time & Attendance menu.",
    "steps": [],
    "tips": [
-    "They are grouped as Hours & overtime (Hours & Calculation, [[ot-rules|Overtime Rules]], [[ot-preapproved|Pre-approved Overtime]]), Holidays & leave (Public Holidays & Leave), Organisation (Departments, Geofencing, Payroll Periods), and Integrations & tools (CVS Employee Mapping, [[settings-bulk|Bulk Analyzer]]).",
+    "They are grouped as Hours & overtime (Hours & Calculation, [[ot-rules|Overtime Rules]], [[ot-preapproved|Pre-approved Overtime]]), Holidays & leave (Public Holidays, Leave), Organisation (Departments, Geofencing, Payroll Periods), and Integrations & tools ([[settings-bulk|Bulk Analyzer]]).",
     "Overtime Rules only shows if you have access to it.",
     "Use Search settings at the top of the side panel to find a setting by name."
    ]
@@ -977,9 +979,9 @@
    "a": "Under Settings › Departments.",
    "steps": [
     "Open Time & Attendance Settings and choose Departments.",
-    "Tick the departments.",
-    "Under Bulk Assign, choose the shift, payroll cycle, [[settings-geofence|geofences]] and working days (M to S).",
-    "Click Apply to Selected."
+    "Pick the department’s default shift and click its working days (M to S). Payroll cycle and [[settings-geofence|geofences]] are in the row’s … menu.",
+    "For many departments at once, tick them and use the bar that comes up at the top. Only what you pick there changes.",
+    "Click Save changes in the bar at the top."
    ],
    "tips": [
     "Staff without their own default shift follow their department’s shift and working days."
@@ -993,12 +995,12 @@
    "a": "Under Settings › Payroll Periods.",
    "steps": [
     "Open Time & Attendance Settings and choose Payroll Periods.",
-    "Click Add Period Type and define the cycle: monthly, weekly or fortnightly, on a fixed date or a relative day such as the last Friday.",
-    "Click Save Cycle Rule.",
-    "To lock a period, choose the cycle rule and the date range, then click Lock Period."
+    "Click New cycle, give it a name and choose how often: monthly (from a start day, or ending on the last weekday of the month), weekly or every 2 weeks. The pop-up shows the periods it will make. Click Save cycle.",
+    "Click a cycle on the left. Its periods are listed on the right; click Lock on a period, then Lock period."
    ],
    "tips": [
-    "Locked days show as Payroll Locked in Team View and cannot be changed until the period is unlocked.",
+    "A lock only covers people on that cycle: their department’s cycle ([[settings-dept|Departments]], the … menu on its row) or their own in Employee Master. The screen says how many people are on no cycle.",
+    "Locked days show as Payroll Locked in Team View, and recalculation (nightly, Recalculate, Bulk Analyzer) leaves them as they are. Click Unlock on the period to open them again.",
     "These are the same payroll periods as Employee Master › Payroll Periods."
    ],
    "kw": "lock locked"
@@ -1125,7 +1127,7 @@
    "t": "Time & Attendance",
    "s": "Reports",
    "q": "How do I export raw clockings?",
-   "a": "Use Export Excel on [[see-punches|Time Logs]], or Export Raw on Actual Attendance.",
+   "a": "Use Export Excel on [[see-punches|Time Logs]], or Export Raw on Weekly Timesheet.",
    "steps": [],
    "tips": [
     "[[see-punches|Time Logs]] exports every clocking with its device and who captured it, for the dates and department you filtered."

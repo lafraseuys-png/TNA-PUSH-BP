@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <!-- Accurate loading screen: must stay the FIRST script on the page. Safe to remove. -->
     <script src="tna_loader.js?v=1"></script>
+    <!-- 2026-11-13 the login session for this page (code repetition review step 1): right after the loader, before the other scripts -->
+    <script src="tna_session.js?v=20261113b"></script>
     <!-- Demo / Setup mode: must load early so every call from this page goes to the demo copy when in demo. AUTO-HEAL: safe to remove. -->
     <script src="tna_demo.js?v=20261020a"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -146,6 +148,21 @@
                 '</style>');
         }
     </script>
+    <!-- 2026-11-13 Attendance Reports card (was injected by tna_reports_layout.js) -->
+    <!-- the pop-up font (Nunito), as the Settings pop-up; offline: Segoe UI / system font -->
+    <link id="tspFont" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="/css/tna_reports.css?v=20261113b">
+    <!-- 2026-11-14 the Dashboard (was injected by tna_dashboard_v2.js) -->
+    <link rel="stylesheet" href="/css/tna_dashboard_v2.css?v=20261115c">
+    <!-- 2026-11-14 Team View: date range boxes, view switch, Visual + Overview tabs (were injected by their scripts) -->
+    <link rel="stylesheet" href="/css/tna_team_view.css?v=20261115b">
+    <!-- 2026-11-15 Weekly Timesheet (#page-attendance) in the Weekly Roster look -->
+    <link rel="stylesheet" href="/css/tna_attendance.css?v=20261115c">
+    <!-- 2026-11-15 Employee Violations (#page-violations) + its Resolve pop-up in the T&A look -->
+    <link rel="stylesheet" href="/css/tna_violations.css?v=20261115d">
+    <!-- 2026-11-15 Settings > Departments work patterns (+ the Weekly Roster "Auto" source line) -->
+    <link rel="stylesheet" href="/css/tna_departments.css?v=20261115b">
+    <link rel="stylesheet" href="/css/tna_payroll_periods.css?v=20261115a">
 </head>
 <body class="font-sans flex h-screen overflow-hidden">
     <script>
@@ -186,8 +203,10 @@
                  so showSection, tab permissions, granular permissions and deep links all work unchanged. -->
             <ul class="sidebar-menu" id="sidebarNav" style="flex-grow: 1; overflow-y: auto; margin-top: 10px;">
                 <!-- 2026-10-27 Global Master Data removed from the Time & Attendance menu (its #page-core-master section stays, unused) -->
-                <li><a data-permission="tna_dashboard" onclick="showSection('high-level', this)" class="sidebar-item" title="High Level Overview"><i class="fas fa-globe-africa"></i> <span>High Level Overview</span></a></li>
-                <li><a data-permission="tna_maps" onclick="showSection('maps', this)" class="sidebar-item" title="Maps"><i class="fas fa-map-marked-alt"></i> <span>Maps</span></a></li>
+                <!-- 2026-11-14 (legacy clean-up, Dashboard part 2): High Level Overview and Maps are the dashboard's Overview and Map tabs.
+                     These two entries stay hidden so the search, deep links and menu groups still find them (showSection opens the tab). -->
+                <li style="display: none;"><a data-permission="tna_dashboard" onclick="showSection('high-level', this)" class="sidebar-item" title="High Level Overview"><i class="fas fa-globe-africa"></i> <span>High Level Overview</span></a></li>
+                <li style="display: none;"><a data-permission="tna_maps" onclick="showSection('maps', this)" class="sidebar-item" title="Maps"><i class="fas fa-map-marked-alt"></i> <span>Maps</span></a></li>
                 <li><a data-permission="tna_dashboard" onclick="showSection('dashboard', this)" class="sidebar-item active" title="Dashboard"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
                 <li><a data-permission="tna_shifts" onclick="showSection('shifts', this)" class="sidebar-item" title="Shift Rules"><i class="fas fa-calendar-alt"></i> <span>Shift Rules</span></a></li>
                 <!-- ⚡ 2026-10-13 Shift Setup Wizard (public/js/tna_shift_wizard.js). Same permission as Shift Rules. -->
@@ -195,8 +214,8 @@
                 <li><a data-permission="tna_roster" onclick="showSection('roster', this)" class="sidebar-item" title="Weekly Roster"><i class="fas fa-clipboard-list"></i> <span>Weekly Roster</span></a></li>
                 <li><a data-permission="tna_inbox" onclick="showSection('workflow', this)" class="sidebar-item" title="Manager Inbox"><i class="fas fa-inbox"></i> <span>Manager Inbox</span></a></li>
                 <li><a data-permission="tna_team_view" onclick="showSection('team-view', this)" class="sidebar-item" title="Team View"><i class="fas fa-users-cog"></i> <span>Team View</span></a></li>
-                <li><a data-permission="tna_attendance" onclick="showSection('attendance', this)" class="sidebar-item" title="Actual Attendance"><i class="fas fa-user-check"></i> <span>Actual Attendance</span></a></li>
-                <li><a data-permission="tna_violations" onclick="showSection('violations', this)" class="sidebar-item" title="Auto-Violations"><i class="fas fa-exclamation-triangle"></i> <span>Auto-Violations</span></a></li>
+                <li><a data-permission="tna_attendance" onclick="showSection('attendance', this)" class="sidebar-item" title="Weekly Timesheet"><i class="fas fa-user-check"></i> <span>Weekly Timesheet</span></a></li>
+                <li><a data-permission="tna_violations" onclick="showSection('violations', this)" class="sidebar-item" title="Employee Violations"><i class="fas fa-exclamation-triangle"></i> <span>Employee Violations</span></a></li>
                 <li><a data-permission="tna_overtime" onclick="showSection('ot-validations', this)" class="sidebar-item" title="OT Validations"><i class="fas fa-stopwatch"></i> <span>OT Validations</span></a></li>
                 <li><a data-permission="tna_logs" onclick="showSection('timelogs', this)" class="sidebar-item" title="Time Logs"><i class="fas fa-history"></i> <span>Time Logs</span></a></li>
                 <li><a data-permission="tna_reports" onclick="showSection('reports', this)" class="sidebar-item" title="Attendance Reports"><i class="fas fa-chart-pie"></i> <span>Attendance Reports</span></a></li>
@@ -238,10 +257,6 @@
             <div class="tna-title-wrap"><h2 id="sectionTitle" class="page-title">Dashboard</h2></div>
             
           <div class="flex items-center gap-4 ml-auto w-full md:w-auto">
-                <div id="dashboardToggleContainer" data-permission="tna_dashboard_hr" class="flex bg-gray-900 rounded border border-gray-600 overflow-hidden shadow-inner flex-shrink-0">
-                    <button id="btnViewHR" onclick="toggleViewMode('HR')" class="px-4 py-1.5 text-xs font-bold text-gray-400 hover:text-white transition-colors duration-200">HR View</button>
-                    <button id="btnViewManager" onclick="toggleViewMode('Manager')" class="px-4 py-1.5 text-xs font-bold bg-indigo-600 text-white transition-colors duration-200">Manager View</button>
-                </div>
                 
                  <!-- Refresh Data button removed: the browser refresh reloads everything (refreshData() still runs on page load) -->
             </div>
@@ -249,368 +264,105 @@
 
        <div class="tna-scroll flex-1 min-h-0 overflow-y-auto overflow-x-hidden pb-40 relative w-full h-full">
 
-            <section id="page-high-level" class="page-section">
-                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-emerald-500 w-full mb-6">
-                    <div class="flex justify-between items-center border-b border-gray-700 pb-2 mb-4">
-                        <h3 class="font-bold text-gray-300"><i class="fas fa-globe-africa mr-2"></i>High Level Executive Overview</h3>
-                    </div>
-                    <div class="flex flex-wrap items-end gap-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
-                        <div>
-                            <label class="block text-[10px] text-purple-400 mb-1 uppercase tracking-wider font-bold">Payroll Cycle</label>
-                            <select id="hloPayrollCycle" onchange="populateHloCycleRanges()" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-purple-500 w-32">
-                                <option value="">-- Custom --</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] text-purple-400 mb-1 uppercase tracking-wider font-bold">Cycle Range</label>
-                            <select id="hloCycleRange" onchange="applyHloCycleRange()" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-purple-500 w-40">
-                                <option value="">-- N/A --</option>
-                            </select>
-                        </div>
-                        <div class="hidden md:block border-l border-gray-700 h-8 mx-1"></div>
-                        <div>
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Start Date</label>
-                            <input type="date" id="hloStartDate" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">End Date</label>
-                            <input type="date" id="hloEndDate" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Department</label>
-                            <select id="hloDeptFilter" onchange="if(typeof filterHighLevelOverview === 'function') filterHighLevelOverview()" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 w-40">
-                                <option value="">-- Select Department --</option>
-                            </select>
-                        </div>
-                        <div class="flex-1 min-w-[200px]">
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Search Employee</label>
-                            <input type="text" id="hloSearch" oninput="if(typeof filterHighLevelOverview === 'function') filterHighLevelOverview()" placeholder="Search Name or PIN..." class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
-                        </div>
-                        <button onclick="loadHighLevelOverview()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow h-8 flex items-center">
-                            <i class="fas fa-sync-alt mr-2"></i> Load Data
-                        </button>
-                    </div>
-
-                    <div class="overflow-x-auto bg-gray-900 border border-gray-700 rounded max-h-[600px] overflow-y-auto">
-                        <table class="w-full text-left text-xs border-collapse whitespace-nowrap">
-                            <thead class="bg-gray-800 text-gray-400 uppercase font-bold sticky top-0 shadow-sm border-b border-gray-700 z-10 select-none">
-                                <tr>
-                                    <th class="p-2 border-r border-gray-700 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('pin')">Display PIN <span id="sortIconHlo-pin" class="ml-1 text-emerald-400 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
-                                    <th class="p-2 border-r border-gray-700 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('name')">Name <span id="sortIconHlo-name" class="ml-1 text-emerald-400 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
-                                    <th class="p-2 border-r border-gray-700 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('surname')">Surname <span id="sortIconHlo-surname" class="ml-1 text-emerald-400 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
-                                    <th class="p-2 border-r border-gray-700 text-center text-blue-300 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('nt')">NT <span id="sortIconHlo-nt" class="ml-1 text-blue-200 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
-                                    <th class="p-2 border-r border-gray-700 text-center text-yellow-400 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('otw')">OT.W <span id="sortIconHlo-otw" class="ml-1 text-yellow-200 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
-                                    <th class="p-2 border-r border-gray-700 text-center text-orange-400 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('ot15')">1.5 <span id="sortIconHlo-ot15" class="ml-1 text-orange-200 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
-                                    <th class="p-2 border-r border-gray-700 text-center text-orange-500 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('ot20')">2.0 <span id="sortIconHlo-ot20" class="ml-1 text-orange-300 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
-                                    <th class="p-2 border-r border-gray-700 text-center text-green-400 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('pph')">PPH <span id="sortIconHlo-pph" class="ml-1 text-green-200 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
-                                    <th class="p-2 border-r border-gray-700 text-center cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('work')">Work <span id="sortIconHlo-work" class="ml-1 text-emerald-400 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
-                                    <th class="p-2 border-r border-gray-700 text-center text-red-400 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('abs')">Abs <span id="sortIconHlo-abs" class="ml-1 text-red-200 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
-                                    <th class="p-2 border-r border-gray-700 text-center text-purple-400 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('adj')">ADJ Time <span id="sortIconHlo-adj" class="ml-1 text-purple-200 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
-                                    <th class="p-2 border-r border-gray-700 text-center text-indigo-400 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('nsAllow')">NS Allow <span id="sortIconHlo-nsAllow" class="ml-1 text-indigo-200 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
-                                    <th class="p-2 text-center text-emerald-400 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('stdbyAllow')">Stdby Allow <span id="sortIconHlo-stdbyAllow" class="ml-1 text-emerald-200 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
-                                </tr>
-                            </thead>
-                            <tbody id="hloTableBody" class="divide-y divide-gray-800 text-gray-300">
-                                <tr><td colspan="12" class="p-4 text-center text-gray-500">Select parameters and click Load Data.</td></tr>
-                            </tbody>
-                            <tfoot id="hloTableFoot" class="bg-gray-800 text-white font-bold sticky bottom-0 border-t border-gray-600 shadow-[0_-4px_6px_rgba(0,0,0,0.3)] z-10">
-                            </tfoot>
-                        </table>
-                    </div>
-
-                    <div class="flex justify-between items-center mt-4 bg-gray-900 p-3 rounded border border-gray-700 shadow-inner">
-                        <div class="flex items-center gap-3">
-                            <span id="hloPageInfo" class="text-xs text-gray-400 font-bold tracking-widest uppercase">Showing 0 of 0</span>
-                            <select id="hloRowsPerPage" onchange="changeHloRowsPerPage()" class="bg-gray-800 border border-gray-600 rounded px-2 py-1 text-xs text-white focus:outline-none focus:border-emerald-500">
-                                <option value="10">10 Rows</option>
-                                <option value="20" selected>20 Rows</option>
-                                <option value="50">50 Rows</option>
-                                <option value="100">100 Rows</option>
-                                <option value="all">View All</option>
-                            </select>
-                        </div>
-                        <div class="flex space-x-2">
-                            <button id="hloBtnPrev" onclick="changeHloPage(-1)" class="bg-gray-800 hover:bg-gray-700 text-emerald-400 px-4 py-1.5 rounded text-xs font-bold border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow"><i class="fas fa-chevron-left mr-1"></i> Prev</button>
-                            <button id="hloBtnNext" onclick="changeHloPage(1)" class="bg-gray-800 hover:bg-gray-700 text-emerald-400 px-4 py-1.5 rounded text-xs font-bold border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow">Next <i class="fas fa-chevron-right ml-1"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- NEW MAPS SECTION -->
-            <section id="page-maps" class="page-section">
-                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-indigo-500 w-full mb-6 flex flex-col h-full min-h-[800px]">
-                    <div class="flex justify-between items-center border-b border-gray-700 pb-2 mb-4 flex-shrink-0">
-                        <h3 class="font-bold text-gray-300"><i class="fas fa-map-marked-alt mr-2"></i>Geographical Punch Mapping</h3>
-                        <button onclick="saveMapDefaultLocation()" class="bg-gray-700 hover:bg-gray-600 text-indigo-400 px-3 py-1.5 rounded text-[10px] font-bold transition shadow border border-gray-600">
-                            <i class="fas fa-save mr-1"></i> Save Default View
-                        </button>
-                    </div>
-                    
-                    <div class="flex flex-wrap items-end gap-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700 flex-shrink-0">
-                        <div>
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Start Date</label>
-                            <input type="date" id="mapStartDate" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-indigo-500 w-36">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">End Date</label>
-                            <input type="date" id="mapEndDate" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-indigo-500 w-36">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Department</label>
-                            <select id="mapDeptFilter" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-indigo-500 w-48">
-                                <option value="">-- Select Department --</option>
-                            </select>
-                        </div>
-                        <div class="flex-1 min-w-[200px]">
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Search Employee</label>
-                            <input type="text" id="mapSearch" placeholder="Search Name or PIN..." class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
-                        </div>
-                        <button onclick="loadMapData()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-1.5 rounded text-xs font-bold transition shadow h-8 flex items-center">
-                            <i class="fas fa-map-pin mr-2"></i> Plot Punches
-                        </button>
-                    </div>
-
-                    <!-- Map Container -->
-                    <div class="bg-gray-900 border border-gray-700 rounded p-2 relative mt-4 w-full" style="height: 600px; min-height: 600px;">
-                        <div id="punchMap" class="w-full h-full rounded z-0" style="height: 100%;"></div>
-                        <div id="mapLoader" class="absolute inset-0 bg-gray-900/80 z-10 flex flex-col justify-center items-center hidden rounded">
-                            <i class="fas fa-circle-notch fa-spin text-4xl text-indigo-500 mb-4"></i>
-                            <p class="text-sm font-bold text-gray-300 tracking-widest uppercase animate-pulse">Fetching Coordinates...</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             <section id="page-dashboard" class="page-section active">
-                <!-- HR View Container -->
-                <div id="dashboard-hr-view" class="w-full flex flex-col gap-6 min-h-[400px] hidden transition-opacity duration-300">
-                    
-                    <!-- HR Filters -->
-                    <div class="bg-gray-800 p-4 rounded shadow-lg border-t-4 border-teal-500 flex flex-wrap items-center gap-4">
-                        <h3 class="font-bold text-gray-300 mr-4"><i class="fas fa-filter mr-2"></i>HR Analytics</h3>
-                        <div class="flex items-center gap-2">
-                            <input type="date" id="hrStartDate" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-teal-500 w-32">
-                            <span class="text-gray-500 text-xs font-bold px-1">to</span>
-                            <input type="date" id="hrEndDate" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-teal-500 w-32">
-                            <select id="hrDeptFilter" onchange="loadHRAnalytics()" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-teal-500 w-48 ml-2">
-                                <option value="">All Departments</option>
-                            </select>
+                <!-- 2026-11-14 legacy clean-up (Dashboard, part 1): the dashboard's frame and header row are written here. They were built at
+                     run time by tna_dashboard_v2.js, over the old Manager / HR dashboard (gone, with the "New dashboard" switch).
+                     Styles: /css/tna_dashboard_v2.css. Content and behaviour: tna_dashboard_v2.js. -->
+                <div id="dv2">
+                    <div id="dv2Head">
+                        <div class="dh-group" role="group" aria-label="Period">
+                        <button type="button" class="dh-arrow" data-step="-1" title="Previous period" aria-label="Previous period"><i class="fas fa-chevron-left"></i></button>
+                        <button type="button" class="dh-btn dh-period" id="dv2PBtn" aria-haspopup="dialog" title="Pick the period"><i class="fas fa-calendar-alt"></i><span class="t" id="dv2PLabel">This month</span><span class="r" id="dv2PRange"></span><i class="fas fa-chevron-down dh-caret"></i></button>
+                        <button type="button" class="dh-arrow" data-step="1" id="dv2PNext" title="Next period" aria-label="Next period"><i class="fas fa-chevron-right"></i></button>
                         </div>
-                        <button onclick="loadHRAnalytics()" class="bg-teal-600 hover:bg-teal-500 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow h-8">
-                            <i class="fas fa-sync-alt mr-1"></i> Update Charts
-                        </button>
+                        <button type="button" class="dh-btn" id="dv2DBtn" aria-haspopup="dialog" title="Pick departments"><i class="fas fa-building"></i><span class="t" id="dv2DLabel">All departments</span><i class="fas fa-chevron-down dh-caret"></i></button>
+                        <button type="button" class="dh-cmp" id="dv2CBtn" aria-haspopup="dialog"><span id="dv2CLabel">vs …</span><i class="fas fa-chevron-down dh-caret"></i></button>
+                        <div id="dv2Tabs" role="tablist" aria-label="Dashboard"></div>
                     </div>
-
-                    <!-- Line Chart (Trends) -->
-                    <div class="bg-gray-800 p-4 rounded shadow-lg border border-gray-700">
-                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Attendance & Overtime Trends</h4>
-                        <div id="hrLineChart" class="w-full h-[450px]"></div>
+                    <div class="dv-pane" id="dv2PMgr">
+                    <div class="dv-sec">Today <small>· live</small></div>
+                    <div class="dv-hero" id="dv2Hero"></div>
+                    <div class="dv-sec">This period <small id="dv2SecP"></small></div>
+                    <div id="dv2Msg"></div>
+                    <div class="dv-card dv-kpis" id="dv2Kpis"></div>
+                    <div class="dv-sec">Needs your attention</div>
+                    <div class="dv-card" id="dv2People"></div>
                     </div>
-
-                    <!-- Bar Chart -->
-                    <div class="bg-gray-800 p-4 rounded shadow-lg border border-gray-700">
-                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Hours Breakdown by Department</h4>
-                        <div id="hrBarChart" class="w-full h-[450px]"></div>
+                    <div class="dv-pane" id="dv2PHr" style="display:none">
+                    <div id="dv2HrMsg"></div>
+                    <div class="dv-sec">Overview</div>
+                    <div class="dv-tiles hr-tiles" id="dv2HrTiles"></div>
+                    <!-- 2026-11-15 performance score (team ring, bands, top / lowest) and charts - drawn by tna_dashboard_v2.js hrPerfPaint / hrChartsPaint.
+                         Hidden while the server sends no score (an older server). -->
+                    <div class="dv-sec" id="dv2HrPerfSec" hidden>Performance <small id="dv2HrPerfSub"></small></div>
+                    <div class="dv-card hr-perf" id="dv2HrPerf" hidden></div>
+                    <div class="dv-sec">Trends</div>
+                    <div class="hr-charts" id="dv2HrCharts"></div>
+                    <div class="dv-sec">Details</div>
+                    <div class="dv-pane" id="dv2HrBody"></div>
                     </div>
-
-                    <!-- Heatmap -->
-                    <div class="bg-gray-800 p-4 rounded shadow-lg border border-gray-700">
-                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Tardiness / Absence Heatmap</h4>
-                        <div id="hrHeatmap" class="w-full h-[450px]"></div>
-                    </div>
-
-                    <!-- Scheduled vs Actual Hours -->
-                    <div class="bg-gray-800 p-4 rounded shadow-lg border border-gray-700">
-                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Scheduled vs Actual Hours</h4>
-                        <div id="hrSchedVsActualChart" class="w-full h-[450px]"></div>
-                    </div>
-                </div>
-
-                <!-- Manager View Container -->
-                <div id="dashboard-manager-view" class="w-full flex flex-col gap-6 min-h-[400px] transition-opacity duration-300">
-                    
-                    <!-- Global Manager Filter -->
-                    <div class="flex justify-end mb-[-1rem] z-10 relative">
-                        <div class="flex items-center bg-gray-800 p-2 rounded shadow-lg border border-gray-700">
-                            <i class="fas fa-building text-gray-400 mr-2 text-xs"></i>
-                            <select id="mgrDeptFilter" onchange="renderManagerDashboard()" class="bg-gray-900 border border-gray-600 rounded p-1 text-xs text-white focus:outline-none focus:border-indigo-500 w-48">
-                                <option value="">All Departments</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- SECTION 1: OVERVIEW -->
-                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-indigo-500">
-                        <h3 class="font-bold text-gray-300 border-b border-gray-700 pb-2 mb-4"><i class="fas fa-chart-line mr-2"></i>Overview (Current Month)</h3>
-                        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
-                            <!-- Active Employees -->
-                            <div onclick="openActiveEmployeesDrillDown()" class="bg-gray-900 border border-gray-700 rounded p-4 flex items-center justify-between cursor-pointer hover:bg-gray-700 hover:border-indigo-500 transition shadow">
-                                <div>
-                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Active Emps</p>
-                                    <h4 id="mgrActiveEmpCount" class="text-2xl font-black text-indigo-400">--</h4>
-                                </div>
+                    <div class="dv-pane" id="dv2PMap" style="display:none"></div>
+                    <div class="dv-pane" id="dv2PHlo" style="display:none">
+                        <!-- 2026-11-14 (legacy clean-up, Dashboard part 2): the High Level Overview, written here. It was its own screen
+                             (#page-high-level) that tna_dashboard_v2.js moved in and re-arranged at start-up. Its table code is in tna_dashboard.js. -->
+                        <div class="bg-gray-800 p-6 rounded shadow-lg w-full dv-card hlo-card">
+                            <div id="hloBar"><div class="hb-t"><h3><i class="fas fa-globe-africa"></i>High Level Overview</h3><span id="hloSubT">Loading…</span></div>
+                                <div class="hb-r"><label class="hb-search" aria-label="Search employees"><i class="fas fa-search"></i><input type="text" id="hloSearch" oninput="if(typeof filterHighLevelOverview === 'function') filterHighLevelOverview()" placeholder="Search name or PIN..." class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-emerald-500"></label>
+                                    <button type="button" class="hb-btn" id="hloFBtn" aria-haspopup="dialog"><i class="fas fa-filter"></i>Filter<span class="hb-n" id="hloFN" hidden></span><i class="fas fa-chevron-down hb-caret"></i></button>
+                                    <button type="button" class="hb-btn" id="hloTBtn" aria-haspopup="dialog"><i class="fas fa-toolbox"></i>Data tools<i class="fas fa-chevron-down hb-caret"></i></button></div></div>
+                            <!-- data fields, never shown: the dashboard's period and departments fill them (tna_dashboard_v2.js hloLoad), the table code reads them -->
+                            <div class="hlo-hide">
+                                <select id="hloPayrollCycle" onchange="populateHloCycleRanges()"><option value="">-- Custom --</option></select>
+                                <select id="hloCycleRange" onchange="applyHloCycleRange()"><option value="">-- N/A --</option></select>
+                                <input type="date" id="hloStartDate">
+                                <input type="date" id="hloEndDate">
+                                <select id="hloDeptFilter" onchange="if(typeof filterHighLevelOverview === 'function') filterHighLevelOverview()"><option value="">-- Select Department --</option></select>
                             </div>
-
-                            <!-- Scheduled Man Hours -->
-                            <div class="bg-gray-900 border border-gray-700 rounded p-4 flex items-center justify-between shadow">
-                                <div>
-                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Sched Hrs</p>
-                                    <h4 id="mgrSchedHrsMonth" class="text-2xl font-black text-teal-400">--</h4>
-                                </div>
-                            </div>
-
-                            <!-- Actual Hours -->
-                            <div class="bg-gray-900 border border-gray-700 rounded p-4 flex items-center justify-between shadow">
-                                <div>
-                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Actual Hrs</p>
-                                    <h4 id="mgrActHrsMonth" class="text-2xl font-black text-blue-400">--</h4>
-                                </div>
-                            </div>
-
-                            <div class="bg-gray-900 border border-gray-700 rounded p-4 flex items-center justify-between shadow border-l-4 border-green-500">
-                                <div>
-                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Att. Rate</p>
-                                    <h4 id="mgrAttRateMonth" class="text-2xl font-black text-green-400">--%</h4>
-                                </div>
-                            </div>
-
-                            <!-- Overtime -->
-                            <div onclick="openOTDrillDown('month')" class="bg-gray-900 border border-gray-700 rounded p-4 flex flex-col justify-center shadow cursor-pointer hover:border-yellow-500 hover:bg-gray-800 transition">
-                                <div class="w-full">
-                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Overtime</p>
-                                    <h4 id="mgrOTMonth" class="text-2xl font-black text-yellow-400">--</h4>
-                                </div>
-                                <div id="mgrOTMonthSub" class="w-full mt-2">
-                                    <!-- JS will inject the larger split text here -->
-                                </div>
-                            </div>
-
-                           <!-- Absences -->
-                            <div onclick="openAbsentDrillDown('month')" class="bg-gray-900 border border-gray-700 rounded p-4 flex items-center justify-between shadow cursor-pointer hover:border-red-500 hover:bg-gray-800 transition">
-                                <div>
-                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Absences</p>
-                                    <h4 id="mgrAbsMonth" class="text-2xl font-black text-red-400">--</h4>
-                                </div>
-                            </div>
-
-                            <!-- Violations -->
-                            <div class="bg-gray-900 border border-gray-700 rounded p-4 flex items-center justify-between shadow">
-                                <div>
-                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Violations</p>
-                                    <h4 id="mgrVioMonth" class="text-2xl font-black text-orange-400">--</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- NEW SECTION: MONTHLY LEADERBOARDS -->
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <!-- Top Absences -->
-                        <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-red-500">
-                           <h3 class="font-bold text-gray-300 border-b border-gray-700 pb-2 mb-4"><i class="fas fa-user-times mr-2 text-red-400"></i>Top 10 Absences</h3>
-                           <div class="overflow-x-auto">
-                               <table class="w-full text-left text-xs">
-                                   <thead class="text-gray-500 border-b border-gray-700">
-                                       <tr><th class="pb-2">Employee</th><th class="pb-2 text-center">Absences</th><th class="pb-2 text-center">Abs. Rate</th></tr>
-                                   </thead>
-                                   <tbody id="mgrAbsencesList" class="text-gray-300 divide-y divide-gray-800">
-                                       <tr><td colspan="3" class="py-4 text-center text-gray-500">Loading...</td></tr>
-                                   </tbody>
-                               </table>
-                           </div>
+                        <div class="overflow-x-auto bg-gray-900 border border-gray-700 rounded max-h-[600px] overflow-y-auto">
+                            <table class="w-full text-left text-xs border-collapse whitespace-nowrap">
+                                <thead class="bg-gray-800 text-gray-400 uppercase font-bold sticky top-0 shadow-sm border-b border-gray-700 z-10 select-none">
+                                    <tr>
+                                        <th class="p-2 border-r border-gray-700 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('pin')">Display PIN <span id="sortIconHlo-pin" class="ml-1 text-emerald-400 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
+                                        <th class="p-2 border-r border-gray-700 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('name')">Name <span id="sortIconHlo-name" class="ml-1 text-emerald-400 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
+                                        <th class="p-2 border-r border-gray-700 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('surname')">Surname <span id="sortIconHlo-surname" class="ml-1 text-emerald-400 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
+                                        <th class="p-2 border-r border-gray-700 text-center text-blue-300 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('nt')">NT <span id="sortIconHlo-nt" class="ml-1 text-blue-200 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
+                                        <th class="p-2 border-r border-gray-700 text-center text-yellow-400 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('otw')">OT.W <span id="sortIconHlo-otw" class="ml-1 text-yellow-200 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
+                                        <th class="p-2 border-r border-gray-700 text-center text-orange-400 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('ot15')">1.5 <span id="sortIconHlo-ot15" class="ml-1 text-orange-200 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
+                                        <th class="p-2 border-r border-gray-700 text-center text-orange-500 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('ot20')">2.0 <span id="sortIconHlo-ot20" class="ml-1 text-orange-300 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
+                                        <th class="p-2 border-r border-gray-700 text-center text-green-400 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('pph')">PPH <span id="sortIconHlo-pph" class="ml-1 text-green-200 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
+                                        <th class="p-2 border-r border-gray-700 text-center cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('work')">Work <span id="sortIconHlo-work" class="ml-1 text-emerald-400 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
+                                        <th class="p-2 border-r border-gray-700 text-center text-red-400 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('abs')">Abs <span id="sortIconHlo-abs" class="ml-1 text-red-200 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
+                                        <th class="p-2 border-r border-gray-700 text-center text-purple-400 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('adj')">ADJ Time <span id="sortIconHlo-adj" class="ml-1 text-purple-200 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
+                                        <th class="p-2 border-r border-gray-700 text-center text-indigo-400 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('nsAllow')">NS Allow <span id="sortIconHlo-nsAllow" class="ml-1 text-indigo-200 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
+                                        <th class="p-2 text-center text-emerald-400 cursor-pointer hover:text-white transition group" onclick="sortHighLevelOverview('stdbyAllow')">Stdby Allow <span id="sortIconHlo-stdbyAllow" class="ml-1 text-emerald-200 group-hover:text-white"><i class="fas fa-sort text-gray-600"></i></span></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="hloTableBody" class="divide-y divide-gray-800 text-gray-300">
+                                    <tr><td colspan="12" class="p-4 text-center text-gray-500">Select parameters and click Load Data.</td></tr>
+                                </tbody>
+                                <tfoot id="hloTableFoot" class="bg-gray-800 text-white font-bold sticky bottom-0 border-t border-gray-600 shadow-[0_-4px_6px_rgba(0,0,0,0.3)] z-10">
+                                </tfoot>
+                            </table>
                         </div>
 
-                        <!-- Top Tardiness -->
-                        <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-orange-500">
-                           <div class="flex justify-between items-center border-b border-gray-700 pb-2 mb-4">
-                               <h3 class="font-bold text-gray-300"><i class="fas fa-clock mr-2 text-orange-400"></i>Top 10 Tardiness</h3>
-                               <button onclick="openTardyDrillDown('month')" class="text-[10px] bg-gray-900 border border-gray-600 text-orange-400 hover:text-orange-300 hover:border-orange-500 px-2 py-1 rounded transition shadow">View All</button>
-                           </div>
-                           <div class="overflow-x-auto">
-                               <table class="w-full text-left text-xs">
-                                   <thead class="text-gray-500 border-b border-gray-700">
-                                       <tr><th class="pb-2">Employee</th><th class="pb-2 text-center">Lates/Early</th><th class="pb-2 text-center">Tardy Rate</th></tr>
-                                   </thead>
-                                   <tbody id="mgrTardyList" class="text-gray-300 divide-y divide-gray-800">
-                                       <tr><td colspan="3" class="py-4 text-center text-gray-500">Loading...</td></tr>
-                                   </tbody>
-                               </table>
-                           </div>
+                        <div class="flex justify-between items-center mt-4 bg-gray-900 p-3 rounded border border-gray-700 shadow-inner">
+                            <div class="flex items-center gap-3">
+                                <span id="hloPageInfo" class="text-xs text-gray-400 font-bold tracking-widest uppercase">Showing 0 of 0</span>
+                                <select id="hloRowsPerPage" onchange="changeHloRowsPerPage()" class="bg-gray-800 border border-gray-600 rounded px-2 py-1 text-xs text-white focus:outline-none focus:border-emerald-500">
+                                    <option value="10">10 Rows</option>
+                                    <option value="20" selected>20 Rows</option>
+                                    <option value="50">50 Rows</option>
+                                    <option value="100">100 Rows</option>
+                                    <option value="all">View All</option>
+                                </select>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button id="hloBtnPrev" onclick="changeHloPage(-1)" class="bg-gray-800 hover:bg-gray-700 text-emerald-400 px-4 py-1.5 rounded text-xs font-bold border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow"><i class="fas fa-chevron-left mr-1"></i> Prev</button>
+                                <button id="hloBtnNext" onclick="changeHloPage(1)" class="bg-gray-800 hover:bg-gray-700 text-emerald-400 px-4 py-1.5 rounded text-xs font-bold border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow">Next <i class="fas fa-chevron-right ml-1"></i></button>
+                            </div>
                         </div>
-
-                        <!-- Perfect Attendance -->
-                        <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-green-500">
-                           <h3 class="font-bold text-gray-300 border-b border-gray-700 pb-2 mb-4"><i class="fas fa-star mr-2 text-green-400"></i>Top 10 Perfect</h3>
-                           <div class="overflow-x-auto">
-                               <table class="w-full text-left text-xs">
-                                   <thead class="text-gray-500 border-b border-gray-700">
-                                       <tr><th class="pb-2">Employee</th><th class="pb-2 text-center">Worked</th><th class="pb-2 text-center">Status</th></tr>
-                                   </thead>
-                                   <tbody id="mgrPerfectList" class="text-gray-300 divide-y divide-gray-800">
-                                       <tr><td colspan="3" class="py-4 text-center text-gray-500">Loading...</td></tr>
-                                   </tbody>
-                               </table>
-                           </div>
                         </div>
                     </div>
-                    <!-- SECTION 2: TODAY'S VIEW -->
-                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-blue-500">
-                        <h3 class="font-bold text-gray-300 border-b border-gray-700 pb-2 mb-4"><i class="fas fa-calendar-day mr-2"></i>Today's Clock Status</h3>
-                        <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
-                            <!-- Clocked In -->
-                            <div onclick="openClockedInDrillDown()" class="bg-gray-900 border border-gray-700 rounded p-4 text-center cursor-pointer hover:border-green-500 hover:bg-gray-800 transition shadow">
-                                <h4 class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Clocked In</h4>
-                                <p class="text-2xl font-black text-green-400" id="mgrTodayIn">--</p>
-                                <p class="text-[10px] text-gray-500 font-bold mt-1" id="mgrTodayInPct">(--%)</p>
-                            </div>
-                            <!-- Clocked Out -->
-                            <div onclick="openClockedOutDrillDown()" class="bg-gray-900 border border-gray-700 rounded p-4 text-center cursor-pointer hover:border-blue-500 hover:bg-gray-800 transition shadow">
-                                <h4 class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Clocked Out</h4>
-                                <p class="text-2xl font-black text-gray-300" id="mgrTodayOut">--</p>
-                                <p class="text-[10px] text-gray-500 font-bold mt-1" id="mgrTodayOutPct">(--%)</p>
-                            </div>
-                            <!-- On Break -->
-                            <div class="bg-gray-900 border border-gray-700 rounded p-4 text-center cursor-pointer hover:border-blue-500 transition shadow">
-                                <h4 class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">On Break</h4>
-                                <p class="text-2xl font-black text-yellow-400" id="mgrTodayBreak">--</p>
-                                <p class="text-[10px] text-gray-500 font-bold mt-1" id="mgrTodayBreakPct">(--%)</p>
-                            </div>
-                            <!-- Absent -->
-                            <div onclick="openAbsentDrillDown('today')" class="bg-gray-900 border border-gray-700 rounded p-4 text-center cursor-pointer hover:border-red-500 hover:bg-gray-800 transition shadow">
-                                <h4 class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Absent</h4>
-                                <p class="text-2xl font-black text-red-400" id="mgrTodayAbsent">--</p>
-                                <p class="text-[10px] text-gray-500 font-bold mt-1" id="mgrTodayAbsentPct">(--%)</p>
-                            </div>
-                            <!-- Remote -->
-                            <div onclick="openOnLeaveDrillDown()" class="bg-gray-900 border border-gray-700 rounded p-4 text-center cursor-pointer hover:border-purple-500 hover:bg-gray-800 transition shadow">
-                                <h4 class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">On Leave</h4>
-                                <p class="text-2xl font-black text-purple-400" id="mgrTodayLeave">--</p>
-                                <p class="text-[10px] text-gray-500 font-bold mt-1" id="mgrTodayLeavePct">(--%)</p>
-                            </div>
-                            
-                            <div class="bg-gray-900 border border-gray-700 rounded p-4 text-center shadow border-b-4 border-green-500">
-                                <h4 class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Att. Rate</h4>
-                                <p class="text-2xl font-black text-green-400" id="mgrTodayAttRate">--%</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- SECTION 3: CUSTOM RANGE -->
-                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-purple-500">
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 border-b border-gray-700 pb-4 md:pb-2 gap-3">
-                            <h3 class="font-bold text-gray-300"><i class="fas fa-calendar-alt mr-2"></i>Custom Range Analytics</h3>
-                            <div class="flex items-center w-full md:w-auto gap-2">
-                                <input type="date" id="mgrCustomStart" onchange="loadManagerCustomRange()" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-purple-500 w-full md:w-32">
-                                <span class="text-gray-500 text-xs font-bold px-1">to</span>
-                                <input type="date" id="mgrCustomEnd" onchange="loadManagerCustomRange()" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-purple-500 w-full md:w-32">
-                            </div>
-                        </div>
-                        <div class="text-center p-8 border border-dashed border-gray-600 rounded bg-gray-900" id="mgrCustomContent">
-                            <p class="text-gray-500 italic text-sm">Select a date range and click Load to view analytics.</p>
-                        </div>
-                    </div>
-
                 </div>
             </section>
 
@@ -630,20 +382,18 @@
                     <div id="tvTraditionalPane">
 
                     <!-- Team View filters - Employee Master "Active Personnel" look.
-                         Order: Search | Dates (one range picker) | Department | Status | Options ... Load Data
-                         AUTO-HEAL: every original id / onchange / oninput is unchanged.
-                         tvStartDate / tvEndDate are kept (hidden) - loadTeamView() and the week auto-fill still use them;
-                         the visible tvDateRange picker only writes into them. -->
+                         Order: Search | Date range | Department | Status | Options ... Load Data
+                         tvStartDate / tvEndDate (hidden) are the source of truth for loadTeamView() and the week auto-fill;
+                         the Start date - End date boxes (tna_tv_range.js, mounted in #tvRangeTrad) write into them. -->
                     <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
                         <div style="display: flex; align-items: flex-end; gap: 15px; flex: 1; flex-wrap: wrap;">
                             <div class="form-group" style="width: 240px;">
                                 <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">Search Employee</label>
                                 <input type="text" id="tvSearch" oninput="if(typeof renderTeamView === 'function') renderTeamView()" placeholder="Name or PIN..." class="form-control">
                             </div>
-                            <div class="form-group" style="width: 250px;">
-                                <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">Dates</label>
-                                <input type="text" id="tvDateRange" placeholder="Pick start and end date..." class="form-control" title="Click a start date, then an end date (max 7 days)">
-                                <!-- Original date fields: hidden, still the source of truth for loadTeamView() -->
+                            <div class="form-group" style="width: auto;">
+                                <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">Date range</label>
+                                <div id="tvRangeTrad"></div>
                                 <div style="display: none;">
                                     <input type="date" id="tvStartDate">
                                     <input type="date" id="tvEndDate">
@@ -738,6 +488,10 @@
                     </div>
 
                     <div class="overflow-x-auto bg-gray-900 rounded border border-gray-700">
+                        <!-- 15 Nov 2026: the list scrolls in its own box (like the Visual view's .tl) so the column headings stay at the top.
+                             Styles: .tv-scroll in css/tna_team_view.css. Keep this box WITHOUT the overflow-x-auto class:
+                             tna_ot_auth.js puts its OT bar before the nearest .overflow-x-auto (the outer box). -->
+                        <div class="tv-scroll">
                         <table class="w-full text-left text-xs border-collapse">
                             <thead class="bg-gray-800 text-gray-400 uppercase font-bold sticky top-0 z-10 shadow-sm border-b border-gray-700">
                                 <tr>
@@ -764,7 +518,8 @@
                                 <tr><td colspan="16" class="p-4 text-center text-gray-500">Select dates and click Load Data.</td></tr>
                             </tbody>
                         </table>
-                        
+                        </div><!-- /tv-scroll -->
+
                         <div class="flex justify-between items-center mt-4 bg-gray-900 p-3 rounded border border-gray-700 shadow-inner">
                             <span id="tvPageInfo" class="text-xs text-gray-400 font-bold tracking-widest uppercase">Showing 0 of 0</span>
                             <div class="flex space-x-2">
@@ -1405,7 +1160,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <p class="rs-hint"><i class="fas fa-info-circle mr-1"></i>Click any day to set or clear a shift. <span class="rs-key"><span class="rs-chip rs-shift rs-auto"><b>Auto</b></span> = their default shift, not set on the roster</span></p>
+                        <p class="rs-hint"><i class="fas fa-info-circle mr-1"></i>Click any day to set or clear a shift. <span class="rs-key"><span class="rs-chip rs-shift rs-auto"><b>Auto</b></span> = their default shift, not set on the roster: their own (Employee Master) or their department's <a class="dp-link" onclick="tnaOpenDeptPattern()" title="Settings › Departments">work pattern</a></span></p>
                     </div>
 
                     <div id="rosterBulkView" class="hidden mt-6 bg-gray-900 p-6 rounded border border-gray-700">
@@ -1458,72 +1213,82 @@
             </section>
 
            <section id="page-attendance" class="page-section">
+                <!-- 2026-11-15 Weekly Timesheet in the Weekly Roster look (always on, no switch). Styles: css/tna_attendance.css
+                     (the Roster's rs-* rules). Rows: renderAttendanceGrid(). Every id and handler is the same as before, so the
+                     permission hiding (tna_attendance_edit / _export / _import) and the saved filters still find them. -->
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-green-500">
-                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
-                        <div class="flex items-center space-x-4">
-                            <h3 class="font-bold text-gray-300"><i class="fas fa-user-check mr-2"></i>Weekly Timesheet</h3>
-                            
-                            <div class="flex items-center space-x-2">
-                                <div class="flex items-center space-x-4 bg-gray-900 px-3 py-1.5 rounded border border-gray-600">
-                                    <button onclick="changeAttendanceWeek(-1)" class="text-gray-400 hover:text-white transition"><i class="fas fa-chevron-left"></i></button>
-                                    <span id="attendanceWeekLabel" class="text-sm font-bold text-green-400 w-48 text-center">Loading...</span>
-                                    <button onclick="changeAttendanceWeek(1)" class="text-gray-400 hover:text-white transition"><i class="fas fa-chevron-right"></i></button>
-                                </div>
-                                <button onclick="forceRecalculateAttendance(this)" class="bg-green-700 hover:bg-green-600 text-white px-4 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-green-500 ml-2" title="Fast UI Recalculation">
-                                    <i class="fas fa-sync-alt mr-2"></i> Recalculate Week
-                                </button>
-                                <button onclick="runAnalyzerForAttendanceWeek(this)" class="bg-indigo-700 hover:bg-indigo-600 text-white px-4 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-indigo-500 ml-2" title="Force Heavy Nightly Analyzer for this week">
-                                    <i class="fas fa-cogs mr-2"></i> Run Analyzer
-                                </button>
-                                
-                                <div id="attendanceSyncControls" class="flex items-center gap-2 ml-4">
-                                    <button id="btnPullCVS" onclick="pullMissingCvsClocks()" class="hidden bg-purple-600 hover:bg-purple-500 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow border border-purple-500">
-                                        <i class="fas fa-cloud-download-alt mr-1"></i> Pull CVS Clocks
-                                    </button>
-                                    
-                                    <button id="btnPullDevices" onclick="pullMissingDeviceClocks()" class="hidden bg-teal-600 hover:bg-teal-500 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow border border-teal-500">
-                                        <i class="fas fa-microchip mr-1"></i> Pull Device Clocks
-                                    </button>
-                                </div>
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2 rs-head">
+                        <div class="rs-left">
+                            <h3 class="font-bold text-gray-300 whitespace-nowrap"><i class="fas fa-user-check mr-2"></i>Weekly Timesheet</h3>
+                            <div class="rs-week">
+                                <button type="button" onclick="changeAttendanceWeek(-1)" aria-label="Previous week"><i class="fas fa-chevron-left"></i></button>
+                                <span id="attendanceWeekLabel">Loading...</span>
+                                <button type="button" onclick="changeAttendanceWeek(1)" aria-label="Next week"><i class="fas fa-chevron-right"></i></button>
                             </div>
                         </div>
-
-                        <div class="flex items-center gap-3">
-                            <button onclick="openExportAttendanceModal()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-blue-500">
-                                <i class="fas fa-file-export mr-2"></i> Export Raw
-                            </button>
-                            
-                            <button id="btnImportAttendance" onclick="document.getElementById('importAttendanceUpload').click()" class="bg-orange-600 hover:bg-orange-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-orange-500">
-                                <i class="fas fa-file-import mr-2"></i> Import Fixes
-                            </button>
+                        <div class="rs-right">
+                            <!-- Two menus like the Roster's "Fill roster" / "Data Tools". While a job runs its spinner shows on the
+                                 menu button (passed in as the button). A menu with nothing left in it hides itself (css). -->
+                            <div class="rs-dd">
+                                <button type="button" id="attRecalcBtn" class="btn" onclick="attendanceDropdown(this)" title="Recalculate this week or pull missing clockings">
+                                    <i class="fas fa-sync-alt"></i> Recalculate <i class="fas fa-chevron-down rs-caret"></i>
+                                </button>
+                                <div class="profile-dropdown-menu rs-dd-menu">
+                                    <div class="rs-dd-h">Recalculate this week</div>
+                                    <button type="button" onclick="attendanceDropdownClose(); forceRecalculateAttendance(document.getElementById('attRecalcBtn'))" class="dropdown-item"><i class="fas fa-sync-alt"></i><span>Recalculate week<small>Puts the IN / OUT clockings in order and reloads the hours</small></span></button>
+                                    <button type="button" onclick="attendanceDropdownClose(); runAnalyzerForAttendanceWeek(document.getElementById('attRecalcBtn'))" class="dropdown-item"><i class="fas fa-cogs"></i><span>Run analyzer<small>The full nightly engine for every day of this week: checks overtime and writes the final hours</small></span></button>
+                                    <!-- Pull CVS / Pull device clocks: always shown, as on the old screen. Their old markup had class "hidden"
+                                         (checkAttendanceSyncCapabilities removes it when CVS / clocks are set up) but the theme's
+                                         .main-content button[class*="bg-"] display rule beat Tailwind's .hidden, so users always saw both.
+                                         To show them only when set up, add class "hidden" back (works in this menu). -->
+                                    <div class="rs-dd-h rs-pull-h">Pull missing clocks</div>
+                                    <button type="button" id="btnPullCVS" onclick="attendanceDropdownClose(); pullMissingCvsClocks(document.getElementById('attRecalcBtn'))" class="dropdown-item"><i class="fas fa-cloud-download-alt"></i><span>Pull CVS clocks<small>Fetches the last 30 days of clockings from ZKTeco CVS</small></span></button>
+                                    <button type="button" id="btnPullDevices" onclick="attendanceDropdownClose(); pullMissingDeviceClocks(document.getElementById('attRecalcBtn'))" class="dropdown-item"><i class="fas fa-microchip"></i><span>Pull device clocks<small>Asks every clock terminal to send its punch history again</small></span></button>
+                                </div>
+                            </div>
+                            <div class="rs-dd">
+                                <button type="button" id="attDataBtn" class="btn" onclick="attendanceDropdown(this)" title="Clockings in and out of Excel">
+                                    <i class="fas fa-database"></i> Data Tools <i class="fas fa-chevron-down rs-caret"></i>
+                                </button>
+                                <div class="profile-dropdown-menu rs-dd-menu">
+                                    <div class="rs-dd-h">Clockings in Excel</div>
+                                    <button type="button" onclick="attendanceDropdownClose(); openExportAttendanceModal()" class="dropdown-item"><i class="fas fa-file-export"></i><span>Export raw<small>Downloads the clockings for a date range and departments</small></span></button>
+                                    <button type="button" id="btnImportAttendance" onclick="attendanceDropdownClose(); document.getElementById('importAttendanceUpload').click()" class="dropdown-item"><i class="fas fa-file-import"></i><span>Import fixes<small>Reads the corrected Excel file; you confirm before anything is saved</small></span></button>
+                                </div>
+                            </div>
                             <input type="file" id="importAttendanceUpload" accept=".xlsx" class="hidden" onchange="importAttendanceExcel(event)">
+                        </div>
+                    </div>
 
-                            <div id="formatIndicatorBadge" class="bg-gray-900 border border-gray-600 text-blue-400 px-3 py-1.5 rounded text-xs font-bold shadow flex items-center ml-2 hidden md:flex">
-                                    <i class="fas fa-clock mr-2"></i> <span id="formatIndicatorText">Displaying: Decimals (8.50)</span>
+                    <!-- the Roster's bar: labelled search + department + count -->
+                    <div class="rs-bar">
+                        <div class="form-group rs-fld">
+                            <label for="attendanceSearch" class="rs-lbl">Search Employees</label>
+                            <div class="rs-search">
+                                <i class="fas fa-search"></i>
+                                <input type="search" id="attendanceSearch" oninput="filterAttendanceGrid()" placeholder="Name or PIN..." class="form-control" autocomplete="off" spellcheck="false">
                             </div>
                         </div>
-                    </div>
-
-                    <div class="flex items-center space-x-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
-                        <div class="relative flex-1 max-w-sm">
-                            <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
-                            <input type="text" id="attendanceSearch" oninput="filterAttendanceGrid()" placeholder="Search Employee Name..." class="w-full pl-8 pr-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-green-500 transition">
+                        <div class="form-group rs-fld">
+                            <label for="attendanceDeptFilter" class="rs-lbl">Department</label>
+                            <select id="attendanceDeptFilter" onchange="filterAttendanceGrid()" class="form-control">
+                                <option value="">-- Select Department --</option>
+                            </select>
                         </div>
-                        <select id="attendanceDeptFilter" onchange="filterAttendanceGrid()" class="bg-gray-800 border border-gray-600 rounded py-1.5 px-3 text-xs text-white focus:outline-none focus:border-green-500 transition w-64">
-                            <option value="">-- Select Department --</option>
-                        </select>
+                        <span id="attendanceCount" class="rs-count"></span>
                     </div>
 
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm border-collapse">
-                            <thead id="attendanceHead" class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
-                                </thead>
-                            <tbody id="attendanceBody" class="divide-y divide-gray-700 bg-gray-800">
-                                <tr><td colspan="9" class="p-4 text-center text-gray-500">Loading attendance...</td></tr>
-                            </tbody>
-                        </table>
-                        <p class="text-[10px] text-gray-500 mt-2"><i class="fas fa-info-circle mr-1"></i>Click on an employee row to drill down into their exact clock punches.</p>
-                        
+                    <div>
+                        <div class="glass-table-container">
+                            <table class="glass-table rs-table">
+                                <thead id="attendanceHead"></thead>
+                                <tbody id="attendanceBody">
+                                    <tr><td colspan="9" class="rs-empty">Loading attendance...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="rs-hint"><i class="fas fa-info-circle mr-1"></i>Click on an employee row to drill down into their exact clock punches.</p>
+
                         <div class="flex justify-between items-center mt-4 bg-gray-900 p-3 rounded border border-gray-700 shadow-inner">
                             <span id="attendancePageInfo" class="text-xs text-gray-400 font-bold tracking-widest uppercase">Showing 0 of 0</span>
                             <div class="flex space-x-2">
@@ -1736,80 +1501,83 @@
             </section>
 
             <section id="page-violations" class="page-section">
+                <!-- 2026-11-15 Employee Violations (was "Auto-Violations") in the T&A look (always on, no switch). Styles: css/tna_violations.css.
+                     Rows: renderViolationsTable(). Every id and onclick is the same as before: the permission hiding (tna_violations_edit /
+                     _export finds the buttons by their onclick), the saved filters (tna_filter_memory.js) and loadViolations()'s spinner
+                     (button[onclick="loadViolations()"]) still find them. Keep the buttons free of Tailwind bg-* classes: the theme
+                     repaints any such button white with !important. -->
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-orange-500">
-                    <div class="flex justify-between items-center mb-2 border-b border-gray-700 pb-2">
-                        <div class="flex items-center space-x-3">
-                            <h3 class="font-bold text-gray-300"><i class="fas fa-exclamation-triangle mr-2"></i>Violations & Exceptions</h3>
-                            <span class="bg-orange-900 text-orange-300 text-[10px] px-2 py-0.5 rounded font-bold border border-orange-500">Action Required</span>
-                        </div>
-                        
-                        <div class="flex space-x-2">
-                            <div class="flex bg-gray-900 rounded border border-indigo-500 overflow-hidden shadow">
-                                <button onclick="triggerNightlySync(this, false)" class="bg-indigo-700 hover:bg-indigo-600 text-white px-3 py-1.5 text-xs font-bold transition flex items-center border-r border-indigo-500" title="Recalculate without overwriting approved timesheets">
-                                    <i class="fas fa-cogs mr-2"></i> Smart Analyze
-                                </button>
-                                <button onclick="triggerNightlySync(this, true)" class="bg-gray-800 hover:bg-red-600 text-red-400 hover:text-white px-3 py-1.5 text-xs font-bold transition flex items-center" title="Warning: This will wipe out HR approvals and reset the selected days">
-                                    <i class="fas fa-exclamation-triangle mr-2"></i> Force Overwrite All
-                                </button>
-                            </div>
-                            
-                            <button onclick="commitViolationsToDB(this)" class="bg-teal-700 hover:bg-teal-600 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow" title="Save calculated statuses to DB for quick loading">
-                        <i class="fas fa-database mr-2"></i> Commit Daily Records to DB
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2 vio-head">
+                        <h3 class="font-bold text-gray-300 whitespace-nowrap"><i class="fas fa-exclamation-triangle mr-2"></i>Employee Violations</h3>
+                        <!-- 15 Nov 2026 (user: make these buttons easier to understand; always on, no switch): plain names with a short
+                             note inside each button (inside, so the permission hiding still hides the note with its button).
+                             Smart Analyze -> Recalculate, Force Overwrite All -> Recalculate & reset; both now run for the department
+                             in the Department box only (they used to run the whole company). "Commit Daily Records to DB" is no
+                             longer shown here (user's choice): it saved the Weekly Timesheet screen's hours, not this list.
+                             commitViolationsToDB() and POST /api/tna/attendance/commit are kept. -->
+                        <div class="vio-acts">
+                            <button type="button" onclick="triggerNightlySync(this, false)" class="btn" title="Runs the shift rules again for the dates and the department picked below. Approved days, HR resolutions and overtime approvals are kept.">
+                                <i class="fas fa-cogs"></i><span class="vio-bt"><b>Recalculate</b><small>Keeps approvals</small></span>
+                            </button>
+                            <button type="button" onclick="triggerNightlySync(this, true)" class="btn" title="Runs the shift rules again for the dates and the department picked below and resets every day: HR resolutions and overtime approvals are wiped.">
+                                <i class="fas fa-exclamation-triangle"></i><span class="vio-bt"><b>Recalculate &amp; reset</b><small>Wipes approvals</small></span>
                             </button>
                         </div>
                     </div>
 
-                    <div class="flex flex-wrap items-end gap-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700 mt-4">
-                        <div>
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Start Date</label>
-                            <input type="date" id="vioStartDate" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-orange-500">
+                    <!-- toolbar: search > date range > department > Show (was "Analyze": it only loads, 15 Nov 2026), then the count, Bulk Action and Export -->
+                    <div class="vio-bar">
+                        <div class="form-group vio-fld vio-fld-search">
+                            <label for="vioSearch" class="vio-lbl">Search Employees</label>
+                            <div class="vio-search">
+                                <i class="fas fa-search"></i>
+                                <input type="search" id="vioSearch" oninput="if(typeof renderViolationsTable === 'function') renderViolationsTable()" placeholder="Name or PIN..." class="form-control" autocomplete="off" spellcheck="false">
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">End Date</label>
-                            <input type="date" id="vioEndDate" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-orange-500">
+                        <div class="form-group vio-fld">
+                            <label for="vioStartDate" class="vio-lbl">Date range</label>
+                            <div class="vio-range">
+                                <input type="date" id="vioStartDate" class="form-control" aria-label="Start date">
+                                <span class="vio-to">–</span>
+                                <input type="date" id="vioEndDate" class="form-control" aria-label="End date">
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Department</label>
-                            <select id="vioDeptFilter" onchange="if(typeof renderViolationsTable === 'function') renderViolationsTable()" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-orange-500 w-48">
+                        <div class="form-group vio-fld">
+                            <label for="vioDeptFilter" class="vio-lbl">Department</label>
+                            <select id="vioDeptFilter" onchange="if(typeof renderViolationsTable === 'function') renderViolationsTable()" class="form-control">
                                 <option value="">-- Select Department --</option>
                             </select>
                         </div>
-                        <div class="flex-1 min-w-[200px]">
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Search Employee</label>
-                            <input type="text" id="vioSearch" oninput="if(typeof renderViolationsTable === 'function') renderViolationsTable()" placeholder="Search Name or PIN..." class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-orange-500">
-                        </div>
-                        <button onclick="loadViolations()" class="bg-orange-600 hover:bg-orange-500 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow h-8">
-                            <i class="fas fa-search mr-1"></i> Analyze
-                        </button>
-                        
-                        <div class="flex items-center ml-auto space-x-2">
-                            <button onclick="openUnifiedAction(true)" class="bg-pink-600 hover:bg-pink-500 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow h-8">
-                                <i class="fas fa-layer-group mr-1"></i> Bulk Action
+                        <button type="button" onclick="loadViolations()" class="vio-go" title="Show the violations already worked out for these dates and this department (nothing is recalculated)"><i class="fas fa-search"></i> Show</button>
+                        <div class="vio-bar-r">
+                            <span id="vioCount" class="vio-count"></span>
+                            <button type="button" onclick="openUnifiedAction(true)" class="btn" title="Resolve every ticked violation at once">
+                                <i class="fas fa-layer-group"></i> Bulk Action
                             </button>
-                            <button onclick="exportViolationsExcel()" class="bg-green-700 hover:bg-green-600 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow h-8">
-                                <i class="fas fa-file-excel mr-1"></i> Export
+                            <button type="button" onclick="exportViolationsExcel()" class="btn" title="Download the violations in Excel">
+                                <i class="fas fa-file-excel"></i> Export
                             </button>
                         </div>
                     </div>
 
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm">
-                            <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
+                    <div class="glass-table-container vio-scroll" id="vioScroll">
+                        <table class="glass-table vio-table">
+                            <thead>
                                 <tr>
-                                    <th class="p-3 w-10 text-center"><input type="checkbox" id="selectAllVio" onchange="toggleSelectAllVio(this)" class="accent-orange-500 w-4 h-4 cursor-pointer"></th>
-                                    <th class="p-3">Date</th>
-                                    <th class="p-3">Employee</th>
-                                    <th class="p-3">Shift Details</th>
-                                    <th class="p-3">Violation</th>
-                                    <th class="p-3">Variance</th>
-                                    <th class="p-3 text-right">Action</th>
+                                    <th class="vio-ck"><input type="checkbox" id="selectAllVio" onchange="toggleSelectAllVio(this)" aria-label="Tick every violation"></th>
+                                    <th>Date</th>
+                                    <th>Employee</th>
+                                    <th>Shift Details</th>
+                                    <th>Violation</th>
+                                    <th>Variance</th>
+                                    <th class="vio-r">Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="violationsBody" class="divide-y divide-gray-700">
-                                <tr><td colspan="7" class="p-4 text-center text-gray-500">Select dates and click Analyze.</td></tr>
+                            <tbody id="violationsBody">
+                                <tr><td colspan="7" class="vio-empty">Select dates and click Analyze.</td></tr>
                             </tbody>
                         </table>
-                  </div>
+                    </div>
                 </div>
             </section>
 
@@ -1894,238 +1662,252 @@
 
             <section id="page-reports" class="page-section pb-32">
 
-                <div class="flex border-b border-gray-700 bg-gray-900 rounded-t shadow-lg mb-4">
-                    <button onclick="toggleReportTab('generator')" id="tab-rep-generator" class="flex-1 py-3 text-sm font-bold text-blue-400 border-b-2 border-blue-400 transition bg-gray-800"><i class="fas fa-file-alt mr-2"></i>Report Generator</button>
-                    <button onclick="toggleReportTab('emailer')" id="tab-rep-emailer" class="flex-1 py-3 text-sm font-bold text-gray-500 border-b-2 border-transparent hover:text-gray-300 hover:bg-gray-800 transition"><i class="fas fa-envelope mr-2"></i>Automated Emailer</button>
-                </div>
-
+                <!-- 2026-11-13 legacy clean-up (Reports, part 1): the Reports card is written here directly, with the same ids and onclicks.
+                     It used to be built at run time by tna_reports_layout.js, which moved these controls out of the old card and hid that card.
+                     Styles: /css/tna_reports.css. Behaviour (Export drop-down, Scheduled Mailers, description): tna_reports_ui.js. -->
                 <div id="reportGeneratorContent" class="flex flex-col gap-6">
-                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-blue-400 w-full min-w-0 max-w-full">
-                        <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
-                            <h3 class="font-bold text-gray-300"><i class="fas fa-chart-pie mr-2"></i>Attendance Reports</h3>
-                            
-                            <div class="flex items-center gap-2">
-                                <button onclick="exportReportToExcel(event)" class="bg-green-700 hover:bg-green-600 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow flex items-center h-8">
-                                    <i class="fas fa-file-excel mr-2"></i> Export to Excel
-                                </button>
-                                <button onclick="exportReportToPdf(event)" class="bg-red-700 hover:bg-red-600 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow flex items-center h-8">
-                                    <i class="fas fa-file-pdf mr-2"></i> Export to PDF
-                                </button>
+                    <div id="trlPanel" class="settings-panel">
+                        <div class="panel-header">
+                            <div><i class="fas fa-chart-pie"></i> Reports</div>
+                            <div class="trl-hr" id="trlHeadRight">
+                                <button type="button" class="btn btn-secondary" id="trlMailersBtn" title="The reports emailed automatically (daily / weekly / monthly)"><i class="fas fa-envelope-open-text"></i> Scheduled Mailers</button>
                             </div>
                         </div>
-
-                    <div class="flex flex-wrap items-end gap-3 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
-                        
-                        <div>
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Report Type</label>
-                           <select id="reportTypeSelect" onchange="toggleReportEmpFilter()" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-blue-500 w-48">
-                                <option value="weekly" data-permission="rep_weekly">Weekly Attendance Summary</option>
-                                <option value="detailed_attendance" data-permission="rep_detailed">Employee Detailed Attendance</option>
-                                <option value="mdb_attendance" data-permission="rep_mdb">MDB Attendance Report</option>
-                                <option value="team_status" data-permission="rep_team_status">Team View Status Report</option>
-                                <option value="muster" data-permission="rep_muster">Daily Muster Roll (Present)</option>
-                                <option value="absent" data-permission="rep_absent">Absenteeism Report</option>
-                                <option value="leave" data-permission="rep_leave">Approved Leave Report</option>
-                               <option value="violations" data-permission="rep_violations">Active Violations Report</option>
-                                <option value="break_violations" data-permission="rep_break_violations">Break Violations Report</option>
-                                <option value="geo_violations" data-permission="rep_violations">Geofence Violations Report</option>
-                                <option value="overtime" data-permission="rep_overtime">Overtime & Premium Hours Report</option>
-                                <option value="periodic_new" data-permission="rep_periodic">Periodic Summary (New Totals)</option>
-                                <option value="ben_span" data-permission="rep_ben_span">BEN SPAN (Wage Estimates)</option>
-                                <option value="legacy_timesheet" data-permission="rep_legacy">Detailed Timesheet (Legacy)</option>
-                                <option value="sync_report" data-permission="rep_sync">Mobile User Sync Report</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Start Date</label>
-                            <input type="date" id="repStartDate" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">End Date</label>
-                            <input type="date" id="repEndDate" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Department</label>
-                             <select id="repDeptFilter" onchange="populateReportEmployees()" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-blue-500 w-40">
-                                <option value="">-- Select Department --</option>
-                            </select>
-                        </div>
-                        <div id="repIndivContainer" class="hidden relative">
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Search Employee (Optional)</label>
-                            <input type="text" id="repIndivSearch" autocomplete="off" oninput="repIndivSearchHandler()" onfocus="repIndivSearchHandler()" placeholder="Type name or PIN..." class="bg-gray-800 border border-gray-600 rounded p-1.5 pr-7 text-xs text-white focus:outline-none focus:border-blue-500 w-52">
-                            <input type="hidden" id="repIndivSelectedId" value="">
-                            <button type="button" id="repIndivClearBtn" onclick="clearRepIndividual()" title="Clear employee" class="hidden absolute right-2 top-[27px] text-gray-400 hover:text-red-400 text-xs"><i class="fas fa-times"></i></button>
-                            <div id="repIndivResults" class="hidden absolute z-50 w-72 bg-gray-800 border border-gray-500 rounded mt-1 max-h-56 overflow-y-auto shadow-2xl p-1 flex flex-col gap-0.5"></div>
-                        </div>
-                        <div id="repEmpContainer" class="hidden relative">
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Employees (Optional)</label>
-                            <button type="button" onclick="document.getElementById('repEmpDropdown').classList.toggle('hidden')" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-blue-500 w-48 text-left flex justify-between items-center">
-                                <span id="repEmpCountLabel">All in Dept</span> <i class="fas fa-chevron-down"></i>
-                            </button>
-                            <div id="repEmpDropdown" class="hidden absolute z-50 w-64 bg-gray-800 border border-gray-500 rounded mt-1 max-h-48 overflow-y-auto shadow-2xl p-2 flex flex-col gap-1">
-                                <div class="text-[10px] text-gray-500 italic text-center p-2">Select a department first.</div>
-                            </div>
-                        </div>
-                        <button onclick="generateReportData(event)" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-1.5 rounded text-xs font-bold transition shadow h-8">
-                            <i class="fas fa-sync mr-1"></i> Generate
-                        </button>
-                    </div>
-                </div> <div class="bg-gray-800 rounded shadow-lg border border-gray-700 flex flex-col" style="width: 100%; max-width: calc(100vw - 300px);">
-                    
-                    <div class="bg-gray-900 px-4 py-3 border-b border-gray-700 flex justify-between items-center rounded-t shrink-0">
-                        <!-- 2026-10-27 theme navy instead of teal (light mode turned text-teal-400 green) -->
-                        <style>#reportDataViewTitle { color: #1a4c7b; } body.dark-mode #reportDataViewTitle { color: #93c5fd; }</style>
-                        <span id="reportDataViewTitle" class="text-xs font-bold uppercase tracking-widest"><i class="fas fa-table mr-2"></i> Report Data View</span>
-                        <span class="text-[10px] text-gray-500 italic"><i class="fas fa-arrows-alt-h mr-1 text-blue-400"></i> Scroll horizontally for more dates</span>
-                    </div>
-                    
-                    <div class="w-full overflow-x-auto overflow-y-auto max-h-[600px] bg-gray-900 rounded-b relative">
-                        <table class="w-full text-left text-sm border-collapse whitespace-nowrap min-w-full" id="reportPreviewTable">
-                            <thead id="reportPreviewHead" class="bg-gray-800 text-gray-400 uppercase text-[10px] font-bold sticky top-0 z-10 shadow-md"></thead>
-                            <tbody id="reportPreviewBody" class="divide-y divide-gray-700 text-xs text-gray-300">
-                                <tr><td class="p-8 text-center text-gray-500 italic"><i class="fas fa-file-alt text-2xl mb-2 block opacity-50"></i>Select parameters and click Generate to populate this window.</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                </div> <div id="reportEmailerContent" class="hidden flex-col gap-6">
-                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-teal-500 w-full">
-                        <h3 class="font-bold text-gray-300 border-b border-gray-700 pb-2 mb-4"><i class="fas fa-paper-plane mr-2"></i>Configure Automated Report</h3>
-                        
-                        <form id="emailerForm" onsubmit="saveReportSchedule(event)" class="space-y-4">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-900 p-4 rounded border border-gray-700">
-                                <div>
-                                    <label class="block text-xs font-bold text-gray-400 mb-1">Report Type</label>
-                                    <select id="emailReportType" required class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
+                        <div id="trlRoot">
+                            <div class="trl-bar" id="trlBar">
+                                <div id="trlRepBox"><label class="trl-lbl" for="reportTypeSelect">Report</label><select id="reportTypeSelect" onchange="toggleReportEmpFilter()" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-blue-500 w-48" data-trp-grouped="1">
+                                    <optgroup label="Attendance">
                                         <option value="weekly" data-permission="rep_weekly">Weekly Attendance Summary</option>
                                         <option value="detailed_attendance" data-permission="rep_detailed">Employee Detailed Attendance</option>
-                                         <option value="mdb_attendance" data-permission="rep_mdb">MDB Attendance Report</option>
-                                        <option value="team_status" data-permission="rep_team_status">Team View Status Report</option>
+                                        <option value="mdb_attendance" data-permission="rep_mdb">MDB Attendance Report</option>
                                         <option value="muster" data-permission="rep_muster">Daily Muster Roll (Present)</option>
+                                        <option value="team_status" data-permission="rep_team_status">Team View Status Report</option>
+                                        <option value="legacy_timesheet" data-permission="rep_legacy">Detailed Timesheet (Legacy)</option>
+                                    </optgroup>
+                                    <optgroup label="Absence &amp; leave">
                                         <option value="absent" data-permission="rep_absent">Absenteeism Report</option>
                                         <option value="leave" data-permission="rep_leave">Approved Leave Report</option>
+                                    </optgroup>
+                                    <optgroup label="Exceptions">
                                         <option value="violations" data-permission="rep_violations">Active Violations Report</option>
                                         <option value="break_violations" data-permission="rep_break_violations">Break Violations Report</option>
                                         <option value="geo_violations" data-permission="rep_violations">Geofence Violations Report</option>
+                                    </optgroup>
+                                    <optgroup label="Overtime &amp; pay">
                                         <option value="overtime" data-permission="rep_overtime">Overtime & Premium Hours Report</option>
                                         <option value="periodic_new" data-permission="rep_periodic">Periodic Summary (New Totals)</option>
                                         <option value="ben_span" data-permission="rep_ben_span">BEN SPAN (Wage Estimates)</option>
+                                    </optgroup>
+                                    <optgroup label="Other">
+                                        <option value="sync_report" data-permission="rep_sync">Mobile User Sync Report</option>
+                                    </optgroup>
+                                </select></div>
+                                <div class="trl-f" id="trlDates"><label class="block">Date range</label><div class="trl-range" id="trlRange"><div>
+                                    <input type="date" id="repStartDate" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-blue-500">
+                                </div><span class="trl-to">–</span><div>
+                                    <input type="date" id="repEndDate" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-blue-500">
+                                </div></div></div>
+                                <div class="trl-f">
+                                    <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Department</label>
+                                    <select id="repDeptFilter" onchange="populateReportEmployees()" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-blue-500 w-40">
+                                    <option value="">-- Select Department --</option>
                                     </select>
                                 </div>
-                                <div>
-                                    <label class="block text-xs font-bold text-gray-400 mb-1">Recipient Email(s) <span class="font-normal text-[10px]">(Comma separated)</span></label>
-                                    <input type="text" id="emailRecipients" placeholder="manager@tnaafrica.co.za" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
+                                <div id="repIndivContainer" class="hidden relative trl-f">
+                                    <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Employee</label>
+                                    <input type="text" id="repIndivSearch" autocomplete="off" oninput="repIndivSearchHandler()" onfocus="repIndivSearchHandler()" placeholder="Name or PIN (optional)" class="bg-gray-800 border border-gray-600 rounded p-1.5 pr-7 text-xs text-white focus:outline-none focus:border-blue-500 w-52">
+                                    <input type="hidden" id="repIndivSelectedId" value="">
+                                    <button type="button" id="repIndivClearBtn" onclick="clearRepIndividual()" title="Clear employee" class="hidden absolute right-2 top-[27px] text-gray-400 hover:text-red-400 text-xs"><i class="fas fa-times"></i></button>
+                                    <div id="repIndivResults" class="hidden absolute z-50 w-72 bg-gray-800 border border-gray-500 rounded mt-1 max-h-56 overflow-y-auto shadow-2xl p-1 flex flex-col gap-0.5"></div>
                                 </div>
-                                <div id="emailRoleContainer" class="hidden">
-                                    <label class="block text-xs font-bold text-gray-400 mb-1">Send to Access Role <span class="font-normal text-[10px]">(Optional)</span></label>
-                                    <select id="emailRecipientRole" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
-                                        <option value="">-- No role (typed emails only) --</option>
-                                    </select>
-                                    <p class="text-[10px] text-gray-500 italic mt-1">Every active user on this role is emailed. Each one only receives the departments and subordinates their own access allows.</p>
-                                </div>
-                                
-                                <div class="col-span-1 md:col-span-2">
-                                    <label class="block text-xs font-bold text-gray-400 mb-1">Departments <span class="font-normal text-[10px]">(Check all that apply)</span></label>
-                                    <div id="emailDeptCheckboxes" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 p-3 bg-gray-800 border border-gray-600 rounded max-h-32 overflow-y-auto">
-                                        </div>
-                                </div>
-                            </div>
-
-                          <input type="hidden" id="editEmailScheduleId">
-
-                            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 bg-gray-900 p-4 rounded border border-gray-700 items-start">
-                                <div class="lg:col-span-3 w-full">
-                                    <label class="block text-xs font-bold text-gray-400 mb-1">Frequency</label>
-                                    <select id="emailFrequency" required onchange="updateEmailFrequencyUI()" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
-                                        <option value="Daily">Daily (Specific Days)</option>
-                                        <option value="Weekly">Weekly (Specific Day)</option>
-                                        <option value="Monthly">Monthly (Specific Date)</option>
-                                    </select>
-                                </div>
-
-                                <div id="freqContainerDays" class="lg:col-span-7 w-full overflow-hidden">
-                                    <label class="block text-xs font-bold text-gray-400 mb-1" id="freqLabel">Select Days of Week</label>
-                                    
-                                    <div id="freqDailyUI" class="flex flex-wrap gap-2 items-center w-full">
-                                        <label class="text-xs text-gray-300 flex items-center bg-gray-800 px-2 py-1.5 rounded border border-gray-600 cursor-pointer select-none hover:border-teal-500 transition whitespace-nowrap"><input type="checkbox" value="1" class="freq-day-chk mr-1.5 accent-teal-500" checked> Mon</label>
-                                        <label class="text-xs text-gray-300 flex items-center bg-gray-800 px-2 py-1.5 rounded border border-gray-600 cursor-pointer select-none hover:border-teal-500 transition whitespace-nowrap"><input type="checkbox" value="2" class="freq-day-chk mr-1.5 accent-teal-500" checked> Tue</label>
-                                        <label class="text-xs text-gray-300 flex items-center bg-gray-800 px-2 py-1.5 rounded border border-gray-600 cursor-pointer select-none hover:border-teal-500 transition whitespace-nowrap"><input type="checkbox" value="3" class="freq-day-chk mr-1.5 accent-teal-500" checked> Wed</label>
-                                        <label class="text-xs text-gray-300 flex items-center bg-gray-800 px-2 py-1.5 rounded border border-gray-600 cursor-pointer select-none hover:border-teal-500 transition whitespace-nowrap"><input type="checkbox" value="4" class="freq-day-chk mr-1.5 accent-teal-500" checked> Thu</label>
-                                        <label class="text-xs text-gray-300 flex items-center bg-gray-800 px-2 py-1.5 rounded border border-gray-600 cursor-pointer select-none hover:border-teal-500 transition whitespace-nowrap"><input type="checkbox" value="5" class="freq-day-chk mr-1.5 accent-teal-500" checked> Fri</label>
-                                        <label class="text-xs text-gray-300 flex items-center bg-gray-800 px-2 py-1.5 rounded border border-gray-600 cursor-pointer select-none hover:border-teal-500 transition whitespace-nowrap"><input type="checkbox" value="6" class="freq-day-chk mr-1.5 accent-teal-500"> Sat</label>
-                                        <label class="text-xs text-red-400 flex items-center bg-gray-800 px-2 py-1.5 rounded border border-gray-600 cursor-pointer select-none hover:border-red-500 transition whitespace-nowrap"><input type="checkbox" value="0" class="freq-day-chk mr-1.5 accent-red-500"> Sun</label>
-                                    </div>
-
-                                    <select id="freqWeeklyUI" class="hidden w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
-                                        <option value="1">Monday</option>
-                                        <option value="2">Tuesday</option>
-                                        <option value="3">Wednesday</option>
-                                        <option value="4">Thursday</option>
-                                        <option value="5">Friday</option>
-                                        <option value="6">Saturday</option>
-                                        <option value="0">Sunday</option>
-                                    </select>
-
-                                    <div id="freqMonthlyUI" class="hidden flex items-center gap-2">
-                                        <span class="text-xs text-gray-400">Day</span>
-                                        <input type="number" id="freqMonthlyDate" min="1" max="31" value="1" class="w-20 bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white text-center focus:outline-none focus:border-teal-500">
-                                        <span class="text-xs text-gray-500">of the month</span>
+                                <div id="repEmpContainer" class="hidden relative trl-f">
+                                    <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Employees</label>
+                                    <button type="button" onclick="document.getElementById('repEmpDropdown').classList.toggle('hidden')" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-blue-500 w-48 text-left flex justify-between items-center">
+                                    <span id="repEmpCountLabel">All in Dept</span> <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <div id="repEmpDropdown" class="hidden absolute z-50 w-64 bg-gray-800 border border-gray-500 rounded mt-1 max-h-48 overflow-y-auto shadow-2xl p-2 flex flex-col gap-1">
+                                    <div class="text-[10px] text-gray-500 italic text-center p-2">Select a department first.</div>
                                     </div>
                                 </div>
-
-                                <div class="lg:col-span-2 w-full">
-                                    <label class="block text-xs font-bold text-gray-400 mb-1">Time to Send</label>
-                                    <input type="time" id="emailRunTime" required value="08:00" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
-                                </div>
-                            </div>
-                            
-                            <div class="bg-gray-900 p-3 rounded border border-gray-700 w-full">
-                                <h4 class="text-xs font-bold text-gray-300 mb-2"><i class="fas fa-calendar-alt mr-1"></i>Report Data Range</h4>
-                                <p id="dataRangeDailyText" class="text-[10px] text-gray-400">The generated report will automatically extract data for <strong>Yesterday</strong>.</p>
-                                <p id="dataRangeWeeklyText" class="text-[10px] text-gray-400 hidden">The generated report will automatically extract data for the <strong>Previous 7 Days</strong>.</p>
-                                
-                                <div id="dataRangeMonthlyUI" class="hidden flex items-center gap-4">
-                                    <div>
-                                        <label class="block text-[10px] text-gray-500 mb-1">Start Day (Previous Month)</label>
-                                        <input type="number" id="dataStartDay" min="1" max="31" value="26" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white text-center focus:outline-none focus:border-teal-500">
-                                    </div>
-                                    <div class="text-gray-500 mt-4"><i class="fas fa-arrow-right"></i></div>
-                                    <div>
-                                        <label class="block text-[10px] text-gray-500 mb-1">End Day (Current Month)</label>
-                                        <input type="number" id="dataEndDay" min="1" max="31" value="25" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white text-center focus:outline-none focus:border-teal-500">
+                                <div id="trlGenBox"><button onclick="generateReportData(event)" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-1.5 rounded text-xs font-bold transition shadow h-8 trp-gen"> <i class="fas fa-sync mr-1"></i> Generate </button></div>
+                                <div class="trl-dd">
+                                    <button type="button" class="btn btn-secondary trl-btn" id="trlExportBtn" title="Download the report on screen, or email it on a schedule"><i class="fas fa-file-export"></i> Export <i class="fas fa-chevron-down"></i></button>
+                                    <div class="trl-menu" id="trlExportMenu">
+                                        <button onclick="exportReportToExcel(event)" class="bg-green-700 hover:bg-green-600 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow flex items-center h-8"><i class="fas fa-file-excel"></i> Excel</button>
+                                        <button onclick="exportReportToPdf(event)" class="bg-red-700 hover:bg-red-600 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow flex items-center h-8"><i class="fas fa-file-pdf"></i> PDF</button>
+                                        <div class="trl-sep"></div>
+                                        <button type="button" id="trpSched" class="trp-sched" title="Email this report automatically"><i class="fas fa-paper-plane"></i> Email on a schedule</button>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="flex justify-end pt-2 gap-3">
-                                <button type="button" id="btnCancelScheduleEdit" onclick="cancelEditSchedule()" class="hidden bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded text-sm font-bold shadow transition">Cancel Edit</button>
-                                <button type="submit" id="btnSaveSchedule" class="bg-teal-700 hover:bg-teal-600 text-white px-6 py-2 rounded text-sm font-bold shadow transition"><i class="fas fa-save mr-2"></i> Save Schedule</button>
+                            <div id="trpDesc" class="trp-desc"></div>
+                            <div class="bg-gray-800 rounded shadow-lg border border-gray-700 flex flex-col trl-table-box" style="width: 100%; max-width: calc(100vw - 300px);">
+                                <div class="w-full overflow-x-auto overflow-y-auto max-h-[600px] bg-gray-900 rounded-b relative trl-scroll">
+                                    <table class="w-full text-left text-sm border-collapse whitespace-nowrap min-w-full" id="reportPreviewTable">
+                                        <thead id="reportPreviewHead" class="bg-gray-800 text-gray-400 uppercase text-[10px] font-bold sticky top-0 z-10 shadow-md"></thead>
+                                        <tbody id="reportPreviewBody" class="divide-y divide-gray-700 text-xs text-gray-300">
+                                        <tr><td class="p-8 text-center text-gray-500 italic"><i class="fas fa-file-alt text-2xl mb-2 block opacity-50"></i>Select parameters and click Generate to populate this window.</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </form>
-                    </div>
-
-                    <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-indigo-500 w-full">
-                        <h3 class="font-bold text-gray-300 border-b border-gray-700 pb-2 mb-4"><i class="fas fa-list mr-2"></i>Active Schedules</h3>
-                        <div class="overflow-x-auto rounded border border-gray-700">
-                            <table class="w-full text-left text-sm border-collapse">
-                                <thead class="bg-gray-700 uppercase text-xs font-bold text-gray-400">
-                                    <tr>
-                                        <th class="p-3">Report</th>
-                                        <th class="p-3">Departments</th>
-                                        <th class="p-3">Recipients</th>
-                                        <th class="p-3">Schedule</th>
-                                        <th class="p-3">Data Range</th>
-                                        <th class="p-3 text-center">Status</th>
-                                        <th class="p-3 text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="emailSchedulesBody" class="divide-y divide-gray-700 bg-gray-900">
-                                    <tr><td colspan="6" class="p-4 text-center text-gray-500">Loading schedules...</td></tr>
-                                </tbody>
-                            </table>
                         </div>
                     </div>
-                </div> </section>
+                </div>
+                <!-- 2026-11-13 legacy clean-up (Reports, part 2): the Scheduled reports pop-up is written here directly, as it looked when
+                     tna_reports_ui.js built it at run time by moving the old "Automated Emailer" card (and its tab bar) into a window and
+                     hiding the rest. The form fields keep their ids: saveReportSchedule() / editReportSchedule() work on them as before.
+                     Styles: /css/tna_reports.css. Behaviour (steps, side menu, schedules table): tna_reports_ui.js. -->
+                <div class="trp-ov" id="trpOv" hidden>
+                    <div class="trp-win trx-win" role="dialog" aria-modal="true" aria-labelledby="trpTitle">
+                        <div class="trp-hdr">
+                            <div class="trp-title"><i class="fas fa-paper-plane"></i><div><b id="trpTitle">Scheduled reports</b><small>Reports emailed automatically, on the days and times you choose</small></div></div>
+                            <button type="button" class="trp-x" aria-label="Close"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="trp-body trx">
+                            <aside class="trx-nav">
+                                <label class="trx-find"><i class="fas fa-search"></i><input type="text" id="trxFind" placeholder="Search schedules" autocomplete="off"></label>
+                                <div class="trx-g"><span class="trx-n">1</span><span id="trxG1">New schedule</span><button type="button" id="trxNew" hidden title="Start a new schedule">+ New</button></div>
+                                <div id="trxSteps"><nav class="trs-tabs" id="trsTabs" aria-label="Steps">
+                                    <button type="button" class="trs-tab" data-step="1"><span class="n">1</span><span class="t">Report</span><span class="s" id="trsSub1"></span></button>
+                                    <button type="button" class="trs-tab" data-step="2"><span class="n">2</span><span class="t">Who gets it</span><span class="s" id="trsSub2"></span></button>
+                                    <button type="button" class="trs-tab" data-step="3"><span class="n">3</span><span class="t">Departments</span><span class="s" id="trsSub3"></span></button>
+                                    <button type="button" class="trs-tab" data-step="4"><span class="n">4</span><span class="t">When</span><span class="s" id="trsSub4"></span></button>
+                                    <button type="button" class="trs-tab" data-step="5"><span class="n">5</span><span class="t">Which data</span><span class="s" id="trsSub5"></span></button>
+                                </nav></div>
+                                <div class="trx-g"><span class="trx-n">2</span><span>Scheduled reports</span></div>
+                                <button type="button" class="trx-item" id="trxAll"><i class="fas fa-list"></i><span class="t">All schedules<b id="trxCount"></b></span></button>
+                            </aside>
+                            <div class="trx-main">
+                                <div class="trx-head"><div class="trx-crumb" id="trxCrumb"></div><h2 class="trx-title" id="trxTitle"></h2><p class="trx-desc" id="trxDesc"></p></div>
+                                <section class="trs-ed" id="trsEd">
+                                    <div id="reportEmailerContent" class="flex-col gap-6">
+                                        <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-teal-500 w-full">
+                                            <form id="emailerForm" onsubmit="saveReportSchedule(event)" class="space-y-4">
+                                                <div class="trs-grid"><div class="trs-pane"><div id="trsSteps">
+                                                    <div class="trs-step" data-step="1">
+                                                        <div class="trf-f"><span class="trf-lbl">Report</span><select id="emailReportType" required class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500" data-trp-grouped="1">
+                                                            <optgroup label="Attendance">
+                                                                <option value="weekly" data-permission="rep_weekly">Weekly Attendance Summary</option>
+                                                                <option value="detailed_attendance" data-permission="rep_detailed">Employee Detailed Attendance</option>
+                                                                <option value="mdb_attendance" data-permission="rep_mdb">MDB Attendance Report</option>
+                                                                <option value="muster" data-permission="rep_muster">Daily Muster Roll (Present)</option>
+                                                                <option value="team_status" data-permission="rep_team_status">Team View Status Report</option>
+                                                            </optgroup>
+                                                            <optgroup label="Absence &amp; leave">
+                                                                <option value="absent" data-permission="rep_absent">Absenteeism Report</option>
+                                                                <option value="leave" data-permission="rep_leave">Approved Leave Report</option>
+                                                            </optgroup>
+                                                            <optgroup label="Exceptions">
+                                                                <option value="violations" data-permission="rep_violations">Active Violations Report</option>
+                                                                <option value="break_violations" data-permission="rep_break_violations">Break Violations Report</option>
+                                                                <option value="geo_violations" data-permission="rep_violations">Geofence Violations Report</option>
+                                                            </optgroup>
+                                                            <optgroup label="Overtime &amp; pay">
+                                                                <option value="overtime" data-permission="rep_overtime">Overtime & Premium Hours Report</option>
+                                                                <option value="periodic_new" data-permission="rep_periodic">Periodic Summary (New Totals)</option>
+                                                                <option value="ben_span" data-permission="rep_ben_span">BEN SPAN (Wage Estimates)</option>
+                                                            </optgroup>
+                                                        </select></div>
+                                                    </div>
+                                                    <div class="trs-step" data-step="2" hidden>
+                                                        <div class="trf-f"><span class="trf-lbl">Send to</span><div class="trf-seg" id="trsSendSeg"><button type="button" data-m="email"><i class="fas fa-at"></i>Email addresses</button><button type="button" data-m="role"><i class="fas fa-users"></i>Access role</button></div></div>
+                                                        <div class="trf-f" id="trsEmailF"><span class="trf-lbl">Email addresses</span><div><div class="trf-chips" id="trfEmails"><input type="text" id="trfEmailIn" autocomplete="off" placeholder="Type an email and press Enter"></div><p class="trf-hint" id="trfEmailHint"></p></div></div>
+                                                        <div class="trf-f" id="trsRoleF"><span class="trf-lbl">Access role</span><div>
+                                                            <div id="emailRoleContainer" class="hidden">
+                                                            <label class="block text-xs font-bold text-gray-400 mb-1">Send to Access Role <span class="font-normal text-[10px]">(Optional)</span></label>
+                                                            <select id="emailRecipientRole" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
+                                                            <option value="">-- No role (typed emails only) --</option>
+                                                            </select>
+                                                            <p class="text-[10px] text-gray-500 italic mt-1">Every active user on this role is emailed. Each one only receives the departments and subordinates their own access allows.</p>
+                                                            </div>
+                                                            <p class="trf-hint" id="trsRoleNote"></p>
+                                                        </div></div>
+                                                    </div>
+                                                    <div class="trs-step" data-step="3" hidden>
+                                                        <div class="trf-f"><span class="trf-lbl">Departments</span><div>
+                                                            <label class="trf-switch"><input type="checkbox" id="trfAllDepts"> All departments <small>· every department, also ones added later</small></label>
+                                                            <div id="trfDeptPick"><div class="trf-chips" id="trfDeptChips" style="cursor: default; margin-top: 10px;"></div>
+                                                            <input type="text" id="trfDeptFind" class="trf-in trf-search" placeholder="Search departments" autocomplete="off"><div class="trf-list" id="trfDeptList"></div><p class="trf-hint" id="trfDeptHint"></p></div>
+                                                        </div></div>
+                                                    </div>
+                                                    <div class="trs-step" data-step="4" hidden>
+                                                        <div class="trf-f"><span class="trf-lbl">How often</span><div class="trf-seg" id="trfFreq"><button type="button" data-f="Daily">Daily</button><button type="button" data-f="Weekly">Weekly</button><button type="button" data-f="Monthly">Monthly</button></div></div>
+                                                        <div class="trf-when">
+                                                            <div class="trf-f"><span class="trf-lbl"><span id="trfDaysLbl">Days</span></span><div id="freqContainerDays" class="lg:col-span-7 w-full overflow-hidden">
+                                                                
+                                                                <div id="freqDailyUI" class="flex flex-wrap gap-2 items-center w-full">
+                                                                <label class="text-xs text-gray-300 flex items-center bg-gray-800 px-2 py-1.5 rounded border border-gray-600 cursor-pointer select-none hover:border-teal-500 transition whitespace-nowrap"><input type="checkbox" value="1" class="freq-day-chk mr-1.5 accent-teal-500" checked> Mon</label>
+                                                                <label class="text-xs text-gray-300 flex items-center bg-gray-800 px-2 py-1.5 rounded border border-gray-600 cursor-pointer select-none hover:border-teal-500 transition whitespace-nowrap"><input type="checkbox" value="2" class="freq-day-chk mr-1.5 accent-teal-500" checked> Tue</label>
+                                                                <label class="text-xs text-gray-300 flex items-center bg-gray-800 px-2 py-1.5 rounded border border-gray-600 cursor-pointer select-none hover:border-teal-500 transition whitespace-nowrap"><input type="checkbox" value="3" class="freq-day-chk mr-1.5 accent-teal-500" checked> Wed</label>
+                                                                <label class="text-xs text-gray-300 flex items-center bg-gray-800 px-2 py-1.5 rounded border border-gray-600 cursor-pointer select-none hover:border-teal-500 transition whitespace-nowrap"><input type="checkbox" value="4" class="freq-day-chk mr-1.5 accent-teal-500" checked> Thu</label>
+                                                                <label class="text-xs text-gray-300 flex items-center bg-gray-800 px-2 py-1.5 rounded border border-gray-600 cursor-pointer select-none hover:border-teal-500 transition whitespace-nowrap"><input type="checkbox" value="5" class="freq-day-chk mr-1.5 accent-teal-500" checked> Fri</label>
+                                                                <label class="text-xs text-gray-300 flex items-center bg-gray-800 px-2 py-1.5 rounded border border-gray-600 cursor-pointer select-none hover:border-teal-500 transition whitespace-nowrap"><input type="checkbox" value="6" class="freq-day-chk mr-1.5 accent-teal-500"> Sat</label>
+                                                                <label class="text-xs text-red-400 flex items-center bg-gray-800 px-2 py-1.5 rounded border border-gray-600 cursor-pointer select-none hover:border-red-500 transition whitespace-nowrap"><input type="checkbox" value="0" class="freq-day-chk mr-1.5 accent-red-500"> Sun</label>
+                                                                </div>
+                                                                
+                                                                <select id="freqWeeklyUI" class="hidden w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
+                                                                <option value="1">Monday</option>
+                                                                <option value="2">Tuesday</option>
+                                                                <option value="3">Wednesday</option>
+                                                                <option value="4">Thursday</option>
+                                                                <option value="5">Friday</option>
+                                                                <option value="6">Saturday</option>
+                                                                <option value="0">Sunday</option>
+                                                                </select>
+                                                                
+                                                                <div id="freqMonthlyUI" class="hidden flex items-center gap-2">
+                                                                <span class="text-xs text-gray-400">Day</span>
+                                                                <input type="number" id="freqMonthlyDate" min="1" max="31" value="1" class="w-20 bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white text-center focus:outline-none focus:border-teal-500">
+                                                                <span class="text-xs text-gray-500">of the month</span>
+                                                                </div>
+                                                            </div></div>
+                                                            <div class="trf-f"><span class="trf-lbl">Time</span><input type="time" id="emailRunTime" required value="08:00" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500"></div>
+                                                        </div>
+                                                        <p class="trf-hint" id="trsWhenHint"></p>
+                                                    </div>
+                                                    <div class="trs-step" data-step="5" hidden>
+                                                        <div class="trf-f"><div><div class="trf-range" id="trfRange"></div><div id="dataRangeMonthlyUI" class="hidden flex items-center gap-4">
+                                                            <div>
+                                                            <label class="block text-[10px] text-gray-500 mb-1">Start Day (Previous Month)</label>
+                                                            <input type="number" id="dataStartDay" min="1" max="31" value="26" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white text-center focus:outline-none focus:border-teal-500">
+                                                            </div>
+                                                            <div class="text-gray-500 mt-4"><i class="fas fa-arrow-right"></i></div>
+                                                            <div>
+                                                            <label class="block text-[10px] text-gray-500 mb-1">End Day (Current Month)</label>
+                                                            <input type="number" id="dataEndDay" min="1" max="31" value="25" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white text-center focus:outline-none focus:border-teal-500">
+                                                            </div>
+                                                            </div></div></div>
+                                                    </div>
+                                                </div>
+                                                    <div class="trs-foot"><div class="trs-say" id="trfSum"></div>
+                                                        <div class="trs-acts"><button type="button" class="trp-btn" id="trsBack"><i class="fas fa-arrow-left"></i> Back</button><button type="button" class="trp-btn" id="trsNext">Next <i class="fas fa-arrow-right"></i></button>
+                                                            <button type="button" class="trp-btn" id="trsCancel" hidden>Cancel</button><button type="submit" id="btnSaveSchedule" class="bg-teal-700 hover:bg-teal-600 text-white px-6 py-2 rounded text-sm font-bold shadow transition"><i class="fas fa-save mr-2"></i> Save Schedule</button></div></div>
+                                                </div></div>
+                                                <input type="hidden" id="editEmailScheduleId">
+                                                <!-- the page's own fields that the steps fill in (hidden): saveReportSchedule() reads them, editReportSchedule() fills them -->
+                                                <div data-trp-hide>
+                                                    <input type="text" id="emailRecipients" placeholder="manager@tnaafrica.co.za" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
+                                                    <select id="emailFrequency" required onchange="updateEmailFrequencyUI()" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-sm text-white focus:outline-none focus:border-teal-500">
+                                                        <option value="Daily">Daily (Specific Days)</option>
+                                                        <option value="Weekly">Weekly (Specific Day)</option>
+                                                        <option value="Monthly">Monthly (Specific Date)</option>
+                                                    </select>
+                                                    <div id="emailDeptCheckboxes" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 p-3 bg-gray-800 border border-gray-600 rounded max-h-32 overflow-y-auto"></div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </section>
+                                <section class="trs-list">
+                                    <table class="trs-tbl"><thead><tr><th>Report</th><th>Departments</th><th>Sent to</th><th>When</th><th>Status</th><th></th></tr></thead>
+                                        <tbody id="trpItems"><tr><td colspan="6" class="empty"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr></tbody></table>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
            <section id="page-overtime" class="page-section pb-32">
                 <!-- ⚡ 2026-10-26 OVERTIME RULES, EASIER TO READ: grouped into Weekends / Pay rates / Rules for shifts or people, with the
@@ -2413,7 +2195,7 @@
                             <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-gray-800/50 transition">
                                 <div>
                                     <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-building text-purple-400 mr-2"></i>Display Deactivated Departments</h4>
-                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">If enabled, deactivated departments will remain visible in dropdowns and the department defaults grid.</p>
+                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">If enabled, deactivated departments will remain visible in dropdowns and the department work patterns list.</p>
                                 </div>
                                 <div class="flex items-center gap-2 flex-shrink-0">
                                     <label class="flex items-center cursor-pointer">
@@ -2462,7 +2244,7 @@
                             <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-gray-800/50 transition">
                                 <div>
                                     <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-redo text-indigo-400 mr-2"></i>After hours are recalculated</h4>
-                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">When new clockings or roster changes recalculate a day, which Manager Inbox items go back to waiting for approval. "Force Overwrite All" always sends everything back.</p>
+                                    <p class="text-[10px] text-gray-500 mt-1 max-w-xl">When new clockings or roster changes recalculate a day, which Manager Inbox items go back to waiting for approval. "Force Overwrite All" (and "Recalculate &amp; reset" on Employee Violations) always sends everything back.</p>
                                 </div>
                                 <div class="flex items-center gap-2 flex-shrink-0">
                                     <select id="settingRecalcReopen" onchange="saveTNASettings(event)" style="width: 16rem;" class="bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
@@ -2636,18 +2418,31 @@
                                     .lv-name { font-weight: 800; font-size: 13.5px; color: #1e293b; }
                                     .lv-sub { font-size: 12px; color: #64748b; }
                                     .lv-chip { display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 999px; font-size: 10.5px; font-weight: 800; vertical-align: middle; background: #eef2f6; color: #475569; }
-                                    .lv-chip.paid { background: #e8f5ee; color: #15803d; } .lv-chip.nt { background: #eaf1f8; color: #1a4c7b; }
+                                    .lv-chip.paid { background: #e8f5ee; color: #15803d; } .lv-chip.nt, .lv-chip.sage { background: #eaf1f8; color: #1a4c7b; }
+                                    .lv-chip.sage { cursor: help; } .lv-chip.sage i { font-size: 9px; margin-right: 2px; }
                                     .lv-off { opacity: .55; }
                                     .lv-btn { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; border: 1px solid #cbd5e1; background: #ffffff; color: #1a4c7b; font-size: 12px; font-weight: 700; cursor: pointer; margin-left: 6px; }
                                     .lv-btn:hover { border-color: #1a4c7b; }
+                                    /* ⚡ 2026-11-15 Leave types: Show Active | Deactivated, and a navy confirm button */
+                                    .lv-show { display: inline-flex; gap: 4px; padding: 3px; margin: 0 0 10px; border: 1px solid #e2e8f0; border-radius: 10px; background: #f7f9fb; }
+                                    .lv-show button { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: #475569; font-size: 12px; font-weight: 700; cursor: pointer; }
+                                    .lv-show button:hover { color: #1a4c7b; }
+                                    .lv-show button.on { background: #ffffff; color: #1a4c7b; box-shadow: 0 1px 3px rgba(15, 23, 42, .08); }
+                                    .lv-show .n { min-width: 18px; padding: 0 6px; border-radius: 999px; font-size: 10.5px; font-weight: 800; text-align: center; background: #eaf1f8; color: #1a4c7b; }
+                                    .lv-navy-btn { background: #1a4c7b; border: 1px solid #1a4c7b; }
+                                    .lv-navy-btn:hover { background: #163f66; }
                                     body.dark-mode .lv-add { background: rgba(255, 255, 255, .03); border-color: rgba(255, 255, 255, .1); }
                                     body.dark-mode .lv-add label.lv-tick { color: #cbd5e1; }
                                     body.dark-mode .lv-list { border-color: rgba(255, 255, 255, .1) !important; background: rgba(255, 255, 255, .02) !important; }
                                     body.dark-mode .lv-list tr + tr td { border-color: rgba(255, 255, 255, .07); }
                                     body.dark-mode .lv-name { color: #e2e8f0; } body.dark-mode .lv-sub { color: #a3b1c4; }
                                     body.dark-mode .lv-chip { background: rgba(255, 255, 255, .08); color: #cbd5e1; }
-                                    body.dark-mode .lv-chip.paid { background: rgba(34, 197, 94, .15); color: #86efac; } body.dark-mode .lv-chip.nt { background: rgba(147, 197, 253, .15); color: #93c5fd; }
+                                    body.dark-mode .lv-chip.paid { background: rgba(34, 197, 94, .15); color: #86efac; } body.dark-mode .lv-chip.nt, body.dark-mode .lv-chip.sage { background: rgba(147, 197, 253, .15); color: #93c5fd; }
                                     body.dark-mode .lv-btn { background: transparent; border-color: rgba(255, 255, 255, .18); color: #93c5fd; }
+                                    body.dark-mode .lv-show { background: rgba(255, 255, 255, .03); border-color: rgba(255, 255, 255, .1); }
+                                    body.dark-mode .lv-show button { color: #a3b1c4; } body.dark-mode .lv-show button:hover { color: #e2e8f0; }
+                                    body.dark-mode .lv-show button.on { background: rgba(255, 255, 255, .08); color: #93c5fd; box-shadow: none; }
+                                    body.dark-mode .lv-show .n { background: rgba(147, 197, 253, .15); color: #93c5fd; }
                                     body.dark-mode .lv-msg.ok { color: #86efac; } body.dark-mode .lv-msg.bad { color: #fca5a5; }
                                 </style>
                                 <div class="lv-head">
@@ -2674,7 +2469,7 @@
                             <div class="p-4 flex flex-col transition">
                                 <div class="lv-head">
                                     <h4 class="text-sm font-bold text-gray-300"><i class="fas fa-bed text-purple-400 mr-2"></i>Leave types</h4>
-                                    <p class="text-[10px] text-gray-500 mt-1">The kinds of leave people can take. This is the same list as <b>ESS Master &rsaquo; Leave Types</b>, where you also set when proof is needed. How much leave people get is set in ESS Master's Leave Policies.</p>
+                                    <p class="text-[10px] text-gray-500 mt-1">The kinds of leave people can take. This is the same list as <b>ESS Master &rsaquo; Leave Types</b>, where you also set when proof is needed. How much leave people get is set in ESS Master's Leave Policies. A <b>From Sage</b> tag shows the Sage leave code the type is linked to (Sage Leave Type Mapping).</p>
                                 </div>
                                 <div class="lv-add">
                                     <input type="text" id="newLeaveName" placeholder="Leave type name, e.g. Study Leave" maxlength="100" onkeydown="if (event.key === 'Enter') { event.preventDefault(); addLeaveType(); }" class="lv-grow bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
@@ -2684,6 +2479,10 @@
                                     <button type="button" onclick="addLeaveType()" class="bg-purple-600 hover:bg-purple-500 text-white px-3 py-1.5 rounded text-xs font-bold shadow transition"><i class="fas fa-plus"></i> Add leave type</button>
                                 </div>
                                 <div class="lv-msg" id="newLeaveMsg"></div>
+                                <div class="lv-show" id="leaveShowBar" role="tablist" aria-label="Show leave types">
+                                    <button type="button" role="tab" data-show="active" class="on" aria-selected="true" onclick="setLeaveShow('active')">Active <span class="n" id="leaveShowActiveN"></span></button>
+                                    <button type="button" role="tab" data-show="inactive" aria-selected="false" onclick="setLeaveShow('inactive')">Deactivated <span class="n" id="leaveShowOffN"></span></button>
+                                </div>
                                 <div class="lv-list bg-gray-800 border border-gray-700 rounded">
                                     <table class="w-full text-left text-xs">
                                         <tbody id="leaveTypesListBody" class="divide-y divide-gray-700">
@@ -2754,194 +2553,91 @@
                     </form>
                 </div>
 
-                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-red-500 w-full mb-6">
-                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
-                        <h3 class="font-bold text-gray-300"><i class="fas fa-lock mr-2"></i>Payroll Periods & Locking</h3>
-                        <button onclick="document.getElementById('payrollPeriodForm').classList.toggle('hidden')" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-1.5 rounded text-xs font-bold transition shadow">
-                            <i class="fas fa-plus mr-1"></i> Add Period Type
-                        </button>
+                <!-- 2026-11-15 Settings > Payroll Periods & Locking in the Settings look (user: "modernize ... and check that it actually
+                     works"; always on, no switch). Cycles on the left; the chosen cycle's periods on the right, each with its own
+                     Lock / Unlock button and who locked it when. Period dates come from the SERVER (GET /api/ess/payroll-periods ->
+                     logic_esspayrollperiods.js windowsFor), the same periods ESS Master and payroll send use. The old in-browser date
+                     maths (generateLockRanges + two drop-downs) is removed: it ran day 31 into the next month and put ESS weekly cycles
+                     on Sundays. Locks still save through POST /api/tna/payroll/locks/toggle (audit trail). The pop-ups #ppNewModal
+                     (New cycle: the same #payrollPeriodForm, ppName, ppType ... ids and createPayrollPeriod()) and #ppAskModal sit on
+                     <body> next to the other pop-ups. Styles: css/tna_payroll_periods.css. Behaviour: "PAYROLL PERIODS & LOCKS" in
+                     tna_dashboard.js. tna_settings_ui.js moves this card (#payrollCard) into Settings > Payroll Periods. -->
+                <div id="payrollCard" class="bg-gray-800 p-6 rounded shadow-lg w-full mb-6">
+                    <div class="pp-head">
+                        <h3><i class="fas fa-lock mr-2"></i>Payroll Periods &amp; Locking</h3>
+                        <button type="button" id="ppNewBtn" class="dp-btn pri" onclick="ppOpenNew()"><i class="fas fa-plus"></i> New cycle</button>
                     </div>
-                    
-                    <form id="payrollPeriodForm" onsubmit="createPayrollPeriod(event)" class="hidden bg-gray-900 p-4 rounded border border-gray-700 mb-6">
-                        <h4 class="text-xs font-bold text-red-400 mb-3 uppercase tracking-wider">Define New Payroll Cycle</h4>
-                        <div class="flex flex-col gap-4">
-                            <div class="flex gap-4 items-end">
-                                <div class="flex-1">
-                                    <label class="block text-[10px] text-gray-500 mb-1">Period Name</label>
-                                    <input type="text" id="ppName" placeholder="e.g. Monthly Managers, Weekly Factory" required class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white">
-                                </div>
-                                <div class="w-48">
-                                    <label class="block text-[10px] text-gray-500 mb-1">Cycle Type</label>
-                                    <select id="ppType" onchange="togglePayrollConfig()" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white">
-                                        <option value="Monthly">Monthly</option>
-                                        <option value="Weekly">Weekly</option>
-                                        <option value="Fortnightly">Fortnightly</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div id="configMonthly" class="p-3 bg-gray-800 rounded border border-gray-700 flex flex-col gap-3 transition">
-                                <div class="flex gap-4">
-                                    <label class="flex items-center text-[10px] text-gray-300 cursor-pointer"><input type="radio" name="monthlyMode" value="fixed" checked onchange="toggleMonthlyMode()" class="mr-1 accent-red-500"> Fixed Date</label>
-                                    <label class="flex items-center text-[10px] text-gray-300 cursor-pointer"><input type="radio" name="monthlyMode" value="relative" onchange="toggleMonthlyMode()" class="mr-1 accent-red-500"> Relative Day (e.g. Last Friday)</label>
-                                </div>
-                                <div id="monthlyFixedMode" class="flex gap-4 items-end">
-                                    <div>
-                                        <label class="block text-[10px] text-gray-500 mb-1">Starts On (Day of Month)</label>
-                                        <input type="number" id="ppMonthStartDay" min="1" max="31" value="26" class="w-24 bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white text-center">
-                                    </div>
-                                    <div>
-                                        <label class="block text-[10px] text-gray-500 mb-1">Of Which Month?</label>
-                                        <select id="ppMonthStartWhen" class="w-32 bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white">
-                                            <option value="previous">Previous Month</option>
-                                            <option value="current">Current Month</option>
-                                        </select>
-                                    </div>
-                                    <div class="text-gray-500 pb-2">➔</div>
-                                    <div>
-                                        <label class="block text-[10px] text-gray-500 mb-1">Ends On (Day of Month)</label>
-                                        <input type="number" id="ppMonthEndDay" min="1" max="31" value="25" class="w-24 bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white text-center">
-                                    </div>
-                                </div>
-                                <div id="monthlyRelativeMode" class="hidden flex gap-4 items-end">
-                                    <div>
-                                        <label class="block text-[10px] text-gray-500 mb-1">Cycle Ends On (Every Month)</label>
-                                        <select id="ppMonthRelativeEnd" class="w-48 bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white">
-                                            <option value="5">Last Friday</option>
-                                            <option value="4">Last Thursday</option>
-                                            <option value="3">Last Wednesday</option>
-                                            <option value="2">Last Tuesday</option>
-                                            <option value="1">Last Monday</option>
-                                            <option value="0">Last Sunday</option>
-                                            <option value="6">Last Saturday</option>
-                                        </select>
-                                    </div>
-                                    <p class="text-[10px] text-gray-500 italic pb-2">Start date auto-calculates from previous cycle's end.</p>
-                                </div>
-                            </div>
-
-                            <div id="configWeekly" class="p-3 bg-gray-800 rounded border border-gray-700 hidden gap-4 items-end transition">
-                                <div>
-                                    <label class="block text-[10px] text-gray-500 mb-1">Cycle Starts On</label>
-                                    <select id="ppWeekStart" class="w-48 bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white">
-                                        <option value="0">Sunday</option><option value="1">Monday</option><option value="2">Tuesday</option>
-                                        <option value="3">Wednesday</option><option value="4" selected>Thursday</option>
-                                        <option value="5">Friday</option><option value="6">Saturday</option>
-                                    </select>
-                                </div>
-                                <p class="text-[10px] text-gray-500 italic pb-2">Cycle will automatically end 6 days later.</p>
-                            </div>
-
-                            <div id="configFortnightly" class="p-3 bg-gray-800 rounded border border-gray-700 hidden gap-4 items-end transition">
-                                <div>
-                                    <label class="block text-[10px] text-gray-500 mb-1">Cycle Starts On</label>
-                                    <select id="ppFortnightStart" class="w-48 bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white">
-                                        <option value="0">Sunday</option><option value="1">Monday</option><option value="2">Tuesday</option>
-                                        <option value="3">Wednesday</option><option value="4" selected>Thursday</option>
-                                        <option value="5">Friday</option><option value="6">Saturday</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] text-gray-500 mb-1">Select an Anchor Date (Any valid past start date)</label>
-                                    <input type="date" id="ppFortnightAnchor" class="w-48 bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white">
-                                </div>
-                            </div>
-
-                            <div class="flex justify-end mt-2">
-                                <button type="submit" class="bg-red-600 hover:bg-red-500 text-white px-6 py-2 rounded text-xs font-bold shadow">Save Cycle Rule</button>
-                            </div>
+                    <div id="ppWarn" class="pp-warn" role="note" hidden></div>
+                    <div class="pp-grid">
+                        <div class="pp-side">
+                            <div class="pp-lbl">Cycles</div>
+                            <div id="payrollPeriodsList" class="pp-cycles"></div>
                         </div>
-                    </form>
-
-                    <div class="flex flex-col md:flex-row gap-6">
-                        <div class="w-full md:w-1/3 md:border-r border-gray-700 md:pr-6">
-                            <h4 class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">Configured Cycles</h4>
-                            <div id="payrollPeriodsList" class="space-y-2"></div>
-                        </div>
-
-                        <div class="w-full md:w-2/3">
-                            <h4 class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">Execute Period Lock</h4>
-                            <div class="bg-gray-900 p-4 rounded border border-gray-700 mb-4 flex flex-col gap-3">
-                                <div class="flex gap-3">
-                                    <div class="flex-1">
-                                        <label class="block text-[10px] text-gray-500 mb-1">1. Select Cycle Rule</label>
-                                        <select id="lockPeriodSelect" onchange="generateLockRanges()" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white"></select>
-                                    </div>
-                                    <div class="flex-1">
-                                        <label class="block text-[10px] text-gray-500 mb-1">2. Select Date Range to Lock</label>
-                                        <select id="lockRangeSelect" class="w-full bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white">
-                                            <option value="">-- Select a cycle first --</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="flex gap-2 justify-end mt-2">
-                                    <button onclick="togglePayrollLock(true)" class="bg-red-700 hover:bg-red-600 text-white px-4 py-1.5 rounded text-xs font-bold h-8 shadow"><i class="fas fa-lock mr-1"></i> Lock Period</button>
-                                    <button onclick="togglePayrollLock(false)" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-1.5 rounded text-xs font-bold h-8 shadow"><i class="fas fa-unlock text-green-400 mr-1"></i> Unlock</button>
+                        <div class="pp-main">
+                            <div id="ppCycleHead" class="pp-chead"></div>
+                            <div class="pp-wrap">
+                                <table class="pp-table">
+                                    <thead><tr><th>Period</th><th>Status</th><th class="pp-c-by">Locked by</th><th class="pp-c-act"></th></tr></thead>
+                                    <tbody id="ppPeriodsBody"></tbody>
+                                </table>
+                            </div>
+                            <div id="ppOtherBox" hidden>
+                                <div class="pp-lbl pp-lbl-gap">Other locked dates <small>locks that are not one of the periods above</small></div>
+                                <div class="pp-wrap">
+                                    <table class="pp-table">
+                                        <thead><tr><th>Cycle</th><th>Dates</th><th class="pp-c-by">Locked by</th><th class="pp-c-act"></th></tr></thead>
+                                        <tbody id="payrollLocksBody"></tbody>
+                                    </table>
                                 </div>
                             </div>
-
-                            <table class="w-full text-left text-xs">
-                                <thead class="text-gray-500 border-b border-gray-700">
-                                    <tr><th class="pb-2">Period Name</th><th class="pb-2">Date Range</th><th class="pb-2 text-center">Status</th></tr>
-                                </thead>
-                                <tbody id="payrollLocksBody" class="text-gray-300 divide-y divide-gray-800">
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-cyan-500 w-full">
-                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
-                        <h3 class="font-bold text-gray-300"><i class="fas fa-building mr-2"></i>Department Default Shifts & Payroll</h3>
+                <!-- 2026-11-15 Settings > Departments: WORK PATTERNS (was "Department Default Shifts & Payroll"). Always on, no switch.
+                     Each department's normal week: default shift + working days (the Weekly Roster's "Auto" days, leave day counts,
+                     clock reminders, Fill roster). Payroll cycle + geofences sit in each row's ... menu. Same Departments columns and
+                     the same PUT /api/tna/departments/:code/defaults as before (all four fields are always sent).
+                     Styles: /css/tna_departments.css. Behaviour: "DEPARTMENT WORK PATTERNS" in tna_dashboard.js.
+                     #deptDefaultsBody keeps its id (tna_settings_ui.js moves this card into Settings, the tours point at it). -->
+                <div id="deptPatternsCard" class="bg-gray-800 p-6 rounded shadow-lg w-full mb-6">
+                    <div class="dp-head"><h3><i class="fas fa-building mr-2"></i>Department work patterns</h3></div>
+                    <div class="dp-tools">
+                        <div class="dp-search"><i class="fas fa-search"></i><input type="text" id="dpSearch" placeholder="Search departments…" autocomplete="off" oninput="dpRender()"></div>
+                        <span class="dp-count" id="dpCount"></span>
                     </div>
-                    <p class="text-xs text-gray-500 mb-4">Set baseline schedules and assign specific Payroll Cycles to entire departments here.</p>
-                    
-                    <div class="flex flex-col xl:flex-row items-center justify-between gap-4 mb-4 bg-gray-900 p-3 rounded border border-gray-700">
-                        <div class="flex items-center space-x-2 w-full">
-                            <span class="text-[10px] text-gray-400 font-bold ml-2 uppercase tracking-wider whitespace-nowrap">Bulk Assign:</span>
-                            <select id="bulkDeptShiftSelect" class="bg-gray-800 border border-gray-600 rounded py-1 px-2 text-xs text-white focus:outline-none focus:border-cyan-500 w-40">
-                                <option value="">-- Shift --</option>
-                            </select>
-                            <select id="bulkDeptPayrollSelect" class="bg-gray-800 border border-gray-600 rounded py-1 px-2 text-xs text-white focus:outline-none focus:border-cyan-500 w-40">
-                                <option value="">-- Payroll Cycle --</option>
-                            </select>
-                            <select id="bulkDeptGeofencesSelect" multiple size="1" class="bg-gray-800 border border-gray-600 rounded py-1 px-2 text-xs text-white focus:outline-none focus:border-cyan-500 w-40" title="Select multiple holding Ctrl/Cmd. Select 'Clear' to inherit global.">
-                                <option value="clear" class="text-red-400 font-bold">■ Clear Geofences</option>
-                            </select>
-                            
-                            <div class="flex items-center space-x-2 ml-4">
-                                <label class="text-[10px] text-gray-400 flex flex-col items-center"><input type="checkbox" value="1" class="bulk-dept-day-chk mb-0.5 accent-cyan-500" checked>M</label>
-                                <label class="text-[10px] text-gray-400 flex flex-col items-center"><input type="checkbox" value="2" class="bulk-dept-day-chk mb-0.5 accent-cyan-500" checked>T</label>
-                                <label class="text-[10px] text-gray-400 flex flex-col items-center"><input type="checkbox" value="3" class="bulk-dept-day-chk mb-0.5 accent-cyan-500" checked>W</label>
-                                <label class="text-[10px] text-gray-400 flex flex-col items-center"><input type="checkbox" value="4" class="bulk-dept-day-chk mb-0.5 accent-cyan-500" checked>T</label>
-                                <label class="text-[10px] text-gray-400 flex flex-col items-center"><input type="checkbox" value="5" class="bulk-dept-day-chk mb-0.5 accent-cyan-500" checked>F</label>
-                                <label class="text-[10px] text-gray-400 flex flex-col items-center"><input type="checkbox" value="6" class="bulk-dept-day-chk mb-0.5 accent-cyan-500">S</label>
-                                <label class="text-[10px] text-red-400 flex flex-col items-center"><input type="checkbox" value="0" class="bulk-dept-day-chk mb-0.5 accent-red-500">S</label>
-                            </div>
-                            
-                            <button onclick="applyBulkDeptShift(event)" class="bg-cyan-700 hover:bg-cyan-600 text-white px-4 py-1 ml-auto rounded text-xs font-bold transition shadow whitespace-nowrap">Apply to Selected</button>
+                    <div class="dp-sticky">
+                        <div class="dp-bar" id="dpBar" hidden role="region" aria-label="Unsaved department changes">
+                            <div class="dp-bar-t"><b><i></i><span id="dpBarT">Unsaved changes</span></b><div class="dp-sub" id="dpBarSub"></div></div>
+                            <button type="button" class="dp-btn" id="dpUndo" onclick="dpUndo()">Undo</button>
+                            <button type="button" class="dp-btn pri" id="dpSave" onclick="dpSave()"><i class="fas fa-save"></i><span>Save changes</span></button>
+                        </div>
+                        <div class="dp-bulk" id="dpBulk" hidden>
+                            <span class="dp-bulk-t" id="dpBulkT">0 ticked</span>
+                            <button type="button" class="dp-btn" onclick="dpBulk(this, 'shift')">Default shift <i class="fas fa-chevron-down"></i></button>
+                            <button type="button" class="dp-btn" onclick="dpBulk(this, 'days')">Working days <i class="fas fa-chevron-down"></i></button>
+                            <button type="button" class="dp-btn" onclick="dpBulk(this, 'period')">Payroll cycle <i class="fas fa-chevron-down"></i></button>
+                            <button type="button" class="dp-btn" onclick="dpBulk(this, 'geo')">Geofences <i class="fas fa-chevron-down"></i></button>
+                            <span class="dp-bulk-sp"></span>
+                            <button type="button" class="dp-btn" onclick="dpTickAll(false)">Clear ticks</button>
                         </div>
                     </div>
-
-                    <div class="overflow-x-auto">
-                            <table class="w-full text-left text-xs">
-                                <thead class="bg-gray-800 text-gray-400 uppercase font-bold border-b border-gray-700">
-                                    <tr>
-                                        <th class="p-2 w-10 text-center"><input type="checkbox" id="selectAllDepts" onchange="toggleSelectAllDepts(this)" class="accent-cyan-500 w-4 h-4 cursor-pointer"></th>
-                                        <th class="p-2">Department</th>
-                                        <th class="p-2 w-40">Default Shift</th>
-                                        <th class="p-2 w-40">Payroll Cycle</th>
-                                        <th class="p-2 w-40">Geofences</th>
-                                        <th class="p-2 text-center">Active Days (M-S)</th>
-                                        <th class="p-2"></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="deptDefaultsBody" class="divide-y divide-gray-800">
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="dp-wrap">
+                        <table class="dp-table">
+                            <thead>
+                                <tr>
+                                    <th class="dp-c-chk"><input type="checkbox" id="dpTickAllBox" onchange="dpTickAll(this.checked)" title="Tick every department in the list" aria-label="Tick every department in the list"></th>
+                                    <th>Department</th>
+                                    <th>Default shift</th>
+                                    <th title="The default shift applies on these days. Leave is not counted on the other days.">Working days</th>
+                                    <th class="dp-c-people" title="Active staff in the department. Staff with their own default shift (Employee Master) follow that instead.">People</th>
+                                    <th class="dp-c-more"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="deptDefaultsBody"></tbody>
+                        </table>
                     </div>
+                </div>
                 
 
                 <!-- NEW BULK ANALYZER SECTION -->
@@ -3493,84 +3189,162 @@
         </div>
     </div>
 
-    <div id="unifiedActionModal" class="modal-backdrop">
-        <div class="bg-gray-800 w-[400px] rounded shadow-2xl border border-gray-600 flex flex-col">
-            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t">
-                <h3 class="font-bold text-lg text-orange-400">Resolve Violation</h3>
-                <button onclick="closeModal('unifiedActionModal')" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="p-6">
-                <p id="unifiedModalContext" class="text-xs text-gray-400 mb-4 font-bold border-b border-gray-700 pb-2"></p>
-                <input type="hidden" id="unifiedTargetKeys"> 
+    <!-- 2026-11-15 Settings > Payroll Periods: "New cycle" pop-up (css/tna_payroll_periods.css, "PAYROLL PERIODS & LOCKS" in tna_dashboard.js).
+         Same form id, field ids, radio name and createPayrollPeriod() as the old inline form. Short choices are button rows that fill
+         the hidden ppType / ppWeekStart / ppMonthRelativeEnd inputs. A monthly cycle runs from its start day to the day before the next
+         start day (how the server works out the periods), so the end day is shown, not typed. -->
+    <div id="ppNewModal" class="modal-backdrop" onclick="if (event.target === this) ppCloseNew()">
+        <div class="pp-box" role="dialog" aria-modal="true" aria-labelledby="ppNewTitle">
+            <form id="payrollPeriodForm" onsubmit="createPayrollPeriod(event)" novalidate>
+                <div class="pp-box-hd">
+                    <h3 id="ppNewTitle"><i class="fas fa-calendar-plus"></i>New payroll cycle</h3>
+                    <button type="button" class="pp-x" onclick="ppCloseNew()" aria-label="Close"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="pp-box-bd">
+                    <label class="pp-f"><span>Name</span>
+                        <input type="text" id="ppName" maxlength="100" placeholder="e.g. Monthly staff, Weekly factory" autocomplete="off" oninput="ppPreview()">
+                    </label>
+                    <div class="pp-f"><span>How often</span>
+                        <input type="hidden" id="ppType" value="Monthly">
+                        <div class="pp-seg" data-pp-for="ppType">
+                            <button type="button" data-v="Monthly" class="on">Monthly</button><button type="button" data-v="Weekly">Weekly</button><button type="button" data-v="Fortnightly">Every 2 weeks</button>
+                        </div>
+                    </div>
+                    <div id="configMonthly" class="pp-cfg">
+                        <div class="pp-seg">
+                            <label><input type="radio" name="monthlyMode" value="fixed" checked onchange="toggleMonthlyMode()"> Starts on a date</label><label><input type="radio" name="monthlyMode" value="relative" onchange="toggleMonthlyMode()"> Ends on the last weekday</label>
+                        </div>
+                        <div id="monthlyFixedMode" class="pp-row">
+                            <label class="pp-f pp-f-sm"><span>Starts on day</span><input type="number" id="ppMonthStartDay" min="1" max="28" value="26" oninput="ppPreview()"></label>
+                            <div class="pp-note" id="ppMonthEndNote"></div>
+                            <input type="hidden" id="ppMonthStartWhen" value="previous"><input type="hidden" id="ppMonthEndDay" value="25">
+                        </div>
+                        <div id="monthlyRelativeMode" class="pp-row hidden">
+                            <div class="pp-f"><span>Ends on the last … of each month</span>
+                                <input type="hidden" id="ppMonthRelativeEnd" value="5">
+                                <div class="pp-days" data-pp-for="ppMonthRelativeEnd"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="configWeekly" class="pp-cfg hidden">
+                        <div class="pp-f"><span>Each week starts on</span>
+                            <input type="hidden" id="ppWeekStart" value="1">
+                            <div class="pp-days" data-pp-for="ppWeekStart"></div>
+                        </div>
+                    </div>
+                    <div id="configFortnightly" class="pp-cfg hidden">
+                        <label class="pp-f"><span>First day of any one period</span><input type="date" id="ppFortnightAnchor" oninput="ppPreview()"></label>
+                        <input type="hidden" id="ppFortnightStart" value="">
+                        <div class="pp-note">Every period is 14 days, counted from this date.</div>
+                    </div>
+                    <div class="pp-prev"><div class="pp-lbl">Periods this cycle makes</div><ul id="ppPreviewList"></ul></div>
+                    <div id="ppNewMsg" class="pp-msg" role="alert" hidden></div>
+                </div>
+                <div class="pp-box-ft">
+                    <button type="button" class="dp-btn" onclick="ppCloseNew()">Cancel</button>
+                    <button type="submit" class="dp-btn pri" id="ppSaveBtn"><i class="fas fa-check"></i> Save cycle</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-               <div class="space-y-3 mb-6">
-                    <label id="optSaveAsIs" class="flex items-start bg-gray-900 p-3 rounded border border-gray-700 cursor-pointer hover:border-teal-500 transition" onclick="toggleUnifiedOptions('save_as_is')">
-                        <input type="radio" name="unifiedAction" value="save_as_is" checked class="mt-1 accent-teal-500">
-                        <div class="ml-3">
-                            <span class="block text-sm font-bold text-gray-200">Save As Is</span>
-                            <span class="block text-[10px] text-gray-500">Accept variance and resolve.</span>
+    <!-- 2026-11-15 Settings > Payroll Periods: lock / unlock one period (filled by ppAskLock in tna_dashboard.js) -->
+    <div id="ppAskModal" class="modal-backdrop" onclick="if (event.target === this) closeModal('ppAskModal')">
+        <div class="pp-box" role="dialog" aria-modal="true" aria-labelledby="ppAskTitle">
+            <div class="pp-box-hd">
+                <h3 id="ppAskTitle"></h3>
+                <button type="button" class="pp-x" onclick="closeModal('ppAskModal')" aria-label="Close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="pp-box-bd" id="ppAskBody"></div>
+            <div class="pp-box-ft">
+                <button type="button" class="dp-btn" onclick="closeModal('ppAskModal')">Cancel</button>
+                <button type="button" class="dp-btn pri" id="ppAskGo"></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="unifiedActionModal" class="modal-backdrop">
+        <!-- 2026-11-15 the Resolve pop-up in the T&A look (styles: css/tna_violations.css). Same ids, radio values and onclicks as before;
+             also opened from Team View and the Manager Inbox. The fields under a choice keep the "hidden" class that toggleUnifiedOptions() switches. -->
+        <div class="vra-box" data-mr-box data-mr-key="unifiedActionModal"><!-- data-mr-*: resize grip (tna_modal_resize.js), same saved size as before -->
+            <div class="vra-hd">
+                <div>
+                    <h3 id="unifiedModalTitle">Resolve Violation</h3>
+                    <p id="unifiedModalContext"></p>
+                </div>
+                <button type="button" onclick="closeModal('unifiedActionModal')" class="vra-x" aria-label="Close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="vra-sb">
+                <input type="hidden" id="unifiedTargetKeys">
+
+                <div class="vra-opts">
+                    <label id="optSaveAsIs" class="vra-opt" onclick="toggleUnifiedOptions('save_as_is')">
+                        <input type="radio" name="unifiedAction" value="save_as_is" checked>
+                        <div class="vra-txt">
+                            <span class="vra-t">Save As Is</span>
+                            <span class="vra-s">Accept variance and resolve.</span>
                         </div>
                     </label>
 
-                    <label id="optAdjust" class="flex items-start bg-gray-900 p-3 rounded border border-gray-700 cursor-pointer hover:border-orange-500 transition" onclick="toggleUnifiedOptions('adjust_logic')">
-                        <input type="radio" name="unifiedAction" value="adjust_logic" class="mt-1 accent-orange-500">
-                        <div class="ml-3 w-full">
-                            <span id="adjustLabelText" class="block text-sm font-bold text-gray-200">Adjust or Add Punch</span>
-                            <div id="unifiedAdjustOptions" class="hidden mt-2 border-t border-gray-700 pt-2 space-y-2">
-                                <div class="flex gap-2">
-                                    <select id="unifiedPunchType" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white w-1/2">
+                    <label id="optAdjust" class="vra-opt" onclick="toggleUnifiedOptions('adjust_logic')">
+                        <input type="radio" name="unifiedAction" value="adjust_logic">
+                        <div class="vra-txt">
+                            <span id="adjustLabelText" class="vra-t">Adjust or Add Punch</span>
+                            <div id="unifiedAdjustOptions" class="hidden vra-more">
+                                <div class="vra-row">
+                                    <select id="unifiedPunchType" class="form-control" aria-label="Clock in or out">
                                         <option value="IN">CLOCK IN</option>
                                         <option value="OUT">CLOCK OUT</option>
                                     </select>
-                                    <input type="time" id="unifiedAdjustTime" value="08:00" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white w-1/2 focus:outline-none focus:border-orange-500">
+                                    <input type="time" id="unifiedAdjustTime" value="08:00" class="form-control" aria-label="Time">
                                 </div>
-                                <div id="newPunchWrapper" class="flex items-center gap-2">
-                                    <input type="checkbox" id="isNewPunch" class="accent-orange-500">
-                                    <span class="text-[10px] text-gray-400">Missing punch (Add New)</span>
+                                <div id="newPunchWrapper" class="vra-chk">
+                                    <input type="checkbox" id="isNewPunch">
+                                    <span>Missing punch (Add New)</span>
                                 </div>
                             </div>
                         </div>
                     </label>
 
-                     <label id="optSnap" class="flex items-start bg-gray-900 p-3 rounded border border-gray-700 cursor-pointer hover:border-indigo-500 transition" onclick="toggleUnifiedOptions('snap')">
-                        <input type="radio" name="unifiedAction" value="snap" class="mt-1 accent-indigo-500">
-                        <div class="ml-3">
-                            <span class="block text-sm font-bold text-gray-200">Snap to Shift Time</span>
-                            <span class="block text-[10px] text-gray-500 mt-0.5">Clocks inside the shift snap to start/end. Early clock-ins and late clock-outs keep their real time as overtime.</span>
+                    <label id="optSnap" class="vra-opt" onclick="toggleUnifiedOptions('snap')">
+                        <input type="radio" name="unifiedAction" value="snap">
+                        <div class="vra-txt">
+                            <span class="vra-t">Snap to Shift Time</span>
+                            <span class="vra-s">Clocks inside the shift snap to start/end. Early clock-ins and late clock-outs keep their real time as overtime.</span>
                         </div>
                     </label>
 
-                    <label id="optLeave" class="flex items-start bg-gray-900 p-3 rounded border border-gray-700 cursor-pointer hover:border-purple-500 transition" onclick="toggleUnifiedOptions('leave')">
-                        <input type="radio" name="unifiedAction" value="leave" class="mt-1 accent-purple-500">
-                        <div class="ml-3 w-full">
-                            <span class="block text-sm font-bold text-gray-200">Log Leave (Absence Resolution)</span>
-                            <div id="unifiedLeaveOptions" class="hidden mt-2 border-t border-gray-700 pt-2">
-                                <select id="unifiedLeaveType" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white w-full focus:outline-none focus:border-purple-500 mb-2">
+                    <label id="optLeave" class="vra-opt" onclick="toggleUnifiedOptions('leave')">
+                        <input type="radio" name="unifiedAction" value="leave">
+                        <div class="vra-txt">
+                            <span id="unifiedLeaveLabel" class="vra-t">Log Leave (Absence Resolution)</span>
+                            <div id="unifiedLeaveOptions" class="hidden vra-more">
+                                <select id="unifiedLeaveType" class="form-control" aria-label="Leave type">
                                     <option value="">-- Select Leave Type --</option>
                                 </select>
-                                <input type="number" id="unifiedLeaveHours" step="0.1" min="0.1" max="24" placeholder="Partial Leave Hours (Leave blank for full day)" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white w-full focus:outline-none focus:border-purple-500">
-                                <div id="unifiedLeaveProofContainer" class="mt-3 hidden"></div>
+                                <input type="number" id="unifiedLeaveHours" step="0.1" min="0.1" max="24" placeholder="Partial Leave Hours (Leave blank for full day)" class="form-control">
+                                <div id="unifiedLeaveProofContainer" class="hidden"></div>
                             </div>
                         </div>
                     </label>
 
-                    <label id="optOverride" class="flex items-start bg-gray-900 p-3 rounded border border-gray-700 cursor-pointer hover:border-yellow-500 transition" onclick="toggleUnifiedOptions('override')">
-                        <input type="radio" name="unifiedAction" value="override" class="mt-1 accent-yellow-500">
-                        <div class="ml-3 w-full">
-                            <span class="block text-sm font-bold text-gray-200">Override Times (Auto-Calc OT)</span>
-                            <div id="unifiedOverrideOptions" class="hidden mt-2 border-t border-gray-700 pt-2 flex gap-2">
-                                <input type="time" id="unifiedOverrideIn" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white w-1/2 focus:outline-none focus:border-yellow-500">
-                                <input type="time" id="unifiedOverrideOut" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white w-1/2 focus:outline-none focus:border-yellow-500">
+                    <label id="optOverride" class="vra-opt" onclick="toggleUnifiedOptions('override')">
+                        <input type="radio" name="unifiedAction" value="override">
+                        <div class="vra-txt">
+                            <span class="vra-t">Override Times (Auto-Calc OT)</span>
+                            <div id="unifiedOverrideOptions" class="hidden vra-more">
+                                <div class="vra-row">
+                                    <div class="vra-f"><span class="vra-mini">In</span><input type="time" id="unifiedOverrideIn" class="form-control" aria-label="In time"></div>
+                                    <div class="vra-f"><span class="vra-mini">Out</span><input type="time" id="unifiedOverrideOut" class="form-control" aria-label="Out time"></div>
+                                </div>
                             </div>
                         </div>
                     </label>
-
                 </div>
-
-                <div class="flex justify-end space-x-3">
-                    <button onclick="closeModal('unifiedActionModal')" class="px-4 py-2 bg-gray-700 text-white rounded text-sm font-bold">Cancel</button>
-                    <button onclick="submitUnifiedAction(event)" class="px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white rounded text-sm font-bold shadow transition">Execute Action</button>
-                </div>
+            </div>
+            <div class="vra-ft">
+                <button type="button" onclick="closeModal('unifiedActionModal')" class="vra-btn">Cancel</button>
+                <button type="button" onclick="submitUnifiedAction(event)" class="vra-go">Execute Action</button>
             </div>
         </div>
     </div>
@@ -3685,6 +3459,8 @@
                 <div id="rosterShiftContent">
                     <label class="block text-xs font-bold text-gray-400 mb-1">Select Shift</label>
                     <select id="rosterShiftSelect" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white focus:outline-none mb-4"></select>
+                    <!-- 2026-11-15 where "Auto" comes from on this day (filled by openRosterModal; css/tna_departments.css) -->
+                    <p id="rosterAutoSource" class="dp-roster-src" hidden></p>
 
                     <div class="pt-2 border-t border-gray-700 mt-2 mb-6">
                         <label class="flex items-center cursor-pointer">
@@ -3911,7 +3687,7 @@
                 
                 <div class="flex justify-end space-x-3">
                     <button type="button" onclick="closeModal('confirmLeaveToggleModal')" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded font-bold text-sm">Cancel</button>
-                    <button type="button" id="btnConfirmLeaveToggle" onclick="submitToggleLeaveStatus()" class="px-4 py-2 text-white rounded font-bold text-sm shadow">Confirm</button>
+                    <button type="button" id="btnConfirmLeaveToggle" onclick="submitToggleLeaveStatus()" class="px-4 py-2 text-white rounded font-bold text-sm shadow lv-navy-btn">Confirm</button>
                 </div>
             </div>
         </div>
@@ -4531,16 +4307,10 @@
    <script src="tna_hours.js"></script>
    <!-- Report preview column sorting (shared with Employee Master). Safe to remove: headers just stop sorting. -->
    <script src="report_sort.js"></script>
-   <script src="tna_dashboard.js?v=2.0.38"></script>
-   <!-- 2026-10-29 New dashboard: Manager | HR tabs, period picker, action queue (switch: TNA Settings > New dashboard, default on).
-        AUTO-HEAL: safe to remove - the old dashboard shows, unchanged. -->
-   <script src="tna_dashboard_v2.js?v=20261106a"></script>
-   <!-- 2026-10-26: Shift Rules "Step-by-step" switch (per user): Create / Edit Shift as a wizard that fills the same form.
-        Switch off or file removed = the classic Edit Shift pop-up. AUTO-HEAL: safe to remove. -->
-   <!-- 2026-10-26 company overtime policy for shifts (Settings > Overtime Rules card + live link). Before the wizard. Safe to remove. -->
-   <!-- 2026-10-26 OFF for now (user): company overtime policy card + step-by-step shift wizard. The classic shift form is used. To turn back on, restore these two lines:
-   <script src="tna_shift_ot_policy.js?v=20261026b"></script>
-   <script src="tna_shift_popup_wizard.js?v=20261026t"></script> -->
+   <script src="tna_dashboard.js?v=20261115q"></script>
+   <!-- The T&A dashboard (Manager | HR | Map | Overview tabs). Since the 14 Nov 2026 clean-up this is the only dashboard:
+        the old dashboards and the "New dashboard" switch are gone, so this file is needed. -->
+   <script src="tna_dashboard_v2.js?v=20261115f"></script>
    <!-- 2026-10-28 Shifts pop-up, step by step (the Scheduled reports look) - replaces the classic Create / Edit Shift form for
         everyone; it fills and saves that same form ("Classic form" link inside). AUTO-HEAL: safe to remove = the classic form. -->
    <script src="tna_shift_steps.js?v=20261028o"></script>
@@ -4550,10 +4320,10 @@
    <script src="tna_shift_patterns.js?v=20261029c"></script>
    <script src="tna_photo_push.js?v=20261019a"></script>
     <!-- Team View > Visual tab (timeline, drag punches, approvals). AUTO-HEAL: safe to remove, Traditional keeps working. -->
-   <script src="tna_tv_range.js?v=20261030g"></script>
-   <script src="tna_team_visual.js?v=20261030d"></script>
+   <script src="tna_tv_range.js?v=20261114b"></script>
+   <script src="tna_team_visual.js?v=20261114a"></script>
     <!-- Team View > Overview tab. Needs tna_team_visual.js. AUTO-HEAL: safe to remove, the other tabs keep working. -->
-   <script src="tna_team_overview.js"></script>
+   <script src="tna_team_overview.js?v=20261114a"></script>
    <!-- ⚡ 2026-10-13 Shift Setup Wizard + "recalculate the affected days" pop-up (window.tnaShiftWizard, window.tnaRecalcPrompt).
         Loaded only while TNA_SHIFT_WIZARD_ENABLED (top of the page) is true. Not loaded = no wizard, no pop-up, as before. -->
    <script>if (window.TNA_SHIFT_WIZARD_ENABLED) document.write('<script src="tna_shift_wizard.js?v=2"><\/script>');</script>
@@ -4562,10 +4332,9 @@
    <!-- System Settings: left menu, one section at a time, (i) help, Save moves with the section. Safe to remove. -->
    <!-- Pre-approved overtime settings section: must load BEFORE tna_settings_ui.js. AUTO-HEAL: safe to remove. -->
    <script src="tna_ot_preapproval.js?v=20261106b"></script>
-   <!-- CVS Employee Mapping (Settings section). Must load BEFORE tna_settings_ui.js. AUTO-HEAL: safe to remove. -->
-   <script src="tna_cvs_mapping.js?v=2"></script>
+   <!-- (2026-11-15: the CVS Employee Mapping Settings section, tna_cvs_mapping.js, was removed - user) -->
    <!-- Compare with CVS (Time Logs). AUTO-HEAL: safe to remove; the button then does nothing. -->
-   <script src="cvs_range_sync.js?v=20261021a"></script>
+   <script src="cvs_range_sync.js?v=20261115a"></script>
    <script>
        (function () {
            var btn = document.getElementById('btnCvsRangeToggle');
@@ -4576,7 +4345,6 @@
                if (box.dataset.crsMounted !== '1') {
                    window.CvsRangeSync.mount(box, {
                        source: 'Time Logs',
-                       mappingUrl: '#cvs-mapping',
                        defaults: function () {
                            var f = document.getElementById('logStartDate'), t = document.getElementById('logEndDate');
                            return (f && t && f.value && t.value) ? { from: f.value, to: t.value } : null;
@@ -4593,7 +4361,7 @@
    <!-- 2026-10-30 instant dark tooltips on buttons and the closed sidebar (like User Access). AUTO-HEAL: safe to remove = the browser tooltips. -->
    <script src="tna_quick_tips.js?v=20261030c"></script>
    <script src="tna_recalc_ask.js?v=20261030e"></script>
-   <script src="tna_settings_ui.js?v=20261106c"></script>
+   <script src="tna_settings_ui.js?v=20261115e"></script>
    <!-- Pre-approved overtime: OT Authorisations page, roster "Authorise OT" tab and badges. Only active while switched on. AUTO-HEAL: safe to remove. -->
    <script src="tna_ot_auth.js?v=1"></script>
    <!-- Shared top bar: search + quick access + profile menu (same as Employee Master). Safe to remove. -->
@@ -4607,7 +4375,7 @@
    <!-- Audit Trail: tags every change with the TNA tab, records tab opens / reports / exports, and runs the Audit Trail tab. Safe to remove. -->
    <script src="tna_audit.js?v=20261030b"></script>
    <!-- Keep the last department / dates / employee when switching TNA tabs (TNA Settings > Keep filters when switching tabs) -->
-   <script src="tna_filter_memory.js?v=20261008a"></script>
+   <script src="tna_filter_memory.js?v=20261114c"></script>
    <!-- 2026-10-26: resize grip (bottom-right) on every T&A pop-up, also the ones built later by JavaScript. Drag to resize,
         double-click to reset, size remembered per pop-up. AUTO-HEAL: safe to remove (both lines). -->
    <script src="tna_modal_resize.js?v=20261026b"></script>
@@ -4615,21 +4383,18 @@
    <!-- 2026-10-26: System Settings opens as a pop-up window (same look as Farmers & Distribution Settings) with Overtime Rules
         as one of its sections; the Overtime Rules sidebar item opens it there. Load LAST (after every file that wraps
         showSection). AUTO-HEAL: safe to remove - Settings and Overtime Rules then open as normal pages again. -->
-   <script src="tna_settings_popup.js?v=20261106i"></script>
+   <script src="tna_settings_popup.js?v=20261115d"></script>
    <!-- 2026-10-27 Overtime Rules > Weekends: the Saturday rate shown read-only on the Saturday row (= the Overtime rate). Not a setting. AUTO-HEAL: safe to remove. -->
    <script src="tna_sat_rate_view.js?v=20261027b"></script>
    <!-- 2026-10-27 Overtime Rules > Overtime limits: the BCEA limits locked (companies may only be stricter), the earnings threshold
         kept by TNA Africa for every company (/api/tna/statutory). AUTO-HEAL: safe to remove - the card as before. -->
    <script src="tna_ot_limits.js?v=20261027d"></script>
    <!-- 2026-10-27 Attendance Reports: tidier screen, report groups + description, the Automated Emailer as a pop-up. AUTO-HEAL: safe to remove. -->
-   <script src="tna_reports_ui.js?v=20261031a"></script>
+   <script src="tna_reports_ui.js?v=20261113b"></script>
    <script src="report_unsubs.js?v=20261031a"></script>
-   <!-- 2026-10-27 Attendance Reports: the same layout as Farmers & Distribution > Reports (Reports card, Filters / Export drop-downs,
-        tags, Contractors table look). Moves the page's own controls only. AUTO-HEAL: safe to remove - the screen as before. -->
-   <script src="tna_reports_layout.js?v=20261027g"></script>
    <!-- 2026-10-27 Reopen the last screen used after a refresh / browser restart (per user). AUTO-HEAL: safe to remove. -->
    <script src="tna_last_screen.js?v=20261027a"></script>
-   <!-- Built-in public holiday calendar (Settings > Public Holidays & Leave). AUTO-HEAL: safe to remove; server without it = no change. -->
+   <!-- Built-in public holiday calendar (Settings > Public Holidays). AUTO-HEAL: safe to remove; server without it = no change. -->
    <script src="tna_holiday_calendar.js?v=20261026d"></script>
    <!-- 2026-10-27 Sidebar groups (same as Contractors & Distribution): Overview, Shifts & Rosters, Daily Attendance,
         Approvals & Overtime, Reports & Payroll, Setup. Moves the existing items only. AUTO-HEAL: safe to remove - flat menu again. -->

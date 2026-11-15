@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <!-- Accurate loading screen: must stay the FIRST script on the page. Safe to remove. -->
     <script src="tna_loader.js?v=1"></script>
+    <!-- 2026-11-13 the login session for this page (code repetition review step 1): right after the loader, before the other scripts -->
+    <script src="tna_session.js?v=20261113b"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Master - TNA AFRICA</title>
     <!-- 2026-10-23: TNA Africa app icon (browser tab) -->
@@ -4949,7 +4951,7 @@
      <script src="theme.js?v=20261106a"></script>
      <!-- Report preview column sorting (shared with TNA Reports). Safe to remove: headers just stop sorting. -->
     <script src="report_sort.js"></script>
-    <script src="employeemaster.js?v=20261112a"></script>
+    <script src="employeemaster.js?v=20261113d"></script>
      <!-- Contacts/addresses rows, Scheduled End Date, Date Engaged, full Create save. AUTO-HEAL: safe to remove. -->
      <script src="employee_profile_fields.js"></script>
     <!-- ⚡ Columns (choose, order, drag), sort, a search under every heading, Export This View - the Farmers & Distribution
@@ -4971,7 +4973,7 @@
     <!-- Guided tours + What's new (content in /tours/employeemaster_tours.json). AUTO-HEAL: safe to remove. -->
     <script src="tna_tour.js?v=20261109a" data-tour-page="employeemaster" data-tour-help-position="right-raised"></script>
     <!-- ⚡ Help as a side panel with a search, opened from a "?" in the top bar. Now the shared tna_help_panel.js (same panel,
-         same ids); em_help_panel.js is kept on disk - put it back here if ever needed. AUTO-HEAL: safe to remove. -->
+         same ids); em_help_panel.js was archived on 2026-11-13 (C:\Apps\_archive\2026-11-13\public\js, also in git history) - copy it back if ever needed. AUTO-HEAL: safe to remove. -->
     <script src="tna_help_panel.js?v=20261109b" data-help-module="Employee Master" data-help-placeholder="What do you want to do? e.g. terminate, import" data-help-examples="employee, terminate, import"></script>
     <!-- Guided setup in Demo / Setup mode (plan in /tours/employeemaster_setup.json). AUTO-HEAL: safe to remove. -->
     <script src="tna_setup.js" data-setup-page="employeemaster"></script>

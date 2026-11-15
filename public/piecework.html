@@ -3,6 +3,8 @@
 <head>
     <!-- Accurate loading screen: must stay the FIRST script on the page. Safe to remove. -->
     <script src="tna_loader.js?v=1"></script>
+    <!-- 2026-11-13 the login session for this page (code repetition review step 1): right after the loader, before the other scripts -->
+    <script src="tna_session.js?v=20261113b"></script>
     <!-- Demo / Setup mode: must load early so every call from this page goes to the demo copy when in demo. AUTO-HEAL: safe to remove. -->
     <script src="tna_demo.js?v=20261020a"></script>
     <script>
@@ -2194,7 +2196,7 @@
           <script>window.TNA_POPUP_NAVY = true; window.TNA_POPUP_KEEP_NATIVE = true;</script>
           <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
           <script src="contractors_modern_popups.js?v=20261112a"></script>
-          <script src="piecework.js?v=20261112x"></script>
+          <script src="piecework.js?v=20261113e"></script>
           <!-- 2026-11-12 Job Costing screen in the current theme (toolbar, totals strip, calm list). Look only.
                AUTO-HEAL: remove this line and the old screen is back -->
           <script src="piecework_jc_look.js?v=20261112d"></script>

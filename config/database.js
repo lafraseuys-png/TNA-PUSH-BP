@@ -37,6 +37,17 @@ if (process.env.DB_DOMAIN) {
     masterConfig.password = process.env.DB_PASSWORD;
 }
 
+// 2026-11-13 (code repetition review, step 0): side scripts take the SAME login as the server from here, so no password is
+// typed into code. Additive - masterConfig above is unchanged. Each script keeps its own database and options:
+//   sql.connect(withServerLogin({ database: 'X', options: { ... } }))
+function withServerLogin(cfg) {
+    const out = Object.assign({}, cfg, { server: masterConfig.server });
+    delete out.user; delete out.password; delete out.authentication;
+    if (masterConfig.authentication) out.authentication = masterConfig.authentication;
+    else { out.user = masterConfig.user; out.password = masterConfig.password; }
+    return out;
+}
+
 const masterPool = new sql.ConnectionPool(masterConfig);
 masterPool.on('error', err => console.error('⚠️ Master SQL Pool Error Caught:', err.message));
 
@@ -164,5 +175,6 @@ module.exports = {
     connectMaster,
     getTenantConnection,
     demoContext,
-    closeTenantPool
+    closeTenantPool,
+    withServerLogin
 };
