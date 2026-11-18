@@ -29,16 +29,16 @@
     </script>
     <link rel="stylesheet" href="/css/styles.css?v=1.0.13">
     <link rel="stylesheet" href="/css/contractors.css">
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+     <script src="/vendor/cdnjs/exceljs/4.3.0/exceljs.min.js"></script>
     <!-- PDF Export Engine -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="/vendor/cdnjs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="/vendor/cdnjs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+    <link rel="stylesheet" href="/vendor/cdnjs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/vendor/cdnjs/font-awesome/6.4.0/css/all.min.css">
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="/vendor/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
     <!-- Flatpickr dark theme: enabled/disabled with the page theme (same as Employee Master) -->
-    <link id="flatpickrDarkTheme" rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+    <link id="flatpickrDarkTheme" rel="stylesheet" type="text/css" href="/vendor/npm/flatpickr@4.6.13/dist/themes/dark.css">
     <script>
         (function () {
             var link = document.getElementById('flatpickrDarkTheme');
@@ -50,7 +50,7 @@
             document.addEventListener('tna:themechange', syncFlatpickrTheme);
         })();
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="/vendor/npm/flatpickr@4.6.13/default.js"></script>
 
     <style>
         /* Base Reset */
@@ -1766,9 +1766,11 @@
     <script src="theme.js?v=20261106a"></script>
     <!-- Shared Team View hours rule: Employee Costs hours always match Team View (traditional). Required. -->
     <script src="tna_hours.js"></script>
+    <!-- Pay hours per type (normal / OT / Saturday / Sunday / public holiday / leave), shared with the server's payroll exports. Required. -->
+    <script src="tna_pay_hours.js"></script>
     <script src="employeeCosts.js"></script>
     <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
-    <script src="tna_topbar.js?v=70"></script>
+    <script src="tna_topbar.js?v=73"></script>
     <!-- Guided tours, how-to guides + What's new (content in /tours/employeecosts_tours.json). AUTO-HEAL: safe to remove. -->
     <script src="tna_tour.js?v=20261109a" data-tour-page="employeecosts" data-tour-help-position="right"></script>
     <!-- 2026-10-23: help as the side panel (same as Employee Master); the page's "?" opens it. AUTO-HEAL: safe to remove. -->

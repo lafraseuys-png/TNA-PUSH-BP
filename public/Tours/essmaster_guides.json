@@ -293,11 +293,11 @@
           "target": [
             "#page-documents button[onclick*='openDocumentUploadModal']"
           ],
-          "title": "Upload Document",
-          "text": "Click <b>Upload Document</b>.",
+          "title": "Upload document",
+          "text": "Click <b>Upload document</b>.",
           "placement": "left",
           "mode": "click",
-          "hint": "Click Upload Document"
+          "hint": "Click Upload document"
         },
         {
           "id": "esg-dc-title",
@@ -887,6 +887,17 @@
           "placement": "right",
           "mode": "click",
           "hint": "Click Global Broadcasts"
+        },
+        {
+          "id": "esg-bc-new",
+          "target": [
+            "#bcNewBtn"
+          ],
+          "title": "New broadcast",
+          "text": "Click <b>New broadcast</b>. The message opens in a pop-up.",
+          "placement": "left",
+          "mode": "click",
+          "hint": "Click New broadcast"
         },
         {
           "id": "esg-bc-title",

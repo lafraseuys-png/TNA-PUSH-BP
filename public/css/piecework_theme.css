@@ -331,3 +331,52 @@ body:not(.dark-mode) :is(.main-content, .modal-backdrop) .hover\:text-gray-300:h
 body:not(.dark-mode) :is(.main-content, .modal-backdrop) :is(input, select, textarea):is([class*="bg-gray-"],[class*="bg-slate-"]) { background-color: #ffffff; color: #333333; border-color: #cbd5e1; color-scheme: light; }
 body:not(.dark-mode) :is(.main-content, .modal-backdrop) :is(input, textarea)::placeholder { color: #94a3b8; }
 body:not(.dark-mode) :is(.main-content, .modal-backdrop) select option { background-color: #ffffff; color: #333333; }
+
+/* ---------- DAILY PRODUCTION: TWO-MONTH DAY PICKER (2026-11-18) ----------
+   user: "on zelri app there is a calendar that shows two months in one popup, apply that calendar to daily production"
+   Same layout as Zelri's date picker (Zelri App/public/js/date-range.js): quick picks on the left, two months side by
+   side (one on phones), ‹ › to move a month, weeks start on Monday, today underlined. Daily Production is ONE day, so
+   one click picks the day and closes it. Built in piecework_daily_look.js (dayPicker); the look of the Data Tools menu. */
+#rdlDateF { position: relative; }
+#rdlBar #dailyDateFilter::-webkit-calendar-picker-indicator { display: none; }
+#rdlBar #dailyDateFilter { cursor: pointer; }
+.dpk-pop { position: absolute; top: calc(100% + 6px); left: 0; z-index: 95; display: flex; width: max-content; max-width: calc(100vw - 32px); box-sizing: border-box; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; box-shadow: 0 18px 40px -12px rgba(15, 23, 42, .35); font-size: 13px; color: #334155; }
+.dpk-pop[hidden] { display: none; }
+.dpk-presets { display: flex; flex-direction: column; gap: 2px; padding: 8px; border-right: 1px solid #eef2f6; min-width: 140px; }
+.dpk-preset { border: 0; background: none; text-align: left; padding: 8px 10px; border-radius: 8px; font: inherit; font-size: 13px; font-weight: 600; color: #334155; cursor: pointer; white-space: nowrap; }
+.dpk-preset:hover, .dpk-preset:focus-visible { background: #f1f5f9; outline: none; }
+.dpk-preset.active { background: rgba(26, 76, 123, .1); color: #1a4c7b; }
+.dpk-main { display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; }
+.dpk-cal { position: relative; }
+.dpk-nav { position: absolute; top: 0; z-index: 1; width: 32px; height: 32px; border: 0; border-radius: 8px; background: none; color: #1a4c7b; font-size: 20px; line-height: 1; cursor: pointer; }
+.dpk-nav:hover, .dpk-nav:focus-visible { background: #f1f5f9; outline: none; }
+.dpk-prev { left: 0; }
+.dpk-next { right: 0; }
+.dpk-months { display: flex; gap: 24px; justify-content: center; }
+.dpk-title { text-align: center; font-weight: 700; color: #1e293b; height: 32px; line-height: 32px; }
+.dpk-grid { border-collapse: collapse; }
+.dpk-grid th { width: 37px; padding: 3px 0; text-align: center; font-size: 11.5px; font-weight: 600; color: #64748b; }
+.dpk-grid td { padding: 1px 0; text-align: center; }
+.dpk-day { width: 37px; height: 34px; border: 0; border-radius: 8px; background: none; font: inherit; font-size: 13px; color: #334155; cursor: pointer; font-variant-numeric: tabular-nums; }
+.dpk-day:hover { background: #f1f5f9; }
+.dpk-day.today { font-weight: 700; color: #1a4c7b; text-decoration: underline; text-underline-offset: 3px; }
+.dpk-day.on { background: #1a4c7b; color: #ffffff; font-weight: 700; text-decoration: none; }
+.dpk-day:focus-visible { outline: 2px solid #1a4c7b; outline-offset: 1px; position: relative; z-index: 1; }
+.dpk-hint { margin: 0; padding-top: 8px; border-top: 1px solid #eef2f6; font-size: 12px; color: #64748b; }
+body.dark-mode .dpk-pop { background: #1a212c; border-color: rgba(255, 255, 255, .1); box-shadow: 0 18px 40px -12px rgba(0, 0, 0, .6); color: #cbd5e1; }
+body.dark-mode .dpk-presets, body.dark-mode .dpk-hint { border-color: rgba(255, 255, 255, .08); }
+body.dark-mode .dpk-preset, body.dark-mode .dpk-day { color: #cbd5e1; }
+body.dark-mode .dpk-preset:hover, body.dark-mode .dpk-preset:focus-visible, body.dark-mode .dpk-nav:hover, body.dark-mode .dpk-nav:focus-visible, body.dark-mode .dpk-day:hover { background: rgba(255, 255, 255, .06); }
+body.dark-mode .dpk-preset.active { background: rgba(37, 99, 168, .25); color: #e2e8f0; }
+body.dark-mode .dpk-nav, body.dark-mode .dpk-day.today { color: #93c5fd; }
+body.dark-mode .dpk-title { color: #e2e8f0; }
+body.dark-mode .dpk-grid th, body.dark-mode .dpk-hint { color: #94a3b8; }
+body.dark-mode .dpk-day.on { background: #1a4c7b; color: #ffffff; }
+body.dark-mode .dpk-day:focus-visible { outline-color: #93c5fd; }
+@media (max-width: 760px) {
+    .dpk-pop { flex-direction: column; width: calc(100vw - 32px); }
+    .dpk-presets { flex-direction: row; overflow-x: auto; border-right: 0; border-bottom: 1px solid #eef2f6; min-width: 0; }
+    .dpk-grid { width: 100%; }
+    .dpk-grid th, .dpk-day { width: calc((100vw - 64px) / 7); }
+    .dpk-day { height: 40px; }
+}

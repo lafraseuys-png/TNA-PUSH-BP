@@ -497,7 +497,7 @@ body.dark-mode #dv2Act .rs-sec, html.dark-mode #dv2Act .rs-sec, body.dark-mode #
 #dv2Act.show { display: flex; }
 #dv2Act .box { background: #fff; color: #0f172a; width: min(620px, 100%); max-height: 88vh; border-radius: 20px; display: flex; flex-direction: column; box-shadow: 0 30px 70px rgba(15,23,42,.25); border: 1px solid #e2e8f0; overflow: hidden; font-size: 12.5px; }
 #dv2Act .hd { display: flex; align-items: flex-start; gap: 10px; padding: 20px 22px 8px; }
-#dv2Act .hd h3 { margin: 0; font-size: 18px; font-weight: 800; }
+#dv2Act .hd h3 { margin: 0; font-size: 18px; font-weight: 800; color: #1a4c7b; }   /* navy title like the Timesheet / Resolve pop-ups (16 Nov) */
 #dv2Act .hd p { margin: 3px 0 0; font-size: 12.5px; color: #64748b; }
 #dv2Act .x { margin-left: auto; border: 0; background: #f1f5f9; color: #64748b; width: 34px; height: 34px; border-radius: 10px; cursor: pointer; flex-shrink: 0; }
 #dv2Act .x:hover { background: #e2e8f0; color: #0f172a; }
@@ -683,12 +683,9 @@ body.dark-mode #dv2 i.fas, html.dark-mode #dv2 i.fas { color: #93c5fd !important
 #dv2Act .fx-ticks { position: relative; height: 16px; }
 #dv2Act .fx-ticks span { position: absolute; transform: translateX(-50%); font-size: 10px; color: #94a3b8; top: 3px; }
 #dv2Act .fx-ticks span:first-child { transform: none; } #dv2Act .fx-ticks span:last-child { transform: translateX(-100%); }
-#dv2Act .fx-list { border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; margin-bottom: 12px; }
-#dv2Act .fx-p { display: flex; align-items: center; gap: 12px; padding: 8px 12px; border-bottom: 1px solid #f1f5f9; font-size: 12.5px; }
-#dv2Act .fx-p:last-child { border-bottom: 0; }
-#dv2Act .fx-p b { min-width: 34px; font-size: 11px; color: #1a4c7b; background: rgba(26,76,123,.08); border-radius: 6px; padding: 2px 6px; text-align: center; }
-#dv2Act .fx-p em { margin-left: auto; font-style: normal; font-size: 11px; color: #94a3b8; }
-#dv2Act .fx-p.ign { opacity: .5; }
+/* 16 Nov 2026: the day's clockings = the shared clockings table (css/tna_clockings.css, same as the Timesheet pop-up) */
+#dv2Act .fx-list { margin-bottom: 14px; }
+#dv2Act .fx-list .ck-wrap { max-height: 260px; }
 #dv2Act .fx-sug { border: 1.5px solid #1a4c7b; border-radius: 14px; padding: 12px 14px; background: rgba(26,76,123,.04); display: flex; flex-direction: column; gap: 10px; }
 #dv2Act .fx-sug b { display: block; font-size: 13.5px; color: #0f172a; } #dv2Act .fx-sug span { font-size: 12px; color: #475569; }
 #dv2Act .fx-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
@@ -704,7 +701,10 @@ body.dark-mode #dv2 i.fas, html.dark-mode #dv2 i.fas { color: #93c5fd !important
 /* flex-shrink 0: the list must not be squeezed into the pane (that clipped it and the pane never scrolled) */
 #dv2People .mp-list { border: 1px solid #e2e8f0; border-radius: 14px; overflow: clip; background: #fff; flex-shrink: 0; }
 #dv2People .rv.ws .rv-pane > * { flex-shrink: 0; }
-#dv2People .mp-head { position: sticky; top: -16px; z-index: 3; box-shadow: 0 1px 0 #e2e8f0; }
+/* 2026-11-18 the tab heading + note stay put: only the list (.rv-scroll) scrolls, its column headings pinned at its top */
+#dv2People .rv.ws .rv-pane { overflow: hidden; padding-bottom: 0; }
+#dv2People .rv.ws .rv-pane > .rv-scroll { flex: 1 1 auto; min-height: 0; overflow: auto; padding-bottom: 16px; }
+#dv2People .mp-head { position: sticky; top: 0; z-index: 3; box-shadow: 0 1px 0 #e2e8f0; }
 #dv2People .mp-head, #dv2People .mp-row { display: grid; grid-template-columns: 20px minmax(150px, 1.2fr) 92px minmax(110px, .8fr) minmax(130px, 1fr) minmax(170px, 1.4fr) 104px; gap: 12px; align-items: center; padding: 9px 14px; }
 #dv2People .mp-list input[type=checkbox] { width: 16px; height: 16px; margin: 0; accent-color: #1a4c7b; cursor: pointer; display: block; }
 #dv2People .mp-row.on { background: rgba(26,76,123,.06); }
@@ -864,7 +864,7 @@ body.dark-mode #dv2 .hr-flag, html.dark-mode #dv2 .hr-flag { color: #fbbf24; }
 :is(html.dark-mode, body.dark-mode) #dv2 .rv-file { color: var(--k-acc); }
 /* the Fix pop-up */
 :is(html.dark-mode, body.dark-mode) #dv2Act .box { background: var(--k-card); color: var(--k-text); border-color: var(--k-line); }
-:is(html.dark-mode, body.dark-mode) #dv2Act .hd h3 { color: var(--k-text); }
+:is(html.dark-mode, body.dark-mode) #dv2Act .hd h3 { color: var(--k-acc); }
 :is(html.dark-mode, body.dark-mode) #dv2Act .hd p { color: var(--k-sub); }
 :is(html.dark-mode, body.dark-mode) #dv2Act .box.fx .hd p b { color: var(--k-text); }
 :is(html.dark-mode, body.dark-mode) #dv2Act .x { background: var(--k-sunk); color: var(--k-text); }
@@ -878,10 +878,6 @@ body.dark-mode #dv2 .hr-flag, html.dark-mode #dv2 .hr-flag { color: #fbbf24; }
 :is(html.dark-mode, body.dark-mode) #dv2Act .fx-mk span { color: var(--k-text); }
 :is(html.dark-mode, body.dark-mode) #dv2Act .fx-mk::after { background: var(--k-acc); }
 :is(html.dark-mode, body.dark-mode) #dv2Act .fx-ticks span { color: #64748b; }
-:is(html.dark-mode, body.dark-mode) #dv2Act .fx-list { border-color: var(--k-line); }
-:is(html.dark-mode, body.dark-mode) #dv2Act .fx-p { border-color: var(--k-line); color: var(--k-text); }
-:is(html.dark-mode, body.dark-mode) #dv2Act .fx-p b { background: var(--k-acc-soft); color: var(--k-acc); }
-:is(html.dark-mode, body.dark-mode) #dv2Act .fx-p em { color: var(--k-sub); }
 :is(html.dark-mode, body.dark-mode) #dv2Act .fx-sug { border-color: rgba(147,197,253,.5); background: rgba(147,197,253,.06); }
 :is(html.dark-mode, body.dark-mode) #dv2Act .fx-alt { border-color: var(--k-line); background: transparent; }
 :is(html.dark-mode, body.dark-mode) #dv2Act .fx-tv { background: rgba(147,197,253,.04); }

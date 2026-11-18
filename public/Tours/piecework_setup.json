@@ -164,7 +164,7 @@
         "activities",
         "teams"
       ],
-      "why": "Prove it works, all in demo:<ol style=\"margin:6px 0 0 16px;padding:0;\"><li><b>Tasks</b>: create a task for your team (<b>Show me how</b> on the Tasks screen).</li><li><b>Daily Production</b>: load the team's day, type in quantities, check their pay, then <b>Commit to Payroll</b>.</li><li>See it on the <b>Production Dashboard</b> and in a <b>Production Report</b>.</li></ol>Tasks and production are never pushed to live.",
+      "why": "Prove it works, all in demo:<ol style=\"margin:6px 0 0 16px;padding:0;\"><li><b>Tasks</b>: create a task for your team (<b>Show me how</b> on the Tasks screen).</li><li><b>Daily Production</b>: load the team's day and check their quantities and pay.</li><li>See it on the <b>Production Dashboard</b> and in a <b>Production Report</b>.</li></ol>Tasks and production are never pushed to live.",
       "confirm": true,
       "confirmLabel": "It all worked"
     }

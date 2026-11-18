@@ -26,12 +26,12 @@
         })();
     </script>
     <link rel="stylesheet" href="/css/styles.css?v=1.0.6">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="/vendor/cdnjs/font-awesome/6.4.0/css/all.min.css">
+     <script src="/vendor/cdnjs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="/vendor/cdnjs/exceljs/4.3.0/exceljs.min.js"></script>
+    <link rel="stylesheet" href="/vendor/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
    <!-- Flatpickr dark theme: enabled/disabled by theme.js via the tna:themechange event -->
-    <link id="flatpickrDarkTheme" rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+    <link id="flatpickrDarkTheme" rel="stylesheet" type="text/css" href="/vendor/npm/flatpickr@4.6.13/dist/themes/dark.css">
     <script>
         (function () {
             var link = document.getElementById('flatpickrDarkTheme');
@@ -43,8 +43,8 @@
             document.addEventListener('tna:themechange', syncFlatpickrTheme);
         })();
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/vendor/npm/flatpickr@4.6.13/default.js"></script>
+    <script src="/vendor/npm/sweetalert2@11.26.25/default.js"></script>
     <style>
         /* Base Reset */
         * {
@@ -4951,13 +4951,13 @@
      <script src="theme.js?v=20261106a"></script>
      <!-- Report preview column sorting (shared with TNA Reports). Safe to remove: headers just stop sorting. -->
     <script src="report_sort.js"></script>
-    <script src="employeemaster.js?v=20261113d"></script>
+    <script src="employeemaster.js?v=20261117cdn"></script>
      <!-- Contacts/addresses rows, Scheduled End Date, Date Engaged, full Create save. AUTO-HEAL: safe to remove. -->
      <script src="employee_profile_fields.js"></script>
     <!-- ⚡ Columns (choose, order, drag), sort, a search under every heading, Export This View - the Farmers & Distribution
          column logic on Active and Terminated (new files). AUTO-HEAL: remove these three lines and the lists are as before. -->
     <script src="contractors_header_search.js?v=20261006a"></script>
-    <script src="tna_styled_export.js?v=20261006a"></script>
+    <script src="tna_styled_export.js?v=20261117cdn"></script>
     <script src="em_columns.js?v=20261006c"></script>
     <!-- ⚡ The screen tabs inside the card, as in Farmers & Distribution (new file). AUTO-HEAL: safe to remove. -->
     <script src="em_tabs_in_card.js?v=20261006a"></script>
@@ -4968,7 +4968,7 @@
      <!-- Payroll Periods & Locking screen. AUTO-HEAL: safe to remove (the screen then stays empty). -->
      <script src="payroll_periods_ui.js"></script>
     <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
-      <script src="tna_topbar.js?v=70"></script>
+      <script src="tna_topbar.js?v=73"></script>
 
     <!-- Guided tours + What's new (content in /tours/employeemaster_tours.json). AUTO-HEAL: safe to remove. -->
     <script src="tna_tour.js?v=20261109a" data-tour-page="employeemaster" data-tour-help-position="right-raised"></script>

@@ -14,18 +14,18 @@
     
     <link rel="stylesheet" href="/css/styles.css?v=1.0.8">
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="/vendor/cdnjs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="/vendor/cdnjs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="/vendor/cdnjs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <link rel="stylesheet" href="/vendor/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/vendor/cdnjs/font-awesome/6.4.0/css/all.min.css">
     
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="/vendor/npm/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="/vendor/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/vendor/npm/chart.js@4.6.1/default.js"></script>
     
     <!-- Add Tailwind CDN to process new layout and Dark Mode classes -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/vendor/tailwindcss/3.4.17/tailwind-play.js"></script>
     <script>
         tailwind.config = {
             darkMode: ['class', '.dark-mode'],
@@ -2017,15 +2017,15 @@
     <script src="fuel_depot_ledger.js?v=20261019b"></script>
     <script src="fuel_report_center.js?v=20261019b"></script>
     <!-- 2026-10-16 modern calendar + drop-down for every date box and select (not #page-settings). AUTO-HEAL: safe to remove. -->
-    <script src="tna_modern_inputs.js?v=20261016c"></script>
+    <script src="tna_modern_inputs.js?v=20261117cdn"></script>
     <!-- 2026-10-16 Settings opens as a pop-up window (the Contractors Settings look). UI only - same ids, onchange and saves. AUTO-HEAL: safe to remove. -->
-    <script src="fuel_settings_popup.js?v=20261021a"></script>
+    <script src="fuel_settings_popup.js?v=20261117cdn"></script>
     <!-- 2026-10-16: a search box under every column heading (as Employee Master / Contractors). AUTO-HEAL: safe to remove. -->
     <script src="contractors_header_search.js?v=20261006a"></script>
     <script src="fuel_header_search.js?v=20261016b"></script>
     <script src="sars_pump_meter_patch.js"></script>
     <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
-    <script src="tna_topbar.js?v=70"></script>
+    <script src="tna_topbar.js?v=73"></script>
     <!-- Guided tours, how-to guides + What's new (content in /tours/fueldashboard_tours.json). AUTO-HEAL: safe to remove. -->
     <script src="tna_tour.js?v=20261109a" data-tour-page="fueldashboard" data-tour-help-position="right"></script>
     <!-- 2026-10-16: Help as a side panel opened from the "?" next to the profile, with search and a Screen filter - the same

@@ -22,17 +22,17 @@
         }
     </script>
     <link rel="stylesheet" href="/css/styles.css?v=1.0.13">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/vendor/cdnjs/font-awesome/6.4.0/css/all.min.css">
     
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="/vendor/npm/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="/vendor/npm/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="/vendor/cdnjs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link href="/vendor/npm/quill@1.3.6/dist/quill.snow.css" rel="stylesheet">
+    <script src="/vendor/npm/quill@1.3.6/dist/quill.min.js"></script>
+    <link rel="stylesheet" href="/vendor/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="/vendor/npm/flatpickr@4.6.13/dist/themes/dark.css">
+    <script src="/vendor/npm/flatpickr@4.6.13/default.js"></script>
+    <script src="/vendor/npm/sweetalert2@11.26.25/default.js"></script>
     
     <style>
         /* Base Reset */
@@ -455,9 +455,12 @@
         body.dark-mode .edit-tab-btn:hover { color: #cbd5e1; }
         body.dark-mode .edit-tab-btn.active { 
             background: rgba(96, 165, 250, 0.15); color: #60a5fa; 
-            border-color: rgba(96, 165, 250, 0.4); 
+            border-color: rgba(96, 165, 250, 0.4);
         }
     </style>
+    <!-- 2026-11-18 Document Center + Global Broadcasts in the T&A look (copied from css/tna_violations.css). After the style block
+         above so its .glass-table rules do not outrank the screen's own (same weight, later wins). -->
+    <link rel="stylesheet" href="/css/ess_documents.css?v=20261118a">
 </head>
 <body class="font-sans">
 
@@ -1452,146 +1455,116 @@
                 </div>
             </section>
 
-            <!-- DOCUMENT CENTER (the sidebar item existed but this screen was missing - clicking it broke the page) -->
+            <!-- DOCUMENT CENTER - 18 Nov 2026 in the T&A look (Employee Violations), always on, no switch. Styles: css/ess_documents.css.
+                 Rows: renderAdminDocuments(). Ids kept for the tours (#adminDocSearch, #adminDocumentsBody, the Upload button's onclick).
+                 Keep the buttons free of Tailwind bg-* classes: the theme repaints any such button white with !important. -->
             <section id="page-documents" class="page-section">
-                <div class="settings-panel" style="border-top-color: #06b6d4;">
-                    <div class="panel-header" style="justify-content: space-between; border-bottom: 1px solid rgba(148, 163, 184, 0.2); padding-bottom: 15px; margin-bottom: 20px;">
-                        <div>
-                            <i class="fas fa-folder-open theme-icon-sync mr-2"></i> Document Center
-                            <p style="font-size: 11px; color: #64748b; margin-top: 4px; font-weight: normal;">Policies and documents for employees to read and acknowledge in self-service.</p>
+                <div class="settings-panel">
+                    <div class="ed-head">
+                        <h3 class="ed-title"><i class="fas fa-folder-open theme-icon-sync"></i> Document Center</h3>
+                        <div class="ed-acts">
+                            <button type="button" onclick="openDocumentUploadModal()" class="btn" title="A policy, procedure or notice for everyone, one department or one person to read and acknowledge">
+                                <i class="fas fa-upload"></i> Upload document
+                            </button>
                         </div>
-                        <button onclick="openDocumentUploadModal()" class="btn">
-                            <i class="fas fa-upload mr-1"></i> Upload Document
-                        </button>
                     </div>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
-                        <input type="text" id="adminDocSearch" oninput="renderAdminDocuments()" placeholder="Search documents..." class="form-control" style="flex: 1; min-width: 220px;">
-                        <select id="adminTagFilter" onchange="renderAdminDocuments()" class="form-control" style="width: 240px;">
-                            <option value="">All Tags</option>
-                        </select>
+
+                    <div class="ed-bar">
+                        <div class="ed-fld ed-fld-search">
+                            <label for="adminDocSearch" class="ed-lbl">Search documents</label>
+                            <div class="ed-search">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                                <input type="search" id="adminDocSearch" oninput="renderAdminDocuments()" placeholder="Title, description or audience..." class="form-control" autocomplete="off" spellcheck="false">
+                            </div>
+                        </div>
+                        <div class="ed-fld ed-fld-tag">
+                            <label for="adminTagFilter" class="ed-lbl">Tag</label>
+                            <select id="adminTagFilter" data-search onchange="renderAdminDocuments()" class="form-control">
+                                <option value="">All Tags</option>
+                            </select>
+                        </div>
+                        <div class="ed-bar-r">
+                            <span id="adminDocCount" class="ed-count"></span>
+                        </div>
                     </div>
-                    <div class="glass-table-container">
-                        <table class="glass-table">
+
+                    <div class="glass-table-container ed-scroll">
+                        <table class="glass-table ed-table">
                             <thead>
                                 <tr>
                                     <th>Document</th>
                                     <th>Sent To</th>
                                     <th>Version</th>
-                                    <th style="text-align: center;">Acknowledged</th>
-                                    <th style="text-align: right;">Actions</th>
+                                    <th class="ed-c">Acknowledged</th>
+                                    <th class="ed-r">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="adminDocumentsBody">
-                                <tr><td colspan="5" style="text-align: center; color: #64748b; padding: 20px;">Loading documents...</td></tr>
+                                <tr><td colspan="5" class="ed-empty"><i class="fas fa-spinner fa-spin"></i>Loading documents...</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </section>
 
+            <!-- GLOBAL BROADCASTS - 18 Nov 2026 in the T&A look, always on, no switch (user picked: list + "New broadcast" pop-up).
+                 The sent list takes the full width; the composer (#broadcastForm, same fields and ids) is in #broadcastComposeModal.
+                 Styles: css/ess_documents.css. Rows: renderAdminBroadcasts(). -->
             <section id="page-broadcasts" class="page-section">
-                <div class="settings-panel" style="border-top-color: #3b82f6;">
-                    <div class="flex flex-col lg:flex-row gap-6">
-                        <div class="flex-1">
-                            <div class="panel-header" style="border-bottom: 1px solid rgba(148, 163, 184, 0.2); padding-bottom: 15px; margin-bottom: 20px;">
-                                <div>
-                                    <i class="fas fa-bullhorn theme-icon-sync mr-2"></i> Message Composer
-                                    <p style="font-size: 11px; color: #64748b; margin-top: 4px; font-weight: normal;">Send an instant update to the mobile app and web portal.</p>
-                                </div>
-                            </div>
-                            <form id="broadcastForm" onsubmit="saveAdminBroadcast(event)" class="space-y-4">
-                                <div class="form-group" style="margin-bottom: 0;">
-                                    <label style="font-size: 10px; font-weight: bold; text-transform: uppercase;">Message Title <span style="color: #ef4444;">*</span></label>
-                                    <input type="text" id="bcTitle" required placeholder="e.g. Important Safety Update" class="form-control w-full">
-                                </div>
-                                <div class="form-group" style="margin-bottom: 0;">
-                                    <label style="font-size: 10px; font-weight: bold; text-transform: uppercase;">Message Body <span style="color: #ef4444;">*</span></label>
-                                    <textarea id="bcBody" required rows="4" placeholder="Type your message here..." class="form-control w-full"></textarea>
-                                </div>
-                                
-                                <div style="background: rgba(148, 163, 184, 0.05); padding: 15px; border-radius: 8px; border: 1px solid rgba(148, 163, 184, 0.2);">
-                                    <label style="display: block; font-size: 10px; font-weight: bold; color: #64748b; text-transform: uppercase; margin-bottom: 10px; border-bottom: 1px solid rgba(148, 163, 184, 0.2); padding-bottom: 5px;">Target Audience</label>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div class="form-group" style="margin-bottom: 0;">
-                                            <select id="bcTargetType" required onchange="handleBroadcastTargetChange()" class="form-control w-full">
-                                                <option value="Global">Global (All Employees)</option>
-                                                <option value="Department">Specific Department</option>
-                                                <option value="Individual">Specific Individual</option>
-                                                <option value="CustomTeam">Custom Broadcast Team</option>
-                                            </select>
-                                        </div>
-                                        <div id="bcTargetValueContainer" class="hidden form-group" style="margin-bottom: 0;">
-                                            <select id="bcTargetDept" class="form-control w-full hidden"></select>
-                                            <div id="bcTargetIndivContainer" class="relative hidden">
-                                                <input type="text" id="bcTargetIndivSearch" oninput="filterBcEmp()" onfocus="showBcEmpDropdown()" placeholder="Search Name or PIN..." class="form-control w-full">
-                                                <div id="bcTargetIndivDropdown" class="profile-dropdown-menu" style="top: 100%; left: 0; width: 100%; max-height: 250px; overflow-y: auto; margin-top: 5px; bottom: auto; padding: 0;"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="bcCustomTeamContainer" class="hidden mt-3 pt-3" style="border-top: 1px solid rgba(148, 163, 184, 0.2);">
-                                        <div style="font-size: 10px; color: #64748b; margin-bottom: 10px;">Search and click to add multiple employees to this broadcast list.</div>
-                                        <div id="bcCustomTeamTags" class="flex flex-wrap gap-2 mb-2"></div>
-                                        <input type="hidden" id="bcCustomTeamValues">
-                                    </div>
-                                </div>
-
-                                <div style="border-top: 1px solid rgba(148, 163, 184, 0.2); padding-top: 15px;">
-                                    <label style="display: block; font-size: 10px; font-weight: bold; color: #3b82f6; text-transform: uppercase; margin-bottom: 5px;"><i class="fas fa-paperclip mr-1"></i> Add Attachment (Optional)</label>
-                                    <input type="file" id="bcFile" accept="image/*,application/pdf" class="w-full text-[10px] text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:font-bold file:bg-gray-200 file:text-gray-700 cursor-pointer">
-                                </div>
-
-                                <div class="flex justify-end pt-2">
-                                    <button type="submit" id="saveBroadcastBtn" class="btn">
-                                        <i class="fas fa-paper-plane mr-1"></i> Send Broadcast
-                                    </button>
-                                </div>
-                            </form>
+                <div class="settings-panel">
+                    <div class="ed-head">
+                        <h3 class="ed-title"><i class="fas fa-bullhorn theme-icon-sync"></i> Global Broadcasts</h3>
+                        <div class="ed-acts">
+                            <button type="button" id="bcNewBtn" onclick="openBroadcastComposeModal()" class="btn" title="Send an instant message to the mobile app and web portal">
+                                <i class="fas fa-paper-plane"></i> New broadcast
+                            </button>
                         </div>
+                    </div>
 
-                        <div class="flex-1 border-t lg:border-t-0 lg:border-l border-[rgba(148,163,184,0.2)] pt-6 lg:pt-0 lg:pl-6 flex flex-col">
-                            <div class="panel-header" style="border-bottom: 1px solid rgba(148, 163, 184, 0.2); padding-bottom: 15px; margin-bottom: 20px;">
-                                <div>
-                                    <i class="fas fa-history theme-icon-sync mr-2"></i> Broadcast History
-                                </div>
+                    <div class="ed-bar">
+                        <div class="ed-fld ed-fld-search">
+                            <label for="bcSearch" class="ed-lbl">Search messages</label>
+                            <div class="ed-search">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                                <input type="search" id="bcSearch" oninput="filterAdminBroadcasts()" placeholder="Title or message..." class="form-control" autocomplete="off" spellcheck="false">
                             </div>
-                            
-                            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; align-items: flex-end; background: rgba(148, 163, 184, 0.05); padding: 10px; border-radius: 8px; border: 1px solid rgba(148, 163, 184, 0.2);">
-                                <div class="form-group" style="width: 130px; margin-bottom: 0;">
-                                    <label style="font-size: 9px; font-weight: bold; text-transform: uppercase;">Start Date</label>
-                                    <input type="date" id="bcStartDate" class="form-control w-full flatpickr-custom-alt-input" style="padding: 6px; font-size: 11px;">
-                                </div>
-                                <div class="form-group" style="width: 130px; margin-bottom: 0;">
-                                    <label style="font-size: 9px; font-weight: bold; text-transform: uppercase;">End Date</label>
-                                    <input type="date" id="bcEndDate" class="form-control w-full flatpickr-custom-alt-input" style="padding: 6px; font-size: 11px;">
-                                </div>
-                                <button onclick="filterAdminBroadcasts()" class="btn" style="padding: 6px 12px; font-size: 11px;">
-                                    <i class="fas fa-filter mr-1"></i> Filter
-                                </button>
+                        </div>
+                        <div class="ed-fld">
+                            <label for="bcStartDate" class="ed-lbl">Date range</label>
+                            <div class="ed-range">
+                                <input type="date" id="bcStartDate" onchange="filterAdminBroadcasts()" class="form-control flatpickr-custom-alt-input" aria-label="Start date">
+                                <span class="ed-to">–</span>
+                                <input type="date" id="bcEndDate" onchange="filterAdminBroadcasts()" class="form-control flatpickr-custom-alt-input" aria-label="End date">
                             </div>
+                        </div>
+                        <button type="button" onclick="filterAdminBroadcasts()" class="ed-go"><i class="fas fa-search"></i> Show</button>
+                        <div class="ed-bar-r">
+                            <span id="bcCount" class="ed-count"></span>
+                        </div>
+                    </div>
 
-                            <div class="glass-table-container flex-1 max-h-[420px]">
-                                <table class="glass-table">
-                                    <thead style="position: sticky; top: 0; z-index: 10;">
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Title & Preview</th>
-                                            <th>Audience</th>
-                                            <th style="text-align: center;">Attachment</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="adminBroadcastsBody">
-                                        <tr><td colspan="4" style="text-align: center; color: #64748b; padding: 20px;">Loading history...</td></tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                    <div class="glass-table-container ed-scroll">
+                        <table class="glass-table ed-table">
+                            <thead>
+                                <tr>
+                                    <th>Sent</th>
+                                    <th>Message</th>
+                                    <th>Sent To</th>
+                                    <th class="ed-c">Attachment</th>
+                                    <th class="ed-r">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminBroadcastsBody">
+                                <tr><td colspan="5" class="ed-empty"><i class="fas fa-spinner fa-spin"></i>Loading messages...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; background: rgba(148, 163, 184, 0.05); padding: 10px; border-radius: 8px;">
-                                <span id="bcPageInfo" style="font-size: 10px; font-weight: bold; color: #64748b; text-transform: uppercase;">Showing 0 of 0</span>
-                                <div style="display: flex; gap: 8px;">
-                                    <button id="bcBtnPrev" onclick="changeBcPage(-1)" class="btn btn-secondary" style="padding: 4px 10px; font-size: 11px;" disabled><i class="fas fa-chevron-left mr-1"></i> Prev</button>
-                                    <button id="bcBtnNext" onclick="changeBcPage(1)" class="btn btn-secondary" style="padding: 4px 10px; font-size: 11px;" disabled>Next <i class="fas fa-chevron-right ml-1"></i></button>
-                                </div>
-                            </div>
+                    <div class="ed-pager">
+                        <span id="bcPageInfo">Showing 0 of 0</span>
+                        <div style="display: flex; gap: 8px;">
+                            <button type="button" id="bcBtnPrev" onclick="changeBcPage(-1)" class="btn btn-secondary" disabled><i class="fas fa-chevron-left"></i> Prev</button>
+                            <button type="button" id="bcBtnNext" onclick="changeBcPage(1)" class="btn btn-secondary" disabled>Next <i class="fas fa-chevron-right"></i></button>
                         </div>
                     </div>
                 </div>
@@ -1974,7 +1947,17 @@
                                     <option value="csv">External (CSV Upload)</option>
                                 </select>
                             </div>
-                            
+
+                            <!-- 2026-11-18: phone shift change requests (utils/shiftChange.js); on by default -->
+                            <div style="background: rgba(148, 163, 184, 0.05); padding: 20px; border-radius: 8px; border: 1px solid rgba(148, 163, 184, 0.2);">
+                                <label style="display: block; font-size: 11px; font-weight: bold; color: #1a4c7b; text-transform: uppercase; margin-bottom: 5px;"><i class="fas fa-exchange-alt mr-1"></i> Shift Change Requests</label>
+                                <p style="font-size: 11px; color: #64748b; margin-bottom: 10px;">Employees can ask for another shift or a day off on a future day from the phone timesheet. When the manager approves, the roster changes for that day.</p>
+                                <label style="display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; cursor: pointer; color: inherit;">
+                                    <input type="checkbox" id="essShiftChangeEnabled" style="width: 16px; height: 16px; accent-color: #3b82f6;">
+                                    Allow shift change requests from the phone
+                                </label>
+                            </div>
+
                             <div class="flex justify-start">
                                 <button type="submit" class="btn">
                                     <i class="fas fa-save mr-1"></i> Save Configuration
@@ -2957,110 +2940,110 @@
         </form>
     </div>
 
+    <!-- DOCUMENT CENTER + GLOBAL BROADCASTS pop-ups - 18 Nov 2026 in the T&A pop-up look (Employee Violations' Resolve pop-up),
+         always on, no switch. Styles: css/ess_documents.css. Same form, field ids and server calls as before.
+         The box is a div (not the form) straight under the backdrop, so the page's dark-mode !important rule for
+         ".modal-backdrop > form" does not repaint it. data-mr-box/-key keep the resize grip (tna_popup_resize_auto.js). -->
     <div id="documentUploadModal" class="modal-backdrop z-[70]">
-        <form id="documentUploadForm" onsubmit="saveAdminDocument(event)" class="info-modal-content" style="max-width: 600px;">
-            <div class="info-modal-header" style="justify-content: space-between;">
-                <h2 class="info-modal-title" style="display: flex; align-items: center; gap: 12px;">
-                    <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(6, 182, 212, 0.1); color: #06b6d4; display: flex; align-items: center; justify-content: center; font-size: 14px;">
-                        <i class="fas fa-file-upload"></i>
+        <div class="ed-box" data-mr-box data-mr-key="documentUploadModal">
+            <form id="documentUploadForm" onsubmit="saveAdminDocument(event)">
+                <div class="ed-hd">
+                    <div>
+                        <h3 id="docModalTitle">Upload document</h3>
+                        <p id="docModalSub">Employees read and acknowledge it in self-service.</p>
                     </div>
-                    Upload New Document
-                </h2>
-                <button type="button" onclick="closeDocumentUploadModal()" class="info-modal-close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="info-modal-body" style="padding: 25px; gap: 15px; overflow-y: visible;">
-                <input type="hidden" id="editDocId">
-                <div class="grid grid-cols-3 gap-4">
-                    <div class="form-group col-span-2">
-                        <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">Document Title <span style="color: #ef4444;">*</span></label>
-                        <input type="text" id="docTitle" required placeholder="e.g. Employee Handbook" class="form-control w-full">
+                    <button type="button" onclick="closeDocumentUploadModal()" class="ed-x" aria-label="Close"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="ed-sb">
+                    <input type="hidden" id="editDocId">
+                    <div class="ed-row">
+                        <label class="ed-f">
+                            <span class="ed-mini">Document title <em>*</em></span>
+                            <input type="text" id="docTitle" required placeholder="e.g. Employee Handbook" class="form-control">
+                        </label>
+                        <label class="ed-f ed-narrow">
+                            <span class="ed-mini">Version</span>
+                            <input type="text" id="docVersion" placeholder="e.g. v2.1" class="form-control">
+                        </label>
                     </div>
-                    <div class="form-group">
-                        <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">Version</label>
-                        <input type="text" id="docVersion" placeholder="e.g. v2.1" class="form-control w-full">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">Description / Instructions</label>
-                    <textarea id="docDesc" rows="2" placeholder="Brief instructions for the employees..." class="form-control w-full"></textarea>
-                </div>
-                <div class="form-group">
-                    <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;"><i class="fas fa-tags mr-1"></i> Custom Tags (Optional)</label>
-                    <input type="text" id="docTags" placeholder="e.g. HR, Policy, 2026 (comma separated)" class="form-control w-full">
-                </div>
-                
-                <div style="background: rgba(148, 163, 184, 0.05); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 8px; padding: 15px; margin-top: 10px;">
-                    <label style="display: block; font-size: 10px; font-weight: bold; color: #64748b; text-transform: uppercase; margin-bottom: 10px; border-bottom: 1px solid rgba(148, 163, 184, 0.2); padding-bottom: 5px;">Target Audience Configuration</label>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">Audience Scope <span style="color: #ef4444;">*</span></label>
-                            <select id="docTargetType" required onchange="handleDocTargetChange()" class="form-control w-full">
+                    <label class="ed-f">
+                        <span class="ed-mini">Description / instructions</span>
+                        <textarea id="docDesc" rows="2" placeholder="Brief instructions for the employees..." class="form-control"></textarea>
+                    </label>
+                    <label class="ed-f">
+                        <span class="ed-mini">Tags (optional)</span>
+                        <input type="text" id="docTags" placeholder="e.g. HR, Policy, 2026" class="form-control">
+                        <span class="ed-hint">Separate tags with commas. They fill the Tag filter on the list.</span>
+                    </label>
+
+                    <div class="ed-well">
+                        <div class="ed-f">
+                            <span class="ed-mini">Who gets it <em>*</em></span>
+                            <select id="docTargetType" data-search required onchange="handleDocTargetChange()" class="form-control">
                                 <option value="Global">Global (All Employees)</option>
                                 <option value="Department">Specific Department</option>
                                 <option value="Individual">Specific Employee (PIN)</option>
                             </select>
                         </div>
-                        <div id="docTargetValueContainer" class="hidden form-group" style="margin-bottom: 0;">
-                            <label id="docTargetValueLabel" style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">Select Target <span style="color: #ef4444;">*</span></label>
-                            <select id="docTargetDept" class="form-control w-full hidden"></select>
-                            <div id="docTargetIndivContainer" class="relative hidden profile-menu-container" style="padding: 0; position: relative; z-index: 105;">
-                                <div style="position: relative;">
-                                    <i class="fas fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 11px;"></i>
-                                    <input type="text" id="docTargetIndivSearch" oninput="filterDocEmp()" onfocus="showDocEmpDropdown()" placeholder="Search Name or PIN..." class="form-control w-full" style="padding-left: 36px; cursor: text;">
+                        <div id="docDeptBox" class="ed-f hidden">
+                            <span class="ed-mini">Department <em>*</em></span>
+                            <select id="docTargetDept" data-search class="form-control"><option value="">-- Choose Department --</option></select>
+                        </div>
+                        <div id="docTargetIndivContainer" class="ed-f hidden">
+                            <span class="ed-mini">Employee <em>*</em></span>
+                            <div class="ed-pickwrap">
+                                <div class="ed-search">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                                    <input type="text" id="docTargetIndivSearch" oninput="filterDocEmp()" onfocus="showDocEmpDropdown()" placeholder="Search name or PIN..." class="form-control" autocomplete="off">
                                 </div>
                                 <input type="hidden" id="docTargetIndivValue">
-                                <div id="docTargetIndivDropdown" class="profile-dropdown-menu" style="display: none; top: 100%; left: 0; width: 100%; max-height: 200px; overflow-y: auto; margin-top: 5px; bottom: auto; padding: 0; z-index: 99999; flex-direction: column;"></div>
+                                <div id="docTargetIndivDropdown" class="ed-pick hidden"></div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div style="border-top: 1px solid rgba(148, 163, 184, 0.2); padding-top: 15px; margin-top: 5px;">
-                    <label style="display: block; font-size: 10px; font-weight: bold; color: #06b6d4; text-transform: uppercase; margin-bottom: 5px;"><i class="fas fa-file-pdf mr-1"></i> Upload PDF Document <span style="color: #ef4444;">*</span></label>
-                    <input type="file" id="docFile" required accept="application/pdf" class="w-full text-[10px] text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:font-bold file:bg-gray-200 file:text-gray-700 cursor-pointer">
-                    <p style="font-size: 10px; color: #64748b; margin-top: 6px; font-style: italic;">Please ensure the document is a PDF.</p>
+                    <label class="ed-f">
+                        <span class="ed-mini">PDF document <em id="docFileStar">*</em></span>
+                        <input type="file" id="docFile" required accept="application/pdf" class="ed-file">
+                        <span id="docFileNote" class="ed-hint">PDF files only.</span>
+                    </label>
                 </div>
-            </div>
-            <div class="info-modal-footer" style="gap: 10px;">
-                <button type="button" onclick="closeDocumentUploadModal()" class="btn btn-secondary" style="margin: 0; padding: 10px 20px; width: auto;">Cancel</button>
-                <button type="submit" id="saveDocumentBtn" class="btn" style="background: #06b6d4 !important; border-color: #0891b2 !important; color: #ffffff !important; box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4) !important; margin: 0; padding: 10px 20px;">Upload & Distribute</button>
-            </div>
-        </form>
+                <div class="ed-ft">
+                    <button type="button" onclick="closeDocumentUploadModal()" class="ed-btn">Cancel</button>
+                    <button type="submit" id="saveDocumentBtn" class="ed-go">Upload &amp; Distribute</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <div id="documentTrackingModal" class="modal-backdrop z-[60]">
-        <div class="bg-gray-800 p-0 rounded-lg w-[95%] lg:w-[800px] shadow-2xl border border-gray-600 flex flex-col max-h-[90vh]">
-            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
-                <h2 class="text-lg font-bold text-cyan-400"><i class="fas fa-chart-pie mr-2"></i>Document Tracking</h2>
-                <button type="button" onclick="closeDocumentTrackingModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+        <div class="ed-box ed-box-wide" data-mr-box data-mr-key="documentTrackingModal">
+            <div class="ed-hd">
+                <div>
+                    <h3>Document tracking</h3>
+                    <p id="trackingDocTitle"></p>
+                </div>
+                <button type="button" onclick="closeDocumentTrackingModal()" class="ed-x" aria-label="Close"><i class="fas fa-times"></i></button>
             </div>
-            <div class="p-6 flex flex-col flex-1 overflow-hidden">
-                <div class="flex justify-between items-start mb-4">
-                    <h3 id="trackingDocTitle" class="text-base font-bold text-white leading-tight pr-4"></h3>
-                    <button type="button" onclick="exportDocumentTracking()" class="bg-green-700 hover:bg-green-600 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-green-500 flex-shrink-0">
-                        <i class="fas fa-file-excel mr-2"></i> Export Excel
-                    </button>
+            <div class="ed-tabsrow">
+                <div class="ed-tabs" role="tablist">
+                    <button type="button" onclick="switchTrackingTab('pending')" id="btn-tab-track-pending" class="ed-tab on">Waiting <span id="countTrackPending" class="ed-n">0</span></button>
+                    <button type="button" onclick="switchTrackingTab('signed')" id="btn-tab-track-signed" class="ed-tab">Acknowledged <span id="countTrackSigned" class="ed-n">0</span></button>
                 </div>
-                
-                <div class="flex border-b border-gray-700 mb-4">
-                    <button onclick="switchTrackingTab('pending')" id="btn-tab-track-pending" class="px-6 py-2 text-sm font-bold border-b-2 transition border-red-500 text-red-400">Pending Signatures (<span id="countTrackPending">0</span>)</button>
-                    <button onclick="switchTrackingTab('signed')" id="btn-tab-track-signed" class="px-6 py-2 text-sm font-bold border-b-2 transition border-transparent text-gray-400 hover:text-gray-200">Acknowledged (<span id="countTrackSigned">0</span>)</button>
-                </div>
-
-                <div class="overflow-y-auto flex-1 bg-gray-900 border border-gray-700 rounded">
-                    <table class="w-full text-left text-[10px] whitespace-nowrap">
-                        <thead class="bg-gray-800 text-gray-400 sticky top-0">
+                <button type="button" onclick="exportDocumentTracking()" class="ed-btn" title="Download everyone in this list with their status (opens in Excel)"><i class="fas fa-file-excel"></i> Export</button>
+            </div>
+            <div class="ed-sb ed-sb-list">
+                <div class="glass-table-container ed-scroll">
+                    <table class="glass-table ed-table">
+                        <thead>
                             <tr>
-                                <th class="p-2">PIN</th>
-                                <th class="p-2">Employee Name</th>
-                                <th class="p-2">Department</th>
-                                <th class="p-2 text-right">Status / Timestamp</th>
+                                <th>Employee</th>
+                                <th>Department</th>
+                                <th class="ed-r">Status</th>
                             </tr>
                         </thead>
-                        <tbody id="trackingTableBody" class="divide-y divide-gray-800">
-                            <tr><td colspan="4" class="p-4 text-center text-gray-500">Loading tracking data...</td></tr>
+                        <tbody id="trackingTableBody">
+                            <tr><td colspan="3" class="ed-empty">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -3085,40 +3068,104 @@
     </div>
 
     <div id="broadcastTrackingModal" class="modal-backdrop z-[60]">
-        <div class="bg-gray-800 p-0 rounded-lg w-[95%] lg:w-[800px] shadow-2xl border border-gray-600 flex flex-col max-h-[90vh]">
-            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
-                <h2 class="text-lg font-bold text-blue-400"><i class="fas fa-eye mr-2"></i>Message Read Receipts</h2>
-                <button type="button" onclick="closeBroadcastTrackingModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+        <div class="ed-box ed-box-wide" data-mr-box data-mr-key="broadcastTrackingModal">
+            <div class="ed-hd">
+                <div>
+                    <h3>Read receipts</h3>
+                    <p id="trackingBcTitle"></p>
+                </div>
+                <button type="button" onclick="closeBroadcastTrackingModal()" class="ed-x" aria-label="Close"><i class="fas fa-times"></i></button>
             </div>
-            <div class="p-6 flex flex-col flex-1 overflow-hidden">
-                <div class="flex justify-between items-start mb-4">
-                    <h3 id="trackingBcTitle" class="text-base font-bold text-white leading-tight pr-4"></h3>
-                    <button type="button" onclick="exportBroadcastTracking()" class="bg-green-700 hover:bg-green-600 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center shadow border border-green-500 flex-shrink-0">
-                        <i class="fas fa-file-excel mr-2"></i> Export Excel
-                    </button>
+            <div class="ed-tabsrow">
+                <div class="ed-tabs" role="tablist">
+                    <button type="button" onclick="switchBroadcastTrackingTab('pending')" id="btn-tab-bc-track-pending" class="ed-tab on">Unread <span id="countBcTrackPending" class="ed-n">0</span></button>
+                    <button type="button" onclick="switchBroadcastTrackingTab('signed')" id="btn-tab-bc-track-signed" class="ed-tab">Read <span id="countBcTrackSigned" class="ed-n">0</span></button>
                 </div>
-                
-                <div class="flex border-b border-gray-700 mb-4">
-                    <button onclick="switchBroadcastTrackingTab('pending')" id="btn-tab-bc-track-pending" class="px-6 py-2 text-sm font-bold border-b-2 transition border-red-500 text-red-400">Unread (<span id="countBcTrackPending">0</span>)</button>
-                    <button onclick="switchBroadcastTrackingTab('signed')" id="btn-tab-bc-track-signed" class="px-6 py-2 text-sm font-bold border-b-2 transition border-transparent text-gray-400 hover:text-gray-200">Read (<span id="countBcTrackSigned">0</span>)</button>
-                </div>
-
-                <div class="overflow-y-auto flex-1 bg-gray-900 border border-gray-700 rounded">
-                    <table class="w-full text-left text-[10px] whitespace-nowrap">
-                        <thead class="bg-gray-800 text-gray-400 sticky top-0">
+                <button type="button" onclick="exportBroadcastTracking()" class="ed-btn" title="Download everyone in this list with their status (opens in Excel)"><i class="fas fa-file-excel"></i> Export</button>
+            </div>
+            <div class="ed-sb ed-sb-list">
+                <div class="glass-table-container ed-scroll">
+                    <table class="glass-table ed-table">
+                        <thead>
                             <tr>
-                                <th class="p-2">PIN</th>
-                                <th class="p-2">Employee Name</th>
-                                <th class="p-2">Department</th>
-                                <th class="p-2 text-right">Status / Timestamp</th>
+                                <th>Employee</th>
+                                <th>Department</th>
+                                <th class="ed-r">Status</th>
                             </tr>
                         </thead>
-                        <tbody id="bcTrackingTableBody" class="divide-y divide-gray-800">
-                            <tr><td colspan="4" class="p-4 text-center text-gray-500">Loading tracking data...</td></tr>
+                        <tbody id="bcTrackingTableBody">
+                            <tr><td colspan="3" class="ed-empty">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- NEW BROADCAST pop-up (18 Nov 2026): the composer that used to sit on the left of Global Broadcasts. Same form id, field ids,
+         saveAdminBroadcast() and POST /api/ess/broadcasts. A half-typed message stays when the pop-up is closed; it clears after sending. -->
+    <div id="broadcastComposeModal" class="modal-backdrop z-[70]">
+        <div class="ed-box" data-mr-box data-mr-key="broadcastComposeModal">
+            <form id="broadcastForm" onsubmit="saveAdminBroadcast(event)">
+                <div class="ed-hd">
+                    <div>
+                        <h3>New broadcast</h3>
+                        <p>Shows straight away in the mobile app and the web portal.</p>
+                    </div>
+                    <button type="button" onclick="closeBroadcastComposeModal()" class="ed-x" aria-label="Close"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="ed-sb">
+                    <label class="ed-f">
+                        <span class="ed-mini">Message title <em>*</em></span>
+                        <input type="text" id="bcTitle" required placeholder="e.g. Important Safety Update" class="form-control">
+                    </label>
+                    <label class="ed-f">
+                        <span class="ed-mini">Message <em>*</em></span>
+                        <textarea id="bcBody" required rows="4" placeholder="Type your message here..." class="form-control"></textarea>
+                    </label>
+
+                    <div class="ed-well">
+                        <div class="ed-f">
+                            <span class="ed-mini">Who gets it <em>*</em></span>
+                            <select id="bcTargetType" data-search required onchange="handleBroadcastTargetChange()" class="form-control">
+                                <option value="Global">Global (All Employees)</option>
+                                <option value="Department">Specific Department</option>
+                                <option value="Individual">Specific Individual</option>
+                                <option value="CustomTeam">Custom Broadcast Team</option>
+                            </select>
+                        </div>
+                        <div id="bcDeptBox" class="ed-f hidden">
+                            <span class="ed-mini">Department <em>*</em></span>
+                            <select id="bcTargetDept" data-search class="form-control"><option value="">-- Choose Department --</option></select>
+                        </div>
+                        <div id="bcTargetIndivContainer" class="ed-f hidden">
+                            <span class="ed-mini" id="bcIndivLabel">Employee <em>*</em></span>
+                            <div class="ed-pickwrap">
+                                <div class="ed-search">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                                    <input type="text" id="bcTargetIndivSearch" oninput="filterBcEmp()" onfocus="showBcEmpDropdown()" placeholder="Search name or PIN..." class="form-control" autocomplete="off">
+                                </div>
+                                <div id="bcTargetIndivDropdown" class="ed-pick hidden"></div>
+                            </div>
+                        </div>
+                        <div id="bcCustomTeamContainer" class="ed-team hidden">
+                            <span class="ed-hint">Search and click to add as many people as you need.</span>
+                            <div id="bcCustomTeamTags" class="ed-teamtags"></div>
+                            <input type="hidden" id="bcCustomTeamValues">
+                        </div>
+                    </div>
+
+                    <label class="ed-f">
+                        <span class="ed-mini">Attachment (optional)</span>
+                        <input type="file" id="bcFile" accept="image/*,application/pdf" class="ed-file">
+                        <span class="ed-hint">A picture or a PDF.</span>
+                    </label>
+                </div>
+                <div class="ed-ft">
+                    <button type="button" onclick="closeBroadcastComposeModal()" class="ed-btn">Cancel</button>
+                    <button type="submit" id="saveBroadcastBtn" class="ed-go"><i class="fas fa-paper-plane"></i> Send broadcast</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -3280,16 +3327,16 @@
             } catch(e) {}
         });
     </script>
-    <script src="ess_master.js?v=20261115a"></script>
+    <script src="ess_master.js?v=20261118c"></script>
     <!-- ESS Master Overview (the first screen). AUTO-HEAL: safe to remove - the old Pending Requests card comes back. -->
-    <script src="ess_overview.js?v=20261007a"></script>
+    <script src="ess_overview.js?v=20261117cdn"></script>
     <!-- ⚡ Claims: Register (search, Filters, Columns, Data Tools, detail + receipt, PDF, Mark paid, charts) and Claim Types
          (was Expense Policies). AUTO-HEAL: safe to remove - the old Claims Register screen comes back. -->
-    <script src="ess_claims.js?v=20261008a"></script>
+    <script src="ess_claims.js?v=20261117cdn"></script>
     <script src="ess_leave_hub.js?v=20261008b"></script>
-    <script src="ess_settings_hub.js?v=20261008a"></script>
+    <script src="ess_settings_hub.js?v=20261118a"></script>
     <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
-      <script src="tna_topbar.js?v=70"></script>
+      <script src="tna_topbar.js?v=73"></script>
     <!-- Guided tours, how-to guides + What's new (content in /tours/essmaster_tours.json). AUTO-HEAL: safe to remove. -->
     <script src="tna_tour.js?v=20261109a" data-tour-page="essmaster" data-tour-help-position="right"></script>
     <!-- 2026-10-23: help as the side panel (same as Employee Master); the page's "?" opens it. AUTO-HEAL: safe to remove. -->

@@ -22,7 +22,7 @@
     {
       "id": "pw-welcome",
       "title": "Welcome to Production Pay",
-      "text": "Pay people for what they produce: set up your farms and units, teams and activities with their rates, give teams tasks, then check each day's production and commit it to payroll.<br><br>Use <b>Next</b> and <b>Back</b>, or your arrow keys. Press <b>Esc</b> to close.",
+      "text": "Pay people for what they produce: set up your farms and units, teams and activities with their rates, give teams tasks, then check each day's production.<br><br>Use <b>Next</b> and <b>Back</b>, or your arrow keys. Press <b>Esc</b> to close.",
       "fullOnly": true
     },
     {
@@ -40,7 +40,7 @@
         "#sidebarNav [onclick*='dashboard']"
       ],
       "title": "Production Dashboard",
-      "text": "Today at a glance: production per team and activity, its value, open tasks, days still to commit to payroll, and job costing.",
+      "text": "Today at a glance: production per team and activity, its value, open tasks and job costing.",
       "placement": "right"
     },
     {
@@ -67,7 +67,7 @@
         "#sidebarNav [onclick*='daily']"
       ],
       "title": "Daily Production",
-      "text": "Check each team's day: quantities captured on the phones, their clockings and pay, then <b>commit it to payroll</b>.",
+      "text": "Check each team's day: quantities captured on the phones, their clockings and pay.",
       "placement": "right"
     },
     {
@@ -264,7 +264,7 @@
             "#pdCards"
           ],
           "title": "Today",
-          "text": "People who captured today and the piece value at worker rates. <b>Your to-do</b>: team-days still to commit to payroll, overdue tasks, and job costing to check. Click any of them to open its screen.",
+          "text": "People who captured today and the piece value at worker rates. <b>Your to-do</b>: overdue tasks, and job costing to check. Click any of them to open its screen.",
           "placement": "bottom"
         },
         {
@@ -292,17 +292,7 @@
             "#pdTeamsPanel"
           ],
           "title": "Per team",
-          "text": "Each team in the period: people, entries, piece value and whether it is committed to payroll. <b>Open</b> takes you to that team in Daily Production.",
-          "placement": "top"
-        },
-        {
-          "id": "pwd2-unc",
-          "target": [
-            "#pd2Unc",
-            "#pdUncommittedPanel"
-          ],
-          "title": "Waiting to be committed",
-          "text": "Every team-day in the last 14 days with production not yet committed to payroll. Click <b>Open</b> to check and commit it.",
+          "text": "Each team in the period: people, entries and piece value. <b>Open</b> takes you to that team in Daily Production.",
           "placement": "top"
         }
       ]
@@ -857,7 +847,7 @@
             "#dailyTeamFilter"
           ],
           "title": "The team",
-          "text": "Choose the team, then <b>Load Grid</b>. Each team's day is checked and committed on its own.",
+          "text": "Choose the team, then <b>Load Grid</b>. Each team's day is shown on its own.",
           "placement": "bottom"
         },
         {
@@ -868,7 +858,7 @@
             ".main-content button[onclick*='openImportDataModal']"
           ],
           "title": "Import Data and Import History",
-          "text": "In <b>Data Tools</b>: <b>Import Data</b> brings in production from an Excel sheet: you match its columns, it's validated, then imported. <b>Import History</b> lists past imports, and one can be rolled back if nothing in it has been committed.",
+          "text": "In <b>Data Tools</b>: <b>Import Data</b> brings in production from an Excel sheet: you match its columns, it's validated, then imported. <b>Import History</b> lists past imports, and one can be rolled back.",
           "placement": "left"
         },
         {
@@ -890,16 +880,6 @@
           "title": "The grid",
           "text": "One row per team member. Their shift and clockings from Time &amp; Attendance, a column per task activity with their quantities and times, then their hours and wages: normal, approved and potential overtime, Sunday/public holiday, piece wage and the total. Time on a task is paid by quantity, so it comes off normal time.",
           "placement": "bottom",
-          "optional": true
-        },
-        {
-          "id": "pwy-actions",
-          "target": [
-            "#dailyActionBar"
-          ],
-          "title": "Check, then commit",
-          "text": "<b>Save Draft</b> keeps your changes. <b>Commit to Payroll</b> makes the day final: its records lock. <b>Unlock</b> reopens committed records, and <b>Revert Edits</b> puts back what the phones captured.<br><br>If the day falls in a <b>locked payroll period</b> (Employee Master &rsaquo; Payroll Periods), it can't be saved, committed, unlocked or reverted until that period is unlocked. You'll see who and which dates are affected.",
-          "placement": "top",
           "optional": true
         }
       ]

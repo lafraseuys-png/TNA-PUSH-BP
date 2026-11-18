@@ -1,0 +1,220 @@
+/* =====================================================================
+   ESS MASTER - DOCUMENT CENTER + GLOBAL BROADCASTS
+   File: public/css/ess_documents.css - linked in the head of ESSMaster.html
+   ---------------------------------------------------------------------
+   18 Nov 2026 (user: "modernize the document center and the global broadcast
+   center to our system theme"; always on, no switch): both screens and their
+   pop-ups in the T&A look, copied from css/tna_violations.css (Employee
+   Violations): title + white theme buttons on top, labelled toolbar with the
+   search icon on the left in soft grey, a glass table in its own scroll box
+   with light headings that stay at the top, one navy chip style, no colours.
+   Global Broadcasts: the history list takes the full width and the composer
+   opens in a pop-up (#broadcastComposeModal) from "New broadcast".
+   Markup: #page-documents, #page-broadcasts, #documentUploadModal,
+   #documentTrackingModal, #broadcastTrackingModal, #broadcastComposeModal.
+   Rows: renderAdminDocuments(), renderAdminBroadcasts(), renderTrackingTable(),
+   renderBcTrackingTable() in js/ess_master.js.
+   No !important here: the new buttons carry no Tailwind bg-* classes and the
+   pop-up boxes are divs (not a form / .bg-gray-800 straight under the
+   backdrop), so the page's !important theme rules never reach them.
+   The search icon is an inline SVG: the page paints every .fas in
+   .main-content navy with !important, which would beat the grey.
+   NOTE: Tailwind's .hidden loses to any rule here that sets display - such
+   boxes get their own .hidden rule below.
+   ===================================================================== */
+
+/* ---------- Header: title on the left, the main button on the right ---------- */
+:is(#page-documents, #page-broadcasts) .ed-head { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+    padding-bottom: 12px; border-bottom: 1px solid rgba(148, 163, 184, .2); }
+:is(#page-documents, #page-broadcasts) .ed-title { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; color: #334155; white-space: nowrap; }
+:is(#page-documents, #page-broadcasts) .ed-acts { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: flex-end; }
+:is(#page-documents, #page-broadcasts) .ed-acts .btn { height: 40px; padding: 0 18px; white-space: nowrap; }
+
+/* ---------- Toolbar: search > tag / date range > Show, then the count ---------- */
+:is(#page-documents, #page-broadcasts) .ed-bar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px 15px; margin: 16px 0; }
+:is(#page-documents, #page-broadcasts) .ed-fld { margin: 0; }
+:is(#page-documents, #page-broadcasts) .ed-lbl { display: block; font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+:is(#page-documents, #page-broadcasts) .ed-fld .form-control { height: 38px; padding-top: 0; padding-bottom: 0; box-sizing: border-box; }
+:is(#page-documents, #page-broadcasts) .ed-fld-search { width: 280px; }
+:is(#page-documents, #page-broadcasts) .ed-fld-search .form-control { width: 100%; }
+#page-documents .ed-fld-tag { width: 200px; }
+#page-documents .ed-fld-tag .form-control { width: 100%; }
+/* search icon on the LEFT in soft grey (user's search-box rule, 10 Nov) */
+.ed-search { position: relative; }
+.ed-search .form-control { padding-left: 34px; }
+.ed-search svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: #64748b; pointer-events: none; }
+/* the Reports date range: two boxes with a dash */
+#page-broadcasts .ed-range { display: flex; align-items: center; gap: 6px; }
+#page-broadcasts .ed-range .form-control { width: 132px; padding-left: 12px; }
+#page-broadcasts .ed-to { color: #94a3b8; font-weight: 700; }
+/* Show = the toolbar's main button, navy like Employee Violations' Show */
+.ed-go { height: 38px; display: inline-flex; align-items: center; gap: 8px; padding: 0 18px; border-radius: 10px; border: 1px solid #1a4c7b;
+    background: #1a4c7b; color: #ffffff; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; box-shadow: 0 4px 12px rgba(26, 76, 123, .2); transition: background-color .2s ease; }
+.ed-go:hover { background: #15406a; border-color: #15406a; }
+.ed-go:disabled { opacity: .75; cursor: progress; }
+:is(#page-documents, #page-broadcasts) .ed-bar-r { margin-left: auto; display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px; }
+:is(#page-documents, #page-broadcasts) .ed-count { align-self: center; font-size: 12px; font-weight: 700; color: #64748b; white-space: nowrap; padding-top: 16px; }
+:is(#page-documents, #page-broadcasts) .ed-count:empty { display: none; }
+
+/* ---------- Table: own scroll box, headings stay at the top ---------- */
+/* Headings are SOLID so rows never show through; the line under them is a shadow because collapsed borders do not travel with a
+   sticky heading (same as Employee Violations / Team View). */
+.ed-scroll { max-height: 68vh; overflow: auto; position: relative; }
+.ed-table th { position: sticky; top: 0; z-index: 3; background-color: #f8fafc; padding: 11px 12px; border-bottom: 0; box-shadow: inset 0 -1px 0 rgba(148, 163, 184, .35); white-space: nowrap; }
+.ed-table td { padding: 11px 12px; vertical-align: middle; }
+.ed-table .ed-c { text-align: center; }
+.ed-table .ed-r { text-align: right; }
+
+/* the two-line cells: bold first line, grey second line */
+.ed-d { white-space: nowrap; }
+.ed-d b { display: block; font-size: 13px; font-weight: 700; color: #1e293b; font-variant-numeric: tabular-nums; }
+.ed-d span { display: block; margin-top: 2px; font-size: 11px; color: #64748b; }
+.ed-doc { min-width: 220px; }
+.ed-doc b { display: block; font-size: 13px; font-weight: 700; color: #1e293b; }
+.ed-doc span { display: block; margin-top: 2px; font-size: 11.5px; color: #64748b; max-width: 460px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ed-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.ed-tagc { display: inline-flex; align-items: center; padding: 1px 8px; border-radius: 6px; font-size: 10.5px; font-weight: 700; background: rgba(148, 163, 184, .14); color: #475569; }
+/* one navy chip for every audience (no colour coding) */
+.ed-chip { display: inline-flex; align-items: center; gap: 6px; max-width: 260px; padding: 3px 10px; border-radius: 999px; border: 1px solid rgba(26, 76, 123, .22);
+    background: rgba(26, 76, 123, .07); color: #1a4c7b; font-size: 10.5px; font-weight: 800; letter-spacing: .4px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ed-chip.ed-chip-plain { text-transform: none; letter-spacing: 0; font-size: 11.5px; }
+/* the Roster's PIN pill */
+.ed-pin { display: inline-block; margin-right: 6px; padding: 1px 7px; border-radius: 6px; font-style: normal; font-size: 11px; font-weight: 800; background: rgba(26, 76, 123, .1); color: #1a4c7b; vertical-align: 1px; }
+.ed-num { font-size: 14px; font-weight: 800; color: #1e293b; font-variant-numeric: tabular-nums; }
+.ed-msg { min-width: 240px; }
+.ed-msg b { display: block; font-size: 13px; font-weight: 700; color: #1e293b; }
+.ed-msg span { display: block; margin-top: 2px; font-size: 11.5px; color: #64748b; max-width: 520px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ed-none { color: #94a3b8; }
+.ed-rowacts { display: inline-flex; gap: 6px; justify-content: flex-end; white-space: nowrap; }
+.ed-table .btn.ed-act { height: 32px; padding: 0 12px; font-size: 12px; gap: 6px; }
+.ed-table .btn.ed-act.ed-ico { width: 32px; padding: 0; }
+td.ed-empty { padding: 28px 16px; text-align: center; color: #64748b; }
+td.ed-empty i { display: block; margin-bottom: 8px; font-size: 22px; color: #1a4c7b; }
+td.ed-empty.ed-err, td.ed-empty.ed-err i { color: #b91c1c; }
+
+/* the pager under the broadcast list */
+#page-broadcasts .ed-pager { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 12px; }
+#page-broadcasts #bcPageInfo { font-size: 12px; font-weight: 600; color: #64748b; }
+#page-broadcasts #bcPageInfo b { color: #1e293b; }
+#page-broadcasts .ed-pager .btn { height: 32px; padding: 0 12px; font-size: 12px; }
+
+/* ---------- Pop-ups (same look as Employee Violations' Resolve pop-up) ---------- */
+.ed-box { position: relative; width: min(600px, calc(100vw - 32px)); max-height: 90vh; display: flex; flex-direction: column; overflow: hidden;
+    background: #ffffff; color: #0f172a; border: 1px solid #e2e8f0; border-radius: 20px; box-shadow: 0 30px 70px rgba(15, 23, 42, .25); }
+.ed-box.ed-box-wide { width: min(800px, calc(100vw - 32px)); }
+.modal-backdrop.active > .ed-box { animation: modalScaleIn .3s cubic-bezier(.16, 1, .3, 1) forwards; }
+.ed-box > form { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; margin: 0; }
+.ed-hd { display: flex; align-items: flex-start; gap: 12px; padding: 20px 22px 14px; border-bottom: 1px solid #f1f5f9; }
+.ed-hd h3 { margin: 0; font-size: 18px; font-weight: 800; color: #1a4c7b; line-height: 1.25; }
+.ed-hd p { margin: 3px 0 0; font-size: 12.5px; font-weight: 600; color: #64748b; }
+.ed-hd p:empty { display: none; }
+.ed-x { margin-left: auto; flex-shrink: 0; width: 34px; height: 34px; display: inline-grid; place-items: center; border: 0; border-radius: 10px; background: #f1f5f9; color: #64748b; cursor: pointer; }
+.ed-x:hover { background: #e2e8f0; color: #0f172a; }
+.ed-sb { flex: 1 1 auto; min-height: 0; overflow: auto; padding: 16px 22px 6px; display: flex; flex-direction: column; gap: 14px; }
+.ed-row { display: flex; gap: 12px; }
+.ed-row > * { flex: 1 1 0; min-width: 0; }
+.ed-row > .ed-narrow { flex: 0 0 150px; }
+.ed-f { display: flex; flex-direction: column; gap: 3px; margin: 0; }
+.ed-f.hidden { display: none; }
+.ed-mini { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #64748b; }
+.ed-mini em { font-style: normal; color: #b91c1c; }
+.ed-hint { font-size: 11px; color: #64748b; }
+.ed-box .form-control { width: 100%; box-sizing: border-box; }
+.ed-box input.form-control, .ed-box select.form-control { height: 38px; padding-top: 0; padding-bottom: 0; }
+.ed-box textarea.form-control { resize: vertical; min-height: 84px; }
+/* a light well around "Who gets it" */
+.ed-well { display: flex; flex-direction: column; gap: 12px; padding: 14px; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc; }
+/* the employee picker (search box + list under it) */
+.ed-pickwrap { position: relative; }
+.ed-pickwrap.hidden { display: none; }
+.ed-pick { position: absolute; z-index: 20; top: calc(100% + 4px); left: 0; right: 0; max-height: 220px; overflow-y: auto; background: #ffffff;
+    border: 1px solid #e2e8f0; border-radius: 10px; box-shadow: 0 12px 28px rgba(15, 23, 42, .14); }
+.ed-pick.hidden { display: none; }
+.ed-pick-i { display: flex; align-items: center; gap: 6px; padding: 8px 12px; font-size: 12.5px; font-weight: 600; color: #1e293b; cursor: pointer; border-top: 1px solid #f1f5f9; }
+.ed-pick-i:first-child { border-top: 0; }
+.ed-pick-i:hover { background: rgba(26, 76, 123, .06); }
+.ed-pick-none { padding: 10px 12px; font-size: 12px; color: #64748b; }
+/* the people picked for a custom team */
+.ed-team { display: flex; flex-direction: column; gap: 6px; }
+.ed-team.hidden { display: none; }
+.ed-teamtags { display: flex; flex-wrap: wrap; gap: 6px; }
+.ed-teamtags:empty::before { content: "Nobody picked yet."; font-size: 11.5px; color: #94a3b8; }
+.ed-tag { display: inline-flex; align-items: center; gap: 6px; padding: 3px 4px 3px 10px; border-radius: 999px; border: 1px solid rgba(26, 76, 123, .22);
+    background: rgba(26, 76, 123, .07); color: #1a4c7b; font-size: 11.5px; font-weight: 700; }
+.ed-tag button { width: 20px; height: 20px; display: inline-grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: #1a4c7b; cursor: pointer; font-size: 10px; }
+.ed-tag button:hover { background: rgba(26, 76, 123, .12); }
+/* file box */
+.ed-file { width: 100%; font-size: 12px; color: #64748b; cursor: pointer; }
+.ed-file::file-selector-button { margin-right: 10px; height: 34px; padding: 0 14px; border: 1px solid rgba(26, 76, 123, .2); border-radius: 8px; background: #ffffff;
+    color: #1a4c7b; font-size: 12px; font-weight: 700; cursor: pointer; }
+.ed-file::file-selector-button:hover { background: #f1f5f9; }
+.ed-ft { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 22px 20px; }
+.ed-btn { height: 38px; padding: 0 16px; border: 1px solid #e2e8f0; border-radius: 10px; background: #ffffff; color: #475569; font-size: 13px; font-weight: 700; cursor: pointer; }
+.ed-btn:hover { background: #f8fafc; color: #0f172a; }
+/* tracking pop-ups: tabs row with the Export button on its right */
+.ed-tabsrow { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 22px 0; }
+.ed-tabs { display: inline-flex; gap: 4px; padding: 4px; border-radius: 12px; background: #f1f5f9; }
+.ed-tab { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 14px; border: 0; border-radius: 9px; background: transparent; color: #64748b;
+    font-size: 12.5px; font-weight: 700; cursor: pointer; }
+.ed-tab:hover { color: #0f172a; }
+.ed-tab.on { background: #ffffff; color: #1a4c7b; box-shadow: 0 1px 4px rgba(15, 23, 42, .1); }
+.ed-n { min-width: 22px; padding: 1px 7px; border-radius: 999px; font-size: 11px; font-weight: 800; background: rgba(26, 76, 123, .1); color: #1a4c7b; text-align: center; }
+.ed-tabsrow .ed-btn { display: inline-flex; align-items: center; gap: 8px; height: 34px; color: #1a4c7b; }
+.ed-box .ed-scroll { max-height: none; flex: 1 1 auto; min-height: 160px; }
+.ed-sb.ed-sb-list { padding-bottom: 20px; }
+.ed-stat { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #1a4c7b; white-space: nowrap; }
+.ed-stat.ed-wait { color: #64748b; font-weight: 600; }
+
+/* ---------- Dark mode ---------- */
+:is(html, body).dark-mode :is(#page-documents, #page-broadcasts) .ed-head { border-bottom-color: rgba(255, 255, 255, .1); }
+:is(html, body).dark-mode :is(#page-documents, #page-broadcasts) .ed-title { color: #e2e8f0; }
+:is(html, body).dark-mode :is(#page-documents, #page-broadcasts) .ed-lbl,
+:is(html, body).dark-mode :is(#page-documents, #page-broadcasts) .ed-count,
+:is(html, body).dark-mode .ed-search svg, :is(html, body).dark-mode #page-broadcasts #bcPageInfo { color: #94a3b8; }
+:is(html, body).dark-mode #page-broadcasts .ed-to { color: #64748b; }
+:is(html, body).dark-mode .ed-go { background: #1e5a94; border-color: #2b6aa6; }
+:is(html, body).dark-mode .ed-go:hover { background: #2563a8; }
+:is(html, body).dark-mode .ed-table th { background-color: #1e293b; box-shadow: inset 0 -1px 0 rgba(255, 255, 255, .08); }
+:is(html, body).dark-mode .ed-scroll { color-scheme: dark; }
+:is(html, body).dark-mode .ed-d b, :is(html, body).dark-mode .ed-doc b, :is(html, body).dark-mode .ed-msg b,
+:is(html, body).dark-mode .ed-num, :is(html, body).dark-mode #page-broadcasts #bcPageInfo b { color: #e2e8f0; }
+:is(html, body).dark-mode .ed-d span, :is(html, body).dark-mode .ed-doc span, :is(html, body).dark-mode .ed-msg span,
+:is(html, body).dark-mode td.ed-empty, :is(html, body).dark-mode .ed-none { color: #94a3b8; }
+:is(html, body).dark-mode .ed-tagc { background: rgba(148, 163, 184, .14); color: #cbd5e1; }
+:is(html, body).dark-mode .ed-pin { background: rgba(59, 130, 246, .18); color: #93c5fd; }
+:is(html, body).dark-mode .ed-chip, :is(html, body).dark-mode .ed-tag { background: rgba(59, 130, 246, .14); border-color: rgba(59, 130, 246, .3); color: #bfdbfe; }
+:is(html, body).dark-mode .ed-tag button { color: #bfdbfe; }
+:is(html, body).dark-mode td.ed-empty i { color: #93c5fd; }
+:is(html, body).dark-mode td.ed-empty.ed-err, :is(html, body).dark-mode td.ed-empty.ed-err i { color: #fca5a5; }
+
+:is(html, body).dark-mode .ed-box { background: #1e293b; color: #e2e8f0; border-color: #334155; box-shadow: 0 30px 70px rgba(0, 0, 0, .5); }
+:is(html, body).dark-mode .ed-hd { border-bottom-color: #334155; }
+:is(html, body).dark-mode .ed-hd h3 { color: #93c5fd; }
+:is(html, body).dark-mode .ed-hd p, :is(html, body).dark-mode .ed-mini, :is(html, body).dark-mode .ed-hint, :is(html, body).dark-mode .ed-file { color: #94a3b8; }
+:is(html, body).dark-mode .ed-mini em { color: #fca5a5; }
+:is(html, body).dark-mode .ed-x { background: #0f172a; color: #94a3b8; }
+:is(html, body).dark-mode .ed-x:hover { background: #273449; color: #f1f5f9; }
+:is(html, body).dark-mode .ed-well { background: rgba(15, 23, 42, .45); border-color: #334155; }
+:is(html, body).dark-mode .ed-pick { background: #1e293b; border-color: #334155; box-shadow: 0 12px 28px rgba(0, 0, 0, .45); }
+:is(html, body).dark-mode .ed-pick-i { color: #e2e8f0; border-top-color: #273449; }
+:is(html, body).dark-mode .ed-pick-i:hover { background: rgba(59, 130, 246, .12); }
+:is(html, body).dark-mode .ed-pick-none, :is(html, body).dark-mode .ed-teamtags:empty::before { color: #94a3b8; }
+:is(html, body).dark-mode .ed-file::file-selector-button { background: #0f172a; border-color: #334155; color: #bfdbfe; }
+:is(html, body).dark-mode .ed-btn { background: #0f172a; border-color: #334155; color: #cbd5e1; }
+:is(html, body).dark-mode .ed-btn:hover { background: #273449; color: #f1f5f9; }
+:is(html, body).dark-mode .ed-tabsrow .ed-btn { color: #bfdbfe; }
+:is(html, body).dark-mode .ed-tabs { background: #0f172a; }
+:is(html, body).dark-mode .ed-tab { color: #94a3b8; }
+:is(html, body).dark-mode .ed-tab:hover { color: #f1f5f9; }
+:is(html, body).dark-mode .ed-tab.on { background: #273449; color: #bfdbfe; box-shadow: none; }
+:is(html, body).dark-mode .ed-n { background: rgba(59, 130, 246, .18); color: #93c5fd; }
+:is(html, body).dark-mode .ed-stat { color: #93c5fd; }
+:is(html, body).dark-mode .ed-stat.ed-wait { color: #94a3b8; }
+
+/* ---------- Phone width ---------- */
+@media (max-width: 640px) {
+    :is(#page-documents, #page-broadcasts) .ed-fld-search, #page-documents .ed-fld-tag { width: 100%; }
+    :is(#page-documents, #page-broadcasts) .ed-bar-r { margin-left: 0; }
+    .ed-row { flex-direction: column; }
+    .ed-row > .ed-narrow { flex: 1 1 auto; }
+}

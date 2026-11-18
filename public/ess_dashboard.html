@@ -2,38 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- 2026-11-16 this page only runs INSIDE My Profile (tna_profile.js opens it as ?embed=1). Opened on its own (old
+         bookmark, phone shortcut, old link) it goes to the Launchpad with My Profile open on the same part
+         (?open=leave -> ?profile=leave), and the rest of this page is swallowed as hidden text so none of it loads. -->
+    <script>
+        if (!(/[?&]embed=1/.test(location.search) && window.parent !== window)) {
+            location.replace('/Launchpad.html?profile=' + encodeURIComponent((/[?&]open=([a-z]+)/i.exec(location.search) || [])[1] || 'overview'));
+            document.write('<plaintext style="display:none">');
+        }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>My Timesheet - ESS</title>
     <!-- 2026-10-23: TNA Africa app icon (browser tab) -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=3">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1">
-    
-    <!-- PWA Manifest & Mobile Meta Tags -->
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#0f172a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="TNA ESS">
-    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
 
     <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/vendor/cdnjs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { background-color: #0f172a; color: #e2e8f0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     </style>
 </head>
 <body class="bg-gray-900 min-h-screen">
-
-    <!-- Top Navigation Bar -->
-    <div class="bg-gray-800 shadow-md border-b border-gray-700 sticky top-0 z-50">
-        <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
-            <button onclick="handleEssBackNavigation()" class="text-gray-400 hover:text-white transition p-2 -ml-2 rounded-full hover:bg-gray-700">
-                <i class="fas fa-arrow-left text-lg"></i>
-            </button>
-            <h1 class="text-lg font-black text-gray-200 tracking-wide">Employee Self Service</h1>
-            <div class="w-8"></div>
-    </div>
 
     <!-- Main Content -->
     <main class="max-w-3xl mx-auto p-4 sm:p-6 pb-20">
@@ -51,10 +41,6 @@
                             </h2>
                             <button onclick="openEssInfoModal()" class="text-gray-400 hover:text-blue-400 transition bg-gray-900 hover:bg-gray-700 rounded flex items-center justify-center border border-gray-600 px-2 py-1 text-xs shadow-sm" title="Edit Profile">
                                 <i class="fas fa-edit mr-1"></i> Edit
-                            </button>
-                            <!-- Manual PWA Install Button (Shown when ready) -->
-                            <button id="btnHeaderInstall" onclick="handlePwaInstall()" class="hidden bg-blue-900/50 hover:bg-blue-800 text-blue-400 border border-blue-500 rounded px-2 py-1 text-xs font-bold shadow-sm transition">
-                                <i class="fas fa-download mr-1"></i> Install App
                             </button>
                         </div>
                         <p id="essProfileDept" class="text-xs text-gray-400 uppercase tracking-wider mt-0.5"></p>
@@ -123,48 +109,6 @@
         </div>
 
     </main>
-
-    <!-- Bottom Navigation Bar -->
-    <div class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 z-40 flex justify-around items-center p-2 pb-4 shadow-2xl">
-        <button onclick="openEssPayslipsModal()" class="flex flex-col items-center justify-center w-full text-gray-400 hover:text-emerald-400 transition py-1 active:scale-95">
-            <i class="fas fa-file-invoice-dollar text-xl mb-1"></i>
-            <span class="text-[10px] font-bold uppercase tracking-wider mt-1">Payslips</span>
-        </button>
-        <button id="btnFooterMSS" onclick="openMSSDashboard()" class="hidden flex flex-col items-center justify-center w-full text-gray-400 hover:text-purple-400 transition py-1 active:scale-95 relative">
-                <div class="relative">
-                    <i class="fas fa-users-cog text-xl mb-1"></i>
-                    <span id="mssFooterBadge" class="hidden absolute -top-2 -right-2 bg-red-500 text-white px-1.5 py-0.5 rounded-full text-[9px] font-black border border-gray-900 shadow leading-none">0</span>
-                </div>
-                <span class="text-[10px] font-bold uppercase tracking-wider mt-1">My Team</span>
-            </button>
-            <button class="flex flex-col items-center justify-center w-full text-gray-600 transition py-1 cursor-not-allowed">
-                <i class="fas fa-chart-pie text-xl mb-1"></i>
-                <span class="text-[10px] font-bold uppercase tracking-wider mt-1">TBA</span>
-            </button>
-    </div>
-
-    <!-- PWA Install Prompt Modal -->
-    <div id="pwaInstallPrompt" class="hidden fixed bottom-20 left-0 right-0 z-[100] p-4 animate-fadeIn">
-        <div class="max-w-md mx-auto bg-gray-800 border border-blue-500 shadow-2xl shadow-blue-900/20 rounded-xl p-4 flex flex-col gap-3 relative">
-            <div class="flex items-start justify-between">
-                <div class="flex items-center gap-3">
-                    <div class="bg-blue-900/50 text-blue-400 p-2 rounded-lg flex-shrink-0">
-                        <i class="fas fa-mobile-alt text-xl px-1"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-bold text-white leading-tight">Install TNA ESS App</h3>
-                        <p class="text-[10px] text-gray-400 mt-1 leading-relaxed" id="pwaInstallMsg">Add this dashboard to your home screen for faster access and a better experience.</p>
-                    </div>
-                </div>
-                <button onclick="dismissPwaPrompt()" class="text-gray-500 hover:text-white transition flex-shrink-0 ml-2">
-                    <i class="fas fa-times text-lg"></i>
-                </button>
-            </div>
-            <button id="btnPwaInstall" onclick="handlePwaInstall()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-2.5 rounded-lg shadow-md transition mt-1">
-                Install App
-            </button>
-        </div>
-    </div>
 
     <!-- ESS Info Modal -->
     <div id="essInfoModal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-50 flex justify-center items-center p-4">
@@ -676,20 +620,10 @@
     <!-- Lafras Test --> 
     <!-- 2026-11-13 the login session for this page (code repetition review step 1): before the other scripts -->
     <script src="tna_session.js?v=20261113b"></script>
-    <script src="ess_dashboard.js?v=20261113d"></script>
+    <script src="ess_dashboard.js?v=20261118a"></script>
     <!-- Pre-approved overtime: shows overtime authorised by the manager on the timesheet and calendar. AUTO-HEAL: safe to remove. -->
     <script src="ess_ot_auth.js?v=1"></script>
-    <!-- Guided tours, form tours, how-to guides + What's new for employees (content in /tours/ess_dashboard_tours.json).
-         Help button raised so it never covers the bottom menu. AUTO-HEAL: safe to remove. -->
-    <!-- 2026-10-23: help as the side panel (same as Employee Master); the page's "?" opens it. AUTO-HEAL: safe to remove.
-         Embedded in My Profile (?embed=1): no tour / help inside the frame - the profile window around it has its own. -->
-    <script>
-        if (!(/[?&]embed=1/.test(location.search) && window.parent !== window)) {
-            document.write('<script src="tna_tour.js?v=20261109a" data-tour-page="ess_dashboard" data-tour-help-position="right-raised"><\/script>');
-            document.write('<script src="tna_help_panel.js?v=20261109b" data-help-module="Employee Self Service" data-help-anchor="#tnaTourHelpBtn"><\/script>');
-        }
-    </script>
-    <!-- 2026-10-23: ESS inside My Profile (only does something with ?embed=1). AUTO-HEAL: safe to remove. -->
-    <script src="ess_embed.js?v=20261026b"></script>
+    <!-- 2026-10-23: ESS inside My Profile (the look, the parts, the pop-ups over the window). -->
+    <script src="ess_embed.js?v=20261117cdn"></script>
 </body>
 </html>

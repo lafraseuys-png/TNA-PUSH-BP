@@ -625,7 +625,7 @@
           "target": [
             "#page-documents button[onclick*='openDocumentUploadModal']"
           ],
-          "title": "Upload Document",
+          "title": "Upload document",
           "text": "A policy, procedure or notice for employees, to everyone, one department or one person.",
           "placement": "left"
         },
@@ -1182,33 +1182,23 @@
       "trigger": "#page-broadcasts.active",
       "steps": [
         {
-          "id": "ebc-msg",
+          "id": "ebc-new",
           "target": [
-            "#bcTitle"
+            "#bcNewBtn"
           ],
-          "title": "The message",
-          "text": "A title and the message. It appears straight away in the mobile app and web portal.",
-          "placement": "bottom",
-          "climb": 1
+          "title": "New broadcast",
+          "text": "Opens the message pop-up: a title, the message, who gets it (everyone, one department, one person or a custom list) and an optional attachment. It appears straight away in the mobile app and web portal.",
+          "placement": "left"
         },
         {
-          "id": "ebc-aud",
+          "id": "ebc-filters",
           "target": [
-            "#bcTargetType"
+            "#bcSearch"
           ],
-          "title": "Who gets it",
-          "text": "Everyone, one department, one person, or a custom list of people.",
+          "title": "Find a message",
+          "text": "Search the title or message, and pick the dates to look at.",
           "placement": "bottom",
           "climb": 1
-        },
-        {
-          "id": "ebc-send",
-          "target": [
-            "#saveBroadcastBtn"
-          ],
-          "title": "Attachment and send",
-          "text": "Add a file if needed, then <b>Send Broadcast</b>.",
-          "placement": "top"
         },
         {
           "id": "ebc-history",
@@ -1216,7 +1206,7 @@
             "#adminBroadcastsBody"
           ],
           "title": "Sent messages",
-          "text": "Every broadcast with its audience and attachment. Filter by date.",
+          "text": "Every broadcast with who it went to and its attachment. <b>Track</b> shows who has read it and who has not.",
           "placement": "top"
         }
       ]

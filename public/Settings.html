@@ -29,15 +29,15 @@
     </script>
 
     <link rel="stylesheet" href="/css/styles.css?v=1.0.11">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="/vendor/cdnjs/font-awesome/6.4.0/css/all.min.css">
+   <link rel="stylesheet" href="/vendor/npm/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="/vendor/npm/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <!-- Flatpickr Core CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="/vendor/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
     
     <!-- Add Tailwind CDN to process new layout classes on the fly -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/vendor/tailwindcss/3.4.17/tailwind-play.js"></script>
     <script>
         tailwind.config = {
             darkMode: ['class', '.dark-mode'],
@@ -1228,20 +1228,15 @@
                                         </div>
                                         <div class="md:col-span-2 mt-2 pt-4 border-t border-slate-200 dark:border-gray-700">
                                             <p class="text-xs font-bold text-slate-700 dark:text-gray-300 mb-1"><i class="fas fa-exchange-alt mr-1"></i> Sending to PaySpace</p>
-                                            <p class="text-[11px] text-slate-500 dark:text-gray-400 mb-3">Saved now and used when sending leave and hours to PaySpace is switched on in a coming update. Only approved and locked days are ever sent.</p>
+                                            <p class="text-[11px] text-slate-500 dark:text-gray-400 mb-3">Hours are sent from <b>T&amp;A &gt; Settings &gt; Payroll Periods</b> (the PaySpace button on a period): approved days only, overtime / Sunday / public holiday hours once decided, as hours - PaySpace works out the money. Hours are only ever added, never overwritten. Leave balances are sent from the same pop-up ("Leave balances" tab): PaySpace's balance is set to T&amp;A's, so every payslip shows it - this pays nobody anything.</p>
                                             <div class="flex flex-wrap gap-6 mb-3">
-                                                <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-gray-300"><input type="checkbox" id="psPushLeave"> Send approved leave</label>
+                                                <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-gray-300"><input type="checkbox" id="psPushLeave"> Send leave balances</label>
                                                 <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-gray-300"><input type="checkbox" id="psPushHours"> Send approved hours per pay run</label>
                                                 <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-gray-300">Leave: hours in one day <input type="number" id="psLeaveHoursPerDay" min="1" max="24" step="0.25" value="8" class="form-control !w-20 !py-1"></label>
                                             </div>
-                                            <p class="text-[11px] font-bold text-slate-600 dark:text-gray-400 mb-2">PaySpace component code for each kind of hours</p>
-                                            <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-                                                <div><label for="psCodeNormal" class="block text-[11px] text-slate-500 mb-1">Normal time</label><input type="text" id="psCodeNormal" class="form-control" placeholder="e.g. BASIC" autocomplete="off"></div>
-                                                <div><label for="psCodeOTWeekday" class="block text-[11px] text-slate-500 mb-1">Overtime (weekday)</label><input type="text" id="psCodeOTWeekday" class="form-control" placeholder="e.g. OT15_W" autocomplete="off"></div>
-                                                <div><label for="psCodeOTSaturday" class="block text-[11px] text-slate-500 mb-1">Overtime (Saturday)</label><input type="text" id="psCodeOTSaturday" class="form-control" placeholder="e.g. OT15_S" autocomplete="off"></div>
-                                                <div><label for="psCodeSunday" class="block text-[11px] text-slate-500 mb-1">Sunday</label><input type="text" id="psCodeSunday" class="form-control" placeholder="e.g. SUN20" autocomplete="off"></div>
-                                                <div><label for="psCodePublicHoliday" class="block text-[11px] text-slate-500 mb-1">Public holiday</label><input type="text" id="psCodePublicHoliday" class="form-control" placeholder="e.g. PPH" autocomplete="off"></div>
-                                            </div>
+                                            <p class="text-[11px] font-bold text-slate-600 dark:text-gray-400 mb-2">PaySpace code for each kind of hours</p>
+                                            <!-- ⚡ 2026-11-17 code table (payroll_connections.js): hourly paid | fixed salary, one row per leave type, codes from PaySpace -->
+                                            <div id="psHoursMap" class="text-[11px] text-slate-500">Loading the PaySpace codes…</div>
                                         </div>
                                     </div>
                                     <div class="flex justify-between items-center mt-5 pt-4 border-t border-slate-200 dark:border-gray-700">
@@ -2414,7 +2409,6 @@
                             <h4 class="text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-teal-400 mb-4"><i class="fas fa-users-cog mr-1"></i> ESS App & Dashboard Features</h4>
                             <div class="grid grid-cols-2 gap-4 bg-slate-50 dark:bg-gray-900 p-6 rounded-xl border border-slate-200 dark:border-gray-700 shadow-inner">
                                 <label class="flex items-center text-sm text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"><input type="checkbox" id="essCanClock" checked class="mr-3 accent-teal-500 w-4 h-4"> Can Clock In/Out</label>
-                                <label class="flex items-center text-sm text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"><input type="checkbox" id="essCanTrip" checked class="mr-3 accent-teal-500 w-4 h-4"> Can Log Trips</label>
                                 <label class="flex items-center text-sm text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"><input type="checkbox" id="essCanLeave" checked class="mr-3 accent-teal-500 w-4 h-4"> Can Log Leave</label>
                                 <label class="flex items-center text-sm text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"><input type="checkbox" id="essCanClaim" checked class="mr-3 accent-teal-500 w-4 h-4"> Can Submit Claims</label>
                             </div>
@@ -3114,7 +3108,6 @@
                             <label class="block text-xs font-bold text-slate-600 dark:text-gray-400 mb-3">ESS Self-Service Features</label>
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-slate-50 dark:bg-gray-900 p-4 rounded-xl border border-slate-200 dark:border-gray-700 text-xs text-slate-700 dark:text-gray-300">
                                 <label class="flex items-center cursor-pointer hover:opacity-80"><input type="checkbox" value="clock" data-group="ess" class="role-mod-chk mr-2 accent-teal-500 w-4 h-4"> Can Clock In/Out</label>
-                                <label class="flex items-center cursor-pointer hover:opacity-80"><input type="checkbox" value="trip" data-group="ess" class="role-mod-chk mr-2 accent-teal-500 w-4 h-4"> Can Log Trips</label>
                                 <label class="flex items-center cursor-pointer hover:opacity-80"><input type="checkbox" value="leave" data-group="ess" class="role-mod-chk mr-2 accent-teal-500 w-4 h-4"> Can Log Leave</label>
                                 <label class="flex items-center cursor-pointer hover:opacity-80"><input type="checkbox" value="claim" data-group="ess" class="role-mod-chk mr-2 accent-teal-500 w-4 h-4"> Can Submit Claims</label>
                             </div>
@@ -3586,7 +3579,6 @@
                         <h4 class="text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-teal-400 mb-4"><i class="fas fa-users-cog mr-1"></i> ESS App Features</h4>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 bg-slate-50 dark:bg-gray-900 p-6 rounded-xl border border-slate-200 dark:border-gray-700 max-h-32 overflow-y-auto shadow-inner text-sm">
                             <label class="flex items-center text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"><input type="checkbox" id="bulk_mod_essClock" class="mr-3 accent-teal-500 w-4 h-4"> Can Clock In/Out</label>
-                            <label class="flex items-center text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"><input type="checkbox" id="bulk_mod_essTrip" class="mr-3 accent-teal-500 w-4 h-4"> Can Log Trips</label>
                             <label class="flex items-center text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"><input type="checkbox" id="bulk_mod_essLeave" class="mr-3 accent-teal-500 w-4 h-4"> Can Log Leave</label>
                             <label class="flex items-center text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"><input type="checkbox" id="bulk_mod_essClaim" class="mr-3 accent-teal-500 w-4 h-4"> Can Submit Claims</label>
                         </div>
@@ -3818,7 +3810,7 @@
     </script>
     
     <!-- Flatpickr Core JS & Initialization -->
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="/vendor/npm/flatpickr@4.6.13/default.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // This applies the modern calendar to EVERY date input automatically
@@ -3994,19 +3986,19 @@
     </script>
 
      <!-- Excel reader for the User Bulk Import feature -->
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="/vendor/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
      <script src="theme.js?v=20261106a"></script>
   <!-- ⚡ 2026-10-20 Modern pop-ups (the Contractors / Employee Master cards) instead of the browser boxes, navy only. AUTO-HEAL: no internet to the CDN = the browser boxes, as before. -->
   <script>window.TNA_POPUP_NAVY = true;</script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="contractors_modern_popups.js?v=20261020a"></script>
-  <script src="settings.js?v=20261115a"></script>
+  <script src="/vendor/npm/sweetalert2@11.26.25/default.js"></script>
+  <script src="contractors_modern_popups.js?v=20261117cdn"></script>
+  <script src="settings.js?v=20261117cdn"></script>
     <!-- ⚡ 2026-10-20 Hardware > Facial AI Licenses: "Data Tools" - license tracker wizard (Excel only, nothing saved). AUTO-HEAL: safe to remove. -->
     <script src="facial_license_tracker.js?v=20261020a"></script>
     <!-- ⚡ 2026-10-20 Hardware, Mobile Errors, Audit Trail, Mobile Transactions in the theme (tables, navy pills, theme buttons). Look only. AUTO-HEAL: safe to remove. -->
     <script src="settings_hw_theme.js?v=20261020l"></script>
     <!-- ⚡ 2026-10-12 Connections: active payroll system + PaySpace (Deel Local Payroll). AUTO-HEAL: safe to remove. -->
-    <script src="payroll_connections.js?v=20261012a"></script>
+    <script src="payroll_connections.js?v=20261118c"></script>
     <script src="settings_leave_tabs.js?v=20261008b"></script>
   <!-- ⚡ Settings > Notifications: clock reminder emails per 5 minutes (new file). AUTO-HEAL: safe to remove. -->
   <script src="clock_reminder_limit.js?v=20261005a"></script>
@@ -4018,11 +4010,11 @@
        Data Tools > Export This View - the same column logic as Employee Master / Contractors (shared files + new
        ua_columns.js). AUTO-HEAL: safe to remove - the list and the old right-click Toggle Columns work as before. -->
   <script src="contractors_header_search.js?v=20261006a"></script>
-  <script src="tna_styled_export.js?v=20261006a"></script>
+  <script src="tna_styled_export.js?v=20261117cdn"></script>
   <script src="ua_columns.js?v=20261009a"></script>
   <!-- ⚡ Data Tools > Bulk Export Login QR PDFs: a zip with one QR card per person (Name Surname.pdf) + All cards.pdf (new file).
        AUTO-HEAL: safe to remove - the menu item goes away, the QR button on each row works as before. -->
-  <script src="ua_qr_bulk.js?v=20261009d"></script>
+  <script src="ua_qr_bulk.js?v=20261117cdn"></script>
   <script src="hw_queue.js?v=20261020a"></script>
   <!-- Compare clocks with CVS (Connectivity > ZKTeco API). AUTO-HEAL: safe to remove. -->
   <script src="cvs_range_sync.js?v=20261115a"></script>
@@ -4033,11 +4025,11 @@
       })();
   </script>
    <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
-   <script src="tna_topbar.js?v=70"></script>
+   <script src="tna_topbar.js?v=73"></script>
     <script src="csvimport.js?v=20261020a"></script>
     <!-- Contractors screen/action permissions (role editor + overrides). Safe to remove. -->
    <script src="contractor_perms.js?v=20261106b"></script>
-   <script src="roles_v2.js?v=20261110b"></script>
+   <script src="roles_v2.js?v=20261117cdn"></script>
    <!-- 2026-11-09 Audit Trail: every module in one list (js/company_audit.js + /api/audit/all) -->
    <script src="company_audit.js?v=20261110c"></script>
    <!-- 2026-11-03 Org Hierarchy sheet. AUTO-HEAL: without the file the menu item opens an empty section, nothing else changes. -->

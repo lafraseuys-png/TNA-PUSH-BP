@@ -16,17 +16,17 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1">
     <link rel="stylesheet" href="/css/styles.css?v=1.0.6">
     <link rel="stylesheet" href="/css/contractors.css?v=20261019a">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="/vendor/cdnjs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/vendor/npm/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="/vendor/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link href="/vendor/npm/quill@1.3.6/dist/quill.snow.css" rel="stylesheet">
+    <script src="/vendor/npm/quill@1.3.6/dist/quill.min.js"></script>
+   <script src="/vendor/cdnjs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <!-- AUTO-HEAL: pdf.js renders imported contract PDFs in the field mapper (same version as HR) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/vendor/cdnjs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="/vendor/cdnjs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="/vendor/cdnjs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="/vendor/npm/chart.js@4.6.1/default.js"></script>
     <style>
     
         .ql-toolbar { background: #cbd5e1; border-radius: 4px 4px 0 0; }
@@ -1460,6 +1460,17 @@
                                     <input type="number" id="distItemFixedQty" min="0.0001" step="any" inputmode="decimal" class="form-control sif-in" placeholder="e.g. 2" oninput="distItemRuleRedraw()">
                                     <b id="distItemFixedQtyUom"></b>
                                     <span>per cycle, whatever his hectares</span>
+                                </div>
+                                <!-- ⚡ 2026-11-18 which categories get it (logic_fixed_items.js IssueCats); none ticked = as before -->
+                                <input type="hidden" id="distItemIssueCats" value="">
+                                <div id="distItemCatsRow" class="sif-fq" role="group" aria-label="Categories that get it">
+                                    <label>Categories that get it</label>
+                                    <label style="font-weight: 600; color: #1e293b; margin: 0;"><input type="checkbox" style="width: auto; margin: 0 4px 0 0;" data-sif-cat="1" onchange="distItemCatsChange(this)"> Cat 1</label>
+                                    <label style="font-weight: 600; color: #1e293b; margin: 0;"><input type="checkbox" style="width: auto; margin: 0 4px 0 0;" data-sif-cat="2" onchange="distItemCatsChange(this)"> Cat 2</label>
+                                    <label style="font-weight: 600; color: #1e293b; margin: 0;"><input type="checkbox" style="width: auto; margin: 0 4px 0 0;" data-sif-cat="3" onchange="distItemCatsChange(this)"> Cat 3</label>
+                                    <label style="font-weight: 600; color: #1e293b; margin: 0;"><input type="checkbox" style="width: auto; margin: 0 4px 0 0;" data-sif-cat="4" onchange="distItemCatsChange(this)"> Cat 4</label>
+                                    <label style="font-weight: 600; color: #1e293b; margin: 0;"><input type="checkbox" style="width: auto; margin: 0 4px 0 0;" data-sif-cat="all" onchange="distItemCatsChange(this)"> All</label>
+                                    <span id="distItemCatsHint">None ticked = as before.</span>
                                 </div>
                                 <div id="distItemRuleEx" class="sif-ex"></div>
                             </div>
@@ -5208,21 +5219,21 @@
     </div>
 
         <!-- ⚡ Modern pop-ups (the Employee Master look): SweetAlert2 + alert / tnaAsk / tnaAskText. AUTO-HEAL: if the CDN cannot load, the browser's own pop-ups. -->
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="contractors_modern_popups.js?v=20261020a"></script>
-        <script src="contractors.js?v=20261115e"></script>
-        <script src="stock_item_rule.js?v=20261102d"></script>
+        <script src="/vendor/npm/sweetalert2@11.26.25/default.js"></script>
+        <script src="contractors_modern_popups.js?v=20261117cdn"></script>
+        <script src="contractors.js?v=20261118a"></script>
+        <script src="stock_item_rule.js?v=20261118a"></script>
         <script src="report_unsubs.js?v=20261031a"></script>
         <!-- ⚡ 2026-10-18 Farmers Master: the import wizard (Data Tools > Import Excel Data). AUTO-HEAL: safe to remove - the old Import screen opens. -->
         <script src="contractors_import_wizard.js?v=20261019a"></script>
         <!-- ⚡ One look for Excel exports (the Reports style: logo, navy headings). AUTO-HEAL: safe to remove - exports go back to plain files. -->
-        <script src="tna_styled_export.js?v=20261005a"></script>
+        <script src="tna_styled_export.js?v=20261117cdn"></script>
         <!-- Contractors screen/action permissions guard. Must load after contractors.js. -->
-            <script src="contractor_perms.js?v=20261109a"></script>
+            <script src="contractor_perms.js?v=20261118a"></script>
         <!-- Shared resize grip for every pop-up (tna_modal_resize.js). Safe to remove. -->
        <script src="tna_modal_resize.js?v=20261026b"></script>
        <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
-        <script src="tna_topbar.js?v=70"></script>
+        <script src="tna_topbar.js?v=73"></script>
       <!-- Employee Master button & tab look (navy glass, red kept for danger). Safe to remove. -->
         <script src="tna_em_buttons.js?v=20261104a"></script>
        <!-- One "Dates" field (drag or click from/to) for every ...DateFrom / ...DateTo pair. Safe to remove. -->
@@ -5276,7 +5287,7 @@
         <!-- ⚡ 2026-11-04 Hierarchy Levels move into Settings > Locations (new file, before the Settings groups). AUTO-HEAL: safe to remove. -->
         <script src="contractors_levels_settings.js?v=20261104a"></script>
         <!-- ⚡ 2026-11-04 Farmer Transfer tab: paste farmer codes, their clubs go to a new FT (new file). AUTO-HEAL: safe to remove. -->
-        <script src="contractors_ft_transfer.js?v=20261106b"></script>
+        <script src="contractors_ft_transfer.js?v=20261117cdn"></script>
         <!-- ⚡ 2026-11-04 Depot Assignment tab: which depot(s) each Field Tech works from (new file, after the transfer file it reuses). AUTO-HEAL: safe to remove. -->
         <script src="contractors_depot_assign.js?v=20261106b"></script>
         <!-- ⚡ 2026-11-04 Workflow screen moves into Settings > 6 Workflow Approval (Workflow Routing, Stand-In Approvers); its
@@ -5284,11 +5295,11 @@
         <script src="contractors_workflow_settings.js?v=20261104b"></script>
         <script src="contractors_settings_groups.js?v=20261106a"></script>
     <!-- 2026-11-10 (user): the pop-up is back, with each section's own tabs at the top inside it (TABS_ON_TOP in the file). -->
-    <script src="contractors_settings_popup.js?v=20261110c"></script>
+    <script src="contractors_settings_popup.js?v=20261117cdn"></script>
     <script src="contractors_products_hub.js?v=20261102g"></script>
     <script src="contractors_calc_test.js?v=20261102a"></script>
     <!-- ⚡ 2026-10-23: SMS & Broadcast opens as a pop-up window like Settings (new file). AUTO-HEAL: safe to remove. -->
-    <script src="contractors_sms_popup.js?v=20261106a"></script>
+    <script src="contractors_sms_popup.js?v=20261117cdn"></script>
         <!-- ⚡ Club membership card of the Chairperson and Secretary (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_club_cards.js?v=20260930b"></script>
         <!-- ⚡ Clubs without a Chairperson / Secretary: Reports tab, "Not assigned clubs" tab, signing block setting (new file). AUTO-HEAL: safe to remove. -->
@@ -5306,16 +5317,16 @@
         <!-- ⚡ Reports > Bulk Approvals: every Inbox "Approve selected" run, with the review answer, for audit (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_bulk_approvals_report.js?v=20261002a"></script>
         <!-- ⚡ Reports: one screen - a report dropdown, filters, columns, sort, column search, summary, pages, export (new file). AUTO-HEAL: safe to remove (the old tabs come back). -->
-        <script src="contractors_report_center.js?v=20261115d"></script>
+        <script src="contractors_report_center.js?v=20261117cdn"></script>
         <!-- ⚡ 2026-11-04 Distribution Master > Final Distributions Approval: upload the client file, compare per farmer, approve final figures (full admins). AUTO-HEAL: safe to remove. -->
-        <script src="contractors_final_dist.js?v=20261115d"></script>
+        <script src="contractors_final_dist.js?v=20261118a"></script>
         <!-- ⚡ 2026-11-06 (user) icon buttons show their name at once on hover, the same dark pop-up as Time & Attendance (remove this line = the browser's own late grey tooltip, as before) -->
         <script src="tna_quick_tips.js?v=20261030c"></script>
         <!-- ⚡ Dashboard: Approved Farmers = farmers with an approved contract + the "Farmers vs Approved" card (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_dash_approval.js?v=20261006a"></script>
         <!-- 2026-11-10 Dashboard in the T&A look: Overview | Map | Approvals (the old dashboard). Switch: Settings > General.
              Server: logic_contractor_dashboard.js. AUTO-HEAL: safe to remove - the old dashboard shows as before. -->
-        <script src="contractors_dashboard_v2.js?v=20261115a"></script>
+        <script src="contractors_dashboard_v2.js?v=20261117cdn"></script>
         <!-- ⚡ Settings > Contract Rules > Partial distribution (Off / only when the warehouse is short / any time with a reason) -->
         <script src="contractors_partial_distribution.js?v=20261004a"></script>
         <!-- ⚡ Settings > Contract Rules > Inputs summary on the phone (club screen card, value on/off) -->
@@ -5356,8 +5367,8 @@
         <script src="contractors_numbers_left.js?v=20261018b"></script>
         <script src="contractors_hierarchy_levels.js?v=20261019b"></script>
         <script src="contractors_manager_assign.js?v=20261110a"></script>
-        <script src="contractors_manager_bulk.js?v=20261105i"></script>
-        <script src="contractors_location_setup.js?v=20261105c"></script>
+        <script src="contractors_manager_bulk.js?v=20261117cdn"></script>
+        <script src="contractors_location_setup.js?v=20261117cdn"></script>
         <!-- ⚡ 2026-10-18 Farmer Profile Overview: header, tabs, season timeline, print. AUTO-HEAL: safe to remove - the old overview shows. -->
         <script src="contractors_profile_overview.js?v=20261115a"></script>
         <!-- ⚡ 2026-11-09 Evidence sent in later: Profile > Transactions "Evidence documents" + "Sent in later" in View Evidence. AUTO-HEAL: safe to remove. -->

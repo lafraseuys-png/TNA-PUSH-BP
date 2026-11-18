@@ -27,7 +27,7 @@
         })();
     </script>
     <link rel="stylesheet" href="/css/styles.css?v=1.0.4">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/vendor/cdnjs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Base Reset */
         * {
@@ -1448,7 +1448,7 @@
     </script>
 
     <script src="theme.js?v=20261106a"></script>
-    <script src="launchpad.js?v=20261113a"></script>
+    <script src="launchpad.js?v=20261117cdn"></script>
     <script src="logo_scale.js?v=20261102d"></script>
 
     <!-- UI Interaction Scripts (Injected AFTER launchpad.js to Auto-Heal interactions) -->
@@ -1807,7 +1807,10 @@
              const allowed = s.ess ? lpEssAllowed(s.perm)
                     : s.contractors ? (isOpen(s.module) && lpContractorAllowed(s.perm))
                     : (isOpen(s.module) && lpScreenAllowed(s.perm));
-                   if (allowed) items.push({ name: s.name, group: (window.tnaModuleDisplayName ? window.tnaModuleDisplayName(s.module) : s.module), icon: s.icon, keys: s.keys || '', url: s.url, run: () => loadModule(s.url) });
+                   // 2026-11-16 self service items open My Profile on that part (the old ESS page is not shown on its own any more)
+                   const essPart = s.ess ? (/[?&]open=([a-z]+)/i.exec(s.url) || [])[1] || 'overview' : null;
+                   if (allowed) items.push({ name: s.name, group: (window.tnaModuleDisplayName ? window.tnaModuleDisplayName(s.module) : s.module), icon: s.icon, keys: s.keys || '', url: s.url,
+                       run: () => { if (!(essPart && window.TnaProfile && window.TnaProfile.open(essPart))) loadModule(s.url); } });
             });
 
             LP_SETTINGS_SCREENS.forEach(s => {
@@ -2363,11 +2366,11 @@
 
     <!-- Guided page tour + What's new (steps in /tours/launchpad.json). AUTO-HEAL: safe to remove. -->
     <!-- My Profile screen (shared with the top bar on the modules). AUTO-HEAL: remove it and the old pop-up is back. -->
-    <script src="tna_profile.js?v=20261106a"></script>
+    <script src="tna_profile.js?v=20261117cdn"></script>
     <!-- Notifications bell + help "?" in the top bar, next to the profile. AUTO-HEAL: safe to remove. -->
     <script src="lp_topbar_icons.js?v=20261026a"></script>
     <!-- 2026-11-09: the shared top bar (search, inbox, help, profile) on the Launchpad too - its old search / bell / profile are hidden by it -->
-    <script src="tna_topbar.js?v=70"></script>
+    <script src="tna_topbar.js?v=73"></script>
     <script src="tna_tour.js?v=20261109a" data-tour-page="launchpad"></script>
     <!-- 2026-10-23: help as the side panel (same as Employee Master); the page's "?" opens it. AUTO-HEAL: safe to remove. -->
     <script src="tna_help_panel.js?v=20261109b" data-help-module="Home" data-help-anchor="#tnaTourHelpBtn"></script>

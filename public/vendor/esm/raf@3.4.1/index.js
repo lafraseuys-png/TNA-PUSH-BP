@@ -1,0 +1,7 @@
+/**
+ * Bundled by jsDelivr using Rollup v4.62.2 and esbuild v0.28.1.
+ * Original file: /npm/raf@3.4.1/index.js
+ *
+ * Do NOT use SRI with dynamically generated files! More information: https://www.jsdelivr.com/using-sri-with-dynamic-files
+ */
+import*as w from"/vendor/esm/performance-now@2.1.0/index.js";var x=typeof globalThis<"u"?globalThis:typeof window<"u"?window:typeof global<"u"?global:typeof self<"u"?self:{};function b(t){return t&&Object.prototype.hasOwnProperty.call(t,"default")?t.default:t}var i={exports:{}},R=b(w),y;function F(){if(y)return i.exports;y=1;for(var t=R,a=typeof window>"u"?x:window,s=["moz","webkit"],l="AnimationFrame",o=a["request"+l],f=a["cancel"+l]||a["cancelRequest"+l],c=0;!o&&c<s.length;c++)o=a[s[c]+"Request"+l],f=a[s[c]+"Cancel"+l]||a[s[c]+"CancelRequest"+l];if(!o||!f){var u=0,h=0,n=[],_=1e3/60;o=function(e){if(n.length===0){var r=t(),v=Math.max(0,_-(r-u));u=v+r,setTimeout(function(){var d=n.slice(0);n.length=0;for(var p=0;p<d.length;p++)if(!d[p].cancelled)try{d[p].callback(u)}catch(g){setTimeout(function(){throw g},0)}},Math.round(v))}return n.push({handle:++h,callback:e,cancelled:!1}),h},f=function(e){for(var r=0;r<n.length;r++)n[r].handle===e&&(n[r].cancelled=!0)}}return i.exports=function(e){return o.call(a,e)},i.exports.cancel=function(){f.apply(a,arguments)},i.exports.polyfill=function(e){e||(e=a),e.requestAnimationFrame=o,e.cancelAnimationFrame=f},i.exports}var m=F(),T=m.cancel,k=m.polyfill;export{T as cancel,m as default,k as polyfill};

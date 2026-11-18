@@ -28,12 +28,12 @@
         })();
     </script>
     <link rel="stylesheet" href="/css/styles.css?v=1.0.5">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="/vendor/cdnjs/exceljs/4.3.0/exceljs.min.js"></script>
+    <link rel="stylesheet" href="/vendor/cdnjs/font-awesome/6.4.0/css/all.min.css">
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="/vendor/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
     <!-- Flatpickr dark theme: enabled/disabled with the page theme (same as Employee Master) -->
-    <link id="flatpickrDarkTheme" rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+    <link id="flatpickrDarkTheme" rel="stylesheet" type="text/css" href="/vendor/npm/flatpickr@4.6.13/dist/themes/dark.css">
     <script>
         (function () {
             var link = document.getElementById('flatpickrDarkTheme');
@@ -45,12 +45,12 @@
             document.addEventListener('tna:themechange', syncFlatpickrTheme);
         })();
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="/vendor/npm/flatpickr@4.6.13/default.js"></script>
+    <script src="/vendor/npm/apexcharts@8.8.2/default.js"></script>
     <!-- Leaflet Maps API -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <link rel="stylesheet" href="/vendor/npm/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="/vendor/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/vendor/npm/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
     
     <style>
         body { background-color: #0f172a; color: #e2e8f0; }
@@ -150,19 +150,21 @@
     </script>
     <!-- 2026-11-13 Attendance Reports card (was injected by tna_reports_layout.js) -->
     <!-- the pop-up font (Nunito), as the Settings pop-up; offline: Segoe UI / system font -->
-    <link id="tspFont" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap">
+    <link id="tspFont" rel="stylesheet" href="/vendor/fonts/nunito.css">
     <link rel="stylesheet" href="/css/tna_reports.css?v=20261113b">
     <!-- 2026-11-14 the Dashboard (was injected by tna_dashboard_v2.js) -->
-    <link rel="stylesheet" href="/css/tna_dashboard_v2.css?v=20261115c">
+    <link rel="stylesheet" href="/css/tna_dashboard_v2.css?v=20261118a">
     <!-- 2026-11-14 Team View: date range boxes, view switch, Visual + Overview tabs (were injected by their scripts) -->
     <link rel="stylesheet" href="/css/tna_team_view.css?v=20261115b">
     <!-- 2026-11-15 Weekly Timesheet (#page-attendance) in the Weekly Roster look -->
-    <link rel="stylesheet" href="/css/tna_attendance.css?v=20261115c">
+    <link rel="stylesheet" href="/css/tna_attendance.css?v=20261116a">
+    <!-- 2026-11-16 one look for every list of IN / OUT clockings: Timesheet pop-up, Fix pop-up, Dashboard Map pin bubble -->
+    <link rel="stylesheet" href="/css/tna_clockings.css?v=20261116e">
     <!-- 2026-11-15 Employee Violations (#page-violations) + its Resolve pop-up in the T&A look -->
     <link rel="stylesheet" href="/css/tna_violations.css?v=20261115d">
     <!-- 2026-11-15 Settings > Departments work patterns (+ the Weekly Roster "Auto" source line) -->
     <link rel="stylesheet" href="/css/tna_departments.css?v=20261115b">
-    <link rel="stylesheet" href="/css/tna_payroll_periods.css?v=20261115a">
+    <link rel="stylesheet" href="/css/tna_payroll_periods.css?v=20261117a">
 </head>
 <body class="font-sans flex h-screen overflow-hidden">
     <script>
@@ -480,6 +482,9 @@
                             </div>
                             <button id="tvBulkSnapBtn" onclick="executeBulkSnapToShift()" class="justify-center bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow whitespace-nowrap">
                                 <i class="fas fa-compress-arrows-alt mr-1"></i> Snap
+                            </button>
+                            <button id="tvBulkApproveAbsBtn" style="display:none" onclick="tvApproveAbsentBulk()" class="justify-center bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow whitespace-nowrap">
+                                <i class="fas fa-user-check mr-1"></i> Approve absent
                             </button>
                             <button id="tvSmartBulkBtn" disabled onclick="handleSmartBulkAction()" class="justify-center bg-gray-600 text-white px-3 py-1.5 rounded text-xs font-bold transition shadow opacity-50 cursor-not-allowed whitespace-nowrap">
                                 <i class="fas fa-layer-group mr-1"></i> Bulk Action
@@ -1252,7 +1257,7 @@
                                 </button>
                                 <div class="profile-dropdown-menu rs-dd-menu">
                                     <div class="rs-dd-h">Clockings in Excel</div>
-                                    <button type="button" onclick="attendanceDropdownClose(); openExportAttendanceModal()" class="dropdown-item"><i class="fas fa-file-export"></i><span>Export raw<small>Downloads the clockings for a date range and departments</small></span></button>
+                                    <button type="button" onclick="attendanceDropdownClose(); openExportAttendanceModal()" class="dropdown-item"><i class="fas fa-file-export"></i><span>Export for fixing<small>One row per person per day, with IN and OUT columns</small></span></button>
                                     <button type="button" id="btnImportAttendance" onclick="attendanceDropdownClose(); document.getElementById('importAttendanceUpload').click()" class="dropdown-item"><i class="fas fa-file-import"></i><span>Import fixes<small>Reads the corrected Excel file; you confirm before anything is saved</small></span></button>
                                 </div>
                             </div>
@@ -3143,49 +3148,68 @@
         </div>
     </div>
 
+    <!-- 2026-11-16 the Timesheet (clockings) pop-up in the shared clockings look (css/tna_clockings.css): wider, roomier, navy only,
+         Cancel / Save & Recalculate at the top under the title (user's choice, was under Add Manual Punch). Same ids and onclicks as
+         before (openDrillDown / stageManualClock / saveDrillDownChanges fill and read them). data-mr-*: resize grip, same saved size key. -->
     <div id="drillDownModal" class="modal-backdrop">
-        <div class="bg-gray-800 w-full max-w-2xl rounded shadow-2xl border border-gray-600 flex flex-col max-h-[90vh]">
-            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t">
-                <h3 class="font-bold text-lg text-green-400" id="drillDownTitle">Timesheet Drill Down</h3>
-                <button onclick="closeDrillDown()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+        <div class="ck-box" data-mr-box data-mr-key="drillDownModal" role="dialog" aria-modal="true" aria-labelledby="drillDownTitle">
+          <!-- screen 1: the timesheet -->
+          <div id="drillDownTsView" class="ck-view">
+            <div class="ck-hd">
+                <h3 id="drillDownTitle">Timesheet Drill Down</h3>
+                <button type="button" onclick="closeDrillDown()" class="ck-x" aria-label="Close"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="drillDownFooterControls" class="ck-bar hidden">
+                <span class="ck-bar-t"><i class="fas fa-pen"></i><span id="drillDownUnsaved">Unsaved changes</span></span>
+                <button type="button" onclick="cancelDrillDownChanges()" class="btn">Cancel</button>
+                <button type="button" id="btnSaveDrillDown" onclick="saveDrillDownChanges()" class="ck-go"><i class="fas fa-save"></i> Save &amp; Recalculate</button>
             </div>
 
-           <div class="p-6 overflow-y-auto flex-1">
+            <div class="ck-sb">
                 <input type="hidden" id="manualEmpId">
 
-                <h4 class="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Raw Clock Records (This Week)</h4>
-            <div class="overflow-x-auto border border-gray-700 rounded">
-                    <table class="w-full text-left text-xs">
-                        <thead class="bg-gray-700 text-gray-400">
+                <div class="ck-lbl">Raw Clock Records (This Week)</div>
+                <div class="ck-wrap">
+                    <table class="ck-table">
+                        <thead>
                             <tr>
-                                <th class="p-2">Date</th>
-                                <th class="p-2">Time</th>
-                                <th class="p-2">Type</th>
-                                <th class="p-2">Device</th>
-                                <th class="p-2 text-center w-20">Ignore</th>
+                                <th class="ck-wd">Date</th>
+                                <th class="ck-wt">Time</th>
+                                <th class="ck-wy">Type</th>
+                                <th>Device</th>
+                                <th class="ck-c">Ignore</th>
                             </tr>
                         </thead>
-                        <tbody id="drillDownBody" class="divide-y divide-gray-700 bg-gray-800">
+                        <tbody id="drillDownBody">
                         </tbody>
                     </table>
                 </div>
-                
-                <div class="mt-4 bg-gray-900 p-3 rounded border border-gray-700 flex flex-wrap items-center gap-3">
-                    <span class="text-xs font-bold text-gray-400">Add Manual Punch:</span>
-                    <input type="date" id="manualDate" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-green-500">
-                    <select id="manualType" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white">
+
+                <div class="ck-lbl">Add Manual Punch</div>
+                <div class="ck-add">
+                    <input type="date" id="manualDate" class="ck-in" aria-label="Date">
+                    <select id="manualType" class="ck-in" aria-label="Clock in or out">
                         <option value="IN">IN</option>
                         <option value="OUT">OUT</option>
                     </select>
-                    <input type="time" id="manualTime" class="bg-gray-800 border border-gray-600 rounded p-1.5 text-xs text-white focus:outline-none focus:border-green-500">
-                    <button onclick="stageManualClock()" class="bg-green-600 hover:bg-green-500 text-white px-3 py-1.5 rounded text-xs font-bold shadow transition"><i class="fas fa-plus mr-1"></i> Add Punch</button>
-                </div>
-                <!-- NEW FOOTER CONTROLS -->
-                <div id="drillDownFooterControls" class="mt-4 pt-4 border-t border-gray-700 flex justify-end space-x-3 hidden">
-                    <button type="button" onclick="cancelDrillDownChanges()" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded font-bold text-sm transition">Cancel</button>
-                    <button type="button" id="btnSaveDrillDown" onclick="saveDrillDownChanges()" class="px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white rounded font-bold text-sm shadow transition"><i class="fas fa-save mr-2"></i> Save & Recalculate</button>
+                    <input type="time" id="manualTime" class="ck-in" aria-label="Time">
+                    <button type="button" onclick="stageManualClock()" class="btn"><i class="fas fa-plus"></i> Add Punch</button>
                 </div>
             </div>
+          </div>
+          <!-- screen 2 (2026-11-16): Assign Shift from a day = the Roster Management tabs in this same pop-up, Back to the timesheet.
+               ddOpenRoster (tna_dashboard.js) moves the Roster pop-up's tabs and fields into #drillDownRosterSlot and puts them back. -->
+          <div id="drillDownRosterView" class="ck-view" hidden>
+            <div class="ck-hd">
+                <div>
+                    <button type="button" onclick="ddRosterBack()" class="ck-back"><i class="fas fa-arrow-left"></i> Back to timesheet</button>
+                    <h3>Roster Management</h3>
+                    <p id="drillDownRosterFor" class="ck-sub"></p>
+                </div>
+                <button type="button" onclick="closeDrillDown()" class="ck-x" aria-label="Close"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="drillDownRosterSlot" class="ck-sb ck-slot"></div>
+          </div>
         </div>
     </div>
 
@@ -3770,21 +3794,18 @@
         </div>
     </div>
 
+    <!-- 2026-11-16 Import fixes: preview of the real changes before anything is saved (filled by afShowPreview in tna_dashboard.js;
+         styles css/tna_attendance.css). Same ids and onclicks as the old "Confirm Import" box (it showed only a row count). -->
     <div id="importConfirmModal" class="modal-backdrop">
-        <div class="bg-gray-800 w-[500px] rounded shadow-2xl border border-gray-600 flex flex-col">
-            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t">
-                <h3 class="font-bold text-lg text-orange-400"><i class="fas fa-exclamation-triangle mr-2"></i>Confirm Import</h3>
-                <button id="btnCloseImportModal" onclick="cancelImport()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+        <div class="af-box" role="dialog" aria-modal="true" aria-labelledby="afTitle" data-mr-box data-mr-key="importConfirmModal">
+            <div class="af-hd">
+                <h3 id="afTitle"><i class="fas fa-file-import"></i>Import fixes · check the changes</h3>
+                <button type="button" id="btnCloseImportModal" onclick="cancelImport()" class="af-x" aria-label="Close"><i class="fas fa-times"></i></button>
             </div>
-            <div class="p-6">
-                <p class="text-sm text-gray-300 mb-4" id="importConfirmMessage"></p>
-                <div class="bg-orange-900/30 border border-orange-500/50 p-3 rounded mb-6">
-                    <p class="text-xs text-orange-300 font-bold"><i class="fas fa-info-circle mr-1"></i>Warning: This action will push changes to the database and force a complete attendance recalculation for all affected employees on the modified dates.</p>
-                </div>
-                <div class="flex justify-end space-x-3">
-                    <button type="button" id="btnCancelImport" onclick="cancelImport()" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded font-bold text-sm transition">Cancel</button>
-                    <button type="button" id="btnExecuteImport" onclick="executeImport()" class="px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white rounded font-bold text-sm shadow transition"><i class="fas fa-check mr-1"></i> Confirm & Import</button>
-                </div>
+            <div class="af-bd" id="importConfirmMessage"></div>
+            <div class="af-ft">
+                <button type="button" id="btnCancelImport" onclick="cancelImport()" class="af-btn">Cancel</button>
+                <button type="button" id="btnExecuteImport" onclick="executeImport()" class="af-btn pri"><i class="fas fa-check"></i> Save</button>
             </div>
         </div>
     </div>
@@ -3792,11 +3813,11 @@
     <div id="exportAttendanceModal" class="modal-backdrop">
         <div class="bg-gray-800 w-[500px] rounded shadow-2xl border border-gray-600 flex flex-col">
             <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t">
-                <h3 class="font-bold text-lg text-blue-400"><i class="fas fa-file-excel mr-2"></i>Export Raw Attendance</h3>
+                <h3 class="font-bold text-lg text-blue-400"><i class="fas fa-file-excel mr-2"></i>Export clockings for fixing</h3>
                 <button onclick="closeModal('exportAttendanceModal')" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
             </div>
             <div class="p-6">
-                <p class="text-xs text-gray-400 mb-4">Export chronological raw clock punches grouped by employee for manual Excel adjustments.</p>
+                <p class="text-xs text-gray-400 mb-4">One row per person per day for every date you pick (up to 62 days), with separate IN and OUT columns. Fix the times in Excel, then use Data Tools &gt; Import fixes.</p>
                 
                 <div class="grid grid-cols-2 gap-4 mb-4">
                     <div>
@@ -4196,23 +4217,6 @@
         </div>
     </div>
 
-    <div id="mapPinListModal" class="modal-backdrop" style="z-index: 65;">
-        <div class="bg-gray-800 w-[500px] max-w-[95vw] rounded shadow-2xl border border-indigo-500 flex flex-col max-h-[85vh]">
-            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t flex-shrink-0">
-                <div>
-                    <h3 id="mapPinListTitle" class="font-bold text-lg text-indigo-400"><i class="fas fa-map-marker-alt mr-2"></i>Device Name</h3>
-                    <p id="mapPinListCount" class="text-xs text-gray-400 mt-1 font-bold">0 Scans</p>
-                </div>
-                <button onclick="document.getElementById('mapPinListModal').classList.remove('active')" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="flex-1 overflow-y-auto p-4 space-y-2 bg-gray-800" id="mapPinListContainer">
-                <!-- Populated via JS -->
-            </div>
-            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b flex justify-end">
-                <button onclick="document.getElementById('mapPinListModal').classList.remove('active')" class="bg-gray-600 hover:bg-gray-500 text-white px-6 py-2 rounded text-xs font-bold shadow transition">Close</button>
-            </div>
-        </div>
-    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -4307,13 +4311,15 @@
    <script src="tna_hours.js"></script>
    <!-- Report preview column sorting (shared with Employee Master). Safe to remove: headers just stop sorting. -->
    <script src="report_sort.js"></script>
-   <script src="tna_dashboard.js?v=20261115q"></script>
+   <script src="tna_dashboard.js?v=20261118r"></script>
+   <!-- 2026-11-17 Settings > Payroll Periods: "PaySpace" button + Send hours pop-up (logic_payspace.js section 5). Safe to remove: no PaySpace button. -->
+   <script src="payspace_send.js?v=20261118b"></script>
    <!-- The T&A dashboard (Manager | HR | Map | Overview tabs). Since the 14 Nov 2026 clean-up this is the only dashboard:
         the old dashboards and the "New dashboard" switch are gone, so this file is needed. -->
-   <script src="tna_dashboard_v2.js?v=20261115f"></script>
+   <script src="tna_dashboard_v2.js?v=20261118b"></script>
    <!-- 2026-10-28 Shifts pop-up, step by step (the Scheduled reports look) - replaces the classic Create / Edit Shift form for
         everyone; it fills and saves that same form ("Classic form" link inside). AUTO-HEAL: safe to remove = the classic form. -->
-   <script src="tna_shift_steps.js?v=20261028o"></script>
+   <script src="tna_shift_steps.js?v=20261116a"></script>
    <!-- 2026-10-28 Bulk assign shifts popup (Fill roster). AUTO-HEAL: remove this line and the old Advanced Bulk Assignment popup is back -->
    <script src="tna_bulk_assign.js?v=20261112a"></script>
    <!-- 2026-10-28 Shift patterns popup (Fill roster > Create shift pattern). Needs tna_bulk_assign.js. AUTO-HEAL: remove this line and the old popup is back -->
@@ -4321,7 +4327,7 @@
    <script src="tna_photo_push.js?v=20261019a"></script>
     <!-- Team View > Visual tab (timeline, drag punches, approvals). AUTO-HEAL: safe to remove, Traditional keeps working. -->
    <script src="tna_tv_range.js?v=20261114b"></script>
-   <script src="tna_team_visual.js?v=20261114a"></script>
+   <script src="tna_team_visual.js?v=20261118a"></script>
     <!-- Team View > Overview tab. Needs tna_team_visual.js. AUTO-HEAL: safe to remove, the other tabs keep working. -->
    <script src="tna_team_overview.js?v=20261114a"></script>
    <!-- ⚡ 2026-10-13 Shift Setup Wizard + "recalculate the affected days" pop-up (window.tnaShiftWizard, window.tnaRecalcPrompt).
@@ -4365,7 +4371,7 @@
    <!-- Pre-approved overtime: OT Authorisations page, roster "Authorise OT" tab and badges. Only active while switched on. AUTO-HEAL: safe to remove. -->
    <script src="tna_ot_auth.js?v=1"></script>
    <!-- Shared top bar: search + quick access + profile menu (same as Employee Master). Safe to remove. -->
-   <script src="tna_topbar.js?v=70"></script>
+   <script src="tna_topbar.js?v=73"></script>
    <!-- Guided tours, how-to guides + What's new (content in /tours/tna_dashboard_tours.json). AUTO-HEAL: safe to remove. -->
    <script src="tna_tour.js?v=20261109a" data-tour-page="tna_dashboard" data-tour-help-position="right"></script>
    <!-- 2026-10-23: help as the side panel (same as Employee Master); the page's "?" opens it. AUTO-HEAL: safe to remove. -->
@@ -4383,7 +4389,7 @@
    <!-- 2026-10-26: System Settings opens as a pop-up window (same look as Farmers & Distribution Settings) with Overtime Rules
         as one of its sections; the Overtime Rules sidebar item opens it there. Load LAST (after every file that wraps
         showSection). AUTO-HEAL: safe to remove - Settings and Overtime Rules then open as normal pages again. -->
-   <script src="tna_settings_popup.js?v=20261115d"></script>
+   <script src="tna_settings_popup.js?v=20261117cdn"></script>
    <!-- 2026-10-27 Overtime Rules > Weekends: the Saturday rate shown read-only on the Saturday row (= the Overtime rate). Not a setting. AUTO-HEAL: safe to remove. -->
    <script src="tna_sat_rate_view.js?v=20261027b"></script>
    <!-- 2026-10-27 Overtime Rules > Overtime limits: the BCEA limits locked (companies may only be stricter), the earnings threshold

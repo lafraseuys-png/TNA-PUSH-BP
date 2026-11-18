@@ -1,0 +1,188 @@
+/* =====================================================================
+   T&A - THE CLOCKINGS LOOK (2026-11-16, user: "all these popups where it shows the in and out clock should look the same
+   ... modernize it and give it more space ... without changing the core look"). Always on, no switch.
+   One look for every list of IN / OUT clockings on the T&A page:
+     - the Timesheet pop-up (#drillDownModal: Weekly Timesheet row, Team View "Punches", High Level Overview, top bar
+       "Add a manual punch") - box, header, Save bar at the top (user's choice), table, Add Manual Punch row
+     - the Fix pop-up's clockings list (#dv2Act: Dashboard "Fix" / "Fix shift", Team View Visual "Fix day")
+     - the Dashboard Map tab's pin bubble (scans at one place)
+   Navy only (user's rule): IN / OUT, late / early, next morning and unsaved are navy chips, no green / red / orange.
+   The box, header and close button copy the Resolve and Fix pop-ups (white, 20px corners, 34px grey close button).
+   Classes ck-*; nothing here restyles another layer.
+   ===================================================================== */
+
+/* ---------- Pop-up box ---------- */
+.ck-box { position: relative; width: min(900px, calc(100vw - 32px)); max-height: 90vh; display: flex; flex-direction: column; overflow: hidden;
+    background: #ffffff; color: #0f172a; border: 1px solid #e2e8f0; border-radius: 20px; box-shadow: 0 30px 70px rgba(15, 23, 42, .25); }
+.modal-backdrop.active > .ck-box { animation: modalScaleIn .3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.ck-hd { display: flex; align-items: flex-start; gap: 12px; padding: 22px 26px 16px; border-bottom: 1px solid #f1f5f9; }
+.ck-hd h3 { margin: 0; font-size: 18px; font-weight: 800; color: #1a4c7b; line-height: 1.3; }
+.ck-x { margin-left: auto; flex-shrink: 0; width: 34px; height: 34px; display: inline-grid; place-items: center; border: 0; border-radius: 10px;
+    background: #f1f5f9; color: #64748b; cursor: pointer; }
+.ck-x:hover { background: #e2e8f0; color: #0f172a; }
+.ck-sb { flex: 1 1 auto; min-height: 0; overflow: auto; padding: 20px 26px 24px; }
+/* two screens in one pop-up: the timesheet, and Assign Shift (Roster Management tabs) with Back to timesheet */
+.ck-view { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+.ck-view[hidden] { display: none; }
+.ck-view.ck-in { animation: ckSlide .24s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes ckSlide { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
+.ck-back { display: inline-flex; align-items: center; gap: 7px; margin: 0 0 8px; padding: 5px 12px 5px 10px; border: 1px solid rgba(26, 76, 123, .18); border-radius: 999px;
+    background: rgba(26, 76, 123, .05); color: #1a4c7b; font-size: 12px; font-weight: 800; cursor: pointer; }
+.ck-back:hover { background: rgba(26, 76, 123, .1); border-color: rgba(26, 76, 123, .3); }
+.ck-sub { margin: 3px 0 0; font-size: 12.5px; font-weight: 600; color: #64748b; }
+/* the Roster pop-up's tabs and fields while they sit here: tabs across the top, the form kept at a readable width */
+.ck-slot { padding: 0; }
+.ck-slot > div:last-child { max-width: 640px; padding: 22px 26px 26px; }
+/* a new punch flashes where it went in */
+.ck-row.flash td { animation: ckFlash 1.8s ease; }
+@keyframes ckFlash { 0%, 35% { background: rgba(26, 76, 123, .16); } 100% { background: rgba(26, 76, 123, .04); } }
+/* x on a new punch: take it off before saving */
+.ck-undo { width: 28px; height: 28px; display: inline-grid; place-items: center; border: 1px solid rgba(26, 76, 123, .2); border-radius: 8px; background: #ffffff; color: #1a4c7b; cursor: pointer; font-size: 12px; }
+.ck-undo:hover { background: rgba(26, 76, 123, .08); }
+
+/* Save bar: under the title, shows after the first change (the "hidden" class is switched by the page) */
+.ck-bar { display: flex; align-items: center; gap: 10px; margin: 0; padding: 12px 26px; background: rgba(26, 76, 123, .05); border-bottom: 1px solid rgba(26, 76, 123, .12); }
+.ck-bar.hidden { display: none; }
+.ck-bar-t { margin-right: auto; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #1a4c7b; }
+.ck-bar .btn { padding: 8px 16px; }
+/* the main button: solid navy, like Reports' Generate / Violations' Show */
+.ck-go { display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 18px; border-radius: 8px; border: 1px solid #1a4c7b;
+    background: #1a4c7b; color: #ffffff; font-size: 13px; font-weight: 800; cursor: pointer; white-space: nowrap; box-shadow: 0 6px 14px rgba(26, 76, 123, .22); }
+.ck-go:hover { background: #15406a; border-color: #15406a; }
+.ck-go:disabled { opacity: .75; cursor: progress; }
+
+/* section label (RAW CLOCK RECORDS / ADD MANUAL PUNCH) */
+.ck-lbl { margin: 0 2px 10px; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #64748b; }
+.ck-lbl:not(:first-child) { margin-top: 24px; }
+
+/* ---------- The clockings table ---------- */
+.ck-wrap { border: 1px solid #e2e8f0; border-radius: 14px; overflow: auto; max-height: 56vh; }
+.ck-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+.ck-table th { position: sticky; top: 0; z-index: 2; background: #f8fafc; color: #64748b; font-size: 10.5px; font-weight: 800; letter-spacing: .07em;
+    text-transform: uppercase; text-align: left; padding: 12px 16px; box-shadow: inset 0 -1px 0 #e2e8f0; white-space: nowrap; }
+.ck-table td { padding: 12px 16px; box-shadow: inset 0 -1px 0 #f1f5f9; vertical-align: middle; color: #1e293b; }
+.ck-table tbody tr:last-child td { box-shadow: none; }
+.ck-table .ck-c { text-align: center; width: 84px; }
+/* fixed column widths, so the columns do not jump when a row changes or a new punch is added */
+.ck-table .ck-wd { width: 130px; }
+.ck-table .ck-wt { width: 210px; }
+.ck-table .ck-wy { width: 120px; }
+.ck-row:hover td { background: #fbfcfe; }
+.ck-date { white-space: nowrap; color: #64748b; font-variant-numeric: tabular-nums; }
+.ck-time { font-size: 14px; font-weight: 800; color: #0f172a; font-variant-numeric: tabular-nums; }
+.ck-dev { font-size: 12px; color: #64748b; }
+.ck-dev b { color: #334155; font-weight: 700; }
+/* small navy chips after the time: next morning / Late in / Early out / Unsaved / ignored */
+.ck-tag { display: inline-flex; align-items: center; gap: 4px; margin-left: 8px; padding: 1px 8px; border-radius: 999px; border: 1px solid rgba(26, 76, 123, .22);
+    background: rgba(26, 76, 123, .06); color: #1a4c7b; font-size: 10.5px; font-weight: 800; white-space: nowrap; vertical-align: 1px; }
+.ck-tag i { font-size: 9.5px; }
+.ck-tag[hidden] { display: none; }
+/* IN / OUT: a pill (read only) or a pill-shaped drop-down (can be changed) */
+.ck-pill, .ck-type { display: inline-flex; align-items: center; justify-content: center; min-width: 46px; height: 28px; padding: 0 10px; border-radius: 8px;
+    border: 1px solid rgba(26, 76, 123, .25); background: rgba(26, 76, 123, .06); color: #1a4c7b; font-size: 11.5px; font-weight: 800; letter-spacing: .03em; }
+.ck-pill.ghost { background: transparent; border-style: dashed; }
+.ck-type { padding: 0 8px; cursor: pointer; font-family: inherit; }
+.ck-type:focus { outline: none; border-color: #1a4c7b; box-shadow: 0 0 0 3px rgba(26, 76, 123, .12); }
+.ck-chk { width: 17px; height: 17px; accent-color: #1a4c7b; cursor: pointer; vertical-align: middle; }
+/* an ignored clocking: faded and struck through, the tick box stays usable */
+.ck-row.ign td { color: #94a3b8; }
+.ck-row.ign :is(.ck-time, .ck-date, .ck-dev) { text-decoration: line-through; color: #94a3b8; }
+.ck-row.ign :is(.ck-type, .ck-pill) { opacity: .5; }
+/* a changed (not saved yet) or newly added clocking: a navy line on the left */
+.ck-row.chg td:first-child, .ck-row.new td:first-child { box-shadow: inset 3px 0 0 #1a4c7b, inset 0 -1px 0 #f1f5f9; }
+.ck-row.new td { background: rgba(26, 76, 123, .04); }
+/* Job Costing unit moves: shown, not clockings */
+.ck-row.move td { background: #fbfcfe; font-style: italic; }
+.ck-row.move .ck-time { font-size: 13px; font-weight: 700; color: #64748b; }
+/* one band per day: date, shift, punches, Assign Shift */
+.ck-day td { padding: 12px 16px; background: #f8fafc; box-shadow: inset 0 1px 0 #e2e8f0, inset 0 -1px 0 #e2e8f0; }
+.ck-table tbody tr.ck-day:first-child td { box-shadow: inset 0 -1px 0 #e2e8f0; }
+.ck-day-in { display: flex; align-items: center; gap: 14px; }
+.ck-day-t { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; }
+.ck-day-t > b { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 800; color: #1a4c7b; font-variant-numeric: tabular-nums; }
+.ck-day-t > span { font-size: 12.5px; color: #475569; }
+.ck-day-t .ck-sep { margin: 0 6px; color: #cbd5e1; }
+.ck-day-t .ck-punch b { color: #0f172a; font-weight: 800; font-variant-numeric: tabular-nums; }
+.ck-day-t .ck-muted { color: #94a3b8; font-style: italic; }
+.ck-day-t .ck-warn { color: #1a4c7b; font-weight: 700; }
+.ck-day .btn { flex-shrink: 0; padding: 7px 14px; font-size: 12px; }
+.ck-lock { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px; background: #f1f5f9; color: #475569; font-size: 11.5px; font-weight: 800; }
+.ck-table td.ck-empty { padding: 34px 16px; text-align: center; color: #94a3b8; }
+.ck-empty i { display: block; margin-bottom: 8px; font-size: 22px; color: #1a4c7b; opacity: .5; }
+
+/* ---------- Add Manual Punch row ---------- */
+.ck-add { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 16px 18px; border: 1px solid #e2e8f0; border-radius: 14px; background: #f8fafc; }
+.ck-in { height: 40px; padding: 0 12px; border: 1px solid #e2e8f0; border-radius: 10px; background: #ffffff; color: #0f172a; font-size: 13px; font-family: inherit; box-sizing: border-box; }
+.ck-in:focus { outline: none; border-color: #1a4c7b; box-shadow: 0 0 0 3px rgba(26, 76, 123, .12); }
+.ck-add input[type="date"].ck-in { width: 170px; }
+.ck-add select.ck-in { width: 92px; font-weight: 700; color: #1a4c7b; }
+.ck-add input[type="time"].ck-in { width: 130px; }
+.ck-add .btn { height: 40px; padding: 0 18px; }
+
+/* ---------- Dashboard Map tab: the pin bubble (scans at one place) ---------- */
+.ck-map { min-width: 250px; font-size: 12.5px; line-height: 1.4; color: #0f172a; }
+.ck-map-t { display: block; font-size: 14px; font-weight: 800; color: #1a4c7b; }
+.ck-map-s { display: block; margin-top: 2px; font-size: 11.5px; color: #64748b; }
+.ck-map-list { margin-top: 10px; max-height: 240px; overflow: auto; border: 1px solid #e2e8f0; border-radius: 12px; }
+.ck-map-r { display: flex; align-items: center; gap: 10px; padding: 8px 10px; box-shadow: inset 0 -1px 0 #f1f5f9; }
+.ck-map-r:last-child { box-shadow: none; }
+.ck-map-who { flex: 1; min-width: 0; }
+.ck-map-who b { display: block; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ck-map-who small { display: block; font-size: 11px; color: #64748b; }
+.ck-map-when { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.ck-map-when small { font-size: 11px; color: #64748b; }
+.ck-map .ck-time { font-size: 13px; }
+.ck-map .ck-pill { min-width: 40px; height: 24px; font-size: 10.5px; padding: 0 8px; }
+.ck-map-more { padding: 7px 10px; font-size: 11.5px; color: #64748b; }
+
+/* ---------- Phone width ---------- */
+@media (max-width: 640px) {
+    .ck-hd, .ck-bar { padding-left: 16px; padding-right: 16px; }
+    .ck-sb { padding: 16px; }
+    .ck-table th, .ck-table td { padding-left: 8px; padding-right: 8px; }
+    .ck-table th { letter-spacing: .02em; }
+    .ck-table :is(.ck-wd, .ck-wt, .ck-wy, .ck-c) { width: auto; }
+    .ck-day-in { flex-wrap: wrap; }
+    .ck-bar { flex-wrap: wrap; }
+}
+
+/* ---------- Dark mode (same colours as the Fix and Import pop-ups) ---------- */
+:is(html.dark-mode, body.dark-mode) .ck-box { background: #1e293b; color: #e2e8f0; border-color: #334155; box-shadow: 0 30px 70px rgba(0, 0, 0, .5); color-scheme: dark; }
+:is(html.dark-mode, body.dark-mode) .ck-hd { border-color: #334155; }
+:is(html.dark-mode, body.dark-mode) .ck-hd h3 { color: #93c5fd; }
+:is(html.dark-mode, body.dark-mode) .ck-x { background: #0f172a; color: #94a3b8; }
+:is(html.dark-mode, body.dark-mode) .ck-x:hover { background: #273449; color: #e2e8f0; }
+:is(html.dark-mode, body.dark-mode) .ck-bar { background: rgba(147, 197, 253, .08); border-color: #334155; }
+:is(html.dark-mode, body.dark-mode) .ck-bar-t { color: #93c5fd; }
+:is(html.dark-mode, body.dark-mode) .ck-go { background: #1a4c7b; border-color: #2563a8; color: #ffffff; box-shadow: none; }
+:is(html.dark-mode, body.dark-mode) .ck-lbl { color: #94a3b8; }
+:is(html.dark-mode, body.dark-mode) .ck-wrap { border-color: #334155; }
+:is(html.dark-mode, body.dark-mode) .ck-table th { background: #172133; color: #94a3b8; box-shadow: inset 0 -1px 0 #334155; }
+:is(html.dark-mode, body.dark-mode) .ck-table td { color: #e2e8f0; box-shadow: inset 0 -1px 0 rgba(255, 255, 255, .06); }
+:is(html.dark-mode, body.dark-mode) .ck-row:hover td { background: #273449; }
+:is(html.dark-mode, body.dark-mode) :is(.ck-date, .ck-dev) { color: #94a3b8; }
+:is(html.dark-mode, body.dark-mode) .ck-dev b { color: #cbd5e1; }
+:is(html.dark-mode, body.dark-mode) .ck-time { color: #f1f5f9; }
+:is(html.dark-mode, body.dark-mode) :is(.ck-tag, .ck-pill, .ck-type) { background: rgba(147, 197, 253, .12); border-color: rgba(147, 197, 253, .3); color: #bfdbfe; }
+:is(html.dark-mode, body.dark-mode) .ck-type option { background: #0f172a; color: #e2e8f0; }
+:is(html.dark-mode, body.dark-mode) .ck-row.ign td, :is(html.dark-mode, body.dark-mode) .ck-row.ign :is(.ck-time, .ck-date, .ck-dev) { color: #64748b; }
+:is(html.dark-mode, body.dark-mode) .ck-row.chg td:first-child, :is(html.dark-mode, body.dark-mode) .ck-row.new td:first-child { box-shadow: inset 3px 0 0 #93c5fd, inset 0 -1px 0 rgba(255, 255, 255, .06); }
+:is(html.dark-mode, body.dark-mode) .ck-row.new td { background: rgba(147, 197, 253, .06); }
+:is(html.dark-mode, body.dark-mode) .ck-row.move td { background: #172133; }
+:is(html.dark-mode, body.dark-mode) .ck-day td { background: #172133; box-shadow: inset 0 1px 0 #334155, inset 0 -1px 0 #334155; }
+:is(html.dark-mode, body.dark-mode) .ck-table tbody tr.ck-day:first-child td { box-shadow: inset 0 -1px 0 #334155; }
+:is(html.dark-mode, body.dark-mode) .ck-day-t > b { color: #93c5fd; }
+:is(html.dark-mode, body.dark-mode) .ck-day-t > span { color: #94a3b8; }
+:is(html.dark-mode, body.dark-mode) .ck-day-t .ck-punch b { color: #f1f5f9; }
+:is(html.dark-mode, body.dark-mode) .ck-day-t .ck-sep { color: #475569; }
+:is(html.dark-mode, body.dark-mode) .ck-day-t .ck-warn { color: #93c5fd; }
+:is(html.dark-mode, body.dark-mode) .ck-lock { background: #0f172a; color: #cbd5e1; }
+:is(html.dark-mode, body.dark-mode) .ck-add { background: #172133; border-color: #334155; }
+:is(html.dark-mode, body.dark-mode) .ck-in { background: #0f172a; color: #e2e8f0; border-color: #334155; color-scheme: dark; }
+:is(html.dark-mode, body.dark-mode) .ck-add select.ck-in { color: #93c5fd; }
+:is(html.dark-mode, body.dark-mode) .ck-empty i { color: #93c5fd; }
+:is(html.dark-mode, body.dark-mode) .ck-back { background: rgba(147, 197, 253, .1); border-color: rgba(147, 197, 253, .25); color: #bfdbfe; }
+:is(html.dark-mode, body.dark-mode) .ck-sub { color: #94a3b8; }
+:is(html.dark-mode, body.dark-mode) .ck-undo { background: #0f172a; border-color: rgba(147, 197, 253, .3); color: #bfdbfe; }
+@keyframes ckFlashDark { 0%, 35% { background: rgba(147, 197, 253, .2); } 100% { background: rgba(147, 197, 253, .06); } }
+:is(html.dark-mode, body.dark-mode) .ck-row.flash td { animation-name: ckFlashDark; }

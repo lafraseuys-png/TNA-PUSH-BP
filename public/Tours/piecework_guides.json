@@ -607,9 +607,9 @@
     },
     {
       "key": "piecework.guide.daily",
-      "title": "Check and commit a day to payroll",
+      "title": "Check a day's production",
       "icon": "fa-calendar-check",
-      "blurb": "Load a team's day, check clockings and quantities, fix what's wrong, then commit it to payroll.",
+      "blurb": "Load a team's day and check clockings, quantities, hours and pay.",
       "steps": [
         {
           "id": "pwg-dy-open",
@@ -617,7 +617,7 @@
             "#sidebarNav [onclick*='daily']"
           ],
           "title": "Daily Production",
-          "text": "Each day is checked and committed here. Click it.",
+          "text": "Each team's day is checked here. Click it.",
           "placement": "right",
           "mode": "click",
           "hint": "Click Daily Production"
@@ -670,18 +670,8 @@
             "#dailyGridBody .daily-qty"
           ],
           "title": "5. Quantities",
-          "text": "One column per task activity: what each person captured on the phone. Type a quantity in, or over a wrong one. On team-paid tasks the share is worked out for you and can't be typed over.",
+          "text": "One column per task activity: what each person captured on the phone (or brought in with Import Data). On team-paid tasks the share is worked out for you. This screen shows them; it doesn't change them.",
           "placement": "right",
-          "optional": true
-        },
-        {
-          "id": "pwg-dy-adhoc",
-          "target": [
-            "#dailyNewTaskBtn"
-          ],
-          "title": "6. Work that wasn't planned",
-          "text": "<b>New task</b> creates a task for this team and day, for work the team did that isn't on one of its tasks yet. It then shows as a column here.",
-          "placement": "bottom",
           "optional": true
         },
         {
@@ -689,8 +679,8 @@
           "target": [
             "#dailyGridHead"
           ],
-          "title": "7. Hours and pay",
-          "text": "The last columns total each person's day: normal time, approved and potential overtime, Sunday/public holiday, then piece wage, time wage and the total. Once someone has a quantity, their time on that task is paid by quantity instead of normal time. They update as you type.",
+          "title": "6. Hours and pay",
+          "text": "The last columns total each person's day: normal time, approved and potential overtime, Sunday/public holiday, then piece wage, time wage and the total. Once someone has a quantity, their time on that task is paid by quantity instead of normal time.",
           "placement": "bottom",
           "optional": true
         },
@@ -703,38 +693,6 @@
           "text": "Show only the people who did piecework, and sort PINs by their numbers only.",
           "placement": "top",
           "climb": 1,
-          "optional": true
-        },
-        {
-          "id": "pwg-dy-save",
-          "target": [
-            ".main-content button[onclick*='saveDailyGrid(false)']"
-          ],
-          "title": "9. Save Draft",
-          "text": "Keeps your changes without making them final. You can come back and carry on.",
-          "placement": "top",
-          "optional": true
-        },
-        {
-          "id": "pwg-dy-commit",
-          "target": [
-            ".main-content button[onclick*='saveDailyGrid(true)']"
-          ],
-          "title": "10. Commit to Payroll",
-          "text": "Makes the day final: its records lock and count towards payroll. Only commit once everything is right.",
-          "placement": "top",
-          "optional": true
-        },
-        {
-          "id": "pwg-dy-fix",
-          "before": [{ "addClass": "#rdlTools", "cls": "open" }],
-          "after": [{ "removeClass": "#rdlTools", "cls": "open" }],
-          "target": [
-            ".main-content button[onclick*='unlockDailyGrid']"
-          ],
-          "title": "If something was wrong",
-          "text": "In <b>Data Tools</b>: <b>Unlock committed</b> reopens committed records so they can be changed. <b>Revert Edits</b> removes manual changes and puts back what the phones captured.<br><br>If the day falls in a <b>locked payroll period</b> (Employee Master &rsaquo; Payroll Periods), it can't be saved, committed, unlocked or reverted until that period is unlocked. You'll see who and which dates are affected.",
-          "placement": "top",
           "optional": true
         }
       ]

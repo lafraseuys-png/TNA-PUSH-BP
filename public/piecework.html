@@ -20,16 +20,16 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=3">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1">
     <link rel="stylesheet" href="/css/styles.css?v=1.0.10">
-    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="/vendor/sheetjs/xlsx-0.20.3/xlsx.full.min.js"></script>
+    <script src="/vendor/cdnjs/exceljs/4.4.0/exceljs.min.js"></script>
+    <link rel="stylesheet" href="/vendor/cdnjs/font-awesome/6.4.0/css/all.min.css">
     
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="/vendor/npm/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="/vendor/npm/leaflet@1.9.4/dist/leaflet.js"></script>
     
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
-    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="/vendor/npm/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="/vendor/npm/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    <script src="/vendor/npm/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
     
     <style>
         body {
@@ -169,7 +169,7 @@
         }
     </style>
     <!-- Same look as Employee Master and HR, light and dark mode. AUTO-HEAL: remove this line for the old dark-only look. -->
-    <link rel="stylesheet" href="/css/piecework_theme.css">
+    <link rel="stylesheet" href="/css/piecework_theme.css?v=20261118a">
 </head>
 <body>
     <div class="background-container"></div>
@@ -834,10 +834,6 @@
                             <button onclick="loadDailyGrid()" class="justify-center bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded font-bold shadow transition text-xs flex items-center whitespace-nowrap">
                                 <i class="fas fa-sync-alt mr-2"></i> Load Grid
                             </button>
-                            <!-- 2026-11-12 one button for a task for this team and day (was a "New Task" button on every row) -->
-                            <button type="button" id="dailyNewTaskBtn" onclick="openAdHocTaskModal()" title="Create a task for this team and day (work that is not on one of its tasks yet)" class="justify-center bg-indigo-700 hover:bg-indigo-600 text-white px-4 py-2 rounded font-bold shadow transition text-xs flex items-center whitespace-nowrap">
-                                <i class="fas fa-plus mr-2"></i> New task
-                            </button>
                             <button onclick="exportDailyGridToExcel()" class="justify-center bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded font-bold shadow transition text-xs flex items-center whitespace-nowrap">
                                 <i class="fas fa-file-excel mr-2"></i> Export Excel
                             </button>
@@ -848,9 +844,6 @@
 
                 <div id="dailyActionBar" class="hidden flex-wrap justify-between items-center gap-4 bg-gray-900 p-3 rounded border border-gray-700 mb-4 flex-shrink-0">
                     <div class="flex flex-wrap items-center gap-3">
-                        <button onclick="revertDailyEdits()" class="bg-gray-800 hover:bg-gray-700 border border-gray-600 text-orange-400 px-3 py-1.5 rounded font-bold shadow transition text-xs flex items-center" title="Wipe manual edits and restore raw data from the mobile app">
-                            <i class="fas fa-undo mr-1"></i> Revert Edits
-                        </button>
                         <label class="flex items-center cursor-pointer text-xs font-bold text-teal-400 bg-gray-800 border border-gray-600 px-3 py-1.5 rounded shadow transition hover:bg-gray-700">
                     <input type="checkbox" id="filterPieceworkOnly" onchange="renderDailyGrid()" class="mr-2 accent-teal-500 w-3 h-3">
                     Show Only Pieceworkers
@@ -860,18 +853,6 @@
                     Ignore Letters in PIN Sort
                 </label>
             </div>
-                    <div class="flex flex-wrap items-center gap-3">
-                        <span class="text-[9px] text-gray-500 hidden lg:block"><i class="fas fa-info-circle mr-1"></i> Auto-saves on commit</span>
-                        <button onclick="unlockDailyGrid()" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded font-bold shadow transition text-xs flex items-center" title="Unlock committed records for editing">
-                            <i class="fas fa-unlock mr-1"></i> Unlock
-                        </button>
-                        <button onclick="saveDailyGrid(false)" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded font-bold shadow transition text-xs flex items-center">
-                            <i class="fas fa-save mr-1"></i> Save Draft
-                        </button>
-                        <button onclick="saveDailyGrid(true)" class="bg-purple-600 hover:bg-purple-500 text-white px-4 py-1.5 rounded font-bold shadow transition text-xs flex items-center">
-                            <i class="fas fa-check-double mr-1"></i> Commit to Payroll
-                        </button>
-                    </div>
                 </div>
 
                 <!-- Dynamic Grid Wrapper -->
@@ -1692,41 +1673,6 @@
         </div>
     </div>
 
-   <!-- Bulk Copy Times Modal -->
-    <div id="bulkCopyModal" class="modal-backdrop" style="z-index: 80;">
-        <div class="bg-gray-800 w-[500px] rounded shadow-2xl border border-indigo-500 flex flex-col max-h-[85vh]">
-            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t flex-shrink-0">
-                <h3 id="bulkCopyTitle" class="font-bold text-lg text-indigo-400">Bulk Copy Times</h3>
-                <button onclick="closeBulkCopyModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
-            </div>
-            
-            <div class="p-6 flex flex-col flex-1 overflow-hidden">
-                <p class="text-xs text-gray-400 mb-4">Select the employees you want to copy these exact times to. <br><span class="font-bold text-indigo-300" id="bulkCopyTimeDisplay">00:00 - 00:00</span></p>
-                
-                <input type="hidden" id="bulkCopyTaskId">
-                <input type="hidden" id="bulkCopyActivityId">
-                <input type="hidden" id="bulkCopyStartTime">
-                <input type="hidden" id="bulkCopyEndTime">
-
-                <div class="flex items-center justify-between bg-gray-900 border border-gray-700 p-2 rounded mb-2">
-                    <label class="flex items-center cursor-pointer text-xs font-bold text-gray-300 uppercase tracking-wider">
-                        <input type="checkbox" id="bulkCopyCheckAll" onchange="toggleAllBulkCopy(this.checked)" class="mr-3 w-4 h-4 accent-indigo-500">
-                        Select All Employees
-                    </label>
-                </div>
-
-                <div class="bg-gray-900 border border-gray-700 rounded flex-1 overflow-y-auto shadow-inner" id="bulkCopyEmployeeList">
-                    <!-- Populated via JS -->
-                </div>
-            </div>
-
-            <div class="p-4 border-t border-gray-700 bg-gray-900 rounded-b flex justify-end space-x-3 flex-shrink-0">
-                <button type="button" onclick="closeBulkCopyModal()" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded font-bold text-sm shadow transition">Cancel</button>
-                <button type="button" onclick="executeBulkCopy()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded font-bold text-sm shadow transition">Apply Copy</button>
-            </div>
-        </div>
-    </div>
-
     <div id="evidenceModal" class="modal-backdrop" style="z-index: 90;">
         <div class="bg-gray-800 w-[500px] max-w-[95vw] rounded shadow-2xl border border-teal-500 flex flex-col p-4">
             <div class="flex justify-between items-center mb-4">
@@ -2194,9 +2140,9 @@
           <!-- 2026-11-12 the app's own pop-up (navy card, as on Employee Master / Settings) for the Job Costing "Time not changed"
                warning. KEEP_NATIVE: the page's other alert() boxes stay as they are. AUTO-HEAL: no CDN -> the browser's box -->
           <script>window.TNA_POPUP_NAVY = true; window.TNA_POPUP_KEEP_NATIVE = true;</script>
-          <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-          <script src="contractors_modern_popups.js?v=20261112a"></script>
-          <script src="piecework.js?v=20261113e"></script>
+          <script src="/vendor/npm/sweetalert2@11.26.25/default.js"></script>
+          <script src="contractors_modern_popups.js?v=20261117cdn"></script>
+          <script src="piecework.js?v=20261118a"></script>
           <!-- 2026-11-12 Job Costing screen in the current theme (toolbar, totals strip, calm list). Look only.
                AUTO-HEAL: remove this line and the old screen is back -->
           <script src="piecework_jc_look.js?v=20261112d"></script>
@@ -2205,7 +2151,7 @@
           <script src="piecework_reports_look.js?v=20261112d"></script>
           <!-- 2026-11-12 Daily Production in the current theme: one toolbar + Data Tools menu, calm navy grid, TNA pop-up restyled.
                Look only. AUTO-HEAL: remove this line and the old screen is back -->
-          <script src="piecework_daily_look.js?v=20261112h"></script>
+          <script src="piecework_daily_look.js?v=20261118b"></script>
           <!-- 2026-11-12 Activities & Pricing in the current theme: two tabs (Piecework | Job Costing), one toolbar, a calm list.
                Look only. AUTO-HEAL: remove this line and the old screen is back -->
           <script src="piecework_activities_look.js?v=20261112d"></script>
@@ -2226,16 +2172,16 @@
           <script src="piecework_farm_map.js?v=20261112f"></script>
           <!-- 2026-11-12 Field Maps in the theme, satellite photos, your farms and units drawn on it with a filter. Look + extra layer only.
                AUTO-HEAL: remove this line and Field Maps is the old screen -->
-          <script src="piecework_maps_look.js?v=20261112j"></script>
+          <script src="piecework_maps_look.js?v=20261117cdn"></script>
           <!-- 2026-11-12 Field Maps: Teams and Tasks as two drop-downs (instead of the Filter Map Data pop-up). Look only.
                AUTO-HEAL: remove this line and the Select Teams & Tasks button + pop-up are back -->
           <script src="piecework_map_filters.js?v=20261112b"></script>
           <script src="piecework_farm_sheet.js?v=20261112c"></script>
-          <script src="piecework_settings_popup.js?v=20261112d"></script>
+          <script src="piecework_settings_popup.js?v=20261117cdn"></script>
           <!-- Production Dashboard (the first screen). AUTO-HEAL: safe to remove. -->
                  <!-- 2026-11-12 Production Dashboard in the Farmers & Distribution look (period, compare, Today card, chart, lists).
                       Must come BEFORE production_dashboard.js. AUTO-HEAL: remove this line and the old dashboard is back -->
-                 <script src="production_dashboard_v2.js?v=20261112b"></script>
+                 <script src="production_dashboard_v2.js?v=20261118a"></script>
                  <script src="production_dashboard.js"></script>
           <!-- Guided tours, how-to guides + What's new (content in /tours/piecework_tours.json). AUTO-HEAL: safe to remove. -->
           <script src="tna_tour.js?v=20261109a" data-tour-page="piecework" data-tour-help-position="right"></script>
@@ -2244,6 +2190,6 @@
           <!-- Guided setup in Demo / Setup mode (plan in /tours/piecework_setup.json). AUTO-HEAL: safe to remove. -->
           <script src="tna_setup.js" data-setup-page="piecework"></script>
           <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
-          <script src="tna_topbar.js?v=70"></script>
+          <script src="tna_topbar.js?v=73"></script>
 </body>
 </html>

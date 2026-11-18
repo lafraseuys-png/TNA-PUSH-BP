@@ -1127,11 +1127,32 @@
    "t": "Time & Attendance",
    "s": "Reports",
    "q": "How do I export raw clockings?",
-   "a": "Use Export Excel on [[see-punches|Time Logs]], or Export Raw on Weekly Timesheet.",
+   "a": "Use Export Excel on [[see-punches|Time Logs]]: one row per clocking. To fix clockings in Excel, use Weekly Timesheet › Data Tools › Export for fixing instead ([[fix-clockings-excel|how]]).",
    "steps": [],
    "tips": [
     "[[see-punches|Time Logs]] exports every clocking with its device and who captured it, for the dates and department you filtered."
    ]
+  },
+  {
+   "k": "fix-clockings-excel",
+   "t": "Time & Attendance",
+   "s": "Clocking",
+   "q": "How do I fix many clockings in Excel?",
+   "a": "Weekly Timesheet › Data Tools › Export for fixing gives one row per person per day, for every date you pick, with separate IN and OUT columns. Fix the times and import the sheet again.",
+   "steps": [
+    "Open Weekly Timesheet, click Data Tools › Export for fixing, choose the dates (up to 62 days) and departments, and click Export.",
+    "In Excel, use the filter on Status (for example Missing punch or Absent) to find the days to fix.",
+    "Type missing times (like 07:30) in the IN or OUT cells, type over wrong ones, or empty a cell to drop that clocking.",
+    "Save the file, then click Data Tools › Import fixes. Check the list of changes and click Save."
+   ],
+   "tips": [
+    "Only the cells you changed are saved; those days are recalculated straight away.",
+    "An emptied cell ignores the clocking (it is kept and can be brought back on the punches pop-up).",
+    "On a night shift, an OUT earlier than the IN before it on the same row is the next morning.",
+    "Days in a locked [[settings-payroll|payroll period]], days approved in Team View and people outside your access are not changed; the preview lists them.",
+    "Files from the old export (one row per clocking) can still be imported."
+   ],
+   "kw": "excel import export fix clockings punches in out"
   },
   {
    "k": "apply-leave",
@@ -1262,8 +1283,8 @@
   {
    "k": "commit-day",
    "t": "Production Pay",
-   "q": "How do I send a team’s day to payroll?",
-   "a": "Open Daily Production, choose the date and team and click Load Grid. Check clockings and quantities (a worker with no clockings that day gets no share of the team's work), fix what is wrong, then click Commit to Payroll. Save Draft keeps your changes without sending them."
+   "q": "How do I check a team’s day of production?",
+   "a": "Open Daily Production, choose the date and team and click Load Grid. It shows each person's clockings, quantities, hours and pay for that day (a worker with no clockings that day gets no share of the team's work). Quantities come from the phones or from Data Tools > Import Data; this screen only shows them."
   },
   {
    "k": "rate-change",
