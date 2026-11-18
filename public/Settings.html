@@ -1191,6 +1191,7 @@
                                                 <span id="viewPsPushLeave" class="px-2 py-1 rounded bg-slate-100 dark:bg-gray-800">Send leave: No</span>
                                                 <span id="viewPsPushHours" class="px-2 py-1 rounded bg-slate-100 dark:bg-gray-800">Send hours: No</span>
                                                 <span id="viewPsCodes" class="px-2 py-1 rounded bg-slate-100 dark:bg-gray-800">Pay codes: not set</span>
+                                                <span id="viewPsCompanies" class="px-2 py-1 rounded bg-slate-100 dark:bg-gray-800 hidden"></span>
                                             </div>
                                         </div>
                                         <div class="md:col-span-2"><p class="text-[11px] font-bold uppercase text-slate-500"><i class="fas fa-plug mr-1"></i> Last test</p><p id="viewPsLastTest" class="text-slate-800 dark:text-gray-200">Never tested</p></div>
@@ -1234,6 +1235,8 @@
                                                 <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-gray-300"><input type="checkbox" id="psPushHours"> Send approved hours per pay run</label>
                                                 <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-gray-300">Leave: hours in one day <input type="number" id="psLeaveHoursPerDay" min="1" max="24" step="0.25" value="8" class="form-control !w-20 !py-1"></label>
                                             </div>
+                                            <!-- 2026-11-18 more PaySpace companies by department (payroll_connections.js "PAYSPACE COMPANIES") -->
+                                            <div id="psCompanies" class="mb-4 text-[11px] text-slate-500"></div>
                                             <p class="text-[11px] font-bold text-slate-600 dark:text-gray-400 mb-2">PaySpace code for each kind of hours</p>
                                             <!-- ⚡ 2026-11-17 code table (payroll_connections.js): hourly paid | fixed salary, one row per leave type, codes from PaySpace -->
                                             <div id="psHoursMap" class="text-[11px] text-slate-500">Loading the PaySpace codes…</div>
@@ -3998,7 +4001,7 @@
     <!-- ⚡ 2026-10-20 Hardware, Mobile Errors, Audit Trail, Mobile Transactions in the theme (tables, navy pills, theme buttons). Look only. AUTO-HEAL: safe to remove. -->
     <script src="settings_hw_theme.js?v=20261020l"></script>
     <!-- ⚡ 2026-10-12 Connections: active payroll system + PaySpace (Deel Local Payroll). AUTO-HEAL: safe to remove. -->
-    <script src="payroll_connections.js?v=20261118c"></script>
+    <script src="payroll_connections.js?v=20261118d"></script>
     <script src="settings_leave_tabs.js?v=20261008b"></script>
   <!-- ⚡ Settings > Notifications: clock reminder emails per 5 minutes (new file). AUTO-HEAL: safe to remove. -->
   <script src="clock_reminder_limit.js?v=20261005a"></script>
