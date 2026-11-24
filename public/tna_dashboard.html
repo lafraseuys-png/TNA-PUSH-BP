@@ -164,7 +164,7 @@
     <link rel="stylesheet" href="/css/tna_violations.css?v=20261115d">
     <!-- 2026-11-15 Settings > Departments work patterns (+ the Weekly Roster "Auto" source line) -->
     <link rel="stylesheet" href="/css/tna_departments.css?v=20261115b">
-    <link rel="stylesheet" href="/css/tna_payroll_periods.css?v=20261124ps5">
+    <link rel="stylesheet" href="/css/tna_payroll_periods.css?v=20261124pp1">
     <!-- 2026-11-24 Pre-approved Overtime screen + the module's pop-ups (only drawn while the module is switched on) -->
     <link rel="stylesheet" href="/css/tna_ot_auth.css?v=20261124pa2">
     <!-- 2026-11-24 Workflow Routing: the Org Hierarchy look (org_sheet.css) + the screen's own styles -->
@@ -2390,29 +2390,31 @@
                         <h3><i class="fas fa-lock mr-2"></i>Payroll Periods &amp; Locking</h3>
                         <button type="button" id="ppNewBtn" class="dp-btn pri" onclick="ppOpenNew()"><i class="fas fa-plus"></i> New cycle</button>
                     </div>
+                    <!-- 2026-11-24 new look (user: "modernize the payroll period screen"): the cycle is a searchable drop-down, the CURRENT
+                         period is a card on top with its two main buttons, the other periods are a sheet grouped per year (older years
+                         folded) with a PaySpace column (sent when / by whom / people) and hover buttons + a ... menu. Same data + routes. -->
+                    <div class="pp-bar">
+                        <div id="payrollPeriodsList" class="pp-cycpick"></div>
+                        <div id="ppCycleHead" class="pp-chead"></div>
+                    </div>
                     <div id="ppWarn" class="pp-warn" role="note" hidden></div>
-                    <div class="pp-grid">
-                        <div class="pp-side">
-                            <div class="pp-lbl">Cycles</div>
-                            <div id="payrollPeriodsList" class="pp-cycles"></div>
+                    <div id="ppCurrent" class="pp-cur" hidden></div>
+                    <div id="ppEarlier">
+                        <div class="pp-lbl">Other periods</div>
+                        <div class="pp-wrap">
+                            <table class="pp-table">
+                                <thead><tr><th>Period</th><th>Status</th><th class="pp-c-ps">PaySpace</th><th class="pp-c-by">Locked</th><th class="pp-c-act"></th></tr></thead>
+                                <tbody id="ppPeriodsBody"></tbody>
+                            </table>
                         </div>
-                        <div class="pp-main">
-                            <div id="ppCycleHead" class="pp-chead"></div>
-                            <div class="pp-wrap">
-                                <table class="pp-table">
-                                    <thead><tr><th>Period</th><th>Status</th><th class="pp-c-by">Locked by</th><th class="pp-c-act"></th></tr></thead>
-                                    <tbody id="ppPeriodsBody"></tbody>
-                                </table>
-                            </div>
-                            <div id="ppOtherBox" hidden>
-                                <div class="pp-lbl pp-lbl-gap">Other locked dates <small>locks that are not one of the periods above</small></div>
-                                <div class="pp-wrap">
-                                    <table class="pp-table">
-                                        <thead><tr><th>Cycle</th><th>Dates</th><th class="pp-c-by">Locked by</th><th class="pp-c-act"></th></tr></thead>
-                                        <tbody id="payrollLocksBody"></tbody>
-                                    </table>
-                                </div>
-                            </div>
+                    </div>
+                    <div id="ppOtherBox" hidden>
+                        <div class="pp-lbl pp-lbl-gap">Other locked dates <small>locks that are not one of the periods above</small></div>
+                        <div class="pp-wrap">
+                            <table class="pp-table">
+                                <thead><tr><th>Cycle</th><th>Dates</th><th class="pp-c-by">Locked</th><th class="pp-c-act"></th></tr></thead>
+                                <tbody id="payrollLocksBody"></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -4129,11 +4131,11 @@
    <script src="tna_hours.js"></script>
    <!-- Report preview column sorting (shared with Employee Master). Safe to remove: headers just stop sorting. -->
    <script src="report_sort.js"></script>
-   <script src="tna_dashboard.js?v=20261124wr1"></script>
+   <script src="tna_dashboard.js?v=20261124pp1"></script>
    <!-- 2026-11-24 Workflow Routing screen (shared with ESS Master) -->
    <script src="workflow_routing.js?v=20261124wr9"></script>
    <!-- 2026-11-17 Settings > Payroll Periods: "PaySpace" button + Send hours pop-up (logic_payspace.js section 5). Safe to remove: no PaySpace button. -->
-   <script src="payspace_send.js?v=20261124ps3"></script>
+   <script src="payspace_send.js?v=20261124ps4"></script>
    <!-- The T&A dashboard (Manager | HR | Map | Overview tabs). Since the 14 Nov 2026 clean-up this is the only dashboard:
         the old dashboards and the "New dashboard" switch are gone, so this file is needed. -->
    <script src="tna_dashboard_v2.js?v=20261118b"></script>

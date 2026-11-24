@@ -23,53 +23,106 @@
 #payrollCard .pp-warn b { font-weight: 800; }
 #payrollCard .pp-warn a, #payrollCard .pp-chead a { color: var(--pp-navy); font-weight: 800; text-decoration: underline; cursor: pointer; }
 
-/* ---------- two columns: cycles | periods ---------- */
-#payrollCard .pp-grid { display: grid; grid-template-columns: minmax(220px, 300px) minmax(0, 1fr); gap: 22px; align-items: start; }
+/* ---------- 2026-11-24 NEW LOOK (user: "modernize the payroll period screen"): one bar on top (the cycle drop-down + its rule),
+   the current period as a card with its two buttons, every other period in a sheet grouped per year (older years folded).
+   Replaces the 15 Nov two columns (cycle cards left | periods right). Navy only, no navy borders, no colour coding. ---------- */
 #payrollCard .pp-lbl { margin: 0 0 8px; font-size: 10.5px; font-weight: 900; letter-spacing: .8px; text-transform: uppercase; color: var(--pp-muted); }
 #payrollCard .pp-lbl small { margin-left: 6px; font-size: 11px; font-weight: 600; letter-spacing: 0; text-transform: none; }
 #payrollCard .pp-lbl-gap { margin-top: 22px; }
-
-/* the cycle cards (one is chosen) */
-#payrollCard .pp-cycles { display: flex; flex-direction: column; gap: 8px; }
-#payrollCard .pp-cyc { display: block; width: 100%; text-align: left; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--pp-line); background: var(--pp-card); color: var(--pp-text);
-    cursor: pointer; box-shadow: 0 1px 2px rgba(15, 23, 42, .04); transition: border-color .15s ease, box-shadow .15s ease; font: inherit; }
-#payrollCard .pp-cyc:hover { border-color: var(--pp-chipline); }
-#payrollCard .pp-cyc:focus-visible { outline: none; border-color: var(--pp-navy); box-shadow: 0 0 0 3px rgba(26, 76, 123, .14); }
-#payrollCard .pp-cyc.on { border-color: var(--pp-navy); box-shadow: inset 3px 0 0 var(--pp-navy), 0 2px 10px rgba(15, 23, 42, .06); }
-#payrollCard .pp-cyc b { display: flex; align-items: center; gap: 4px; font-size: 13.5px; font-weight: 800; }
+#payrollCard #ppEarlier[hidden], #payrollCard #ppOtherBox[hidden] { display: none; }
 #payrollCard em.dp-tag { font-style: normal; }
-#payrollCard .pp-cyc b .dp-tag { margin-left: auto; }
-#payrollCard .pp-cyc > span { display: block; margin-top: 3px; font-size: 11.5px; color: var(--pp-muted); }
-#payrollCard .pp-none { padding: 18px 14px; border: 1px dashed var(--pp-line); border-radius: 12px; color: var(--pp-muted); font-size: 12.5px; text-align: center; }
+#payrollCard .pp-dot { display: inline-block; width: 3px; height: 3px; border-radius: 50%; background: var(--pp-muted); opacity: .6; margin: 0 2px; vertical-align: middle; }
+#payrollCard .pp-mut { color: var(--pp-muted); }
+#payrollCard .pp-none { padding: 12px 16px; border: 1px dashed var(--pp-line); border-radius: 12px; color: var(--pp-muted); font-size: 12.5px; }
 
-/* the chosen cycle's heading line */
-#payrollCard .pp-chead { margin-bottom: 10px; }
-#payrollCard .pp-chead h4 { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 15px; font-weight: 800; color: var(--pp-text); }
-#payrollCard .pp-chead p { margin: 3px 0 0; font-size: 12px; color: var(--pp-muted); }
+/* the bar: cycle drop-down button + the chosen cycle's rule and links */
+#payrollCard .pp-bar { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 16px; margin-bottom: 16px; }
+#payrollCard .pp-cycbtn { display: inline-flex; align-items: center; gap: 8px; max-width: 100%; padding: 9px 14px; border-radius: 12px; border: 1px solid var(--pp-line); background: var(--pp-card);
+    color: var(--pp-text); font: inherit; font-size: 13px; cursor: pointer; box-shadow: 0 1px 2px rgba(15, 23, 42, .05); transition: background-color .15s ease, box-shadow .15s ease; }
+#payrollCard .pp-cycbtn:hover { box-shadow: 0 3px 12px rgba(15, 23, 42, .08); }
+#payrollCard .pp-cycbtn:focus-visible { outline: 2px solid var(--pp-navy); outline-offset: 2px; }
+#payrollCard .pp-cycbtn > i:first-child { color: var(--pp-navy); }
+#payrollCard .pp-cyck { font-size: 10px; font-weight: 900; letter-spacing: .8px; text-transform: uppercase; color: var(--pp-muted); }
+#payrollCard .pp-cycbtn b { font-size: 14px; font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+#payrollCard .pp-cycn { font-size: 11.5px; color: var(--pp-muted); white-space: nowrap; }
+#payrollCard .pp-cycv { font-size: 11px; color: var(--pp-muted); margin-left: 2px; }
+:is(html, body).dark-mode #payrollCard .pp-cycbtn { background: rgba(255, 255, 255, .04); box-shadow: none; }
+#payrollCard .pp-chead { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 8px; font-size: 12.5px; color: var(--pp-muted); }
+#payrollCard .pp-chead b { color: var(--pp-text); font-weight: 800; }
+#payrollCard .pp-chead:empty { display: none; }
 
-/* ---------- the periods tables: own scroll box, headings pinned ---------- */
+/* the current period card */
+#payrollCard .pp-cur { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px 24px; margin-bottom: 20px; padding: 18px 22px;
+    border-radius: 16px; border: 1px solid var(--pp-line); background: linear-gradient(120deg, var(--pp-chip) 0%, var(--pp-card) 55%); box-shadow: 0 2px 12px rgba(15, 23, 42, .05); }
+#payrollCard .pp-cur[hidden] { display: none; }
+:is(html, body).dark-mode #payrollCard .pp-cur { background: linear-gradient(120deg, rgba(147, 197, 253, .1) 0%, rgba(255, 255, 255, .03) 55%); box-shadow: none; }
+#payrollCard .pp-cur-l { min-width: 0; }
+#payrollCard .pp-cur-k { display: flex; align-items: center; gap: 7px; font-size: 10.5px; font-weight: 900; letter-spacing: .8px; text-transform: uppercase; color: var(--pp-navy); }
+#payrollCard .pp-cur-k i { font-size: 7px; }
+#payrollCard .pp-cur-d { margin-top: 5px; font-size: 21px; font-weight: 800; letter-spacing: -.2px; color: var(--pp-text); font-variant-numeric: tabular-nums; }
+#payrollCard .pp-cur-m { display: flex; align-items: center; gap: 6px; margin-top: 2px; font-size: 12.5px; color: var(--pp-muted); }
+#payrollCard .pp-cur-s { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; margin-top: 12px; }
+#payrollCard .pp-cur-r { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+#payrollCard .pp-cur-r .dp-btn { padding: 9px 16px; font-size: 13px; }
+
+/* PaySpace sent status + who locked (in the card and the sheet) */
+#payrollCard .pp-ps { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--pp-text); white-space: nowrap; }
+#payrollCard .pp-ps > i { color: var(--pp-navy); font-size: 11px; }
+#payrollCard .pp-ps.none { color: var(--pp-muted); font-weight: 600; }
+#payrollCard .pp-ps.none > i { color: var(--pp-muted); opacity: .7; }
+#payrollCard .pp-ps em { font-style: normal; font-weight: 600; color: var(--pp-muted); }
+#payrollCard .pp-ps-by { font-size: 11.5px; color: var(--pp-muted); margin-left: -10px; }
+#payrollCard .pp-who { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
+#payrollCard .pp-who b { display: block; font-size: 12.5px; font-weight: 700; color: var(--pp-text); white-space: nowrap; }
+#payrollCard .pp-who small { display: block; font-size: 11px; color: var(--pp-muted); white-space: nowrap; }
+#payrollCard .pp-who.off b { color: var(--pp-muted); font-weight: 600; }
+#payrollCard .pp-av { flex: none; display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--pp-chip); color: var(--pp-navy); font-size: 10px; font-weight: 800; letter-spacing: .3px; }
+#payrollCard .pp-who.off .pp-av { background: transparent; box-shadow: inset 0 0 0 1px var(--pp-line); color: var(--pp-muted); }
+
+/* ---------- the periods sheet: own scroll box, headings pinned ---------- */
 #payrollCard .pp-wrap { background: var(--pp-card); border: 1px solid var(--pp-line); border-radius: 14px; box-shadow: 0 2px 10px rgba(15, 23, 42, .05); max-height: 52vh; overflow: auto; }
 :is(html, body).dark-mode #payrollCard .pp-wrap { background: rgba(255, 255, 255, .04); box-shadow: none; }
 #payrollCard .pp-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
 #payrollCard .pp-table thead th { position: sticky; top: 0; z-index: 2; background: #f8fafc; color: #64748b; font-size: 10.5px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase;
     text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--pp-line); white-space: nowrap; }
+#payrollCard .pp-table th[hidden], #payrollCard .pp-table td[hidden] { display: none; }
 /* same trick as Departments: the Settings pop-up forces heading colours with !important in dark mode - a solid inset shadow wins without one */
 :is(html, body).dark-mode #payrollCard .pp-table thead th { background: #172133; color: #94a3b8; box-shadow: inset 0 0 0 9999px #172133, inset 0 -1px 0 rgba(255, 255, 255, .1); border-bottom-width: 0; }
-#payrollCard .pp-table td { --pp-row: #f1f5f9; padding: 11px 14px; border-bottom: 0; box-shadow: inset 0 -1px 0 var(--pp-row); color: var(--pp-text); vertical-align: middle; }
+#payrollCard .pp-table td { --pp-row: #f1f5f9; padding: 10px 14px; border-bottom: 0; box-shadow: inset 0 -1px 0 var(--pp-row); color: var(--pp-text); vertical-align: middle; }
 :is(html, body).dark-mode #payrollCard .pp-table td { --pp-row: rgba(255, 255, 255, .06); }
 #payrollCard .pp-table tbody tr:last-child td { box-shadow: none; }
-#payrollCard .pp-table tbody tr:hover td { background: rgba(26, 76, 123, .03); }
+#payrollCard .pp-table tbody tr:not(.pp-yr):hover td { background: rgba(26, 76, 123, .03); }
+:is(html, body).dark-mode #payrollCard .pp-table tbody tr:not(.pp-yr):hover td { background: rgba(147, 197, 253, .04); }
 #payrollCard .pp-table .pp-c-act { width: 1%; text-align: right; white-space: nowrap; }
 #payrollCard .pp-table td.pp-c-act .dp-btn { padding: 6px 12px; }
 #payrollCard .pp-per b { font-weight: 800; white-space: nowrap; font-variant-numeric: tabular-nums; }
-#payrollCard .pp-per small, #payrollCard .pp-by small { display: block; margin-top: 2px; font-size: 11.5px; color: var(--pp-muted); }
-#payrollCard .pp-by { font-size: 12.5px; }
-#payrollCard .pp-by.none { color: var(--pp-muted); }
+#payrollCard .pp-per small { display: block; margin-top: 2px; font-size: 11.5px; color: var(--pp-muted); }
 #payrollCard .pp-empty { padding: 26px 16px; text-align: center; color: var(--pp-muted); font-size: 13px; }
 #payrollCard .pp-empty a { color: var(--pp-navy); font-weight: 800; text-decoration: underline; cursor: pointer; }
+
+/* year rows: fold / unfold a year */
+#payrollCard .pp-table tr.pp-yr td { padding: 0; background: var(--pp-soft); }
+#payrollCard .pp-yrb { display: flex; align-items: center; gap: 8px; width: 100%; padding: 8px 14px; border: 0; background: transparent; color: var(--pp-text); font: inherit;
+    font-size: 12px; font-weight: 900; letter-spacing: .4px; text-align: left; cursor: pointer; }
+#payrollCard .pp-yrb i { width: 10px; color: var(--pp-navy); }
+#payrollCard .pp-yrb span { font-weight: 600; letter-spacing: 0; color: var(--pp-muted); }
+#payrollCard .pp-yrb:hover { color: var(--pp-navy); }
+#payrollCard .pp-yrb:focus-visible { outline: 2px solid var(--pp-navy); outline-offset: -2px; }
+
+/* row buttons: shown on hover / keyboard focus; the ... menu is always there (touch screens use it) */
+#payrollCard .pp-hov { display: inline-flex; gap: 6px; vertical-align: middle; opacity: 0; transition: opacity .12s ease; }
+#payrollCard tr:hover .pp-hov, #payrollCard tr:focus-within .pp-hov { opacity: 1; }
+@media (hover: none) { #payrollCard .pp-hov { display: none; } }
+#payrollCard .pp-more { width: 30px; height: 30px; margin-left: 6px; border-radius: 8px; border: 0; background: transparent; color: var(--pp-muted); cursor: pointer; vertical-align: middle; }
+#payrollCard .pp-more:hover, #payrollCard .pp-more:focus-visible { background: var(--pp-chip); color: var(--pp-navy); outline: none; }
+.emdp.pp-dd { width: 280px; }
+.emdp.pp-dd .emdp-list { margin-top: 0; }
+
 #payrollCard tr.pp-flash td { animation: ppFlash 1.8s ease-out; }
+#payrollCard .pp-cur.pp-flash { animation: ppFlashCard 1.8s ease-out; }
 @keyframes ppFlash { 0%, 60% { background: rgba(26, 76, 123, .1); } 100% { background: transparent; } }
-@media (prefers-reduced-motion: reduce) { #payrollCard tr.pp-flash td { animation: none; background: rgba(26, 76, 123, .08); } }
+@keyframes ppFlashCard { 0%, 60% { box-shadow: 0 0 0 4px rgba(26, 76, 123, .12); } 100% { box-shadow: 0 2px 12px rgba(15, 23, 42, .05); } }
+@media (prefers-reduced-motion: reduce) { #payrollCard tr.pp-flash td, #payrollCard .pp-cur.pp-flash { animation: none; } }
 
 /* status: navy chip when locked, plain outline when open (no colour coding) */
 .pp-st { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: 999px; font-size: 11px; font-weight: 800; letter-spacing: .3px; white-space: nowrap;
@@ -136,8 +189,8 @@
 .pp-msg[hidden] { display: none; }
 
 @media (max-width: 860px) {
-    #payrollCard .pp-grid { grid-template-columns: minmax(0, 1fr); }
     #payrollCard .pp-table .pp-c-by { display: none; }
+    #payrollCard .pp-cur { padding: 16px; }
 }
 
 /* =====================================================================
