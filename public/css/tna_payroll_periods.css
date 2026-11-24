@@ -226,9 +226,9 @@
 #psSendModal .ps-cos { display: flex; flex-direction: column; gap: 5px; }
 #psSendModal .ps-co { display: flex; align-items: center; gap: 9px; width: 100%; padding: 7px 10px; border-radius: 9px; border: 1px solid var(--ps-ln); background: var(--ps-card); color: var(--ps-tx2);
     font-size: 12.5px; font-weight: 800; text-align: left; cursor: pointer; }
-#psSendModal .ps-co:hover { border-color: var(--ps-on); }
+#psSendModal .ps-co:hover { background: var(--ps-hover); }   /* 24 Nov (user: "no borders navy colour"): hover tints, the border stays grey */
 #psSendModal .ps-rad { width: 14px; height: 14px; flex: none; border-radius: 50%; border: 2px solid var(--ps-ft); }
-#psSendModal .ps-co.on { border-color: var(--ps-ac); box-shadow: inset 3px 0 0 var(--ps-ac); color: var(--ps-tx); }
+#psSendModal .ps-co.on { background: var(--ps-soft); color: var(--ps-tx); }   /* the picked company: soft tint + the radio dot, no navy border / bar */
 #psSendModal .ps-co.on .ps-rad { border-color: var(--ps-ac); background: radial-gradient(circle, var(--ps-ac) 0 3px, transparent 3.5px); }
 #psSendModal .ps-co small { display: block; font-size: 11px; font-weight: 600; color: var(--ps-mt); }
 #psSendModal .ps-dd { position: relative; }
@@ -290,7 +290,7 @@
 #psSendModal .ps-ck.fold .ps-ck-row { display: none; }
 #psSendModal .ps-ck-ic { width: 26px; height: 26px; flex: none; display: grid; place-items: center; border-radius: 8px; background: var(--ps-soft); color: var(--ps-ac); font-size: 12px; }
 #psSendModal .ps-ck-row.strong .ps-ck-ic, #psSendModal .ps-ck-row.ok .ps-ck-ic { background: var(--ps-navy); color: #fff; }
-#psSendModal .ps-ck-tx { flex: 1; min-width: 0; font-size: 13px; color: var(--ps-tx2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#psSendModal .ps-ck-tx { flex: 1; min-width: 0; font-size: 13px; color: var(--ps-tx2); line-height: 1.45; overflow-wrap: anywhere; }   /* 24 Nov: long notes wrap (was one line, cut off - a PaySpace error could not be read) */
 #psSendModal .ps-ck-tx b { font-weight: 800; color: var(--ps-tx); }
 #psSendModal .ps-ck-row.note .ps-ck-tx { color: var(--ps-mt); }
 #psSendModal .ps-ck-row.note .ps-ck-ic { background: transparent; color: var(--ps-ft); }
@@ -471,3 +471,7 @@
 }
 /* last: anything hidden stays hidden */
 #psSendModal [hidden] { display: none; }
+
+/* 2026-11-24 Hours filters: the status filters add up to Everyone; Fixed salary (a pay basis) sits after this divider */
+.ps-segsep { display: inline-block; width: 1px; height: 22px; background: #cbd5e1; margin: 0 6px; align-self: center; flex: none; }
+body.dark-mode .ps-segsep { background: #475569; }
