@@ -9,7 +9,7 @@
     <!-- Demo / Setup mode: must load early so every call from this page goes to the demo copy when in demo. AUTO-HEAL: safe to remove. -->
     <script src="tna_demo.js?v=20261020a"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Time & Attendance Dashboard</title>
+    <title>Time &amp; Attendance</title>
     <!-- 2026-10-23: TNA Africa app icon (browser tab) -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=3">
@@ -164,7 +164,12 @@
     <link rel="stylesheet" href="/css/tna_violations.css?v=20261115d">
     <!-- 2026-11-15 Settings > Departments work patterns (+ the Weekly Roster "Auto" source line) -->
     <link rel="stylesheet" href="/css/tna_departments.css?v=20261115b">
-    <link rel="stylesheet" href="/css/tna_payroll_periods.css?v=20261119a">
+    <link rel="stylesheet" href="/css/tna_payroll_periods.css?v=20261124ps2">
+    <!-- 2026-11-24 Pre-approved Overtime screen + the module's pop-ups (only drawn while the module is switched on) -->
+    <link rel="stylesheet" href="/css/tna_ot_auth.css?v=20261124pa2">
+    <!-- 2026-11-24 Workflow Routing: the Org Hierarchy look (org_sheet.css) + the screen's own styles -->
+    <link rel="stylesheet" href="/css/org_sheet.css?v=20261124u5">
+    <link rel="stylesheet" href="/css/workflow_routing.css?v=20261124wr8">
 </head>
 <body class="font-sans flex h-screen overflow-hidden">
     <script>
@@ -608,196 +613,9 @@
             </section>
 
             <section id="page-workflow-routing" class="page-section pb-32">
-                <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-purple-500 max-w-6xl">
-                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
-                        <h3 class="font-bold text-gray-300"><i class="fas fa-project-diagram mr-2"></i>Workflow Routing</h3>
-                    </div>
-
-                    <!-- Two separate jobs, two tabs -->
-                    <div class="flex border-b border-gray-700 mb-4">
-                        <button type="button" id="wfrTabBtnChains" onclick="wfrShowTab('chains')" class="px-4 py-2 text-xs font-bold text-purple-400 border-b-2 border-purple-400 transition"><i class="fas fa-sitemap mr-1"></i> Approval Chains</button>
-                        <button type="button" id="wfrTabBtnStandins" onclick="wfrShowTab('standins')" class="px-4 py-2 text-xs font-bold text-gray-500 border-b-2 border-transparent hover:text-gray-300 transition"><i class="fas fa-user-clock mr-1"></i> Stand-in Approvers <span id="wfrActiveStandinBadge" class="hidden ml-1 bg-teal-600 text-white text-[9px] px-1.5 py-0.5 rounded-full">0</span></button>
-                    </div>
-
-                    <!-- ================= TAB 1: APPROVAL CHAINS ================= -->
-                    <div id="wfrTabChains">
-                        <p class="text-xs text-gray-400 mb-4">Who approves leave requests, leave cancellations and claims. Set a rule for a whole department, or a rule for one employee (an employee rule replaces the department rule for that person). Requests go to the 1st approver, then the 2nd, then the 3rd.</p>
-
-                        <form id="workflowRoutingForm" onsubmit="saveWorkflowRouting(event)" class="bg-gray-900 p-4 rounded border border-gray-700 mb-6 space-y-4 shadow-inner">
-                            <input type="hidden" id="wfEditStructureId" value="">
-                            <div id="wfrEditBanner" class="hidden bg-indigo-900/40 border border-indigo-500 text-indigo-200 text-xs p-2 rounded flex justify-between items-center">
-                                <span><i class="fas fa-pen mr-1"></i> Editing rule for: <b id="wfrEditLabel"></b></span>
-                                <button type="button" onclick="wfrResetForm()" class="text-indigo-300 hover:text-white text-xs font-bold">Cancel edit</button>
-                            </div>
-
-                            <!-- Step 1: target -->
-                            <div>
-                                <label class="block text-[10px] text-purple-400 font-bold mb-2 uppercase tracking-wider">1. Who does this rule apply to?</label>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <label class="flex items-center bg-gray-800 border border-gray-600 rounded px-3 py-2 text-xs text-gray-200 cursor-pointer hover:border-purple-500 transition">
-                                        <input type="radio" name="wfTargetType" value="dept" checked onchange="wfrSetTargetType('dept')" class="accent-purple-500 mr-2"> <i class="fas fa-sitemap mr-1 text-purple-400"></i> A whole department
-                                    </label>
-                                    <label class="flex items-center bg-gray-800 border border-gray-600 rounded px-3 py-2 text-xs text-gray-200 cursor-pointer hover:border-pink-500 transition">
-                                        <input type="radio" name="wfTargetType" value="emp" onchange="wfrSetTargetType('emp')" class="accent-pink-500 mr-2"> <i class="fas fa-user mr-1 text-pink-400"></i> One employee
-                                    </label>
-                                </div>
-                                <div id="wfTargetDeptWrap" class="relative">
-                                    <input type="text" id="wfDeptSearch" oninput="filterWfDept()" onfocus="showWfDeptDropdown()" autocomplete="off" placeholder="Search department..." class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-purple-500">
-                                    <input type="hidden" id="wfDeptCode">
-                                    <div id="wfDeptDropdown" class="hidden absolute z-50 w-full bg-gray-800 border border-gray-500 rounded mt-1 max-h-48 overflow-y-auto shadow-2xl"></div>
-                                </div>
-                                <div id="wfTargetEmpWrap" class="relative hidden">
-                                    <input type="text" id="wfEmpSearch" oninput="filterWfEmp()" onfocus="showWfEmpDropdown()" autocomplete="off" placeholder="Search employee name or PIN..." class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-pink-500">
-                                    <input type="hidden" id="wfEmpId">
-                                    <div id="wfEmpDropdown" class="hidden absolute z-50 w-full bg-gray-800 border border-gray-500 rounded mt-1 max-h-48 overflow-y-auto shadow-2xl"></div>
-                                </div>
-                            </div>
-
-                            <!-- Step 2: the chain -->
-                            <div class="border-t border-gray-700 pt-4">
-                                <label class="block text-[10px] text-purple-400 font-bold mb-2 uppercase tracking-wider">2. Approvers, in order</label>
-                                <div class="flex flex-col md:flex-row md:items-end gap-3">
-                                    <div class="flex-1">
-                                        <label class="block text-[10px] text-gray-400 font-bold mb-1 uppercase">1st Approver <span class="text-purple-400">*</span></label>
-                                        <select id="wfLevel1" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none"></select>
-                                    </div>
-                                    <i class="fas fa-arrow-right text-gray-600 hidden md:block pb-3"></i>
-                                    <div class="flex-1">
-                                        <label class="block text-[10px] text-gray-400 font-bold mb-1 uppercase">2nd Approver</label>
-                                        <select id="wfLevel2" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none"></select>
-                                    </div>
-                                    <i class="fas fa-arrow-right text-gray-600 hidden md:block pb-3"></i>
-                                    <div class="flex-1">
-                                        <label class="block text-[10px] text-gray-400 font-bold mb-1 uppercase">3rd Approver</label>
-                                        <select id="wfLevel3" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none"></select>
-                                    </div>
-                                </div>
-                                <p class="text-[10px] text-gray-500 mt-2">Leave the 2nd and 3rd empty for a one-step approval.</p>
-                            </div>
-
-                            <!-- Step 3: backup approver (Administrator only) -->
-                            <div class="border-t border-gray-700 pt-4">
-                                <label class="block text-[10px] text-blue-400 font-bold mb-1 uppercase tracking-wider">3. Backup approver (optional) <span id="wfrStandingAdminNote" class="hidden text-orange-400 normal-case font-normal ml-1"><i class="fas fa-lock mr-1"></i>Only an Administrator can change this</span></label>
-                                <p class="text-[10px] text-gray-500 mb-2">Can approve for this rule at any level while the dates are valid. Leave the dates empty for no end date. To cover one person while they are away, use the <b>Stand-in Approvers</b> tab instead.</p>
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                    <div>
-                                        <label class="block text-[10px] text-gray-400 mb-1 uppercase">Backup approver</label>
-                                        <select id="wfStanding" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none"></select>
-                                    </div>
-                                    <div>
-                                        <label class="block text-[10px] text-gray-400 mb-1 uppercase">From</label>
-                                        <input type="date" id="wfStandingFrom" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500">
-                                    </div>
-                                    <div>
-                                        <label class="block text-[10px] text-gray-400 mb-1 uppercase">To</label>
-                                        <input type="date" id="wfStandingTo" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="flex justify-end gap-2 pt-3 border-t border-gray-800">
-                                <button type="button" onclick="wfrResetForm()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded text-xs font-bold shadow transition">Clear</button>
-                                <button type="submit" id="btnSaveRoutingRule" class="bg-purple-600 hover:bg-purple-500 text-white px-6 py-2 rounded text-xs font-bold shadow transition"><i class="fas fa-save mr-1"></i> Save Routing Rule</button>
-                            </div>
-                        </form>
-
-                        <div class="flex flex-wrap items-center gap-3 mb-3">
-                            <div class="relative flex-1 min-w-[220px]">
-                                <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
-                                <input type="text" id="wfrRuleSearch" oninput="renderWorkflowRouting()" placeholder="Search department, employee or approver..." class="w-full pl-8 pr-3 py-1.5 bg-gray-900 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-purple-500">
-                            </div>
-                            <select id="wfrRuleTypeFilter" onchange="renderWorkflowRouting()" class="bg-gray-900 border border-gray-600 rounded py-1.5 px-3 text-xs text-white focus:outline-none focus:border-purple-500">
-                                <option value="">All rules</option>
-                                <option value="dept">Department rules</option>
-                                <option value="emp">Employee rules</option>
-                            </select>
-                            <span id="wfrRuleCount" class="text-[10px] text-gray-500 font-bold uppercase tracking-wider"></span>
-                        </div>
-
-                        <div class="overflow-x-auto bg-gray-900 border border-gray-700 rounded p-2">
-                            <table class="w-full text-left text-xs border-collapse">
-                                <thead class="bg-gray-800 text-gray-400 uppercase font-bold">
-                                    <tr>
-                                        <th class="p-3 border-b border-gray-700">Applies To</th>
-                                        <th class="p-3 border-b border-gray-700">Name</th>
-                                        <th class="p-3 border-b border-gray-700">Approval Chain</th>
-                                        <th class="p-3 border-b border-gray-700">Backup Approver</th>
-                                        <th class="p-3 text-right border-b border-gray-700">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="routingBody" class="divide-y divide-gray-800 text-gray-300">
-                                    <tr><td colspan="5" class="p-4 text-center text-gray-500">Loading configurations...</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- ================= TAB 2: STAND-IN APPROVERS ================= -->
-                    <div id="wfrTabStandins" class="hidden">
-                        <p class="text-xs text-gray-400 mb-4">When someone is away, choose who approves in their place. Between the From and To dates the stand-in sees and can approve everything the away person could approve, using the away person's access. The away person can still approve too. Every approval by a stand-in is recorded as "on behalf of".</p>
-
-                        <div id="wfrStandinLocked" class="hidden bg-orange-900/30 border border-orange-500 text-orange-300 text-xs p-3 rounded mb-4"><i class="fas fa-lock mr-1"></i> Only an Administrator can add, end or delete stand-ins. You can view them below.</div>
-
-                        <div id="wfrStandinForm" class="bg-gray-900 p-4 rounded border border-gray-700 mb-4 shadow-inner space-y-3">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-[10px] text-gray-400 font-bold mb-1 uppercase"><i class="fas fa-plane-departure mr-1 text-orange-400"></i> Who is away</label>
-                                    <select id="wfrAwayUser" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none"></select>
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] text-gray-400 font-bold mb-1 uppercase"><i class="fas fa-user-check mr-1 text-teal-400"></i> Who stands in</label>
-                                    <select id="wfrStandInUser" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none"></select>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
-                                <div>
-                                    <label class="block text-[10px] text-gray-400 font-bold mb-1 uppercase">From</label>
-                                    <input type="date" id="wfrSiFrom" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-teal-500">
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] text-gray-400 font-bold mb-1 uppercase">To</label>
-                                    <input type="date" id="wfrSiTo" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-teal-500">
-                                </div>
-                                <div class="md:col-span-2">
-                                    <label class="block text-[10px] text-gray-400 font-bold mb-1 uppercase">Reason (optional)</label>
-                                    <input type="text" id="wfrSiReason" maxlength="500" placeholder="e.g. Annual leave" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-teal-500">
-                                </div>
-                            </div>
-                            <div id="wfrSiMsg" class="hidden text-xs p-2 rounded border"></div>
-                            <div class="flex justify-end">
-                                <button type="button" id="btnSaveStandin" onclick="saveStandin()" class="bg-teal-600 hover:bg-teal-500 text-white px-6 py-2 rounded text-xs font-bold shadow transition"><i class="fas fa-user-plus mr-1"></i> Add Stand-in</button>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-3 mb-3">
-                            <select id="wfrSiStatusFilter" onchange="renderStandins()" class="bg-gray-900 border border-gray-600 rounded py-1.5 px-3 text-xs text-white focus:outline-none focus:border-teal-500">
-                                <option value="current">Active and upcoming</option>
-                                <option value="past">Expired and ended</option>
-                                <option value="all">All</option>
-                            </select>
-                            <span id="wfrSiCount" class="text-[10px] text-gray-500 font-bold uppercase tracking-wider"></span>
-                        </div>
-
-                        <div class="overflow-x-auto bg-gray-900 border border-gray-700 rounded p-2">
-                            <table class="w-full text-left text-xs border-collapse">
-                                <thead class="bg-gray-800 text-gray-400 uppercase font-bold">
-                                    <tr>
-                                        <th class="p-3 border-b border-gray-700">Away</th>
-                                        <th class="p-3 border-b border-gray-700">Stand-in</th>
-                                        <th class="p-3 border-b border-gray-700">Dates</th>
-                                        <th class="p-3 border-b border-gray-700">Reason</th>
-                                        <th class="p-3 border-b border-gray-700 text-center">Status</th>
-                                        <th class="p-3 border-b border-gray-700">Set By</th>
-                                        <th class="p-3 border-b border-gray-700 text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="wfrStandinBody" class="divide-y divide-gray-800 text-gray-300">
-                                    <tr><td colspan="7" class="p-4 text-center text-gray-500">Loading stand-ins...</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <!-- 2026-11-24 Workflow Routing (Approval Chains + Stand-in Approvers) is drawn by js/workflow_routing.js (shared with ESS Master >
+                     Settings > Approval routing), styles css/org_sheet.css + css/workflow_routing.css. showSection('workflow-routing') mounts it.
+                     The old form + list (wfr* ids) were removed - git history keeps them. -->
             </section>
 
            <section id="page-employees" class="page-section">
@@ -2643,7 +2461,7 @@
                         </table>
                     </div>
                 </div>
-                
+
 
                 <!-- NEW BULK ANALYZER SECTION -->
                 <div class="bg-gray-800 p-6 rounded shadow-lg border-t-4 border-red-500 w-full mb-6">
@@ -4311,9 +4129,11 @@
    <script src="tna_hours.js"></script>
    <!-- Report preview column sorting (shared with Employee Master). Safe to remove: headers just stop sorting. -->
    <script src="report_sort.js"></script>
-   <script src="tna_dashboard.js?v=20261118r"></script>
+   <script src="tna_dashboard.js?v=20261124wr1"></script>
+   <!-- 2026-11-24 Workflow Routing screen (shared with ESS Master) -->
+   <script src="workflow_routing.js?v=20261124wr9"></script>
    <!-- 2026-11-17 Settings > Payroll Periods: "PaySpace" button + Send hours pop-up (logic_payspace.js section 5). Safe to remove: no PaySpace button. -->
-   <script src="payspace_send.js?v=20261119b"></script>
+   <script src="payspace_send.js?v=20261124ps2"></script>
    <!-- The T&A dashboard (Manager | HR | Map | Overview tabs). Since the 14 Nov 2026 clean-up this is the only dashboard:
         the old dashboards and the "New dashboard" switch are gone, so this file is needed. -->
    <script src="tna_dashboard_v2.js?v=20261118b"></script>
@@ -4327,7 +4147,7 @@
    <script src="tna_photo_push.js?v=20261019a"></script>
     <!-- Team View > Visual tab (timeline, drag punches, approvals). AUTO-HEAL: safe to remove, Traditional keeps working. -->
    <script src="tna_tv_range.js?v=20261114b"></script>
-   <script src="tna_team_visual.js?v=20261118a"></script>
+   <script src="tna_team_visual.js?v=20261124a"></script>
     <!-- Team View > Overview tab. Needs tna_team_visual.js. AUTO-HEAL: safe to remove, the other tabs keep working. -->
    <script src="tna_team_overview.js?v=20261114a"></script>
    <!-- ⚡ 2026-10-13 Shift Setup Wizard + "recalculate the affected days" pop-up (window.tnaShiftWizard, window.tnaRecalcPrompt).
@@ -4337,7 +4157,7 @@
    <script src="tna_sage_queue.js"></script>
    <!-- System Settings: left menu, one section at a time, (i) help, Save moves with the section. Safe to remove. -->
    <!-- Pre-approved overtime settings section: must load BEFORE tna_settings_ui.js. AUTO-HEAL: safe to remove. -->
-   <script src="tna_ot_preapproval.js?v=20261106b"></script>
+   <script src="tna_ot_preapproval.js?v=20261124c"></script>
    <!-- (2026-11-15: the CVS Employee Mapping Settings section, tna_cvs_mapping.js, was removed - user) -->
    <!-- Compare with CVS (Time Logs). AUTO-HEAL: safe to remove; the button then does nothing. -->
    <script src="cvs_range_sync.js?v=20261115a"></script>
@@ -4367,15 +4187,16 @@
    <!-- 2026-10-30 instant dark tooltips on buttons and the closed sidebar (like User Access). AUTO-HEAL: safe to remove = the browser tooltips. -->
    <script src="tna_quick_tips.js?v=20261030c"></script>
    <script src="tna_recalc_ask.js?v=20261030e"></script>
-   <script src="tna_settings_ui.js?v=20261115e"></script>
-   <!-- Pre-approved overtime: OT Authorisations page, roster "Authorise OT" tab and badges. Only active while switched on. AUTO-HEAL: safe to remove. -->
-   <script src="tna_ot_auth.js?v=1"></script>
+   <script src="tna_settings_ui.js?v=20261120b"></script>
+   <!-- Pre-approved overtime: the "Pre-approved Overtime" screen (Planner | Authorisations | Report), roster "Authorise OT" tab and badges,
+        Team View figures. Only active while switched on. Styles: css/tna_ot_auth.css. AUTO-HEAL: safe to remove. -->
+   <script src="tna_ot_auth.js?v=20261124pa2"></script>
    <!-- Shared top bar: search + quick access + profile menu (same as Employee Master). Safe to remove. -->
-   <script src="tna_topbar.js?v=73"></script>
+   <script src="tna_topbar.js?v=88"></script>
    <!-- Guided tours, how-to guides + What's new (content in /tours/tna_dashboard_tours.json). AUTO-HEAL: safe to remove. -->
-   <script src="tna_tour.js?v=20261109a" data-tour-page="tna_dashboard" data-tour-help-position="right"></script>
+   <script src="tna_tour.js?v=20261123r" data-tour-page="tna_dashboard" data-tour-help-position="right"></script>
    <!-- 2026-10-23: help as the side panel (same as Employee Master); the page's "?" opens it. AUTO-HEAL: safe to remove. -->
-   <script src="tna_help_panel.js?v=20261109b" data-help-module="Time &amp; Attendance" data-help-anchor="#tnaTourHelpBtn"></script>
+   <script src="tna_help_panel.js?v=20261123r" data-help-module="Time &amp; Attendance" data-help-anchor="#tnaTourHelpBtn"></script>
    <!-- Guided setup in Demo / Setup mode (plan in /tours/tna_dashboard_setup.json). AUTO-HEAL: safe to remove. -->
    <script src="tna_setup.js" data-setup-page="tna_dashboard"></script>
    <!-- Audit Trail: tags every change with the TNA tab, records tab opens / reports / exports, and runs the Audit Trail tab. Safe to remove. -->
@@ -4389,7 +4210,7 @@
    <!-- 2026-10-26: System Settings opens as a pop-up window (same look as Farmers & Distribution Settings) with Overtime Rules
         as one of its sections; the Overtime Rules sidebar item opens it there. Load LAST (after every file that wraps
         showSection). AUTO-HEAL: safe to remove - Settings and Overtime Rules then open as normal pages again. -->
-   <script src="tna_settings_popup.js?v=20261117cdn"></script>
+   <script src="tna_settings_popup.js?v=20261120b"></script>
    <!-- 2026-10-27 Overtime Rules > Weekends: the Saturday rate shown read-only on the Saturday row (= the Overtime rate). Not a setting. AUTO-HEAL: safe to remove. -->
    <script src="tna_sat_rate_view.js?v=20261027b"></script>
    <!-- 2026-10-27 Overtime Rules > Overtime limits: the BCEA limits locked (companies may only be stricter), the earnings threshold

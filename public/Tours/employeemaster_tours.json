@@ -63,24 +63,6 @@
       "placement": "right"
     },
     {
-      "id": "em-nav-access-roles",
-      "target": [
-        "#sidebarNav a[data-permission='emp_master_access_roles']"
-      ],
-      "title": "Access Roles",
-      "text": "Which access zones (groups of clocking devices) each department's employees can use.",
-      "placement": "right"
-    },
-    {
-      "id": "em-nav-teams",
-      "target": [
-        "#sidebarNav a[data-permission='emp_master_teams']"
-      ],
-      "title": "Custom Teams",
-      "text": "Groups of employees across departments, such as crews or shifts.",
-      "placement": "right"
-    },
-    {
       "id": "em-nav-leave",
       "target": [
         "#sidebarNav a[data-permission='emp_master_leave']"
@@ -96,15 +78,6 @@
       ],
       "title": "Custom Attributes",
       "text": "Your own extra fields and lists, such as employee types and cost centres.",
-      "placement": "right"
-    },
-    {
-      "id": "em-nav-hierarchy",
-      "target": [
-        "#sidebarNav a[data-permission='emp_master_hierarchy']"
-      ],
-      "title": "Org Hierarchy",
-      "text": "Your organogram: reporting lines, managers and levels.",
       "placement": "right"
     },
     {
@@ -532,7 +505,7 @@
             "#selectAllEmps"
           ],
           "title": "Change many employees at once",
-          "text": "Tick employees (or this box for the whole page) and a toolbar appears to <b>Set Manager</b>, <b>Assign HOD</b>, <b>Move Department</b> or <b>Terminate</b> them all together.",
+          "text": "Tick employees (or this box for the whole page) and a toolbar appears to <b>Move Department</b> or <b>Terminate</b> them all together. Managers and heads of department are set in Company Settings > Org Hierarchy.",
           "placement": "right"
         },
         {
@@ -694,49 +667,15 @@
       "key": "employeemaster.departments",
       "title": "Departments",
       "trigger": "#page-departments.active",
-      "reset": [
-        {
-          "call": "switchDeptTab",
-          "args": [
-            "structure"
-          ]
-        }
-      ],
       "steps": [
         {
-          "id": "emd-tabs",
+          "id": "emd-datatools",
           "target": [
-            "#btn-tab-structure"
+            "#deptDataToolsBtn"
           ],
-          "title": "Three tabs",
-          "text": "<b>Departments &amp; Zones</b>, <b>Company Rules</b> and <b>Cost Centres</b>.",
-          "placement": "bottom",
-          "climb": 1,
-          "before": [
-            {
-              "call": "switchDeptTab",
-              "args": [
-                "structure"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "emd-sync",
-          "target": [
-            "#syncDeptBtn"
-          ],
-          "title": "Sync Departments",
-          "text": "Pulls your departments from your ZKTeco server, so both systems use the same structure.",
-          "placement": "bottom",
-          "before": [
-            {
-              "call": "switchDeptTab",
-              "args": [
-                "structure"
-              ]
-            }
-          ]
+          "title": "Data Tools",
+          "text": "<b>Download Excel file</b> gives you every department. Change names or statuses, add rows with new codes for new departments, then bring it back with <b>Bulk Import</b>. Every row is checked first, and one Undo puts the whole import back.",
+          "placement": "bottom"
         },
         {
           "id": "emd-create",
@@ -744,16 +683,8 @@
             "#page-departments button[onclick*='openCreateDeptModal']"
           ],
           "title": "Create Dept",
-          "text": "Add a new department with its code, name, parent department and head(s) of department.",
-          "placement": "left",
-          "before": [
-            {
-              "call": "switchDeptTab",
-              "args": [
-                "structure"
-              ]
-            }
-          ]
+          "text": "Add a new department: type its name and the code fills itself in (you can change it). Where it sits in the company and its heads are set in Company Settings &gt; Org Hierarchy.",
+          "placement": "left"
         },
         {
           "id": "emd-search",
@@ -774,21 +705,22 @@
           "placement": "bottom"
         },
         {
-          "id": "emd-select",
-          "target": [
-            "#selectAllDepts"
-          ],
-          "title": "Change several at once",
-          "text": "Tick departments (or this box for all of them) and use <b>Assign Parent</b> to put them all under the same parent department.",
-          "placement": "right"
-        },
-        {
           "id": "emd-edit",
           "target": [
             "#deptTableBody button[data-tooltip='Edit Department']"
           ],
           "title": "Edit",
-          "text": "Change the department's name, parent department or head(s) of department.",
+          "text": "Change the department's name. A new name is carried onto everyone in the department.",
+          "placement": "left",
+          "timeout": 3000
+        },
+        {
+          "id": "emd-zones",
+          "target": [
+            "#deptTableBody button[aria-label='Access zones']"
+          ],
+          "title": "Access zones",
+          "text": "Pick the access zones whose devices this department's people are sent to (this was the Access Roles screen). Point at the shield to see the zones it has now.",
           "placement": "left",
           "timeout": 3000
         },
@@ -800,147 +732,6 @@
           ],
           "title": "Deactivate",
           "text": "Closes a department. You choose where its active employees move to, the date and the reason. A deactivated department can be reactivated later.",
-          "placement": "left",
-          "timeout": 3000
-        },
-        {
-          "id": "emd-rules",
-          "target": [
-            "#tab-company-rules"
-          ],
-          "title": "Company Rules",
-          "text": "Operational rules or policies you assign to departments. <b>Create Rule</b> asks for a name, a description and the departments it applies to.",
-          "placement": "top",
-          "before": [
-            {
-              "call": "switchDeptTab",
-              "args": [
-                "rules"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "emd-costcentres",
-          "target": [
-            "#tab-cost-centres"
-          ],
-          "title": "Cost Centres",
-          "text": "Cost centres for financial reporting. Add one with a code and name, then link employees to it on their profile.",
-          "placement": "top",
-          "before": [
-            {
-              "call": "switchDeptTab",
-              "args": [
-                "costcentres"
-              ]
-            }
-          ],
-          "after": [
-            {
-              "call": "switchDeptTab",
-              "args": [
-                "structure"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "key": "employeemaster.deptzones",
-      "title": "Access Roles",
-      "trigger": "#page-deptzones.active",
-      "steps": [
-        {
-          "id": "emz-table",
-          "target": [
-            "#page-deptzones table"
-          ],
-          "title": "Access by department",
-          "text": "Each department and the access zones its employees can use. Zones are groups of clocking devices, created in <b>Settings &gt; Access Zones</b>.",
-          "placement": "top"
-        },
-        {
-          "id": "emz-search",
-          "target": [
-            "#searchDeptZone"
-          ],
-          "title": "Search",
-          "text": "Find a department by name.",
-          "placement": "bottom"
-        },
-        {
-          "id": "emz-assign",
-          "target": [
-            "#deptZoneTableBody button[onclick*='openDeptZoneModal']"
-          ],
-          "title": "Assign Zones",
-          "text": "Choose which zones the whole department can use. Every employee in the department gets access to those devices.",
-          "placement": "left",
-          "timeout": 3000
-        },
-        {
-          "id": "emz-sync",
-          "target": [
-            "#deptZoneTableBody button[onclick*='syncDeptToDevices']"
-          ],
-          "title": "Sync Device",
-          "text": "Sends this department's authorised employees to its devices. <b>Anyone not authorised is removed from those devices</b>, so check the zones first.",
-          "placement": "left",
-          "timeout": 3000
-        }
-      ]
-    },
-    {
-      "key": "employeemaster.teams",
-      "title": "Custom Teams",
-      "trigger": "#page-teams.active",
-      "steps": [
-        {
-          "id": "emtm-create",
-          "target": [
-            "#page-teams button[onclick*='openTeamModal']"
-          ],
-          "title": "Create Team",
-          "text": "A team groups employees from any department under one team leader, such as a crew or a shift. Give it a name, choose the leader, then tick the members. You can filter by department, show only the selected members, or select everyone in the filtered list.",
-          "placement": "left"
-        },
-        {
-          "id": "emtm-search",
-          "target": [
-            "#searchTeam"
-          ],
-          "title": "Search",
-          "text": "Find a team by name.",
-          "placement": "bottom"
-        },
-        {
-          "id": "emtm-table",
-          "target": [
-            "#page-teams table"
-          ],
-          "title": "Your teams",
-          "text": "Each team, its leader and how many members it has.",
-          "placement": "top"
-        },
-        {
-          "id": "emtm-edit",
-          "target": [
-            "#teamsTableBody button[onclick*='openTeamModal']"
-          ],
-          "title": "Edit",
-          "text": "Change the team's name, leader or members.",
-          "placement": "left",
-          "timeout": 3000
-        },
-        {
-          "id": "emtm-delete",
-          "target": [
-            "#teamsTableBody button[onclick*='deleteTeam']"
-          ],
-          "title": "Delete",
-          "text": "Removes the team and takes all its members out of it. The employees' own records are not changed.",
           "placement": "left",
           "timeout": 3000
         }
@@ -1019,8 +810,8 @@
           "target": [
             "#btn-tab-attr-fields"
           ],
-          "title": "Two tabs",
-          "text": "<b>Employee Attributes</b> are your own extra fields. <b>Employee Types</b> are your own employment types.",
+          "title": "Employee Attributes",
+          "text": "<b>Employee Attributes</b> are your own extra fields. <b>Employee Types</b> opens <b>Employee Master Settings</b> (the gear), where employee types are kept with job titles, job grades and occupations.",
           "placement": "bottom",
           "climb": 1,
           "before": [
@@ -1115,136 +906,12 @@
         {
           "id": "ema-types",
           "target": [
-            "#tab-attr-types"
+            "#btn-tab-attr-types"
           ],
           "title": "Employee Types",
-          "text": "Add your own employment types, such as Contractor or Temp. They appear in the employee type lists across Employee Master. Edit or deactivate them here. Deactivating a type clears it from any employees who have it, so you can reassign them.",
-          "placement": "top",
-          "before": [
-            {
-              "call": "switchAttrTab",
-              "args": [
-                "types"
-              ]
-            }
-          ],
-          "after": [
-            {
-              "call": "switchAttrTab",
-              "args": [
-                "fields"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "key": "employeemaster.hierarchy",
-      "title": "Org Hierarchy",
-      "trigger": "#page-hierarchy.active",
-      "reset": [
-        {
-          "call": "switchHierTab",
-          "args": [
-            "chart"
-          ]
-        }
-      ],
-      "steps": [
-        {
-          "id": "emh-tabs",
-          "target": [
-            "#btn-tab-hier-chart"
-          ],
-          "title": "Four tabs",
-          "text": "<b>Org Chart</b>, <b>Manager Assignments</b>, <b>Stand-in Delegations</b> and <b>Hierarchy Levels</b>.",
+          "text": "Employee types are kept in <b>Employee Master Settings</b> (the gear) › Job lists now, together with job titles, job grades and occupations. This tab opens them there. The employee profile picks from those lists.",
           "placement": "bottom",
-          "climb": 1,
-          "before": [
-            {
-              "call": "switchHierTab",
-              "args": [
-                "chart"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "emh-chart",
-          "target": [
-            "#companyOrgChartContainer"
-          ],
-          "title": "Org Chart",
-          "text": "Your company's structure as a chart. Use <b>Refresh Chart</b> after making changes.",
-          "placement": "top",
-          "before": [
-            {
-              "call": "switchHierTab",
-              "args": [
-                "chart"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "emh-assign",
-          "target": [
-            "#tab-hier-assignments"
-          ],
-          "title": "Manager Assignments",
-          "text": "Link a system user to one or more parts of the hierarchy. That manager can then see those employees and handle their workflow approvals. Pick the user, pick the nodes, then assign.",
-          "placement": "top",
-          "before": [
-            {
-              "call": "switchHierTab",
-              "args": [
-                "assignments"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "emh-delegate",
-          "target": [
-            "#tab-hier-delegations"
-          ],
-          "title": "Stand-in Delegations",
-          "text": "While a manager is away, send their approvals to a stand-in. Choose the manager, the stand-in and the start and end dates.",
-          "placement": "top",
-          "before": [
-            {
-              "call": "switchHierTab",
-              "args": [
-                "delegations"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "emh-levels",
-          "target": [
-            "#tab-hier-levels"
-          ],
-          "title": "Hierarchy Levels",
-          "text": "Name the levels of your structure, for example Company, Region and Department. The diagram shows how they stack.",
-          "placement": "top",
-          "before": [
-            {
-              "call": "switchHierTab",
-              "args": [
-                "levels"
-              ]
-            }
-          ],
-          "after": [
-            {
-              "call": "switchHierTab",
-              "args": [
-                "chart"
-              ]
-            }
-          ]
+          "optional": true
         }
       ]
     },

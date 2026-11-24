@@ -22,6 +22,8 @@
     <style>
         body { background-color: #0f172a; color: #e2e8f0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     </style>
+    <!-- 2026-11-24 the page's own styles (first: My Profile > Documents) -->
+    <link rel="stylesheet" href="/css/ess_dashboard.css?v=20261124a">
 </head>
 <body class="bg-gray-900 min-h-screen">
 
@@ -386,26 +388,29 @@
         </form>
     </div>
 
-    <div id="essDocumentsModal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-50 flex justify-center items-center p-4">
-        <div class="bg-gray-800 p-0 rounded-lg w-full max-w-md shadow-2xl border border-gray-600 flex flex-col max-h-[90vh]">
-            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
-                <h2 class="text-lg font-bold text-cyan-400"><i class="fas fa-folder-open mr-2"></i>Company Documents</h2>
-                <button type="button" onclick="closeEssDocumentsModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="bg-gray-800 p-3 border-b border-gray-700 flex gap-2">
-                <div class="relative flex-1">
-                    <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
-                    <input type="text" id="empDocSearch" oninput="renderEssDocuments()" placeholder="Search..." class="w-full pl-8 pr-3 py-1.5 bg-gray-900 border border-gray-600 rounded text-xs text-white focus:outline-none focus:border-cyan-500 transition">
+    <!-- ⚡ 2026-11-24 MY PROFILE > DOCUMENTS: search + tags on top; the list on the left (To sign / Signed / All), the picked
+         document shown on the right with Full screen / Download / Sign & Accept above it. Drawn by ess_dashboard.js
+         (renderEssDocuments), styled by css/ess_dashboard.css. The id and open/closeEssDocumentsModal keep their names:
+         My Profile switches to this part by them (ess_embed.js MODALS). -->
+    <section id="essDocumentsModal" class="hidden" aria-label="Company documents">
+        <div class="pd-bar">
+            <label class="pd-search"><i class="fas fa-search"></i><input type="text" id="empDocSearch" oninput="renderEssDocuments()" placeholder="Search documents..." autocomplete="off"></label>
+            <div class="pd-dd" id="essDocTagDd" hidden>
+                <button type="button" class="pd-ddb" data-doc-dd aria-haspopup="listbox"><i class="fas fa-tag"></i><span id="essDocTagLabel">All tags</span><i class="fas fa-chevron-down"></i></button>
+                <div class="pd-ddm">
+                    <label class="pd-search"><i class="fas fa-search"></i><input type="text" id="essDocTagQ" placeholder="Search tags..." autocomplete="off"></label>
+                    <div class="pd-ddl" id="essDocTagList" role="listbox"></div>
                 </div>
-                <select id="empDocTagFilter" onchange="renderEssDocuments()" class="w-24 sm:w-32 bg-gray-900 border border-gray-600 rounded py-1.5 px-2 text-xs text-white focus:outline-none focus:border-cyan-500 transition">
-                    <option value="">All Tags</option>
-                </select>
-            </div>
-            <div class="p-4 overflow-y-auto space-y-3 bg-gray-900 flex-1" id="essDocumentsList">
-                <div class="text-center text-gray-500 py-6"><i class="fas fa-spinner fa-spin text-2xl mb-2"></i><p class="text-xs">Loading documents...</p></div>
             </div>
         </div>
-    </div>
+        <div class="pd-split">
+            <div class="pd-card pd-listc">
+                <div class="pd-pills" id="essDocPills"></div>
+                <div class="pd-rows" id="essDocumentsList"><div class="pd-none"><i class="fas fa-spinner fa-spin"></i> Loading documents...</div></div>
+            </div>
+            <div class="pd-card pd-view" id="essDocView"></div>
+        </div>
+    </section>
 
     <!-- ESS Payslips View -->
     <div id="essPayslipsModal" class="hidden fixed inset-0 bg-gray-900 z-50 flex flex-col">
@@ -620,10 +625,10 @@
     <!-- Lafras Test --> 
     <!-- 2026-11-13 the login session for this page (code repetition review step 1): before the other scripts -->
     <script src="tna_session.js?v=20261113b"></script>
-    <script src="ess_dashboard.js?v=20261118a"></script>
+    <script src="ess_dashboard.js?v=20261124a"></script>
     <!-- Pre-approved overtime: shows overtime authorised by the manager on the timesheet and calendar. AUTO-HEAL: safe to remove. -->
     <script src="ess_ot_auth.js?v=1"></script>
     <!-- 2026-10-23: ESS inside My Profile (the look, the parts, the pop-ups over the window). -->
-    <script src="ess_embed.js?v=20261117cdn"></script>
+    <script src="ess_embed.js?v=20261124a"></script>
 </body>
 </html>

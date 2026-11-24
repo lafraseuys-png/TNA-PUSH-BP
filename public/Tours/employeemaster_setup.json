@@ -14,7 +14,7 @@
           "structure"
         ]
       },
-      "why": "Every employee belongs to a department. Departments drive who approves, which devices people are sent to, leave policies and reports. Set which department sits under which for your structure.",
+      "why": "Every employee belongs to a department. Departments drive who approves, which devices people are sent to, leave policies and reports. Where each department sits and its heads are set in Company Settings > Org Hierarchy.",
       "checks": [
         {
           "url": "/api/departments",
@@ -28,40 +28,16 @@
       "todo": "At least one active department."
     },
     {
-      "id": "costcentres",
-      "title": "Cost centres",
-      "section": "departments",
-      "call": {
-        "fn": "switchDeptTab",
-        "args": [
-          "costcentres"
-        ]
-      },
-      "optional": true,
-      "why": "For financial reporting: which cost centre an employee's costs go to.",
-      "checks": [
-        {
-          "url": "/api/cost-centres",
-          "list": "",
-          "where": [
-            "IsActive"
-          ],
-          "min": 1
-        }
-      ],
-      "todo": "At least one active cost centre."
-    },
-    {
       "id": "types",
-      "title": "Employee types and custom fields",
+      "title": "Custom fields",
       "section": "attributes",
       "call": {
         "fn": "switchAttrTab",
         "args": [
-          "types"
+          "fields"
         ]
       },
-      "why": "Your own employee types (beyond Permanent and Seasonal) and any extra fields you keep per employee, such as boot size or licence number.",
+      "why": "Any extra fields you keep per employee, such as boot size or licence number. (Employee types, job titles, job grades and occupations are kept in Employee Master Settings › Job lists.)",
       "confirm": true,
       "confirmLabel": "These are right"
     },
@@ -104,12 +80,12 @@
     {
       "id": "zones",
       "title": "Device access",
-      "section": "deptzones",
+      "section": "departments",
       "optional": true,
       "needs": [
         "departments"
       ],
-      "why": "Which clocking devices each department is sent to. In demo nothing is sent to devices; after pushing, use Sync Device in live.",
+      "why": "Which clocking devices each department is sent to: the shield button on each department. In demo nothing is sent to devices; after pushing, use Send to devices now in live.",
       "checks": [
         {
           "url": "/api/tenant/department-zones",
@@ -118,45 +94,6 @@
         }
       ],
       "todo": "At least one department linked to an access zone."
-    },
-    {
-      "id": "hierarchy",
-      "title": "Managers",
-      "section": "hierarchy",
-      "call": {
-        "fn": "switchHierTab",
-        "args": [
-          "assignments"
-        ]
-      },
-      "optional": true,
-      "needs": [
-        "departments"
-      ],
-      "why": "Who manages whom: hierarchy levels, and a manager for each department or team.",
-      "checks": [
-        {
-          "url": "/api/hierarchy/managers",
-          "list": "",
-          "min": 1
-        }
-      ],
-      "todo": "At least one manager assignment."
-    },
-    {
-      "id": "teams",
-      "title": "Teams",
-      "section": "teams",
-      "optional": true,
-      "why": "Groups of employees across departments, for example a shift crew.",
-      "checks": [
-        {
-          "url": "/api/teams",
-          "list": "teams",
-          "min": 1
-        }
-      ],
-      "todo": "At least one team."
     },
     {
       "id": "employees",

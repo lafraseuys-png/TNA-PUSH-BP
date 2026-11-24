@@ -85,7 +85,7 @@
         "#sidebarNav [onclick*='teams']"
       ],
       "title": "Teams",
-      "text": "Your production teams, their members and their manager. These are separate from Employee Master's Custom Teams.",
+      "text": "Your production teams, their members and their manager. These are separate from the teams in Company Settings > Org Hierarchy.",
       "placement": "right"
     },
     {

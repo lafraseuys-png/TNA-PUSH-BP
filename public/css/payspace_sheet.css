@@ -1,0 +1,252 @@
+/* =====================================================================
+   Settings > Connectivity > Legacy Systems: the PaySpace sheet                                   2026-11-24
+   User: "modernize the legacy system screen ... excel column and rows like style ... the edit screen is so
+   confusing". Ticked: one settings sheet (Setting | Value | Status), edit inside the sheet (Save / Cancel on top),
+   an Excel grid for the pay codes, help text in (i) icons only, PaySpace companies as a mini sheet + a department
+   pop-up, the active payroll system as row 0. PaySpace only - the Sage tab is unchanged.
+   Drawn by payroll_connections.js. Every name starts with pss- so nothing else in Settings is touched.
+   Navy only; light + dark (body.dark-mode). No overflow:hidden on the sheets: the Settings dropdowns open
+   below their box and would be cut off.
+   ===================================================================== */
+#cat-cvs, .pss-tipbox, #psDeptModal {
+    --pss-navy: #1a4c7b; --pss-navy-d: #133a5e;
+    /* 2026-11-24 (user: "use our column theme colour, not the weird blue"): the Settings tables (.glass-table, User Access) */
+    --pss-line: #efefef; --pss-line-s: #e5e5e5; --pss-htext: #475569;
+    --pss-head: #f7f7f7; --pss-rn: #fafafa; --pss-grp: #f7f7f7;
+    --pss-cell: #ffffff; --pss-ro: #fafafa; --pss-hover: rgba(15, 23, 42, .025);
+    --pss-text: #1e293b; --pss-key: #334155; --pss-mut: #64748b; --pss-faint: #94a3b8;
+    --pss-badge: #e2e8f0; --pss-sel: #1a4c7b; --pss-shadow: 0 10px 30px rgba(0, 0, 0, .04);
+}
+body.dark-mode #cat-cvs, body.dark-mode #psDeptModal {
+    --pss-navy: #93c5fd; --pss-navy-d: #bfdbfe;
+    --pss-line: rgba(255, 255, 255, .05); --pss-line-s: rgba(255, 255, 255, .08); --pss-htext: #cbd5e1;
+    --pss-head: #11151c; --pss-rn: rgba(0, 0, 0, .2); --pss-grp: rgba(0, 0, 0, .22);
+    --pss-cell: rgba(30, 41, 59, .55); --pss-ro: rgba(0, 0, 0, .12); --pss-hover: rgba(255, 255, 255, .03);
+    --pss-text: #e2e8f0; --pss-key: #cbd5e1; --pss-mut: #94a3b8; --pss-faint: #64748b;
+    --pss-badge: #374151; --pss-sel: #60a5fa; --pss-shadow: 0 10px 30px rgba(0, 0, 0, .3);
+}
+
+/* ---------- the sheet ---------- */
+.pss-sheet { background: var(--pss-cell); border: 1px solid var(--pss-line-s); border-radius: 10px; box-shadow: var(--pss-shadow); }
+.pss-grid { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; color: var(--pss-text); table-layout: fixed; }
+.pss-grid th, .pss-grid td { border-bottom: 1px solid var(--pss-line); border-right: 1px solid var(--pss-line); height: 40px; padding: 0 12px; text-align: left; vertical-align: middle; }
+.pss-grid tr > :last-child { border-right: 0; }
+.pss-grid > tbody:last-of-type > tr:last-child > * { border-bottom: 0; }
+/* rounded corners without overflow:hidden (the table's first and last row only) */
+.pss-grid > thead > tr:first-child > :first-child, .pss-grid:not(:has(> thead)) > tbody:first-of-type > tr:first-child > :first-child { border-top-left-radius: 9px; }
+.pss-grid > thead > tr:first-child > :last-child, .pss-grid:not(:has(> thead)) > tbody:first-of-type > tr:first-child > :last-child { border-top-right-radius: 9px; }
+.pss-grid > tbody:last-of-type > tr:last-child > :first-child { border-bottom-left-radius: 9px; }
+.pss-grid > tbody:last-of-type > tr:last-child > :last-child { border-bottom-right-radius: 9px; }
+/* the last row on show ends the sheet (payroll_connections.js renumber marks it: editing hides the read-only rows) */
+.pss-grid tr.pss-endrow > * { border-bottom: 0; }
+.pss-grid tr.pss-endrow > :first-child { border-bottom-left-radius: 9px; }
+.pss-grid tr.pss-endrow > :last-child { border-bottom-right-radius: 9px; }
+.pss-grid thead th { background: var(--pss-head); color: var(--pss-htext); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; height: 40px; white-space: nowrap; border-bottom-color: rgba(0, 0, 0, .08); }
+.pss-grid thead th.pss-k { color: var(--pss-htext); font-weight: 700; }
+body.dark-mode .pss-grid thead th { border-bottom-color: rgba(255, 255, 255, .08); }
+.pss-c-rn { width: 46px; } .pss-c-k { width: 28%; } .pss-c-s { width: 150px; }
+.pss-c-kh { width: 250px; } .pss-c-id { width: 190px; } .pss-c-nm { width: 30%; } .pss-c-x { width: 52px; }
+/* Excel row numbers */
+.pss-grid .pss-rn { background: var(--pss-rn); color: var(--pss-faint); font-size: 11px; font-weight: 700; text-align: center; padding: 0 4px; font-variant-numeric: tabular-nums; }
+/* hover = a tint laid over the cell (the frozen cells of the code grid stay solid) */
+.pss-grid tbody tr:not(.pss-grp):hover > td:not(.pss-na), .pss-grid tbody tr:not(.pss-grp):hover > th { background-image: linear-gradient(var(--pss-hover), var(--pss-hover)); }
+/* group rows */
+.pss-grid tr.pss-grp > td { background: var(--pss-grp); height: 34px; color: var(--pss-htext); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+.pss-grid tr.pss-grp > td i.pss-gi { margin-right: 7px; font-size: 11px; color: var(--pss-navy); }
+/* setting name */
+.pss-grid .pss-k { font-weight: 600; color: var(--pss-key); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pss-k label { font: inherit; color: inherit; cursor: inherit; margin: 0; }
+.pss-k > i.pss-ki, .pss-k label > i.pss-ki { color: var(--pss-navy); width: 16px; margin-right: 6px; font-size: 12px; text-align: center; }
+.pss-v { color: var(--pss-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* a cell with a box in it: the Settings dropdown opens below the box, so nothing may cut it off */
+.pss-grid td.pss-e { overflow: visible; }
+.pss-v > .pss-view { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pss-v .pss-m { color: var(--pss-mut); }
+.pss-v .pss-yes, .pss-v .pss-no { display: inline-flex; align-items: center; gap: 7px; font-weight: 600; }
+.pss-v .pss-yes i { color: var(--pss-navy); }
+.pss-v .pss-no { color: var(--pss-mut); font-weight: 500; }
+.pss-v .pss-no i { color: var(--pss-faint); }
+.pss-na { background: var(--pss-ro); color: var(--pss-faint); font-size: 12px; font-style: italic; }
+
+/* status badges: navy only. Filled = good, dashed = needs attention */
+.pss-b { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 4px; background: var(--pss-badge); color: var(--pss-navy); font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .3px; white-space: nowrap; }
+.pss-b.is-on { background: #1a4c7b; color: #fff; }
+.pss-b.is-miss { background: transparent; border: 1px dashed var(--pss-faint); color: var(--pss-mut); }
+.pss-b i { font-size: 9px; }
+.pss-b.is-chg { background: transparent; border: 1px solid var(--pss-navy); }
+
+/* (i) help icons - the text shows in .pss-tipbox */
+.pss-tip { color: var(--pss-faint); font-size: 12px; margin-left: 7px; cursor: help; outline: none; transition: color .15s; text-transform: none; letter-spacing: 0; }
+.pss-tip:hover, .pss-tip:focus-visible { color: var(--pss-navy); }
+.pss-tip.is-warn { color: var(--pss-navy); }
+.pss-tipbox { position: fixed; z-index: 3000; max-width: 340px; padding: 9px 12px; border-radius: 8px; background: #0f172a; color: #f1f5f9; border: 1px solid rgba(255, 255, 255, .08); font-size: 12px; line-height: 1.5; font-weight: 500; box-shadow: 0 12px 30px rgba(0, 0, 0, .25); pointer-events: none; opacity: 0; transform: translateY(3px); transition: opacity .12s, transform .12s; }
+.pss-tipbox.on { opacity: 1; transform: none; }
+.pss-tipbox b { color: #fff; }
+
+/* ---------- top bar: title, messages, actions (sticky) ---------- */
+/* under the shared top bar (tna_topbar.js publishes --tnb-stick-h) */
+.pss-bar { position: sticky; top: calc(var(--tnb-stick-h, 0px) + 8px); z-index: 30; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 12px 10px 16px; margin-bottom: 12px; border-radius: 10px; background: var(--pss-cell); border: 1px solid var(--pss-line-s); box-shadow: var(--pss-shadow); }
+.pss-title { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; color: var(--pss-text); white-space: nowrap; }
+.pss-title > i:first-child { color: var(--pss-navy); }
+.pss-title small { font-size: 12px; font-weight: 500; color: var(--pss-mut); }
+.pss-sp { flex: 1; }
+.pss-mode { display: none; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: var(--pss-navy); white-space: nowrap; }
+.pss-mode b { min-width: 22px; height: 20px; padding: 0 7px; border-radius: 999px; background: #1a4c7b; color: #fff; font-size: 10.5px; display: inline-grid; place-items: center; }
+.pss-msg { font-size: 12px; font-weight: 700; color: var(--pss-navy); max-width: 520px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pss-msg.is-bad { color: #dc2626; }
+.pss-msg.is-busy { color: var(--pss-mut); }
+.pss-msg:empty { display: none; }
+body.dark-mode .pss-msg.is-bad { color: #f87171; }
+#cat-cvs .pss-btn { padding: 7px 14px; font-size: 12px; margin: 0; white-space: nowrap; }
+#cat-cvs .pss-btn:hover { transform: none; }
+:is(#cat-cvs, #psDeptModal) .pss-btn.is-main { background: #1a4c7b; border-color: #1a4c7b; color: #fff; }
+:is(#cat-cvs, #psDeptModal) .pss-btn.is-main:hover { background: #133a5e; }
+#cat-cvs .pss-btn:disabled { opacity: .5; cursor: default; }
+/* view / edit (.pss-host = #payspaceConfigContainer, #sageConfigContainer) */
+.pss-host .pss-edit { display: none; }
+.pss-host.pss-editing .pss-edit { display: block; }
+.pss-host.pss-editing tr.pss-edit { display: table-row; }
+.pss-host.pss-editing tr.pss-edit.hidden { display: none; }
+.pss-host.pss-editing button.pss-edit, .pss-host.pss-editing .pss-mode { display: inline-flex; }
+.pss-host.pss-editing .pss-view { display: none; }
+#cat-cvs .pss-btn[hidden] { display: none; }
+
+/* ---------- cells while editing: flat, boxed on focus like an Excel cell ---------- */
+.pss-editing .pss-grid td.pss-v.pss-e { padding: 0; background: var(--pss-cell); }
+#cat-cvs .form-control.pss-in, #cat-cvs .pss-in { display: block; width: 100%; height: 39px; border: 0; border-radius: 0; background-color: transparent; padding: 0 12px; font-size: 13px; color: var(--pss-text); box-shadow: none; }
+#cat-cvs .form-control.pss-in:hover { background-color: var(--pss-hover); }
+#cat-cvs .form-control.pss-in:focus { background-color: var(--pss-cell); box-shadow: inset 0 0 0 2px var(--pss-sel); }
+#cat-cvs .pss-in::placeholder { color: var(--pss-faint); }
+#cat-cvs input[type=number].pss-in { width: 110px; }
+.pss-grid td .profile-menu-container { display: block; }
+.pss-cellrow { display: flex; align-items: center; }
+.pss-cellrow > input.pss-in { flex: 1; min-width: 0; }
+.pss-chk { display: inline-flex; align-items: center; gap: 9px; height: 39px; padding: 0 12px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--pss-text); user-select: none; white-space: nowrap; margin: 0; }
+.pss-chk input { width: 16px; height: 16px; accent-color: #1a4c7b; cursor: pointer; margin: 0; }
+.pss-chk input + .pss-yn::before { content: 'No'; color: var(--pss-mut); font-weight: 500; }
+.pss-chk input:checked + .pss-yn::before { content: 'Yes'; color: var(--pss-text); font-weight: 600; }
+.pss-chk.is-sm { height: auto; padding: 0 12px 0 0; font-size: 11.5px; font-weight: 500; color: var(--pss-mut); }
+/* a changed cell: navy bar on its left, "Changed" in the status column */
+.pss-grid tr.is-changed > td.pss-v { box-shadow: inset 3px 0 0 #1a4c7b; }
+.pss-grid tr .pss-chgb { display: none; }
+.pss-grid tr.is-changed .pss-chgb { display: inline-flex; }
+.pss-grid td.pss-v.is-changed { box-shadow: inset 3px 0 0 #1a4c7b; }
+
+/* ---------- blocks under the sheet (companies, pay codes) ---------- */
+.pss-block { margin-top: 14px; }
+.pss-host.pss-editing .pss-block.pss-edit { display: block; }
+.pss-bh { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; min-height: 46px; padding: 6px 10px 6px 14px; background: var(--pss-grp); border: 1px solid var(--pss-line-s); border-bottom: 0; border-radius: 10px 10px 0 0; }
+.pss-bt { display: inline-flex; align-items: center; color: var(--pss-htext); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; white-space: nowrap; }
+.pss-bt > i:first-child { margin-right: 8px; color: var(--pss-navy); }
+.pss-sheet.is-under { border-radius: 0 0 10px 10px; }
+.pss-sheet.is-under .pss-grid > thead > tr:first-child > * { border-radius: 0; }
+/* a sheet with another block under it (Sage mapping + "no T&A leave type") */
+.pss-sheet.is-mid { border-radius: 0; }
+.pss-sheet.is-mid .pss-grid > tbody:last-of-type > tr:last-child > * { border-radius: 0; }
+.pss-count { font-size: 12px; font-weight: 700; color: var(--pss-mut); white-space: nowrap; }
+.pss-count b { color: var(--pss-navy); }
+.pss-note { padding: 6px 14px; font-size: 11.5px; color: var(--pss-mut); background: var(--pss-cell); border-left: 1px solid var(--pss-line-s); border-right: 1px solid var(--pss-line-s); border-bottom: 1px solid var(--pss-line); }
+.pss-note:empty { display: none; }
+.pss-loading { padding: 18px 14px; font-size: 12.5px; color: var(--pss-mut); background: var(--pss-cell); border: 1px solid var(--pss-line-s); border-radius: 0 0 10px 10px; }
+.pss-loading.is-bad { color: #dc2626; font-weight: 700; }
+body.dark-mode .pss-loading.is-bad { color: #f87171; }
+.pss-loading i { margin-right: 8px; }
+/* company pills for the code grid */
+.pss-seg { display: inline-flex; align-items: center; gap: 4px; padding: 3px; border-radius: 999px; background: var(--pss-cell); border: 1px solid var(--pss-line-s); }
+.pss-seg button { height: 28px; padding: 0 12px; border: 0; border-radius: 999px; background: transparent; color: var(--pss-mut); font-size: 11.5px; font-weight: 700; cursor: pointer; white-space: nowrap; font-family: inherit; }
+.pss-seg button:hover { color: var(--pss-navy); }
+.pss-seg button.on { background: #1a4c7b; color: #fff; }
+.pss-seg button small { font-weight: 600; opacity: .75; margin-left: 4px; }
+
+/* the pay code grid: frozen first columns + sticky headings */
+.pss-gridwrap { max-height: 62vh; overflow: auto; border-radius: 0 0 10px 10px; }
+.pss-codes { min-width: 860px; }
+.pss-codes thead th { position: sticky; top: 0; z-index: 3; }
+.pss-codes .pss-rn, .pss-codes .pss-k { position: sticky; z-index: 2; }
+.pss-codes .pss-rn { left: 0; }
+.pss-codes .pss-k { left: 46px; background: var(--pss-cell); box-shadow: 1px 0 0 var(--pss-line-s); }
+.pss-codes thead .pss-rn, .pss-codes thead .pss-k { z-index: 4; background: var(--pss-head); }
+.pss-codes .pss-gls { position: sticky; left: 58px; display: inline-flex; align-items: center; }
+.pss-codes tr.pss-grp > td.pss-rn { background: var(--pss-grp); }
+.pss-codes td.pss-v { padding: 0; }
+.pss-codes .pss-in:not(:placeholder-shown) { font-weight: 700; color: var(--pss-navy); }
+.pss-codes .pss-in[aria-invalid=true] { text-decoration: line-through; color: var(--pss-mut); outline: 1px dashed var(--pss-navy); outline-offset: -5px; }
+body.dark-mode .pss-codes thead th { background: #11151c; }
+body.dark-mode .pss-codes .pss-k { background: #1e293b; }
+body.dark-mode .pss-codes .pss-rn { background: #151a22; }
+body.dark-mode .pss-codes thead .pss-rn, body.dark-mode .pss-codes thead .pss-k { background: #11151c; }
+body.dark-mode .pss-codes tr.pss-grp > td { background: #171c25; }
+
+/* saved codes PaySpace no longer has (renamed there): the new code one click away */
+.pss-miss { padding: 8px 14px 10px; background: var(--pss-cell); border-left: 1px solid var(--pss-line-s); border-right: 1px solid var(--pss-line-s); border-bottom: 1px solid var(--pss-line); }
+.pss-misst { display: flex; align-items: center; gap: 8px; color: var(--pss-htext); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+.pss-missl { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 4px 0; font-size: 12.5px; color: var(--pss-text); }
+.pss-missl i { color: var(--pss-navy); }
+.pss-missl .pss-chip { height: 26px; font-size: 11.5px; }
+
+/* the Sage leave type mapping grid */
+.pss-c-lt { width: 30%; } .pss-c-ck { width: 46px; } .pss-c-rows { width: 110px; }
+.pss-smap td.pss-v { padding: 0; }
+.pss-smap .pss-in:not(:placeholder-shown) { font-weight: 700; color: var(--pss-navy); }
+.pss-smap .pss-in[aria-invalid=true] { outline: 1px dashed #dc2626; outline-offset: -5px; }
+.pss-smap td.pss-ckc { text-align: center; padding: 0; }
+.pss-smap td.pss-ckc input, .pss-smap th.pss-ckc input { width: 16px; height: 16px; accent-color: #1a4c7b; cursor: pointer; vertical-align: middle; }
+.pss-sub { border-top: 0; }
+.pss-sub .pss-bh { border-radius: 0; border-top: 1px solid var(--pss-line-s); }
+
+/* the companies mini sheet */
+.pss-cos .pss-in { font-size: 13px; }
+.pss-cos td.pss-v { padding: 0; }
+.pss-cos td.pss-ro { background: var(--pss-ro); color: var(--pss-mut); padding: 0 12px; }
+.pss-deptbtn { display: flex; align-items: center; gap: 8px; width: 100%; height: 39px; padding: 0 12px; border: 0; background: transparent; color: var(--pss-text); font-size: 13px; text-align: left; cursor: pointer; font-family: inherit; }
+.pss-deptbtn:hover { background: var(--pss-hover); }
+.pss-deptbtn:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--pss-sel); }
+.pss-deptbtn span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pss-deptbtn span.is-none { color: var(--pss-faint); }
+.pss-deptbtn b { flex: none; min-width: 22px; height: 20px; padding: 0 7px; border-radius: 999px; background: var(--pss-badge); color: var(--pss-navy); font-size: 10.5px; display: inline-grid; place-items: center; }
+.pss-deptbtn i { color: var(--pss-faint); font-size: 10px; }
+.pss-x { width: 30px; height: 30px; border: 0; border-radius: 6px; background: transparent; color: var(--pss-mut); cursor: pointer; display: inline-grid; place-items: center; }
+.pss-x:hover { background: var(--pss-hover); color: var(--pss-navy); }
+.pss-cos td.pss-xc { text-align: center; padding: 0; }
+
+/* the companies Test Connection found */
+.pss-pick { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: -2px 0 12px; padding: 9px 12px; border-radius: 10px; border: 1px dashed var(--pss-line-s); background: var(--pss-cell); font-size: 12px; font-weight: 700; color: var(--pss-mut); }
+.pss-pick.hidden { display: none; }
+.pss-chip { height: 30px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--pss-line-s); background: var(--pss-cell); color: var(--pss-navy); font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; }
+.pss-chip:hover { border-color: #1a4c7b; }
+.pss-chip small { color: var(--pss-mut); font-weight: 600; margin-left: 4px; }
+
+/* the Sage | PaySpace switch: the Org Hierarchy Users | Tree | Board look (org_sheet.css .hl-seg .hl-vw).
+   Its floating white card is only set for #page-orgh there, so the same lines are given to #legacySubTabs here. */
+#legacySubTabs { margin: 0 0 18px; background: #fff; box-shadow: 0 1px 2px rgba(15,23,42,.06), 0 4px 14px rgba(15,23,42,.08); }
+body.dark-mode #legacySubTabs { background: rgba(30,41,59,.9); box-shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 18px rgba(0,0,0,.35); }
+#legacySubTabs button { display: inline-flex; align-items: center; }
+/* "Active" next to the active system */
+.pss-tabb { display: inline-flex; align-items: center; margin-left: 8px; padding: 2px 7px; border-radius: 4px; background: #1a4c7b; color: #fff; font-size: 9.5px; font-weight: 800; letter-spacing: .4px; }
+#legacySubTabs button.on .pss-tabb { background: rgba(255,255,255,.22); }
+.pss-tabb[hidden] { display: none; }
+#legacySubTabs button:focus:not(:focus-visible) { outline: none; }
+
+/* ---------- department pop-up (the Settings pop-up look: .modal-backdrop / .info-modal-*) ---------- */
+#psDeptModal .info-modal-content { max-width: 640px; }
+#psDeptModal .info-modal-body { padding: 16px 22px; gap: 12px; }
+.pss-dtools { display: flex; align-items: center; gap: 10px; }
+.pss-dtools .form-control { flex: 1; }
+.pss-dn { font-size: 12px; font-weight: 700; color: var(--pss-mut); white-space: nowrap; }
+.pss-dn b { color: var(--pss-navy); }
+.pss-dlist { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--pss-line-s); border-radius: 8px; max-height: 46vh; overflow-y: auto; background: var(--pss-cell); }
+.pss-dlist label { display: flex; align-items: center; gap: 10px; min-height: 38px; padding: 0 12px; border-bottom: 1px solid var(--pss-line); font-size: 13px; color: var(--pss-text); cursor: pointer; margin: 0; }
+.pss-dlist label:nth-child(odd) { border-right: 1px solid var(--pss-line); }
+.pss-dlist label:hover { background: var(--pss-hover); }
+.pss-dlist label[hidden] { display: none; }
+.pss-dlist input { width: 16px; height: 16px; accent-color: #1a4c7b; margin: 0; flex: none; }
+.pss-dlist label span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pss-dlist label small { flex: none; color: var(--pss-faint); font-size: 11px; }
+.pss-dempty { grid-column: 1 / -1; padding: 16px; text-align: center; color: var(--pss-mut); font-size: 12.5px; }
+.pss-dempty[hidden] { display: none; }
+
+@media (max-width: 760px) {
+    .pss-c-k { width: 40%; } .pss-c-s { width: 92px; }
+    .pss-dlist { grid-template-columns: 1fr; }
+    .pss-dlist label:nth-child(odd) { border-right: 0; }
+}

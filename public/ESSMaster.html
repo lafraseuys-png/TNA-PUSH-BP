@@ -10,7 +10,7 @@
     <!-- 2026-10-31: was included twice - harmless in QC, but the obfuscated production copy throws "already been declared" on the second load -->
     <script src="tna_demo.js?v=20261020a"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESS Master - TNA Africa</title>
+    <title>ESS Master</title>
     <!-- 2026-10-23: TNA Africa app icon (browser tab) -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=3">
@@ -22,6 +22,7 @@
         }
     </script>
     <link rel="stylesheet" href="/css/styles.css?v=1.0.13">
+    <link rel="stylesheet" href="/css/em_job_lists.css?v=20261120d">   <!-- 2026-11-20 Job Title / Grade / Occupation drop-downs (em_job_lists.js) -->
     <link rel="stylesheet" href="/vendor/cdnjs/font-awesome/6.4.0/css/all.min.css">
     
     <link rel="stylesheet" href="/vendor/npm/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
@@ -461,6 +462,9 @@
     <!-- 2026-11-18 Document Center + Global Broadcasts in the T&A look (copied from css/tna_violations.css). After the style block
          above so its .glass-table rules do not outrank the screen's own (same weight, later wins). -->
     <link rel="stylesheet" href="/css/ess_documents.css?v=20261118a">
+    <!-- 2026-11-24 Settings > Approval routing = the shared Workflow Routing screen (js/workflow_routing.js): the Org Hierarchy look + its own styles -->
+    <link rel="stylesheet" href="/css/org_sheet.css?v=20261124u5">
+    <link rel="stylesheet" href="/css/workflow_routing.css?v=20261124wr8">
 </head>
 <body class="font-sans">
 
@@ -2167,7 +2171,6 @@
                     <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Occupation (Legacy)</label><input type="text" id="editEmpOccupation" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
                     <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Group Start Date <span class="text-red-400">*</span></label><input type="date" id="editEmpStartDate" required class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
                     <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Employee Type</label><select id="editEmpType" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"><option value="">-- Select --</option><option value="Permanent">Permanent</option><option value="Seasonal">Seasonal</option></select></div>
-                    <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Cost Centre</label><select id="editEmpCostCentre" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"><option value="">-- None --</option></select></div>
                     <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Previous Period Worked</label><input type="text" id="editEmpPrevWorked" placeholder="e.g. 2024 Season" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
                     <div><label class="block text-[10px] font-bold text-gray-400 mb-1">Date Engaged</label><input type="date" id="editEmpDateEngaged" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
                     <div><label class="block text-[10px] font-bold text-gray-400 mb-1">RFID Card Number</label><input type="text" id="editEmpCardNo" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-xs text-white focus:outline-none focus:border-blue-500"></div>
@@ -3327,20 +3330,22 @@
             } catch(e) {}
         });
     </script>
-    <script src="ess_master.js?v=20261118c"></script>
+    <script src="ess_master.js?v=20261123cc"></script>
+    <script src="em_job_lists.js?v=20261120g"></script>   <!-- 2026-11-20 Job Title / Grade / Occupation pick from Employee Master Settings > Job lists. AUTO-HEAL: safe to remove = typing boxes -->
     <!-- ESS Master Overview (the first screen). AUTO-HEAL: safe to remove - the old Pending Requests card comes back. -->
     <script src="ess_overview.js?v=20261117cdn"></script>
     <!-- ⚡ Claims: Register (search, Filters, Columns, Data Tools, detail + receipt, PDF, Mark paid, charts) and Claim Types
          (was Expense Policies). AUTO-HEAL: safe to remove - the old Claims Register screen comes back. -->
     <script src="ess_claims.js?v=20261117cdn"></script>
     <script src="ess_leave_hub.js?v=20261008b"></script>
-    <script src="ess_settings_hub.js?v=20261118a"></script>
+    <script src="workflow_routing.js?v=20261124wr9"></script>
+    <script src="ess_settings_hub.js?v=20261124wr1"></script>
     <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
-      <script src="tna_topbar.js?v=73"></script>
+      <script src="tna_topbar.js?v=88"></script>
     <!-- Guided tours, how-to guides + What's new (content in /tours/essmaster_tours.json). AUTO-HEAL: safe to remove. -->
-    <script src="tna_tour.js?v=20261109a" data-tour-page="essmaster" data-tour-help-position="right"></script>
+    <script src="tna_tour.js?v=20261123r" data-tour-page="essmaster" data-tour-help-position="right"></script>
     <!-- 2026-10-23: help as the side panel (same as Employee Master); the page's "?" opens it. AUTO-HEAL: safe to remove. -->
-    <script src="tna_help_panel.js?v=20261109b" data-help-module="ESS Master" data-help-anchor="#tnaTourHelpBtn"></script>
+    <script src="tna_help_panel.js?v=20261123r" data-help-module="ESS Master" data-help-anchor="#tnaTourHelpBtn"></script>
     <!-- Guided setup in Demo / Setup mode (plan in /tours/essmaster_setup.json). AUTO-HEAL: safe to remove. -->
     <script src="tna_setup.js" data-setup-page="essmaster"></script>
     <!-- 2026-10-26: resize grip (six dots, same as the ticket system) on every pop-up. Drag to resize, double-click to reset. Safe to remove. -->

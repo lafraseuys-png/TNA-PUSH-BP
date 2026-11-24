@@ -1,0 +1,233 @@
+/* =====================================================================
+   ua_user_v2.css - SETTINGS > USER ACCESS: the NEW Create User / Edit User pop-up (js/ua_user_v2.js)   (web) 2026-11-23
+   Only under :is(#createUserModal, #editModal).uav2 - that class is added when someone presses "Try new" (remembered
+   per user), so for everyone else this file changes nothing. The "Try new" button itself is .uv2-try. No !important.
+   Look: the new employee profile (em_v2.css) - white window, #f7f9fb side menu, off-white section cards, navy #1a4c7b;
+   dark mode slate #1a212c / #151b24.
+   ===================================================================== */
+:is(#createUserModal, #editModal) { --uv2-ac: #1a4c7b; --uv2-ac-soft: rgba(26, 76, 123, .08); --uv2-bg: #ffffff; --uv2-bg2: #f7f9fb; --uv2-ln: #e2e8f0;
+    --uv2-tx: #0f172a; --uv2-tx2: #334155; --uv2-mt: #64748b; --uv2-on: #c6d6e8; --uv2-hover: rgba(26, 76, 123, .07); --uv2-err: #dc2626; --uv2-err-soft: #fef2f2;
+    --uv2-warn: #8a5a00; --uv2-warn-soft: #fff8e6; --uv2-card: #f9fafb; --uv2-card-ln: #e5e7eb; --uv2-sh: 0 30px 90px rgba(15, 23, 42, .4); }
+body.dark-mode :is(#createUserModal, #editModal) { --uv2-ac: #93c5fd; --uv2-ac-soft: rgba(147, 197, 253, .12); --uv2-bg: #1a212c; --uv2-bg2: #151b24; --uv2-ln: rgba(255, 255, 255, .08);
+    --uv2-tx: #f1f5f9; --uv2-tx2: #cbd5e1; --uv2-mt: #94a3b8; --uv2-on: rgba(255, 255, 255, .12); --uv2-hover: rgba(148, 163, 184, .12); --uv2-err: #f87171;
+    --uv2-err-soft: rgba(248, 113, 113, .12); --uv2-warn: #e7b65a; --uv2-warn-soft: rgba(231, 182, 90, .12); --uv2-card: #20262f; --uv2-card-ln: rgba(255, 255, 255, .1); --uv2-sh: 0 30px 90px rgba(0, 0, 0, .6); }
+
+/* ---------- "Try new" in the old pop-up's title bar ---------- */
+.uv2-try { display: inline-flex; align-items: center; gap: 7px; height: 32px; padding: 0 14px; margin-left: auto; margin-right: 12px; border: 0; border-radius: 999px; background: #fff; color: #1a4c7b;
+    font: 800 12px/1 'Nunito', system-ui, 'Segoe UI', sans-serif; cursor: pointer; box-shadow: 0 1px 2px rgba(15, 23, 42, .06), 0 4px 14px rgba(15, 23, 42, .08); transition: box-shadow .15s; }
+.uv2-try:hover { box-shadow: 0 2px 4px rgba(15, 23, 42, .06), 0 8px 20px rgba(15, 23, 42, .10); }
+body.dark-mode .uv2-try { background: rgba(30, 41, 59, .9); color: #93c5fd; box-shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .35); }
+
+/* ---------- the window ---------- */
+:is(#createUserModal, #editModal).uav2 { padding: 12px; }
+:is(#createUserModal, #editModal).uav2 > form { width: min(1320px, 94vw); height: min(900px, 92vh); max-width: none; max-height: none; min-width: 0; resize: none; display: flex; flex-direction: column;
+    background: var(--uv2-bg); color: var(--uv2-tx); border-radius: 18px; box-shadow: var(--uv2-sh); overflow: hidden; padding: 0; font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif; }
+body.dark-mode :is(#createUserModal, #editModal).uav2 > form { border: 1px solid var(--uv2-ln); }
+:is(#createUserModal, #editModal).uav2 > form > .info-modal-header,
+:is(#createUserModal, #editModal).uav2 > form > .info-modal-footer,
+:is(#createUserModal, #editModal).uav2 .edit-tab-nav,
+:is(#createUserModal, #editModal).uav2 .edit-tab-pane,
+:is(#createUserModal, #editModal).uav2 :is(#userLinkedEmpDropdown, #editLinkedEmpDropdown),
+:is(#createUserModal, #editModal).uav2 #editModules { display: none; }
+
+/* header card: who + actions */
+:is(#createUserModal, #editModal).uav2 .uv2-top { display: flex; align-items: center; gap: 18px; padding: 16px 26px; border-bottom: 1px solid var(--uv2-ln); background: var(--uv2-bg); }
+:is(#createUserModal, #editModal).uav2 .uv2-who { display: flex; align-items: center; gap: 14px; min-width: 0; flex: 1; }
+:is(#createUserModal, #editModal).uav2 .uv2-who > div { min-width: 0; }
+:is(#createUserModal, #editModal).uav2 .uv2-hide { display: none; }
+/* the old boxes' orange / teal / purple labels and notes: navy only */
+:is(#createUserModal, #editModal).uav2 .uv2-sec-g label i { color: var(--uv2-ac); }
+:is(#createUserModal, #editModal).uav2 #overrideIndicator { color: var(--uv2-ac); }
+:is(#createUserModal, #editModal).uav2 .uv2-av { width: 56px; height: 56px; border-radius: 50%; flex: none; display: inline-grid; place-items: center; overflow: hidden; background: var(--uv2-ac-soft); color: var(--uv2-ac);
+    font-weight: 800; font-size: 18px; letter-spacing: .5px; }
+:is(#createUserModal, #editModal).uav2 .uv2-av img { width: 100%; height: 100%; object-fit: cover; display: block; }
+:is(#createUserModal, #editModal).uav2 .uv2-nm { display: block; font-size: 19px; font-weight: 800; color: var(--uv2-tx); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+:is(#createUserModal, #editModal).uav2 .uv2-sub { display: block; font-size: 12.5px; color: var(--uv2-mt); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+:is(#createUserModal, #editModal).uav2 .uv2-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
+:is(#createUserModal, #editModal).uav2 .uv2-chip { display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 9px; border-radius: 999px; background: var(--uv2-ac-soft); color: var(--uv2-ac);
+    font-size: 11px; font-weight: 800; white-space: nowrap; }
+:is(#createUserModal, #editModal).uav2 .uv2-chip.off { background: var(--uv2-err-soft); color: var(--uv2-err); }
+:is(#createUserModal, #editModal).uav2 .uv2-acts { display: flex; align-items: center; gap: 10px; flex: none; }
+:is(#createUserModal, #editModal).uav2 .uv2-btn { display: inline-flex; align-items: center; gap: 7px; height: 38px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--uv2-ln); background: var(--uv2-bg);
+    color: var(--uv2-tx2); font-weight: 800; font-size: 13px; line-height: 1; font-family: inherit; cursor: pointer; white-space: nowrap; transition: background .15s, box-shadow .15s; }
+:is(#createUserModal, #editModal).uav2 .uv2-btn:hover { background: var(--uv2-hover); }
+:is(#createUserModal, #editModal).uav2 .uv2-btn.uv2-pri { background: #1a4c7b; border-color: #1a4c7b; color: #fff; }
+:is(#createUserModal, #editModal).uav2 .uv2-btn.uv2-pri:hover { background: #143f68; }
+:is(#createUserModal, #editModal).uav2 .uv2-btn:disabled { opacity: .5; cursor: default; }
+:is(#createUserModal, #editModal).uav2 .uv2-cnt { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: rgba(255, 255, 255, .22); font-size: 11px; display: inline-grid; place-items: center; }
+:is(#createUserModal, #editModal).uav2 .uv2-cnt:empty { display: none; }
+:is(#createUserModal, #editModal).uav2 .uv2-link { background: none; border: 0; padding: 0 6px; color: var(--uv2-mt); font-weight: 700; font-size: 12px; line-height: 1; font-family: inherit; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+:is(#createUserModal, #editModal).uav2 .uv2-link:hover { color: var(--uv2-ac); }
+:is(#createUserModal, #editModal).uav2 .uv2-x { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--uv2-ln); background: var(--uv2-bg); color: var(--uv2-mt); cursor: pointer; }
+:is(#createUserModal, #editModal).uav2 .uv2-x:hover { background: var(--uv2-hover); color: var(--uv2-tx); }
+
+/* body: side menu + the section */
+:is(#createUserModal, #editModal).uav2 > form > .info-modal-body { flex: 1; min-height: 0; display: grid; grid-template-columns: 250px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); padding: 0;
+    overflow: hidden; max-height: none; background: var(--uv2-bg); }
+:is(#createUserModal, #editModal).uav2 .uv2-nav { grid-row: 1; grid-column: 1; display: flex; flex-direction: column; gap: 2px; padding: 18px 14px; border-right: 1px solid var(--uv2-ln); background: var(--uv2-bg2); overflow-y: auto; }
+:is(#createUserModal, #editModal).uav2 .uv2-nav button { display: flex; align-items: center; gap: 11px; width: 100%; padding: 11px 14px; border: 1px solid transparent; border-radius: 10px; background: transparent;
+    font-weight: 700; font-size: 13.5px; line-height: 1.2; font-family: inherit; color: var(--uv2-tx2); text-align: left; cursor: pointer; }
+:is(#createUserModal, #editModal).uav2 .uv2-nav button i { width: 18px; text-align: center; color: var(--uv2-ac); }
+:is(#createUserModal, #editModal).uav2 .uv2-nav button:hover { background: var(--uv2-hover); }
+:is(#createUserModal, #editModal).uav2 .uv2-nav button.on { background: var(--uv2-bg); border-color: var(--uv2-on); box-shadow: 0 2px 10px rgba(15, 23, 42, .06); color: var(--uv2-ac); font-weight: 800; }
+body.dark-mode :is(#createUserModal, #editModal).uav2 .uv2-nav button.on { background: rgba(255, 255, 255, .08); color: #fff; }
+:is(#createUserModal, #editModal).uav2 .uv2-dot { margin-left: auto; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; background: var(--uv2-err); color: #fff; font-size: 10.5px; font-weight: 800;
+    font-style: normal; display: inline-grid; place-items: center; }
+:is(#createUserModal, #editModal).uav2 .uv2-dot:empty { display: none; }
+:is(#createUserModal, #editModal).uav2 .uv2-hint { margin-top: auto; padding: 14px 8px 0; font-size: 11.5px; color: var(--uv2-mt); line-height: 1.5; }
+:is(#createUserModal, #editModal).uav2 .uv2-hint kbd { font: inherit; font-size: 10.5px; padding: 1px 5px; border: 1px solid var(--uv2-ln); border-radius: 4px; background: var(--uv2-bg); }
+:is(#createUserModal, #editModal).uav2 .uv2-scroll { grid-row: 1; grid-column: 2; min-width: 0; min-height: 0; overflow-y: auto; max-height: none; padding: 22px 32px 48px; }
+:is(#createUserModal, #editModal).uav2 .uv2-pane { display: none; background: var(--uv2-card); border: 1px solid var(--uv2-card-ln); border-radius: 14px; padding: 6px 26px; box-shadow: 0 1px 3px rgba(15, 23, 42, .04); }
+:is(#createUserModal, #editModal).uav2 .uv2-pane.on { display: block; animation: uv2In .25s ease; }
+@keyframes uv2In { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { :is(#createUserModal, #editModal).uav2 .uv2-pane.on { animation: none; } }
+:is(#createUserModal, #editModal).uav2 #userError { position: static; margin: 0 0 14px; padding: 10px 14px; border-radius: 10px; background: var(--uv2-err-soft); }
+:is(#createUserModal, #editModal).uav2 #userError.hidden { display: none; }
+
+/* a section: heading on the left, fields on the right (the profile's .ep2-sec) */
+:is(#createUserModal, #editModal).uav2 .uv2-sec { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 28px; padding: 22px 0; border-top: 1px solid var(--uv2-ln); }
+:is(#createUserModal, #editModal).uav2 .uv2-sec:first-child { border-top: 0; }
+:is(#createUserModal, #editModal).uav2 .uv2-sec-h b { display: block; font-size: 15px; font-weight: 800; color: var(--uv2-tx); margin-bottom: 4px; }
+:is(#createUserModal, #editModal).uav2 .uv2-sec-h span { display: block; font-size: 12.5px; line-height: 1.5; color: var(--uv2-mt); }
+:is(#createUserModal, #editModal).uav2 .uv2-sec-g { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 20px; align-content: start; min-width: 0; }
+:is(#createUserModal, #editModal).uav2 .uv2-sec-g.uv2-one { grid-template-columns: minmax(0, 1fr); }
+:is(#createUserModal, #editModal).uav2 .uv2-sec-g label.block { font-size: 11px; letter-spacing: .4px; color: var(--uv2-mt); }
+:is(#createUserModal, #editModal).uav2 .uv2-sec-g .form-control { background: var(--uv2-bg); }
+:is(#createUserModal, #editModal).uav2 .uv2-sec-g .uv2-span { grid-column: 1 / -1; }
+/* wide sections (lists, levels, scope): the heading on top, the content the full width */
+:is(#createUserModal, #editModal).uav2 .uv2-sec.uv2-wide { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+:is(#createUserModal, #editModal).uav2 .uv2-sec.uv2-wide .uv2-sec-h { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+:is(#createUserModal, #editModal).uav2 .uv2-sec.uv2-wide .uv2-sec-h b { margin-bottom: 0; }
+:is(#createUserModal, #editModal).uav2 .uv2-sec-g .flex > button { color: var(--uv2-ac); }   /* Generate (was teal in dark mode) */
+
+/* sign-in switches and the tick lists (phone tiles, ESS, scope trees): calm cards, navy ticks */
+:is(#createUserModal, #editModal).uav2 .uv2-switches { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+:is(#createUserModal, #editModal).uav2 :is(.uv2-switches, .uv2-ticks) > label { display: flex; align-items: center; gap: 10px; margin: 0; padding: 12px 14px; border: 1px solid var(--uv2-card-ln); border-radius: 10px;
+    background: var(--uv2-bg); color: var(--uv2-tx2); font-size: 13px; font-weight: 700; cursor: pointer; transition: border-color .15s, background .15s; }
+:is(#createUserModal, #editModal).uav2 :is(.uv2-switches, .uv2-ticks) > label:hover { border-color: var(--uv2-on); background: var(--uv2-hover); }
+:is(#createUserModal, #editModal).uav2 :is(.uv2-switches, .uv2-ticks) > label:has(input:checked) { border-color: var(--uv2-on); }
+:is(#createUserModal, #editModal).uav2 :is(.uv2-switches, .uv2-ticks, .uv2-sec-g) input[type="checkbox"],
+:is(#createUserModal, #editModal).uav2 :is(.uv2-switches, .uv2-ticks, .uv2-sec-g) input[type="radio"] { accent-color: #1a4c7b; width: 17px; height: 17px; margin: 0; flex: none; }
+body.dark-mode :is(#createUserModal, #editModal).uav2 :is(.uv2-switches, .uv2-ticks, .uv2-sec-g) input { accent-color: #5b8fc7; }
+:is(#createUserModal, #editModal).uav2 .uv2-ticks { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; max-height: none; overflow: visible; padding: 0; border: 0;
+    background: transparent; box-shadow: none; }
+:is(#createUserModal, #editModal).uav2 .uv2-ticks > :not(label) { grid-column: 1 / -1; }
+:is(#createUserModal, #editModal).uav2 #scopeTreesWrapper { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; min-height: 0; }
+:is(#createUserModal, #editModal).uav2 #scopeTreesWrapper label.block { color: var(--uv2-tx); font-size: 12px; }
+:is(#createUserModal, #editModal).uav2 #scopeTreesWrapper > div > div { background: var(--uv2-bg); border-color: var(--uv2-card-ln); box-shadow: none; max-height: 420px; }
+
+/* checks as you type */
+:is(#createUserModal, #editModal).uav2 .uv2-msg { margin-top: 6px; font-size: 12px; font-weight: 700; line-height: 1.4; display: flex; gap: 6px; align-items: flex-start; }
+:is(#createUserModal, #editModal).uav2 .uv2-msg:empty { display: none; }
+:is(#createUserModal, #editModal).uav2 .uv2-msg.err { color: var(--uv2-err); }
+:is(#createUserModal, #editModal).uav2 .uv2-msg.warn { color: var(--uv2-warn); }
+:is(#createUserModal, #editModal).uav2 .uv2-msg.ok { color: var(--uv2-ac); }
+:is(#createUserModal, #editModal).uav2 .form-control.uv2-bad { border-color: var(--uv2-err); box-shadow: 0 0 0 3px var(--uv2-err-soft); }
+:is(#createUserModal, #editModal).uav2 .uv2-meter { display: flex; gap: 4px; margin-top: 8px; }
+:is(#createUserModal, #editModal).uav2 .uv2-meter i { flex: 1; height: 5px; border-radius: 3px; background: var(--uv2-ln); }
+:is(#createUserModal, #editModal).uav2 .uv2-meter[data-s="1"] i:nth-child(-n+1),
+:is(#createUserModal, #editModal).uav2 .uv2-meter[data-s="2"] i:nth-child(-n+2),
+:is(#createUserModal, #editModal).uav2 .uv2-meter[data-s="3"] i:nth-child(-n+3),
+:is(#createUserModal, #editModal).uav2 .uv2-meter[data-s="4"] i:nth-child(-n+4) { background: var(--uv2-ac); }
+:is(#createUserModal, #editModal).uav2 .uv2-meter[data-s="1"] i:nth-child(1) { background: var(--uv2-err); }
+
+/* smarter employee picker */
+:is(#createUserModal, #editModal).uav2 .uv2-pick { position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 90; background: var(--uv2-bg); border: 1px solid var(--uv2-ln); border-radius: 14px;
+    box-shadow: 0 24px 50px rgba(15, 23, 42, .2); padding: 6px; max-height: 340px; overflow-y: auto; }
+:is(#createUserModal, #editModal).uav2 .uv2-pi { display: flex; align-items: center; gap: 12px; padding: 8px 10px; border-radius: 10px; cursor: pointer; }
+:is(#createUserModal, #editModal).uav2 .uv2-pi:hover, :is(#createUserModal, #editModal).uav2 .uv2-pi.hl { background: var(--uv2-hover); }
+:is(#createUserModal, #editModal).uav2 .uv2-pi .uv2-av { width: 34px; height: 34px; font-size: 11px; }
+:is(#createUserModal, #editModal).uav2 .uv2-pi b { display: block; font-size: 13px; color: var(--uv2-tx); }
+:is(#createUserModal, #editModal).uav2 .uv2-pi small { display: block; font-size: 11.5px; color: var(--uv2-mt); }
+:is(#createUserModal, #editModal).uav2 .uv2-pi .uv2-chip { margin-left: auto; }
+:is(#createUserModal, #editModal).uav2 .uv2-pi-none { padding: 14px; text-align: center; color: var(--uv2-mt); font-size: 12.5px; }
+
+/* Overview cards */
+:is(#createUserModal, #editModal).uav2 .uv2-ov { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; padding: 20px 0; }
+:is(#createUserModal, #editModal).uav2 .uv2-card { background: var(--uv2-bg); border: 1px solid var(--uv2-card-ln); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+:is(#createUserModal, #editModal).uav2 .uv2-card.uv2-span { grid-column: 1 / -1; }
+:is(#createUserModal, #editModal).uav2 .uv2-card h4 { display: flex; align-items: center; gap: 8px; margin: 0 0 10px; font-size: 11px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase; color: var(--uv2-mt); }
+:is(#createUserModal, #editModal).uav2 .uv2-card h4 i { color: var(--uv2-ac); }
+:is(#createUserModal, #editModal).uav2 .uv2-card h4 .uv2-link { margin-left: auto; text-transform: none; letter-spacing: 0; }
+:is(#createUserModal, #editModal).uav2 .uv2-kv { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 7px 12px; font-size: 13px; }
+:is(#createUserModal, #editModal).uav2 .uv2-kv dt { color: var(--uv2-mt); font-weight: 600; }
+:is(#createUserModal, #editModal).uav2 .uv2-kv dd { margin: 0; color: var(--uv2-tx); font-weight: 700; min-width: 0; overflow-wrap: anywhere; }
+:is(#createUserModal, #editModal).uav2 .uv2-kv dd small { color: var(--uv2-mt); font-weight: 600; }
+:is(#createUserModal, #editModal).uav2 .uv2-log { list-style: none; margin: 0; padding: 0; }
+:is(#createUserModal, #editModal).uav2 .uv2-log li { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 12px; padding: 8px 0; border-top: 1px solid var(--uv2-ln); font-size: 12.5px; }
+:is(#createUserModal, #editModal).uav2 .uv2-log li:first-child { border-top: 0; }
+:is(#createUserModal, #editModal).uav2 .uv2-log time { color: var(--uv2-mt); font-weight: 600; }
+:is(#createUserModal, #editModal).uav2 .uv2-log b { color: var(--uv2-tx); }
+:is(#createUserModal, #editModal).uav2 .uv2-log span { color: var(--uv2-mt); }
+:is(#createUserModal, #editModal).uav2 .uv2-empty { color: var(--uv2-mt); font-size: 12.5px; padding: 6px 0; }
+
+/* Web modules as levels (the Roles pop-up's None | View | Edit | Full | Custom) */
+:is(#createUserModal, #editModal).uav2 .uv2-lv { display: flex; flex-direction: column; gap: 8px; }
+:is(#createUserModal, #editModal).uav2 .uv2-lv-row { display: flex; align-items: center; gap: 14px; padding: 10px 14px; border: 1px solid var(--uv2-card-ln); border-radius: 12px; background: var(--uv2-bg); }
+:is(#createUserModal, #editModal).uav2 .uv2-lv-row > i { width: 32px; height: 32px; border-radius: 9px; display: inline-grid; place-items: center; background: var(--uv2-ac-soft); color: var(--uv2-ac); flex: none; }
+:is(#createUserModal, #editModal).uav2 .uv2-lv-row { flex-wrap: wrap; }
+:is(#createUserModal, #editModal).uav2 .uv2-lv-nm { flex: 1; min-width: 170px; }
+:is(#createUserModal, #editModal).uav2 .uv2-lv-nm b { display: block; font-size: 13.5px; color: var(--uv2-tx); }
+:is(#createUserModal, #editModal).uav2 .uv2-lv-nm span { display: block; font-size: 11.5px; color: var(--uv2-mt); margin-top: 1px; }
+:is(#createUserModal, #editModal).uav2 .uv2-diff { display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 9px; border-radius: 999px; border: 1px dashed var(--uv2-ac); color: var(--uv2-ac);
+    font-size: 11px; font-weight: 800; white-space: nowrap; flex: none; }
+:is(#createUserModal, #editModal).uav2 .uv2-seg { display: inline-flex; padding: 3px; border-radius: 10px; background: var(--uv2-bg2); gap: 3px; flex: none; }
+body.dark-mode :is(#createUserModal, #editModal).uav2 .uv2-seg { background: rgba(255, 255, 255, .05); }
+:is(#createUserModal, #editModal).uav2 .uv2-seg button { height: 30px; min-width: 56px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; font-weight: 700; font-size: 12.5px; line-height: 1; font-family: inherit;
+    color: var(--uv2-mt); cursor: pointer; }
+:is(#createUserModal, #editModal).uav2 .uv2-seg button:hover { color: var(--uv2-ac); }
+:is(#createUserModal, #editModal).uav2 .uv2-seg button.on { background: #1a4c7b; color: #fff; box-shadow: 0 2px 8px rgba(26, 76, 123, .25); }
+:is(#createUserModal, #editModal).uav2 .uv2-note { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; margin-bottom: 12px; border-radius: 10px; background: var(--uv2-ac-soft); color: var(--uv2-tx2);
+    font-size: 12.5px; line-height: 1.5; }
+:is(#createUserModal, #editModal).uav2 .uv2-note > i { color: var(--uv2-ac); margin-top: 2px; }
+:is(#createUserModal, #editModal).uav2 .uv2-note.uv2-mt { margin: 12px 0 0; }
+:is(#createUserModal, #editModal).uav2 .uv2-note .uv2-link { margin-left: auto; white-space: nowrap; }
+
+/* Data scope: "Sees what" cards */
+:is(#createUserModal, #editModal).uav2 .uv2-sees { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+:is(#createUserModal, #editModal).uav2 .uv2-sees button { text-align: left; padding: 14px 16px; border: 1px solid var(--uv2-card-ln); border-radius: 12px; background: var(--uv2-bg); cursor: pointer; font-family: inherit;
+    color: var(--uv2-tx2); transition: border-color .15s, box-shadow .15s; }
+:is(#createUserModal, #editModal).uav2 .uv2-sees button b { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--uv2-tx); margin-bottom: 4px; }
+:is(#createUserModal, #editModal).uav2 .uv2-sees button b i { color: var(--uv2-ac); }
+:is(#createUserModal, #editModal).uav2 .uv2-sees button span { font-size: 12px; line-height: 1.45; color: var(--uv2-mt); }
+:is(#createUserModal, #editModal).uav2 .uv2-sees button:hover { border-color: var(--uv2-on); }
+:is(#createUserModal, #editModal).uav2 .uv2-sees button.on { border-color: #1a4c7b; box-shadow: 0 0 0 3px rgba(26, 76, 123, .12); }
+:is(#createUserModal, #editModal).uav2 .uv2-sees button:disabled { opacity: .5; cursor: default; }
+:is(#createUserModal, #editModal).uav2 .uv2-q { display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 12px; margin-bottom: 12px; border-radius: 10px; background: var(--uv2-bg); color: #64748b;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, .06), 0 4px 14px rgba(15, 23, 42, .08); }
+:is(#createUserModal, #editModal).uav2 .uv2-q input { flex: 1; min-width: 0; border: 0; outline: none; background: transparent; color: var(--uv2-tx); font-weight: 600; font-size: 13px; line-height: 1; font-family: inherit; }
+
+/* review before saving */
+.uv2-rev { position: fixed; inset: 0; z-index: 4000; display: grid; place-items: center; padding: 16px; background: rgba(15, 23, 42, .45); backdrop-filter: blur(3px); font-family: 'Nunito', system-ui, 'Segoe UI', sans-serif; }
+.uv2-rev-box { width: min(620px, 100%); max-height: min(720px, 90vh); display: flex; flex-direction: column; background: #fff; color: #0f172a; border-radius: 16px; box-shadow: 0 30px 90px rgba(15, 23, 42, .4); overflow: hidden; }
+body.dark-mode .uv2-rev-box { background: #1a212c; color: #f1f5f9; border: 1px solid rgba(255, 255, 255, .08); }
+.uv2-rev-box h3 { margin: 0; padding: 18px 22px 12px; font-size: 16px; font-weight: 800; }
+.uv2-rev-box h3 small { display: block; font-size: 12.5px; font-weight: 600; color: #64748b; margin-top: 3px; }
+.uv2-rev-warn { margin: 0 22px 12px; padding: 10px 12px; border: 1px solid #1a4c7b; border-radius: 10px; font-size: 12.5px; font-weight: 800; color: #1a4c7b; }
+body.dark-mode .uv2-rev-warn { color: #93c5fd; border-color: rgba(147, 197, 253, .45); }
+.uv2-rev-list { flex: 1; overflow-y: auto; padding: 0 22px; }
+.uv2-rev-list div { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 12px; padding: 9px 0; border-top: 1px solid #e2e8f0; font-size: 13px; }
+body.dark-mode .uv2-rev-list div { border-color: rgba(255, 255, 255, .08); }
+.uv2-rev-list b { font-weight: 800; }
+.uv2-rev-list s { color: #94a3b8; }
+.uv2-rev-list em { font-style: normal; font-weight: 800; color: #1a4c7b; }
+body.dark-mode .uv2-rev-list em { color: #93c5fd; }
+.uv2-rev-ft { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 22px; border-top: 1px solid #e2e8f0; }
+body.dark-mode .uv2-rev-ft { border-color: rgba(255, 255, 255, .08); }
+.uv2-rev-ft button { height: 38px; padding: 0 18px; border-radius: 10px; border: 1px solid #e2e8f0; background: #fff; color: #334155; font-weight: 800; font-size: 13px; line-height: 1; font-family: inherit; cursor: pointer; }
+.uv2-rev-ft button.uv2-pri { background: #1a4c7b; border-color: #1a4c7b; color: #fff; }
+body.dark-mode .uv2-rev-ft button:not(.uv2-pri) { background: #151b24; color: #cbd5e1; border-color: rgba(255, 255, 255, .1); }
+
+/* narrow screens: menu on top, one column */
+@media (max-width: 860px) {
+    :is(#createUserModal, #editModal).uav2 { padding: 0; }
+    :is(#createUserModal, #editModal).uav2 > form { width: 100vw; height: 100vh; border-radius: 0; }
+    :is(#createUserModal, #editModal).uav2 .uv2-top { flex-wrap: wrap; padding: 12px 14px; }
+    :is(#createUserModal, #editModal).uav2 > form > .info-modal-body { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+    :is(#createUserModal, #editModal).uav2 .uv2-nav { flex-direction: row; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--uv2-ln); padding: 8px; }
+    :is(#createUserModal, #editModal).uav2 .uv2-nav button { width: auto; white-space: nowrap; }
+    :is(#createUserModal, #editModal).uav2 .uv2-hint { display: none; }
+    :is(#createUserModal, #editModal).uav2 .uv2-scroll { grid-row: 2; grid-column: 1; padding: 14px; }
+    :is(#createUserModal, #editModal).uav2 :is(.uv2-sec, .uv2-sec-g, .uv2-ov, .uv2-sees, #scopeTreesWrapper) { grid-template-columns: minmax(0, 1fr); }
+    :is(#createUserModal, #editModal).uav2 .uv2-lv-row { flex-wrap: wrap; }
+}

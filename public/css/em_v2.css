@@ -1,0 +1,740 @@
+/* =====================================================================
+   em_v2.css - EMPLOYEE MASTER: the NEW employee profile pop-up (em_profile_v2.js) and the Settings pop-up
+   (em_settings.js).                                                                        (web) 2026-11-19
+   Everything for the profile is under :is(#editEmpModal, #createEmpModal).emp2 (2026-11-20: Create New Employee too) - that class is only added when Settings > "New employee
+   profile pop-up" is ON, so with the switch off this file changes nothing on the page. No !important.
+   v2 (19 Nov): the T&A pop-up look - the old Company Settings pop-up tokens (#tcsPop, pop-up removed 23 Nov): white
+   card, #f7f9fb side menu, #e6e6e6 page behind the white sections, navy #1a4c7b; dark mode slate #1a212c / #151b24.
+   Near full screen (12 px margin), header card, Overview cards, view first (fields read like text) then Edit.
+   ===================================================================== */
+:root { --ep2-ac: #1a4c7b; --ep2-ac-soft: rgba(26, 76, 123, .08); --ep2-bg: #ffffff; --ep2-bg2: #f7f9fb; --ep2-page: #ffffff;   /* user 19 Nov: white behind the sections, no grey */ --ep2-ln: #e2e8f0; --ep2-tx: #0f172a;
+        --ep2-tx2: #334155; --ep2-mt: #64748b; --ep2-on: #c6d6e8; --ep2-hover: rgba(26, 76, 123, .07); --ep2-err: #dc2626; --ep2-err-soft: #fef2f2; --ep2-warn: #8a5a00;
+        --ep2-sh: 0 30px 90px rgba(15, 23, 42, .4);
+        --ep2-card: #f9fafb; --ep2-card-ln: #e5e7eb; }   /* user 19 Nov: the cards a touch off-white (not cream) so they stand out on the white */
+body.dark-mode { --ep2-ac: #93c5fd; --ep2-ac-soft: rgba(147, 197, 253, .12); --ep2-bg: #1a212c; --ep2-bg2: #151b24; --ep2-page: #1a212c; --ep2-ln: rgba(255, 255, 255, .08);
+        --ep2-tx: #f1f5f9; --ep2-tx2: #cbd5e1; --ep2-mt: #94a3b8; --ep2-on: rgba(255, 255, 255, .12); --ep2-hover: rgba(148, 163, 184, .12); --ep2-err: #f87171;
+        --ep2-err-soft: rgba(248, 113, 113, .12); --ep2-warn: #e7b65a; --ep2-sh: 0 30px 90px rgba(0, 0, 0, .6);
+        --ep2-card: #20262f; --ep2-card-ln: rgba(255, 255, 255, .1); }
+
+/* ---------- the window: big, centred (user 19 Nov: "a bit smaller" than edge to edge) ---------- */
+:is(#editEmpModal, #createEmpModal).emp2 { padding: 12px; }
+:is(#editEmpModal, #createEmpModal).emp2 :is(#editEmpForm, #createEmpForm) { width: min(1480px, 92vw); height: min(940px, 90vh); max-width: none; max-height: none; min-width: 0; resize: none; display: flex; flex-direction: column;
+    background: var(--ep2-bg); color: var(--ep2-tx); border-radius: 18px; box-shadow: var(--ep2-sh); overflow: hidden; padding: 0;
+    font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif; }
+body.dark-mode :is(#editEmpModal, #createEmpModal).emp2 :is(#editEmpForm, #createEmpForm) { border: 1px solid var(--ep2-ln); }
+:is(#editEmpModal, #createEmpModal).emp2 :is(#editEmpForm, #createEmpForm) > .info-modal-header,
+:is(#editEmpModal, #createEmpModal).emp2 :is(#editEmpForm, #createEmpForm) > .info-modal-footer,
+:is(#editEmpModal, #createEmpModal).emp2 .edit-tab-nav { display: none; }
+
+/* ---------- the action buttons: a slim bar over the section (v3, user 19 Nov: no header card) ---------- */
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 480px) minmax(0, 1fr); align-items: center; gap: 16px; padding: 12px 28px;
+    border-bottom: 1px solid var(--ep2-ln); background: var(--ep2-bg); flex-shrink: 0; position: relative; z-index: 5; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-top > .ep2-acts { grid-column: 3; justify-self: end; }
+/* the field search: the look of the app's own top-bar search (tna_topbar.js .tnb-sbox), in the middle (user 19 Nov) */
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-tsearch { grid-column: 2; position: relative; width: 100%; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-tsearch > i { left: 14px; color: var(--ep2-mt); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-tsearch #editEmpFieldSearch { width: 100%; height: 44px; box-sizing: border-box; border-radius: 10px; border: 1px solid var(--ep2-ln); background: var(--ep2-bg);
+    padding: 0 70px 0 40px; font-size: 14px; color: var(--ep2-tx); box-shadow: none; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-tsearch #editEmpFieldSearch:hover { border-color: #cbd5e1; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-tsearch #editEmpFieldSearch:focus { border-color: #1a4c7b; box-shadow: 0 0 0 3px var(--ep2-hover); }
+body.dark-mode :is(#editEmpModal, #createEmpModal).emp2 .ep2-tsearch #editEmpFieldSearch:focus { border-color: #5b8fc7; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-tsearch #editEmpFieldSearch::placeholder { color: var(--ep2-mt); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-tkbd { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 11px; font-weight: 700; color: var(--ep2-mt);
+    border: 1px solid var(--ep2-ln); border-radius: 6px; padding: 3px 6px; white-space: nowrap; pointer-events: none; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-acts { display: flex; align-items: center; gap: 8px; }
+/* the person at the top of the side menu: photo, name, PIN */
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-me { display: flex; align-items: center; gap: 12px; padding: 2px 4px 16px; flex-shrink: 0; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-me .profile-menu-container > div:first-child { box-shadow: 0 0 0 3px var(--ep2-ac-soft); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-me #editEmpPhotoPlaceholder i { font-size: 22px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-me #editEmpPhotoInitials { font-size: 19px; }
+/* 2026-11-20 Create New Employee (em_profile_v2.js makeV2('create')): no photo yet - the initials of the name typed; the title sits
+   where the Edit pop-up has its field search */
+#createEmpModal.emp2 .ep2-ini { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--ep2-ac-soft); color: var(--ep2-ac);
+    font-size: 19px; font-weight: 900; box-shadow: 0 0 0 3px var(--ep2-ac-soft); }
+#createEmpModal.emp2 .ep2-ini i { font-size: 20px; }
+#createEmpModal.emp2 .ep2-ttl { grid-column: 1 / 3; display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 900; color: var(--ep2-ac); white-space: nowrap; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-who { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-who b { font-size: 15.5px; font-weight: 900; line-height: 1.25; color: var(--ep2-ac); overflow-wrap: anywhere; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-who span { font-size: 12.5px; font-weight: 700; color: var(--ep2-mt); }
+.ep2-btn { height: 38px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--ep2-ln); background: var(--ep2-bg); color: var(--ep2-tx); font-family: inherit;
+    font-weight: 800; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.ep2-btn:hover { background: var(--ep2-hover); }
+.ep2-btn.pri { background: #1a4c7b; border-color: #1a4c7b; color: #fff; }
+.ep2-btn.pri:hover { filter: brightness(1.1); }
+.ep2-btn.ghost { width: 38px; padding: 0; justify-content: center; color: var(--ep2-mt); }
+.ep2-btn:disabled { opacity: .45; cursor: default; filter: none; }
+.ep2-btn .ep2-n { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: rgba(255, 255, 255, .22); font-size: 11px; display: inline-flex; align-items: center; justify-content: center; }
+.ep2-btn.busy i { animation: ep2spin 1s linear infinite; }
+@keyframes ep2spin { to { transform: rotate(360deg); } }
+.ep2-x { width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--ep2-ln); background: var(--ep2-bg); color: var(--ep2-mt); cursor: pointer; font-size: 15px; }
+.ep2-x:hover { background: var(--ep2-hover); color: var(--ep2-tx); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-more { position: relative; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-menu { position: absolute; right: 0; top: calc(100% + 6px); min-width: 220px; background: var(--ep2-bg); border: 1px solid var(--ep2-ln);
+    border-radius: 12px; box-shadow: 0 12px 32px rgba(15, 23, 42, .18); padding: 6px; z-index: 20; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-menu button { width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 10px; border: 0; background: transparent; font-family: inherit;
+    color: var(--ep2-tx); font-size: 13px; font-weight: 600; border-radius: 8px; cursor: pointer; text-align: left; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-menu button:hover { background: var(--ep2-hover); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-menu button i { width: 16px; color: var(--ep2-ac); }
+
+/* ---------- body: side menu + the section ---------- */
+:is(#editEmpModal, #createEmpModal).emp2 :is(#editEmpForm, #createEmpForm) > .info-modal-body { flex: 1; min-height: 0; display: grid; grid-template-columns: 270px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr);
+    padding: 0; overflow: hidden; max-height: none; gap: 0; background: var(--ep2-page); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-nav { grid-row: 1; grid-column: 1; display: flex; flex-direction: column; gap: 2px; padding: 20px 16px 18px; border-right: 1px solid var(--ep2-ln);
+    background: var(--ep2-bg2); overflow-y: auto; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-nav button { display: flex; align-items: center; gap: 11px; width: 100%; margin-bottom: 2px; padding: 11px 14px; border: 1px solid transparent; border-radius: 10px;
+    background: transparent; color: var(--ep2-tx2); font-weight: 600; font-size: 14px; font-family: inherit; cursor: pointer; text-align: left; position: relative; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-nav button i { width: 18px; text-align: center; color: var(--ep2-ac); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-nav button:hover { background: var(--ep2-hover); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-nav button.on { background: var(--ep2-bg); border-color: var(--ep2-on); box-shadow: 0 2px 10px rgba(15, 23, 42, .06); color: var(--ep2-ac); font-weight: 800; }
+body.dark-mode :is(#editEmpModal, #createEmpModal).emp2 .ep2-nav button.on { background: rgba(255, 255, 255, .08); color: #fff; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-nav .ep2-dot { margin-left: auto; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; font-size: 10.5px; font-weight: 800; font-style: normal;
+    display: inline-flex; align-items: center; justify-content: center; background: #1a4c7b; color: #fff; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-nav .ep2-dot.err { background: var(--ep2-err); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-nav .ep2-hint { margin-top: auto; padding: 14px 8px 0; font-size: 11.5px; color: var(--ep2-mt); line-height: 1.5; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-nav kbd { font: inherit; font-size: 10.5px; padding: 1px 5px; border: 1px solid var(--ep2-ln); border-radius: 4px; background: var(--ep2-bg); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-main { grid-row: 1; grid-column: 2; min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-scroll { flex: 1; min-height: 0; overflow-y: auto; padding: 22px 36px 48px; }
+:is(#editEmpModal, #createEmpModal).emp2 :is(.edit-tab-pane, .create-tab-pane) { background: var(--ep2-card); border: 1px solid var(--ep2-card-ln); border-radius: 14px; padding: 22px 26px 8px; box-shadow: 0 1px 3px rgba(15, 23, 42, .04); }
+
+/* ---------- view first: the fields read like text ---------- */
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view :is(.edit-tab-pane, .create-tab-pane) .form-control:disabled { background-color: transparent; background-image: none; border-color: transparent; box-shadow: none; padding-left: 0; padding-right: 0;
+    color: var(--ep2-tx); -webkit-text-fill-color: var(--ep2-tx); opacity: 1; cursor: default; font-weight: 700; }
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view :is(.edit-tab-pane, .create-tab-pane) select.form-control:disabled { appearance: none; -webkit-appearance: none; }
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view :is(.edit-tab-pane, .create-tab-pane) input:disabled::-webkit-calendar-picker-indicator { display: none; }
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view :is(.edit-tab-pane, .create-tab-pane) input[type="checkbox"]:disabled { opacity: 1; cursor: default; }
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view .ep2-blank > :not(label) { display: none; }
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view .ep2-blank::after { content: '\2014'; display: block; padding: 8px 0; color: var(--ep2-mt); font-weight: 700; }
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view .ep2-msg,
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view :is(.edit-tab-pane, .create-tab-pane) input[type="file"],
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view :is(.edit-tab-pane, .create-tab-pane) button[onclick^="addDynamicRow"],
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view :is(.edit-tab-pane, .create-tab-pane) button[onclick^="addContactRow"],
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view :is(.edit-tab-pane, .create-tab-pane) button[onclick^="addAddressRow"],
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view :is(.edit-tab-pane, .create-tab-pane) button[onclick^="cloneAddressRow"],
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view :is(.edit-tab-pane, .create-tab-pane) button[onclick^="copyResidentialToPostal"],
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view :is(.edit-tab-pane, .create-tab-pane) button[onclick*="closest('tr').remove()"],
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view #photoContextMenu a:not(:first-child),
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view #photoContextMenu .dropdown-divider { display: none; }
+
+/* ---------- settings-style sections (Personal; user 19 Nov "less strain on the eyes") ---------- */
+:root { --ep2-fill: #f1f4f8; }
+body.dark-mode { --ep2-fill: rgba(255, 255, 255, .05); }
+:is(#editEmpModal, #createEmpModal).emp2 :is(.edit-tab-pane, .create-tab-pane).ep2-flat { background: transparent; border: 0; box-shadow: none; padding: 0 4px 8px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs { max-width: 1100px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-sec { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 32px; padding: 26px 0; border-top: 1px solid var(--ep2-ln); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-sec:first-child { border-top: 0; padding-top: 6px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-sec-h b { display: block; font-size: 15px; font-weight: 800; color: var(--ep2-tx); margin-bottom: 4px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-sec-h span { display: block; font-size: 13px; line-height: 1.5; color: var(--ep2-mt); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-sec-g { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px 20px; align-content: start; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-sec-g.ep2-sec-list { display: block; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px 20px; }
+/* a group with a table: title + hint on one line above it, the table across the full width (user 19 Nov: "so crammed") */
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-sec.ep2-wide { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-sec.ep2-wide .ep2-sec-h { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-sec.ep2-wide .ep2-sec-h b { margin-bottom: 0; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .form-group { margin: 0; min-width: 0; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .form-group > label { color: var(--ep2-tx2); display: block; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .form-control { font-size: 14px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .form-control:not(:disabled) { background-color: var(--ep2-fill); border-color: transparent; border-radius: 10px; min-height: 42px; color: var(--ep2-tx); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .form-control:not(:disabled):hover { border-color: var(--ep2-ln); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .form-control:not(:disabled):focus { background-color: var(--ep2-bg); border-color: #1a4c7b; box-shadow: 0 0 0 3px var(--ep2-ac-soft); }
+body.dark-mode :is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .form-control:not(:disabled):focus { border-color: #5b8fc7; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .form-control.ep2-bad, :is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-bad + input.form-control { border-color: var(--ep2-err); box-shadow: 0 0 0 3px var(--ep2-err-soft); }
+/* blocks of the page's own form inside a group (lists, tables, old boxes): stacked with air between, quiet tables */
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-sec-g.ep2-sec-list > * + * { margin-top: 18px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .glass-table-container { background: transparent; border: 1px solid var(--ep2-ln); box-shadow: none; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .glass-table th { background: var(--ep2-bg2); color: var(--ep2-tx2); font-size: 11.5px; letter-spacing: .3px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .glass-table td { color: var(--ep2-tx); border-bottom-color: var(--ep2-ln); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-age { margin-top: 5px; font-size: 12px; font-weight: 600; color: var(--ep2-mt); }
+/* contacts as a list */
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-clist { background: transparent; border: 0; box-shadow: none; border-radius: 0; overflow: visible; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-clist table, :is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-clist tbody { display: block; width: 100%; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-clist thead { display: none; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-clist tbody tr { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--ep2-ln); background: transparent; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-clist tbody tr:first-child { padding-top: 0; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-clist tbody tr:hover { background: transparent; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-clist td { display: flex; align-items: center; gap: 12px; border: 0; color: var(--ep2-tx); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-clist td:nth-child(1) { flex: 0 0 230px; min-width: 0; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-clist td:nth-child(2) { flex: 1 1 auto; min-width: 0; flex-direction: column; align-items: stretch; gap: 0; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-clist td:nth-child(3) { flex: 0 0 auto; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-clist td[colspan] { flex: 1 1 auto; display: block; padding: 4px 0 10px; color: var(--ep2-mt); font-style: normal; font-size: 13px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-clist select.form-control:not(:disabled) { appearance: none; -webkit-appearance: none; cursor: pointer;
+    background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%2364748b%22%3E%3Cpath d=%22M7 10l5 5 5-5z%22/%3E%3C/svg%3E');
+    background-repeat: no-repeat; background-position: right 10px center; background-size: 22px; padding-right: 34px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-cic { width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%; background: var(--ep2-ac-soft); color: var(--ep2-ac); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; margin-top: 3px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-cdel { width: 36px; height: 36px; margin-top: 3px; border-radius: 10px; border: 1px solid transparent; background: transparent; color: var(--ep2-mt); cursor: pointer; font-size: 14px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-cdel:hover { color: var(--ep2-err); background: var(--ep2-err-soft); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-addc { margin-top: 12px; display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 10px; border: 1px dashed var(--ep2-on);
+    background: transparent; color: var(--ep2-ac); font-family: inherit; font-size: 13px; font-weight: 800; cursor: pointer; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-addc:hover { background: var(--ep2-hover); }
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view .ep2-cdel, :is(#editEmpModal, #createEmpModal).emp2.ep2-view .ep2-addc { display: none; }
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view .ep2-clist td:nth-child(1) { flex-basis: 200px; }
+@media (max-width: 1100px) {
+    :is(#editEmpModal, #createEmpModal).emp2 .ep2-sec { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+}
+@media (max-width: 760px) {
+    :is(#editEmpModal, #createEmpModal).emp2 .ep2-sec-g { grid-template-columns: minmax(0, 1fr); }
+    :is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-clist tbody tr { flex-wrap: wrap; }
+    :is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-clist td:nth-child(1) { flex-basis: 100%; }
+}
+
+/* ---------- phone country code picker (user 19 Nov) ---------- */
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-clist td.ep2-phone { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 8px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-clist td.ep2-phone > input[type="text"] { flex: 1 1 200px; min-width: 0; order: 2; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-clist td.ep2-phone > .ep2-cc { order: 1; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-clist td.ep2-phone > .ep2-msg { order: 3; flex-basis: 100%; margin-top: 0; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-cc { height: 42px; padding: 0 10px 0 12px; border-radius: 10px; border: 1px solid transparent; background: var(--ep2-fill); color: var(--ep2-tx);
+    display: inline-flex; align-items: center; gap: 6px; font-family: inherit; font-size: 13.5px; cursor: pointer; flex-shrink: 0; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-cc:hover { border-color: var(--ep2-ln); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-cc span { font-size: 11px; font-weight: 800; color: var(--ep2-mt); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-cc b { font-weight: 800; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-cc i { font-size: 11px; color: var(--ep2-mt); }
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view .ep2-cc { display: none; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-ccmenu .ep2-ccq { padding: 0 0 8px; margin-bottom: 4px; border-bottom: 1px solid var(--ep2-ln); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-ccmenu .ep2-ccq input { width: 100%; font-size: 14px; padding: 10px 12px 10px 34px; border-radius: 10px; min-height: 40px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-ccmenu .ep2-ccl { display: flex; flex-direction: column; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-ccmenu .dropdown-item { gap: 10px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-ccmenu .ep2-ccc { min-width: 50px; color: var(--ep2-ac); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-ccmenu .ep2-ccnone { padding: 10px 12px; color: var(--ep2-mt); font-size: 13px; }
+
+/* ---------- switches instead of tick boxes (user 19 Nov) ---------- */
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs input.ep2-sw { appearance: none; -webkit-appearance: none; width: 40px; height: 22px; margin: 0; border: 0; border-radius: 999px; background: #cbd5e1;
+    position: relative; flex-shrink: 0; cursor: pointer; transition: background .15s; }
+body.dark-mode :is(#editEmpModal, #createEmpModal).emp2 .ep2-secs input.ep2-sw { background: #475569; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs input.ep2-sw::before { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .3); transition: left .15s; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs input.ep2-sw:checked { background: #1a4c7b; }
+body.dark-mode :is(#editEmpModal, #createEmpModal).emp2 .ep2-secs input.ep2-sw:checked { background: #5b8fc7; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs input.ep2-sw:checked::before { left: 21px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs input.ep2-sw:focus-visible { outline: 2px solid #1a4c7b; outline-offset: 2px; }
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view .ep2-secs input.ep2-sw:disabled { cursor: default; opacity: 1; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs label:has(> input.ep2-sw) { color: var(--ep2-tx); cursor: pointer; }
+/* ---------- working days: one pill per day ---------- */
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-days > label { background: var(--ep2-fill); color: var(--ep2-tx2); border: 1px solid transparent; cursor: pointer; user-select: none; transition: background .15s, color .15s; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-days > label:hover { border-color: var(--ep2-ln); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-days > label:has(input:checked) { background: #1a4c7b; color: #fff; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-days > label:has(input:focus-visible) { outline: 2px solid #1a4c7b; outline-offset: 2px; }
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view .ep2-days > label { cursor: default; }
+/* ---------- Leave history: calm rows, leave type as a navy chip (no green / grey colours) ---------- */
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs #editEmpLeaveHistoryBody tr { border-color: var(--ep2-ln); background: transparent; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs #editEmpLeaveHistoryBody tr:hover { background: var(--ep2-hover); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs #editEmpLeaveHistoryBody td { padding: 12px 14px; font-size: 13.5px; color: var(--ep2-tx2); font-family: inherit; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs #editEmpLeaveHistoryBody td:first-child { font-weight: 700; color: var(--ep2-tx); white-space: nowrap; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs #editEmpLeaveHistoryBody span.rounded { display: inline-flex; align-items: center; padding: 4px 11px; border: 0; border-radius: 999px;
+    background: var(--ep2-ac-soft); color: var(--ep2-ac); font-size: 12px; font-weight: 700; text-transform: none; letter-spacing: 0; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs #editEmpLeaveHistoryBody a { color: var(--ep2-ac); font-weight: 700; text-decoration: none; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs #editEmpLeaveHistoryBody td[colspan] { color: var(--ep2-mt); font-style: normal; }
+
+/* ---------- attachments: a picture of each document (like the Farmers contract template cards) ---------- */
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-doc { display: flex; justify-content: center; align-items: flex-start; width: 100%; height: 200px; margin: 0 0 10px; padding: 14px 0 0; border: 0;
+    border-radius: 10px; background: #e8edf3; overflow: hidden; cursor: pointer; position: relative; font-family: inherit; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-doc::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 40px; background: linear-gradient(rgba(232, 237, 243, 0), #e8edf3); pointer-events: none; }
+body.dark-mode :is(#editEmpModal, #createEmpModal).emp2 .ep2-doc { background: #0b1220; }
+body.dark-mode :is(#editEmpModal, #createEmpModal).emp2 .ep2-doc::after { background: linear-gradient(rgba(11, 18, 32, 0), #0b1220); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-doc canvas { width: 150px; height: auto; background: #fff; box-shadow: 0 2px 10px rgba(0, 0, 0, .18); flex: none; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-doc img { max-width: 86%; max-height: 172px; object-fit: contain; background: #fff; box-shadow: 0 2px 10px rgba(0, 0, 0, .18); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-doc:hover canvas, :is(#editEmpModal, #createEmpModal).emp2 .ep2-doc:hover img { box-shadow: 0 6px 18px rgba(0, 0, 0, .25); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-doc-ph { align-self: center; display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: -14px; color: var(--ep2-mt); font-size: 12.5px; font-weight: 700; text-align: center; padding: 0 12px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-doc-ph i { font-size: 26px; color: #94a3b8; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-upl { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; height: 36px; border-radius: 10px; border: 1px solid var(--ep2-ln);
+    background: var(--ep2-bg); color: var(--ep2-ac); font-family: inherit; font-size: 13px; font-weight: 800; cursor: pointer; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-upl:hover { background: var(--ep2-hover); }
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view .ep2-upl { display: none; }
+
+/* ---------- drop-down lists (user 19 Nov: "modernize the drop-downs ... more spacious and better") ---------- */
+:is(#editEmpModal, #createEmpModal).emp2 .profile-dropdown-menu { background: var(--ep2-bg); border: 1px solid var(--ep2-ln); border-radius: 14px; padding: 6px; min-width: 220px;
+    box-shadow: 0 18px 44px rgba(15, 23, 42, .18); }
+body.dark-mode :is(#editEmpModal, #createEmpModal).emp2 .profile-dropdown-menu { background: var(--ep2-bg); border-color: var(--ep2-ln); box-shadow: 0 18px 44px rgba(0, 0, 0, .55); }
+:is(#editEmpModal, #createEmpModal).emp2 .profile-dropdown-menu .dropdown-item { padding: 10px 12px; border-radius: 9px; font-size: 14px; font-weight: 600; line-height: 1.3; color: var(--ep2-tx2); flex-shrink: 0; }
+:is(#editEmpModal, #createEmpModal).emp2 .profile-dropdown-menu .dropdown-item:hover,
+:is(#editEmpModal, #createEmpModal).emp2 .profile-dropdown-menu .dropdown-item.active { background: var(--ep2-hover); color: var(--ep2-ac); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-msearch { background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22 fill=%22%2394a3b8%22%3E%3Cpath d=%22M505 442.7 405.3 343c28.4-34.9 45.5-79.4 45.5-127.9C450.8 96.5 354.3 0 235.4 0S20 96.5 20 215.1s96.5 215.1 215.4 215.1c48.5 0 93-17.1 127.9-45.5L462.9 484c5.7 5.7 13.3 8.8 21 8.8s15.3-2.9 21-8.8c11.7-11.6 11.7-30.5.1-41.3zM235.4 370.4c-85.6 0-155.3-69.7-155.3-155.3S149.8 59.8 235.4 59.8s155.3 69.7 155.3 155.3-69.7 155.3-155.3 155.3z%22/%3E%3C/svg%3E');
+    background-repeat: no-repeat; background-position: 12px center; background-size: 14px; }
+
+/* ---------- Title drop-down (the Title box with the built-in titles) ---------- */
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-titlebox:not(:disabled) { background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%2364748b%22%3E%3Cpath d=%22M7 10l5 5 5-5z%22/%3E%3C/svg%3E');
+    background-repeat: no-repeat; background-position: right 10px center; background-size: 24px; padding-right: 34px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-tmenu .dropdown-item.active { background: var(--ep2-hover); color: var(--ep2-ac); }
+
+/* ---------- checks as you type ---------- */
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-bad, :is(#editEmpModal, #createEmpModal).emp2 .ep2-bad + input[type="text"] { border-color: var(--ep2-err); box-shadow: 0 0 0 3px var(--ep2-err-soft); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-msg { display: flex; gap: 6px; align-items: flex-start; font-size: 11.5px; font-weight: 600; line-height: 1.4; margin-top: 5px; color: var(--ep2-err); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-msg.warn { color: var(--ep2-warn); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-flash { animation: ep2flash 1.6s ease; border-radius: 8px; }
+@keyframes ep2flash { 0%, 40% { box-shadow: 0 0 0 4px var(--ep2-ac-soft); background-color: var(--ep2-ac-soft); } 100% { box-shadow: none; } }
+
+/* ---------- small sheets: review before saving, discard changes ---------- */
+.ep2-dlg-back { position: fixed; inset: 0; z-index: 400; background: rgba(15, 23, 42, .5); display: flex; align-items: center; justify-content: center; padding: 16px; }
+.ep2-dlg { width: min(560px, 100%); max-height: 86vh; display: flex; flex-direction: column; background: var(--ep2-bg); color: var(--ep2-tx); border-radius: 16px;
+    box-shadow: var(--ep2-sh); overflow: hidden; font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif; }
+body.dark-mode .ep2-dlg { border: 1px solid var(--ep2-ln); }
+.ep2-dlg h3 { margin: 0; padding: 18px 20px 4px; font-size: 17px; font-weight: 900; color: var(--ep2-ac); }
+.ep2-dlg .ep2-sub { padding: 0 20px 12px; font-size: 13px; color: var(--ep2-mt); border-bottom: 1px solid var(--ep2-ln); }
+.ep2-dlg .ep2-list { overflow-y: auto; padding: 8px 20px 14px; }
+.ep2-dlg .ep2-grp { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ep2-mt); margin: 12px 0 6px; }
+.ep2-dlg .ep2-ch { display: grid; grid-template-columns: minmax(120px, 34%) 1fr; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--ep2-ln); font-size: 13px; }
+.ep2-dlg .ep2-ch b { font-weight: 700; overflow-wrap: anywhere; }
+.ep2-dlg .ep2-ch span { color: var(--ep2-mt); overflow-wrap: anywhere; }
+.ep2-dlg .ep2-ch span ins { text-decoration: none; color: var(--ep2-tx); font-weight: 700; }
+.ep2-dlg .ep2-ch.big b::after { content: ' \2022'; color: var(--ep2-ac); }
+.ep2-dlg .ep2-warns { margin: 12px 0 0; padding: 10px 12px; border-radius: 10px; background: var(--ep2-bg2); font-size: 12.5px; color: var(--ep2-warn); line-height: 1.5; }
+.ep2-dlg .ep2-foot { display: flex; justify-content: flex-end; gap: 8px; padding: 14px 20px; border-top: 1px solid var(--ep2-ln); }
+.ep2-toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 450; background: #0f172a; color: #fff; padding: 10px 16px; border-radius: 10px;
+    font-size: 13px; font-weight: 600; box-shadow: 0 8px 24px rgba(0, 0, 0, .3); max-width: min(520px, 92vw); }
+
+/* ---------- photo: View (large, in the app) and Crop (EmployeeMaster.html viewFullProfilePhoto / openPhotoCropper) ---------- */
+.emph-back { position: fixed; inset: 0; z-index: 500; background: rgba(15, 23, 42, .72); display: flex; align-items: center; justify-content: center; padding: 16px; }
+.emph-view { max-width: min(900px, 94vw); max-height: 92vh; display: flex; flex-direction: column; gap: 10px; }
+.emph-view img { max-width: 100%; max-height: calc(92vh - 60px); object-fit: contain; border-radius: 14px; background: #fff; box-shadow: 0 30px 80px rgba(0, 0, 0, .5); }
+.emph-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #fff; font-weight: 800; font-size: 15px; font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif; }
+.emph-x { width: 38px; height: 38px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, .3); background: rgba(255, 255, 255, .12); color: #fff; cursor: pointer; font-size: 15px; }
+.emph-crop { width: min(440px, 94vw); display: flex; flex-direction: column; gap: 14px; padding: 18px 20px; border-radius: 18px; background: var(--ep2-bg); color: var(--ep2-tx);
+    box-shadow: var(--ep2-sh); font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif; }
+body.dark-mode .emph-crop { border: 1px solid var(--ep2-ln); }
+.emph-crop .emph-bar { color: var(--ep2-ac); font-size: 17px; font-weight: 900; }
+.emph-crop .emph-x { border-color: var(--ep2-ln); background: var(--ep2-bg); color: var(--ep2-mt); }
+.emph-stage { display: flex; justify-content: center; }
+.emph-stage canvas { width: 360px; max-width: 100%; height: auto; border-radius: 14px; background: #0f172a; cursor: grab; touch-action: none; }
+.emph-tools { display: flex; align-items: center; gap: 10px; color: var(--ep2-mt); }
+.emph-tools input { flex: 1; accent-color: #1a4c7b; }
+.emph-hint { font-size: 12.5px; color: var(--ep2-mt); text-align: center; }
+.emph-foot { display: flex; justify-content: flex-end; gap: 8px; }
+.emph-btn { height: 38px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--ep2-ln); background: var(--ep2-bg); color: var(--ep2-tx); font-family: inherit; font-weight: 800; font-size: 13px;
+    cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+.emph-btn:hover { background: var(--ep2-hover); }
+.emph-btn.pri { background: #1a4c7b; border-color: #1a4c7b; color: #fff; }
+
+/* ---------- Employee Master Settings pop-up (em_settings.js) ----------
+   2026-11-20 (user: "make the employee settings popup as big as the popup for time and attendance settings ... and have a
+   search bar like time and attendance settings"): the T&A Settings pop-up's size and layout (tna_settings_popup.js) - window
+   min(1440px) x min(960px), 300px menu with "Search settings" (or press /) on top, roomy content, the same open effect. */
+.emset-back { position: fixed; inset: 0; z-index: 300; background: rgba(15, 23, 42, .45); display: flex; align-items: center; justify-content: center; padding: 28px;
+    backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); animation: emsetFade .2s ease-out both; }
+.emset-win { width: min(1440px, 100%); height: min(960px, 100%); display: flex; flex-direction: column; background: var(--ep2-bg); color: var(--ep2-tx);
+    border: 1px solid var(--ep2-ln); border-radius: 20px; box-shadow: 0 30px 60px -18px rgba(15, 23, 42, .45); overflow: hidden;
+    animation: emsetPop .28s cubic-bezier(.16, 1, .3, 1) both; transform-origin: 50% 40%; }
+@keyframes emsetFade { from { background-color: rgba(15, 23, 42, 0); backdrop-filter: blur(0); -webkit-backdrop-filter: blur(0); } }
+@keyframes emsetPop { from { opacity: 0; transform: translateY(14px) scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes emsetPopFade { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .emset-win { animation-name: emsetPopFade; } }
+.emset-head { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 20px 26px 20px 32px; border-bottom: 1px solid var(--ep2-ln); }
+.emset-title { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.emset-title > i { color: var(--ep2-ac); font-size: 18px; }
+.emset-title b { display: block; font-size: 20px; font-weight: 900; color: var(--ep2-ac); line-height: 1.2; }
+.emset-title small { display: block; margin-top: 2px; font-size: 13px; font-weight: 600; color: var(--ep2-mt); }
+.emset-body { flex: 1; min-height: 0; display: grid; grid-template-columns: 300px minmax(0, 1fr); }
+.emset-nav { padding: 24px 18px 32px; border-right: 1px solid var(--ep2-ln); display: flex; flex-direction: column; gap: 4px; background: var(--ep2-bg2); overflow-y: auto; }
+.emset-nav button { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border: 1px solid transparent; border-radius: 10px; background: transparent; color: var(--ep2-tx2);
+    font-weight: 600; font-size: 14px; cursor: pointer; text-align: left; font-family: inherit; }
+.emset-nav button i { width: 18px; text-align: center; color: var(--ep2-ac); }
+.emset-nav button:hover { background: var(--ep2-hover); }
+.emset-nav button.on { background: var(--ep2-bg); border-color: var(--ep2-on); color: var(--ep2-ac); font-weight: 800; box-shadow: 0 2px 10px rgba(15, 23, 42, .06); }
+.emset-navh { margin: 18px 14px 6px; font-size: 10.5px; font-weight: 900; letter-spacing: .8px; text-transform: uppercase; color: var(--ep2-mt); }
+/* "Search settings" (or press /) - the T&A Settings search box */
+.emset-search { position: relative; margin-bottom: 16px; }
+.emset-search .box { display: flex; align-items: center; gap: 8px; background: var(--ep2-bg); border: 1px solid #cbd5e1; border-radius: 999px; padding: 10px 16px; color: #94a3b8; }
+.emset-search input { flex: 1; border: 0; background: none; outline: none; min-width: 0; font-size: 13px; color: var(--ep2-tx); padding: 0; box-shadow: none; font-family: inherit; }
+.emset-search kbd { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 11px; border: 1px solid #cbd5e1; border-radius: 5px; padding: 0 5px; color: #64748b; background: var(--ep2-bg); }
+.emset-results { position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 5; background: var(--ep2-bg); border: 1px solid var(--ep2-ln); border-radius: 12px;
+    box-shadow: 0 18px 40px -12px rgba(15, 23, 42, .35); padding: 6px; max-height: 330px; overflow: auto; }
+.emset-results button { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; width: 100%; text-align: left; border: 0; background: none; border-radius: 8px; padding: 8px 10px;
+    cursor: pointer; font-size: 13px; font-weight: 600; color: var(--ep2-tx); box-shadow: none; }
+.emset-results button i { display: none; }
+.emset-results button:hover, .emset-results button.on { background: var(--ep2-ac-soft); }
+.emset-results small { color: var(--ep2-mt); font-size: 11.5px; font-weight: 600; }
+.emset-results p { padding: 10px; color: var(--ep2-mt); font-size: 12.5px; margin: 0; }
+body.dark-mode .emset-search .box, body.dark-mode .emset-search kbd { border-color: rgba(255, 255, 255, .12); background: rgba(255, 255, 255, .06); }
+.emset-flash { animation: emsetFlash 1.8s ease-out; border-radius: 14px; }
+@keyframes emsetFlash { 0%, 70% { box-shadow: 0 0 0 3px rgba(26, 76, 123, .55); } 100% { box-shadow: 0 0 0 3px transparent; } }
+.emset-main { padding: 40px 56px 80px; overflow-y: auto; background: var(--ep2-page); }
+.emset-main h3 { margin: 0 0 6px; font-size: 26px; font-weight: 900; color: var(--ep2-tx); }
+.emset-main > p { margin: 0 0 24px; font-size: 14px; color: var(--ep2-mt); max-width: 760px; line-height: 1.5; }
+.emset-card { background: var(--ep2-bg); border: 1px solid var(--ep2-ln); border-radius: 14px; }
+.emset-row { display: flex; align-items: center; gap: 18px; padding: 16px 18px; }
+.emset-row b { display: block; font-size: 14px; margin-bottom: 4px; }
+.emset-row span { display: block; font-size: 12.5px; color: var(--ep2-mt); line-height: 1.5; }
+.emset-note { margin-top: 12px; font-size: 12.5px; color: var(--ep2-mt); min-height: 18px; }
+.emset-note.err { color: var(--ep2-err); }
+.ep2-switch { flex-shrink: 0; width: 46px; height: 26px; border-radius: 999px; border: 0; background: #cbd5e1; position: relative; cursor: pointer; transition: background .15s; }
+body.dark-mode .ep2-switch { background: #475569; }
+.ep2-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, .3); transition: left .15s; }
+.ep2-switch[aria-checked="true"] { background: #1a4c7b; }
+.ep2-switch[aria-checked="true"]::after { left: 23px; }
+.ep2-switch:disabled { opacity: .5; cursor: default; }
+
+/* ---------- smaller screens ---------- */
+@media (max-width: 960px) {
+    :is(#editEmpModal, #createEmpModal).emp2 :is(#editEmpForm, #createEmpForm) > .info-modal-body { grid-template-columns: 220px minmax(0, 1fr); }
+    :is(#editEmpModal, #createEmpModal).emp2 .ep2-scroll { padding-left: 20px; padding-right: 20px; }
+}
+@media (max-width: 760px), (max-height: 560px) {
+    :is(#editEmpModal, #createEmpModal).emp2 { padding: 0; }
+    :is(#editEmpModal, #createEmpModal).emp2 :is(#editEmpForm, #createEmpForm) { width: 100%; height: 100%; border-radius: 0; }
+}
+@media (max-width: 760px) {
+    :is(#editEmpModal, #createEmpModal).emp2 .ep2-top { padding: 10px 12px; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+    :is(#editEmpModal, #createEmpModal).emp2 .ep2-tsearch { grid-column: 1; }
+    :is(#editEmpModal, #createEmpModal).emp2 .ep2-top > .ep2-acts { grid-column: 2; }
+    :is(#editEmpModal, #createEmpModal).emp2 .ep2-tkbd { display: none; }
+    :is(#editEmpModal, #createEmpModal).emp2 .ep2-me { padding: 0 8px 0 0; }
+    :is(#editEmpModal, #createEmpModal).emp2 :is(#editEmpForm, #createEmpForm) > .info-modal-body { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
+    :is(#editEmpModal, #createEmpModal).emp2 .ep2-nav { grid-row: 1; flex-direction: row; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--ep2-ln); padding: 8px; }
+    :is(#editEmpModal, #createEmpModal).emp2 .ep2-nav button { width: auto; white-space: nowrap; margin: 0; }
+    :is(#editEmpModal, #createEmpModal).emp2 .ep2-nav .ep2-hint { display: none; }
+    :is(#editEmpModal, #createEmpModal).emp2 .ep2-main { grid-row: 2; grid-column: 1; }
+    :is(#editEmpModal, #createEmpModal).emp2 .ep2-scroll { padding: 14px 12px 32px; }
+    :is(#editEmpModal, #createEmpModal).emp2 :is(.edit-tab-pane, .create-tab-pane) { padding: 16px; }
+    .emset-back { padding: 12px; }
+    .emset-body { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
+    .emset-nav { flex-direction: row; flex-wrap: wrap; padding: 12px; border-right: 0; border-bottom: 1px solid var(--ep2-ln); max-height: 40vh; }
+    .emset-nav .emset-search { flex: 1 1 100%; margin-bottom: 6px; }
+    .emset-navh { flex: 1 1 100%; margin: 6px 4px 0; }
+    .emset-main { padding: 20px 16px 40px; }
+    .emset-head { padding: 14px 16px; }
+}
+@media (prefers-reduced-motion: reduce) { .ep2-switch, .ep2-switch::after { transition: none; } .ep2-btn.busy i, :is(#editEmpModal, #createEmpModal).emp2 .ep2-flash { animation: none; } }
+
+/* ---------- Active Personnel: multi-pick department filter (employeemaster.js empDeptPicker; the T&A dashboard's department
+   pop-up look, tna_dashboard_v2.css .dv2-pop-dept, copied under its own names) ---------- */
+.emdp-btn { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left; cursor: pointer; font-family: inherit; }
+.emdp-btn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.emdp-btn i { font-size: 15px; color: #64748b; flex-shrink: 0; margin-right: 3px; }
+.emdp-btn.on { border-color: #1a4c7b; color: #1a4c7b; font-weight: 700; }
+body.dark-mode .emdp-btn.on { border-color: #93c5fd; color: #93c5fd; }
+.emdp { position: fixed; z-index: 3500; width: 300px; max-width: calc(100vw - 16px); background: #fff; color: #0f172a; border: 1px solid #e2e8f0; border-radius: 16px;
+    box-shadow: 0 24px 50px rgba(15, 23, 42, .2); padding: 10px; font-size: 12.5px; font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif; }
+.emdp-search { display: flex; align-items: center; gap: 8px; border: 1px solid #e2e8f0; border-radius: 10px; padding: 0 10px; margin-bottom: 6px; color: #94a3b8; }
+.emdp-search:focus-within { border-color: #1a4c7b; box-shadow: 0 0 0 3px rgba(26, 76, 123, .12); }
+.emdp-search input { border: 0; outline: none; height: 36px; flex: 1; min-width: 0; background: transparent; color: inherit; font-size: 12.5px; box-shadow: none; font-family: inherit; }
+.emdp-all { display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%; border: 0; background: transparent; padding: 8px 10px; border-radius: 9px;
+    cursor: pointer; text-align: left; font-weight: 700; color: #334155; font-size: 12.5px; font-family: inherit; }
+.emdp-all span { display: flex; align-items: center; gap: 8px; }
+.emdp-all span i { color: #1a4c7b; }
+.emdp-all > .fa-check { color: #1a4c7b; visibility: hidden; }
+.emdp-all:hover { background: #f1f5f9; }
+.emdp-all.on { background: rgba(26, 76, 123, .09); color: #1a4c7b; }
+.emdp-all.on > .fa-check { visibility: visible; }
+.emdp-list { max-height: 290px; overflow: auto; margin-top: 4px; }
+.emdp-dk { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 9px; cursor: pointer; font-weight: 600; margin: 0; color: #334155; }
+.emdp-dk:hover { background: #f1f5f9; }
+.emdp-dk input { width: 16px; height: 16px; accent-color: #1a4c7b; margin: 0; flex-shrink: 0; }
+.emdp-none { padding: 14px; color: #64748b; text-align: center; }
+.emdp-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 4px 2px; margin-top: 8px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #64748b; }
+.emdp-btns { display: flex; gap: 6px; }
+.emdp-ok { background: #1a4c7b; color: #fff; border: 0; border-radius: 9px; padding: 8px 16px; font-weight: 800; cursor: pointer; font-size: 12px; font-family: inherit; }
+.emdp-ok:hover { background: #143f68; }
+.emdp-ghost { background: #f1f5f9; color: #334155; border: 0; border-radius: 9px; padding: 8px 12px; font-weight: 800; cursor: pointer; font-size: 12px; font-family: inherit; }
+body.dark-mode .emdp { background: #1e293b; color: #e2e8f0; border-color: #334155; box-shadow: 0 20px 50px rgba(0, 0, 0, .5); }
+body.dark-mode .emdp-search, body.dark-mode .emdp-foot { border-color: #334155; }
+body.dark-mode .emdp-all, body.dark-mode .emdp-dk { color: #e2e8f0; }
+body.dark-mode .emdp-all:hover, body.dark-mode .emdp-dk:hover { background: #0f172a; }
+body.dark-mode .emdp-all.on { background: rgba(147, 197, 253, .12); color: #93c5fd; }
+body.dark-mode .emdp-all span i, body.dark-mode .emdp-all > .fa-check { color: #93c5fd; }
+body.dark-mode .emdp-ghost { background: #0f172a; color: #93c5fd; }
+
+/* ---------- Addresses: search first (OpenStreetMap), Enter it myself below (em_profile_v2.js addrSearchInto) ---------- */
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-asrch { position: relative; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-asrch-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-aseg { display: inline-flex; padding: 3px; border-radius: 10px; background: var(--ep2-fill); flex-shrink: 0; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-aseg button { border: 0; background: transparent; padding: 8px 14px; border-radius: 8px; font-family: inherit; font-size: 13px; font-weight: 800; color: var(--ep2-tx2); cursor: pointer; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-aseg button.on { background: #1a4c7b; color: #fff; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-abox { flex: 1 1 320px; min-width: 0; display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 14px; border-radius: 10px;
+    border: 1px solid var(--ep2-ln); background: var(--ep2-bg); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-abox:focus-within { border-color: #1a4c7b; box-shadow: 0 0 0 3px var(--ep2-hover); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-abox > i { color: var(--ep2-mt); font-size: 14px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-abox input { flex: 1; min-width: 0; border: 0; outline: none; background: transparent; box-shadow: none; padding: 0; font-family: inherit; font-size: 14px; color: var(--ep2-tx); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-aspin { animation: ep2spin 1s linear infinite; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-ares { position: absolute; left: 0; right: 0; top: 52px; z-index: 30; background: var(--ep2-bg); border: 1px solid var(--ep2-ln); border-radius: 14px; padding: 6px;
+    box-shadow: 0 18px 44px rgba(15, 23, 42, .18); max-height: 300px; overflow-y: auto; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-ahit { display: flex; align-items: flex-start; gap: 10px; width: 100%; padding: 10px 12px; border: 0; border-radius: 9px; background: transparent; text-align: left;
+    font-family: inherit; font-size: 13.5px; font-weight: 600; color: var(--ep2-tx2); cursor: pointer; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-ahit:hover { background: var(--ep2-hover); color: var(--ep2-ac); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-ahit i { color: var(--ep2-ac); margin-top: 2px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-anone { padding: 12px; font-size: 13px; color: var(--ep2-mt); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-ahint { margin-top: 8px; font-size: 12px; color: var(--ep2-mt); }
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view .ep2-asrch { display: none; }
+
+/* ---------- HR lists as rows (medical aid, emergency contacts, benefits) - the contact list's treatment (20 Nov) ---------- */
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-rlist { background: transparent; border: 0; box-shadow: none; border-radius: 0; overflow: visible; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-rlist table, :is(#editEmpModal, #createEmpModal).emp2 .ep2-rlist thead, :is(#editEmpModal, #createEmpModal).emp2 .ep2-rlist tbody { display: block; width: 100%; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-rlist tr { display: grid; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--ep2-ln); background: transparent; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-rlist thead tr { padding: 0 0 6px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-rlist tbody tr:hover { background: transparent; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-rlist table:has(:is(#editEmpDependantsBody, #createEmpDependantsBody)) tr { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.1fr) minmax(0, 1.1fr) 76px 40px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-rlist table:has(:is(#editEmpEmergencyBody, #createEmpEmergencyBody)) tr { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 1.1fr) 40px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-rlist table:has(:is(#editEmpBenefitsBody, #createEmpBenefitsBody)) tr { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.3fr) minmax(0, 1.1fr) minmax(0, .9fr) 40px; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-rlist th { background: transparent; border: 0; padding: 0; font-size: 12.5px; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--ep2-tx2); text-align: left; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-secs .ep2-rlist td { border: 0; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-rlist table:not(:has(tbody tr)) thead { display: none; }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-rlist tbody:empty::before { content: 'None added yet.'; display: block; padding: 4px 0 2px; font-size: 13px; color: var(--ep2-mt); }
+:is(#editEmpModal, #createEmpModal).emp2 .ep2-rlist .ep2-cdel { margin-top: 0; }
+:is(#editEmpModal, #createEmpModal).emp2.ep2-view .ep2-rlist .ep2-cdel { display: none; }
+
+/* ---------- Leave Types: Add / Edit Leave Type pop-ups (EmployeeMaster.html #createLeaveTypeModal / #editLeaveTypeModal) ----------
+   2026-11-20 user: "match our theme" - navy, no green. Same markup as before (info-modal-*), only restyled here;
+   buttons are the photo pop-up's .emph-btn / .emph-btn.pri. Dark mode keeps the page's normal pop-up background. */
+.info-modal-content.lvt-pop { max-width: 460px; border-radius: 18px; background: #ffffff; }   /* white (user 19 Nov: no grey); dark mode = page rule */
+.lvt-pop .info-modal-header { padding: 18px 20px 14px 24px; background: transparent; border-bottom: 1px solid var(--ep2-ln); align-items: flex-start; }
+body.dark-mode .lvt-pop .info-modal-header, body.dark-mode .lvt-pop .info-modal-footer { background: transparent; border-color: var(--ep2-ln); }
+.lvt-head { display: flex; align-items: flex-start; gap: 12px; min-width: 0; }
+.lvt-ico { flex-shrink: 0; width: 38px; height: 38px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; background: var(--ep2-ac-soft); color: var(--ep2-ac); }
+.lvt-pop .info-modal-title { display: block; font-size: 17px; letter-spacing: 0; line-height: 1.3; }
+.lvt-head p { margin: 3px 0 0; font-size: 12.5px; color: var(--ep2-mt); line-height: 1.4; }
+.lvt-pop .info-modal-close { width: 34px; height: 34px; font-size: 14px; flex-shrink: 0; }
+.lvt-pop .info-modal-close:hover { background: var(--ep2-ac-soft); border-color: var(--ep2-ln); color: var(--ep2-ac); transform: none; }   /* no red */
+.lvt-pop .info-modal-body { padding: 20px 24px 8px; gap: 16px; }
+.lvt-pop .form-group { gap: 6px; }
+.lvt-pop .form-group label { font-size: 12.5px; font-weight: 700; color: var(--ep2-tx2); text-transform: none; letter-spacing: 0; margin: 0; }
+.lvt-pop .form-control { height: 40px; border-radius: 10px; font-size: 13.5px; }
+.lvt-req { color: var(--ep2-ac); }
+.lvt-hint { font-size: 12px; color: var(--ep2-mt); line-height: 1.4; }
+.lvt-msg { font-size: 12.5px; font-weight: 700; color: var(--ep2-err); line-height: 1.4; }
+.lvt-msg:empty { display: none; }
+.lvt-pop .info-modal-footer { padding: 14px 24px 18px; gap: 8px; border-top: 0; }
+/* 2026-11-20: the bulk bar pop-ups (Move Department, Terminate) use this look too - label with a link on the right, an inline row */
+.lvt-labrow { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.lvt-link { background: none; border: 0; padding: 0; font-family: inherit; font-size: 12px; font-weight: 700; color: var(--ep2-ac); cursor: pointer; }
+.lvt-link:hover { text-decoration: underline; }
+.lvt-row { gap: 8px; align-items: center; }
+.lvt-row .form-control { flex: 1; min-width: 0; }
+.lvt-row .emph-btn { height: 40px; padding: 0 13px; flex-shrink: 0; }
+
+/* 2026-11-23 Departments: tick lists in a .lvt-pop (Create Department HODs, Access zones) - a calm box, one row per choice */
+.lvt-ticks { max-height: 200px; overflow-y: auto; border: 1px solid var(--ep2-ln); border-radius: 10px; padding: 4px; background: var(--ep2-bg); }
+.lvt-tick { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--ep2-tx); }
+.lvt-tick:hover { background: var(--ep2-hover); }
+.lvt-tick input { width: 15px; height: 15px; margin: 0; accent-color: #1a4c7b; cursor: pointer; flex-shrink: 0; }
+.lvt-tick small { font-weight: 500; color: var(--ep2-mt); }
+.lvt-empty { padding: 14px 10px; text-align: center; font-size: 12.5px; color: var(--ep2-mt); }
+.lvt-pop .info-modal-footer .lvt-left { margin-right: auto; }
+
+/* 2026-11-23 Departments > Data Tools > Bulk Import (#deptImportModal): file box, summary chips, the rows list */
+.info-modal-content.lvt-pop.dpx-pop { max-width: 820px; width: min(95vw, 820px); }
+.dpx-pop .info-modal-body { max-height: 70vh; overflow-y: auto; }
+.dpx-pick { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.dpx-file { width: 100%; display: flex; align-items: center; gap: 14px; padding: 16px 18px; border: 1.5px dashed var(--ep2-on); border-radius: 12px; background: var(--ep2-bg2); cursor: pointer; }
+.dpx-file:hover { border-color: var(--ep2-ac); background: var(--ep2-ac-soft); }
+.dpx-file > i { font-size: 22px; color: var(--ep2-ac); }
+.dpx-file b { display: block; font-size: 13.5px; color: var(--ep2-tx); }
+.dpx-file small { display: block; font-size: 12px; color: var(--ep2-mt); margin-top: 2px; }
+.dpx-sum { display: flex; flex-wrap: wrap; gap: 8px; }
+.dpx-chip { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--ep2-ln); background: var(--ep2-bg); font-size: 12.5px; font-weight: 700; color: var(--ep2-tx2); }
+.dpx-chip b { min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; background: var(--ep2-ac); color: #fff; font-size: 11.5px; }
+.dpx-chip.off b { background: var(--ep2-ac-soft); color: var(--ep2-ac); }
+.dpx-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.dpx-table th { text-align: left; padding: 8px 10px; font-size: 10.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ep2-ac); border-bottom: 1px solid var(--ep2-ln); position: sticky; top: 0; background: var(--ep2-bg); }
+.dpx-table td { padding: 8px 10px; border-bottom: 1px solid var(--ep2-ln); color: var(--ep2-tx); vertical-align: top; }
+.dpx-table td.dpx-what { color: var(--ep2-tx2); }
+.dpx-table td.dpx-why { color: var(--ep2-mt); }
+.dpx-table code { font-size: 12px; color: var(--ep2-tx2); }
+.dpx-tag { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 800; white-space: nowrap; background: var(--ep2-ac); color: #fff; }
+.dpx-tag.same, .dpx-tag.skip { background: var(--ep2-ac-soft); color: var(--ep2-ac); }
+.dpx-wrap { border: 1px solid var(--ep2-ln); border-radius: 12px; max-height: 340px; overflow: auto; }
+.dpx-note { font-size: 12.5px; color: var(--ep2-mt); }
+.dpx-done { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 12px; background: var(--ep2-ac-soft); color: var(--ep2-tx); font-size: 13px; font-weight: 600; }
+.dpx-done > i { font-size: 18px; color: var(--ep2-ac); }
+.dpx-out { display: flex; flex-direction: column; gap: 12px; }
+.dpx-out:empty { display: none; }
+.lvt-pop .emph-btn[hidden], .dpx-pick[hidden] { display: none; }
+
+/* ---------- Infringements & performance notes (BOTH profile looks, always on) ---------- 2026-11-20
+   user: "fix the outdated highlighted stuff in the infringements and the outdated evidence action items". Rows are drawn in
+   employeemaster.js (/dynamic-hr). Navy only: summary chip with the count in a navy dot (was red, count white on white);
+   code = plain bold text in a div (a span straight in the cell got the page's td > span badge = the grey highlight);
+   evidence = the lists' square .btn.btn-secondary icon button (colours, hover, dark mode from the page) + its tooltip. */
+.em-inf-chip { display: inline-flex; align-items: center; gap: 7px; padding: 3px 4px 3px 10px; border-radius: 999px; background: var(--ep2-ac-soft);
+        border: 1px solid rgba(26, 76, 123, .18); color: var(--ep2-ac); font-size: 11.5px; font-weight: 700; line-height: 1.5; }
+.em-inf-chip b { min-width: 20px; padding: 0 6px; border-radius: 999px; background: var(--ep2-ac); color: #ffffff; font-size: 11px; text-align: center; }
+body.dark-mode .em-inf-chip { border-color: rgba(147, 197, 253, .25); }
+body.dark-mode .em-inf-chip b { color: #0f172a; }
+.em-inf-main { width: 100%; }   /* Code / Desc takes the room that is left; long text is cut with dots (full text in the tooltip) */
+.em-inf-code, .em-inf-desc { width: 0; min-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.em-inf-code { font-weight: 700; color: var(--ep2-ac); }
+.em-inf-desc { margin-top: 2px; font-size: 11px; color: var(--ep2-mt); }
+.em-ev { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px; width: 60px; margin: 0 auto; }   /* two per row: 4 = 2x2, so the half-width boxes never scroll sideways */
+.em-ev .em-ev-btn { width: 28px; height: 28px; padding: 0; gap: 0; font-size: 12px; border-radius: 8px; flex-shrink: 0; }
+.em-ev-none { color: var(--ep2-mt); }
+/* the page tooltip (EmployeeMaster.html [data-tooltip]) is centred: in the 2x2 block the right button's label stuck out of the
+   scroll box (hidden labels still count, so the table scrolled sideways). Here every label opens to the left, inside the box. */
+.em-ev [data-tooltip]::before { left: auto; right: 0; transform: translateY(5px); }
+.em-ev [data-tooltip]:hover::before { transform: translateY(0); }
+
+/* =====================================================================================================================
+   Employee Master lists - Settings > Display switches (js/em_display.js), 2026-11-20. Each look only shows while its switch
+   is on. Copied from the T&A dashboard (tna_dashboard_v2.css): the KPI strip (.dv-kpis / .dv-kpi), the segmented switch
+   (.dv-seg), the round avatar (.dv-av), the tile hover (.dv-tile). Navy only.
+   ===================================================================================================================== */
+/* the Settings pop-up: switches in groups (a small heading, one card, a line between the rows) */
+.emset-sec + .emset-sec { margin-top: 44px; }   /* user 20 Nov: room to breathe between the groups */
+.emset-grp { display: flex; align-items: center; gap: 12px; margin: 0 0 14px; }
+.emset-grp > i { width: 34px; height: 34px; flex-shrink: 0; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; background: var(--ep2-ac-soft); color: var(--ep2-ac); font-size: 14px; }
+.emset-grp b { display: block; font-size: 16px; font-weight: 800; color: var(--ep2-ac); line-height: 1.25; }
+.emset-grp small { display: block; margin-top: 2px; font-size: 12.5px; font-weight: 500; color: var(--ep2-mt); line-height: 1.4; }
+.emset-sec .emset-row { padding: 18px 22px; }
+.emset-card > .emset-row + .emset-row { border-top: 1px solid var(--ep2-ln); }
+
+/* headcount tiles */
+#emTiles[hidden], #emViewBox[hidden] { display: none; }
+.emx-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin: 0 0 20px; background: rgba(255, 255, 255, .68); border: 1px solid rgba(148, 163, 184, .28);
+    border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(15, 23, 42, .05); }
+.emx-kpi { padding: 14px 16px; border: 0; border-right: 1px solid rgba(148, 163, 184, .28); background: transparent; text-align: left; font: inherit; color: #0f172a; cursor: pointer;
+    display: flex; flex-direction: column; gap: 3px; min-width: 0; transition: background .15s, box-shadow .15s; }
+.emx-kpi:last-child { border-right: 0; }
+.emx-kpi:hover, .emx-kpi:focus-visible { background: rgba(26, 76, 123, .09); outline: none; }
+.emx-kpi.on { background: rgba(26, 76, 123, .09); box-shadow: inset 0 -3px 0 #1a4c7b; }
+.emx-kpi .k { font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.emx-kpi .v { font-size: 22px; font-weight: 900; font-variant-numeric: tabular-nums; line-height: 1.15; color: #1a4c7b; }
+.emx-kpi .s { font-size: 10.5px; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Table | Cards */
+.emx-seg { display: inline-flex; align-items: stretch; height: 38px; box-sizing: border-box; background: rgba(241, 245, 249, .85); border: 1px solid rgba(148, 163, 184, .28); border-radius: 12px; padding: 3px; gap: 2px; }
+.emx-seg button { border: 0; background: transparent; color: #64748b; font: inherit; font-size: 13px; font-weight: 700; padding: 0 11px; min-width: 36px; justify-content: center; border-radius: 9px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px; transition: background .15s, color .15s; }
+.emx-seg button:hover { color: #1a4c7b; }
+.emx-seg button.on { background: #1a4c7b; color: #fff; box-shadow: 0 4px 12px rgba(26, 76, 123, .25); }
+.emx-seg button:focus-visible { outline: 2px solid #1a4c7b; outline-offset: 1px; }
+
+/* photo next to name (the initials when there is none) */
+.emx-nmw { display: inline-flex; align-items: center; gap: 10px; min-width: 0; vertical-align: middle; white-space: nowrap; }
+.emx-av { width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden;
+    background: rgba(26, 76, 123, .1); color: #1a4c7b; font-size: 11px; font-weight: 900; letter-spacing: .02em; font-style: normal; }
+.emx-av img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.emx-av-lg { width: 48px; height: 48px; font-size: 15px; }
+
+/* compact rows, click a row to open */
+.glass-table.emx-compact td { padding-top: 7px; padding-bottom: 7px; }
+.glass-table.emx-compact thead tr:not(.hs-row) th { padding-top: 10px; padding-bottom: 10px; }
+.glass-table.emx-compact .emx-av { width: 24px; height: 24px; font-size: 9.5px; }
+.glass-table.emx-rowopen tbody tr[data-pin] { cursor: pointer; }
+
+/* group by department: a heading row per department, folds its rows */
+.glass-table tr.emx-grp td { padding: 0; background: rgba(26, 76, 123, .05); border-bottom: 1px solid rgba(26, 76, 123, .12); }
+.emx-grp-b { display: inline-flex; align-items: center; gap: 10px; border: 0; background: transparent; padding: 10px 15px; font: inherit; font-size: 12.5px; color: #1a4c7b; cursor: pointer; text-align: left; }
+.emx-grp-b b { font-weight: 800; }
+.emx-grp-b span { font-size: 11px; font-weight: 700; color: #64748b; background: rgba(26, 76, 123, .08); padding: 2px 8px; border-radius: 999px; }
+.emx-grp-b i { font-size: 11px; transition: transform .15s; }
+.emx-grp-b[aria-expanded="false"] i { transform: rotate(-90deg); }
+.emx-grp-b:focus-visible { outline: 2px solid #1a4c7b; outline-offset: -2px; border-radius: 8px; }
+.glass-table tr.emx-fold, .emx-cards .emx-fold { display: none; }
+
+/* pinned PIN + name: the cells stick on the left (em_display.js measures the offsets into --emx-l) */
+.glass-table.emx-pin .emx-pc { position: sticky; left: var(--emx-l, 0); z-index: 2; background: #fff; }
+.glass-table.emx-pin thead .emx-pc { z-index: 4; background: #f8fafc; }
+.glass-table.emx-pin .emx-pc-last { box-shadow: 8px 0 10px -8px rgba(15, 23, 42, .22); }
+.glass-table.emx-pin tbody tr:has(input[type="checkbox"]:checked) .emx-pc { background: #eef3f8; }
+.glass-table.emx-pin tr.emx-grp .emx-grp-b { position: sticky; left: 0; }
+
+/* card view: the same page of people as cards */
+.emx-cards { display: none; }
+#page-employees.emx-cardmode #empTableWrap, #page-terminated.emx-cardmode #termTableWrap { display: none; }   /* 2026-11-20 Terminated too */
+#page-employees.emx-cardmode .emx-cards, #page-terminated.emx-cardmode .emx-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+.emx-card { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 3px; padding: 22px 16px 14px; min-width: 0; cursor: pointer;
+    background: rgba(255, 255, 255, .68); border: 1px solid rgba(148, 163, 184, .28); border-radius: 16px; box-shadow: 0 10px 30px rgba(15, 23, 42, .05);
+    transition: border-color .15s, transform .15s, box-shadow .15s; }
+.emx-card:hover, .emx-card:focus-within { border-color: rgba(26, 76, 123, .45); transform: translateY(-2px); box-shadow: 0 14px 30px rgba(26, 76, 123, .1); }
+.emx-card:has(.emx-card-sel:checked) { border-color: #1a4c7b; background: rgba(26, 76, 123, .06); }
+.emx-card-sel { position: absolute; top: 12px; left: 12px; width: 16px; height: 16px; margin: 0; accent-color: #1a4c7b; cursor: pointer; }
+.emx-card .emx-av-lg { width: 64px; height: 64px; font-size: 20px; margin-bottom: 8px; }
+.emx-card-nm { font-size: 14px; font-weight: 800; color: #0f172a; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.emx-card-pin { font-size: 11.5px; font-weight: 600; color: #64748b; }
+.emx-card-job { font-size: 12.5px; color: #334155; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px; }
+.emx-card-meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 6px; }
+.emx-chip { background: rgba(26, 76, 123, .1); color: #1a4c7b; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; }   /* the list's department badge */
+.emx-chip.ghost { background: transparent; box-shadow: inset 0 0 0 1px rgba(26, 76, 123, .25); }
+.emx-card-act { display: flex; justify-content: center; gap: 8px; width: 100%; margin-top: 12px; }
+.emx-card-act .btn { padding: 6px 12px; font-size: 12px; }
+.emx-cards-h { grid-column: 1 / -1; margin-top: 4px; border-bottom: 1px solid rgba(26, 76, 123, .12); }
+.emx-cards-h .emx-grp-b { padding: 6px 2px; }
+.emx-cards-none { grid-column: 1 / -1; text-align: center; color: #64748b; padding: 20px; }
+
+/* hover quick card */
+.emx-qc { position: fixed; z-index: 450; width: 300px; max-width: calc(100vw - 16px); background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 14px 16px;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, .18); color: #0f172a; pointer-events: none; animation: emxQc .15s ease-out both; }
+.emx-qc[hidden] { display: none; }
+@keyframes emxQc { from { opacity: 0; transform: translateY(4px); } }
+@media (prefers-reduced-motion: reduce) { .emx-qc { animation: none; } }
+.emx-qc-top { display: flex; align-items: center; gap: 12px; padding-bottom: 10px; margin-bottom: 8px; border-bottom: 1px solid #e2e8f0; }
+.emx-qc-top b { display: block; font-size: 14px; font-weight: 800; }
+.emx-qc-top span { font-size: 11.5px; color: #64748b; font-weight: 600; }
+.emx-qc dl { display: grid; grid-template-columns: 86px minmax(0, 1fr); gap: 5px 10px; margin: 0; font-size: 12.5px; }
+.emx-qc dt { color: #64748b; font-weight: 600; }
+.emx-qc dd { margin: 0; color: #1e293b; overflow-wrap: anywhere; }
+.emx-qc-none { color: #94a3b8; font-style: italic; }
+
+/* dark mode */
+body.dark-mode .emx-kpis, body.dark-mode .emx-card { background: rgba(30, 41, 59, .62); border-color: rgba(148, 163, 184, .18); }
+body.dark-mode .emx-kpi { color: #e2e8f0; border-color: rgba(148, 163, 184, .18); }
+body.dark-mode .emx-kpi .v { color: #93c5fd; }
+body.dark-mode .emx-kpi .k, body.dark-mode .emx-kpi .s, body.dark-mode .emx-card-pin, body.dark-mode .emx-cards-none { color: #94a3b8; }
+body.dark-mode .emx-kpi:hover, body.dark-mode .emx-kpi.on { background: rgba(147, 197, 253, .12); }
+body.dark-mode .emx-kpi.on { box-shadow: inset 0 -3px 0 #93c5fd; }
+body.dark-mode .emx-seg { background: rgba(15, 23, 42, .6); border-color: rgba(148, 163, 184, .18); }
+body.dark-mode .emx-seg button { color: #94a3b8; }
+body.dark-mode .emx-seg button:hover { color: #93c5fd; }
+body.dark-mode .emx-seg button.on { background: #1a4c7b; color: #fff; }
+body.dark-mode .emx-av { background: rgba(147, 197, 253, .14); color: #93c5fd; }
+body.dark-mode .glass-table tr.emx-grp td { background: rgba(147, 197, 253, .06); border-color: rgba(147, 197, 253, .12); }
+body.dark-mode .emx-grp-b, body.dark-mode .emx-chip { color: #93c5fd; }
+body.dark-mode .emx-grp-b span, body.dark-mode .emx-chip { background: rgba(147, 197, 253, .12); }
+body.dark-mode .emx-grp-b span { color: #cbd5e1; }
+body.dark-mode .emx-chip.ghost { background: transparent; box-shadow: inset 0 0 0 1px rgba(147, 197, 253, .3); }
+body.dark-mode .glass-table.emx-pin .emx-pc { background: #1b212b; }
+body.dark-mode .glass-table.emx-pin thead .emx-pc { background: #1e293b; }
+body.dark-mode .glass-table.emx-pin tbody tr:has(input[type="checkbox"]:checked) .emx-pc { background: #1f2c3d; }
+body.dark-mode .emx-card:has(.emx-card-sel:checked) { border-color: #93c5fd; background: rgba(147, 197, 253, .08); }
+body.dark-mode .emx-card-nm { color: #f1f5f9; }
+body.dark-mode .emx-card-job { color: #cbd5e1; }
+body.dark-mode .emx-cards-h { border-color: rgba(147, 197, 253, .12); }
+body.dark-mode .emx-qc { background: #1a212c; border-color: rgba(255, 255, 255, .1); color: #f1f5f9; box-shadow: 0 18px 40px rgba(0, 0, 0, .5); }
+body.dark-mode .emx-qc-top { border-color: rgba(255, 255, 255, .08); }
+body.dark-mode .emx-qc dd { color: #e2e8f0; }
+body.dark-mode .emx-qc dt, body.dark-mode .emx-qc-top span { color: #94a3b8; }
+
+/* ---------- Active Personnel + Terminated Records: the headings stay at the top (user 20 Nov: "when I scroll down this whole
+   section should stay fixed"; always on, no switch - like Team View and the F&D lists). The list scrolls in its own box (it
+   already scrolled sideways, which is why the heading never stuck to the page); the box fits under the top bar with the page
+   buttons below it (--tnb-stick-h = the bottom of the stuck top bar, tna_topbar.js). The whole heading block (heading row + the
+   search boxes under it) sticks as one, on a solid background, the line under it drawn as a shadow (collapsed borders do not
+   travel with sticky cells). ---------- */
+#empTableWrap, #termTableWrap { overflow: auto; max-height: max(360px, calc(100vh - var(--tnb-stick-h, 90px) - 130px)); overscroll-behavior-y: auto; }
+#empTableWrap > table > thead, #termTableWrap > table > thead { position: sticky; top: 0; z-index: 5; box-shadow: inset 0 -1px 0 rgba(15, 23, 42, .1); }
+#empTableWrap > table > thead th, #termTableWrap > table > thead th { background: #f8fafc; backdrop-filter: none; -webkit-backdrop-filter: none; }
+body.dark-mode #empTableWrap > table > thead th, body.dark-mode #termTableWrap > table > thead th { background: #1e293b; }
+body.dark-mode #empTableWrap > table > thead, body.dark-mode #termTableWrap > table > thead { box-shadow: inset 0 -1px 0 rgba(255, 255, 255, .08); }
+body.dark-mode #empTableWrap, body.dark-mode #termTableWrap { color-scheme: dark; }
+
+/* ---------- Employee lists: the Columns chooser (em_columns.js - Columns button / right-click a heading) ----------
+   2026-11-20 (user: "weird old look to the column chooser and dragger ... make it modern ... the colours look old"): the
+   Settings pop-ups' look - white card (slate in dark mode), navy title and ticks, Reset + close on top, a count, a navy line
+   where a dragged column will land. Was a <style> em_columns.js injected, with the old blue. */
+#emColPicker { position: fixed; z-index: 400; width: 300px; max-height: 78vh; display: flex; flex-direction: column; overflow: hidden;
+    background: var(--ep2-bg); color: var(--ep2-tx); border: 1px solid var(--ep2-ln); border-radius: 14px; box-shadow: 0 24px 48px -16px rgba(15, 23, 42, .4);
+    font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif; font-size: 13px; animation: emcpIn .16s ease-out both; }
+@keyframes emcpIn { from { opacity: 0; transform: translateY(-4px) scale(.98); } }
+@media (prefers-reduced-motion: reduce) { #emColPicker { animation: none; } }
+body.dark-mode #emColPicker { box-shadow: 0 24px 48px -16px rgba(0, 0, 0, .7); }
+#emColPicker .h { display: flex; align-items: flex-start; gap: 6px; padding: 14px 12px 12px 16px; border-bottom: 1px solid var(--ep2-ln); }
+#emColPicker .h > div { flex: 1; min-width: 0; }
+#emColPicker .h b { display: block; font-size: 15px; font-weight: 800; color: var(--ep2-ac); line-height: 1.25; }
+#emColPicker .h small { display: block; margin-top: 2px; font-size: 12px; font-weight: 500; color: var(--ep2-mt); }
+#emColPicker .h button { flex-shrink: 0; height: 30px; padding: 0 10px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border-radius: 8px;
+    border: 1px solid var(--ep2-ln); background: var(--ep2-bg); color: var(--ep2-tx2); font-family: inherit; font-size: 12px; font-weight: 800; cursor: pointer; }
+#emColPicker .h button:hover { background: var(--ep2-hover); color: var(--ep2-ac); }
+#emColPicker .h [data-close] { width: 30px; padding: 0; }
+#emColPicker .n { padding: 10px 16px 2px; font-size: 11px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; color: var(--ep2-mt); }
+#emColPicker .l { flex: 1; overflow-y: auto; padding: 4px 8px 10px; }
+#emColPicker .i { position: relative; display: flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 8px; border-radius: 8px; cursor: grab; transition: background-color .12s; }
+#emColPicker .i:hover { background: var(--ep2-hover); }
+#emColPicker .i .fa-grip-vertical { width: 12px; text-align: center; font-size: 12px; color: var(--ep2-mt); opacity: .4; transition: opacity .12s; }
+#emColPicker .i:hover .fa-grip-vertical { opacity: 1; color: var(--ep2-ac); }
+#emColPicker .i label { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; margin: 0; cursor: pointer; font-size: 13px; font-weight: 600;
+    text-transform: none; letter-spacing: 0; color: var(--ep2-tx2); }
+#emColPicker .i label span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#emColPicker .i input { width: 16px; height: 16px; margin: 0; flex-shrink: 0; accent-color: #1a4c7b; cursor: pointer; }
+body.dark-mode #emColPicker .i input { accent-color: #93c5fd; }
+#emColPicker .i:has(input:checked) label { color: var(--ep2-tx); font-weight: 700; }
+#emColPicker .i.drag { opacity: .4; }
+#emColPicker .i.over::before { content: ''; position: absolute; left: 8px; right: 8px; top: -1px; height: 2px; border-radius: 2px; background: #1a4c7b; }
+body.dark-mode #emColPicker .i.over::before { background: #93c5fd; }
+/* dragging a heading on the list itself: where it will land */
+tr th[data-emk][draggable="true"].em-drop { box-shadow: inset 3px 0 0 #1a4c7b; }
+body.dark-mode tr th[data-emk][draggable="true"].em-drop { box-shadow: inset 3px 0 0 #93c5fd; }

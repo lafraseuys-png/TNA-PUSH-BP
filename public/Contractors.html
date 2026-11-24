@@ -9,7 +9,7 @@
     <!-- Demo / Setup mode: must load early so every call from this page goes to the demo copy when in demo. AUTO-HEAL: safe to remove. -->
     <script src="tna_demo.js?v=20261020a"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contractors & Distribution - TNA AFRICA</title>
+    <title>Contractors &amp; Distribution</title>
     <!-- 2026-10-23: TNA Africa app icon (browser tab) -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=3">
@@ -343,7 +343,7 @@
                 
                 <div class="profile-dropdown-menu" id="profileDropdown">
                     <a href="Launchpad.html" class="dropdown-item"><i class="fa-solid fa-rocket"></i> Launchpad</a>
-                    <a href="Settings.html" class="dropdown-item"><i class="fa-solid fa-gear"></i> System Settings</a>
+                    <a href="Settings.html" target="_blank" rel="noopener" class="dropdown-item"><i class="fa-solid fa-gear"></i> System Settings</a>
                     <div class="dropdown-divider"></div>
                     <a href="#" onclick="logout()" class="dropdown-item logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
                 </div>
@@ -5233,7 +5233,7 @@
         <!-- Shared resize grip for every pop-up (tna_modal_resize.js). Safe to remove. -->
        <script src="tna_modal_resize.js?v=20261026b"></script>
        <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
-        <script src="tna_topbar.js?v=73"></script>
+        <script src="tna_topbar.js?v=88"></script>
       <!-- Employee Master button & tab look (navy glass, red kept for danger). Safe to remove. -->
         <script src="tna_em_buttons.js?v=20261104a"></script>
        <!-- One "Dates" field (drag or click from/to) for every ...DateFrom / ...DateTo pair. Safe to remove. -->
@@ -5247,7 +5247,7 @@
         <!-- 2026-10-18 "Depot" instead of "Warehouse" on every screen (words only - names, data, exports and the phone stay the same). AUTO-HEAL: safe to remove. -->
         <script src="contractors_depot_words.js?v=20261018a"></script>
         <!-- Sidebar groups (Farmers & Contracts / Distribution / Reports & Messages / Setup). Safe to remove. -->
-        <script src="contractors_sidebar_groups.js?v=20261104b"></script>
+        <script src="contractors_sidebar_groups.js?v=20261123s"></script>
        <!-- Workflow screen: left menu, one section at a time, (i) help, Stand-In pop-up. Safe to remove. -->
         <script src="contractors_workflow_ui.js?v=20261019d"></script>
         <!-- ⚡ Workflow: step 0 "Chairperson & Secretary (phone)" - automatic approval + biometric check settings (new file). AUTO-HEAL: safe to remove. -->
@@ -5317,9 +5317,9 @@
         <!-- ⚡ Reports > Bulk Approvals: every Inbox "Approve selected" run, with the review answer, for audit (new file). AUTO-HEAL: safe to remove. -->
         <script src="contractors_bulk_approvals_report.js?v=20261002a"></script>
         <!-- ⚡ Reports: one screen - a report dropdown, filters, columns, sort, column search, summary, pages, export (new file). AUTO-HEAL: safe to remove (the old tabs come back). -->
-        <script src="contractors_report_center.js?v=20261117cdn"></script>
+        <script src="contractors_report_center.js?v=20261124a"></script>
         <!-- ⚡ 2026-11-04 Distribution Master > Final Distributions Approval: upload the client file, compare per farmer, approve final figures (full admins). AUTO-HEAL: safe to remove. -->
-        <script src="contractors_final_dist.js?v=20261118a"></script>
+        <script src="contractors_final_dist.js?v=20261124a"></script>
         <!-- ⚡ 2026-11-06 (user) icon buttons show their name at once on hover, the same dark pop-up as Time & Attendance (remove this line = the browser's own late grey tooltip, as before) -->
         <script src="tna_quick_tips.js?v=20261030c"></script>
         <!-- ⚡ Dashboard: Approved Farmers = farmers with an approved contract + the "Farmers vs Approved" card (new file). AUTO-HEAL: safe to remove. -->
@@ -5378,7 +5378,7 @@
         <!-- ⚡ 2026-11-10 no screen title / description at the top of a screen (the lit sidebar item shows it). AUTO-HEAL: safe to remove. -->
         <script src="contractors_no_titles.js?v=20261110c"></script>
         <!-- ⚡ 2026-11-10 every list: headings stay at the top while scrolling (own scroll area, browser-pinned, solid colours). AUTO-HEAL: safe to remove. -->
-        <script src="contractors_sticky_heads.js?v=20261110g"></script>
+        <script src="contractors_sticky_heads.js?v=20261123a"></script>
         <!-- ⚡ 2026-10-18 Add / Edit Farmer: one organised form with a side menu + changes summary on Save. AUTO-HEAL: safe to remove - the old tabbed form shows. -->
         <script src="contractors_profile_form.js?v=20261019c"></script>
         <script src="contractors_navy_badges.js?v=20261019b"></script>
@@ -5389,12 +5389,12 @@
         <script src="contractors_progressive.js?v=20261106a"></script>
         <script src="contractors_work_tabs.js?v=20261105d"></script>
 
-        <script src="tna_tour.js?v=20261109a" data-tour-page="contractors" data-tour-help-position="right-raised"></script>
+        <script src="tna_tour.js?v=20261123r" data-tour-page="contractors" data-tour-help-position="right-raised"></script>
         <!-- ⚡ Farmers & Distribution: "What's new" notes from releases.json (pages: "contractors"). AUTO-HEAL: safe to remove. -->
         <script src="tna_releases.js" data-release-page="contractors"></script>
         <!-- ⚡ Help as a side panel with a search, opened from a "?" in the top bar next to your name (same as Employee Master). The round "?"
              at the bottom right is hidden on this page. AUTO-HEAL: safe to remove - the round "?" and its menu come back. -->
-        <script src="tna_help_panel.js?v=20261109b" data-help-module="Farmers &amp; Distribution" data-help-placeholder="What do you want to do? e.g. give a contract" data-help-examples="contract, farmer, distribution, club"></script>
+        <script src="tna_help_panel.js?v=20261123r" data-help-module="Farmers &amp; Distribution" data-help-placeholder="What do you want to do? e.g. give a contract" data-help-examples="contract, farmer, distribution, club"></script>
         <!-- Guided setup in Demo / Setup mode (plan in /tours/contractors_setup.json). AUTO-HEAL: safe to remove. -->
         <script src="tna_setup.js" data-setup-page="contractors"></script>
         <!-- Dark mode fixes: Employee Master background, dark cards instead of white boxes. Loaded last. Safe to remove. -->

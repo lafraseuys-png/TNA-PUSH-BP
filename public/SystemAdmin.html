@@ -67,12 +67,15 @@
     <!-- Auto-heal: v2 look (same as the Support desk). Fonts fall back to system fonts if blocked;
          if godmode-theme.css is missing the page keeps the old look. -->
     <link rel="stylesheet" href="/vendor/fonts/inter-orbitron.css">
-    <link rel="stylesheet" href="/css/globaladmin-theme.css?v=20261111f">
+    <link rel="stylesheet" href="/css/globaladmin-theme.css?v=20261124gs3">
+    <link rel="stylesheet" href="/css/godmode_licences.css?v=20261124b">
 </head>
 <body class="font-sans flex h-screen overflow-hidden bg-gray-900 gm-v2 theme-galaxy" data-sysadmin="1">
     <script>
         // Auto-heal: apply the saved God Mode theme before the page paints (dark/galaxy is the default)
         try { if (localStorage.getItem('tna_gm_theme') === 'light') document.body.classList.remove('theme-galaxy'); } catch (e) {}
+        // the sidebar closer's saved state (globaladmin-ui.js), also before paint so the menu does not jump
+        try { if (localStorage.getItem('tna_gm_sidebar') === 'collapsed') document.body.classList.add('gm-rail'); } catch (e) {}
     </script>
 
     <aside id="mainSidebar" class="w-64 bg-gray-800 flex flex-col shadow-xl flex-shrink-0 border-r border-gray-700 h-screen sidebar-collapsed">
@@ -89,14 +92,14 @@
             </button>
         </div>
 
-        <!-- Auto-heal: v2 brand block. The logo comes from Global Settings > Branding (godmode-ui.js);
-             with no logo the name shows. #godModeTrigger and #sysAdminSessionBadge are unchanged. -->
+        <!-- 2026-11-24 sidebar closer (like T&A): folds the menu to an icon rail - globaladmin-ui.js gmToggleSidebar, desktop only -->
+        <button type="button" id="gmSbToggle" class="gm-sb-toggle" onclick="window.gmToggleSidebar && gmToggleSidebar()" title="Collapse sidebar" aria-label="Collapse sidebar"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg></button>
+        <!-- Auto-heal: v2 brand block. The logo comes from Global Settings > Branding (godmode-ui.js); with no logo the name shows.
+             2026-11-24 the SYSTEM ADMIN chip, the "TNA Africa Master Control" line and the session badge were removed (user).
+             The 30-minute session still ends on time (script at the bottom of this page). -->
         <div class="p-6 border-b border-gray-700 text-center gm-brand">
             <img id="gmBrandLogo" class="gm-brand-logo" alt="Logo" style="display: none;">
             <div id="gmBrandText" class="gm-brand-text">TNA Africa</div>
-            <h1 id="godModeTrigger" class="text-2xl font-black text-red-500 select-none"><i class="fas fa-user-shield mr-2"></i>SYSTEM ADMIN</h1>
-            <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">TNA Africa Master Control</p>
-            <p id="sysAdminSessionBadge" class="mt-2 inline-block text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-900/30 border border-emerald-700 px-2 py-0.5 rounded"><i class="fas fa-lock-open mr-1"></i>Session active</p>
         </div>
         <nav class="flex-1 overflow-y-auto py-4" id="sidebarNav">
             <button onclick="showSection('dashboard', this)" class="sidebar-item active w-full flex items-center p-4 text-left">
@@ -110,6 +113,10 @@
             </button>
             <button onclick="showSection('hardware', this)" class="sidebar-item w-full flex items-center p-4 text-left">
                 <i class="fas fa-microchip w-6 text-center mr-2"></i> Hardware
+            </button>
+            <!-- 2026-11-24 Licences: face licence stock, codes per tenant, history (js/godmode_licences.js) -->
+            <button id="btnLicences" onclick="showSection('licences', this); window.flcOpen && flcOpen()" class="sidebar-item w-full flex items-center p-4 text-left">
+                <i class="fas fa-id-card-clip w-6 text-center mr-2"></i> Licences
             </button>
             <button onclick="showSection('global', this)" class="sidebar-item w-full flex items-center p-4 text-left">
                 <i class="fas fa-globe w-6 text-center mr-2"></i> Global Settings
@@ -260,62 +267,6 @@
         </div>
         </section>
 
-        <!-- TAB 4: GLOBAL SETTINGS (Part 1) -->
-        <section id="page-global" class="page-section">
-
-        <!-- NEW: BRANDING - the logo at the top of the God Mode and System Admin menu (godmode-ui.js).
-             Saved in the master database; every upload/removal is written to the Master Audit Trail.
-             AUTO-HEAL: safe to remove; without it the menu shows the "TNA Africa" name. -->
-        <div class="section" id="gmBrandingCard" style="border-color: #22d3ee;">
-            <h2 class="text-2xl font-semibold mb-2"><i class="fas fa-image mr-2 text-cyan-400"></i>Branding <span class="gm-new-badge">New</span></h2>
-            <p class="text-sm text-gray-400 mb-4">Your logo shows at the top of the God Mode and System Admin menu for every God Mode user. The menu is dark in both themes, so a white or light logo on a transparent background (PNG) looks best. PNG, JPG or WEBP, up to 1 MB.</p>
-            <div class="gm-brand-edit">
-                <div class="gm-brand-preview">
-                    <img id="gmBrandPreview" alt="Logo preview" style="display: none;">
-                    <span id="gmBrandPreviewEmpty">No logo yet - "TNA Africa" is shown</span>
-                </div>
-                <div class="gm-brand-actions">
-                    <input type="file" id="gmBrandFile" accept="image/png,image/jpeg,image/webp" class="w-full text-sm text-gray-400">
-                    <div class="flex flex-wrap gap-2 items-center">
-                        <button type="button" id="gmBrandSaveBtn" onclick="window.gmUploadLogo && gmUploadLogo(this)" class="bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded shadow transition"><i class="fas fa-upload mr-2"></i>Upload logo</button>
-                        <button type="button" id="gmBrandResetBtn" onclick="window.gmResetLogo && gmResetLogo(this)" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded shadow transition"><i class="fas fa-undo mr-2"></i>Use default</button>
-                    </div>
-                    <p id="gmBrandInfo" class="text-xs text-gray-400"></p>
-                    <p id="gmBrandMsg" class="text-sm font-bold hidden"></p>
-                </div>
-            </div>
-        </div>
-        <div class="section" style="border-color: #8b5cf6;">
-            <h2 class="text-2xl font-semibold mb-4">Global Email Settings</h2>
-            <form id="emailSettingsForm">
-                <input type="text" id="smtpHost" placeholder="SMTP Host (e.g., smtp.gmail.com)" class="w-full p-2 mb-2 border rounded bg-gray-800 text-white border-gray-600">
-                <input type="number" id="smtpPort" placeholder="SMTP Port (e.g., 587)" class="w-full p-2 mb-2 border rounded bg-gray-800 text-white border-gray-600">
-                <input type="text" id="smtpUser" placeholder="SMTP User" class="w-full p-2 mb-2 border rounded bg-gray-800 text-white border-gray-600">
-                <input type="password" id="smtpPass" placeholder="SMTP Password (optional to change)" class="w-full p-2 mb-2 border rounded bg-gray-800 text-white border-gray-600">
-                <input type="email" id="fromEmail" placeholder="From Email" class="w-full p-2 mb-4 border rounded bg-gray-800 text-white border-gray-600">
-                <button type="submit" class="w-full bg-green-800 text-white p-2 rounded">Save Email Settings</button>
-            </form>
-            <h3 class="text-xl font-semibold mt-6 mb-2">Test Email</h3>
-            <input type="email" id="testTo" placeholder="Test To Email" class="w-full p-2 mb-2 border rounded bg-gray-800 text-white border-gray-600">
-            <input type="text" id="testSubject" placeholder="Test Subject" class="w-full p-2 mb-2 border rounded bg-gray-800 text-white border-gray-600">
-            <textarea id="testText" placeholder="Test Message" class="w-full p-2 mb-4 border rounded bg-gray-800 text-white border-gray-600" rows="4"></textarea>
-            <button onclick="sendTestEmail()" class="w-full bg-blue-800 text-white p-2 rounded">Send Test Email</button>
-            <p id="emailError" class="text-red-500 mt-2 hidden"></p>
-            <p id="emailSuccess" class="text-green-500 mt-2 hidden"></p>
-        </div>
-        
-        <div class="section mt-6" style="border-color: #0ea5e9;">
-            <h2 class="text-2xl font-semibold mb-4">SSO (Single Sign-On) Configuration</h2>
-            <p class="text-sm text-gray-400 mb-4">Provide your active App Registration Client IDs. If left blank, the respective SSO buttons will be safely disabled on the login screen.</p>
-            <form id="ssoSettingsForm">
-                <input type="text" id="ssoGoogleId" placeholder="Google Client ID (.apps.googleusercontent.com)" class="w-full p-2 mb-2 border rounded bg-gray-800 text-white border-gray-600">
-                <input type="text" id="ssoMicrosoftId" placeholder="Microsoft Client ID (Azure Application ID)" class="w-full p-2 mb-4 border rounded bg-gray-800 text-white border-gray-600">
-                <button type="submit" class="w-full bg-cyan-800 hover:bg-cyan-700 text-white font-bold p-2 rounded transition shadow"><i class="fas fa-save mr-2"></i> Save SSO Configuration</button>
-            </form>
-            <p id="ssoSuccessMsg" class="text-green-500 mt-2 hidden font-bold"><i class="fas fa-check-circle mr-1"></i> SSO Settings saved successfully to Master DB!</p>
-        </div>
-        </section>
-
         <!-- TAB 3: HARDWARE -->
         <section id="page-hardware" class="page-section">
         
@@ -421,6 +372,12 @@
             </div>
         </div>
         </section> <!-- End Hardware Tab -->
+
+        <!-- 2026-11-24 LICENCES: face licences - By tenant | Stock | History, drawn by js/godmode_licences.js
+             (styles: the Tenants list rules + css/godmode_licences.css). Server: routes/faceLicences.js. -->
+        <section id="page-licences" class="page-section">
+            <div class="section tn-card" id="flcCard"><div id="flcRoot"><div class="tn-empty">Loading…</div></div></div>
+        </section>
 
         <!-- SECRET TAB: TNA ADMIN -->
         <section id="page-tna-admin" class="page-section">
@@ -599,6 +556,7 @@
                         <p class="text-xs text-gray-400 mb-3">These addresses will automatically receive a full financial breakdown whenever a Tenant is added or updated.</p>
                         <input type="text" id="notificationEmails" placeholder="admin@tnaafrica.co.za, accounts@tnaafrica.co.za" class="w-full p-2 border rounded bg-gray-900 text-white border-gray-600 focus:border-red-500 focus:outline-none">
                     </div>
+                    <p class="text-xs text-gray-400 mb-6"><i class="fas fa-circle-info mr-1"></i> Licence expiry emails are set in Global Settings &gt; Email (the gear at the bottom of the menu).</p>
 
                     <button type="submit" class="w-full bg-red-700 hover:bg-red-600 text-white font-bold py-3 rounded transition shadow-lg"><i class="fas fa-save mr-2"></i> Save Global Settings</button>   
                 </form>
@@ -692,25 +650,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- TAB 4: GLOBAL SETTINGS (Part 2) -->
-        <section id="page-global-2" class="page-section tab-global-linked">
-        <div class="section" style="border-color: #f59e0b;">
-            <h2 class="text-2xl font-semibold mb-4">Hardware Network Config</h2>
-            <form id="hardwareConfigForm" class="space-y-4">
-                <div>
-                    <label class="block text-sm text-gray-300 mb-1">Additional Device Ports (Comma Separated)</label>
-                    <p class="text-xs text-gray-500 mb-2">Port <strong class="text-teal-400" id="primaryPortText">...</strong> is permanently locked as the primary listener. Open additional ports to bypass strict client firewalls (e.g., 80, 8080).</p>
-                    <div class="flex items-center gap-4">
-                        <span id="primaryPortBadge" class="bg-teal-900/30 text-teal-400 border border-teal-700 px-4 py-2 rounded font-mono text-lg shadow-inner cursor-not-allowed">...</span>
-                        <span class="text-gray-500 text-xl">+</span>
-                        <input type="text" id="devicePorts" placeholder="80, 8080" class="flex-1 p-2 border rounded bg-gray-900 text-white border-gray-600 font-mono tracking-widest text-lg">
-                    </div>
-                </div>
-                <button type="submit" class="bg-blue-800 hover:bg-blue-700 text-white px-6 py-2 rounded transition shadow-lg"><i class="fas fa-power-off mr-2"></i> Save & Restart Service</button>
-            </form>
-        </div>
-        </section> <!-- End Global Settings Part 2 -->
 
         <!-- TAB 5: REPORTS -->
         <section id="page-reports" class="page-section">
@@ -1216,170 +1155,373 @@
     
     
 
-    <!-- NEW ADVANCED TENANT CREATION MODAL -->
-    <div id="createTenantModal" class="fixed inset-0 z-[100] hidden bg-black/80 backdrop-blur-sm items-center justify-center p-4">
-        <div class="bg-gray-800 border border-gray-600 rounded-lg shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col relative text-white">
-            
-            <header class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900 rounded-t-lg">
-                <h3 class="text-xl font-bold text-emerald-400"><i class="fas fa-rocket mr-2"></i>Deploy New SaaS Tenant</h3>
-                <button type="button" onclick="closeCreateTenantModal()" class="text-gray-400 hover:text-white transition"><i class="fas fa-times text-2xl"></i></button>
+    <!-- GLOBAL SETTINGS POP-UP (2026-11-24, user: "modernize every single thing in the global settings ... massive cleanup").
+         The Edit tenant look: side menu with ONE section at a time, the open section's Save button + message in the top bar,
+         settings-style sections. Every id / form / onclick is the same as the old cards, so the load + save code in
+         globaladmin.js, globaladmin-ui.js and godmode_licences.js works unchanged (the Save buttons reach their form with form="...").
+         Active Directory, System users and the Google / Microsoft checks are drawn by js/ad_identity.js into the three hosts.
+         Opened by the sidebar gear / showSection('global') (js/godmode_settings.js). Styles: css/globaladmin-theme.css sections 28 + 29. -->
+    <div id="gmsOverlay" aria-hidden="true">
+        <div class="tp2-win" role="dialog" aria-modal="true" aria-labelledby="gmsTitle">
+
+            <header class="tp2-top">
+                <h3 id="gmsTitle"><i class="fas fa-gear"></i> Global Settings</h3>
+                <div class="gms-msgs">
+                    <p id="emailSuccess" class="gms-msg hidden" data-pane="email"></p>
+                    <p id="emailError" class="gms-msg is-err hidden" data-pane="email"></p>
+                    <p id="gmsLicMsg" class="gms-msg" data-pane="email"></p>
+                    <p id="ssoSuccessMsg" class="gms-msg hidden" data-pane="sso"><i class="fas fa-check-circle"></i> Client IDs saved</p>
+                    <p id="adSsoMsg" class="gms-msg" data-pane="sso"></p>
+                    <p id="adMsg" class="gms-msg" data-pane="ad users"></p>
+                    <p id="flcFromStockMsg" class="gms-msg hidden" data-pane="faces"></p>
+                </div>
+                <div class="tp2-acts">
+                    <button type="submit" form="emailSettingsForm" class="tp2-btn pri" data-pane="email"><i class="fas fa-save"></i> Save email settings</button>
+                    <button type="submit" form="ssoSettingsForm" class="tp2-btn pri" data-pane="sso"><i class="fas fa-save"></i> Save sign-on settings</button>
+                    <button type="button" id="adSaveBtn" class="tp2-btn pri" data-pane="ad"><i class="fas fa-save"></i> Save AD settings</button>
+                    <button type="submit" form="flcSwitchForm" id="flcFromStockSave" class="tp2-btn pri" data-pane="faces"><i class="fas fa-save"></i> Save</button>
+                    <button type="submit" form="hardwareConfigForm" class="tp2-btn pri" data-pane="ports"><i class="fas fa-power-off"></i> Save &amp; restart service</button>
+                    <button type="button" class="tp2-x" data-close="1" title="Close (Esc)" aria-label="Close"><i class="fas fa-times"></i></button>
+                </div>
             </header>
-            
-            <div class="flex-1 overflow-y-auto p-6">
-                <form id="advancedTenantForm">
-                    
-                    <!-- Basic Info -->
-                    <h4 class="text-lg font-bold text-gray-300 border-b border-gray-700 pb-1 mb-4">1. Core Deployment Data</h4>
-                    <div class="grid grid-cols-2 gap-4 mb-6">
-                        <div>
-                            <label class="block text-xs text-gray-400 uppercase mb-1">Company / Tenant Name *</label>
-                            <input type="text" id="advTenantName" required class="w-full p-2 border rounded bg-gray-900 text-white border-gray-600 focus:border-emerald-500">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-gray-400 uppercase mb-1">Preferred License Key *</label>
-                            <input type="text" id="advLicenseKey" required placeholder="e.g. TNA-AFRICA-2026" class="w-full p-2 border rounded bg-gray-900 text-white border-gray-600 font-mono focus:border-emerald-500">
-                        </div>
-                        <div class="col-span-2">
-                            <label class="block text-xs text-gray-400 uppercase mb-1">Assigned Reseller *</label>
-                            <select id="advReseller" required class="w-full p-2 border rounded bg-gray-900 text-white border-gray-600 focus:border-emerald-500">
-                                <option value="1">MY COMPANY</option>
-                            </select>
-                        </div>
-                        <div class="col-span-2">
-                            <label class="block text-xs text-gray-400 uppercase mb-1">Physical Address (Optional)</label>
-                            <textarea id="advAddress" rows="2" class="w-full p-2 border rounded bg-gray-900 text-white border-gray-600 focus:border-emerald-500"></textarea>
-                        </div>
-                        <div>
-                            <label id="lblUsername" class="block text-xs text-gray-400 uppercase mb-1">Master Admin Username *</label>
-                            <input type="text" id="advUsername" class="w-full p-2 border rounded bg-gray-900 text-white border-gray-600 focus:border-emerald-500">
-                        </div>
-                        <div>
-                            <label id="lblPassword" class="block text-xs text-gray-400 uppercase mb-1">Master Admin Password *</label>
-                            <input type="password" id="advPassword" placeholder="Leave blank to keep current password" class="w-full p-2 border rounded bg-gray-900 text-white border-gray-600 focus:border-emerald-500">
-                        </div>
-                        <div>
-                            <div class="flex justify-between items-end mb-1">
-                                <label class="block text-xs text-gray-400 uppercase">License Expiry (Auto-Calc)</label>
-                                <button type="button" id="btnAdminUnlockExpiry" onclick="unlockExpiryDate()" class="text-[10px] text-pink-500 hover:text-pink-400 font-bold hidden"><i class="fas fa-lock mr-1"></i> Admin Override</button>
+
+            <div class="tp2-body">
+                <nav class="tp2-nav" id="gmsNav">
+                    <div class="tp2-me">
+                        <div class="tp2-ini"><i class="fas fa-gear"></i></div>
+                        <div class="tp2-who"><b>Global Settings</b><span>Every God Mode user</span></div>
+                    </div>
+                    <button type="button" data-gms="branding"><i class="fas fa-image"></i> Branding</button>
+                    <button type="button" data-gms="email"><i class="fas fa-envelope"></i> Email</button>
+                    <button type="button" data-gms="sso"><i class="fas fa-right-to-bracket"></i> Single sign-on</button>
+                    <button type="button" data-gms="ad"><i class="fas fa-sitemap"></i> Active Directory</button>
+                    <button type="button" data-gms="users"><i class="fas fa-users"></i> System users <em class="tp2-dot" id="gmsCntUsers"></em></button>
+                    <button type="button" data-gms="faces"><i class="fas fa-id-card-clip"></i> Face licences</button>
+                    <button type="button" data-gms="ports"><i class="fas fa-network-wired"></i> Device ports</button>
+                </nav>
+
+                <div class="tp2-scroll" id="gmsContent">
+                    <!-- BRANDING (System Admin only): the logo at the top of the God Mode and System Admin menu (globaladmin-ui.js).
+                         Saved in the master database; every upload / removal is written to the Master Audit Trail. -->
+                    <div class="tp2-pane" data-gms-pane="branding" id="gmBrandingCard" hidden>
+                        <section class="tp2-sec">
+                            <div class="tp2-sec-h"><b>Menu logo</b><span>Shows at the top of the God Mode and System Admin menu for every God Mode user. The menu is dark in both themes, so a white or light logo on a transparent background (PNG) looks best.</span></div>
+                            <div class="gms-brand">
+                                <div class="gm-brand-preview">
+                                    <img id="gmBrandPreview" alt="Logo preview" style="display: none;">
+                                    <span id="gmBrandPreviewEmpty">No logo yet - "TNA Africa" is shown</span>
+                                </div>
+                                <div>
+                                    <div class="gms-acts">
+                                        <label class="tp2-btn tp2-upl" id="gmBrandPick"><i class="fas fa-folder-open"></i> Choose image<input type="file" id="gmBrandFile" class="tp2-file" accept="image/png,image/jpeg,image/webp"></label>
+                                        <button type="button" id="gmBrandSaveBtn" onclick="window.gmUploadLogo && gmUploadLogo(this)" class="tp2-btn pri"><i class="fas fa-upload"></i> Upload logo</button>
+                                        <button type="button" id="gmBrandResetBtn" onclick="window.gmResetLogo && gmResetLogo(this)" class="tp2-btn"><i class="fas fa-undo"></i> Use default</button>
+                                    </div>
+                                    <p class="tp2-note" id="gmBrandFileName">PNG, JPG or WEBP, up to 1 MB.</p>
+                                    <p id="gmBrandInfo" class="gms-info"></p>
+                                    <p id="gmBrandMsg" class="hidden"></p>
+                                </div>
                             </div>
-                            <input type="date" id="advExpiryDate" readonly class="w-full p-2 border rounded bg-gray-800 text-gray-500 border-gray-600 cursor-not-allowed">
-                        </div>
-                        <div>
-                            <div class="flex justify-between items-end mb-1">
-                                <label class="block text-xs text-emerald-400 uppercase font-bold"><i class="fas fa-users mr-1"></i>Total Employee Count *</label>
-                                <button type="button" id="btnAdminUnlockEstEmps" onclick="unlockEstEmployees()" class="text-[10px] text-pink-500 hover:text-pink-400 font-bold hidden"><i class="fas fa-lock mr-1"></i> Admin Override</button>
+                        </section>
+                    </div>
+                    <!-- EMAIL -->
+                    <div class="tp2-pane" data-gms-pane="email" hidden>
+                        <form id="emailSettingsForm" autocomplete="off">
+                            <section class="tp2-sec">
+                                <div class="tp2-sec-h"><b>Mail server</b><span>Every system email goes out through this server: reports, reminders, password resets and alerts.</span></div>
+                                <div class="tp2-sec-g tp2-two">
+                                    <div class="tp2-f"><label for="smtpHost">SMTP host</label><input type="text" id="smtpHost" class="tp2-in" placeholder="smtp.gmail.com"></div>
+                                    <div class="tp2-f"><label for="smtpPort">SMTP port</label><input type="number" id="smtpPort" class="tp2-in" placeholder="587"></div>
+                                    <div class="tp2-f"><label for="smtpUser">SMTP user</label><input type="text" id="smtpUser" class="tp2-in" autocomplete="off"></div>
+                                    <div class="tp2-f"><label for="smtpPass">SMTP password <span class="tp2-opt">(optional)</span></label><input type="password" id="smtpPass" class="tp2-in" placeholder="Leave blank to keep the saved password" autocomplete="new-password"></div>
+                                    <div class="tp2-f gms-span2"><label for="fromEmail">From address</label><input type="email" id="fromEmail" class="tp2-in" placeholder="support@company.co.za">
+                                        <p class="tp2-note"><i class="fas fa-circle-info"></i> Mail shows as sent from this address.</p></div>
+                                </div>
+                            </section>
+                        </form>
+                        <!-- 2026-11-24 LICENCE EXPIRY EMAILS (moved here from System Admin > TNA Admin; services/licenceExpiryAlerts.js sends them).
+                             js/godmode_settings.js draws the list and saves it with the top-bar Save (its own route, /api/admin/settings/licence-alerts). -->
+                        <section class="tp2-sec" id="gmsLicSec">
+                            <div class="tp2-sec-h"><b>Licence expiry emails</b><span>These people get an email 2 days before a tenant's licence expires, and again on the expiry date.</span></div>
+                            <div class="tp2-sec-g tp2-one">
+                                <div class="tp2-f"><label for="gmsLicAdd">People to notify</label>
+                                    <div class="gms-chips" id="gmsLicChips"><span class="gms-empty">Loading...</span></div>
+                                    <div class="gms-addrow"><input type="email" id="gmsLicAdd" class="tp2-in" placeholder="name@tnaafrica.co.za" autocomplete="off">
+                                        <button type="button" class="tp2-btn" id="gmsLicAddBtn"><i class="fas fa-plus"></i> Add</button></div>
+                                    <p class="tp2-note" id="gmsLicNote"><i class="fas fa-circle-info"></i> Saved with the Save button at the top.</p></div>
                             </div>
-                            <input type="number" id="advEstimatedEmployees" min="1" placeholder="Total expected employees..." required class="w-full p-2 border rounded bg-gray-900 text-white border-gray-600 focus:border-emerald-500" oninput="syncEmployeeCounts()">
-                            <p id="tnaMinWarning" class="text-[10px] text-yellow-500 mt-1 hidden font-bold"><i class="fas fa-info-circle"></i> TNA requires a minimum of 10 employees.</p>
-                        </div>
-                    </div>
-
-                    <!-- Dynamic Contacts -->
-                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-1">
-                        <h4 class="text-lg font-bold text-gray-300">2. Key Contacts</h4>
-                        <button type="button" onclick="addContactRow()" class="text-xs bg-blue-700 hover:bg-blue-600 text-white px-2 py-1 rounded shadow"><i class="fas fa-plus mr-1"></i> Add Contact</button>
-                    </div>
-                    <div id="contactsContainer" class="space-y-3 mb-6">
-                        <!-- Contacts injected via JS -->
-                    </div>
-
-                    <!-- Module Selection & Engine -->
-                    <h4 class="text-lg font-bold text-gray-300 border-b border-gray-700 pb-1 mb-4 flex justify-between items-end">
-                        <div class="flex items-center gap-4">
-                            <span>3. Active Modules & Costs</span>
-                        </div>
-                        <span id="pricingUpdatedWrapper" class="text-xs font-normal text-gray-400 hidden bg-gray-800 px-2 py-1 rounded">Prices Last Updated: <strong class="text-emerald-400" id="pricingUpdatedDate"></strong></span>
-                    </h4>
-                    
-                    <!-- Mirrors the Launchpad tiles: same names, same order. The tenant sees ONLY the ticked tiles. -->
-                    <p class="text-xs text-gray-400 mb-2">Launchpad tiles &mdash; the tenant will only see the modules ticked here.</p>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-3 bg-gray-900 p-4 rounded border border-gray-700">
-                        <label class="flex items-center space-x-2 text-sm cursor-not-allowed opacity-70" title="Core module - every tenant gets it"><input type="checkbox" id="modEmployeeMaster" class="w-4 h-4 text-emerald-500" checked disabled> <span>Employee Master <em class="text-xs text-gray-400">(always included)</em></span></label>
-                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modTNA" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>Time & Attendance</span></label>
-                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modHRContracts" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>HR Management</span></label>
-                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modFuel" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>Fuel Management</span></label>
-                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modPieceWork" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>Production Pay</span></label>
-                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modStockAssets" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>Asset Tagging & Stock Control</span></label>
-                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modEmployeeCosts" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>Employee Costs</span></label>
-                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modESSMaster" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>ESS Master</span></label>
-                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modContractors" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>Contractors & Distribution</span></label>
-                    </div>
-
-                    <p class="text-xs text-gray-400 mb-2">Add-ons (not Launchpad tiles)</p>
-                    <div class="flex flex-wrap gap-6 mb-4 bg-gray-900 p-4 rounded border border-gray-700">
-                       <div class="flex items-center space-x-2">
-                            <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modFacial" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>Facial Hardware</span></label>
-                            <input type="number" id="advFacialLicenses" placeholder="Qty" min="0" value="0" class="w-16 p-1 bg-gray-800 text-white border border-gray-600 rounded text-xs focus:border-emerald-500">
-                        </div>
-                        <label class="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" id="modAccessControl" class="w-4 h-4 text-emerald-500" onchange="triggerPricingEngine()"> <span>Access Control</span></label>
-                    </div>
-
-                    <!-- Tile visibility options removed: the Launchpad shows ONLY the modules ticked above. -->
-
-                    <div class="flex items-center gap-2 mb-4 bg-gray-800 p-3 rounded border border-gray-700">
-                        <span class="text-sm font-bold text-yellow-500"><i class="fas fa-plus-circle mr-1"></i> Add Dynamic Cost:</span>
-                        <select id="tenantDynamicCostSelect" class="flex-1 p-1.5 border rounded bg-gray-900 text-white border-gray-600 text-sm focus:outline-none focus:border-emerald-500">
-                            <option value="">-- Select Item --</option>
-                        </select>
-                        <input type="number" id="tenantDynamicCostQty" placeholder="Qty" min="1" value="1" class="w-20 p-1.5 border rounded bg-gray-900 text-white border-gray-600 text-sm focus:outline-none focus:border-emerald-500">
-                        <button type="button" onclick="addDynamicCostToMatrix()" class="bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-1.5 px-4 rounded transition text-sm shadow">Add</button>
-                    </div>
-
-                    <div id="pricingWarningMsg" class="hidden mb-4 p-3 bg-orange-900/40 border border-orange-700 rounded text-orange-400 text-sm font-bold">
-                        <i class="fas fa-exclamation-triangle mr-2"></i> Warning: One or more modules are priced below the recommended global base cost.
-                    </div>
-
-                    <table class="w-full border-collapse mb-6 text-sm" id="pricingTable">
-                        <thead>
-                            <tr class="bg-gray-700 text-gray-300">
-                                <th class="p-2 border border-gray-600 text-left">Line Item</th>
-                                <th class="p-2 border border-gray-600 w-24 text-center">Type</th>
-                                <th class="p-2 border border-gray-600 w-20 text-center">Qty</th>
-                                <th class="p-2 border border-gray-600 w-32">Unit Cost</th>
-                                <th class="p-2 border border-gray-600 w-32 text-orange-400">Min Cost</th>
-                                <th class="p-2 border border-gray-600 w-32 bg-gray-800 text-emerald-400 font-bold">Total Cost</th>
-                            </tr>
-                        </thead>
-                        <tbody id="pricingTableBody">
-                            <tr><td colspan="6" class="p-4 text-center text-gray-500">Select modules above to build the pricing matrix.</td></tr>
-                        </tbody>
-                    </table>
-
-                    <!-- Compliance Documents -->
-                    <h4 class="text-lg font-bold text-gray-300 border-b border-gray-700 pb-1 mb-4 mt-6">4. Compliance & Legal Documents</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <div class="bg-gray-800 p-3 rounded border border-gray-700">
-                            <label class="block text-xs text-gray-400 uppercase mb-1 font-bold">Signed T&C</label>
-                            <input type="file" id="advDocTerms" accept=".pdf,image/*" class="w-full text-xs text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:bg-gray-700 file:text-white hover:file:bg-gray-600">
-                            <div class="flex justify-between items-center mt-2">
-                                <a id="viewDocTerms" target="_blank" class="hidden text-xs text-blue-400 hover:text-blue-300 font-bold"><i class="fas fa-file-download mr-1"></i> View Document</a>
-                                <label id="wrapVerifyTerms" class="hidden items-center space-x-1 text-xs text-emerald-400 font-bold cursor-pointer">
-                                    <input type="checkbox" id="chkVerifyTerms" class="w-3 h-3 text-emerald-500" onchange="handleDocVerification(this)">
-                                    <span>Verified</span>
-                                </label>
+                        </section>
+                        <section class="tp2-sec">
+                            <div class="tp2-sec-h"><b>Send a test</b><span>Check that mail goes out. It uses the saved settings, so save your changes first.</span></div>
+                            <div class="tp2-sec-g tp2-two">
+                                <div class="tp2-f"><label for="testTo">Send to</label><input type="email" id="testTo" class="tp2-in" placeholder="you@company.co.za"></div>
+                                <div class="tp2-f"><label for="testSubject">Subject</label><input type="text" id="testSubject" class="tp2-in" placeholder="Test email"></div>
+                                <div class="tp2-f gms-span2"><label for="testText">Message</label><textarea id="testText" class="tp2-in" rows="3" placeholder="If you can read this, mail works."></textarea></div>
+                                <div class="gms-acts gms-span2"><button type="button" class="tp2-btn" onclick="sendTestEmail()"><i class="fas fa-paper-plane"></i> Send test email</button></div>
                             </div>
-                        </div>
-                        <div class="bg-gray-800 p-3 rounded border border-gray-700">
-                            <label class="block text-xs text-gray-400 uppercase mb-1 font-bold">Data Processing Agreement</label>
-                            <input type="file" id="advDocDpa" accept=".pdf,image/*" class="w-full text-xs text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:bg-gray-700 file:text-white hover:file:bg-gray-600">
-                            <div class="flex justify-between items-center mt-2">
-                                <a id="viewDocDpa" target="_blank" class="hidden text-xs text-blue-400 hover:text-blue-300 font-bold"><i class="fas fa-file-download mr-1"></i> View Document</a>
-                                <label id="wrapVerifyDpa" class="hidden items-center space-x-1 text-xs text-emerald-400 font-bold cursor-pointer">
-                                    <input type="checkbox" id="chkVerifyDpa" class="w-3 h-3 text-emerald-500" onchange="handleDocVerification(this)">
-                                    <span>Verified</span>
-                                </label>
-                            </div>
-                        </div>
+                        </section>
                     </div>
-                </form>
+
+                    <!-- SINGLE SIGN-ON (the Google / Microsoft checks below are drawn by ad_identity.js and saved with the same Save) -->
+                    <div class="tp2-pane" data-gms-pane="sso" hidden>
+                        <form id="ssoSettingsForm" autocomplete="off">
+                            <section class="tp2-sec">
+                                <div class="tp2-sec-h"><b>Client IDs</b><span>From your Google and Microsoft app registrations. Leave one blank and its button is switched off on the login screen.</span></div>
+                                <div class="tp2-sec-g tp2-one">
+                                    <div class="tp2-f"><label for="ssoGoogleId">Google client ID</label><input type="text" id="ssoGoogleId" class="tp2-in tp2-mono" placeholder="123456789-abc.apps.googleusercontent.com">
+                                        <p class="tp2-note"><i class="fas fa-circle-info"></i> Ends in .apps.googleusercontent.com</p></div>
+                                    <div class="tp2-f"><label for="ssoMicrosoftId">Microsoft client ID</label><input type="text" id="ssoMicrosoftId" class="tp2-in tp2-mono" placeholder="00000000-0000-0000-0000-000000000000">
+                                        <p class="tp2-note"><i class="fas fa-circle-info"></i> The Application (client) ID in Azure</p></div>
+                                </div>
+                            </section>
+                        </form>
+                        <div id="gmsSsoChecksHost"></div>
+                    </div>
+
+                    <!-- ACTIVE DIRECTORY + SYSTEM USERS (js/ad_identity.js) -->
+                    <div class="tp2-pane" data-gms-pane="ad" hidden><div id="gmsAdHost"></div></div>
+                    <div class="tp2-pane" data-gms-pane="users" hidden><div id="gmsUsersHost"></div></div>
+
+                    <!-- FACE LICENCES: the "take face licences from the stock" switch (js/godmode_licences.js reads + saves it) -->
+                    <div class="tp2-pane" data-gms-pane="faces" id="flcSettingsCard" hidden>
+                        <form id="flcSwitchForm" onsubmit="event.preventDefault(); window.flcSaveSwitch && flcSaveSwitch(event.submitter || document.getElementById('flcFromStockSave'))">
+                            <section class="tp2-sec">
+                                <div class="tp2-sec-h"><b>Licence stock</b><span>How the Facial licences number on the Edit tenant form gives codes to a tenant.</span></div>
+                                <div class="tp2-sec-g tp2-one">
+                                    <label class="tp2-mod" for="flcFromStock"><input type="checkbox" class="tp2-sw" id="flcFromStock">
+                                        <span><b>Take codes from the licence stock</b><small id="flcFromStockLab">Off - make new codes (as before)</small></span></label>
+                                    <p class="tp2-note"><i class="fas fa-circle-info"></i> Off = the form makes new codes, as before. On = raising the number takes codes from the stock on the Licences screen, and the save is refused when the stock is too small.</p>
+                                </div>
+                            </section>
+                        </form>
+                    </div>
+
+                    <!-- DEVICE PORTS -->
+                    <div class="tp2-pane" data-gms-pane="ports" hidden>
+                        <form id="hardwareConfigForm">
+                            <section class="tp2-sec">
+                                <div class="tp2-sec-h"><b>Device ports</b><span>The ports the clocking devices connect on. Saving restarts the device service, so devices reconnect after a few seconds.</span></div>
+                                <div class="tp2-sec-g tp2-two">
+                                    <div class="tp2-f"><label>Primary port</label><div class="tp2-in tp2-mono gms-ro" id="primaryPortBadge">...</div>
+                                        <p class="tp2-note"><i class="fas fa-lock"></i> Always open. Port <span id="primaryPortText">...</span> cannot be changed.</p></div>
+                                    <div class="tp2-f"><label for="devicePorts">Extra ports <span class="tp2-opt">(optional)</span></label><input type="text" id="devicePorts" class="tp2-in tp2-mono" placeholder="80, 8080">
+                                        <p class="tp2-note"><i class="fas fa-circle-info"></i> Comma separated. For sites whose firewall blocks the primary port.</p></div>
+                                </div>
+                            </section>
+                        </form>
+                    </div>
+                </div>
             </div>
-            
-            <footer class="p-4 border-t border-gray-700 bg-gray-900 rounded-b-lg flex justify-end gap-3">
-                <p id="advTenantError" class="text-red-500 text-sm hidden self-center mr-auto font-bold"></p>
-                <button type="button" onclick="closeCreateTenantModal()" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded transition">Cancel</button>
-                <button type="button" onclick="submitAdvancedTenant(true)" id="btnSaveQuote" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded transition shadow-lg"><i class="fas fa-file-invoice mr-2"></i> Save as Quote</button>
-                <button type="button" onclick="submitAdvancedTenant(false)" id="btnSubmitTenant" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-6 rounded transition shadow-lg"><i class="fas fa-cloud-upload-alt mr-2"></i> Deploy Tenant</button>
-            </footer>
+        </div>
+    </div>
+
+    <!-- EDIT TENANT POP-UP (2026-11-24, user: "look like our new employee profile in Employee Master", clean navy).
+         Side menu with ONE section at a time (tpShow in globaladmin.js), slim top bar with the buttons, settings-style
+         sections. Every id, name and onclick is the same as before, so openEditTenantModal / submitAdvancedTenant and
+         the tours work unchanged. New tenant + Edit quote open the onboarding wizard (onboarding.js) instead.
+         Styles: css/globaladmin-theme.css section 28. -->
+    <div id="createTenantModal" class="fixed inset-0 z-[100] hidden items-center justify-center">
+        <div class="tp2-win" role="dialog" aria-modal="true" aria-labelledby="tpTitle">
+
+            <header class="tp2-top">
+                <h3 id="tpTitle"><i class="fas fa-building"></i> Edit tenant</h3>
+                <p id="advTenantError" class="tp2-err hidden"></p>
+                <div class="tp2-acts">
+                    <button type="button" onclick="closeCreateTenantModal()" class="tp2-btn">Cancel</button>
+                    <button type="button" onclick="submitAdvancedTenant(true)" id="btnSaveQuote" class="tp2-btn pri hidden"><i class="fas fa-file-invoice"></i> Save as Quote</button>
+                    <button type="button" onclick="submitAdvancedTenant(false)" id="btnSubmitTenant" class="tp2-btn pri"><i class="fas fa-save"></i> Save changes</button>
+                    <button type="button" onclick="closeCreateTenantModal()" class="tp2-x" title="Close (Esc)" aria-label="Close"><i class="fas fa-times"></i></button>
+                </div>
+            </header>
+
+            <div class="tp2-body">
+                <nav class="tp2-nav" id="tpNav">
+                    <div class="tp2-me">
+                        <div class="tp2-ini" id="tpIni"><i class="fas fa-building"></i></div>
+                        <div class="tp2-who"><b id="tpName">Tenant</b><span id="tpKey"></span></div>
+                    </div>
+                    <button type="button" data-tp="company" class="on"><i class="fas fa-building"></i> Company</button>
+                    <button type="button" data-tp="login"><i class="fas fa-key"></i> Login &amp; licence</button>
+                    <button type="button" data-tp="contacts"><i class="fas fa-address-book"></i> Key contacts <em class="tp2-dot" id="tpCntContacts"></em></button>
+                    <button type="button" data-tp="modules"><i class="fas fa-th-large"></i> Modules <em class="tp2-dot" id="tpCntModules"></em></button>
+                    <button type="button" data-tp="costs"><i class="fas fa-coins"></i> Costs</button>
+                    <button type="button" data-tp="docs"><i class="fas fa-file-signature"></i> Documents</button>
+                </nav>
+
+                <div class="tp2-scroll">
+                <form id="advancedTenantForm" autocomplete="off">
+
+                    <!-- Company -->
+                    <section class="tp2-pane" data-tp-pane="company">
+                        <div class="tp2-sec">
+                            <div class="tp2-sec-h"><b>Company</b><span>The tenant's name, the licence key it signs in with and the reseller it belongs to.</span></div>
+                            <div class="tp2-sec-g">
+                                <div class="tp2-f"><label for="advTenantName">Company / tenant name *</label><input type="text" id="advTenantName" required class="tp2-in"></div>
+                                <div class="tp2-f"><label for="advLicenseKey">Licence key *</label><input type="text" id="advLicenseKey" required placeholder="e.g. TNA-AFRICA-2026" class="tp2-in tp2-mono"></div>
+                                <div class="tp2-f"><label for="advReseller">Assigned reseller *</label>
+                                    <select id="advReseller" required class="tp2-in" data-tp-sel>
+                                        <option value="1">MY COMPANY</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tp2-sec">
+                            <div class="tp2-sec-h"><b>Address</b><span>Where the company is. Optional.</span></div>
+                            <div class="tp2-sec-g tp2-one">
+                                <div class="tp2-f"><label for="advAddress">Physical address</label><textarea id="advAddress" rows="3" class="tp2-in"></textarea></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Login & licence -->
+                    <section class="tp2-pane hidden" data-tp-pane="login">
+                        <div class="tp2-sec">
+                            <div class="tp2-sec-h"><b>Master admin</b><span>The tenant's main administrator login. Leave the password blank to keep the current one.</span></div>
+                            <div class="tp2-sec-g tp2-two">
+                                <div class="tp2-f"><label id="lblUsername" for="advUsername">Master Admin Username *</label><input type="text" id="advUsername" class="tp2-in" autocomplete="off"></div>
+                                <div class="tp2-f"><label id="lblPassword" for="advPassword">Master Admin Password *</label><input type="password" id="advPassword" placeholder="Leave blank to keep current password" class="tp2-in" autocomplete="new-password"></div>
+                            </div>
+                        </div>
+                        <div class="tp2-sec">
+                            <div class="tp2-sec-h"><b>Licence</b><span>When the licence ends and how many employees it is for.</span></div>
+                            <div class="tp2-sec-g tp2-two">
+                                <div class="tp2-f">
+                                    <div class="tp2-lrow"><label for="advExpiryDate">Licence expiry</label>
+                                        <button type="button" id="btnAdminUnlockExpiry" onclick="unlockExpiryDate()" class="tp2-link hidden"><i class="fas fa-lock"></i> Admin Override</button></div>
+                                    <input type="date" id="advExpiryDate" readonly class="tp2-in">
+                                </div>
+                                <div class="tp2-f">
+                                    <div class="tp2-lrow"><label for="advEstimatedEmployees">Total employee count *</label>
+                                        <button type="button" id="btnAdminUnlockEstEmps" onclick="unlockEstEmployees()" class="tp2-link hidden"><i class="fas fa-lock"></i> Admin Override</button></div>
+                                    <input type="number" id="advEstimatedEmployees" min="1" placeholder="Total expected employees..." required class="tp2-in" oninput="syncEmployeeCounts()">
+                                    <p id="tnaMinWarning" class="tp2-note hidden"><i class="fas fa-info-circle"></i> Time &amp; Attendance needs at least 10 employees.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Key contacts -->
+                    <section class="tp2-pane hidden" data-tp-pane="contacts">
+                        <div class="tp2-sec tp2-wide">
+                            <div class="tp2-sec-h"><b>Key contacts</b><span>The first contact is the main contact and needs a name, surname, email and cell number.</span></div>
+                            <div class="tp2-sec-g tp2-one">
+                                <div id="contactsContainer" class="tp2-clist">
+                                    <!-- Contacts injected via JS (addContactRow) -->
+                                </div>
+                                <button type="button" onclick="addContactRow(); tpCounts();" class="tp2-addc"><i class="fas fa-plus"></i> Add contact</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Modules (mirror the Launchpad tiles: same names, same order. The tenant sees ONLY the modules switched on.) -->
+                    <section class="tp2-pane hidden" data-tp-pane="modules">
+                        <div class="tp2-sec">
+                            <div class="tp2-sec-h"><b>Launchpad tiles</b><span>The tenant only sees the modules switched on here.</span></div>
+                            <div class="tp2-sec-g tp2-mods">
+                                <label class="tp2-mod is-locked" title="Core module - every tenant gets it"><span><b>Employee Master</b><small>Always included</small></span><input type="checkbox" id="modEmployeeMaster" class="tp2-sw" checked disabled></label>
+                                <label class="tp2-mod"><span><b>Time &amp; Attendance</b></span><input type="checkbox" id="modTNA" class="tp2-sw" onchange="triggerPricingEngine()"></label>
+                                <label class="tp2-mod"><span><b>HR Management</b></span><input type="checkbox" id="modHRContracts" class="tp2-sw" onchange="triggerPricingEngine()"></label>
+                                <label class="tp2-mod"><span><b>Fuel Management</b></span><input type="checkbox" id="modFuel" class="tp2-sw" onchange="triggerPricingEngine()"></label>
+                                <label class="tp2-mod"><span><b>Production Pay</b></span><input type="checkbox" id="modPieceWork" class="tp2-sw" onchange="triggerPricingEngine()"></label>
+                                <label class="tp2-mod"><span><b>Asset Tagging &amp; Stock Control</b></span><input type="checkbox" id="modStockAssets" class="tp2-sw" onchange="triggerPricingEngine()"></label>
+                                <label class="tp2-mod"><span><b>Employee Costs</b></span><input type="checkbox" id="modEmployeeCosts" class="tp2-sw" onchange="triggerPricingEngine()"></label>
+                                <label class="tp2-mod"><span><b>ESS Master</b></span><input type="checkbox" id="modESSMaster" class="tp2-sw" onchange="triggerPricingEngine()"></label>
+                                <label class="tp2-mod"><span><b>Contractors &amp; Distribution</b></span><input type="checkbox" id="modContractors" class="tp2-sw" onchange="triggerPricingEngine()"></label>
+                            </div>
+                        </div>
+                        <div class="tp2-sec">
+                            <div class="tp2-sec-h"><b>Add-ons</b><span>Extras that are not Launchpad tiles.</span></div>
+                            <div class="tp2-sec-g tp2-mods">
+                                <div class="tp2-mod">
+                                    <label for="modFacial"><b>Facial Hardware</b><small>Number of licences</small></label>
+                                    <input type="number" id="advFacialLicenses" placeholder="Qty" min="0" value="0" class="tp2-in tp2-qty" aria-label="Facial hardware licences">
+                                    <input type="checkbox" id="modFacial" class="tp2-sw" onchange="triggerPricingEngine()">
+                                </div>
+                                <label class="tp2-mod"><span><b>Access Control</b></span><input type="checkbox" id="modAccessControl" class="tp2-sw" onchange="triggerPricingEngine()"></label>
+                            </div>
+                        </div>
+                        <!-- Tile visibility options removed: the Launchpad shows ONLY the modules switched on above. -->
+                    </section>
+
+                    <!-- Costs -->
+                    <section class="tp2-pane hidden" data-tp-pane="costs">
+                        <div class="tp2-sec tp2-wide">
+                            <div class="tp2-sec-h">
+                                <b>Costs</b><span>Built from the modules switched on. Costs come from Global Module Costing.</span>
+                                <span id="pricingUpdatedWrapper" class="tp2-chip hidden">Prices last updated: <strong id="pricingUpdatedDate"></strong></span>
+                            </div>
+                            <div class="tp2-sec-g tp2-one">
+                                <div class="tp2-addcost">
+                                    <span class="tp2-addcost-l"><i class="fas fa-plus-circle"></i> Add extra cost</span>
+                                    <select id="tenantDynamicCostSelect" class="tp2-in" data-tp-sel>
+                                        <option value="">Choose an extra cost...</option>
+                                    </select>
+                                    <input type="number" id="tenantDynamicCostQty" placeholder="Qty" min="1" value="1" class="tp2-in tp2-qty" aria-label="Quantity">
+                                    <button type="button" onclick="addDynamicCostToMatrix()" class="tp2-btn">Add</button>
+                                </div>
+
+                                <div id="pricingWarningMsg" class="tp2-warnbox hidden">
+                                    <i class="fas fa-exclamation-triangle"></i> Warning: One or more modules are priced below the recommended global base cost.
+                                </div>
+
+                                <div class="tp2-tblwrap">
+                                    <table class="tp2-tbl" id="pricingTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Line Item</th>
+                                                <th class="c">Type</th>
+                                                <th class="c">Qty</th>
+                                                <th>Unit Cost</th>
+                                                <th>Min Cost</th>
+                                                <th>Total Cost</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="pricingTableBody">
+                                            <tr><td colspan="6" class="tp2-empty">Switch on modules to build the costs.</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Compliance documents -->
+                    <section class="tp2-pane hidden" data-tp-pane="docs">
+                        <div class="tp2-sec tp2-wide">
+                            <div class="tp2-sec-h"><b>Compliance &amp; legal documents</b><span>Both are needed before a tenant can go live. Once both are verified the licence runs to the end of next month.</span></div>
+                            <div class="tp2-sec-g tp2-docs">
+                                <div class="tp2-doc">
+                                    <div class="tp2-doc-h"><span class="tp2-cic"><i class="fas fa-file-contract"></i></span><span><b>Signed T&amp;C</b><small id="tpDocTermsName">No file chosen</small></span></div>
+                                    <button type="button" class="tp2-docpic" id="tpDocTermsPic" onclick="tpOpenDoc('Terms')" title="Open the document"></button>
+                                    <div id="wrapVerifyTerms" class="tp2-doc-st hidden">
+                                        <input type="checkbox" id="chkVerifyTerms" onchange="handleDocVerification(this)">
+                                        <span>Verified</span>
+                                    </div>
+                                    <div class="tp2-doc-a">
+                                        <a id="viewDocTerms" target="_blank" class="tp2-btn hidden"><i class="fas fa-eye"></i> View</a>
+                                        <label class="tp2-btn tp2-upl"><i class="fas fa-upload"></i> <span>Upload</span>
+                                            <input type="file" id="advDocTerms" accept=".pdf,image/*" class="tp2-file" onchange="tpFileChosen(this, 'tpDocTermsName')"></label>
+                                    </div>
+                                </div>
+                                <div class="tp2-doc">
+                                    <div class="tp2-doc-h"><span class="tp2-cic"><i class="fas fa-user-shield"></i></span><span><b>Data Processing Agreement</b><small id="tpDocDpaName">No file chosen</small></span></div>
+                                    <button type="button" class="tp2-docpic" id="tpDocDpaPic" onclick="tpOpenDoc('Dpa')" title="Open the document"></button>
+                                    <div id="wrapVerifyDpa" class="tp2-doc-st hidden">
+                                        <input type="checkbox" id="chkVerifyDpa" onchange="handleDocVerification(this)">
+                                        <span>Verified</span>
+                                    </div>
+                                    <div class="tp2-doc-a">
+                                        <a id="viewDocDpa" target="_blank" class="tp2-btn hidden"><i class="fas fa-eye"></i> View</a>
+                                        <label class="tp2-btn tp2-upl"><i class="fas fa-upload"></i> <span>Upload</span>
+                                            <input type="file" id="advDocDpa" accept=".pdf,image/*" class="tp2-file" onchange="tpFileChosen(this, 'tpDocDpaName')"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </form>
+                </div>
+            </div>
 
         </div>
     </div>
@@ -1573,42 +1715,41 @@
         });
     </script>
     <script>
-        // System Admin session countdown (token issued by the access code, 30 minutes)
+        // System Admin session end (token issued by the access code, 30 minutes).
+        // 2026-11-24 the sidebar badge that showed the minutes left was removed (user); the session still ends on time.
+        // On load, globaladmin.js handles a missing/expired session.
         (function () {
-            function tick(isTimer) {
-                const badge = document.getElementById('sysAdminSessionBadge');
-                if (!badge) return;
+            function tick() {
                 try {
                     const st = sessionStorage.getItem('sysAdminToken');
+                    if (!st) return;
                     const p = JSON.parse(atob(st.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
                     const mins = Math.max(0, Math.ceil((p.exp * 1000 - Date.now()) / 60000));
-                    badge.innerHTML = '<i class="fas fa-lock-open mr-1"></i>Session: ' + mins + ' min left';
-                    if (mins <= 5) badge.className = badge.className.replace(/emerald/g, 'yellow');
-                    if (mins <= 0 && isTimer && !window.__sysAdminLeaving) {
+                    if (mins <= 0 && !window.__sysAdminLeaving) {
                         window.__sysAdminLeaving = true;
                         sessionStorage.removeItem('sysAdminToken');
                         alert('Your login session has ended. Please log in again.');
                         window.location.href = '/Login.html';
                     }
-                } catch (e) { badge.innerHTML = '<i class="fas fa-lock mr-1"></i>No session'; }
+                } catch (e) {}
             }
-            tick(false); // on load, godmode.js handles a missing/expired session
-            setInterval(function () { tick(true); }, 30000);
+            setInterval(tick, 30000);
         })();
     </script>
-    <script src="globaladmin.js?v=20261111f"></script>
+    <script src="globaladmin.js?v=20261124gs2"></script>
     <script src="godmode_dashboard.js?v=20261111c"></script>
-    <script src="godmode_topbar.js?v=20261111c"></script>
-    <script src="godmode_settings.js?v=20261111c"></script>
-    <script src="ad_identity.js?v=20261030a"></script>
+    <script src="godmode_topbar.js?v=20261124a"></script>
+    <script src="godmode_settings.js?v=20261124gs2"></script>
+    <script src="godmode_licences.js?v=20261124c"></script>
+    <script src="ad_identity.js?v=20261124gs2"></script>
     <!-- Demo / Setup mode per company. AUTO-HEAL: safe to remove. -->
     <script src="demo_admin.js"></script>
     <!-- v2 look: theme, profile, logo, Branding card. AUTO-HEAL: safe to remove. -->
 <script src="globaladmin-ui.js"></script>
 <!-- Guided tours + What's new. AUTO-HEAL: no tour file / old server = nothing auto-starts. -->
-<script src="tna_tour.js?v=20261109a" data-tour-page="systemadmin" data-tour-help-position="right-raised"></script>
+<script src="tna_tour.js?v=20261123r" data-tour-page="systemadmin" data-tour-help-position="right-raised"></script>
 <!-- 2026-10-23: help as the side panel (same as Employee Master); the page's "?" opens it. AUTO-HEAL: safe to remove. -->
-<script src="tna_help_panel.js?v=20261109b" data-help-module="System Admin" data-help-anchor="#tnaTourHelpBtn"></script>
+<script src="tna_help_panel.js?v=20261123r" data-help-module="System Admin" data-help-anchor="#tnaTourHelpBtn"></script>
 <script src="tna_releases.js" data-release-page="systemadmin"></script>
 <!-- Tenant onboarding wizard + billing options + user reseller links. AUTO-HEAL: safe to remove. -->
 <script src="onboarding.js?v=20261111a"></script>

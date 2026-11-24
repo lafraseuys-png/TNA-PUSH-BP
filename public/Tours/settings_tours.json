@@ -959,7 +959,7 @@
             "#btnFilterHub"
           ],
           "title": "Filters",
-          "text": "Filter by <b>User Type</b> (system logins or users linked to an employee) and by <b>Assigned Role</b>. The number shows how many filters are on.",
+          "text": "Filter by <b>Status</b> (active users unless you choose otherwise) and by <b>Assigned Role</b>, with how many users each choice has. The button reads <b>Filters · 2</b> and turns navy while filters are on.",
           "placement": "bottom"
         },
         {
@@ -1546,7 +1546,7 @@
             "#btnFilterHub"
           ],
           "title": "Filters",
-          "text": "Opens a panel with two filters. <b>User Type</b> separates system-only logins from users linked to an employee record. <b>Assigned Role</b> narrows to one role, or to users on custom permissions with no role at all. The badge shows how many filters are active."
+          "text": "Opens the Filters pop-up. <b>Status</b> shows active users unless you choose inactive or all. <b>Assigned Role</b> narrows to one role, or to users on custom permissions with no role at all. Each choice shows how many users it has, and the button reads <b>Filters · 2</b> while filters are on."
         },
         {
           "id": "stg-cu-columns",

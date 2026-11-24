@@ -9,7 +9,7 @@
     <!-- Demo / Setup mode: must load early so every call from this page goes to the demo copy when in demo. AUTO-HEAL: safe to remove. -->
     <script src="tna_demo.js?v=20261020a"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tenant Settings - TNA AFRICA</title>
+    <title>Company Settings</title>
     <!-- 2026-10-23: TNA Africa app icon (browser tab) -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=3">
@@ -30,6 +30,12 @@
 
     <link rel="stylesheet" href="/css/styles.css?v=1.0.11">
     <link rel="stylesheet" href="/vendor/cdnjs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 2026-11-23 Audit Trail styles (both looks; folded in from company_audit.js) -->
+    <link rel="stylesheet" href="/css/company_audit.css?v=20261123a">
+    <!-- 2026-11-23 the new Create / Edit User pop-up ("Try new", js/ua_user_v2.js) - only under .uav2, so nothing changes until someone presses Try new -->
+    <link rel="stylesheet" href="/css/ua_user_v2.css?v=20261124a">
+    <!-- 2026-11-24 Connectivity > Legacy Systems: the PaySpace sheet (payroll_connections.js) -->
+    <link rel="stylesheet" href="/css/payspace_sheet.css?v=20261124f">
    <link rel="stylesheet" href="/vendor/npm/leaflet@1.9.4/dist/leaflet.css" />
     <script src="/vendor/npm/leaflet@1.9.4/dist/leaflet.js"></script>
     
@@ -89,6 +95,14 @@
             border-color: rgba(255, 255, 255, 0.08) !important;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
             color: #e2e8f0;
+        }
+
+        /* 2026-11-23 TRIAL (user: "make this whole card feel like its floating, just want to test it out"): Users card only.
+           Layered soft shadow, navy-tinted, so the card lifts off the page. Light mode only for the trial (dark mode keeps its own shadow).
+           To undo: delete this rule. */
+        #page-users > .glass-panel {
+            /* kept within the 24px padding of the scroll area (it clips anything wider) */
+            box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.05), 0 2px 4px rgba(15, 23, 42, 0.05), 0 10px 20px -8px rgba(15, 23, 42, 0.14), 0 22px 40px -18px rgba(26, 76, 123, 0.38);
         }
 
         .page-section { display: none; }
@@ -440,6 +454,80 @@
         body.dark-mode .flatpickr-custom-alt-input {
             background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='%23cbd5e1' d='M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 64 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192h352v256c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192z'/%3E%3C/svg%3E");
         }
+
+        /* --- 2026-11-23 Settings > User Access (settings.js "USER ACCESS - THE USERS LIST"): Type / Status badges, headings,
+           Columns picker (the picker + drag styles were injected by ua_columns.js - folded in) --- */
+        .ua-type, .ua-st { display: inline-block; padding: 3px 9px; border-radius: 6px; font-size: 10px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
+        .ua-type-user, .ua-st.on { background: rgba(26, 76, 123, .1); color: #1a4c7b; }
+        .ua-type-ess { background: #1a4c7b; color: #fff; }
+        .ua-type-none, .ua-st.off { background: transparent; color: #64748b; box-shadow: inset 0 0 0 1px #cbd5e1; }
+        .ua-types { display: inline-flex; gap: 4px; flex-wrap: nowrap; }
+        body.dark-mode .ua-type-user, body.dark-mode .ua-st.on { background: rgba(147, 197, 253, .12); color: #93c5fd; }
+        body.dark-mode .ua-type-none, body.dark-mode .ua-st.off { color: #94a3b8; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .15); }
+        .ua-emp { font-size: 12px; white-space: nowrap; }
+        /* the face next to the name (the Employee Master list's .emx-av look) */
+        .ua-nm { display: flex; align-items: center; gap: 10px; }
+        .ua-av { width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; background: rgba(26, 76, 123, .1); color: #1a4c7b; font-size: 11px; font-weight: 900; letter-spacing: .02em; }
+        .ua-av img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        body.dark-mode .ua-av { background: rgba(147, 197, 253, .14); color: #93c5fd; }
+        .ua-emp b { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; color: #1a4c7b; margin-right: 4px; }
+        body.dark-mode .ua-emp b { color: #93c5fd; }
+        #usersTable th.ua-th { cursor: pointer; white-space: nowrap; }
+        /* the Actions column as wide as its buttons (user 23 Nov: "the action area is way too big"); the rest of the width goes to the other columns */
+        #usersTable th[data-uak="actions"], #usersTable tbody tr > td:last-child:not([colspan]) { width: 1%; white-space: nowrap; }
+        #usersTable .ua-sort { color: #94a3b8; margin-left: 5px; }
+        #usersTable .ua-sort.on { color: #1a4c7b; }
+        body.dark-mode #usersTable .ua-sort.on { color: #93c5fd; }
+        #usersTable th.ua-drop-l { box-shadow: inset 3px 0 0 #1a4c7b; }
+        #usersTable th.ua-drop-r { box-shadow: inset -3px 0 0 #1a4c7b; }
+        #usersTable th.ua-dragging { opacity: .45; }
+        #uaColPicker { position: fixed; z-index: 400; width: 280px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; box-shadow: 0 14px 34px rgba(15,23,42,.22); font-size: 13px; color: #1e293b; display: flex; flex-direction: column; max-height: 78vh; }
+        #uaColPicker .h { padding: 10px 14px; border-bottom: 1px solid #e2e8f0; font-weight: 700; color: #1a4c7b; }
+        #uaColPicker .h span { display: block; font-weight: 400; font-size: 11px; color: #64748b; margin-top: 2px; }
+        #uaColPicker .l { overflow-y: auto; padding: 4px 0; flex: 1; }
+        #uaColPicker .i { display: flex; align-items: center; gap: 8px; padding: 6px 14px; cursor: grab; }
+        #uaColPicker .i:hover { background: #f1f5f9; }
+        #uaColPicker .i.over { box-shadow: inset 0 2px 0 #1a4c7b; }
+        #uaColPicker .i .fa-grip-vertical { color: #94a3b8; }
+        #uaColPicker .i label { display: flex; align-items: center; gap: 8px; flex: 1; cursor: pointer; margin: 0; font-weight: 400; font-size: 13px; text-transform: none; letter-spacing: 0; color: inherit; }
+        #uaColPicker .i input { accent-color: #1a4c7b; }
+        #uaColPicker .f { display: flex; justify-content: space-between; gap: 8px; padding: 8px 14px; border-top: 1px solid #e2e8f0; }
+        #uaColPicker .f button { background: none; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; font-size: 12px; cursor: pointer; color: inherit; }
+        body.dark-mode #uaColPicker { background: #1e293b; border-color: #334155; color: #e2e8f0; }
+        body.dark-mode #uaColPicker .h, body.dark-mode #uaColPicker .f { border-color: #334155; }
+        body.dark-mode #uaColPicker .h { color: #93c5fd; }
+        body.dark-mode #uaColPicker .i:hover { background: #0f172a; }
+
+        /* 2026-11-24 Connectivity tabs (user: "a highlighted blue line under the tab you are in, animated when switching so it feels
+           interactive"): ONE navy line slides and stretches to the open tab (settings.js switchApiCategory / apiTabInk), the label fades
+           to navy, a faint line previews the tab under the mouse, and the opened tab glides in from the side the line moved to. */
+        .stab { position: relative; display: flex; flex-wrap: wrap; gap: 2px 26px; border-bottom: 1px solid #cbd5e1; }
+        .stab-b { position: relative; display: inline-flex; align-items: center; gap: 8px; background: none; border: 0; padding: 10px 2px 13px; font-family: inherit; font-size: 12px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase; color: #64748b; cursor: pointer; transition: color .25s ease; }
+        .stab-b i { font-size: 12px; transition: transform .4s cubic-bezier(.34, 1.56, .64, 1); }
+        .stab-b:hover { color: #1a4c7b; }
+        .stab-b:hover i { transform: translateY(-1px); }
+        .stab-b.on { color: #1a4c7b; }
+        .stab-b.on i { transform: scale(1.15); }
+        .stab-b:active i { transform: scale(.9); }
+        .stab-b:focus:not(:focus-visible) { outline: none; }
+        .stab-b:focus-visible { outline: 2px solid rgba(26, 76, 123, .35); outline-offset: 2px; border-radius: 4px; }
+        .stab-b::after { content: ''; position: absolute; left: 50%; right: 50%; bottom: -1px; height: 3px; border-radius: 3px 3px 0 0; background: rgba(26, 76, 123, .18); transition: left .25s ease, right .25s ease; }
+        .stab-b:not(.on):hover::after { left: 0; right: 0; }
+        .stab-ink { position: absolute; left: 0; top: 0; width: 0; height: 3px; border-radius: 3px 3px 0 0; background: #1a4c7b; box-shadow: 0 1px 8px rgba(26, 76, 123, .35); pointer-events: none; transition: transform .32s cubic-bezier(.65, .05, .25, 1), width .32s cubic-bezier(.65, .05, .25, 1); }
+        .stab.no-anim .stab-ink { transition: none; }
+        body.dark-mode .stab { border-bottom-color: #374151; }
+        body.dark-mode .stab-b { color: #94a3b8; }
+        body.dark-mode .stab-b:hover, body.dark-mode .stab-b.on { color: #93c5fd; }
+        body.dark-mode .stab-b::after { background: rgba(147, 197, 253, .2); }
+        body.dark-mode .stab-ink { background: #60a5fa; box-shadow: 0 1px 10px rgba(96, 165, 250, .45); }
+        @keyframes stabInR { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
+        @keyframes stabInL { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: none; } }
+        .stab-in-r { animation: stabInR .4s cubic-bezier(.16, 1, .3, 1) both; }
+        .stab-in-l { animation: stabInL .4s cubic-bezier(.16, 1, .3, 1) both; }
+        @media (prefers-reduced-motion: reduce) {
+            .stab-ink, .stab-b, .stab-b i, .stab-b::after { transition: none; }
+            .stab-in-r, .stab-in-l { animation: none; }
+        }
     </style>
     <!-- 2026-11-03 User Access bulk bar in the Org Hierarchy look (look only). AUTO-HEAL: safe to remove. -->
     <link rel="stylesheet" href="/css/bulk_bar.css?v=20261103a">
@@ -478,9 +566,8 @@
             </div>
 
             <ul class="sidebar-menu" style="flex-grow: 1; overflow-y: auto; margin-top: 10px;" id="sidebarNav">
-                 <li data-permission="set_profile"><a onclick="showSection('profile', this)" class="sidebar-item active" style="cursor: pointer;"><i class="fa-solid fa-building"></i> <span>Company Profile</span></a></li>
-                <li data-permission="set_api,sys_api"><a onclick="showSection('api', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-network-wired"></i> <span>Connectivity</span></a></li>
-                <li data-permission="set_sync,sys_api"><a onclick="showSection('sync', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-rotate"></i> <span>Sync Engine</span></a></li>
+                <!-- 2026-11-23 grouped (user: "categorised like the Farmers module sidebar"): My Company | Users & Access | Devices | Integrations | Account & Logs - contractors_sidebar_groups.js puts the titles in; this order is also the fallback -->
+                <li data-permission="set_profile"><a onclick="showSection('profile', this)" class="sidebar-item active" style="cursor: pointer;"><i class="fa-solid fa-building"></i> <span>My Company</span></a></li>
                 <li data-permission="set_users,sys_users"><a onclick="showSection('users', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-users"></i> <span>User Access</span></a></li>
                 <li data-permission="set_roles,sys_users"><a onclick="showSection('roles', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-shield-halved"></i> <span>Roles & Permissions</span></a></li>
                 <!-- 2026-11-03 Org Hierarchy sheet (js/org_sheet.js + routes/orgHierarchy.js); same permission as User Access -->
@@ -488,11 +575,13 @@
                 <li data-permission="set_zones,sys_hardware"><a onclick="showSection('zones', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-location-dot"></i> <span>Access Zones</span></a></li>
                 <li data-permission="set_devices,sys_hardware"><a onclick="showSection('devices', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-microchip"></i> <span>Hardware</span></a></li>
                 <li data-permission="set_errors,sys_hardware"><a onclick="showSection('errors', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-bug"></i> <span>Mobile Errors</span></a></li>
+                <li data-permission="set_mobile_tx,sys_api"><a onclick="showSection('mobile-tx', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-exchange-alt text-teal-500"></i> <span>Mobile Transactions</span></a></li>
+                <li data-permission="set_api,sys_api"><a onclick="showSection('api', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-network-wired"></i> <span>Connectivity</span></a></li>
+                <li data-permission="set_sync,sys_api"><a onclick="showSection('sync', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-rotate"></i> <span>Sync Engine</span></a></li>
+                <li data-permission="set_notifications,set_sync,sys_api"><a onclick="showSection('notifications', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-bell text-amber-500"></i> <span>Notifications</span></a></li>
                 <li data-permission="set_billing"><a onclick="showSection('billing', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-file-invoice-dollar icon-green"></i> <span>Usage & Quota</span></a></li>
                 <li data-permission="set_audit,sys_users"><a onclick="showSection('audit', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-clipboard-list"></i> <span>Audit Trail</span></a></li>
-                <li data-permission="set_mobile_tx,sys_api"><a onclick="showSection('mobile-tx', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-exchange-alt text-teal-500"></i> <span>Mobile Transactions</span></a></li>
-                               <li data-permission="set_tickets"><a onclick="showSection('my-tickets', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-headset text-orange-500"></i> <span>My Tickets</span></a></li>
-                <li data-permission="set_notifications,set_sync,sys_api"><a onclick="showSection('notifications', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-bell text-amber-500"></i> <span>Notifications</span></a></li>
+                <li data-permission="set_tickets"><a onclick="showSection('my-tickets', this)" class="sidebar-item" style="cursor: pointer;"><i class="fa-solid fa-headset text-orange-500"></i> <span>My Tickets</span></a></li>
             </ul>
             
             <!-- Profile Block at Bottom of Sidebar -->
@@ -523,7 +612,7 @@
 
     <main class="main-content flex flex-col bg-transparent relative z-10">
         <header class="pb-4 mb-4 flex justify-between items-center z-10 border-b border-slate-300 dark:border-gray-700">
-            <h2 id="sectionTitle" class="text-xl font-bold text-slate-800 dark:text-gray-200 uppercase tracking-wide">Company Profile</h2>
+            <h2 id="sectionTitle" class="text-xl font-bold text-slate-800 dark:text-gray-200 uppercase tracking-wide">My Company</h2>
         </header>
 
         <div class="flex-1 overflow-y-auto p-6 relative">
@@ -634,17 +723,18 @@
            
            <section id="page-api" class="page-section">
                 <div class="glass-panel p-6 rounded-lg border-t-[3px] border-t-[#1a4c7b]">
-                    <!-- Category Tabs Header -->
-                    <div class="flex flex-wrap border-b border-slate-300 dark:border-gray-700 mb-6 gap-4">
-                        <button type="button" onclick="switchApiCategory('email')" id="btn-cat-email" class="bg-transparent border-none border-b-2 border-blue-600 dark:border-sky-400 text-blue-600 dark:text-sky-400 font-bold py-2 px-2 cursor-pointer transition-all uppercase tracking-wide text-xs"><i class="fas fa-envelope mr-1"></i> Email Config</button>
-                        <button type="button" onclick="switchApiCategory('sso')" id="btn-cat-sso" class="bg-transparent border-none border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-gray-300 font-bold py-2 px-2 cursor-pointer transition-all uppercase tracking-wide text-xs"><i class="fas fa-key mr-1"></i> Login Setup</button>
-                        <button type="button" onclick="switchApiCategory('tna')" id="btn-cat-tna" class="bg-transparent border-none border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-gray-300 font-bold py-2 px-2 cursor-pointer transition-all uppercase tracking-wide text-xs"><i class="fas fa-globe mr-1"></i> ZKTeco API</button>
-                        <button type="button" onclick="switchApiCategory('cvs')" id="btn-cat-cvs" class="bg-transparent border-none border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-gray-300 font-bold py-2 px-2 cursor-pointer transition-all uppercase tracking-wide text-xs"><i class="fas fa-database mr-1"></i> Legacy Systems</button>
-                        <button type="button" onclick="switchApiCategory('mobilesec')" id="btn-cat-mobilesec" class="bg-transparent border-none border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-gray-300 font-bold py-2 px-2 cursor-pointer transition-all uppercase tracking-wide text-xs"><i class="fas fa-shield-alt mr-1"></i> Mobile Security</button>
+                    <!-- Category Tabs Header: 2026-11-24 one sliding navy line (.stab, <style> "Connectivity tabs"; settings.js switchApiCategory) -->
+                    <div id="apiCatTabs" class="stab mb-6" role="tablist" aria-label="Connectivity">
+                        <button type="button" role="tab" aria-selected="true" onclick="switchApiCategory('email')" id="btn-cat-email" class="stab-b on"><i class="fas fa-envelope"></i>Email Config</button>
+                        <button type="button" role="tab" aria-selected="false" onclick="switchApiCategory('sso')" id="btn-cat-sso" class="stab-b"><i class="fas fa-key"></i>Login Setup</button>
+                        <button type="button" role="tab" aria-selected="false" onclick="switchApiCategory('tna')" id="btn-cat-tna" class="stab-b"><i class="fas fa-globe"></i>ZKTeco API</button>
+                        <button type="button" role="tab" aria-selected="false" onclick="switchApiCategory('cvs')" id="btn-cat-cvs" class="stab-b"><i class="fas fa-database"></i>Legacy Systems</button>
+                        <button type="button" role="tab" aria-selected="false" onclick="switchApiCategory('mobilesec')" id="btn-cat-mobilesec" class="stab-b"><i class="fas fa-shield-alt"></i>Mobile Security</button>
+                        <span class="stab-ink" aria-hidden="true"></span>
                     </div>
 
                     <!-- CATEGORY: EMAIL -->
-                    <div id="cat-email" class="api-category block animate-[slideFadeIn_0.3s_ease_forwards]">
+                    <div id="cat-email" class="api-category block">
                         <p class="text-xs text-slate-600 dark:text-gray-400 mb-4">Configure custom SMTP settings for this tenant. If left blank, the system will seamlessly use the Master Global Email Settings.</p>
                         <!-- Email Configuration Container -->
                         <div id="emailConfigContainer" class="mt-4">
@@ -978,279 +1068,303 @@
                     </div>
 
                     <!-- CATEGORY: LEGACY SYSTEMS -->
-                    <div id="cat-cvs" class="api-category hidden" style="display: none;">
-                        <!-- ⚡ 2026-10-12 ACTIVE PAYROLL SYSTEM (payroll_connections.js). Employee Master > Data Tools > Payroll Sync follows it. -->
-                        <div id="payrollProviderCard" class="flex flex-wrap items-end gap-4 mb-6 p-4 rounded-xl border border-slate-200 dark:border-gray-700 bg-white/40 dark:bg-gray-900/40 shadow-sm">
-                            <div class="flex-1 min-w-[240px]">
-                                <label for="payrollProviderSelect" class="block text-xs font-bold text-slate-600 dark:text-gray-400 mb-1"><i class="fas fa-money-check-alt mr-1"></i> Active payroll system</label>
-                                <select id="payrollProviderSelect" class="form-control" onchange="savePayrollProvider(this.value)">
-                                    <option value="NONE">None</option><option value="SAGE_300">Sage 300 People</option><option value="SAGE_ONLINE">Sage Business Cloud</option><option value="PAYSPACE">PaySpace (Deel Local Payroll)</option>
-                                </select>
-                                <p class="text-[11px] text-slate-600 dark:text-gray-400 mt-1">Employee Master &gt; Data Tools &gt; <b>Payroll Sync</b> and the leave and hours sending use this system. Set up its connection in its tab below.</p>
-                            </div>
-                            <span id="payrollProviderStatus" class="text-xs font-bold hidden"></span>
-                        </div>
-
-                        <div id="legacySubTabs" class="flex gap-6 border-b border-slate-200 dark:border-gray-700 mb-6" role="tablist">
-                            <button type="button" id="lsubbtn-sage" role="tab" onclick="switchLegacySub('sage')" class="bg-transparent border-none border-b-2 border-transparent pb-2 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-slate-800 dark:text-gray-400 dark:hover:text-white"><i class="fas fa-database mr-1"></i> Sage Integration</button>
-                            <button type="button" id="lsubbtn-payspace" role="tab" onclick="switchLegacySub('payspace')" class="bg-transparent border-none border-b-2 border-transparent pb-2 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-slate-800 dark:text-gray-400 dark:hover:text-white"><i class="fas fa-cloud mr-1"></i> PaySpace Integration</button>
-                        </div>
-
-                        <div id="lsub-sage" class="legacy-sub">
-                        <!-- NEW: SAGE INTEGRATION -->
-                        <div class="flex justify-between items-center mt-10 mb-4 border-b border-slate-200 dark:border-gray-700 pb-2">
-                            <h4 class="font-bold text-slate-700 dark:text-gray-300 text-sm">Sage Integration Configuration</h4>
-                            <div class="flex space-x-2 items-center">
-                                <span id="sageTestResult" class="text-xs font-bold hidden"></span>
-                                <button type="button" onclick="testSageApi()" class="btn-primary !py-1.5 !px-3 !text-xs">Test Connection</button>
-                            </div>
-                        </div>
-                        <p class="text-[11px] text-slate-600 dark:text-gray-400 mb-3">Configure integration with Sage. Select your active Sage provider below, then provide your connection credentials.</p>
-                        
-                        <div id="sageConfigContainer" class="mt-4">
-                            <!-- Read-Only View -->
-                            <div id="sageViewMode" class="bg-white/40 dark:bg-gray-900/40 rounded-xl border border-slate-200 dark:border-gray-700 shadow-sm overflow-hidden">
-                                <div class="p-5 flex justify-between items-center border-b border-slate-200 dark:border-gray-700 bg-slate-50/50 dark:bg-gray-800/50">
-                                    <div>
-                                        <h4 class="text-sm font-bold text-slate-700 dark:text-gray-200">Current Configuration</h4>
-                                    </div>
-                                    <button type="button" onclick="toggleSageEditMode(true)" class="btn-primary !py-1.5 !px-4 !text-xs shadow-sm"><i class="fas fa-edit mr-1"></i> Edit</button>
-                                </div>
-                                <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-y-5 gap-x-8 text-sm">
-                                    <div class="col-span-1 md:col-span-2">
-                                        <p class="text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-gray-400 mb-1"><i class="fas fa-link mr-1"></i> Sage API URL</p>
-                                        <p id="viewSageApiUrl" class="font-semibold text-slate-800 dark:text-gray-200">Not configured</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-gray-400 mb-1"><i class="fas fa-user mr-1"></i> Username</p>
-                                        <p id="viewSageUsername" class="font-semibold text-slate-800 dark:text-gray-200">-</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-gray-400 mb-1"><i class="fas fa-database mr-1"></i> Master Data Source</p>
-                                        <p id="viewSageMasterSystem" class="font-semibold text-[#1a4c7b] dark:text-teal-400">-</p>
-                                    </div>
-                                   <div class="col-span-1 md:col-span-2 border-t border-slate-200 dark:border-gray-700 pt-4 mt-1">
-                                        <p class="text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-gray-400 mb-2"><i class="fas fa-exchange-alt mr-1"></i> Synchronization Rules</p>
-                                        <div class="flex flex-wrap gap-4 mb-4">
-                                            <span id="viewSagePushLeave" class="bg-slate-100 dark:bg-gray-800 px-2 py-1 rounded text-xs text-slate-600 dark:text-gray-400 border border-slate-200 dark:border-gray-700">Push Leave: No</span>
-                                            <span id="viewSagePushPay" class="bg-slate-100 dark:bg-gray-800 px-2 py-1 rounded text-xs text-slate-600 dark:text-gray-400 border border-slate-200 dark:border-gray-700">Push Pay: No</span>
-                                            <span id="viewSagePullWage" class="bg-slate-100 dark:bg-gray-800 px-2 py-1 rounded text-xs text-slate-600 dark:text-gray-400 border border-slate-200 dark:border-gray-700">Pull Wage Advice: No</span>
-                                            <span id="viewSageLeaveFrequency" class="bg-teal-100 dark:bg-teal-900/50 px-2 py-1 rounded text-xs text-teal-700 dark:text-teal-400 font-bold border border-teal-300 dark:border-teal-600">Leave Pull: Manual</span>
-                                            <span id="viewSageLeaveLastPull" class="bg-slate-100 dark:bg-gray-800 px-2 py-1 rounded text-xs text-slate-600 dark:text-gray-400 border border-slate-200 dark:border-gray-700">Last pull: never</span>
-                                        </div>
-                                        <div class="flex items-center gap-2">
-                                            <span class="text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-gray-400">Default Wage Type:</span>
-                                            <span id="viewSageDefaultWage" class="font-bold text-[#1a4c7b] dark:text-teal-400 text-xs">-</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Edit Form Mode -->
-                            <form id="sageSettingsForm" class="hidden">
-                                <div class="bg-white/40 dark:bg-gray-900/40 rounded-xl border border-slate-200 dark:border-gray-700 shadow-sm flex flex-col overflow-hidden">
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 p-5">
-                                       <!-- SAGE API CREDENTIALS -->
-                                        <div class="col-span-1 md:col-span-2">
-                                            <label class="block text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-gray-400 mb-1.5"><i class="fas fa-link mr-1"></i> Sage API Server URL</label>
-                                            <input type="url" id="sageApiUrl" placeholder="e.g., https://online.sage.co.za/A92744" class="form-control">
-                                        </div>
-                                        <div class="col-span-1 border-t border-slate-200 dark:border-gray-700 pt-4 mt-1">
-                                            <label class="block text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-gray-400 mb-1.5"><i class="fas fa-user mr-1"></i> Username</label>
-                                            <input type="text" id="sageUsername" placeholder="API User" class="form-control" autocomplete="off">
-                                        </div>
-                                        <div class="col-span-1 border-t border-slate-200 dark:border-gray-700 pt-4 mt-1">
-                                            <label class="block text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-gray-400 mb-1.5"><i class="fas fa-lock mr-1"></i> Password</label>
-                                            <input type="password" id="sagePassword" placeholder="API Password" class="form-control" autocomplete="new-password">
-                                        </div>
-                                        <div class="col-span-1 md:col-span-2">
-                                            <label class="block text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-gray-400 mb-1.5"><i class="fas fa-key mr-1"></i> API Key</label>
-                                            <input type="password" id="sageApiKey" placeholder="Your Sage API Key" class="form-control">
-                                        </div>
-                                        <div>
-                                            <label class="block text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-gray-400 mb-1.5"><i class="fas fa-user-tag mr-1"></i> Employee Generic GET Code</label>
-                                            <input type="text" id="sageEmployeeGetCode" placeholder="e.g., EMP_DET" class="form-control" autocomplete="off">
-                                        </div>
-                                        <div>
-                                            <label class="block text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-gray-400 mb-1.5"><i class="fas fa-calendar-alt mr-1"></i> Leave Generic GET Code</label>
-                                            <input type="text" id="sageLeaveGetCode" placeholder="e.g., LEAVE_DETAIL" class="form-control" autocomplete="off">
-                                        </div>
-                                        
-                                        <div class="col-span-1 md:col-span-2 border-t border-slate-200 dark:border-gray-700 pt-4 mt-1">
-                                            <label class="block text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-gray-400 mb-1.5"><i class="fas fa-database mr-1"></i> Master Data Source</label>
-                                            <select id="sageMasterSystem" class="form-control">
-                                                <option value="TNA">TNA Africa is Master (Push Updates to Sage)</option>
-                                                <option value="SAGE">Sage 300 is Master (Pull Only, Do Not Push)</option>
+                    <div id="cat-cvs" class="api-category hidden" style="display: none;" data-no-sticky-heads><!-- 2026-11-24 data-no-sticky-heads: the sheets size themselves; contractors_sticky_heads.js boxed them at 610px and cut off rows + dropdowns -->
+                        <!-- ⚡ 2026-10-12 ACTIVE PAYROLL SYSTEM (payroll_connections.js). Employee Master > Data Tools > Payroll Sync follows it.
+                             2026-11-24 sheet look (css/payspace_sheet.css): row 0 of the sheet. -->
+                        <div id="payrollProviderCard" class="pss-sheet mb-5">
+                            <table class="pss-grid">
+                                <colgroup><col class="pss-c-rn"><col class="pss-c-k"><col><col class="pss-c-s"></colgroup>
+                                <tbody>
+                                    <tr>
+                                        <td class="pss-rn">0</td>
+                                        <th scope="row" class="pss-k"><label for="payrollProviderSelect"><i class="fas fa-money-check-alt pss-ki"></i>Active payroll system</label><i class="fas fa-circle-info pss-tip" tabindex="0" data-tip="Employee Master &gt; Data Tools &gt; Payroll Sync and the leave and hours sending use this system. Set up its connection in its tab below."></i></th>
+                                        <td class="pss-v pss-e">
+                                            <select id="payrollProviderSelect" class="form-control pss-in" data-nosearch onchange="savePayrollProvider(this.value)">
+                                                <option value="NONE">None</option><option value="SAGE_300">Sage 300 People</option><option value="SAGE_ONLINE">Sage Business Cloud</option><option value="PAYSPACE">PaySpace (Deel Local Payroll)</option>
                                             </select>
-                                        </div>
+                                        </td>
+                                        <td><span id="payrollProviderStatus" class="pss-msg"></span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
 
-                                        <div class="col-span-1 border-t border-slate-200 dark:border-gray-700 pt-4 mt-1">
-                                            <label class="block text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-gray-400 mb-3"><i class="fas fa-upload mr-1"></i> Push Rules (TNA -> Sage)</label>
-                                            <div class="flex flex-col gap-3">
-                                                <label class="flex items-center text-sm text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer">
-                                                    <input type="checkbox" id="sagePushLeave" class="mr-3 accent-[#1a4c7b] w-4 h-4 shadow-sm"> Push Leave Transactions
-                                                </label>
-                                                <label class="flex items-center text-sm text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer">
-                                                    <input type="checkbox" id="sagePushPay" class="mr-3 accent-[#1a4c7b] w-4 h-4 shadow-sm"> Push Payroll / Cost Data
-                                                </label>
-                                            </div>
-                                        </div>
+                        <!-- 2026-11-24 the Org Hierarchy Users | Tree | Board switch look (org_sheet.css .hl-seg .hl-vw) -->
+                        <div id="legacySubTabs" class="hl-seg hl-vw" role="tablist" aria-label="Payroll system">
+                            <button type="button" id="lsubbtn-sage" role="tab" onclick="switchLegacySub('sage')"><i class="fas fa-database"></i>Sage Integration<span class="pss-tabb" id="lsubact-sage" hidden>Active</span></button>
+                            <button type="button" id="lsubbtn-payspace" role="tab" onclick="switchLegacySub('payspace')"><i class="fas fa-cloud"></i>PaySpace Integration<span class="pss-tabb" id="lsubact-payspace" hidden>Active</span></button>
+                        </div>
 
-                                        <div class="col-span-1 border-t border-slate-200 dark:border-gray-700 pt-4 mt-1">
-                                            <label class="block text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-gray-400 mb-3"><i class="fas fa-download mr-1"></i> Pull Rules (Sage -> TNA)</label>
-                                            <div class="flex flex-col gap-3">
-                                                <label class="flex items-center text-sm text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer">
-                                                    <input type="checkbox" id="sagePullWage" class="mr-3 accent-teal-500 w-4 h-4 shadow-sm"> Pull Wage Advice & Pay Rates
-                                                </label>
-                                                <label class="flex items-center text-sm text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer" title="Writes each approved Sage leave day to the Weekly Roster and Team View on every leave pull">
-                                                    <input type="checkbox" id="sagePullLeaveDays" class="mr-3 accent-teal-500 w-4 h-4 shadow-sm"> Pull Leave Days to Roster &amp; Team View
-                                                </label>
-                                                <div class="mt-2">
-                                                    <label class="block text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-gray-400 mb-1.5">Default Wage Type</label>
-                                                    <select id="sageDefaultWageType" class="form-control">
+                        <!-- 2026-11-24 SAGE: the PaySpace sheet look (css/payspace_sheet.css). The logic moved from settings.js to
+                             payroll_connections.js ("SAGE"). Same ids, same saves (/api/settings/sage-api, /api/sage/leave-mapping). -->
+                        <div id="lsub-sage" class="legacy-sub">
+                            <div id="sageConfigContainer" class="pss-host">
+                                <div class="pss-bar">
+                                    <span class="pss-title"><i class="fas fa-database"></i>Sage <small>Sage 300 People · Sage Business Cloud</small></span>
+                                    <span class="pss-mode">Editing <b id="sageChangeCount">0</b> <span id="sageChangeWord">changes</span></span>
+                                    <span class="pss-sp"></span>
+                                    <span id="sageTestResult" class="pss-msg"></span>
+                                    <span id="sageError" class="pss-msg" role="status"></span>
+                                    <button type="button" onclick="testSageApi()" class="btn-primary pss-btn"><i class="fas fa-plug"></i> Test connection</button>
+                                    <button type="button" onclick="toggleSageEditMode(true)" class="btn-primary pss-btn pss-view" id="sageEditBtn"><i class="fas fa-pen"></i> Edit</button>
+                                    <button type="button" onclick="toggleSageEditMode(false)" class="btn-primary pss-btn pss-edit">Cancel</button>
+                                    <button type="submit" form="sageSettingsForm" class="btn-primary pss-btn is-main pss-edit" id="sageSaveBtn"><i class="fas fa-check"></i> Save</button>
+                                </div>
+
+                                <form id="sageSettingsForm" novalidate autocomplete="off">
+                                    <div class="pss-sheet">
+                                        <table class="pss-grid" id="sageSheet">
+                                            <colgroup><col class="pss-c-rn"><col class="pss-c-k"><col><col class="pss-c-s"></colgroup>
+                                            <thead><tr><th class="pss-rn"></th><th>Setting</th><th>Value</th><th>Status</th></tr></thead>
+                                            <tbody>
+                                                <tr class="pss-grp"><td class="pss-rn"></td><td colspan="3"><i class="fas fa-link pss-gi"></i>Connection<i class="fas fa-circle-info pss-tip" tabindex="0" data-tip="The login for the Sage API. Save, then press Test connection."></i></td></tr>
+                                                <tr data-pss-f="sageApiUrl">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><label for="sageApiUrl"><i class="fas fa-link pss-ki"></i>Sage API server URL</label></th>
+                                                    <td class="pss-v pss-e"><span class="pss-view" id="viewSageApiUrl">-</span><div class="pss-edit"><input type="url" id="sageApiUrl" class="form-control pss-in" placeholder="e.g. https://online.sage.co.za/A92744"></div></td>
+                                                    <td><span class="pss-view" id="sageStApiUrl"></span><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
+                                                <tr data-pss-f="sageUsername">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><label for="sageUsername"><i class="fas fa-user pss-ki"></i>Username</label></th>
+                                                    <td class="pss-v pss-e"><span class="pss-view" id="viewSageUsername">-</span><div class="pss-edit"><input type="text" id="sageUsername" class="form-control pss-in" placeholder="API user" autocomplete="off"></div></td>
+                                                    <td><span class="pss-view" id="sageStUsername"></span><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
+                                                <tr data-pss-f="sagePassword">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><label for="sagePassword"><i class="fas fa-lock pss-ki"></i>Password</label></th>
+                                                    <td class="pss-v pss-e"><span class="pss-view" id="viewSagePassword">-</span><div class="pss-edit"><input type="password" id="sagePassword" class="form-control pss-in" placeholder="API password" autocomplete="new-password"></div></td>
+                                                    <td><span class="pss-view" id="sageStPassword"></span><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
+                                                <tr data-pss-f="sageApiKey">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><label for="sageApiKey"><i class="fas fa-key pss-ki"></i>API key</label></th>
+                                                    <td class="pss-v pss-e"><span class="pss-view" id="viewSageApiKey">-</span><div class="pss-edit"><input type="password" id="sageApiKey" class="form-control pss-in" placeholder="Your Sage API key" autocomplete="new-password"></div></td>
+                                                    <td><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
+                                                <tr data-pss-f="sageEmployeeGetCode">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><label for="sageEmployeeGetCode"><i class="fas fa-user-tag pss-ki"></i>Employee generic GET code</label><i class="fas fa-circle-info pss-tip" tabindex="0" data-tip="The Sage generic GET code that returns the employees, e.g. EMP_DET."></i></th>
+                                                    <td class="pss-v pss-e"><span class="pss-view" id="viewSageEmpCode">-</span><div class="pss-edit"><input type="text" id="sageEmployeeGetCode" class="form-control pss-in" placeholder="e.g. EMP_DET" autocomplete="off"></div></td>
+                                                    <td><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
+                                                <tr data-pss-f="sageLeaveGetCode">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><label for="sageLeaveGetCode"><i class="fas fa-calendar-alt pss-ki"></i>Leave generic GET code</label><i class="fas fa-circle-info pss-tip" tabindex="0" data-tip="The Sage generic GET code that returns the leave, e.g. LEAVE_DETAIL."></i></th>
+                                                    <td class="pss-v pss-e"><span class="pss-view" id="viewSageLeaveCode">-</span><div class="pss-edit"><input type="text" id="sageLeaveGetCode" class="form-control pss-in" placeholder="e.g. LEAVE_DETAIL" autocomplete="off"></div></td>
+                                                    <td><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
+
+                                                <tr class="pss-grp"><td class="pss-rn"></td><td colspan="3"><i class="fas fa-database pss-gi"></i>Master data<i class="fas fa-circle-info pss-tip" tabindex="0" data-tip="Which system owns the employee details. TNA Africa as master pushes updates to Sage; Sage as master is pull only - nothing is pushed."></i></td></tr>
+                                                <tr data-pss-f="sageMasterSystem">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><label for="sageMasterSystem"><i class="fas fa-crown pss-ki"></i>Master data source</label></th>
+                                                    <td class="pss-v pss-e"><span class="pss-view" id="viewSageMasterSystem">-</span><div class="pss-edit"><select id="sageMasterSystem" class="form-control pss-in" data-nosearch>
+                                                        <option value="TNA">TNA Africa is Master (Push Updates to Sage)</option>
+                                                        <option value="SAGE">Sage 300 is Master (Pull Only, Do Not Push)</option>
+                                                    </select></div></td>
+                                                    <td><span class="pss-view" id="sageStMaster"></span><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
+
+                                                <tr class="pss-grp"><td class="pss-rn"></td><td colspan="3"><i class="fas fa-upload pss-gi"></i>Push rules (T&amp;A to Sage)</td></tr>
+                                                <tr data-pss-f="sagePushLeave">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><i class="fas fa-umbrella-beach pss-ki"></i>Push leave transactions</th>
+                                                    <td class="pss-v pss-e"><span class="pss-view" id="viewSagePushLeave">-</span><div class="pss-edit"><label class="pss-chk"><input type="checkbox" id="sagePushLeave"><span class="pss-yn"></span></label></div></td>
+                                                    <td><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
+                                                <tr data-pss-f="sagePushPay">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><i class="fas fa-coins pss-ki"></i>Push payroll / cost data</th>
+                                                    <td class="pss-v pss-e"><span class="pss-view" id="viewSagePushPay">-</span><div class="pss-edit"><label class="pss-chk"><input type="checkbox" id="sagePushPay"><span class="pss-yn"></span></label></div></td>
+                                                    <td><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
+
+                                                <tr class="pss-grp"><td class="pss-rn"></td><td colspan="3"><i class="fas fa-download pss-gi"></i>Pull rules (Sage to T&amp;A)</td></tr>
+                                                <tr data-pss-f="sagePullWage">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><i class="fas fa-file-invoice-dollar pss-ki"></i>Pull wage advice &amp; pay rates</th>
+                                                    <td class="pss-v pss-e"><span class="pss-view" id="viewSagePullWage">-</span><div class="pss-edit"><label class="pss-chk"><input type="checkbox" id="sagePullWage"><span class="pss-yn"></span></label></div></td>
+                                                    <td><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
+                                                <tr data-pss-f="sagePullLeaveDays">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><i class="fas fa-calendar-check pss-ki"></i>Pull leave days to Roster &amp; Team View<i class="fas fa-circle-info pss-tip" tabindex="0" data-tip="Writes each approved Sage leave day to the Weekly Roster and Team View on every leave pull."></i></th>
+                                                    <td class="pss-v pss-e"><span class="pss-view" id="viewSagePullLeaveDays">-</span><div class="pss-edit"><label class="pss-chk"><input type="checkbox" id="sagePullLeaveDays"><span class="pss-yn"></span></label></div></td>
+                                                    <td><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
+                                                <tr data-pss-f="sageDefaultWageType">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><label for="sageDefaultWageType"><i class="fas fa-money-bill-wave pss-ki"></i>Default wage type</label></th>
+                                                    <td class="pss-v pss-e"><span class="pss-view" id="viewSageDefaultWage">-</span><div class="pss-edit"><select id="sageDefaultWageType" class="form-control pss-in" data-nosearch>
                                                         <option value="Fixed">Fixed Salary</option>
                                                         <option value="Hourly">Hourly Rate</option>
-                                                    </select>
-                                                </div>
-                                                <div class="mt-2 border-t border-slate-200 dark:border-gray-700 pt-3">
-                                                    <label class="block text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-gray-400 mb-1.5">Leave Balance Pull Frequency</label>
-                                                    <select id="sageLeavePullFrequency" onchange="window.toggleSageLeavePullDay()" class="form-control mb-2">
+                                                    </select></div></td>
+                                                    <td><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
+                                                <tr data-pss-f="sageLeavePullFrequency">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><label for="sageLeavePullFrequency"><i class="fas fa-rotate pss-ki"></i>Leave balance pull</label><i class="fas fa-circle-info pss-tip" tabindex="0" data-tip="How often the leave balances are pulled from Sage. Manual = only when someone runs it."></i></th>
+                                                    <td class="pss-v pss-e"><span class="pss-view" id="viewSageLeaveFrequency">-</span><div class="pss-edit"><select id="sageLeavePullFrequency" onchange="window.toggleSageLeavePullDay()" class="form-control pss-in" data-nosearch>
                                                         <option value="Manual">Manual Only (run on demand)</option>
                                                         <option value="Daily">Instant / Daily</option>
                                                         <option value="Weekly">Weekly</option>
                                                         <option value="Monthly">Specific Monthly Date</option>
-                                                    </select>
-                                                    <div id="sageLeavePullDayContainer" class="hidden">
-                                                        <label class="block text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-gray-400 mb-1.5">Day of the Month (1-31)</label>
-                                                        <input type="number" id="sageLeavePullDay" min="1" max="31" value="20" class="form-control">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                                    </select></div></td>
+                                                    <td><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
+                                                <tr id="sageLeavePullDayContainer" class="pss-edit hidden" data-pss-f="sageLeavePullDay">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><label for="sageLeavePullDay"><i class="fas fa-calendar-day pss-ki"></i>Day of the month (1-31)</label></th>
+                                                    <td class="pss-v pss-e"><input type="number" id="sageLeavePullDay" min="1" max="31" value="20" class="form-control pss-in"></td>
+                                                    <td><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
+                                            </tbody>
+                                            <!-- read-only rows -->
+                                            <tbody class="pss-view">
+                                                <tr class="pss-grp"><td class="pss-rn"></td><td colspan="3"><i class="fas fa-clock-rotate-left pss-gi"></i>Last leave pull</td></tr>
+                                                <tr><td class="pss-rn"></td><th scope="row" class="pss-k"><i class="fas fa-stethoscope pss-ki"></i>Result</th><td class="pss-v" id="viewSageLeaveLastPull">Never</td><td id="sageStLastPull"></td></tr>
+                                            </tbody>
+                                        </table>
                                     </div>
-                                    <div class="bg-slate-100/80 dark:bg-gray-800/80 border-t border-slate-200 dark:border-gray-700 py-3 px-5 flex justify-between items-center">
-                                        <div>
-                                            <p id="sageError" class="text-red-500 dark:text-red-400 text-xs font-bold hidden"></p>
-                                        </div>
-                                        <div class="flex gap-2">
-                                            <button type="button" onclick="toggleSageEditMode(false)" class="btn-primary !bg-slate-200 !text-slate-700 !border-slate-300 dark:!bg-gray-700 dark:!text-white dark:!border-gray-600 !m-0 !py-1.5 !px-4 shadow-sm">Cancel</button>
-                                            <button type="submit" class="btn-primary !m-0 !py-1.5 !px-5 shadow-sm">Save</button>
-                                        </div>
-                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- SAGE LEAVE TYPE MAPPING: an Excel grid (payroll_connections.js "SAGE LEAVE TYPE MAPPING") -->
+                            <section class="pss-block">
+                                <div class="pss-bh">
+                                    <span class="pss-bt"><i class="fas fa-right-left"></i>Sage leave type mapping<i class="fas fa-circle-info pss-tip" tabindex="0" data-tip="Link each T&amp;A leave type to its Sage leave type. Suggested matches are filled in, but nothing is saved until you press Save mapping."></i></span>
+                                    <span class="pss-sp"></span>
+                                    <span id="sageMapStatus" class="pss-msg"></span>
+                                    <button type="button" onclick="loadSageLeaveMapping()" class="btn-primary pss-btn" id="sageMapLoadBtn"><i class="fas fa-rotate"></i> Load from Sage</button>
+                                    <button type="button" onclick="saveSageLeaveMapping()" class="btn-primary pss-btn is-main" id="sageMapSaveBtn" hidden><i class="fas fa-check"></i> Save mapping</button>
                                 </div>
-                            </form>
+                                <div id="sageLeaveMapContainer"><div class="pss-loading">Press Load from Sage to fetch the leave types.</div></div>
+                            </section>
                         </div>
 
-                        <!-- SAGE LEAVE TYPE MAPPING -->
-                        <div class="flex justify-between items-center mt-10 mb-4 border-b border-slate-200 dark:border-gray-700 pb-2">
-                            <h4 class="font-bold text-slate-700 dark:text-gray-300 text-sm">Sage Leave Type Mapping</h4>
-                            <div class="flex space-x-2 items-center">
-                                <span id="sageMapStatus" class="text-xs font-bold hidden"></span>
-                                <button type="button" onclick="loadSageLeaveMapping()" class="btn-primary !py-1.5 !px-3 !text-xs"><i class="fas fa-sync mr-1"></i> Load from Sage</button>
-                            </div>
-                        </div>
-                        <p class="text-[11px] text-slate-600 dark:text-gray-400 mb-3">Link each local leave type to its Sage equivalent. Suggested matches are pre-selected but are not saved until you click Save Mapping.</p>
-
-                        <div id="sageLeaveMapContainer" class="mt-4 bg-white/40 dark:bg-gray-900/40 rounded-xl border border-slate-200 dark:border-gray-700 shadow-sm overflow-hidden">
-                            <div class="p-5 text-center text-xs text-slate-500 dark:text-gray-400">
-                                Click <b>Load from Sage</b> to fetch leave types.
-                            </div>
-                        </div>
-                        </div>
-
-                        <!-- ⚡ 2026-10-12 PAYSPACE (Deel Local Payroll) - payroll_connections.js / logic_payspace.js -->
+                        <!-- ⚡ 2026-10-12 PAYSPACE (Deel Local Payroll) - payroll_connections.js / logic_payspace.js
+                             2026-11-24 sheet look (css/payspace_sheet.css): one sheet, Edit turns the Value cells into boxes,
+                             Save / Cancel in the bar on top, help text in the (i) icons. Same ids, same saves as before. -->
                         <div id="lsub-payspace" class="legacy-sub" style="display: none;">
-                            <div class="flex justify-between items-center mb-4 border-b border-slate-200 dark:border-gray-700 pb-2">
-                                <h4 class="font-bold text-slate-700 dark:text-gray-300 text-sm">PaySpace Integration <span class="font-normal text-slate-500">(Deel Local Payroll)</span></h4>
-                                <div class="flex space-x-2 items-center">
-                                    <span id="payspaceTestResult" class="text-xs font-bold hidden"></span>
-                                    <button type="button" onclick="testPayspaceApi()" class="btn-primary !py-1.5 !px-3 !text-xs">Test Connection</button>
+                            <div id="payspaceConfigContainer" class="pss-host">
+                                <div class="pss-bar">
+                                    <span class="pss-title"><i class="fas fa-cloud"></i>PaySpace <small>Deel Local Payroll</small></span>
+                                    <span class="pss-mode">Editing <b id="psChangeCount">0</b> <span id="psChangeWord">changes</span></span>
+                                    <span class="pss-sp"></span>
+                                    <span id="payspaceTestResult" class="pss-msg"></span>
+                                    <span id="psError" class="pss-msg" role="status"></span>
+                                    <button type="button" onclick="testPayspaceApi()" class="btn-primary pss-btn"><i class="fas fa-plug"></i> Test connection</button>
+                                    <button type="button" onclick="togglePayspaceEditMode(true)" class="btn-primary pss-btn pss-view" id="psEditBtn"><i class="fas fa-pen"></i> Edit</button>
+                                    <button type="button" onclick="togglePayspaceEditMode(false)" class="btn-primary pss-btn pss-edit">Cancel</button>
+                                    <button type="submit" form="payspaceSettingsForm" class="btn-primary pss-btn is-main pss-edit" id="psSaveBtn"><i class="fas fa-check"></i> Save</button>
                                 </div>
-                            </div>
-                            <p class="text-[11px] text-slate-600 dark:text-gray-400 mb-3">Connect to PaySpace with the API credentials the company creates in PaySpace (Config &gt; Basic Settings &gt; General Company &gt; Integrations &gt; API Credentials). Use the <b>Test</b> environment until everything works, then switch to <b>Live</b> with live credentials.</p>
-                            <div id="payspaceCompanies" class="hidden mb-4"></div>
+                                <div id="payspaceCompanies" class="pss-pick hidden"></div>
 
-                            <div id="payspaceConfigContainer" class="bg-white/40 dark:bg-gray-900/40 rounded-xl border border-slate-200 dark:border-gray-700 shadow-sm overflow-hidden">
-                                <!-- Read-only view -->
-                                <div id="payspaceViewMode">
-                                    <div class="flex justify-between items-center p-5 border-b border-slate-200 dark:border-gray-700">
-                                        <div>
-                                            <h4 class="font-bold text-slate-700 dark:text-gray-300 text-sm">Current Configuration</h4>
-                                            <p class="text-[11px] text-slate-500 dark:text-gray-400">The client secret is stored encrypted and is never shown again.</p>
-                                        </div>
-                                        <button type="button" onclick="togglePayspaceEditMode(true)" class="btn-primary !py-1.5 !px-3 !text-xs"><i class="fas fa-edit mr-1"></i> Edit</button>
-                                    </div>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 p-5 text-sm">
-                                        <div><p class="text-[11px] font-bold uppercase text-slate-500"><i class="fas fa-server mr-1"></i> Environment</p><p id="viewPsEnvironment" class="text-slate-800 dark:text-gray-200">-</p></div>
-                                        <div><p class="text-[11px] font-bold uppercase text-slate-500"><i class="fas fa-building mr-1"></i> Company ID</p><p id="viewPsCompanyId" class="text-slate-800 dark:text-gray-200">-</p></div>
-                                        <div><p class="text-[11px] font-bold uppercase text-slate-500"><i class="fas fa-id-badge mr-1"></i> Client ID</p><p id="viewPsClientId" class="text-slate-800 dark:text-gray-200">Not configured</p></div>
-                                        <div><p class="text-[11px] font-bold uppercase text-slate-500"><i class="fas fa-key mr-1"></i> Client secret</p><p id="viewPsSecret" class="text-slate-800 dark:text-gray-200">-</p></div>
-                                        <div class="md:col-span-2">
-                                            <p class="text-[11px] font-bold uppercase text-slate-500 mb-1"><i class="fas fa-exchange-alt mr-1"></i> Sending to PaySpace</p>
-                                            <div class="flex flex-wrap gap-2 text-[11px]">
-                                                <span id="viewPsPushLeave" class="px-2 py-1 rounded bg-slate-100 dark:bg-gray-800">Send leave: No</span>
-                                                <span id="viewPsPushHours" class="px-2 py-1 rounded bg-slate-100 dark:bg-gray-800">Send hours: No</span>
-                                                <span id="viewPsLateNextRun" class="px-2 py-1 rounded bg-slate-100 dark:bg-gray-800">Late approvals to next run: No</span>
-                                                <span id="viewPsCodes" class="px-2 py-1 rounded bg-slate-100 dark:bg-gray-800">Pay codes: not set</span>
-                                                <span id="viewPsCompanies" class="px-2 py-1 rounded bg-slate-100 dark:bg-gray-800 hidden"></span>
-                                            </div>
-                                        </div>
-                                        <div class="md:col-span-2"><p class="text-[11px] font-bold uppercase text-slate-500"><i class="fas fa-plug mr-1"></i> Last test</p><p id="viewPsLastTest" class="text-slate-800 dark:text-gray-200">Never tested</p></div>
-                                    </div>
-                                </div>
+                                <form id="payspaceSettingsForm" novalidate autocomplete="off">
+                                    <div class="pss-sheet">
+                                        <table class="pss-grid" id="psSheet">
+                                            <colgroup><col class="pss-c-rn"><col class="pss-c-k"><col><col class="pss-c-s"></colgroup>
+                                            <thead><tr><th class="pss-rn"></th><th>Setting</th><th>Value</th><th>Status</th></tr></thead>
+                                            <tbody>
+                                                <tr class="pss-grp"><td class="pss-rn"></td><td colspan="3"><i class="fas fa-link pss-gi"></i>Connection<i class="fas fa-circle-info pss-tip" tabindex="0" data-tip="Use the API credentials the company creates in PaySpace (Config > Basic Settings > General Company > Integrations > API Credentials). Use Test until everything works, then switch to Live with live credentials."></i></td></tr>
+                                                <tr data-pss-f="psEnvironment">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><label for="psEnvironment"><i class="fas fa-server pss-ki"></i>Environment</label></th>
+                                                    <td class="pss-v pss-e"><span class="pss-view" id="viewPsEnvironment">-</span><div class="pss-edit"><select id="psEnvironment" class="form-control pss-in" data-nosearch><option value="test">Test (staging)</option><option value="live">Live</option></select></div></td>
+                                                    <td><span class="pss-view" id="psStEnvironment"></span><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
+                                                <tr data-pss-f="psCompanyId">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><label for="psCompanyId"><i class="fas fa-building pss-ki"></i>Company ID</label><i class="fas fa-circle-info pss-tip" tabindex="0" data-tip="Test connection lists the companies this login can see. Click one to fill this in, then Save."></i></th>
+                                                    <td class="pss-v pss-e"><span class="pss-view" id="viewPsCompanyId">-</span><div class="pss-edit"><input type="text" id="psCompanyId" class="form-control pss-in" placeholder="e.g. 12345" autocomplete="off"></div></td>
+                                                    <td><span class="pss-view" id="psStCompanyId"></span><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
+                                                <tr data-pss-f="psClientId">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><label for="psClientId"><i class="fas fa-id-badge pss-ki"></i>Client ID</label></th>
+                                                    <td class="pss-v pss-e"><span class="pss-view" id="viewPsClientId">Not configured</span><div class="pss-edit"><input type="text" id="psClientId" class="form-control pss-in" placeholder="From PaySpace API Credentials" autocomplete="off"></div></td>
+                                                    <td><span class="pss-view" id="psStClientId"></span><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
+                                                <tr data-pss-f="psClientSecret,psClearSecret">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><label for="psClientSecret"><i class="fas fa-key pss-ki"></i>Client secret</label><i class="fas fa-circle-info pss-tip" tabindex="0" data-tip="Stored encrypted and never shown again. Leave the box empty to keep the saved secret."></i></th>
+                                                    <td class="pss-v pss-e"><span class="pss-view" id="viewPsSecret">-</span><div class="pss-edit"><div class="pss-cellrow"><input type="password" id="psClientSecret" class="form-control pss-in" autocomplete="new-password" placeholder="Paste the secret"><label class="pss-chk is-sm hidden" id="psClearSecretWrap"><input type="checkbox" id="psClearSecret"> Remove the saved secret</label></div></div></td>
+                                                    <td><span class="pss-view" id="psStSecret"></span><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
+                                                <tr data-pss-f="psScope">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><label for="psScope"><i class="fas fa-user-shield pss-ki"></i>Access (scope)</label><i class="fas fa-circle-info pss-tip" tabindex="0" data-tip="Full access is needed to send leave and hours. Read only can only pull employees."></i></th>
+                                                    <td class="pss-v pss-e"><span class="pss-view" id="viewPsScope">-</span><div class="pss-edit"><select id="psScope" class="form-control pss-in" data-nosearch>
+                                                        <option value="api.full_access">Full access (needed to send leave and hours)</option>
+                                                        <option value="api.read_only">Read only (pull employees only)</option>
+                                                        <option value="api.create">Create</option>
+                                                        <option value="api.update">Update</option>
+                                                    </select></div></td>
+                                                    <td><span class="pss-view" id="psStScope"></span><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
 
-                                <!-- Edit form -->
-                                <form id="payspaceSettingsForm" class="hidden p-5">
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label for="psEnvironment" class="block text-xs font-bold text-slate-600 dark:text-gray-400 mb-1"><i class="fas fa-server mr-1"></i> Environment</label>
-                                            <select id="psEnvironment" class="form-control"><option value="test">Test (staging)</option><option value="live">Live</option></select>
-                                        </div>
-                                        <div>
-                                            <label for="psCompanyId" class="block text-xs font-bold text-slate-600 dark:text-gray-400 mb-1"><i class="fas fa-building mr-1"></i> Company ID</label>
-                                            <input type="text" id="psCompanyId" class="form-control" placeholder="e.g. 12345 (Test Connection lists them)" autocomplete="off">
-                                        </div>
-                                        <div>
-                                            <label for="psClientId" class="block text-xs font-bold text-slate-600 dark:text-gray-400 mb-1"><i class="fas fa-id-badge mr-1"></i> Client ID</label>
-                                            <input type="text" id="psClientId" class="form-control" autocomplete="off">
-                                        </div>
-                                        <div>
-                                            <label for="psClientSecret" class="block text-xs font-bold text-slate-600 dark:text-gray-400 mb-1"><i class="fas fa-key mr-1"></i> Client secret</label>
-                                            <input type="password" id="psClientSecret" class="form-control" autocomplete="new-password" placeholder="Paste the secret">
-                                            <label class="flex items-center gap-2 text-[11px] text-slate-600 dark:text-gray-400 mt-1 hidden" id="psClearSecretWrap"><input type="checkbox" id="psClearSecret"> Remove the saved secret</label>
-                                        </div>
-                                        <div>
-                                            <label for="psScope" class="block text-xs font-bold text-slate-600 dark:text-gray-400 mb-1"><i class="fas fa-user-shield mr-1"></i> Access (scope)</label>
-                                            <select id="psScope" class="form-control">
-                                                <option value="api.full_access">Full access (needed to send leave and hours)</option>
-                                                <option value="api.read_only">Read only (pull employees only)</option>
-                                                <option value="api.create">Create</option>
-                                                <option value="api.update">Update</option>
-                                            </select>
-                                        </div>
-                                        <div class="md:col-span-2 mt-2 pt-4 border-t border-slate-200 dark:border-gray-700">
-                                            <p class="text-xs font-bold text-slate-700 dark:text-gray-300 mb-1"><i class="fas fa-exchange-alt mr-1"></i> Sending to PaySpace</p>
-                                            <p class="text-[11px] text-slate-500 dark:text-gray-400 mb-3">Hours are sent from <b>T&amp;A &gt; Settings &gt; Payroll Periods</b> (the PaySpace button on a period): approved days only, overtime / Sunday / public holiday hours once decided, as hours - PaySpace works out the money. Hours are only ever added, never overwritten. Leave balances are sent from the same pop-up ("Leave balances" tab): PaySpace's balance is set to T&amp;A's, so every payslip shows it - this pays nobody anything.</p>
-                                            <div class="flex flex-wrap gap-6 mb-3">
-                                                <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-gray-300"><input type="checkbox" id="psPushLeave"> Send leave balances</label>
-                                                <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-gray-300"><input type="checkbox" id="psPushHours"> Send approved hours per pay run</label>
-                                                <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-gray-300" title="A period already sent to a pay run that is now closed can be sent to the next open run - only the hours approved since. Off: those dates stay blocked."><input type="checkbox" id="psLateNextRun"> Late approvals go to the next pay run</label>
-                                                <label class="flex items-center gap-2 text-xs text-slate-700 dark:text-gray-300">Leave: hours in one day <input type="number" id="psLeaveHoursPerDay" min="1" max="24" step="0.25" value="8" class="form-control !w-20 !py-1"></label>
-                                            </div>
-                                            <!-- 2026-11-18 more PaySpace companies by department (payroll_connections.js "PAYSPACE COMPANIES") -->
-                                            <div id="psCompanies" class="mb-4 text-[11px] text-slate-500"></div>
-                                            <p class="text-[11px] font-bold text-slate-600 dark:text-gray-400 mb-2">PaySpace code for each kind of hours</p>
-                                            <!-- ⚡ 2026-11-17 code table (payroll_connections.js): hourly paid | fixed salary, one row per leave type, codes from PaySpace -->
-                                            <div id="psHoursMap" class="text-[11px] text-slate-500">Loading the PaySpace codes…</div>
-                                        </div>
+                                                <tr class="pss-grp"><td class="pss-rn"></td><td colspan="3"><i class="fas fa-right-left pss-gi"></i>Sending to PaySpace<i class="fas fa-circle-info pss-tip" tabindex="0" data-tip="Hours and leave balances are sent from T&amp;A > Settings > Payroll Periods (the PaySpace button on a period)."></i></td></tr>
+                                                <tr data-pss-f="psPushLeave">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><i class="fas fa-umbrella-beach pss-ki"></i>Send leave balances<i class="fas fa-circle-info pss-tip" tabindex="0" data-tip="Sent from the Payroll Periods pop-up (Leave balances tab). PaySpace's balance is set to T&amp;A's, so every payslip shows it. This pays nobody anything."></i></th>
+                                                    <td class="pss-v pss-e"><span class="pss-view" id="viewPsPushLeave">-</span><div class="pss-edit"><label class="pss-chk"><input type="checkbox" id="psPushLeave"><span class="pss-yn"></span></label></div></td>
+                                                    <td><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
+                                                <tr data-pss-f="psPushHours">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><i class="fas fa-clock pss-ki"></i>Send approved hours per pay run<i class="fas fa-circle-info pss-tip" tabindex="0" data-tip="Approved days only. Overtime, Sunday and public holiday hours go once they are decided, as hours: PaySpace works out the money. Hours are only ever added, never overwritten."></i></th>
+                                                    <td class="pss-v pss-e"><span class="pss-view" id="viewPsPushHours">-</span><div class="pss-edit"><label class="pss-chk"><input type="checkbox" id="psPushHours"><span class="pss-yn"></span></label></div></td>
+                                                    <td><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
+                                                <tr data-pss-f="psLateNextRun">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><i class="fas fa-forward pss-ki"></i>Late approvals go to the next pay run<i class="fas fa-circle-info pss-tip" tabindex="0" data-tip="A period already sent to a pay run that is now closed can be sent to the next open run - only the hours approved since. Off: those dates stay blocked."></i></th>
+                                                    <td class="pss-v pss-e"><span class="pss-view" id="viewPsLateNextRun">-</span><div class="pss-edit"><label class="pss-chk"><input type="checkbox" id="psLateNextRun"><span class="pss-yn"></span></label></div></td>
+                                                    <td><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
+                                                <tr data-pss-f="psLeaveHoursPerDay">
+                                                    <td class="pss-rn"></td>
+                                                    <th scope="row" class="pss-k"><label for="psLeaveHoursPerDay"><i class="fas fa-hourglass-half pss-ki"></i>Leave: hours in one day</label><i class="fas fa-circle-info pss-tip" tabindex="0" data-tip="The hours in a full leave day. A part day goes to PaySpace as part of a day, e.g. 4 of 8 hours = 0.5 day."></i></th>
+                                                    <td class="pss-v pss-e"><span class="pss-view" id="viewPsLeaveHours">-</span><div class="pss-edit"><input type="number" id="psLeaveHoursPerDay" min="1" max="24" step="0.25" value="8" class="form-control pss-in"></div></td>
+                                                    <td><span class="pss-b is-chg pss-chgb">Changed</span></td>
+                                                </tr>
+                                            </tbody>
+                                            <!-- read-only rows: companies, pay codes, last test (filled by payroll_connections.js) -->
+                                            <tbody class="pss-view" id="psViewMore">
+                                                <tr class="pss-grp"><td class="pss-rn"></td><td colspan="3"><i class="fas fa-building-user pss-gi"></i>PaySpace companies</td></tr>
+                                                <tr><td class="pss-rn"></td><th scope="row" class="pss-k"><i class="fas fa-building pss-ki"></i>Main company</th><td class="pss-v" id="viewPsMainCo">-</td><td></td></tr>
+                                                <tr class="pss-grp"><td class="pss-rn"></td><td colspan="3"><i class="fas fa-table-cells pss-gi"></i>Pay codes</td></tr>
+                                                <tr><td class="pss-rn"></td><th scope="row" class="pss-k"><i class="fas fa-hashtag pss-ki"></i>Codes set</th><td class="pss-v" id="viewPsCodes">Not set</td><td id="psStCodes"></td></tr>
+                                                <tr class="pss-grp"><td class="pss-rn"></td><td colspan="3"><i class="fas fa-plug pss-gi"></i>Last test</td></tr>
+                                                <tr><td class="pss-rn"></td><th scope="row" class="pss-k"><i class="fas fa-stethoscope pss-ki"></i>Result</th><td class="pss-v" id="viewPsLastTest">Never tested</td><td id="psStLastTest"></td></tr>
+                                            </tbody>
+                                        </table>
                                     </div>
-                                    <div class="flex justify-between items-center mt-5 pt-4 border-t border-slate-200 dark:border-gray-700">
-                                        <p id="psError" class="text-xs text-red-500"></p>
-                                        <div class="flex gap-2">
-                                            <button type="button" onclick="togglePayspaceEditMode(false)" class="btn-primary !bg-slate-200 !text-slate-700 !border-slate-300 dark:!bg-gray-700 dark:!text-white dark:!border-gray-600 !m-0 !py-1.5 !px-4 !text-xs">Cancel</button>
-                                            <button type="submit" class="btn-primary !py-1.5 !px-3 !text-xs">Save</button>
+
+                                    <!-- 2026-11-18 more PaySpace companies by department; 2026-11-24 a mini sheet + the department pop-up (#psDeptModal) -->
+                                    <section class="pss-block pss-edit">
+                                        <div class="pss-bh">
+                                            <span class="pss-bt"><i class="fas fa-building-user"></i>PaySpace companies<i class="fas fa-circle-info pss-tip" tabindex="0" data-tip="One T&amp;A company can send to more PaySpace companies with the same login, split by department. The main company (Company ID above) gets everyone except the departments given to another company."></i></span>
+                                            <span class="pss-sp"></span>
+                                            <button type="button" class="btn-primary pss-btn" onclick="payspaceAddCompany()"><i class="fas fa-plus"></i> Add company</button>
                                         </div>
-                                    </div>
+                                        <div id="psCompanies"><div class="pss-loading">Loading the PaySpace companies…</div></div>
+                                    </section>
+
+                                    <!-- ⚡ 2026-11-17 code table: hourly paid | fixed salary, one row per leave type, codes from PaySpace; 2026-11-24 Excel grid -->
+                                    <section class="pss-block pss-edit">
+                                        <div class="pss-bh">
+                                            <span class="pss-bt"><i class="fas fa-table-cells"></i>Pay codes<i class="fas fa-circle-info pss-tip" tabindex="0" data-tip="The PaySpace code each kind of T&amp;A hours is sent on. An empty box = those hours are not sent. The codes come from PaySpace (only codes that take hours; UIF / ETI are left out): type in a box to search them."></i></span>
+                                            <span id="psCoSeg"></span>
+                                            <span class="pss-sp"></span>
+                                            <span class="pss-count" id="psCodesCount"></span>
+                                            <button type="button" class="btn-primary pss-btn" onclick="payspaceFillCodes()" title="Fills only the empty boxes, with PaySpace's confirmed codes for this company"><i class="fas fa-wand-magic-sparkles"></i> Fill empty boxes</button>
+                                            <button type="button" class="btn-primary pss-btn" onclick="payspaceLoadCodes(true)" title="Read the codes from PaySpace again"><i class="fas fa-rotate"></i> Read codes again</button>
+                                        </div>
+                                        <div class="pss-note" id="psCodesInfo"></div>
+                                        <div id="psHoursMap"><div class="pss-loading">Loading the PaySpace codes…</div></div>
+                                    </section>
                                 </form>
                             </div>
                         </div>
@@ -1415,28 +1529,37 @@
                     <div class="flex justify-between items-center mb-4 border-b border-slate-300 dark:border-gray-700 pb-2">
                         <h3 class="font-bold text-slate-700 dark:text-gray-300"><i class="fas fa-users text-[#1a4c7b] dark:text-gray-300 mr-2"></i>Active Tenant Users</h3>
                         <div class="flex items-center space-x-3">
-                            <!-- ⚡ Export Report moved into Data Tools (same function, exportUsersReport). Data Tools also gets
-                                 "Export This View" from ua_columns.js. -->
+                            <!-- ⚡ Export Report moved into Data Tools (same function, exportUsersReport). 2026-11-23 Export This View is in
+                                 the markup now (settings.js uaExportView; it was added by ua_columns.js). -->
                              <div class="relative" id="userDataToolsWrap">
-                                <button type="button" onclick="toggleUserDataTools(event)" class="btn-primary !py-1.5 !px-4 !text-xs shadow-sm">
+                                <!-- 2026-11-23 Org Hierarchy look: floats like its Data Tools (org_sheet.css #uaToolsBtn); the menu opens as the
+                                     Org Data Tools menu built from the items below (settings.js toggleUserDataTools; data-grp = heading) -->
+                                <button type="button" id="uaToolsBtn" data-ohpk onclick="toggleUserDataTools(event)" class="btn-primary !py-1.5 !px-4 !text-xs shadow-sm">
                                     <i class="fas fa-toolbox mr-1"></i> Data Tools <i class="fas fa-chevron-down ml-1 text-[9px]"></i>
                                 </button>
                                 <div id="userDataToolsMenu" class="hidden absolute right-0 mt-2 w-72 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg shadow-2xl z-[60] overflow-hidden text-left">
-                                    <button type="button" id="userExportReportItem" onclick="closeUserDataTools(); exportUsersReport()" class="w-full text-left px-4 py-3 text-xs text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-700 transition flex items-start gap-3">
+                                    <button type="button" id="userExportReportItem" data-grp="Export" onclick="closeUserDataTools(); exportUsersReport()" class="w-full text-left px-4 py-3 text-xs text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-700 transition flex items-start gap-3">
                                         <i class="fas fa-file-excel text-green-600 dark:text-green-400 mt-0.5"></i>
                                         <span>
                                             <span class="block font-bold">Export Report</span>
                                             <span class="block text-[10px] text-slate-500 dark:text-gray-400 mt-0.5 font-normal">Every user with their role and password status</span>
                                         </span>
                                     </button>
-                                    <button type="button" onclick="userDataToolsAction('template')" class="w-full text-left px-4 py-3 text-xs text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-700 transition flex items-start gap-3 border-t-4 border-slate-100 dark:border-gray-900">
+                                    <button type="button" id="uaExportView" data-grp="Export" onclick="closeUserDataTools(); uaExportView()" class="w-full text-left px-4 py-3 text-xs text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-700 transition flex items-start gap-3 border-t border-slate-200 dark:border-gray-700">
+                                        <i class="fas fa-table text-[#1a4c7b] dark:text-blue-400 mt-0.5"></i>
+                                        <span>
+                                            <span class="block font-bold">Export This View</span>
+                                            <span class="block text-[10px] text-slate-500 dark:text-gray-400 mt-0.5 font-normal">The users the list shows (search, filters, sort - all pages) with your columns, in your order</span>
+                                        </span>
+                                    </button>
+                                    <button type="button" data-grp="Import" onclick="userDataToolsAction('template')" class="w-full text-left px-4 py-3 text-xs text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-700 transition flex items-start gap-3 border-t-4 border-slate-100 dark:border-gray-900">
                                         <i class="fas fa-download text-green-600 dark:text-green-400 mt-0.5"></i>
                                         <span>
                                             <span class="block font-bold">Download Blank Template</span>
                                             <span class="block text-[10px] text-slate-500 dark:text-gray-400 mt-0.5 font-normal">Excel file with the import columns and your role list</span>
                                         </span>
                                     </button>
-                                    <button type="button" onclick="userDataToolsAction('import')" class="w-full text-left px-4 py-3 text-xs text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-700 transition flex items-start gap-3 border-t border-slate-200 dark:border-gray-700">
+                                    <button type="button" data-grp="Import" onclick="userDataToolsAction('import')" class="w-full text-left px-4 py-3 text-xs text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-700 transition flex items-start gap-3 border-t border-slate-200 dark:border-gray-700">
                                         <i class="fas fa-file-upload text-[#1a4c7b] dark:text-blue-400 mt-0.5"></i>
                                         <span>
                                             <span class="block font-bold">Bulk Import Users</span>
@@ -1445,7 +1568,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <button onclick="openCreateUserModal()" class="btn-primary !py-1.5 !px-4 !text-xs shadow-sm">
+                            <button type="button" id="uaCreateBtn" onclick="openCreateUserModal()" class="btn-primary !py-1.5 !px-4 !text-xs shadow-sm">
                                 <i class="fas fa-user-plus mr-1"></i> Create User
                             </button>
                         </div>
@@ -1461,28 +1584,24 @@
                             </div>
                         </div>
                         
+                        <!-- 2026-11-23 Columns (settings.js uaOpenColumns - was added by ua_columns.js): tick + drag to order.
+                             Same day: Columns + Filters are the Org Hierarchy drop-down buttons (org_sheet.js ddBtn classes, floating via
+                             org_sheet.css #page-users .hl-fbtn); Filters reads "Filters · 2" and turns navy while a filter is on (settings.js compute) -->
+                        <button type="button" id="uaColsBtn" data-ua-cols onclick="uaOpenColumns(event)" title="Choose and order the columns (or right-click a heading)" class="form-control emdp-btn hl-dd !w-auto hl-fbtn" aria-haspopup="dialog"><span>Columns</span><i class="fas fa-caret-down" aria-hidden="true"></i></button>
+
                         <!-- Advanced Filter Hub -->
                         <div class="relative w-full md:w-auto flex justify-end">
-                            <button type="button" id="btnFilterHub" onclick="toggleUserFilterHub()" class="btn-primary !bg-white dark:!bg-gray-800 !border-slate-200 dark:!border-gray-700 !text-slate-600 dark:!text-gray-300 shadow-sm !m-0 !py-2 !px-4 whitespace-nowrap w-full md:w-auto justify-center transition hover:!border-slate-300 dark:hover:!border-gray-500">
-                                <i class="fas fa-filter mr-2"></i> Filters <span id="activeFilterBadge" class="hidden ml-2 bg-[#1a4c7b] dark:bg-teal-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">0</span>
-                            </button>
-                            
-                            <!-- Filter Popover Panel -->
+                            <button type="button" id="btnFilterHub" onclick="toggleUserFilterHub(this)" class="form-control emdp-btn hl-dd !w-auto hl-fbtn" aria-haspopup="dialog"><span>Filters</span><i class="fas fa-caret-down" aria-hidden="true"></i></button>
+
+                            <!-- Filter Popover Panel: since 2026-11-23 only the fallback when org_sheet.js is missing (the Org Hierarchy
+                                 Filters pop-up opens instead, settings.js toggleUserFilterHub); its two selects still hold the filter values -->
                             <div id="userFilterHub" class="hidden absolute top-full right-0 mt-2 w-72 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-xl shadow-2xl z-50 p-5 flex flex-col gap-5 origin-top-right">
                                 <div class="flex justify-between items-center border-b border-slate-200 dark:border-gray-700 pb-3">
                                     <h4 class="text-xs font-bold text-slate-700 dark:text-gray-300 uppercase tracking-wider">Filter Users</h4>
                                     <button type="button" onclick="resetUserFilters()" class="text-[10px] text-blue-600 dark:text-blue-400 font-bold hover:underline transition">Reset All</button>
                                 </div>
                                 
-                                <div class="w-full relative z-[60]">
-                                    <label class="block text-[10px] font-bold text-slate-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">User Type</label>
-                                    <select id="userFilterDropdown" onchange="applyUserFilters()" class="form-control !py-1.5 !text-xs shadow-sm appearance-none">
-                                        <option value="all" selected>All Users</option>
-                                        <option value="system">System Users (No Linked Emp)</option>
-                                        <option value="employee">Linked Employees</option>
-                                    </select>
-                                </div>
-                                
+                                <!-- 2026-11-23 the "User Type" box became Show (in the Org-look Filters pop-up, settings.js toggleUserFilterHub) -->
                                 <div class="w-full relative z-[50]">
                                     <label class="block text-[10px] font-bold text-slate-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Assigned Role</label>
                                     <select id="userRoleFilterDropdown" onchange="applyUserFilters()" class="form-control !py-1.5 !text-xs shadow-sm appearance-none">
@@ -1504,6 +1623,8 @@
                         </div>
                     </div>
                     
+                    <!-- 2026-11-23 the Show bar (All | ESS users | Users | Unlinked) was here; the same day it moved into the Filters pop-up -->
+
                     <!-- Bulk Action Toolbar -->
                     <div id="bulkToolbar" class="hidden bg-indigo-50/80 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-500/30 rounded-xl p-3 mb-5 flex flex-wrap md:flex-nowrap items-center justify-between transition-all shadow-inner gap-3">
                         <span class="text-sm font-bold text-indigo-800 dark:text-indigo-300 flex items-center">
@@ -1529,6 +1650,11 @@
                                 <i class="fas fa-key mr-1"></i> Default Password
                             </button>
 
+                            <!-- 2026-11-23 folded in from user_login_details.js (settings.js uaLoginDetailsBulk) -->
+                            <button type="button" id="uldBulkBtn" onclick="uaLoginDetailsBulk()" class="btn-primary !py-1.5 !px-3 !text-xs shadow-sm !m-0">
+                                <i class="fas fa-envelope-open-text mr-1"></i> Email Login Details
+                            </button>
+
                             <!-- 2026-11-03 Bulk Deactivate / Activate: each shows only when a ticked user can be changed that way -->
                             <button id="bulkDeactivateBtn" onclick="executeBulkAction('deactivate')" class="btn-primary !py-1.5 !px-3 !text-xs shadow-sm !m-0">
                                 <i class="fas fa-ban mr-1"></i> Deactivate
@@ -1545,107 +1671,15 @@
                     </div>
                    <div class="glass-table-container">
                         <table id="usersTable" class="glass-table">
-                            <thead oncontextmenu="openUserColumnSelector(event, this)">
-                                <tr>
-                                    <th style="width: 40px; text-align: center;"><input type="checkbox" id="masterUserCheck" onchange="toggleAllUsers(this)" class="accent-[#1a4c7b] w-4 h-4 cursor-pointer"></th>
-                                    <th>User Profile</th>
-                                    <th>Email</th>
-                                    <th style="text-align: center;">Status</th>
-                                    <th style="text-align: center;">Access</th>
-                                    <th>Assigned Role</th>
-                                    <th>Data Scope (Depts)</th>
-                                    <th>Modules</th>
-                                    <th style="text-align: right;">Actions</th>
-                                </tr>
+                            <!-- 2026-11-23 the headings are drawn by settings.js (USER ACCESS - THE USERS LIST): your columns, in your order -->
+                            <thead>
+                                <tr></tr>
                             </thead>
                             <tbody>
                             </tbody>
                         </table>
                     </div>
 
-                    <!-- User Column Selector Context Menu -->
-                    <div id="userColumnSelectorMenu" class="profile-dropdown-menu" style="position: absolute; display: none; visibility: visible; opacity: 1; transform: none; top: 0; left: 0; bottom: auto; min-width: 180px; padding: 10px; z-index: 1000; box-shadow: 0 8px 30px rgba(0,0,0,0.15);">
-                        <div style="font-size: 10px; font-weight: 700; color: #64748b; margin-bottom: 8px; padding-bottom: 5px; border-bottom: 1px solid rgba(148, 163, 184, 0.2); text-transform: uppercase; letter-spacing: 0.5px;">Toggle Columns</div>
-                        <div style="display: flex; flex-direction: column; gap: 8px;" id="userColumnSelectorList">
-                            <label class="dropdown-item" style="padding: 4px 8px; margin: 0; border-radius: 4px; cursor: pointer;"><input type="checkbox" checked onchange="toggleUserColumnVisibility(2, event)" style="accent-color: #1a4c7b; margin-right: 8px;"> User Profile</label>
-                            <label class="dropdown-item" style="padding: 4px 8px; margin: 0; border-radius: 4px; cursor: pointer;"><input type="checkbox" checked onchange="toggleUserColumnVisibility(3, event)" style="accent-color: #1a4c7b; margin-right: 8px;"> Email</label>
-                            <label class="dropdown-item" style="padding: 4px 8px; margin: 0; border-radius: 4px; cursor: pointer;"><input type="checkbox" checked onchange="toggleUserColumnVisibility(4, event)" style="accent-color: #1a4c7b; margin-right: 8px;"> Status</label>
-                            <label class="dropdown-item" style="padding: 4px 8px; margin: 0; border-radius: 4px; cursor: pointer;"><input type="checkbox" checked onchange="toggleUserColumnVisibility(5, event)" style="accent-color: #1a4c7b; margin-right: 8px;"> Access</label>
-                            <label class="dropdown-item" style="padding: 4px 8px; margin: 0; border-radius: 4px; cursor: pointer;"><input type="checkbox" checked onchange="toggleUserColumnVisibility(6, event)" style="accent-color: #1a4c7b; margin-right: 8px;"> Assigned Role</label>
-                            <label class="dropdown-item" style="padding: 4px 8px; margin: 0; border-radius: 4px; cursor: pointer;"><input type="checkbox" checked onchange="toggleUserColumnVisibility(7, event)" style="accent-color: #1a4c7b; margin-right: 8px;"> Data Scope (Depts)</label>
-                            <label class="dropdown-item" style="padding: 4px 8px; margin: 0; border-radius: 4px; cursor: pointer;"><input type="checkbox" checked onchange="toggleUserColumnVisibility(8, event)" style="accent-color: #1a4c7b; margin-right: 8px;"> Modules</label>
-                        </div>
-                    </div>
-                    <script>
-                        let colVisibilityStateUsers = {
-                            2: true, 3: true, 4: true, 5: true, 6: true, 7: true, 8: true
-                        };
-
-                        const savedUserCols = localStorage.getItem("tna_users_cols");
-                        if (savedUserCols) {
-                            try { colVisibilityStateUsers = JSON.parse(savedUserCols); } catch(e) {}
-                        }
-
-                        function syncUserColumnCheckboxes() {
-                            const menu = document.getElementById('userColumnSelectorMenu');
-                            if (!menu) return;
-                            Object.keys(colVisibilityStateUsers).forEach(colIndex => {
-                                const isChecked = colVisibilityStateUsers[colIndex];
-                                const checkbox = menu.querySelector('input[onchange*="toggleUserColumnVisibility(' + colIndex + ',"]');
-                                if (checkbox) checkbox.checked = isChecked;
-                            });
-                        }
-
-                        document.addEventListener('DOMContentLoaded', () => {
-                            syncUserColumnCheckboxes();
-                            applyUserColumnVisibility();
-                        });
-
-                        function openUserColumnSelector(event, theadElement) {
-                            event.preventDefault();
-                            const menu = document.getElementById('userColumnSelectorMenu');
-                            menu.style.display = 'flex';
-                            menu.style.top = event.pageY + 'px';
-                            menu.style.left = event.pageX + 'px';
-                            menu.dataset.targetTableId = theadElement.closest('table').id;
-                        }
-
-                        function toggleUserColumnVisibility(colIndex, event) {
-                            colVisibilityStateUsers[colIndex] = event.target.checked;
-                            localStorage.setItem("tna_users_cols", JSON.stringify(colVisibilityStateUsers));
-                            applyUserColumnVisibility();
-                        }
-
-                        function applyUserColumnVisibility() {
-                            const menu = document.getElementById('userColumnSelectorMenu');
-                            if(!menu) return;
-                            const tableId = menu.dataset.targetTableId || 'usersTable';
-                            const table = document.getElementById(tableId);
-                            if (!table) return;
-
-                            Object.keys(colVisibilityStateUsers).forEach(colIndex => {
-                                const isChecked = colVisibilityStateUsers[colIndex];
-                                
-                                const th = table.querySelector('thead tr th:nth-child(' + colIndex + ')');
-                                if (th) th.style.display = isChecked ? '' : 'none';
-                                
-                                const rows = table.querySelectorAll('tbody tr');
-                                rows.forEach(row => {
-                                    const td = row.querySelector('td:nth-child(' + colIndex + ')');
-                                    if (td) td.style.display = isChecked ? '' : 'none';
-                                });
-                            });
-                            syncUserColumnCheckboxes();
-                        }
-
-                        window.addEventListener('click', function(e) {
-                            const menu = document.getElementById('userColumnSelectorMenu');
-                            if (menu && menu.style.display === 'flex' && !e.target.closest('#userColumnSelectorMenu')) {
-                                menu.style.display = 'none';
-                            }
-                        });
-                    </script>
-                    
                     <div class="flex justify-between items-center mt-4 pt-4 border-t border-slate-300 dark:border-gray-700">
                         <div class="flex items-center space-x-3">
                             <span id="userPageInfo" class="text-xs text-slate-500 dark:text-gray-400">Showing 0 to 0 of 0 users</span>
@@ -1669,7 +1703,7 @@
                 <div class="glass-panel p-6 rounded-lg border-t-[3px] border-t-teal-500 mb-6">
                     <div class="flex justify-between items-center mb-4 border-b border-slate-300 dark:border-gray-700 pb-2">
                         <h3 class="font-bold text-slate-700 dark:text-gray-300"><i class="fas fa-exchange-alt text-teal-500 mr-2"></i>Mobile Transactions & Sync Logs</h3>
-                        <button onclick="loadMobileTransactions()" class="btn-primary text-xs !py-1.5 !px-3" title="Refresh Logs"><i class="fas fa-sync-alt"></i></button>
+                        <button onclick="loadMobileTransactions(false)" class="btn-primary text-xs !py-1.5 !px-3" title="Refresh Logs"><i class="fas fa-sync-alt"></i></button>
                     </div>
                     <p class="text-sm text-slate-600 dark:text-gray-400 mb-4">View every transaction batch pushed from mobile devices to the server. Use filters to trace lost records.</p>
                     
@@ -1694,7 +1728,7 @@
                                 <option value="failed">Contains Errors</option>
                             </select>
                         </div>
-                        <button onclick="loadMobileTransactions()" class="btn-primary !py-1.5 !px-4 !text-xs ml-auto"><i class="fas fa-filter mr-1"></i> Filter</button>
+                        <button onclick="loadMobileTransactions(false)" class="btn-primary !py-1.5 !px-4 !text-xs ml-auto"><i class="fas fa-filter mr-1"></i> Filter</button>
                     </div>
 
                     <div class="overflow-x-auto">
@@ -2122,6 +2156,27 @@
     </main>
 
    <!-- Create Company Modal -->
+    <!-- 2026-11-24 Legacy Systems > PaySpace companies: which T&A departments go to an extra PaySpace company (payroll_connections.js) -->
+    <div id="psDeptModal" class="modal-backdrop z-[70]" role="dialog" aria-modal="true" aria-labelledby="psDeptTitle">
+        <div class="info-modal-content">
+            <div class="info-modal-header">
+                <h2 class="info-modal-title" id="psDeptTitle"><i class="fas fa-sitemap" style="margin-right: 8px;"></i> <span id="psDeptTitleText">Departments</span></h2>
+                <button type="button" onclick="payspaceDeptClose(false)" class="info-modal-close" aria-label="Close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="info-modal-body">
+                <div class="pss-dtools">
+                    <input type="search" id="psDeptSearch" class="form-control" placeholder="Search departments" autocomplete="off" oninput="payspaceDeptFilter()">
+                    <span class="pss-dn"><b id="psDeptCount">0</b> chosen</span>
+                </div>
+                <div class="pss-dlist" id="psDeptList"></div>
+            </div>
+            <div class="info-modal-footer">
+                <button type="button" class="btn-primary" onclick="payspaceDeptClose(false)">Cancel</button>
+                <button type="button" class="btn-primary pss-btn is-main" onclick="payspaceDeptClose(true)"><i class="fas fa-check"></i> Done</button>
+            </div>
+        </div>
+    </div>
+
     <div id="createCompanyModal" class="modal-backdrop z-[70]">
         <form id="createCompanyForm" class="info-modal-content" style="max-width: 800px;" novalidate>
             <div class="info-modal-header">
@@ -2880,11 +2935,8 @@
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="emp_master_departments" class="perm-chk-empmaster accent-blue-500 mr-2 w-3.5 h-3.5"> Tab: Departments</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="emp_master_departments_edit" class="perm-chk-empmaster accent-blue-500 mr-2 w-3.5 h-3.5"> └─ Can Edit / Create</label>
                             
-                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="emp_master_access_roles" class="perm-chk-empmaster accent-blue-500 mr-2 w-3.5 h-3.5"> Tab: Access Roles</label>
-                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="emp_master_access_roles_edit" class="perm-chk-empmaster accent-blue-500 mr-2 w-3.5 h-3.5"> └─ Can Edit / Assign</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="emp_master_access_roles_edit" class="perm-chk-empmaster accent-blue-500 mr-2 w-3.5 h-3.5"> └─ Can set Access zones</label>
                             
-                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="emp_master_teams" class="perm-chk-empmaster accent-blue-500 mr-2 w-3.5 h-3.5"> Tab: Custom Teams</label>
-                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="emp_master_teams_edit" class="perm-chk-empmaster accent-blue-500 mr-2 w-3.5 h-3.5"> └─ Can Edit / Create</label>
                             
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="emp_master_leave" class="perm-chk-empmaster accent-blue-500 mr-2 w-3.5 h-3.5"> Tab: Leave Management</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="emp_master_leave_edit" class="perm-chk-empmaster accent-blue-500 mr-2 w-3.5 h-3.5"> └─ Can Edit / Create</label>
@@ -2894,8 +2946,6 @@
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="emp_master_attributes_export" class="perm-chk-empmaster accent-blue-500 mr-2 w-3.5 h-3.5"> └─ Can Export Data</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="emp_master_attributes_import" class="perm-chk-empmaster accent-blue-500 mr-2 w-3.5 h-3.5"> └─ Can Bulk Upload</label>
                             
-                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="emp_master_hierarchy" class="perm-chk-empmaster accent-blue-500 mr-2 w-3.5 h-3.5"> Tab: Org Hierarchy & Managers</label>
-                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="emp_master_hierarchy_edit" class="perm-chk-empmaster accent-blue-500 mr-2 w-3.5 h-3.5"> └─ Can Edit / Assign</label>
                             
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="emp_master_audit" class="perm-chk-empmaster accent-blue-500 mr-2 w-3.5 h-3.5"> Tab: Audit & History</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="emp_master_reports" class="perm-chk-empmaster accent-blue-500 mr-2 w-3.5 h-3.5"> Tab: Reports</label>
@@ -3237,11 +3287,8 @@
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="emp_master_departments" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Departments</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="emp_master_departments_edit" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> └─ Can Edit / Create</label>
                             
-                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="emp_master_access_roles" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Access Roles</label>
-                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="emp_master_access_roles_edit" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> └─ Can Edit / Assign</label>
+                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="emp_master_access_roles_edit" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> └─ Can set Access zones</label>
                             
-                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="emp_master_teams" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Custom Teams</label>
-                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="emp_master_teams_edit" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> └─ Can Edit / Create</label>
                             
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="emp_master_leave" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Leave Management</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="emp_master_leave_edit" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> └─ Can Edit / Create</label>
@@ -3251,8 +3298,6 @@
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="emp_master_attributes_export" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> └─ Can Export Data</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="emp_master_attributes_import" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> └─ Can Bulk Upload</label>
                             
-                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="emp_master_hierarchy" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Org Hierarchy & Managers</label>
-                            <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer pl-6"><input type="checkbox" value="emp_master_hierarchy_edit" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> └─ Can Edit / Assign</label>
                             
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="emp_master_audit" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Audit & History</label>
                             <label class="flex items-center text-xs text-gray-800 hover:bg-gray-100 p-0.5 cursor-pointer"><input type="checkbox" value="emp_master_reports" class="operm-chk accent-orange-500 mr-2 w-3.5 h-3.5"> Tab: Reports</label>
@@ -3639,6 +3684,8 @@
         function compShow(v) {
             const tab = v === 'deactivated' ? 'deactivated' : 'active';
             switchCompanyTab(tab);
+            // 2026-11-23 remembered per user (settings.js tnaSettingsFilters; put back when My Company opens)
+            if (window.tnaSettingsFilters) window.tnaSettingsFilters.set('profile', { show: tab === 'deactivated' ? 'deactivated' : '' });
         }
 
         function switchCompanyTab(tab) {
@@ -3997,29 +4044,32 @@
   <script>window.TNA_POPUP_NAVY = true;</script>
   <script src="/vendor/npm/sweetalert2@11.26.25/default.js"></script>
   <script src="contractors_modern_popups.js?v=20261117cdn"></script>
-  <script src="settings.js?v=20261117cdn"></script>
+  <script src="settings.js?v=20261124tb2"></script>
+    <!-- 2026-11-23 sidebar groups (user: "categorised like the Farmers module does it"): the Farmers module's script with the Settings list -->
+    <script>window.TNA_SIDEBAR_GROUPS = { store: 'setSidebarGroupsOpen', groups: [
+        { key: 'access', title: 'Users & Access', screens: ['users', 'roles', 'orgh'] },
+        { key: 'devices', title: 'Devices', screens: ['zones', 'devices', 'errors', 'mobile-tx'] },
+        { key: 'integrations', title: 'Integrations', screens: ['api', 'sync', 'notifications'] },
+        { key: 'account', title: 'Account & Logs', screens: ['billing', 'audit', 'my-tickets'] }] };</script>
+    <script src="contractors_sidebar_groups.js?v=20261123s"></script>
     <!-- ⚡ 2026-10-20 Hardware > Facial AI Licenses: "Data Tools" - license tracker wizard (Excel only, nothing saved). AUTO-HEAL: safe to remove. -->
     <script src="facial_license_tracker.js?v=20261020a"></script>
     <!-- ⚡ 2026-10-20 Hardware, Mobile Errors, Audit Trail, Mobile Transactions in the theme (tables, navy pills, theme buttons). Look only. AUTO-HEAL: safe to remove. -->
     <script src="settings_hw_theme.js?v=20261020l"></script>
     <!-- ⚡ 2026-10-12 Connections: active payroll system + PaySpace (Deel Local Payroll). AUTO-HEAL: safe to remove. -->
-    <script src="payroll_connections.js?v=20261119a"></script>
+    <script src="payroll_connections.js?v=20261124ps3"></script>
     <script src="settings_leave_tabs.js?v=20261008b"></script>
   <!-- ⚡ Settings > Notifications: clock reminder emails per 5 minutes (new file). AUTO-HEAL: safe to remove. -->
   <script src="clock_reminder_limit.js?v=20261005a"></script>
-  <!-- ⚡ Settings > Users: email login details (PDF) to one user or the ticked users (new file). AUTO-HEAL: safe to remove. -->
-  <script src="user_login_details.js?v=20261005a"></script>
   <!-- ⚡ Settings > Notifications: scheduled notifications (phone + email) (new file). AUTO-HEAL: safe to remove. -->
   <script src="notif_scheduler.js?v=20261008c"></script>
-  <!-- ⚡ Settings > User Access: Columns (choose + drag order), click a heading to sort, a search under every heading,
-       Data Tools > Export This View - the same column logic as Employee Master / Contractors (shared files + new
-       ua_columns.js). AUTO-HEAL: safe to remove - the list and the old right-click Toggle Columns work as before. -->
+  <!-- Settings > User Access list (settings.js): the search under every heading + remembered columns (contractors_header_search.js)
+       and Data Tools > Export This View in the Reports look (tna_styled_export.js). 2026-11-23 ua_columns.js was folded into settings.js. -->
   <script src="contractors_header_search.js?v=20261006a"></script>
   <script src="tna_styled_export.js?v=20261117cdn"></script>
-  <script src="ua_columns.js?v=20261009a"></script>
   <!-- ⚡ Data Tools > Bulk Export Login QR PDFs: a zip with one QR card per person (Name Surname.pdf) + All cards.pdf (new file).
        AUTO-HEAL: safe to remove - the menu item goes away, the QR button on each row works as before. -->
-  <script src="ua_qr_bulk.js?v=20261117cdn"></script>
+  <script src="ua_qr_bulk.js?v=20261123fl1"></script>
   <script src="hw_queue.js?v=20261020a"></script>
   <!-- Compare clocks with CVS (Connectivity > ZKTeco API). AUTO-HEAL: safe to remove. -->
   <script src="cvs_range_sync.js?v=20261115a"></script>
@@ -4030,15 +4080,18 @@
       })();
   </script>
    <!-- Shared top bar: search + quick access + profile menu. Safe to remove. -->
-   <script src="tna_topbar.js?v=73"></script>
+   <script src="tna_topbar.js?v=88"></script>
     <script src="csvimport.js?v=20261020a"></script>
     <!-- Contractors screen/action permissions (role editor + overrides). Safe to remove. -->
    <script src="contractor_perms.js?v=20261106b"></script>
-   <script src="roles_v2.js?v=20261117cdn"></script>
+   <script src="roles_v2.js?v=20261123sf"></script>
    <!-- 2026-11-09 Audit Trail: every module in one list (js/company_audit.js + /api/audit/all) -->
-   <script src="company_audit.js?v=20261110c"></script>
+   <script src="company_audit.js?v=20261123sf"></script>
    <!-- 2026-11-03 Org Hierarchy sheet. AUTO-HEAL: without the file the menu item opens an empty section, nothing else changes. -->
-   <script src="org_sheet.js?v=20261110e"></script>
+   <script src="org_sheet.js?v=20261124u5"></script>
+   <!-- 2026-11-23 User Access: the new Create / Edit User pop-up, opened with "Try new" (remembered per user). AUTO-HEAL: without the file the
+        old pop-ups are unchanged and there is no Try new button. -->
+   <script src="ua_user_v2.js?v=20261124a"></script>
         <!-- ================================================================
          RESIZABLE MODALS - bottom-right diagonal grip (inline)
          Drag to resize, double-click the grip to reset. Size is remembered
@@ -4205,17 +4258,17 @@
     </script>
 
     <!-- Guided tours, section tours, how-to guides + What's new (content in /tours/settings_tours.json). AUTO-HEAL: safe to remove. -->
-    <script src="ad_identity.js?v=20261030a"></script>
+    <script src="ad_identity.js?v=20261124gs2"></script>
     <!-- ⚡ 2026-10-20 Connectivity > Login Setup as a pop-up window (SSO Client + AD Integration). AUTO-HEAL: safe to remove (the two tabs show instead). -->
     <script src="login_setup_popup.js?v=20261030a"></script>
-    <script src="tna_tour.js?v=20261109a" data-tour-page="settings" data-tour-help-position="right-raised"></script>
+    <script src="tna_tour.js?v=20261123r" data-tour-page="settings" data-tour-help-position="right-raised"></script>
     <!-- ⚡ Help as a side panel with a search, opened from a "?" in the top bar (shared with Employee Master). "Tour an area"
          opens any Settings area from the sidebar, then tours it. AUTO-HEAL: safe to remove - the round "?" comes back. -->
-    <script src="tna_help_panel.js?v=20261109b" data-help-module="Settings" data-help-placeholder="What do you want to do? e.g. add a user, schedule" data-help-examples="user, role, sync, notification" data-help-btn-class="btn-primary" data-help-areas="#sidebarNav"></script>
+    <script src="tna_help_panel.js?v=20261123r" data-help-module="Settings" data-help-placeholder="What do you want to do? e.g. add a user, schedule" data-help-examples="user, role, sync, notification" data-help-btn-class="btn-primary" data-help-areas="#sidebarNav"></script>
     <!-- ⚡ 2026-11-10 (user): the Farmers & Distribution list look in Company Settings too - the Action column pinned on the right with its
          white band + shadow, and the headings pinned at the top while scrolling. Both are shared, generic files. AUTO-HEAL: safe to remove. -->
     <script src="contractors_sticky_actions.js?v=20261104a"></script>
-    <script src="contractors_sticky_heads.js?v=20261110g"></script>
+    <script src="contractors_sticky_heads.js?v=20261123a"></script>
     <!-- Demo / Setup mode: Settings are live-only. In demo the page can be looked at, but the server refuses every save,
          and this notice says why. AUTO-HEAL: safe to remove. -->
     <script>

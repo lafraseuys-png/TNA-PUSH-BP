@@ -591,50 +591,47 @@
         {
           "id": "taw-tabs",
           "target": [
-            "#wfrTabBtnChains"
+            "#wrTabs"
           ],
           "title": "Approvers and stand-ins",
-          "text": "<b>Approval chains</b> set who approves; <b>Stand-ins</b> cover someone who's away.",
-          "placement": "bottom",
-          "climb": 1
+          "text": "<b>Approvers</b> sets who approves; <b>Stand-in Approvers</b> cover someone who is away.",
+          "placement": "bottom"
         },
         {
-          "id": "taw-target",
+          "id": "taw-views",
           "target": [
-            "#wfDeptSearch"
+            "#wrViews"
           ],
-          "title": "For a department or a person",
-          "text": "Choose a department, or one employee for their own approvers (this overrides their department).",
-          "placement": "bottom",
-          "climb": 2
+          "title": "Three ways to look",
+          "text": "<b>Sheet</b> sets the approvers, <b>By approver</b> shows what each person approves and what is waiting for them, <b>Board</b> is a picture of it.",
+          "placement": "bottom"
         },
         {
-          "id": "taw-levels",
+          "id": "taw-sheet",
           "target": [
-            "#wfLevel1"
+            "#wrSheet"
           ],
-          "title": "The approvers",
-          "text": "A request goes to the 1st approver, then the 2nd and 3rd. The standing approver is the backup.",
-          "placement": "bottom",
-          "climb": 2
-        },
-        {
-          "id": "taw-save",
-          "target": [
-            "#btnSaveRoutingRule"
-          ],
-          "title": "Save",
-          "text": "Requests from then on follow this rule.",
+          "title": "One row per department",
+          "text": "People with their own approvers sit under their department. Click a <b>1st / 2nd / 3rd / Backup</b> cell to pick someone - it saves straight away, with <b>Undo</b> in the message.",
           "placement": "top"
         },
         {
-          "id": "taw-list",
+          "id": "taw-mode",
           "target": [
-            "#routingBody"
+            "#wrMode"
           ],
-          "title": "Your rules",
-          "text": "Every department and personal rule; search or filter by type.",
-          "placement": "top"
+          "title": "Requests follow",
+          "text": "How new requests find their approvers: this screen, or the Reports to line.",
+          "placement": "bottom"
+        },
+        {
+          "id": "taw-tools",
+          "target": [
+            "#wrTools"
+          ],
+          "title": "Excel",
+          "text": "Download the approvers, or fill in the template and import it - every row is checked before anything changes.",
+          "placement": "bottom"
         }
       ]
     },

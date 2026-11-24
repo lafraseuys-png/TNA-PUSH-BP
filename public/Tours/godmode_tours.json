@@ -212,21 +212,48 @@
           "target": "#emailSettingsForm",
           "placement": "bottom",
           "title": "System email",
-          "text": "The mail server the system sends from. Use <b>Send Test Email</b> below to check it works."
+          "text": "The mail server the system sends from. The Save button is at the top; <b>Send a test</b> below checks that mail goes out.",
+          "before": [
+            {
+              "click": "#gmsNav [data-gms=\"email\"]"
+            }
+          ]
+        },
+        {
+          "id": "gm.global.licexp",
+          "target": "#gmsLicSec",
+          "placement": "top",
+          "title": "Licence expiry emails",
+          "text": "The people who get an email 2 days before a tenant's licence expires, and again on the expiry date. Add or remove people here, then press <b>Save email settings</b>.",
+          "before": [
+            {
+              "click": "#gmsNav [data-gms=\"email\"]"
+            }
+          ]
         },
         {
           "id": "gm.global.sso",
           "target": "#ssoSettingsForm",
           "placement": "top",
           "title": "Single Sign-On",
-          "text": "Google and Microsoft app IDs for the Login page. Leave one blank and its button is switched off."
+          "text": "Google and Microsoft app IDs for the Login page. Leave one blank and its button is switched off. The extra Google / Microsoft checks are on this page too.",
+          "before": [
+            {
+              "click": "#gmsNav [data-gms=\"sso\"]"
+            }
+          ]
         },
         {
           "id": "gm.global.ports",
           "target": "#hardwareConfigForm",
           "placement": "top",
           "title": "Device ports",
-          "text": "Extra ports the clocking devices can connect on, for sites with strict firewalls. Saving restarts the device service."
+          "text": "Extra ports the clocking devices can connect on, for sites with strict firewalls. Saving restarts the device service.",
+          "before": [
+            {
+              "click": "#gmsNav [data-gms=\"ports\"]"
+            }
+          ]
         }
       ]
     },
@@ -264,14 +291,24 @@
           "title": "This changes a live tenant",
           "text": "New tenants now use <b>Start onboarding</b>. This form is only for changing a tenant that is already live.",
           "target": "#advTenantName",
-          "placement": "bottom"
+          "placement": "bottom",
+          "before": [
+            {
+              "click": "#tpNav [data-tp=\"company\"]"
+            }
+          ]
         },
         {
           "id": "gm.tf.pricing",
           "title": "Costs",
           "text": "Costs come from Global Module Costing. Only System Admin can give a special price.",
           "target": "#pricingTable",
-          "placement": "top"
+          "placement": "top",
+          "before": [
+            {
+              "click": "#tpNav [data-tp=\"costs\"]"
+            }
+          ]
         }
       ]
     },

@@ -7,7 +7,7 @@
     <!-- 2026-11-13 the login session for this page (code repetition review step 1): right after the loader, before the other scripts -->
     <script src="tna_session.js?v=20261113b"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Launchpad | tnaafrica</title>
+   <title>Launchpad</title>
     <!-- 2026-10-23: TNA Africa app icon (browser tab) -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=3">
@@ -1225,7 +1225,7 @@
                 <div id="displayTenant" class="hidden"></div>
                 
                 <a href="#" class="dropdown-item" data-tour="lp-menu-profile" onclick="openProfileModal()"><i class="fa-solid fa-user"></i> Profile <small class="lp-clockhint" style="margin-left: auto; padding-left: 10px; font-size: 10.5px; font-weight: 700; white-space: nowrap;" title="Clock in / out, leave, timesheet and payslips are in your profile"><i class="fa-solid fa-clock" style="width: auto; margin-right: 3px; color: inherit;"></i>Clock in / out</small></a>
-                <a href="Settings.html" class="dropdown-item hidden" id="btnSettings"><i class="fa-solid fa-gear"></i> Settings</a>
+                <a href="Settings.html" target="_blank" rel="noopener" class="dropdown-item hidden" id="btnSettings"><i class="fa-solid fa-gear"></i> Settings</a>
                 <a href="AccessControl.html" class="dropdown-item hidden" id="btnAccessControl"><i class="fa-solid fa-door-closed"></i> Access Control</a>
                <!-- 2026-10-23: "ESS" removed - self service is inside My Profile now (Profile above). The ESS page itself is unchanged. -->
               <a href="#" class="dropdown-item hidden" id="btnConnectPhone" onclick="if (typeof openLaunchpadConnectQr === 'function') openLaunchpadConnectQr(event); return false;"><i class="fa-solid fa-qrcode"></i> Connect a Phone</a>
@@ -1448,7 +1448,7 @@
     </script>
 
     <script src="theme.js?v=20261106a"></script>
-    <script src="launchpad.js?v=20261117cdn"></script>
+    <script src="launchpad.js?v=20261123r"></script>
     <script src="logo_scale.js?v=20261102d"></script>
 
     <!-- UI Interaction Scripts (Injected AFTER launchpad.js to Auto-Heal interactions) -->
@@ -1542,12 +1542,9 @@
             lpScr('Employee Master', 'EmployeeMaster.html?view=', [
                 ['employees',  'Active Personnel',   'fa-users',       'tna_employees',          'employees staff people personnel profiles'],
                 ['terminated', 'Terminated Records', 'fa-user-slash',  'emp_master_terminated',  'terminated resigned dismissed former'],
-                ['departments','Departments',        'fa-sitemap',     'emp_master_departments', 'departments cost centres company rules'],
-                ['deptzones',  'Access Roles',       'fa-shield-alt',  'emp_master_access_roles','access roles zones doors biometric'],
-                ['teams',      'Custom Teams',       'fa-users-cog',   'emp_master_teams',       'teams groups crews'],
+                ['departments','Departments',        'fa-sitemap',     'emp_master_departments', 'departments access zones doors biometric import excel'],
                 ['leave',      'Leave Management',   'fa-calendar-alt','emp_master_leave',       'leave balances annual sick days'],
                 ['attributes', 'Custom Attributes',  'fa-tags',        'emp_master_attributes',  'custom fields attributes'],
-                ['hierarchy',  'Org Hierarchy',      'fa-layer-group', 'emp_master_hierarchy',   'organogram reporting lines managers structure'],
                 ['audit',      'Audit & History',    'fa-history',     'emp_master_audit',       'audit history changes log'],
                 ['reports',    'Data Reports',       'fa-file-csv',    'emp_master_reports',     'reports export csv data']
             ]),
@@ -1751,10 +1748,11 @@
 
         // Settings screens - permission keys copied from the Settings sidebar
         const LP_SETTINGS_SCREENS = [
-            { id: 'profile',       name: 'Company Profile',     icon: 'fa-building',            perm: 'set_profile',                        keys: 'company logo details entity' },
+            { id: 'profile',       name: 'My Company',          icon: 'fa-building',            perm: 'set_profile',                        keys: 'company profile logo details entity' },
             { id: 'api',           name: 'Connectivity',        icon: 'fa-network-wired',       perm: 'set_api,sys_api',                    keys: 'email smtp sso api zkteco sage integration' },
             { id: 'sync',          name: 'Sync Engine',         icon: 'fa-rotate',              perm: 'set_sync,sys_api',                   keys: 'mobile app preferences hierarchy manual sync' },
             { id: 'users',         name: 'User Access',         icon: 'fa-users',               perm: 'set_users,sys_users',                keys: 'users logins accounts create user password' },
+            { id: 'orgh',          name: 'Org Hierarchy',       icon: 'fa-sitemap',             perm: 'set_users,sys_users',                keys: 'org hierarchy teams crews reports to managers department scoping sees' },
             { id: 'roles',         name: 'Roles & Permissions', icon: 'fa-shield-halved',       perm: 'set_roles,sys_users',                keys: 'roles permissions access rights' },
             { id: 'zones',         name: 'Access Zones',        icon: 'fa-location-dot',        perm: 'set_zones,sys_hardware',             keys: 'zones geofence locations sites' },
             { id: 'devices',       name: 'Hardware',            icon: 'fa-microchip',           perm: 'set_devices,sys_hardware',           keys: 'devices biometric terminals phones hardware' },
@@ -1817,7 +1815,8 @@
                 if (lpSettingsAllowed(s.perm)) items.push({
                     name: s.name, group: 'Settings', icon: s.icon, keys: s.keys,
                     url: `Settings.html?section=${encodeURIComponent(s.id)}`,
-                    run: () => loadModule(`Settings.html?section=${encodeURIComponent(s.id)}`)
+                    // 2026-11-24 Company Settings opens in a new tab (the Launchpad stays); pop-ups blocked = this tab
+                    run: () => { const u = `Settings.html?section=${encodeURIComponent(s.id)}`; let ok = false; if (window.tnaOpenInTab) ok = window.tnaOpenInTab(u); else { const w = window.open(u, '_blank'); if (w) { try { w.opener = null; } catch (e) { } ok = true; } } if (!ok) loadModule(u); }
                 });
             });
 // Screens only. Profile, ESS, Connect a Phone and Download the App
@@ -2370,10 +2369,10 @@
     <!-- Notifications bell + help "?" in the top bar, next to the profile. AUTO-HEAL: safe to remove. -->
     <script src="lp_topbar_icons.js?v=20261026a"></script>
     <!-- 2026-11-09: the shared top bar (search, inbox, help, profile) on the Launchpad too - its old search / bell / profile are hidden by it -->
-    <script src="tna_topbar.js?v=73"></script>
-    <script src="tna_tour.js?v=20261109a" data-tour-page="launchpad"></script>
+    <script src="tna_topbar.js?v=88"></script>
+    <script src="tna_tour.js?v=20261123r" data-tour-page="launchpad"></script>
     <!-- 2026-10-23: help as the side panel (same as Employee Master); the page's "?" opens it. AUTO-HEAL: safe to remove. -->
-    <script src="tna_help_panel.js?v=20261109b" data-help-module="Home" data-help-anchor="#tnaTourHelpBtn"></script>
+    <script src="tna_help_panel.js?v=20261123r" data-help-module="Home" data-help-anchor="#tnaTourHelpBtn"></script>
     <!-- Support Ticket popup: right module name, new look (2026-11-15), your name/email + My tickets pass. AUTO-HEAL: safe to remove. -->
     <script src="tna_support_polish.js?v=20261115a"></script>
 

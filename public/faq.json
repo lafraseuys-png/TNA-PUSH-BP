@@ -570,7 +570,7 @@
    "q": "Can overtime be authorised before it is worked?",
    "a": "Yes, if your company has switched on Use pre-approved overtime under Time & Attendance Settings › Pre-approved Overtime.",
    "steps": [
-    "Managers log the authorised hours on the OT Authorisations page, or with Authorise OT on the Weekly Roster.",
+    "Managers type the authorised hours on the Pre-approved Overtime screen (Planner tab: people x days, like Excel), or use Pre-approve OT on the Weekly Roster.",
     "Days with authorised overtime show a small OT badge on the roster."
    ],
    "tips": [
@@ -914,7 +914,7 @@
    "t": "Time & Attendance",
    "s": "Weekly rostering",
    "q": "How do I authorise overtime from the roster?",
-   "a": "Click the person’s day and use the Authorise OT tab, or Authorise OT on the toolbar for many people.",
+   "a": "Click the person’s day and use the Pre-approve OT tab, or Fill roster › Pre-approve overtime for many people (4 steps: who, which days, hours & reason, then Check & save, which checks every day before anything is saved). The Pre-approved Overtime screen’s Planner tab shows the whole week to type into.",
    "steps": [],
    "tips": [
     "This is available when [[ot-preapproved|Pre-approved Overtime]] is switched on in Time & Attendance Settings.",

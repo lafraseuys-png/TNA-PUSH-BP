@@ -130,7 +130,7 @@ body.gm-v2:not(.theme-galaxy) main > .flex-1.overflow-y-auto {
 }
 body.gm-v2 .page-section.active { animation: gmFadeIn 0.25s ease-in-out; }
 
-/* ---------- 3. Sidebar (floating card; starfield in dark, ash in light) ---------- */
+/* ---------- 3. Sidebar (floating card; starfield in dark, soft white in light like the T&A sidebar) ---------- */
 body.gm-v2 #mainSidebar {
     background:
         radial-gradient(1px 1px at 20px 40px, rgba(255, 255, 255, 0.7), transparent),
@@ -143,44 +143,91 @@ body.gm-v2 #mainSidebar {
     border: 1px solid rgba(34, 211, 238, 0.22);
     box-shadow: 0 0 24px rgba(34, 211, 238, 0.12), 0 10px 30px rgba(2, 6, 23, 0.35);
 }
+/* 2026-11-24 light = the T&A sidebar (tna_shell.css .sidebar): soft white glass on the grey page (was dark ash) */
 body.gm-v2:not(.theme-galaxy) #mainSidebar {
-    background: linear-gradient(180deg, #282d34 0%, #1e2228 100%);
-    border: 1px solid #14171b;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.22);
+    background: rgba(255, 255, 255, 0.65);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    color: #0f172a;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
 }
 @media (min-width: 769px) {
     body.gm-v2 #mainSidebar {
+        position: relative;
         width: 236px;
         height: calc(100vh - 32px);
         margin: 16px 0 16px 16px;
         border-radius: 18px;
         overflow: hidden;
+        transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+}
+
+/* Sidebar closer (2026-11-24): the T&A panel button (tna_sidebar_toggle.js look) in the top-right corner.
+   Click = slim icon rail (body.gm-rail, saved per device in localStorage "tna_gm_sidebar" by globaladmin-ui.js).
+   Desktop only - phones keep their own menu button. Without gm-v2 the button stays hidden. */
+.gm-sb-toggle { display: none; }
+@media (min-width: 769px) {
+    body.gm-v2 .gm-sb-toggle {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        z-index: 2;
+        display: grid;
+        place-items: center;
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        border: 0;
+        border-radius: 8px;
+        background: transparent;
+        color: #94a3b8;
+        cursor: pointer;
+        transition: background-color 0.15s, color 0.15s;
+    }
+    body.gm-v2 .gm-sb-toggle:hover { background: rgba(255, 255, 255, 0.08); color: #ffffff; }
+    body.gm-v2:not(.theme-galaxy) .gm-sb-toggle { color: #71717a; }
+    body.gm-v2:not(.theme-galaxy) .gm-sb-toggle:hover { background: #efefed; color: #18181b; }
+    body.gm-v2 .gm-sb-toggle:focus-visible { outline: 2px solid #60a5fa; outline-offset: 2px; }
+    body.gm-v2 .gm-sb-toggle svg {
+        display: block;
+        width: 17px;
+        height: 17px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
     }
 }
 body.gm-v2 #mainSidebar::-webkit-scrollbar-thumb,
 body.gm-v2 #sidebarNav::-webkit-scrollbar-thumb { background: rgba(34, 211, 238, 0.25); }
 
-/* Brand: logo (or the name) + GOD MODE / SYSTEM ADMIN chip */
+/* Brand: only the logo (or the name). 2026-11-24 the GOD MODE / SYSTEM ADMIN chip, the "Master Control" line and the
+   session badge were removed (user). Side padding keeps the logo clear of the sidebar closer in the corner. */
 body.gm-v2 #mainSidebar .gm-brand {
-    padding: 18px 16px 14px;
+    padding: 20px 44px 16px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     text-align: center;
 }
+body.gm-v2:not(.theme-galaxy) #mainSidebar .gm-brand { border-bottom-color: rgba(15, 23, 42, 0.07); }
 body.gm-v2 #mainSidebar .gm-brand-logo {
     display: block;
     width: 100%;
     max-height: 48px;
-    margin: 0 auto 10px;
+    margin: 0 auto;
     object-fit: contain;
     object-position: center;
 }
 body.gm-v2 #mainSidebar .gm-brand-text {
-    margin-bottom: 8px;
     font-size: 18px;
     font-weight: 800;
     letter-spacing: 0.3px;
-    color: #f4f6f8;
+    color: #1a4c7b;
 }
+/* GlobalAdmin.html: logo + name sit in #godModeTrigger (5 clicks = the System Admin access code, as before) */
+body.gm-v2 #godModeTrigger { cursor: pointer; user-select: none; }
 body.gm-v2.theme-galaxy #mainSidebar .gm-brand-text {
     font-family: 'Orbitron', 'Segoe UI', sans-serif;
     font-size: 16px;
@@ -188,49 +235,6 @@ body.gm-v2.theme-galaxy #mainSidebar .gm-brand-text {
     letter-spacing: 2px;
     color: #e0f2fe;
     text-shadow: 0 0 10px rgba(34, 211, 238, 0.6);
-}
-body.gm-v2 #godModeTrigger {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin: 0;
-    padding: 3px 11px;
-    font-family: 'Inter', 'Segoe UI', sans-serif;
-    font-size: 10.5px;
-    font-weight: 800;
-    line-height: 1.6;
-    letter-spacing: 0.14em;
-    color: #f87171;
-    background: rgba(239, 68, 68, 0.14);
-    border: 1px solid rgba(248, 113, 113, 0.4);
-    border-radius: 999px;
-}
-body.gm-v2 #godModeTrigger i { margin-right: 0; font-size: 10px; }
-body.gm-v2[data-sysadmin="1"] #godModeTrigger {
-    color: #fcd34d;
-    background: rgba(251, 191, 36, 0.14);
-    border-color: rgba(251, 191, 36, 0.4);
-}
-body.gm-v2 #mainSidebar .gm-brand > p {
-    margin-top: 6px;
-    font-size: 9.5px;
-    letter-spacing: 0.18em;
-    color: #94a3b8;
-}
-body.gm-v2 #sysAdminSessionBadge {
-    margin-top: 10px;
-    padding: 2px 10px;
-    font-size: 10px;
-    letter-spacing: 0.06em;
-    color: #34d399;
-    background: rgba(16, 185, 129, 0.14);
-    border: 1px solid rgba(52, 211, 153, 0.4);
-    border-radius: 999px;
-}
-body.gm-v2 #sysAdminSessionBadge[class*="yellow"] {
-    color: #fcd34d;
-    background: rgba(251, 191, 36, 0.14);
-    border-color: rgba(251, 191, 36, 0.45);
 }
 
 /* Menu */
@@ -260,12 +264,12 @@ body.gm-v2 #sidebarNav .sidebar-item {
 }
 body.gm-v2 #sidebarNav .sidebar-item i { width: 20px; margin-right: 0; font-size: 14px; }
 body.gm-v2 #sidebarNav .sidebar-item:hover { background: rgba(34, 211, 238, 0.08); color: #ffffff; }
-/* The System Admin tabs keep their colour as an icon hint */
-body.gm-v2 #sidebarNav .sidebar-item.text-red-400 i { color: #f87171; }
-body.gm-v2 #sidebarNav .sidebar-item.text-yellow-500 i { color: #eab308; }
-body.gm-v2 #sidebarNav .sidebar-item.text-indigo-400 i { color: #818cf8; }
-body.gm-v2 #sidebarNav .sidebar-item.text-purple-400 i { color: #c084fc; }
-body.gm-v2 #sidebarNav .sidebar-item.text-emerald-400 i { color: #34d399; }
+/* The System Admin tabs keep their colour as an icon hint (dark only; light = navy icons like T&A) */
+body.gm-v2.theme-galaxy #sidebarNav .sidebar-item.text-red-400 i { color: #f87171; }
+body.gm-v2.theme-galaxy #sidebarNav .sidebar-item.text-yellow-500 i { color: #eab308; }
+body.gm-v2.theme-galaxy #sidebarNav .sidebar-item.text-indigo-400 i { color: #818cf8; }
+body.gm-v2.theme-galaxy #sidebarNav .sidebar-item.text-purple-400 i { color: #c084fc; }
+body.gm-v2.theme-galaxy #sidebarNav .sidebar-item.text-emerald-400 i { color: #34d399; }
 body.gm-v2 #sidebarNav .sidebar-item.active {
     background: linear-gradient(90deg, rgba(34, 211, 238, 0.22), rgba(34, 211, 238, 0.04));
     color: #ffffff;
@@ -285,17 +289,22 @@ body.gm-v2 #sidebarNav .sidebar-item.active::before {
 }
 body.gm-v2 #sidebarNav .sidebar-item.active i { color: #67e8f9; filter: drop-shadow(0 0 4px #22d3ee); }
 
-body.gm-v2:not(.theme-galaxy) #sidebarNav .gm-nav-group { color: #7a838f; }
-body.gm-v2:not(.theme-galaxy) #sidebarNav .sidebar-item { color: #c3c9d1; }
-body.gm-v2:not(.theme-galaxy) #sidebarNav .sidebar-item:hover { background: rgba(255, 255, 255, 0.07); color: #ffffff; }
+/* light = the T&A menu (tna_shell.css .sidebar-menu a): slate text, navy icons, the open screen a white card with navy text */
+body.gm-v2:not(.theme-galaxy) #sidebarNav .gm-nav-group { color: #64748b; }
+body.gm-v2:not(.theme-galaxy) #sidebarNav .sidebar-item { color: #475569; transition: background-color 0.15s ease, color 0.15s ease, transform 0.2s ease; }
+body.gm-v2:not(.theme-galaxy) #sidebarNav .sidebar-item i { color: #1a4c7b; }
+body.gm-v2:not(.theme-galaxy) #sidebarNav .sidebar-item:hover { background: rgba(241, 245, 249, 0.7); color: #0f172a; transform: translateX(5px); }
 body.gm-v2:not(.theme-galaxy) #sidebarNav .sidebar-item.active {
-    background: #12609f;
-    color: #ffffff;
+    background: #ffffff;
+    color: #1a4c7b;
     font-weight: 700;
-    box-shadow: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(26, 76, 123, 0.15);
 }
+body.gm-v2:not(.theme-galaxy) #sidebarNav .sidebar-item.active:hover { transform: none; }
 body.gm-v2:not(.theme-galaxy) #sidebarNav .sidebar-item.active::before { display: none; }
-body.gm-v2:not(.theme-galaxy) #sidebarNav .sidebar-item.active i { color: #ffffff; filter: none; }
+body.gm-v2:not(.theme-galaxy) #sidebarNav .sidebar-item.active i { color: #1a4c7b; filter: none; }
+body.gm-v2:not(.theme-galaxy) #mainSidebar::-webkit-scrollbar-thumb,
+body.gm-v2:not(.theme-galaxy) #sidebarNav::-webkit-scrollbar-thumb { background: #cbd5e1; }
 
 /* Old footer ("Back to Login") - godmode-ui.js hides it once the profile menu is ready */
 body.gm-v2 #mainSidebar > .p-4.border-t { border-top-color: rgba(255, 255, 255, 0.08); }
@@ -303,6 +312,36 @@ body.gm-v2 #mainSidebar a { color: #94a3b8; }
 body.gm-v2 #mainSidebar a:hover { color: #ffffff; }
 body.gm-v2 #mainSidebar .text-gray-400 { color: #94a3b8; }
 body.gm-v2 .mobile-brand-header { border-bottom-color: rgba(255, 255, 255, 0.08); }
+body.gm-v2:not(.theme-galaxy) .mobile-brand-header { border-bottom-color: rgba(15, 23, 42, 0.07); }
+body.gm-v2:not(.theme-galaxy) .mobile-brand-header button:hover { color: #0f172a; }
+
+/* The rail (sidebar closed, body.gm-rail): 80px like the folded T&A menu - small logo, icons only (name in the tooltip),
+   the closer centred on top. Kept after the menu rules above so these win. Desktop only. */
+@media (min-width: 769px) {
+    body.gm-v2.gm-rail #mainSidebar { width: 80px; }
+    body.gm-v2.gm-rail .gm-sb-toggle { right: calc(50% - 15px); }
+    body.gm-v2.gm-rail #mainSidebar .gm-brand { padding: 54px 8px 12px; }
+    body.gm-v2.gm-rail #mainSidebar .gm-brand-logo { max-height: 24px; }
+    body.gm-v2.gm-rail #mainSidebar .gm-brand-text { font-size: 9px; letter-spacing: 0; }
+    body.gm-v2.gm-rail #sidebarNav { padding: 8px 12px 12px; }
+    body.gm-v2.gm-rail #sidebarNav .gm-nav-group {
+        height: 1px;
+        margin: 10px 6px;
+        font-size: 0;
+        background: currentColor;
+        opacity: 0.35;
+    }
+    body.gm-v2.gm-rail #sidebarNav .sidebar-item {
+        justify-content: center;
+        gap: 0;
+        padding: 11px 0;
+        font-size: 0;           /* the name stays in the button: showSection reads it for the screen title */
+    }
+    body.gm-v2.gm-rail #sidebarNav .sidebar-item i { width: auto; font-size: 16px; }
+    body.gm-v2.gm-rail #sidebarNav .sidebar-item:hover { transform: none; }
+    body.gm-v2.gm-rail #mainSidebar .gms-dcard { justify-content: center; padding: 6px; }
+    body.gm-v2.gm-rail #mainSidebar .gms-dcard span { display: none; }
+}
 
 /* ---------- 4. Profile pill + menu ---------- */
 body.gm-v2 #gmProfile { position: relative; flex-shrink: 0; }
@@ -352,19 +391,6 @@ body.gm-v2 #gmProfile .gm-role {
     color: var(--d-muted);
 }
 body.gm-v2 #gmProfile .gm-caret { font-size: 11px; opacity: 0.6; }
-body.gm-v2 #gmProfile .gm-new-dot {
-    position: absolute;
-    top: -7px;
-    right: -6px;
-    padding: 1px 6px;
-    border-radius: 999px;
-    background: #f59e0b;
-    color: #111827;
-    font-size: 9px;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
-}
 body.gm-v2 #gmProfile .gm-menu {
     display: none;
     position: absolute;
@@ -812,107 +838,108 @@ body.gm-v2.theme-galaxy .tt-menu .tt-msub { color: #9aa4d4; }
 /* ---------- 20. Tenants list v2 (2026-11-11) ----------
    Toolbar (search > filters, actions on the right) + one table with reseller group rows,
    own scroll area, sticky headings, pinned Actions column. One accent colour for everything.
-   Scoped to #page-tenants; the var() fallbacks keep it readable without body.gm-v2. */
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-card { padding: 0; overflow: visible; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-tb {
+   Scoped to #page-tenants; the var() fallbacks keep it readable without body.gm-v2.
+   2026-11-24: also the Licences screen (#page-licences) and its pop-ups (#flcOv) - css/godmode_licences.css has only its extras. */
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-card { padding: 0; overflow: visible; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-tb {
     display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
     padding: 12px 14px; border-bottom: 1px solid var(--d-border, #374151);
 }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-search { position: relative; flex: 0 1 320px; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-search i { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--d-muted, #94a3b8); font-size: 12px; opacity: 0.8; pointer-events: none; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-search input {
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-search { position: relative; flex: 0 1 320px; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-search i { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--d-muted, #94a3b8); font-size: 12px; opacity: 0.8; pointer-events: none; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-search input {
     width: 100%; height: 34px; padding: 0 10px 0 32px; font: inherit; font-size: 13px;
     border-radius: 8px; border: 1px solid var(--d-border, #4b5563); background: var(--d-field, #111827); color: var(--d-text, #e2e8f0); outline: none;
 }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-search input::placeholder { color: var(--d-muted, #94a3b8); opacity: 0.8; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-search input:focus, :is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-dd-btn:focus-visible { border-color: var(--d-accent, #22d3ee); box-shadow: 0 0 0 3px var(--d-ring, rgba(34,211,238,.22)); }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-dd { position: relative; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-dd-btn {
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-search input::placeholder { color: var(--d-muted, #94a3b8); opacity: 0.8; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-search input:focus, :is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-dd-btn:focus-visible { border-color: var(--d-accent, #22d3ee); box-shadow: 0 0 0 3px var(--d-ring, rgba(34,211,238,.22)); }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-dd { position: relative; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-dd-btn {
     height: 34px; padding: 0 10px; display: inline-flex; align-items: center; gap: 7px; font: inherit; font-size: 13px; cursor: pointer;
     border-radius: 8px; border: 1px solid var(--d-border, #4b5563); background: var(--d-field, #111827); color: var(--d-text, #e2e8f0); outline: none;
 }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-dd-btn .tn-lab { color: var(--d-muted, #94a3b8); }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-dd-btn .fa-chevron-down { font-size: 10px; color: var(--d-muted, #94a3b8); }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-dd-pop {
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-dd-btn .tn-lab { color: var(--d-muted, #94a3b8); }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-dd-btn .fa-chevron-down { font-size: 10px; color: var(--d-muted, #94a3b8); }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-dd-pop {
     display: none; position: absolute; top: 38px; left: 0; min-width: 230px; max-height: 320px; overflow: auto; padding: 6px; z-index: 30;
     background: var(--d-menu, #0b1330); border: 1px solid var(--d-pop-border, var(--d-border, #374151)); border-radius: 10px; box-shadow: 0 12px 30px rgba(0,0,0,.35);
 }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-dd.open .tn-dd-pop { display: block; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-dd-pop .tn-search { flex: none; margin-bottom: 4px; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-dd-pop .tn-search input { height: 30px; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-opt { display: flex; justify-content: space-between; gap: 12px; padding: 7px 9px; border-radius: 6px; cursor: pointer; font-size: 13px; color: var(--d-text, #e2e8f0); }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-opt:hover { background: var(--d-hover, rgba(34,211,238,.07)); }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-opt.sel { color: var(--d-accent, #22d3ee); font-weight: 600; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-opt span { color: var(--d-muted, #94a3b8); }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-count { font-size: 12px; color: var(--d-muted, #94a3b8); padding: 0 4px; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-sp { flex: 1; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-btn {
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-dd.open .tn-dd-pop { display: block; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-dd-pop .tn-search { flex: none; margin-bottom: 4px; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-dd-pop .tn-search input { height: 30px; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-opt { display: flex; justify-content: space-between; gap: 12px; padding: 7px 9px; border-radius: 6px; cursor: pointer; font-size: 13px; color: var(--d-text, #e2e8f0); }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-opt:hover { background: var(--d-hover, rgba(34,211,238,.07)); }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-opt.sel { color: var(--d-accent, #22d3ee); font-weight: 600; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-opt span { color: var(--d-muted, #94a3b8); }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-count { font-size: 12px; color: var(--d-muted, #94a3b8); padding: 0 4px; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-sp { flex: 1; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-btn {
     height: 34px; padding: 0 14px; display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; cursor: pointer;
     font: inherit; font-size: 13px; font-weight: 600; border-radius: 8px;
     border: 1px solid var(--d-border, #4b5563); background: transparent; color: var(--d-text, #e2e8f0);
     transition: background-color .15s ease, border-color .15s ease;
 }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-btn:hover { background: var(--d-hover, rgba(34,211,238,.07)); border-color: var(--d-accent, #22d3ee); }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-btn[hidden] { display: none; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-btn i.mr-2 { margin-right: 0; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-btn.tn-pri { background: rgba(34, 211, 238, 0.12); border-color: var(--d-accent, #22d3ee); color: #a5f3fc; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-btn.tn-pri:hover { background: rgba(34, 211, 238, 0.2); }
-body.gm-v2:not(.theme-galaxy) :is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-btn.tn-pri { background: var(--d-accent); color: #fff; }
-body.gm-v2:not(.theme-galaxy) :is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-btn.tn-pri:hover { filter: brightness(1.1); }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-btn:hover { background: var(--d-hover, rgba(34,211,238,.07)); border-color: var(--d-accent, #22d3ee); }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-btn[hidden] { display: none; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-btn i.mr-2 { margin-right: 0; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-btn.tn-pri { background: rgba(34, 211, 238, 0.12); border-color: var(--d-accent, #22d3ee); color: #a5f3fc; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-btn.tn-pri:hover { background: rgba(34, 211, 238, 0.2); }
+body.gm-v2:not(.theme-galaxy) :is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-btn.tn-pri { background: var(--d-accent); color: #fff; }
+body.gm-v2:not(.theme-galaxy) :is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-btn.tn-pri:hover { filter: brightness(1.1); }
 
 /* list: own scroll area so the toolbar and headings stay in view */
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-scroll { max-height: calc(100vh - 230px); min-height: 160px; overflow: auto; border-radius: 0 0 14px 14px; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-table { width: 100%; min-width: 1100px; border-collapse: separate; border-spacing: 0; font-size: 13px; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-table th {
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-scroll { max-height: calc(100vh - 230px); min-height: 160px; overflow: auto; border-radius: 0 0 14px 14px; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-table { width: 100%; min-width: 1100px; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-table th {
     position: sticky; top: 0; z-index: 3; background: var(--d-head-solid, #1f2937); color: var(--d-muted, #94a3b8);
     padding: 10px 12px; border: 0; border-bottom: 1px solid var(--d-border, #374151);
     font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; text-align: left; white-space: nowrap;
 }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-table td { padding: 11px 12px; border: 0; border-bottom: 1px solid var(--d-border, #374151); vertical-align: middle; white-space: nowrap; color: var(--d-text, #e2e8f0); }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-table tbody tr.tn-row:hover > td { background: var(--d-hover, rgba(34,211,238,.07)); }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-table tbody tr.tn-row.tn-ticked > td { background: rgba(34, 211, 238, 0.09); }
-body.gm-v2:not(.theme-galaxy) :is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-table tbody tr.tn-row.tn-ticked > td { background: var(--d-ring); }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-c-chk { width: 44px; text-align: center !important; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-chk { width: 16px; height: 16px; cursor: pointer; accent-color: var(--d-accent, #22d3ee); vertical-align: middle; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) tr.tn-grp > td {
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-table td { padding: 11px 12px; border: 0; border-bottom: 1px solid var(--d-border, #374151); vertical-align: middle; white-space: nowrap; color: var(--d-text, #e2e8f0); }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-table tbody tr.tn-row:hover > td { background: var(--d-hover, rgba(34,211,238,.07)); }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-table tbody tr.tn-row.tn-ticked > td { background: rgba(34, 211, 238, 0.09); }
+body.gm-v2:not(.theme-galaxy) :is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-table tbody tr.tn-row.tn-ticked > td { background: var(--d-ring); }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-c-chk { width: 44px; text-align: center !important; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-chk { width: 16px; height: 16px; cursor: pointer; accent-color: var(--d-accent, #22d3ee); vertical-align: middle; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) tr.tn-grp > td {
     background: var(--d-head, #111827); padding: 8px 12px; font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--d-accent, #22d3ee);
 }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) tr.tn-grp:hover > td { background: var(--d-head, #111827); }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) tr.tn-grp i { margin-right: 7px; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) tr.tn-grp .tn-n { margin-left: 8px; color: var(--d-muted, #94a3b8); font-weight: 500; text-transform: none; letter-spacing: 0; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-nm { font-weight: 600; font-size: 14px; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-sub { display: block; margin-top: 2px; font-size: 12px; font-weight: 400; color: var(--d-muted, #94a3b8); }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-sub i { font-size: 10px; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-key { font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: var(--d-muted, #94a3b8); }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-copy { margin-left: 4px; padding: 2px 5px; border: 0; border-radius: 5px; background: none; color: var(--d-muted, #94a3b8); cursor: pointer; opacity: .75; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-copy:hover { opacity: 1; color: var(--d-accent, #22d3ee); background: var(--d-hover, rgba(34,211,238,.07)); }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-chip {
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) tr.tn-grp:hover > td { background: var(--d-head, #111827); }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) tr.tn-grp i { margin-right: 7px; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) tr.tn-grp .tn-n { margin-left: 8px; color: var(--d-muted, #94a3b8); font-weight: 500; text-transform: none; letter-spacing: 0; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-nm { font-weight: 600; font-size: 14px; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-sub { display: block; margin-top: 2px; font-size: 12px; font-weight: 400; color: var(--d-muted, #94a3b8); }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-sub i { font-size: 10px; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-key { font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: var(--d-muted, #94a3b8); }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-copy { margin-left: 4px; padding: 2px 5px; border: 0; border-radius: 5px; background: none; color: var(--d-muted, #94a3b8); cursor: pointer; opacity: .75; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-copy:hover { opacity: 1; color: var(--d-accent, #22d3ee); background: var(--d-hover, rgba(34,211,238,.07)); }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-chip {
     display: inline-flex; align-items: center; gap: 5px; margin-top: 4px; padding: 2px 8px; border-radius: 999px;
     font-size: 11px; font-weight: 600; border: 1px solid var(--d-border, #374151); color: var(--d-muted, #94a3b8);
 }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-chip.tn-miss { border-color: var(--d-accent, #22d3ee); color: var(--d-accent, #22d3ee); background: rgba(34, 211, 238, 0.1); }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-mods { display: flex; gap: 5px; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-mod { padding: 3px 7px; border-radius: 6px; font-size: 11px; background: var(--d-sunken, #111827); border: 1px solid var(--d-border, #374151); color: var(--d-text, #e2e8f0); }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-mod.tn-more { color: var(--d-accent, #22d3ee); cursor: default; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-dash { color: var(--d-muted, #94a3b8); opacity: .75; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-empty { padding: 30px; text-align: center; color: var(--d-muted, #94a3b8); }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-chip.tn-miss { border-color: var(--d-accent, #22d3ee); color: var(--d-accent, #22d3ee); background: rgba(34, 211, 238, 0.1); }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-mods { display: flex; gap: 5px; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-mod { padding: 3px 7px; border-radius: 6px; font-size: 11px; background: var(--d-sunken, #111827); border: 1px solid var(--d-border, #374151); color: var(--d-text, #e2e8f0); }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-mod.tn-more { color: var(--d-accent, #22d3ee); cursor: default; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-dash { color: var(--d-muted, #94a3b8); opacity: .75; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-empty { padding: 30px; text-align: center; color: var(--d-muted, #94a3b8); }
 /* pinned Actions column (solid background + shadow so rows slide under it) */
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-table .tn-c-act { position: sticky; right: 0; z-index: 2; text-align: right; background: var(--d-head-solid, #1f2937); box-shadow: -10px 0 14px -10px rgba(0, 0, 0, .55); }
-body.gm-v2.theme-galaxy :is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-table td.tn-c-act { background: #0a1128; }
-body.gm-v2:not(.theme-galaxy) :is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-table td.tn-c-act { background: var(--d-card); box-shadow: -10px 0 14px -10px rgba(15, 23, 42, .18); }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-table th.tn-c-act { z-index: 4; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-table tr.tn-grp > td.tn-c-act { background: var(--d-head-solid, #111827); }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-ib {
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-table .tn-c-act { position: sticky; right: 0; z-index: 2; text-align: right; background: var(--d-head-solid, #1f2937); box-shadow: -10px 0 14px -10px rgba(0, 0, 0, .55); }
+body.gm-v2.theme-galaxy :is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-table td.tn-c-act { background: #0a1128; }
+body.gm-v2:not(.theme-galaxy) :is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-table td.tn-c-act { background: var(--d-card); box-shadow: -10px 0 14px -10px rgba(15, 23, 42, .18); }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-table th.tn-c-act { z-index: 4; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-table tr.tn-grp > td.tn-c-act { background: var(--d-head-solid, #111827); }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-ib {
     width: 30px; height: 30px; margin-left: 4px; display: inline-grid; place-items: center; cursor: pointer;
     border-radius: 8px; border: 1px solid var(--d-border, #4b5563); background: transparent; color: var(--d-muted, #94a3b8);
 }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-ib:hover { color: var(--d-accent, #22d3ee); border-color: var(--d-accent, #22d3ee); background: var(--d-hover, rgba(34,211,238,.07)); }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-ib:hover { color: var(--d-accent, #22d3ee); border-color: var(--d-accent, #22d3ee); background: var(--d-hover, rgba(34,211,238,.07)); }
 /* quotes card: same accent instead of the blue icon */
 
 @media (max-width: 768px) {
-    :is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-search { flex: 1 1 100%; }
-    :is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-sp { display: none; }
-    :is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-scroll { max-height: none; }
+    :is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-search { flex: 1 1 100%; }
+    :is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-sp { display: none; }
+    :is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-scroll { max-height: none; }
 }
 
 /* ---------- 21. No top lines (2026-11-11, user: "not neat") ----------
@@ -938,8 +965,8 @@ body.gm-v2:not(.theme-galaxy) #page-tenants .tn-quotes :is(.ob-tab.on, .ob-btn.p
 body.gm-v2:not(.theme-galaxy) #page-tenants .tn-quotes .ob-missing { color: var(--d-muted); }
 
 /* ---------- 23. Modules pop-up + older quotes rows (2026-11-11) ---------- */
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-mod-cell { cursor: pointer; }
-:is(#page-tenants, #page-audit-tenants, #page-hardware) .tn-mod-cell:hover .tn-mod { border-color: var(--d-accent, #22d3ee); }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-mod-cell { cursor: pointer; }
+:is(#page-tenants, #page-audit-tenants, #page-hardware, #page-licences, #flcOv) .tn-mod-cell:hover .tn-mod { border-color: var(--d-accent, #22d3ee); }
 .tn-modpop {
     position: fixed; z-index: 1000; min-width: 230px; max-width: 320px; max-height: 70vh; overflow: auto;
     background: var(--d-menu, #0b1330); border: 1px solid var(--d-pop-border, rgba(34,211,238,.25)); border-radius: 12px;
@@ -1171,3 +1198,334 @@ body.gm-v2.theme-galaxy #page-hardware .hw-sel option { background: #0b1330; col
 #deviceActionModal .dc-note { display: flex; gap: 12px; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--d-border, #374151); background: var(--d-sunken, rgba(2,6,23,.45)); font-size: 12.5px; line-height: 1.55; color: var(--d-muted, #94a3b8); }
 #deviceActionModal .dc-note i { color: var(--d-accent, #22d3ee); margin-top: 3px; } #deviceActionModal .dc-note b { color: var(--d-text, #e2e8f0); }
 @media (max-width: 720px) { #deviceActionModal .dc-cols { grid-template-columns: 1fr; gap: 0; } #deviceActionModal .dc-cols > div + div { margin-top: 14px; } #deviceActionModal .dc-danger .dc-tiles { grid-template-columns: 1fr; } }
+
+/* ---------- 28. Edit tenant pop-up (2026-11-24, #createTenantModal) + Global Settings pop-up (#gmsOverlay, section 29) ----------
+   User: "look like our new employee profile in Employee Master" + "clean navy colours as the theme".
+   The Employee Master profile pop-up look (css/em_v2.css .ep2-*): white window, #f7f9fb side menu with ONE section at a
+   time, slim top bar with the buttons, settings-style sections (title + hint on the left, fields on the right), soft
+   grey boxes, switches, navy #1a4c7b. Galaxy (dark) uses the God Mode colours (cyan accent) like the rest of the page.
+   Everything is scoped to the two pop-up ids (the id beats the general pop-up / field / table remaps above). 2026-11-24: the
+   Global Settings pop-up uses the same look, so every rule here serves both (:is(#createTenantModal, #gmsOverlay)).
+   Side menu + drop-downs + rows: globaladmin.js (tpShow, tpRefresh, tpSelInit, addContactRow, appendPricingRow). */
+:is(#createTenantModal, #gmsOverlay) {
+    --tp-ac: #1a4c7b; --tp-ac-soft: rgba(26, 76, 123, .08); --tp-bg: #ffffff; --tp-bg2: #f7f9fb; --tp-ln: #e2e8f0; --tp-tx: #0f172a; --tp-tx2: #334155;
+    --tp-mt: #64748b; --tp-on: #c6d6e8; --tp-hover: rgba(26, 76, 123, .07); --tp-fill: #f1f4f8; --tp-card: #f9fafb; --tp-card-ln: #e5e7eb;
+    --tp-err: #dc2626; --tp-err-soft: #fef2f2; --tp-warn: #8a5a00; --tp-pri-bg: #1a4c7b; --tp-pri-ln: #1a4c7b; --tp-pri-tx: #ffffff;
+    --tp-sw-off: #cbd5e1; --tp-sw-on: #1a4c7b; --tp-pop-sh: 0 18px 44px rgba(15, 23, 42, .18); --tp-sh: 0 30px 90px rgba(15, 23, 42, .4);
+    padding: 16px;
+}
+body.theme-galaxy :is(#createTenantModal, #gmsOverlay) {
+    --tp-ac: #22d3ee; --tp-ac-soft: rgba(34, 211, 238, .1); --tp-bg: #0b1330; --tp-bg2: #081026; --tp-ln: rgba(34, 211, 238, .16); --tp-tx: #e2e8f0; --tp-tx2: #cbd5e1;
+    --tp-mt: #94a3b8; --tp-on: rgba(34, 211, 238, .35); --tp-hover: rgba(34, 211, 238, .07); --tp-fill: rgba(2, 6, 23, .6); --tp-card: rgba(2, 6, 23, .35); --tp-card-ln: rgba(34, 211, 238, .14);
+    --tp-err: #f87171; --tp-err-soft: rgba(248, 113, 113, .12); --tp-warn: #e7b65a; --tp-pri-bg: rgba(34, 211, 238, .14); --tp-pri-ln: #22d3ee; --tp-pri-tx: #a5f3fc;
+    --tp-sw-off: #334155; --tp-sw-on: #0891b2; --tp-pop-sh: 0 18px 44px rgba(0, 0, 0, .55); --tp-sh: 0 0 40px rgba(34, 211, 238, .12), 0 30px 60px rgba(0, 0, 0, .6);
+}
+
+/* the window */
+:is(#createTenantModal, #gmsOverlay) > .tp2-win { width: min(1280px, 94vw); height: min(860px, 90vh); max-width: none; display: flex; flex-direction: column; padding: 0; overflow: hidden;
+    background: var(--tp-bg); color: var(--tp-tx); border: 1px solid var(--tp-ln); border-radius: 18px; box-shadow: var(--tp-sh); }
+
+/* slim top bar: title | error | buttons */
+:is(#createTenantModal, #gmsOverlay) .tp2-top { display: flex; align-items: center; gap: 16px; padding: 12px 18px 12px 26px; flex-shrink: 0; background: var(--tp-bg); border: 0; border-bottom: 1px solid var(--tp-ln); border-radius: 0; }
+:is(#createTenantModal, #gmsOverlay) .tp2-top h3 { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 17px; font-weight: 800; color: var(--tp-ac); white-space: nowrap; text-shadow: none; }
+:is(#createTenantModal, #gmsOverlay) .tp2-err { flex: 1; min-width: 0; display: flex; align-items: flex-start; gap: 8px; margin: 0; padding: 7px 12px; border-radius: 10px; background: var(--tp-err-soft);
+    color: var(--tp-err); font-size: 12.5px; font-weight: 700; line-height: 1.4; }
+:is(#createTenantModal, #gmsOverlay) .tp2-err::before { content: '\f071'; font-family: 'Font Awesome 6 Free'; font-weight: 900; }
+:is(#createTenantModal, #gmsOverlay) .tp2-acts { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+:is(#createTenantModal, #gmsOverlay) .tp2-btn { height: 38px; padding: 0 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap; cursor: pointer; text-decoration: none;
+    border-radius: 10px; border: 1px solid var(--tp-ln); background: var(--tp-bg); color: var(--tp-tx); font: inherit; font-size: 13px; font-weight: 700; transition: background-color .15s, border-color .15s; }
+:is(#createTenantModal, #gmsOverlay) .tp2-btn:hover { background: var(--tp-hover); }
+:is(#createTenantModal, #gmsOverlay) .tp2-btn.pri { background: var(--tp-pri-bg); border-color: var(--tp-pri-ln); color: var(--tp-pri-tx); }
+:is(#createTenantModal, #gmsOverlay) .tp2-btn.pri:hover { filter: brightness(1.1); }
+:is(#createTenantModal, #gmsOverlay) .tp2-btn.sm { height: 28px; padding: 0 10px; border-radius: 8px; font-size: 12px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-btn:disabled { opacity: .5; cursor: default; filter: none; }
+:is(#createTenantModal, #gmsOverlay) .tp2-x { width: 38px; height: 38px; flex-shrink: 0; border-radius: 10px; border: 1px solid var(--tp-ln); background: var(--tp-bg); color: var(--tp-mt); cursor: pointer; font-size: 15px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-x:hover { background: var(--tp-hover); color: var(--tp-tx); }
+:is(#createTenantModal, #gmsOverlay) .tp2-link { display: inline-flex; align-items: center; gap: 5px; padding: 0; border: 0; background: none; color: var(--tp-ac); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+:is(#createTenantModal, #gmsOverlay) .tp2-link:hover { text-decoration: underline; }
+
+/* body: side menu + the section */
+:is(#createTenantModal, #gmsOverlay) .tp2-body { flex: 1; min-height: 0; display: grid; grid-template-columns: 260px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); }
+:is(#createTenantModal, #gmsOverlay) .tp2-nav { display: flex; flex-direction: column; gap: 2px; padding: 20px 16px; overflow-y: auto; background: var(--tp-bg2); border-right: 1px solid var(--tp-ln); }
+:is(#createTenantModal, #gmsOverlay) .tp2-me { display: flex; align-items: center; gap: 12px; padding: 2px 4px 16px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-ini { width: 52px; height: 52px; flex-shrink: 0; border-radius: 50%; display: grid; place-items: center; background: var(--tp-ac-soft); color: var(--tp-ac);
+    font-size: 18px; font-weight: 900; box-shadow: 0 0 0 3px var(--tp-ac-soft); }
+:is(#createTenantModal, #gmsOverlay) .tp2-who { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-who b { font-size: 15px; font-weight: 800; line-height: 1.25; color: var(--tp-ac); overflow-wrap: anywhere; }
+:is(#createTenantModal, #gmsOverlay) .tp2-who span { font-family: ui-monospace, Consolas, monospace; font-size: 11.5px; font-weight: 600; color: var(--tp-mt); overflow-wrap: anywhere; }
+:is(#createTenantModal, #gmsOverlay) .tp2-nav > button { display: flex; align-items: center; gap: 11px; width: 100%; padding: 11px 14px; border: 1px solid transparent; border-radius: 10px; background: transparent;
+    color: var(--tp-tx2); font: inherit; font-size: 14px; font-weight: 600; text-align: left; cursor: pointer; }
+:is(#createTenantModal, #gmsOverlay) .tp2-nav > button i { width: 18px; text-align: center; color: var(--tp-ac); }
+:is(#createTenantModal, #gmsOverlay) .tp2-nav > button:hover { background: var(--tp-hover); }
+:is(#createTenantModal, #gmsOverlay) .tp2-nav > button.on { background: var(--tp-bg); border-color: var(--tp-on); box-shadow: 0 2px 10px rgba(15, 23, 42, .06); color: var(--tp-ac); font-weight: 800; }
+:is(#createTenantModal, #gmsOverlay) .tp2-dot { margin-left: auto; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center;
+    background: var(--tp-pri-bg); color: var(--tp-pri-tx); font-size: 11px; font-weight: 800; font-style: normal; }
+:is(#createTenantModal, #gmsOverlay) .tp2-dot:empty { display: none; }
+:is(#createTenantModal, #gmsOverlay) .tp2-scroll { min-width: 0; min-height: 0; overflow-y: auto; padding: 22px 36px 40px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-pane { max-width: 1100px; }
+
+/* settings-style sections */
+:is(#createTenantModal, #gmsOverlay) .tp2-sec { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 32px; padding: 26px 0; border-top: 1px solid var(--tp-ln); }
+:is(#createTenantModal, #gmsOverlay) .tp2-sec:first-child { border-top: 0; padding-top: 6px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-sec-h > b { display: block; margin-bottom: 4px; font-size: 15px; font-weight: 800; color: var(--tp-tx); }
+:is(#createTenantModal, #gmsOverlay) .tp2-sec-h > span:not(.tp2-chip) { display: block; font-size: 13px; line-height: 1.5; color: var(--tp-mt); }
+:is(#createTenantModal, #gmsOverlay) .tp2-sec.tp2-wide { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-wide .tp2-sec-h { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-wide .tp2-sec-h > b { margin-bottom: 0; }
+:is(#createTenantModal, #gmsOverlay) .tp2-wide .tp2-sec-h .tp2-chip { margin-left: auto; }
+:is(#createTenantModal, #gmsOverlay) .tp2-sec-g { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px 20px; align-content: start; }
+:is(#createTenantModal, #gmsOverlay) .tp2-sec-g.tp2-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+:is(#createTenantModal, #gmsOverlay) .tp2-sec-g.tp2-one { grid-template-columns: minmax(0, 1fr); }
+
+/* fields */
+:is(#createTenantModal, #gmsOverlay) .tp2-f { min-width: 0; }
+:is(#createTenantModal, #gmsOverlay) .tp2-f label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--tp-tx2); }
+:is(#createTenantModal, #gmsOverlay) .tp2-lrow { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-lrow label { margin-bottom: 0; }
+:is(#createTenantModal, #gmsOverlay) .tp2-opt { margin-left: 4px; font-weight: 600; color: var(--tp-mt); }
+:is(#createTenantModal, #gmsOverlay) .tp2-in { width: 100%; box-sizing: border-box; min-height: 42px; padding: 9px 12px; margin: 0; font: inherit; font-size: 14px; color: var(--tp-tx);
+    background-color: var(--tp-fill); border: 1px solid transparent; border-radius: 10px; outline: none; box-shadow: none; opacity: 1; transition: border-color .15s, box-shadow .15s, background-color .15s; }
+:is(#createTenantModal, #gmsOverlay) .tp2-in:hover { border-color: var(--tp-ln); }
+:is(#createTenantModal, #gmsOverlay) .tp2-in:focus { background-color: var(--tp-bg); border-color: var(--tp-ac); box-shadow: 0 0 0 3px var(--tp-ac-soft); }
+:is(#createTenantModal, #gmsOverlay) .tp2-in::placeholder { color: var(--tp-mt); opacity: .8; }
+:is(#createTenantModal, #gmsOverlay) .tp2-in[readonly] { background-color: transparent; border-color: var(--tp-ln); color: var(--tp-mt); cursor: not-allowed; box-shadow: none; }
+:is(#createTenantModal, #gmsOverlay) textarea.tp2-in { min-height: 84px; resize: vertical; line-height: 1.5; }
+:is(#createTenantModal, #gmsOverlay) select.tp2-in { appearance: none; -webkit-appearance: none; padding-right: 36px; cursor: pointer;
+    background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%2364748b%22%3E%3Cpath d=%22M7 10l5 5 5-5z%22/%3E%3C/svg%3E');
+    background-repeat: no-repeat; background-position: right 10px center; background-size: 22px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-mono { font-family: ui-monospace, Consolas, monospace; letter-spacing: .02em; }
+:is(#createTenantModal, #gmsOverlay) .tp2-qty { width: 84px; flex: none; min-height: 36px; padding: 6px 10px; text-align: center; }
+:is(#createTenantModal, #gmsOverlay) .tp2-note { display: flex; align-items: center; gap: 6px; margin: 6px 0 0; font-size: 12px; font-weight: 600; color: var(--tp-mt); }
+:is(#createTenantModal, #gmsOverlay) .tp2-note i { color: var(--tp-ac); }
+:is(#createTenantModal, #gmsOverlay) .tp2-chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--tp-on); background: transparent;
+    color: var(--tp-ac); font-size: 11.5px; font-weight: 700; white-space: nowrap; }
+:is(#createTenantModal, #gmsOverlay) .tp2-chip.fill { background: var(--tp-ac-soft); border-color: transparent; }
+:is(#createTenantModal, #gmsOverlay) .tp2-chip strong { font-weight: 800; }
+
+/* searchable drop-down (the <select> stays, hidden, with its id and value) */
+:is(#createTenantModal, #gmsOverlay) .tp2-ddw { position: relative; flex: 1; min-width: 0; }
+:is(#createTenantModal, #gmsOverlay) .tp2-dd { display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left; cursor: pointer; }
+:is(#createTenantModal, #gmsOverlay) .tp2-dd > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+:is(#createTenantModal, #gmsOverlay) .tp2-dd.ph > span { color: var(--tp-mt); }
+:is(#createTenantModal, #gmsOverlay) .tp2-dd > i { font-size: 11px; color: var(--tp-mt); }
+:is(#createTenantModal, #gmsOverlay) .tp2-dd-pop { position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 30; min-width: 260px; max-height: 320px; display: flex; flex-direction: column; padding: 6px;
+    background: var(--tp-bg); border: 1px solid var(--tp-ln); border-radius: 14px; box-shadow: var(--tp-pop-sh); }
+:is(#createTenantModal, #gmsOverlay) .tp2-dd-q { position: relative; padding: 0 0 6px; margin-bottom: 4px; border-bottom: 1px solid var(--tp-ln); }
+:is(#createTenantModal, #gmsOverlay) .tp2-dd-q i { position: absolute; left: 12px; top: 13px; font-size: 13px; color: var(--tp-mt); }
+:is(#createTenantModal, #gmsOverlay) .tp2-dd-q .tp2-in { min-height: 38px; padding: 8px 12px 8px 34px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-dd-list { overflow-y: auto; display: flex; flex-direction: column; }
+:is(#createTenantModal, #gmsOverlay) .tp2-dd-opt { padding: 10px 12px; border-radius: 9px; font-size: 14px; font-weight: 600; line-height: 1.3; color: var(--tp-tx2); cursor: pointer; }
+:is(#createTenantModal, #gmsOverlay) .tp2-dd-opt:hover, :is(#createTenantModal, #gmsOverlay) .tp2-dd-opt.act { background: var(--tp-hover); color: var(--tp-ac); }
+:is(#createTenantModal, #gmsOverlay) .tp2-dd-opt.sel { color: var(--tp-ac); font-weight: 800; }
+:is(#createTenantModal, #gmsOverlay) .tp2-dd-none { padding: 10px 12px; font-size: 13px; color: var(--tp-mt); }
+
+/* switches (like the employee profile) */
+:is(#createTenantModal, #gmsOverlay) input.tp2-sw { appearance: none; -webkit-appearance: none; position: relative; flex-shrink: 0; width: 40px; height: 22px; margin: 0; padding: 0; border: 0; border-radius: 999px;
+    background-color: var(--tp-sw-off); box-shadow: none; cursor: pointer; transition: background-color .15s; }
+:is(#createTenantModal, #gmsOverlay) input.tp2-sw::before { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, .3); transition: left .15s; }
+:is(#createTenantModal, #gmsOverlay) input.tp2-sw:checked { background-color: var(--tp-sw-on); }
+:is(#createTenantModal, #gmsOverlay) input.tp2-sw:checked::before { left: 21px; }
+:is(#createTenantModal, #gmsOverlay) input.tp2-sw:focus-visible { outline: 2px solid var(--tp-ac); outline-offset: 2px; }
+:is(#createTenantModal, #gmsOverlay) input.tp2-sw:disabled { opacity: .55; cursor: default; }
+
+/* modules: one card per Launchpad tile */
+:is(#createTenantModal, #gmsOverlay) .tp2-sec-g.tp2-mods { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 14px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-mod { display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 10px 14px; border-radius: 12px; background: var(--tp-card); border: 1px solid var(--tp-card-ln);
+    cursor: pointer; transition: border-color .15s, background-color .15s; }
+:is(#createTenantModal, #gmsOverlay) .tp2-mod:hover { border-color: var(--tp-on); }
+:is(#createTenantModal, #gmsOverlay) .tp2-mod:has(> input.tp2-sw:checked) { border-color: var(--tp-on); background: var(--tp-ac-soft); }
+:is(#createTenantModal, #gmsOverlay) .tp2-mod.is-locked { cursor: default; }
+:is(#createTenantModal, #gmsOverlay) .tp2-mod > :is(span, label) { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; margin: 0; cursor: inherit; }
+:is(#createTenantModal, #gmsOverlay) .tp2-mod > label { cursor: pointer; }
+:is(#createTenantModal, #gmsOverlay) .tp2-mod b { font-size: 14px; font-weight: 700; color: var(--tp-tx); }
+:is(#createTenantModal, #gmsOverlay) .tp2-mod small { font-size: 12px; font-weight: 600; color: var(--tp-mt); }
+
+/* key contacts as a list */
+:is(#createTenantModal, #gmsOverlay) .tp2-clist { display: flex; flex-direction: column; }
+:is(#createTenantModal, #gmsOverlay) .tp2-crow { display: flex; align-items: flex-start; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--tp-ln); }
+:is(#createTenantModal, #gmsOverlay) .tp2-crow:first-child { padding-top: 0; }
+:is(#createTenantModal, #gmsOverlay) .tp2-cside { flex: 0 0 52px; display: flex; flex-direction: column; align-items: center; gap: 6px; padding-top: 24px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-cic { width: 38px; height: 38px; flex-shrink: 0; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+    background: var(--tp-ac-soft); color: var(--tp-ac); font-size: 14px; font-weight: 800; }
+:is(#createTenantModal, #gmsOverlay) .tp2-cmain { display: none; font-size: 10.5px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: var(--tp-ac); }
+:is(#createTenantModal, #gmsOverlay) .tp2-clist > .contact-row:first-child .tp2-cmain { display: block; }
+:is(#createTenantModal, #gmsOverlay) .tp2-cgrid { flex: 1; min-width: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 16px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-cdel { width: 36px; height: 36px; flex-shrink: 0; margin-top: 27px; border-radius: 10px; border: 1px solid transparent; background: transparent; color: var(--tp-mt); cursor: pointer; font-size: 14px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-cdel:hover { background: var(--tp-hover); color: var(--tp-ac); }
+:is(#createTenantModal, #gmsOverlay) .tp2-clist > .contact-row:first-child .tp2-cdel { visibility: hidden; }
+:is(#createTenantModal, #gmsOverlay) .tp2-addc { justify-self: start; display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 10px; border: 1px dashed var(--tp-on);
+    background: transparent; color: var(--tp-ac); font: inherit; font-size: 13px; font-weight: 800; cursor: pointer; }
+:is(#createTenantModal, #gmsOverlay) .tp2-addc:hover { background: var(--tp-hover); }
+
+/* costs */
+:is(#createTenantModal, #gmsOverlay) .tp2-addcost { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 12px; background: var(--tp-card); border: 1px solid var(--tp-card-ln); }
+:is(#createTenantModal, #gmsOverlay) .tp2-addcost-l { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--tp-ac); white-space: nowrap; }
+:is(#createTenantModal, #gmsOverlay) .tp2-addcost .tp2-in { background-color: var(--tp-bg); border-color: var(--tp-ln); }
+:is(#createTenantModal, #gmsOverlay) .tp2-warnbox { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 10px; background: var(--tp-bg2); color: var(--tp-warn); font-size: 13px; font-weight: 600; }
+:is(#createTenantModal, #gmsOverlay) .tp2-tblwrap { overflow-x: auto; border: 1px solid var(--tp-ln); border-radius: 12px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-tbl { width: 100%; min-width: 760px; border-collapse: separate; border-spacing: 0; font-size: 13.5px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-tbl th { padding: 10px 14px; text-align: left; white-space: nowrap; background: var(--tp-bg2); color: var(--tp-tx2); border: 0; border-bottom: 1px solid var(--tp-ln);
+    font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+:is(#createTenantModal, #gmsOverlay) .tp2-tbl td { padding: 10px 14px; vertical-align: middle; background: transparent; color: var(--tp-tx); border: 0; border-bottom: 1px solid var(--tp-ln); white-space: nowrap; }
+:is(#createTenantModal, #gmsOverlay) .tp2-tbl :is(th, td).c { text-align: center; }
+:is(#createTenantModal, #gmsOverlay) .tp2-tbl tbody tr:last-child > td { border-bottom: 0; }
+:is(#createTenantModal, #gmsOverlay) .tp2-tbl tbody tr:hover > td { background: var(--tp-hover); }
+:is(#createTenantModal, #gmsOverlay) .tp2-tbl .mod-name { font-weight: 700; }
+:is(#createTenantModal, #gmsOverlay) .tp2-tbl .mod-override-badge, :is(#createTenantModal, #gmsOverlay) .tp2-tbl .mod-override-reset { margin-left: 8px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-empty { padding: 28px 14px; text-align: center; color: var(--tp-mt); }
+:is(#createTenantModal, #gmsOverlay) .tp2-qtycell { display: flex; align-items: center; justify-content: center; gap: 4px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-qtycell .tp2-cdel { width: 30px; height: 30px; margin-top: 0; font-size: 12px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-tbl td:first-child { white-space: normal; }
+:is(#createTenantModal, #gmsOverlay) .tp2-money { display: flex; align-items: center; gap: 6px; color: var(--tp-mt); font-weight: 600; }
+:is(#createTenantModal, #gmsOverlay) .tp2-money .tp2-in { width: 104px; flex: none; min-height: 36px; padding: 6px 10px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-money .tp2-in[readonly] { padding-left: 0; background-color: transparent; border-color: transparent; color: var(--tp-tx); cursor: default; }
+:is(#createTenantModal, #gmsOverlay) .tp2-money.tot .tp2-in { font-weight: 800; color: var(--tp-ac); }
+
+/* documents */
+:is(#createTenantModal, #gmsOverlay) .tp2-sec-g.tp2-docs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-doc { display: flex; flex-direction: column; gap: 14px; padding: 18px; border-radius: 14px; background: var(--tp-card); border: 1px solid var(--tp-card-ln); }
+:is(#createTenantModal, #gmsOverlay) .tp2-doc-h { display: flex; align-items: center; gap: 12px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-doc-h > span:last-child { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-doc-h b { font-size: 14.5px; font-weight: 700; color: var(--tp-tx); }
+:is(#createTenantModal, #gmsOverlay) .tp2-doc-h small { font-size: 12.5px; color: var(--tp-mt); overflow-wrap: anywhere; }
+:is(#createTenantModal, #gmsOverlay) .tp2-doc-st { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-doc-a { display: flex; flex-wrap: wrap; gap: 8px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-upl { position: relative; overflow: hidden; color: var(--tp-ac); }
+:is(#createTenantModal, #gmsOverlay) .tp2-file { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+/* a picture of the document (page 1 of a PDF, an image as itself) - like the employee profile attachments (em_v2.css .ep2-doc).
+   User 24 Nov: "would be nice to have a preview of the document from here". A click opens it. */
+:is(#createTenantModal, #gmsOverlay) { --tp-docbg: #e8edf3; }
+body.theme-galaxy :is(#createTenantModal, #gmsOverlay) { --tp-docbg: #060b1f; }
+:is(#createTenantModal, #gmsOverlay) .tp2-docpic { position: relative; display: flex; justify-content: center; align-items: flex-start; width: 100%; height: 230px; margin: 0; padding: 16px 0 0; border: 0;
+    border-radius: 10px; background: var(--tp-docbg); overflow: hidden; cursor: pointer; font: inherit; }
+:is(#createTenantModal, #gmsOverlay) .tp2-docpic::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 44px; background: linear-gradient(transparent, var(--tp-docbg)); pointer-events: none; }
+:is(#createTenantModal, #gmsOverlay) .tp2-docpic canvas { width: 170px; height: auto; flex: none; background: #fff; box-shadow: 0 2px 10px rgba(0, 0, 0, .18); transition: box-shadow .15s, transform .15s; }
+:is(#createTenantModal, #gmsOverlay) .tp2-docpic img { max-width: 86%; max-height: 200px; object-fit: contain; background: #fff; box-shadow: 0 2px 10px rgba(0, 0, 0, .18); transition: box-shadow .15s, transform .15s; }
+:is(#createTenantModal, #gmsOverlay) .tp2-docpic:hover :is(canvas, img) { box-shadow: 0 6px 18px rgba(0, 0, 0, .25); transform: translateY(-2px); }
+:is(#createTenantModal, #gmsOverlay) .tp2-docpic:focus-visible { outline: 2px solid var(--tp-ac); outline-offset: 2px; }
+:is(#createTenantModal, #gmsOverlay) .tp2-docpic-ph { align-self: center; display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: -16px; padding: 0 12px;
+    color: var(--tp-mt); font-size: 12.5px; font-weight: 700; text-align: center; }
+:is(#createTenantModal, #gmsOverlay) .tp2-docpic-ph i { font-size: 26px; color: #94a3b8; }
+:is(#createTenantModal, #gmsOverlay) .tp2-docpic .tp2-chip { position: absolute; top: 10px; left: 10px; z-index: 1; background: var(--tp-bg); }
+:is(#createTenantModal, #gmsOverlay) .tp2-btn.is-off { opacity: .45; pointer-events: none; }
+
+/* smaller screens */
+@media (max-width: 1100px) {
+    :is(#createTenantModal, #gmsOverlay) .tp2-sec { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+}
+@media (max-width: 860px) {
+    :is(#createTenantModal, #gmsOverlay) { padding: 8px; }
+    :is(#createTenantModal, #gmsOverlay) > .tp2-win { width: 100%; height: 100%; }
+    :is(#createTenantModal, #gmsOverlay) .tp2-top { flex-wrap: wrap; padding: 10px 14px; }
+    :is(#createTenantModal, #gmsOverlay) .tp2-err { order: 3; flex-basis: 100%; }
+    :is(#createTenantModal, #gmsOverlay) .tp2-body { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+    :is(#createTenantModal, #gmsOverlay) .tp2-nav { flex-direction: row; overflow-x: auto; padding: 8px 10px; border-right: 0; border-bottom: 1px solid var(--tp-ln); }
+    :is(#createTenantModal, #gmsOverlay) .tp2-me { display: none; }
+    :is(#createTenantModal, #gmsOverlay) .tp2-nav > button { width: auto; flex: none; white-space: nowrap; }
+    :is(#createTenantModal, #gmsOverlay) .tp2-scroll { padding: 16px; }
+    :is(#createTenantModal, #gmsOverlay) .tp2-sec-g, :is(#createTenantModal, #gmsOverlay) .tp2-sec-g.tp2-two, :is(#createTenantModal, #gmsOverlay) .tp2-sec-g.tp2-mods,
+    :is(#createTenantModal, #gmsOverlay) .tp2-sec-g.tp2-docs, :is(#createTenantModal, #gmsOverlay) .tp2-cgrid { grid-template-columns: minmax(0, 1fr); }
+    :is(#createTenantModal, #gmsOverlay) .tp2-addcost { flex-wrap: wrap; }
+}
+
+/* Tailwind's .hidden lives in a CSS layer, so the rules above would beat it - this keeps the page's own show/hide working.
+   Keep it LAST in this section. */
+:is(#createTenantModal, #gmsOverlay) .tp2-win .hidden { display: none; }
+
+/* ---------- 29. Global Settings pop-up (2026-11-24, #gmsOverlay - js/godmode_settings.js) ----------
+   User: "modernize every single thing in the global settings, it's a mess, hard to read ... massive cleanup". User ticked:
+   one section at a time (like Edit tenant), Active Directory split in two (settings | System users), the Google / Microsoft
+   checks under Single sign-on, replace with no switch. Section 28 draws the window, top bar, side menu, sections, fields,
+   switches and table; this section adds the overlay, the sidebar gear and the few settings-only pieces.
+   Markup: SystemAdmin.html + GlobalAdmin.html (#gmsOverlay). Active Directory / System users / Google-Microsoft checks are drawn
+   by js/ad_identity.js into #gmsAdHost / #gmsUsersHost / #gmsSsoChecksHost. (Was injected by godmode_settings.js, 11 Nov.) */
+
+/* sidebar dock with the gear (like the T&A dock .tnd-card / .tnd-gear) */
+.gms-dock { margin: auto 10px 12px; flex-shrink: 0; }
+.gms-dcard { display: flex; align-items: center; gap: 10px; padding: 6px 6px 6px 14px; border-radius: 14px; background: var(--d-sunken, rgba(2, 6, 23, .45)); border: 1px solid var(--d-border, rgba(34, 211, 238, .16)); }
+.gms-dcard span { flex: 1; font-size: 12.5px; font-weight: 600; color: var(--d-muted, #94a3b8); }
+body.gm-v2:not(.theme-galaxy) .gms-dcard { background: #ffffff; border-color: #e2e8f0; box-shadow: 0 2px 8px rgba(15, 23, 42, .05); }
+body.gm-v2:not(.theme-galaxy) .gms-dcard span { color: #475569; }
+.gms-gear { width: 44px; height: 44px; border: 0; border-radius: 10px; display: grid; place-items: center; cursor: pointer; background: transparent; color: var(--d-accent, #22d3ee); font-size: 18px; }
+.gms-gear:hover { background: rgba(34, 211, 238, .12); }
+.gms-gear i { transition: transform .35s ease; }
+.gms-gear:hover i { transform: rotate(45deg); }
+.gms-gear.on { background: var(--d-accent, #22d3ee); color: #04121c; }
+body.gm-v2:not(.theme-galaxy) .gms-gear { color: #1a4c7b; }
+body.gm-v2:not(.theme-galaxy) .gms-gear:hover { background: #eef3f8; }
+body.gm-v2:not(.theme-galaxy) .gms-gear.on { background: #1a4c7b; color: #ffffff; }
+/* the old "Global Settings" menu item: the gear replaced it (it stays as the anchor of the "Settings & reports" group + gmGo) */
+#sidebarNav .sidebar-item.gms-moved { display: none !important; }
+
+/* the overlay + open / close effect (reduced motion = fade only) */
+#gmsOverlay { position: fixed; inset: 0; z-index: 900; display: none; align-items: center; justify-content: center; background: var(--d-overlay, rgba(2, 6, 23, .6));
+    backdrop-filter: blur(3px); opacity: 0; transition: opacity .18s ease; }
+#gmsOverlay.show { display: flex; }
+#gmsOverlay.in { opacity: 1; }
+#gmsOverlay > .tp2-win { transform: translateY(14px) scale(.985); transition: transform .2s ease; }
+#gmsOverlay.in > .tp2-win { transform: none; }
+@media (prefers-reduced-motion: reduce) { #gmsOverlay > .tp2-win { transform: none; transition: none; } }
+
+/* top bar: the open section's message + its Save button (the others are .gms-away) */
+#gmsOverlay .gms-msgs { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+#gmsOverlay .gms-msg { margin: 0; padding: 7px 12px; border-radius: 10px; background: var(--tp-ac-soft); color: var(--tp-ac); font-size: 12.5px; font-weight: 700; line-height: 1.4; }
+#gmsOverlay .gms-msg:empty { display: none; }
+#gmsOverlay .gms-msg.is-err { background: var(--tp-err-soft); color: var(--tp-err); }
+#gmsOverlay .tp2-me .tp2-ini { font-size: 20px; }
+#gmsOverlay .tp2-who span { font-family: inherit; }
+
+/* a pane's sections sit inside forms / hosts: every section gets the line above it, only the pane's very first one does not */
+#gmsOverlay .tp2-sec:first-child { border-top: 1px solid var(--tp-ln); padding-top: 26px; }
+#gmsOverlay .tp2-pane > .tp2-sec:first-child,
+#gmsOverlay .tp2-pane > :first-child > .tp2-sec:first-child,
+#gmsOverlay .tp2-pane > :first-child > :first-child > .tp2-sec:first-of-type { border-top: 0; padding-top: 6px; }
+
+/* settings-only pieces */
+#gmsOverlay .gms-span2 { grid-column: 1 / -1; }
+#gmsOverlay .gms-ro { display: flex; align-items: center; color: var(--tp-tx); background-color: transparent; border-color: var(--tp-ln); cursor: default; }
+#gmsOverlay .gms-acts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+#gmsOverlay .gms-acts .tp2-note { margin: 0; }
+#gmsOverlay .tp2-f .gms-acts { margin-top: 8px; }
+/* the service-account password is read-only until clicked (stops Chrome dropping a saved login in) - it should not look locked */
+#gmsOverlay #adBindPassword[readonly] { background-color: var(--tp-fill); border-color: transparent; color: var(--tp-tx); cursor: text; }
+#gmsOverlay .gms-out { margin: 12px 0 0; padding: 12px 14px; border-radius: 10px; background: var(--tp-bg2); border: 1px solid var(--tp-ln); color: var(--tp-tx2);
+    font: 12.5px/1.55 ui-monospace, Consolas, monospace; white-space: pre-wrap; }
+#gmsOverlay .gms-warn { padding: 10px 14px; border-radius: 10px; background: var(--tp-err-soft); color: var(--tp-err); font-size: 12.5px; line-height: 1.5; }
+#gmsOverlay .gms-empty { font-size: 13px; color: var(--tp-mt); }
+#gmsOverlay .tp2-mod small { font-weight: 500; line-height: 1.45; }
+/* AD group -> system rights rows */
+#gmsOverlay .gms-map { display: flex; flex-direction: column; gap: 10px; }
+#gmsOverlay .gms-maprow { display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto; align-items: center; gap: 16px; padding: 10px 12px; border-radius: 12px;
+    background: var(--tp-card); border: 1px solid var(--tp-card-ln); }
+#gmsOverlay .gms-maprow > label { display: inline-flex; align-items: center; gap: 8px; margin: 0; font-size: 13px; font-weight: 600; color: var(--tp-tx2); white-space: nowrap; cursor: pointer; }
+#gmsOverlay .gms-maprow .tp2-in { background-color: var(--tp-bg); border-color: var(--tp-ln); }
+#gmsOverlay .gms-maprow .tp2-cdel { margin-top: 0; }
+/* logo: preview on the menu's own background (.gm-brand-preview, section 13) + the buttons */
+#gmsOverlay .gms-brand { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 22px; align-items: start; }
+#gmsOverlay .gms-brand .gm-brand-preview { height: 130px; }
+#gmsOverlay .gms-info { margin: 12px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--tp-mt); }
+#gmsOverlay #gmBrandMsg { margin: 10px 0 0; font-size: 12.5px; font-weight: 700; color: var(--tp-ac); }
+#gmsOverlay #gmBrandMsg.is-err { color: var(--tp-err); }
+#gmsOverlay #gmBrandMsg.is-hint { color: var(--tp-mt); }
+/* Email > Licence expiry emails: one chip per person (x removes) + the Add row */
+#gmsOverlay .gms-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-height: 30px; margin-bottom: 10px; }
+#gmsOverlay .gms-chip { padding: 5px 6px 5px 12px; font-size: 12.5px; }
+#gmsOverlay .gms-chip button { width: 20px; height: 20px; display: inline-grid; place-items: center; padding: 0; border: 0; border-radius: 50%; background: transparent;
+    color: var(--tp-ac); font-size: 11px; cursor: pointer; }
+#gmsOverlay .gms-chip button:hover { background: var(--tp-hover); }
+#gmsOverlay .gms-addrow { display: flex; align-items: center; gap: 8px; max-width: 560px; }
+#gmsOverlay .gms-addrow .tp2-btn { height: 42px; flex-shrink: 0; }
+#gmsOverlay .tp2-note.gms-dirty { color: var(--tp-ac); }
+/* System users table */
+#gmsOverlay .tp2-tbl .tp2-in { min-height: 36px; padding: 6px 10px; font-size: 13px; }
+#gmsOverlay .tp2-tbl select.tp2-in { min-width: 104px; }
+#gmsOverlay .tp2-tbl td small { display: block; font-size: 12px; color: var(--tp-mt); }
+#gmsOverlay .tp2-tbl td.r { text-align: right; }
+#gmsOverlay .tp2-tbl td.r .tp2-btn + .tp2-btn { margin-left: 6px; }
+@media (max-width: 860px) {
+    #gmsOverlay .gms-msgs { order: 3; flex-basis: 100%; justify-content: flex-start; }
+    #gmsOverlay .gms-brand, #gmsOverlay .gms-maprow { grid-template-columns: minmax(0, 1fr); }
+}
+/* LAST: the other sections' Save buttons / messages, and anything a script hides with the hidden attribute
+   (e.g. godmode_licences.js hides the Face licences Save for read-only users) - the display rules above would beat it */
+#gmsOverlay .gms-away, #gmsOverlay [hidden] { display: none; }

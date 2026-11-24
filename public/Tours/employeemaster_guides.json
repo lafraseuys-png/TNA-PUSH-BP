@@ -111,7 +111,7 @@
             "#createEmpDeptDisplay"
           ],
           "title": "Department",
-          "text": "Required. The department decides which clocking devices the employee is sent to (through <b>Access Roles</b> and Settings &gt; Access Zones, or their Access Control levels), where they sit in the hierarchy, and how they're grouped in reports.",
+          "text": "Required. The department decides which clocking devices the employee is sent to (through the department's <b>Access zones</b> on the Departments screen, or their Access Control levels), where they sit in the hierarchy, and how they're grouped in reports.",
           "placement": "right",
           "climb": 1,
           "before": [
@@ -180,21 +180,6 @@
             }
           ],
           "optional": true
-        },
-        {
-          "id": "emg-cr-cost",
-          "target": [
-            "#createEmpCostCentre"
-          ],
-          "title": "Cost Centre",
-          "text": "Links the employee to a cost centre for financial reporting (set up in <b>Departments &gt; Cost Centres</b>).",
-          "placement": "right",
-          "climb": 1,
-          "before": [
-            {
-              "click": "#createEmpModal button[onclick*='switchCreateTab'][onclick*='employment']"
-            }
-          ]
         },
         {
           "id": "emg-cr-prev",
@@ -667,7 +652,7 @@
             "#editEmpDeptDisplay"
           ],
           "title": "Department",
-          "text": "Required. The department decides which clocking devices they can use (through <b>Access Roles</b>), where they sit in the hierarchy, and how they are grouped in reports.",
+          "text": "Required. The department decides which clocking devices they can use (through the department's <b>Access zones</b> on the Departments screen), where they sit in the hierarchy, and how they are grouped in reports.",
           "placement": "right",
           "climb": 1,
           "before": [
@@ -752,21 +737,6 @@
             }
           ],
           "optional": true
-        },
-        {
-          "id": "emg-ed-cost",
-          "target": [
-            "#editEmpCostCentre"
-          ],
-          "title": "Cost Centre",
-          "text": "Links the employee to a cost centre for financial reporting. Cost centres are set up in <b>Departments &gt; Cost Centres</b>.",
-          "placement": "right",
-          "climb": 1,
-          "before": [
-            {
-              "click": "#editEmpModal button[onclick*='switchEditTab'][onclick*='employment']"
-            }
-          ]
         },
         {
           "id": "emg-ed-prev",

@@ -1,0 +1,151 @@
+/* =====================================================================
+   ess_dashboard.css - the ESS page's own styles (ess_dashboard.html, shown only inside My Profile)            (web)
+   2026-11-24 MY PROFILE > DOCUMENTS: search + tags on top; on the left the list (To sign / Signed / All), on the right
+   the picked document shown large with Full screen / Download / Sign & Accept above it. Navy only. Sign & Accept asks in
+   a navy pop-up (#essDocConfirm). Drawn by ess_dashboard.js (renderEssDocuments). Always on, no switch.
+   Same cards, pills and buttons as the Claims page (ess_embed.js #eeReq) and the document viewer (tna_profile.js #tpfDoc).
+   Light look by default; html.ee-dark = the system is in dark mode (ess_embed.js syncTheme).
+   Note: styles.css is Tailwind 4 (utilities in a layer), so these unlayered rules win over its classes - the section's
+   display is set only while it is not .hidden.
+   ===================================================================== */
+
+#essDocumentsModal:not(.hidden) { display: flex; }
+#essDocumentsModal { flex-direction: column; gap: 12px; height: 100vh; box-sizing: border-box; padding: 4px 28px 24px; color: #1e293b; }
+
+/* ---- toolbar: search, then the tag filter ---- */
+#essDocumentsModal .pd-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex: none; }
+#essDocumentsModal .pd-search { position: relative; flex: 1 1 240px; max-width: 360px; display: flex; align-items: center; margin: 0; }
+#essDocumentsModal .pd-search > i { position: absolute; left: 13px; color: #64748b; font-size: 12.5px; pointer-events: none; }
+#essDocumentsModal .pd-search input { width: 100%; height: 40px; padding: 0 12px 0 36px; border: 1px solid #c6d6e8; border-radius: 12px; font-size: 13px; font-family: inherit; background: #ffffff; color: #1e293b; outline: none; }
+#essDocumentsModal .pd-search input:focus { border-color: #1a4c7b; box-shadow: 0 0 0 3px rgba(26, 76, 123, .12); }
+
+/* the tag filter: a drop-down with its own search box */
+#essDocumentsModal .pd-dd { position: relative; flex: none; }
+#essDocumentsModal .pd-dd[hidden] { display: none; }
+#essDocumentsModal .pd-ddb { height: 40px; min-width: 150px; padding: 0 12px; display: inline-flex; align-items: center; gap: 8px; border: 1px solid #c6d6e8; border-radius: 12px; background: #ffffff; color: #1a4c7b; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; }
+#essDocumentsModal .pd-ddb span { flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
+#essDocumentsModal .pd-ddb .fa-chevron-down { font-size: 10px; color: #64748b; transition: transform .15s; }
+#essDocumentsModal .pd-dd.open .pd-ddb { border-color: #1a4c7b; box-shadow: 0 0 0 3px rgba(26, 76, 123, .12); }
+#essDocumentsModal .pd-dd.open .pd-ddb .fa-chevron-down { transform: rotate(180deg); }
+#essDocumentsModal .pd-ddm { display: none; position: absolute; top: calc(100% + 6px); left: 0; z-index: 30; width: 240px; padding: 8px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 16px 36px -10px rgba(15, 23, 42, .25); }
+#essDocumentsModal .pd-dd.open .pd-ddm { display: block; }
+#essDocumentsModal .pd-ddm .pd-search { max-width: none; margin-bottom: 6px; }
+#essDocumentsModal .pd-ddm .pd-search input { height: 34px; border-radius: 9px; }
+#essDocumentsModal .pd-ddl { max-height: 220px; overflow-y: auto; }
+#essDocumentsModal .pd-ddl button { display: flex; align-items: center; gap: 8px; width: 100%; padding: 7px 10px; border: 0; border-radius: 8px; background: transparent; color: #1e293b; font-size: 13px; font-weight: 600; font-family: inherit; text-align: left; cursor: pointer; }
+#essDocumentsModal .pd-ddl button:hover { background: #f1f5f9; }
+#essDocumentsModal .pd-ddl button.on { background: #eaf1f8; color: #1a4c7b; font-weight: 800; }
+#essDocumentsModal .pd-ddl button i { width: 14px; color: #1a4c7b; font-size: 11px; }
+#essDocumentsModal .pd-ddl .pd-ddnone { padding: 10px; color: #94a3b8; font-size: 12.5px; text-align: center; }
+
+/* ---- the two panes ---- */
+#essDocumentsModal .pd-split { flex: 1; min-height: 360px; display: grid; grid-template-columns: minmax(260px, 330px) minmax(0, 1fr); gap: 14px; }
+#essDocumentsModal .pd-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; box-shadow: 0 2px 10px rgba(15, 23, 42, .05); min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+
+/* left: pills + the list */
+#essDocumentsModal .pd-pills { display: flex; gap: 6px; flex-wrap: wrap; padding: 14px 14px 10px; flex: none; }
+#essDocumentsModal .pd-pills button { border: 1px solid #c6d6e8; background: #ffffff; color: #1a4c7b; border-radius: 99px; padding: 5px 13px; font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
+#essDocumentsModal .pd-pills button b { margin-left: 5px; opacity: .7; }
+#essDocumentsModal .pd-pills button.on { background: #1a4c7b; border-color: #1a4c7b; color: #ffffff; }
+#essDocumentsModal .pd-rows { flex: 1; min-height: 0; overflow-y: auto; padding: 0 14px 14px; }
+#essDocumentsModal .pd-row { display: flex; align-items: flex-start; gap: 11px; width: 100%; padding: 11px 12px; margin-bottom: 8px; border: 1px solid #eef2f6; border-radius: 12px; background: #f8fafc; text-align: left; font-family: inherit; color: inherit; cursor: pointer; transition: border-color .12s, background .12s; }
+#essDocumentsModal .pd-row:hover { border-color: #c6d6e8; }
+#essDocumentsModal .pd-row.on { background: #eaf1f8; border-color: #1a4c7b; box-shadow: inset 3px 0 0 #1a4c7b; }
+#essDocumentsModal .pd-row:focus-visible { outline: 2px solid #1a4c7b; outline-offset: 2px; }
+#essDocumentsModal .pd-ic { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; flex: none; background: #eaf1f8; color: #1a4c7b; font-size: 15px; }
+#essDocumentsModal .pd-row.on .pd-ic { background: #1a4c7b; color: #ffffff; }
+#essDocumentsModal .pd-t { flex: 1; min-width: 0; }
+#essDocumentsModal .pd-t b { display: block; font-size: 13.5px; font-weight: 800; color: #1e293b; line-height: 1.3; word-break: break-word; }
+#essDocumentsModal .pd-t small { display: block; font-size: 11.5px; color: #64748b; margin-top: 2px; }
+#essDocumentsModal .pd-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+#essDocumentsModal .pd-tag { display: inline-flex; align-items: center; gap: 4px; padding: 1px 8px; border-radius: 6px; background: #f1f5f9; color: #334155; font-size: 10.5px; font-weight: 800; letter-spacing: .03em; }
+#essDocumentsModal .pd-tag i { font-size: 9px; color: #1a4c7b; }
+
+/* status: navy only - To sign = solid, Signed = soft with a tick */
+#essDocumentsModal .pd-st { flex: none; display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; padding: 3px 10px; border-radius: 99px; white-space: nowrap; }
+#essDocumentsModal .pd-st.todo { background: #1a4c7b; color: #ffffff; }
+#essDocumentsModal .pd-st.done { background: #eaf1f8; color: #1a4c7b; }
+#essDocumentsModal .pd-none { padding: 22px; border: 1px dashed #cbd5e1; border-radius: 12px; text-align: center; color: #64748b; font-size: 13px; }
+
+/* right: the picked document */
+#essDocumentsModal .pd-vhead { display: flex; flex-direction: column; gap: 12px; padding: 14px 16px 12px 18px; border-bottom: 1px solid #eef2f6; flex: none; }
+#essDocumentsModal .pd-vt { min-width: 0; }
+#essDocumentsModal .pd-vt b { display: block; font-size: 16px; font-weight: 800; color: #1e293b; line-height: 1.3; word-break: break-word; }
+#essDocumentsModal .pd-vt small { display: block; font-size: 12px; color: #64748b; font-weight: 600; margin-top: 3px; }
+#essDocumentsModal .pd-vt p { margin: 6px 0 0; font-size: 12.5px; color: #475569; line-height: 1.45; }
+#essDocumentsModal .pd-vt .pd-tags { margin-top: 8px; }
+#essDocumentsModal .pd-acts { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+#essDocumentsModal .pd-b, #essDocConfirm .pd-b { height: 38px; padding: 0 14px; border-radius: 10px; border: 1px solid #c6d6e8; background: #ffffff; color: #1a4c7b; font-weight: 800; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-family: inherit; white-space: nowrap; }
+#essDocumentsModal .pd-b:hover, #essDocConfirm .pd-b:hover { background: #eaf1f8; }
+#essDocumentsModal .pd-b.pri, #essDocConfirm .pd-b.pri { background: #1a4c7b; border-color: #1a4c7b; color: #ffffff; box-shadow: 0 4px 12px -4px rgba(26, 76, 123, .5); }
+#essDocumentsModal .pd-b.pri:hover, #essDocConfirm .pd-b.pri:hover { background: #163f66; }
+#essDocConfirm .pd-b:disabled { opacity: .7; cursor: default; }
+#essDocumentsModal .pd-signed { display: inline-flex; align-items: center; gap: 7px; height: 38px; padding: 0 14px; border-radius: 10px; background: #eaf1f8; color: #1a4c7b; font-weight: 800; font-size: 13px; white-space: nowrap; }
+#essDocumentsModal .pd-frame { flex: 1; min-height: 0; background: #f1f5f9; display: flex; align-items: center; justify-content: center; }
+#essDocumentsModal .pd-frame iframe { width: 100%; height: 100%; border: 0; background: #ffffff; }
+#essDocumentsModal .pd-frame img { max-width: calc(100% - 32px); max-height: calc(100% - 32px); object-fit: contain; border-radius: 8px; box-shadow: 0 6px 20px rgba(15, 23, 42, .15); background: #ffffff; }
+#essDocumentsModal .pd-empty { margin: auto; padding: 30px; text-align: center; color: #64748b; font-size: 13px; font-weight: 600; }
+#essDocumentsModal .pd-empty i { display: block; font-size: 34px; color: #94a3b8; margin-bottom: 10px; }
+#essDocumentsModal .pd-empty b { display: block; font-size: 15px; font-weight: 800; color: #1e293b; margin-bottom: 4px; }
+
+/* narrow window (phone): the list, then the document under it */
+@media (max-width: 760px) {
+    #essDocumentsModal { height: auto; padding: 4px 14px 18px; }
+    #essDocumentsModal .pd-search { max-width: none; }
+    #essDocumentsModal .pd-split { display: block; min-height: 0; }
+    #essDocumentsModal .pd-split > .pd-card + .pd-card { margin-top: 14px; }
+    #essDocumentsModal .pd-rows { max-height: none; overflow: visible; }
+    #essDocumentsModal .pd-view { height: 78vh; }
+    #essDocumentsModal .pd-b span { display: none; }
+    #essDocumentsModal .pd-b.pri span { display: inline; }
+}
+
+/* ---- Sign & Accept: the confirm pop-up (.fixed.inset-0.bg-black = a page pop-up: My Profile spreads this frame over the
+   whole window while it shows - ess_embed.js watchDialogs) ---- */
+#essDocConfirm { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 24px; background: rgba(15, 23, 42, .5); }
+#essDocConfirm .pd-cfc { width: min(460px, 100%); background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, .35); overflow: hidden; display: flex; flex-direction: column; color: #1e293b; animation: pdCfIn .16s ease-out; }
+@keyframes pdCfIn { from { opacity: 0; transform: translateY(8px) scale(.99); } to { opacity: 1; transform: none; } }
+#essDocConfirm .pd-cfh { display: flex; align-items: center; gap: 12px; padding: 18px 22px; border-bottom: 1px solid #eef2f6; }
+#essDocConfirm .pd-cfh .pd-ic { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; flex: none; background: #eaf1f8; color: #1a4c7b; font-size: 15px; }
+#essDocConfirm .pd-cfh b { display: block; font-size: 16px; font-weight: 800; color: #1a4c7b; }
+#essDocConfirm .pd-cfh small { display: block; font-size: 12.5px; color: #64748b; font-weight: 600; margin-top: 1px; word-break: break-word; }
+#essDocConfirm .pd-cfb { padding: 18px 22px; font-size: 13.5px; line-height: 1.55; color: #334155; }
+#essDocConfirm .pd-cferr { margin-top: 12px; padding: 9px 12px; border-radius: 10px; background: #fef2f2; color: #b91c1c; font-size: 12.5px; font-weight: 700; }
+#essDocConfirm .pd-cferr[hidden] { display: none; }
+#essDocConfirm .pd-cff { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 22px; background: #f8fafc; border-top: 1px solid #eef2f6; }
+
+/* ---- dark mode (the system is dark) ---- */
+html.ee-dark #essDocumentsModal { color: #e2e8f0; }
+html.ee-dark #essDocumentsModal .pd-search > i { color: #94a3b8; }
+html.ee-dark #essDocumentsModal .pd-search input { background: #162236; color: #e2e8f0; border-color: rgba(255, 255, 255, .12); }
+html.ee-dark #essDocumentsModal .pd-ddb { background: #162236; color: #93c5fd; border-color: rgba(255, 255, 255, .12); }
+html.ee-dark #essDocumentsModal .pd-ddm { background: #1e293b; border-color: rgba(255, 255, 255, .1); }
+html.ee-dark #essDocumentsModal .pd-ddl button { color: #e2e8f0; }
+html.ee-dark #essDocumentsModal .pd-ddl button:hover { background: #162236; }
+html.ee-dark #essDocumentsModal .pd-ddl button.on { background: rgba(147, 197, 253, .12); color: #93c5fd; }
+html.ee-dark #essDocumentsModal .pd-ddl button i { color: #93c5fd; }
+html.ee-dark #essDocumentsModal .pd-card { background: #1e293b; border-color: rgba(255, 255, 255, .08); box-shadow: none; }
+html.ee-dark #essDocumentsModal .pd-pills button { background: transparent; color: #93c5fd; border-color: rgba(147, 197, 253, .35); }
+html.ee-dark #essDocumentsModal .pd-pills button.on { background: #1a4c7b; border-color: #1a4c7b; color: #ffffff; }
+html.ee-dark #essDocumentsModal .pd-row { background: #162236; border-color: rgba(255, 255, 255, .06); }
+html.ee-dark #essDocumentsModal .pd-row:hover { border-color: rgba(147, 197, 253, .35); }
+html.ee-dark #essDocumentsModal .pd-row.on { background: rgba(147, 197, 253, .1); border-color: #93c5fd; box-shadow: inset 3px 0 0 #93c5fd; }
+html.ee-dark #essDocumentsModal .pd-ic { background: rgba(147, 197, 253, .12); color: #93c5fd; }
+html.ee-dark #essDocumentsModal .pd-row.on .pd-ic { background: #1a4c7b; color: #ffffff; }
+html.ee-dark #essDocumentsModal .pd-t b, html.ee-dark #essDocumentsModal .pd-vt b, html.ee-dark #essDocumentsModal .pd-empty b { color: #f1f5f9; }
+html.ee-dark #essDocumentsModal .pd-t small, html.ee-dark #essDocumentsModal .pd-vt small, html.ee-dark #essDocumentsModal .pd-empty { color: #94a3b8; }
+html.ee-dark #essDocumentsModal .pd-vt p { color: #cbd5e1; }
+html.ee-dark #essDocumentsModal .pd-tag { background: rgba(255, 255, 255, .06); color: #cbd5e1; }
+html.ee-dark #essDocumentsModal .pd-tag i { color: #93c5fd; }
+html.ee-dark #essDocumentsModal .pd-st.done, html.ee-dark #essDocumentsModal .pd-signed { background: rgba(147, 197, 253, .12); color: #93c5fd; }
+html.ee-dark #essDocumentsModal .pd-none { border-color: rgba(255, 255, 255, .15); color: #94a3b8; }
+html.ee-dark #essDocumentsModal .pd-vhead { border-color: rgba(255, 255, 255, .08); }
+html.ee-dark #essDocumentsModal .pd-frame { background: #0f172a; }
+html.ee-dark #essDocumentsModal .pd-b:not(.pri), html.ee-dark #essDocConfirm .pd-b:not(.pri) { background: transparent; color: #93c5fd; border-color: rgba(147, 197, 253, .35); }
+html.ee-dark #essDocConfirm .pd-cfc { background: #1e293b; border-color: rgba(255, 255, 255, .1); color: #e2e8f0; }
+html.ee-dark #essDocConfirm .pd-cfh { border-color: rgba(255, 255, 255, .08); }
+html.ee-dark #essDocConfirm .pd-cfh .pd-ic { background: rgba(147, 197, 253, .12); color: #93c5fd; }
+html.ee-dark #essDocConfirm .pd-cfh b { color: #93c5fd; }
+html.ee-dark #essDocConfirm .pd-cfh small { color: #94a3b8; }
+html.ee-dark #essDocConfirm .pd-cfb { color: #cbd5e1; }
+html.ee-dark #essDocConfirm .pd-cff { background: #162236; border-color: rgba(255, 255, 255, .08); }

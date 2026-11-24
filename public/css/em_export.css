@@ -1,0 +1,70 @@
+/* =====================================================================
+   em_export.css - EMPLOYEE MASTER: the Custom Blank Template / Custom Data Export pop-up (#exportConfigModal).   2026-11-20
+   The pop-up is built from the Employee Master Settings pop-up's classes (em_v2.css .emset-*, .emph-btn - navy, the T&A look);
+   this file only adds what that pop-up has no class for: the group list with counts, the tick rows, the preset block.
+   Drawn by employeemaster.js (EXPORT_GROUPS, xpBuild). No !important.
+   ===================================================================== */
+#exportConfigModal { padding: 28px; }
+#exportConfigModal .xp-win { width: min(1180px, 100%); height: min(860px, 100%); font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif; }
+#exportConfigModal .emset-title small { max-width: 640px; line-height: 1.45; }
+#exportConfigModal .emset-body { grid-template-columns: 280px minmax(0, 1fr); }
+
+/* the top right: how many columns the file gets, Cancel, Generate */
+.xp-acts { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.xp-count { font-size: 12.5px; font-weight: 800; color: var(--ep2-ac); background: var(--ep2-ac-soft); border-radius: 999px; padding: 6px 12px; white-space: nowrap; }
+.xp-acts .emph-btn { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+
+/* the left menu: one line per group, a count of the ticked fields on the right */
+.xp-links { display: flex; flex-direction: column; gap: 2px; }
+.xp-nav .xp-links button { padding: 9px 12px; font-size: 13px; }
+.xp-links button span { flex: 1; min-width: 0; text-align: left; }
+.xp-links button b { min-width: 22px; padding: 1px 7px; border-radius: 999px; font-size: 11px; font-weight: 800; text-align: center; color: var(--ep2-mt); }
+.xp-links button b.has { background: var(--ep2-ac); color: #fff; }
+body.dark-mode .xp-links button b.has { color: #0f172a; }
+.xp-nav .xp-untick { margin-top: 8px; justify-content: center; border: 1px dashed var(--ep2-ln); font-size: 12.5px; }
+
+/* My presets */
+.xp-presets { display: flex; flex-direction: column; gap: 8px; padding: 0 2px; }
+.xp-sel { width: 100%; height: 38px; box-sizing: border-box; border: 1px solid var(--ep2-ln); border-radius: 10px; background: var(--ep2-bg); color: var(--ep2-tx); padding: 0 10px; font-size: 13px; font-family: inherit; }
+.xp-sel:focus { outline: none; border-color: #1a4c7b; box-shadow: 0 0 0 3px var(--ep2-hover); }
+.xp-pbtns { display: flex; flex-wrap: wrap; gap: 6px; }
+.xp-pbtns .emph-btn { height: 34px; padding: 0 12px; font-size: 12.5px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+    border: 1px solid var(--ep2-ln); background: var(--ep2-bg); }   /* the menu's own button style (.emset-nav button) would make them plain text */
+.xp-pbtns .emph-btn.pri { background: #1a4c7b; border-color: #1a4c7b; color: #fff; }
+.xp-pname { flex-direction: column; gap: 8px; }
+.xp-pname p { margin: 0; font-size: 12px; color: var(--ep2-mt); line-height: 1.4; }
+.xp-pstatus { font-size: 12px; font-weight: 700; line-height: 1.4; }
+
+/* the fields */
+.xp-main { padding: 28px 40px 60px; scroll-padding-top: 14px; }
+.xp-always { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 30px; padding: 12px 16px; border: 1px solid var(--ep2-ln); border-radius: 14px; background: var(--ep2-bg2); }
+.xp-always b { font-size: 12.5px; font-weight: 800; color: var(--ep2-tx2); margin-right: 4px; }
+.xp-lock { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--ep2-ac-soft); color: var(--ep2-ac); font-size: 12.5px; font-weight: 700; }
+.xp-lock i { font-size: 10px; }
+.xp-sec + .xp-sec { margin-top: 30px; }
+.xp-sec-h { display: flex; align-items: center; gap: 12px; margin: 0 0 12px; }
+.xp-sec-h > b { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 800; color: var(--ep2-ac); }
+.xp-sec-h > b i { width: 30px; height: 30px; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; background: var(--ep2-ac-soft); font-size: 13px; }
+.xp-n { font-size: 12px; font-weight: 600; color: var(--ep2-mt); margin-right: auto; }
+.xp-link { border: 0; background: none; padding: 4px 6px; border-radius: 6px; color: var(--ep2-ac); font-size: 12.5px; font-weight: 800; font-family: inherit; cursor: pointer; }
+.xp-link:hover { background: var(--ep2-hover); }
+.xp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; }
+.xp-f { display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 8px 12px; border: 1px solid var(--ep2-ln); border-radius: 10px; background: var(--ep2-bg);
+    font-size: 13px; font-weight: 600; color: var(--ep2-tx2); cursor: pointer; transition: background-color .12s, border-color .12s; }
+.xp-f:hover { background: var(--ep2-hover); }
+.xp-f:has(input:checked) { border-color: var(--ep2-on); background: var(--ep2-ac-soft); color: var(--ep2-ac); font-weight: 800; }
+.xp-f input { width: 16px; height: 16px; margin: 0; flex-shrink: 0; accent-color: #1a4c7b; cursor: pointer; }
+body.dark-mode .xp-f input { accent-color: #93c5fd; }
+.xp-f span { min-width: 0; overflow-wrap: anywhere; }
+.xp-f[hidden], .xp-sec[hidden] { display: none; }
+.xp-flash { animation: emsetFlash 1.8s ease-out; }
+.xp-none, .xp-empty { font-size: 13px; color: var(--ep2-mt); }
+.xp-empty { padding: 30px 0; text-align: center; }
+
+@media (max-width: 860px) {
+    #exportConfigModal { padding: 12px; }
+    #exportConfigModal .emset-body { grid-template-columns: 1fr; }
+    #exportConfigModal .emset-head { flex-wrap: wrap; }
+    .xp-nav .xp-links { flex-direction: row; flex-wrap: wrap; }
+    .xp-main { padding: 18px 16px 40px; }
+}

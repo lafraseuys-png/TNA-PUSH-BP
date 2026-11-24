@@ -1,0 +1,130 @@
+/* =====================================================================
+   css/em_job_lists.css - Employee profile: Job Title / Job Grade / Occupation drop-downs + Employee Master Settings > Job lists (2026-11-20)
+   Behaviour: public/js/em_job_lists.js (EmployeeMaster.html + ESSMaster.html). The list is the page's own
+   .profile-dropdown-menu / .dropdown-item (so the new profile look restyles it like its other drop-downs);
+   this file only places it under the box and adds the search box, the "not on the list" tag and the footer.
+   Navy only. No !important.
+   ===================================================================== */
+
+.jlp-host { position: relative; }
+.jlp-host.jlp-open { z-index: 120; }
+
+/* the box: a drop-down arrow, opens on click */
+input.jlp-box:not(:disabled) { cursor: pointer; padding-right: 34px;
+    background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%2364748b%22%3E%3Cpath d=%22M7 10l5 5 5-5z%22/%3E%3C/svg%3E');
+    background-repeat: no-repeat; background-position: right 10px center; background-size: 24px; }
+#editEmpModal.emp2 input.jlp-box:not(:disabled) {
+    background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%2364748b%22%3E%3Cpath d=%22M7 10l5 5 5-5z%22/%3E%3C/svg%3E');
+    background-repeat: no-repeat; background-position: right 10px center; background-size: 24px; padding-right: 34px; }
+
+/* the list, right under the box */
+.profile-dropdown-menu.jlp-menu { top: calc(100% + 4px); left: 0; right: auto; bottom: auto; width: 100%; min-width: 230px; max-height: 340px;
+    z-index: 130; flex-direction: column; overflow: hidden; box-shadow: 0 12px 30px rgba(15, 23, 42, .14); }
+.jlp-menu .jlp-q { flex-shrink: 0; padding: 8px; border-bottom: 1px solid #e2e8f0; }
+.jlp-menu .jlp-q input { width: 100%; box-sizing: border-box; font-size: 12.5px; padding: 7px 10px 7px 32px; border-radius: 8px;
+    background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22 fill=%22%2364748b%22%3E%3Cpath d=%22M505 442.7 405.3 343c28.4-34.9 45.5-79.4 45.5-127.9C450.8 96.5 354.3 0 235.4 0S20 96.5 20 215.1s96.5 215.1 215.4 215.1c48.5 0 93-17.1 127.9-45.5L462.9 484c5.7 5.7 13.3 8.8 21 8.8s15.3-2.9 21-8.8c11.7-11.6 11.7-30.5.1-41.3zM235.4 370.4c-85.6 0-155.3-69.7-155.3-155.3S149.8 59.8 235.4 59.8s155.3 69.7 155.3 155.3-69.7 155.3-155.3 155.3z%22/%3E%3C/svg%3E');
+    background-repeat: no-repeat; background-position: 11px center; background-size: 13px; }
+.jlp-menu .jlp-list { overflow-y: auto; min-height: 0; flex: 1; }
+.jlp-menu .dropdown-item { padding: 9px 14px; }
+.jlp-menu .dropdown-item.active { color: #1a4c7b; font-weight: 700; background: rgba(26, 76, 123, .06); }
+.jlp-menu .dropdown-item.jlp-hi { background: rgba(26, 76, 123, .1); }
+.jlp-menu .jlp-none { color: #94a3b8; font-style: italic; }
+.jlp-menu .jlp-tag { margin-left: auto; padding: 1px 8px; border-radius: 999px; font-size: 10.5px; font-weight: 800; font-style: normal; background: #eaf1f8; color: #1a4c7b; white-space: nowrap; }
+.jlp-menu .jlp-empty { padding: 10px 14px; font-size: 12px; color: #64748b; }
+.jlp-menu .jlp-foot { flex-shrink: 0; border-top: 1px solid #e2e8f0; }
+.jlp-menu .jlp-foot .dropdown-item { color: #1a4c7b; font-weight: 700; font-size: 12.5px; }
+.jlp-menu .jlp-foot .dropdown-item i { width: 14px; text-align: center; font-size: 11px; }
+
+body.dark-mode .jlp-menu .jlp-q, body.dark-mode .jlp-menu .jlp-foot { border-color: rgba(255, 255, 255, .1); }
+body.dark-mode .jlp-menu .dropdown-item.active { color: #93c5fd; background: rgba(147, 197, 253, .1); }
+body.dark-mode .jlp-menu .dropdown-item.jlp-hi { background: rgba(147, 197, 253, .14); }
+body.dark-mode .jlp-menu .jlp-tag { background: rgba(147, 197, 253, .15); color: #93c5fd; }
+body.dark-mode .jlp-menu .jlp-foot .dropdown-item { color: #93c5fd; }
+body.dark-mode .jlp-menu .jlp-empty { color: #94a3b8; }
+
+/* =====================================================================
+   Employee Master Settings > Job lists (em_job_lists.js EmJobLists.mount; the pop-up is em_settings.js, its look em_v2.css
+   .emset-*). Colours = the pop-up's own --ep2-* variables, so dark mode follows by itself. Navy only, no red / green.
+   ===================================================================== */
+
+.jl-add { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.jl-find { position: relative; flex: 1; min-width: 200px; }
+.jl-find > i { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); font-size: 13px; color: #64748b; pointer-events: none; }
+body.dark-mode .jl-find > i { color: #94a3b8; }
+.jl-find input { width: 100%; box-sizing: border-box; height: 38px; padding: 8px 12px 8px 36px; border: 1px solid var(--ep2-ln, #e2e8f0); border-radius: 10px;
+    background: var(--ep2-bg, #fff); color: var(--ep2-tx, #0f172a); font-size: 13px; font-family: inherit; outline: none; }
+.jl-find input:focus { border-color: var(--ep2-ac, #1a4c7b); box-shadow: 0 0 0 3px var(--ep2-ac-soft, rgba(26, 76, 123, .08)); }
+.jl-add .ep2-btn { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; font-weight: 700; font-size: 13px; cursor: pointer; }
+.jl-msg { min-height: 18px; margin: 8px 2px; font-size: 12.5px; font-weight: 700; color: var(--ep2-mt, #64748b); }
+.jl-msg.ok { color: var(--ep2-ac, #1a4c7b); }
+.jl-msg.bad { color: var(--ep2-err, #dc2626); }
+.jl-ro { margin: 0 2px 10px; font-size: 12.5px; color: var(--ep2-mt, #64748b); }
+
+/* On the list | Removed */
+.jl-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.jl-show { display: inline-flex; gap: 4px; padding: 3px; border: 1px solid var(--ep2-ln, #e2e8f0); border-radius: 10px; background: var(--ep2-bg2, #f7f9fb); }
+.jl-show button { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent;
+    color: var(--ep2-mt, #64748b); font-size: 12px; font-weight: 700; font-family: inherit; cursor: pointer; }
+.jl-show button:hover { color: var(--ep2-ac, #1a4c7b); }
+.jl-show button.on { background: var(--ep2-bg, #fff); color: var(--ep2-ac, #1a4c7b); box-shadow: 0 1px 3px rgba(15, 23, 42, .08); }
+.jl-show .n { min-width: 18px; padding: 0 6px; border-radius: 999px; font-size: 10.5px; font-weight: 800; text-align: center; background: var(--ep2-ac-soft, #eaf1f8); color: var(--ep2-ac, #1a4c7b); }
+.jl-found { font-size: 12px; font-weight: 700; color: var(--ep2-mt, #64748b); }
+
+/* the list */
+.jl-list { overflow: hidden; }
+.jl-list table { width: 100%; border-collapse: collapse; }
+.jl-list td { padding: 10px 14px; vertical-align: middle; font-size: 13px; }
+.jl-list tr + tr td { border-top: 1px solid var(--ep2-ln, #e2e8f0); }
+.jl-list td:last-child { text-align: right; white-space: nowrap; width: 1%; }
+.jl-name { font-weight: 800; font-size: 13.5px; color: var(--ep2-tx, #0f172a); }
+.jl-off .jl-name { opacity: .6; }
+.jl-chip { display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 999px; font-size: 10.5px; font-weight: 800; vertical-align: middle;
+    background: var(--ep2-ac-soft, #eaf1f8); color: var(--ep2-ac, #1a4c7b); cursor: default; }
+.jl-chip.none { background: transparent; border: 1px dashed var(--ep2-ln, #e2e8f0); color: var(--ep2-mt, #64748b); }
+.jl-btn { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; margin-left: 6px; border-radius: 8px; border: 1px solid var(--ep2-ln, #e2e8f0);
+    background: var(--ep2-bg, #fff); color: var(--ep2-ac, #1a4c7b); font-size: 12px; font-weight: 700; font-family: inherit; cursor: pointer; }
+.jl-btn:hover { background: var(--ep2-hover, rgba(26, 76, 123, .07)); }
+.jl-btn[disabled] { opacity: .55; cursor: default; }
+.jl-empty { text-align: center; color: var(--ep2-mt, #64748b); }
+.jl-list mark, .jl-empty mark { background: var(--ep2-ac-soft, rgba(26, 76, 123, .14)); color: inherit; border-radius: 3px; padding: 0 1px; }
+
+/* Rename / Remove / Merge sheet (the profile pop-up's .ep2-dlg) */
+.jl-sheet .ep2-dlg { width: min(440px, 100%); }
+.jl-sheet .ep2-dlg h3 i { margin-right: 4px; }
+.jl-sheet .ep2-sub { padding-top: 4px; line-height: 1.5; }
+.jl-sheet .ep2-list { padding-top: 14px; }
+.jl-sheet .ep2-foot .ep2-btn { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; cursor: pointer; }
+.jl-field { display: flex; flex-direction: column; gap: 5px; margin: 0; }
+.jl-field > span { font-size: 10.5px; font-weight: 900; letter-spacing: .8px; text-transform: uppercase; color: var(--ep2-mt, #64748b); }
+.jl-field input { box-sizing: border-box; width: 100%; min-height: 38px; padding: 8px 12px; border: 1px solid var(--ep2-ln, #cbd5e1); border-radius: 10px;
+    background: var(--ep2-bg, #fff); color: var(--ep2-tx, #0f172a); font-size: 13.5px; font-family: inherit; outline: none; }
+.jl-field input:focus { border-color: var(--ep2-ac, #1a4c7b); box-shadow: 0 0 0 3px var(--ep2-ac-soft, rgba(26, 76, 123, .12)); }
+.jl-p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ep2-tx2, #334155); }
+.jl-err { margin-top: 8px; font-size: 12.5px; font-weight: 700; color: var(--ep2-err, #dc2626); min-height: 0; }
+.jl-err:empty { display: none; }
+
+@media (max-width: 640px) {
+    .jl-list td { display: block; width: auto; text-align: left; }
+    .jl-list td:last-child { text-align: left; padding-top: 0; }
+    .jl-list .jl-btn:first-child { margin-left: 0; }
+}
+
+/* =====================================================================
+   2026-11-20 Quick add (em_quick_add.js): the right-click menu, the "+ New ..." line at the bottom of the profile's
+   drop-downs, and a short highlight on the field that got the new value. Navy only.
+   ===================================================================== */
+.qa-menu { position: fixed; z-index: 450; min-width: 230px; padding: 6px; background: var(--ep2-bg, #fff); border: 1px solid var(--ep2-ln, #e2e8f0); border-radius: 12px;
+    box-shadow: 0 18px 40px -12px rgba(15, 23, 42, .35); font-family: inherit; }
+.qa-menu button { display: flex; align-items: center; gap: 10px; width: 100%; padding: 9px 12px; border: 0; border-radius: 8px; background: none; text-align: left;
+    font-size: 13px; font-weight: 700; color: var(--ep2-tx, #0f172a); cursor: pointer; font-family: inherit; }
+.qa-menu button i { width: 14px; text-align: center; color: var(--ep2-ac, #1a4c7b); }
+.qa-menu button:hover:not([disabled]), .qa-menu button:focus-visible { background: var(--ep2-ac-soft, rgba(26, 76, 123, .08)); outline: none; }
+.qa-menu button[disabled] { opacity: .5; cursor: default; }
+.qa-menu .qa-note { padding: 4px 12px 6px; font-size: 11.5px; color: var(--ep2-mt, #64748b); max-width: 260px; }
+.dropdown-item.qa-new { color: #1a4c7b; font-weight: 700; border-top: 1px solid #e2e8f0; }
+.dropdown-item.qa-new i { width: 14px; text-align: center; font-size: 11px; }
+.qa-foot .dropdown-item.qa-new { border-top: 1px solid #e2e8f0; }
+body.dark-mode .dropdown-item.qa-new { color: #93c5fd; border-color: rgba(255, 255, 255, .1); }
+.qa-flash { animation: qaFlash 1.6s ease-out; }
+@keyframes qaFlash { 0%, 50% { box-shadow: 0 0 0 3px rgba(26, 76, 123, .35); } 100% { box-shadow: 0 0 0 3px transparent; } }
+@media (prefers-reduced-motion: reduce) { .qa-flash { animation: none; outline: 2px solid #1a4c7b; } }
